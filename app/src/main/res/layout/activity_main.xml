@@ -4,15 +4,182 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@android:color/white"
+    tools:context=".activity.MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/txt_MainActivity_proceed"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:paddingTop="@dimen/common_10dp"
+        android:paddingBottom="@dimen/common_10dp"
+        android:text="@string/main_proceeds"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/common_24dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/lin_MainActivity_TopPanel"
+        android:layout_width="@dimen/common_0dp"
+        android:layout_height="@dimen/common_80dp"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:background="@drawable/border_line_top_bottom_right"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_MainActivity_proceed"
+        app:layout_constraintWidth_percent="0.5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:text="@string/main_term"
+            android:textColor="@color/black"
+            android:textSize="@dimen/common_18dp" />
+
+        <EditText
+            android:id="@+id/txt_MainActivity_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="@dimen/common_20dp"
+            android:layout_marginTop="@dimen/common_5dp"
+            android:layout_marginEnd="@dimen/common_20dp"
+            android:background="@null"
+            android:gravity="center"
+            android:hint="@string/main_hint_term"
+            android:textColor="@color/black"
+            android:textSize="@dimen/common_12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/common_80dp"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:background="@drawable/border_line_top_bottom"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_MainActivity_proceed"
+        app:layout_constraintWidth_percent="0.5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:text="@string/main_subject"
+            android:textColor="@color/black"
+            android:textSize="@dimen/common_18dp" />
+
+        <EditText
+            android:id="@+id/txt_MainActivity_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/common_5dp"
+            android:background="@null"
+            android:hint="@string/main_hint_subject"
+            android:textColor="@color/black"
+            android:textSize="@dimen/common_12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_MainActivity_total_gain_losses"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_100dp"
+        android:background="@drawable/border_line_bottom"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        app:layout_constraintEnd_toEndOf="@+id/lin_MainActivity_TopPanel"
+        app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_TopPanel"
+        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_TopPanel">
+
+        <TextView
+            android:layout_width="@dimen/common_0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="@string/main_realization_gains_losses"
+            android:textColor="@color/black"
+            android:textSize="@dimen/common_13dp" />
+
+        <TextView
+            android:id="@+id/txt_total_realization_gains_losses"
+            android:layout_width="@dimen/common_0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/common_5dp"
+            android:layout_marginEnd="@dimen/common_5dp"
+            android:layout_weight="6"
+            android:gravity="center"
+            android:text="0원"
+            android:textColor="@color/red"
+            android:textSize="@dimen/common_18dp" />
+
+        <TextView
+            android:id="@+id/txt_total_realization_gains_losses_percent"
+            android:layout_width="@dimen/common_0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="0%"
+            android:textColor="@color/red"
+            android:textSize="@dimen/common_15dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_subject_name"
+        android:layout_width="@dimen/common_0dp"
+        android:layout_height="@dimen/common_60dp"
+        android:background="@drawable/border_line_bottom_right"
+        android:gravity="center"
+        android:text="@string/main_date_of_sale_and_subject_name"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
+        app:layout_constraintWidth_percent="0.333"/>
+
+    <TextView
+        android:id="@+id/lin_gain_losses"
+        android:layout_width="@dimen/common_0dp"
+        android:layout_height="@dimen/common_60dp"
+        android:background="@drawable/border_line_bottom_right"
+        android:gravity="center"
+        android:text="@string/real_gains_losses_amount_and_gain_percent"
+        android:textColor="@color/black"
+        app:layout_constraintLeft_toRightOf="@+id/txt_subject_name"
+        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
+        app:layout_constraintWidth_percent="0.333"/>
+
+    <TextView
+        android:id="@+id/lin_"
+        android:layout_width="@dimen/common_0dp"
+        android:layout_height="@dimen/common_60dp"
+        android:background="@drawable/border_line_bottom"
+        android:gravity="center"
+        android:text="@string/purchase_price_and_sell_price"
+        android:textColor="@color/black"
+        app:layout_constraintLeft_toRightOf="@+id/lin_gain_losses"
+        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
+        app:layout_constraintWidth_percent="0.333"/>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_subject_name" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

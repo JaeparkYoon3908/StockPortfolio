@@ -1,16 +1,21 @@
 package com.yjpapp.stockportfolio.database
 
 class Databases {
-    companion object{
+    companion object CreateDB{
         /**
          * table name
          */
-        const val TABLE_DATA: String = "data_table"
+        private const val TABLE_DATA: String = "data_table"
 
         /**
-         * common columns
+         * proceed_list_data_table columns
          */
-        const val COL_ID: String = "id"
+        internal const val COL_ID: String = "id"
+        internal const val COL_DATA_PROCEED: String = "proceed"
+        internal const val CREATE_DATA_TABLE: String =
+            "create table " + TABLE_DATA + "(" +
+                    COL_ID + " integer primary key autoincrement, "+
+                    COL_DATA_PROCEED
 
     }
 }
