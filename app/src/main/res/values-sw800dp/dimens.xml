@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Galaxy Tab S6 Lite 임시  2000 x 1200 (WUXGA+)   비율 15 : 9  -->
+    <!-- dp 정의 px/1.271 정도가 필요하나 sw820넘어갈 시 dimens 값 인식 못함
+    해상도가 특이해서 그런것으로 생각됨 꼭 필요한 dp값 강제 설정  -->
+
+    <!-- sw752 기준 454dp -->
+    <dimen name="common_227dp">535dp</dimen>
+</resources>
