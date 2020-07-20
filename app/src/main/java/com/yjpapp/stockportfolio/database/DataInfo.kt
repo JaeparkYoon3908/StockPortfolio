@@ -1,12 +1,13 @@
 package com.yjpapp.stockportfolio.database
 
 class DataInfo {
-    private var id: Int = 0
-    private lateinit var date_of_sale: String //매매일
-    private lateinit var subject_name: String //종목명
-    private lateinit var real_gain_losses_amount: String //순손익금액
-    private lateinit var gain_percent: String // 수익률
-    private lateinit var purchase_price: String // 매수단가
-    private lateinit var sell_price: String // 매도단가
-
+    var dateOfSale: String? = null //매매일
+    var subjectName: String? = null // 종목명
+    var realPainLossesAmount: String? = null //순손익금액
+    var gainPercent: String? = null // 수익률
+    var purchasePrice: String? = null // 매수단가
+    var sellPrice: String? = null // 매도단가
 }
+
+
+
