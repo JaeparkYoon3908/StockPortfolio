@@ -13,6 +13,7 @@ class MainActivity : RootActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        /* db 생성코드
         val dbHelper = DatabaseOpenHelper(this)
         val sqliteDatabases = dbHelper.writableDatabase
         val databaseHandler = DatabaseHandler(sqliteDatabases, dbHelper)
@@ -21,5 +22,7 @@ class MainActivity : RootActivity(R.layout.activity_main) {
         dataInfo.gainPercent = "10%"
         dataInfo.realPainLossesAmount = "test"
         databaseHandler.insertData(dataInfo)
+
+         */
     }
 }
