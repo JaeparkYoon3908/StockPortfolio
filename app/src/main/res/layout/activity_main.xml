@@ -92,7 +92,7 @@
     <LinearLayout
         android:id="@+id/lin_MainActivity_total_gain_losses"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_100dp"
+        android:layout_height="@dimen/common_50dp"
         android:background="@drawable/border_line_bottom"
         android:orientation="horizontal"
         android:weightSum="10"
@@ -135,51 +135,49 @@
             android:textSize="@dimen/common_15dp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txt_subject_name"
-        android:layout_width="@dimen/common_0dp"
-        android:layout_height="@dimen/common_60dp"
-        android:background="@drawable/border_line_bottom_right"
-        android:gravity="center"
-        android:text="@string/main_date_of_sale_and_subject_name"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
-        app:layout_constraintWidth_percent="0.333"/>
-
-    <TextView
-        android:id="@+id/lin_gain_losses"
-        android:layout_width="@dimen/common_0dp"
-        android:layout_height="@dimen/common_60dp"
-        android:background="@drawable/border_line_bottom_right"
-        android:gravity="center"
-        android:text="@string/real_gains_losses_amount_and_gain_percent"
-        android:textColor="@color/black"
-        app:layout_constraintLeft_toRightOf="@+id/txt_subject_name"
-        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
-        app:layout_constraintWidth_percent="0.333"/>
-
-    <TextView
-        android:id="@+id/lin_"
-        android:layout_width="@dimen/common_0dp"
-        android:layout_height="@dimen/common_60dp"
-        android:background="@drawable/border_line_bottom"
-        android:gravity="center"
-        android:text="@string/purchase_price_and_sell_price"
-        android:textColor="@color/black"
-        app:layout_constraintLeft_toRightOf="@+id/lin_gain_losses"
-        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
-        app:layout_constraintWidth_percent="0.333"/>
-
-    <view class="androidx.appcompat.app.AlertController$RecycleListView"
-        android:id="@+id/listView"
+    <LinearLayout
+        android:id="@+id/lin_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:weightSum="3"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_subject_name" />
-    <ImageView
+        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses">
+
+        <TextView
+            android:id="@+id/txt_subject_name"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_60dp"
+            android:layout_weight="1"
+            android:background="@drawable/border_line_bottom_right"
+            android:gravity="center"
+            android:text="@string/main_date_of_sale_and_subject_name"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/lin_gain_losses"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_60dp"
+            android:layout_weight="1"
+            android:background="@drawable/border_line_bottom_right"
+            android:gravity="center"
+            android:text="@string/real_gains_losses_amount_and_gain_percent"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/lin_sel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_60dp"
+            android:layout_weight="1"
+            android:background="@drawable/border_line_bottom"
+            android:gravity="center"
+            android:text="@string/purchase_price_and_sell_price"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/lin_subtitle" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,4 +13,8 @@
     <color name="red">#FF0000</color>
     <color name="blue">#007dd6</color>
 
+    <color name="color_app_icon_orange">#FFA500</color>
+    <color name="color_app_icon_yellow">#FFF200</color>
+    <color name="color_app_icon_bold_green">#59590D</color>
+    <color name="color_app_icon_green">#32590D</color>
 </resources>
