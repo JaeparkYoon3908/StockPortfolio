@@ -7,30 +7,38 @@
     android:background="@android:color/white"
     tools:context=".activity.MainActivity">
 
-    <TextView
-        android:id="@+id/txt_MainActivity_proceed"
+    <Toolbar
+        android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:gravity="center"
-        android:paddingTop="@dimen/common_10dp"
-        android:paddingBottom="@dimen/common_10dp"
-        android:text="@string/main_proceeds"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/common_24dp"
+        android:layout_height="@dimen/common_70dp"
+        android:background="@color/color_app_icon_green"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/txt_MainActivity_proceed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="@dimen/common_10dp"
+            android:paddingBottom="@dimen/common_10dp"
+            android:text="@string/main_proceeds"
+            android:textColor="@android:color/white"
+            android:textSize="26sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </Toolbar>
+
 
     <LinearLayout
         android:id="@+id/lin_MainActivity_TopPanel"
         android:layout_width="@dimen/common_0dp"
         android:layout_height="@dimen/common_80dp"
-        android:layout_marginTop="@dimen/common_10dp"
         android:background="@drawable/border_line_top_bottom_right"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_MainActivity_proceed"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
         app:layout_constraintWidth_percent="0.5">
 
         <TextView
@@ -61,11 +69,10 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="@dimen/common_80dp"
-        android:layout_marginTop="@dimen/common_10dp"
         android:background="@drawable/border_line_top_bottom"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_MainActivity_proceed"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
         app:layout_constraintWidth_percent="0.5">
 
         <TextView

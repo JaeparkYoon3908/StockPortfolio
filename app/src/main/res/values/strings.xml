@@ -8,6 +8,9 @@
     <string name="main_subject">종류</string>
     <string name="main_hint_subject">종류를 입력해주세요.</string>
     <string name="main_date_of_sale_and_subject_name">매매일\n종목명</string>
+    <string name="main_date_of_sale_and_subject_name_data">%s \n %s</string>
     <string name="real_gains_losses_amount_and_gain_percent">순손익금액\n수익률</string>
+    <string name="real_gains_losses_amount_and_gain_percent_data">%s \n %s</string>
     <string name="purchase_price_and_sell_price">매수단가\n매도단가</string>
+    <string name="purchase_price_and_sell_price_data">%s \n %s</string>
 </resources>
