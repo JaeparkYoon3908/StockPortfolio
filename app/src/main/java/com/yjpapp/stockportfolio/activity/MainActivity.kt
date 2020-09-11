@@ -2,14 +2,14 @@ package com.yjpapp.stockportfolio.activity
 
 import android.os.Bundle
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.DataInfo
+import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.database.DatabaseHandler
 import com.yjpapp.stockportfolio.database.DatabaseOpenHelper
 
 class MainActivity : RootActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        logcat("테스트 로그캣")
     }
 
     // DB 생성 코드

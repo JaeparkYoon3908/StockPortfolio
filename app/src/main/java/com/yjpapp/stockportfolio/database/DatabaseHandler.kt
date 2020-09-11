@@ -1,8 +1,9 @@
 package com.yjpapp.stockportfolio.database
 
 import android.content.ContentValues
-import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import com.yjpapp.stockportfolio.model.DataInfo
+import com.yjpapp.stockportfolio.model.HeadInfo
 
 class DatabaseHandler(var database: SQLiteDatabase, var dbHelper: DatabaseOpenHelper) {
 

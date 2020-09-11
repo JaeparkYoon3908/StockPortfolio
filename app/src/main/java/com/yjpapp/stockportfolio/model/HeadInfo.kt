@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.database
+package com.yjpapp.stockportfolio.model
 
 class HeadInfo(
     var period: String?,
