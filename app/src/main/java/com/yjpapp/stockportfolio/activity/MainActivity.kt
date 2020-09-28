@@ -23,8 +23,7 @@ class MainActivity : RootActivity(R.layout.activity_main) {
     private fun initLayout(){
         rv_data.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         val arrayList = ArrayList<DataInfo>()
-        val dataInfo = DataInfo()
-        dataInfo.dateOfSale = "세일"
+        val dataInfo = DataInfo("세일", null, null, null, null, null)
         arrayList.add(dataInfo)
         arrayList.add(dataInfo)
         arrayList.add(dataInfo)
@@ -42,7 +41,7 @@ class MainActivity : RootActivity(R.layout.activity_main) {
         val sqliteDatabases = dbHelper.writableDatabase
         val databaseHandler = DatabaseHandler(sqliteDatabases, dbHelper)
 
-        val dataInfo = DataInfo()
+        val dataInfo = DataInfo("세일", null, null, null, null, null)
         dataInfo.gainPercent = "10%"
         dataInfo.realPainLossesAmount = "test"
         databaseHandler.insertData(dataInfo)

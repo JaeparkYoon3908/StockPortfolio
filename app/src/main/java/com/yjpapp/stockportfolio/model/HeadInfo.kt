@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.model
 
-class HeadInfo(
+data class HeadInfo(
     var period: String?,
     var subject: String?
 )

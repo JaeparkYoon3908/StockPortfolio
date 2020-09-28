@@ -6,14 +6,15 @@ import android.os.PersistableBundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.yjpapp.stockportfolio.BuildConfig
+import com.yjpapp.stockportfolio.R
 import java.util.logging.Logger
 
-open class RootActivity : AppCompatActivity {
+open class RootActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
+        setContentView(R.layout.activity_root)
     }
-    constructor(contentLayout: Int) : super(contentLayout)
 
     fun logcat(msg: String){
         if(BuildConfig.LOG_CAT) Log.d(javaClass.simpleName, msg)
