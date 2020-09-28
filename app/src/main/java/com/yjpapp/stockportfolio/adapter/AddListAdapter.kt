@@ -8,30 +8,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DataInfo
 
-class MainListAdapter(private val data: ArrayList<DataInfo>) :
-    RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
+class AddListAdapter(private val data: ArrayList<DataInfo>) :
+    RecyclerView.Adapter<AddListAdapter.ViewHolder>() {
     private var mContext: Context? = null
-    private var arrayList = ArrayList<DataInfo>()
 
-    init {
-        this.arrayList = data
-    }
-
-    class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
+    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
         val inflater = mContext?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view:View = inflater.inflate(R.layout.item_main_list, parent, false)
+        val view: View = inflater.inflate(R.layout.item_main_list, parent, false)
         return ViewHolder(view)
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        //val dateOfSale: String? = data[position].dateOfSale
     }
 
     override fun getItemCount(): Int {
-        return arrayList.size
+        return data.size
     }
 }

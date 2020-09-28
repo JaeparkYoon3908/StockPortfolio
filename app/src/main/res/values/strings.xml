@@ -13,4 +13,6 @@
     <string name="real_gains_losses_amount_and_gain_percent_data">%s \n %s</string>
     <string name="purchase_price_and_sell_price">매수단가\n매도단가</string>
     <string name="purchase_price_and_sell_price_data">%s \n %s</string>
+    <string name="add_title">추가하기</string>
+
 </resources>
