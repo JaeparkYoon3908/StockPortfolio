@@ -10,7 +10,7 @@ import com.yjpapp.stockportfolio.R
 import java.util.logging.Logger
 
 open class RootActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
-
+    public var mContext: Context? = this
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
         setContentView(R.layout.activity_root)

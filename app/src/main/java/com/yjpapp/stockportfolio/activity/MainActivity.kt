@@ -1,8 +1,8 @@
 package com.yjpapp.stockportfolio.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.adapter.MainListAdapter
@@ -11,6 +11,7 @@ import com.yjpapp.stockportfolio.database.DatabaseOpenHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.util.Utils
+import kotlin.collections.ArrayList
 
 
 class MainActivity : RootActivity(R.layout.activity_main) {
@@ -21,16 +22,31 @@ class MainActivity : RootActivity(R.layout.activity_main) {
     }
 
     private fun initLayout(){
-        rv_data.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        recyclerview_MainActivity.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         val arrayList = ArrayList<DataInfo>()
         val dataInfo = DataInfo("세일", null, null, null, null, null)
-        arrayList.add(dataInfo)
-        arrayList.add(dataInfo)
-        arrayList.add(dataInfo)
+
+        for(i in 1..10){
+            arrayList.add(dataInfo)
+        }
+
         val mainListAdapter = MainListAdapter(arrayList)
-        rv_data.adapter = mainListAdapter
-        img_back.setColorFilter(getColor(R.color.white))
-        img_back.setOnClickListener{
+        recyclerview_MainActivity.adapter = mainListAdapter
+        //img_back.setColorFilter(getColor(R.color.white))
+
+        //리스너 등록
+        //lin_add.setOnClickListener(onClickListener)
+
+    }
+
+    private val onClickListener = View.OnClickListener {view: View? ->
+        when(view?.id){
+            /*
+            R.id.lin_add -> {
+                val intent = Intent(mContext, AddActivity::class.java)
+                startActivity(intent)
+            }
+             */
 
         }
     }

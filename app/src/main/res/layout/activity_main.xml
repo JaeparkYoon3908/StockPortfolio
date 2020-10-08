@@ -7,20 +7,24 @@
     android:background="@android:color/white"
     tools:context=".activity.MainActivity">
 
+
     <Toolbar
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
         android:background="@color/color_app_icon_green"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <!--
         <ImageView
             android:id="@+id/img_back"
             android:layout_width="25dp"
             android:layout_height="35dp"
             android:src="@drawable/icon_c_back_on"
             />
+            -->
 
         <TextView
             android:id="@+id/txt_MainActivity_proceed"
@@ -29,24 +33,31 @@
             android:layout_gravity="center"
             android:paddingTop="@dimen/common_10dp"
             android:paddingBottom="@dimen/common_10dp"
-            android:text="@string/main_proceeds"
+            android:text="@string/common_proceeds"
             android:textColor="@android:color/white"
             android:textSize="22sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/img_add"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="20dp"
+        <!--
+        <LinearLayout
+            android:id="@+id/lin_add"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:src="@drawable/bottom_btn_add"
-            />
+            android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/img_add"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/bottom_btn_add"
+                />
+        </LinearLayout>
+        -->
     </Toolbar>
-
 
     <LinearLayout
         android:id="@+id/lin_MainActivity_TopPanel"
@@ -54,6 +65,7 @@
         android:layout_height="@dimen/common_80dp"
         android:background="@drawable/border_line_top_bottom_right"
         android:orientation="vertical"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
         app:layout_constraintWidth_percent="0.5">
@@ -63,8 +75,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/common_10dp"
-            android:text="@string/main_term"
-            android:textColor="@color/black"
+            android:text="@string/common_term"
+            android:textColor="@color/color_222222"
             android:textSize="@dimen/common_18dp" />
 
         <EditText
@@ -77,8 +89,8 @@
             android:layout_marginEnd="@dimen/common_20dp"
             android:background="@null"
             android:gravity="center"
-            android:hint="@string/main_hint_term"
-            android:textColor="@color/black"
+            android:hint="@string/common_hint_term"
+            android:textColor="@color/color_222222"
             android:textSize="@dimen/common_12dp" />
     </LinearLayout>
 
@@ -86,7 +98,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="@dimen/common_80dp"
-        android:background="@drawable/border_line_top_bottom"
+        android:background="@drawable/border_line_top_bottom_right"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
@@ -97,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/common_10dp"
-            android:text="@string/main_subject"
+            android:text="@string/common_subject"
             android:textColor="@color/black"
             android:textSize="@dimen/common_18dp" />
 
@@ -108,8 +120,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/common_5dp"
             android:background="@null"
-            android:hint="@string/main_hint_subject"
-            android:textColor="@color/black"
+            android:hint="@string/common_hint_subject"
+            android:textColor="@color/color_222222"
             android:textSize="@dimen/common_12dp" />
     </LinearLayout>
 
@@ -130,8 +142,8 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
             android:gravity="center"
-            android:text="@string/main_realization_gains_losses"
-            android:textColor="@color/black"
+            android:text="@string/common_realization_gains_losses"
+            android:textColor="@color/color_222222"
             android:textSize="@dimen/common_13dp" />
 
         <TextView
@@ -176,8 +188,8 @@
             android:layout_weight="1"
             android:background="@drawable/border_line_bottom_right"
             android:gravity="center"
-            android:text="@string/main_date_of_sale_and_subject_name"
-            android:textColor="@color/black"
+            android:text="@string/common_date_of_sale_and_subject_name"
+            android:textColor="@color/color_222222"
             android:lineSpacingExtra="5sp"
             />
 
@@ -188,8 +200,8 @@
             android:layout_weight="1"
             android:background="@drawable/border_line_bottom_right"
             android:gravity="center"
-            android:text="@string/real_gains_losses_amount_and_gain_percent"
-            android:textColor="@color/black"
+            android:text="@string/common_real_gains_losses_amount_and_gain_percent"
+            android:textColor="@color/color_222222"
             android:lineSpacingExtra="5sp"
             />
 
@@ -200,15 +212,66 @@
             android:layout_weight="1"
             android:background="@drawable/border_line_bottom"
             android:gravity="center"
-            android:text="@string/purchase_price_and_sell_price"
-            android:textColor="@color/black"
+            android:text="@string/common_purchase_price_and_sell_price"
+            android:textColor="@color/color_222222"
             android:lineSpacingExtra="5sp"
             />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_data"
+        android:id="@+id/recyclerview_MainActivity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/lin_subtitle" />
+        android:layout_height="0dp"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/lin_subtitle"
+        app:layout_constraintBottom_toTopOf="@+id/lin_bottom_menu"
+        />
+
+    <LinearLayout
+        android:id="@+id/lin_bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_50dp"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:background="@color/color_f1f1f1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <LinearLayout
+            android:id="@+id/lin_bottom_menu_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/txt_bottom_menu_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/common_modify"
+                android:textSize="16sp"
+                android:textColor="@color/color_222222"
+                />
+        </LinearLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/color_222222"
+            />
+        <LinearLayout
+            android:id="@+id/lin_bottom_menu_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/txt_bottom_menu_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/common_add"
+                android:textSize="16sp"
+                android:textColor="@color/color_222222"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

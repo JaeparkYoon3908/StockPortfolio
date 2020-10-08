@@ -17,4 +17,8 @@
     <color name="color_app_icon_yellow">#FFF200</color>
     <color name="color_app_icon_bold_green">#59590D</color>
     <color name="color_app_icon_green">#32590D</color>
+    <color name="color_main_background">#E2EdC5</color>
+
+    <color name="color_222222">#222222</color>
+    <color name="color_f1f1f1">#f1f1f1</color>
 </resources>

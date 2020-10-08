@@ -24,11 +24,12 @@ class MainListAdapter(private val data: ArrayList<DataInfo>) :
         val inflater = mContext?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view:View = inflater.inflate(R.layout.item_main_list, parent, false)
         return ViewHolder(view)
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        holder.itemView.setOnLongClickListener {
+            return@setOnLongClickListener true
+        }
     }
 
     override fun getItemCount(): Int {

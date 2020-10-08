@@ -1,18 +1,21 @@
 <resources>
     <string name="app_name">수익얼마</string>
 
-    <string name="main_proceeds">수익금</string>
-    <string name="main_term">기간</string>
-    <string name="main_hint_term">기간을 입력해주세요.</string>
-    <string name="main_realization_gains_losses">실현손익</string>
-    <string name="main_subject">종류</string>
-    <string name="main_hint_subject">종류를 입력해주세요.</string>
-    <string name="main_date_of_sale_and_subject_name">매매일\n종목명</string>
-    <string name="main_date_of_sale_and_subject_name_data">%s \n %s</string>
-    <string name="real_gains_losses_amount_and_gain_percent">순손익금액\n수익률</string>
-    <string name="real_gains_losses_amount_and_gain_percent_data">%s \n %s</string>
-    <string name="purchase_price_and_sell_price">매수단가\n매도단가</string>
-    <string name="purchase_price_and_sell_price_data">%s \n %s</string>
-    <string name="add_title">추가하기</string>
+    <string name="common_proceeds">수익금</string>
+    <string name="common_term">기간</string>
+    <string name="common_hint_term">기간을 입력해주세요.</string>
+    <string name="common_realization_gains_losses">실현손익</string>
+    <string name="common_subject">종류</string>
+    <string name="common_hint_subject">종류를 입력해주세요.</string>
+    <string name="common_date_of_sale_and_subject_name">매매일\n종목명</string>
+    <string name="common_date_of_sale_and_subject_name_data">%s \n %s</string>
+    <string name="common_real_gains_losses_amount_and_gain_percent">순손익금액\n수익률</string>
+    <string name="common_real_gains_losses_amount_and_gain_percent_data">%s \n %s</string>
+    <string name="common_purchase_price_and_sell_price">매수단가\n매도단가</string>
+    <string name="common_purchase_price_and_sell_price_data">%s \n %s</string>
+    <string name="common_add">추가</string>
+    <string name="common_modify">수정</string>
+    <string name="common_delete">삭제</string>
 
+    <string name="AddActivity_list1_hint">종목명을 입력해주세요.</string>
 </resources>
