@@ -16,7 +16,4 @@ open class RootActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
         setContentView(R.layout.activity_root)
     }
 
-    fun logcat(msg: String){
-        if(BuildConfig.LOG_CAT) Log.d(javaClass.simpleName, msg)
-    }
 }

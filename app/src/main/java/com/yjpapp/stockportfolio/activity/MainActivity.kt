@@ -21,7 +21,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
     private var mainListAdapter: MainListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        logcat(Utils.getTodayYYYYMMDD())
+        Utils.logcat(Utils.getTodayYYYYMMDD())
         initLayout()
     }
 
@@ -92,6 +92,6 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
         txt_bottom_menu_left.text = getString(R.string.common_cancel)
         txt_bottom_menu_right.text = getString(R.string.common_complete)
 
-        logcat("deleteModeOn 콜백 왔어!!")
+        Utils.logcat("deleteModeOn 콜백 왔어!!")
     }
 }
