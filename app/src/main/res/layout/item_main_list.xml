@@ -6,6 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:weightSum="3">
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"
+        />
 
     <TextView
         android:id="@+id/list_1"
@@ -17,7 +24,7 @@
         android:textColor="@color/black"
         android:lineSpacingExtra="5sp"
         android:gravity="center"
-        android:background="@drawable/border_line_bottom_right"
+        android:background="@drawable/border_line_bottom_left_right"
         tools:text="매매일\n종목명" />
 
     <TextView

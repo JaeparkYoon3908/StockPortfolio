@@ -16,6 +16,8 @@
     <string name="common_add">추가</string>
     <string name="common_modify">수정</string>
     <string name="common_delete">삭제</string>
+    <string name="common_complete">완료</string>
+    <string name="common_cancel">취소</string>
 
     <string name="AddActivity_list1_hint">종목명을 입력해주세요.</string>
 </resources>
