@@ -1,6 +1,5 @@
 package com.yjpapp.stockportfolio.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -12,6 +11,7 @@ import com.yjpapp.stockportfolio.database.DatabaseOpenHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.util.Utils
+import kotlinx.android.synthetic.main.item_main_list.*
 import kotlin.collections.ArrayList
 
 
@@ -42,6 +42,10 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
         //lin_add.setOnClickListener(onClickListener)
         lin_bottom_menu_left.setOnClickListener(onClickListener)
         lin_bottom_menu_right.setOnClickListener(onClickListener)
+        checkbox_all.setOnCheckedChangeListener {view, isChecked ->
+            mainListAdapter?.setAllCheckClicked(isChecked)
+            mainListAdapter?.notifyDataSetChanged()
+        }
     }
 
     private val onClickListener = View.OnClickListener {view: View? ->
@@ -50,9 +54,10 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
                 //delete 모드에서 왼쪽 버튼을 누름
                 if(isDeleteMode){
                     Toast.makeText(this@MainActivity, "deleteMode On!!!", Toast.LENGTH_SHORT).show()
+                    lin_all_check.visibility = View.GONE
                     txt_bottom_menu_left.text = getString(R.string.common_modify)
                     txt_bottom_menu_right.text = getString(R.string.common_add)
-                    mainListAdapter?.hideCheckBox()
+                    mainListAdapter?.setDeleteModeOff()
                     mainListAdapter?.notifyDataSetChanged()
                     isDeleteMode = false
                 }else{
@@ -63,9 +68,10 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
                 //delete 모드에서 오른쪽 버튼을 누름
                 if(isDeleteMode){
                     Toast.makeText(this@MainActivity, "deleteMode On!!!", Toast.LENGTH_SHORT).show()
+                    lin_all_check.visibility = View.GONE
                     txt_bottom_menu_left.text = getString(R.string.common_modify)
                     txt_bottom_menu_right.text = getString(R.string.common_add)
-                    mainListAdapter?.hideCheckBox()
+                    mainListAdapter?.setDeleteModeOff()
                     mainListAdapter?.notifyDataSetChanged()
                     isDeleteMode = false
                 }else{
@@ -89,6 +95,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
 
     override fun deleteModeOn() {
         isDeleteMode = true
+        lin_all_check.visibility = View.VISIBLE
         txt_bottom_menu_left.text = getString(R.string.common_cancel)
         txt_bottom_menu_right.text = getString(R.string.common_complete)
 

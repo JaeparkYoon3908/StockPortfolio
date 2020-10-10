@@ -30,7 +30,6 @@ class AddActivity: RootActivity(R.layout.activity_add) {
             R.id.img_add ->{
 
             }
-
         }
     }
 }

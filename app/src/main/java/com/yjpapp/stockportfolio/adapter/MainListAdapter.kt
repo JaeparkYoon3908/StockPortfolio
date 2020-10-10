@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.activity.MainActivity
 import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.item_main_list.view.*
@@ -16,7 +15,8 @@ class MainListAdapter(private val data: ArrayList<DataInfo>, callback: OnDeleteM
     private var mContext: Context? = null
     private var dataList = ArrayList<DataInfo>()
     private var onDeleteMode: OnDeleteMode
-    private var hideCheckBox: Boolean = true
+    private var deleteModeOn: Boolean = false
+    private var allCheckClick: Boolean = false
 
     interface OnDeleteMode{
         fun deleteModeOn()
@@ -39,22 +39,24 @@ class MainListAdapter(private val data: ArrayList<DataInfo>, callback: OnDeleteM
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 아이템을 길게 눌렀을 때 삭제모드로 전환.
         holder.itemView.setOnLongClickListener {
-            hideCheckBox = false
+            deleteModeOn = true
             onDeleteMode.deleteModeOn()
             notifyDataSetChanged()
             return@setOnLongClickListener true
         }
-        if(hideCheckBox){
-            holder.itemView.checkbox.visibility = View.GONE
+        if(deleteModeOn){
+            holder.itemView.rel_checkbox.visibility = View.VISIBLE
         }else{
-            holder.itemView.checkbox.visibility = View.VISIBLE
+            holder.itemView.rel_checkbox.visibility = View.GONE
         }
-        holder.itemView.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->  }
+        holder.itemView.checkbox!!.isChecked = allCheckClick
+        holder.itemView.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+        }
         
         if(holder.itemView.checkbox.isChecked){
-            Utils.logcat("position : " + position + "isChecked!!")
+            Utils.logcat("position : $position isChecked!!")
         }else{
-            Utils.logcat("position : " + position + "notChecked!!")
+            Utils.logcat("position : $position notChecked!!")
         }
     }
 
@@ -66,7 +68,11 @@ class MainListAdapter(private val data: ArrayList<DataInfo>, callback: OnDeleteM
         dataList.removeAt(position)
     }
 
-    fun hideCheckBox(){
-        hideCheckBox = true
+    fun setDeleteModeOff(){
+        deleteModeOn = false
+    }
+
+    fun setAllCheckClicked(check: Boolean){
+        allCheckClick = check
     }
 }
