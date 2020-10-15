@@ -28,7 +28,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
     private fun initLayout(){
         recyclerview_MainActivity.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         val arrayList = ArrayList<DataInfo>()
-        val dataInfo = DataInfo("세일", null, null, null, null, null)
+        val dataInfo = DataInfo("세일", null, null, null, null, null, false)
 
         for(i in 1..10){
             arrayList.add(dataInfo)
@@ -51,7 +51,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
     private val onClickListener = View.OnClickListener {view: View? ->
         when(view?.id){
             R.id.lin_bottom_menu_left -> {
-                //delete 모드에서 왼쪽 버튼을 누름
+                //delete 모드에서 취소 버튼을 누름
                 if(isDeleteMode){
                     Toast.makeText(this@MainActivity, "deleteMode On!!!", Toast.LENGTH_SHORT).show()
                     lin_all_check.visibility = View.GONE
@@ -65,7 +65,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
                 }
             }
             R.id.lin_bottom_menu_right -> {
-                //delete 모드에서 오른쪽 버튼을 누름
+                //delete 모드에서 완료 버튼을 누름
                 if(isDeleteMode){
                     Toast.makeText(this@MainActivity, "deleteMode On!!!", Toast.LENGTH_SHORT).show()
                     lin_all_check.visibility = View.GONE
@@ -74,11 +74,20 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
                     mainListAdapter?.setDeleteModeOff()
                     mainListAdapter?.notifyDataSetChanged()
                     isDeleteMode = false
+
                 }else{
 
                 }
             }
         }
+    }
+    override fun deleteModeOn() {
+        isDeleteMode = true
+        lin_all_check.visibility = View.VISIBLE
+        txt_bottom_menu_left.text = getString(R.string.common_cancel)
+        txt_bottom_menu_right.text = getString(R.string.common_complete)
+
+        Utils.logcat("deleteModeOn 콜백 왔어!!")
     }
 
     // DB 생성 코드
@@ -87,18 +96,15 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
         val sqliteDatabases = dbHelper.writableDatabase
         val databaseHandler = DatabaseHandler(sqliteDatabases, dbHelper)
 
-        val dataInfo = DataInfo("세일", null, null, null, null, null)
+        val dataInfo = DataInfo("세일", null, null, null, null, null, false)
         dataInfo.gainPercent = "10%"
         dataInfo.realPainLossesAmount = "test"
         databaseHandler.insertData(dataInfo)
     }
+    private fun deleteDataInfoList(){
+        val dataInfoList = mainListAdapter?.getDataInfoList()
+        for (i in 0..dataInfoList?.size!!){
 
-    override fun deleteModeOn() {
-        isDeleteMode = true
-        lin_all_check.visibility = View.VISIBLE
-        txt_bottom_menu_left.text = getString(R.string.common_cancel)
-        txt_bottom_menu_right.text = getString(R.string.common_complete)
-
-        Utils.logcat("deleteModeOn 콜백 왔어!!")
+        }
     }
 }

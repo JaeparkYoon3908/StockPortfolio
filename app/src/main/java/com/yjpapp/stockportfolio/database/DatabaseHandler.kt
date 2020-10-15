@@ -32,4 +32,20 @@ class DatabaseHandler(var database: SQLiteDatabase, var dbHelper: DatabaseOpenHe
 
         return insertCheck != -1L
     }
+
+    fun getAllDataInfo(): DataInfo {
+
+
+        return DataInfo(null, null, null, null,
+            null,null,false)
+    }
+
+    fun getDataInfo(position: Int): DataInfo {
+        return DataInfo(null, null, null, null,
+        null,null,false)
+    }
+
+    fun deleteDataInfo(position: Int){
+
+    }
 }

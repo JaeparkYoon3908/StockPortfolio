@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_main_list.view.*
 class MainListAdapter(private val data: ArrayList<DataInfo>, callback: OnDeleteMode) :
     RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
     private var mContext: Context? = null
-    private var dataList = ArrayList<DataInfo>()
+    private var dataInfoList = ArrayList<DataInfo>()
     private var onDeleteMode: OnDeleteMode
     private var deleteModeOn: Boolean = false
     private var allCheckClick: Boolean = false
@@ -23,7 +23,7 @@ class MainListAdapter(private val data: ArrayList<DataInfo>, callback: OnDeleteM
     }
 
     init {
-        this.dataList = data
+        this.dataInfoList = data
         this.onDeleteMode = callback
     }
 
@@ -51,6 +51,7 @@ class MainListAdapter(private val data: ArrayList<DataInfo>, callback: OnDeleteM
         }
         holder.itemView.checkbox!!.isChecked = allCheckClick
         holder.itemView.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            dataInfoList[position].isDeleteCheck = isChecked
         }
         
         if(holder.itemView.checkbox.isChecked){
@@ -61,11 +62,11 @@ class MainListAdapter(private val data: ArrayList<DataInfo>, callback: OnDeleteM
     }
 
     override fun getItemCount(): Int {
-        return dataList.size
+        return dataInfoList.size
     }
 
     fun deleteList(position: Int){
-        dataList.removeAt(position)
+        dataInfoList.removeAt(position)
     }
 
     fun setDeleteModeOff(){
@@ -74,5 +75,9 @@ class MainListAdapter(private val data: ArrayList<DataInfo>, callback: OnDeleteM
 
     fun setAllCheckClicked(check: Boolean){
         allCheckClick = check
+    }
+
+    fun getDataInfoList(): ArrayList<DataInfo>{
+        return dataInfoList
     }
 }
