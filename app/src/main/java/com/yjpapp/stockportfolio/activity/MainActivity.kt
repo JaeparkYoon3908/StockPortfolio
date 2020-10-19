@@ -19,10 +19,12 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
 
     private var isDeleteMode: Boolean = false
     private var mainListAdapter: MainListAdapter? = null
+    private lateinit var databaseHandler:DatabaseHandler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Utils.logcat(Utils.getTodayYYYYMMDD())
         initLayout()
+        createDB()
     }
 
     private fun initLayout(){
@@ -94,7 +96,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
     private fun createDB() {
         val dbHelper = DatabaseOpenHelper(this)
         val sqliteDatabases = dbHelper.writableDatabase
-        val databaseHandler = DatabaseHandler(sqliteDatabases, dbHelper)
+        databaseHandler = DatabaseHandler(sqliteDatabases, dbHelper)
 
         val dataInfo = DataInfo("세일", null, null, null, null, null, false)
         dataInfo.gainPercent = "10%"
@@ -104,7 +106,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
     private fun deleteDataInfoList(){
         val dataInfoList = mainListAdapter?.getDataInfoList()
         for (i in 0..dataInfoList?.size!!){
-
+            databaseHandler.insertData(dataInfoList[i])
         }
     }
 }

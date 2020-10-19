@@ -8,7 +8,7 @@ import com.yjpapp.stockportfolio.model.HeadInfo
 class DatabaseHandler(var database: SQLiteDatabase, var dbHelper: DatabaseOpenHelper) {
 
     fun insertData(dataInfo: DataInfo): Boolean{
-        var insertCheck: Long = -1L
+        var insertCheck: Long
         val contentValues = ContentValues()
         contentValues.put(Databases.COL_DATE_OF_SALE, dataInfo.dateOfSale)
         contentValues.put(Databases.COL_SUBJECT_NAME,dataInfo.subjectName)
@@ -23,7 +23,7 @@ class DatabaseHandler(var database: SQLiteDatabase, var dbHelper: DatabaseOpenHe
     }
 
     fun insertHead(headInfo: HeadInfo): Boolean{
-        var insertCheck: Long = -1L
+        var insertCheck: Long
         val contentValues = ContentValues()
         contentValues.put(Databases.COL_PERIOD, headInfo.period)
         contentValues.put(Databases.COL_SUBJECT, headInfo.subject)
