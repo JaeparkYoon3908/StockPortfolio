@@ -30,7 +30,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
     private fun initLayout(){
         recyclerview_MainActivity.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         val arrayList = ArrayList<DataInfo>()
-        val dataInfo = DataInfo("세일", null, null, null, null, null, false)
+        val dataInfo = DataInfo("세일", null, null, null, null, null, null)
 
         for(i in 1..10){
             arrayList.add(dataInfo)
@@ -98,7 +98,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
         val sqliteDatabases = dbHelper.writableDatabase
         databaseHandler = DatabaseHandler(sqliteDatabases, dbHelper)
 
-        val dataInfo = DataInfo("세일", null, null, null, null, null, false)
+        val dataInfo = DataInfo("세일", null, null, null, null, null, null)
         dataInfo.gainPercent = "10%"
         dataInfo.realPainLossesAmount = "test"
         databaseHandler.insertData(dataInfo)

@@ -7,7 +7,7 @@ data class DataInfo (
     var gainPercent: String?, // 수익률
     var purchasePrice: String?, // 매수단가
     var sellPrice: String?, // 매도단가
-    var isDeleteCheck: Boolean
+    var isDeleteCheck: String?
 )
 
 
