@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.model
 
 data class DataInfo (
+    var id: Int,
     var dateOfSale: String?, //매매일
     var subjectName: String?, // 종목명
     var realPainLossesAmount: String?, //순손익금액
