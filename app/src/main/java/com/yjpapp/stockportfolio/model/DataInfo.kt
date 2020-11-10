@@ -10,8 +10,3 @@ data class DataInfo (
     var sellPrice: String?, // 매도단가
     var isDeleteCheck: String?
 )
-
-
-
-
-

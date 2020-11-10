@@ -15,12 +15,13 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
 
     private var isDeleteMode: Boolean = false
     private var mainListAdapter: MainListAdapter? = null
+    private var dataList: ArrayList<DataInfo?>? = null
 //    private lateinit var databaseHandler:DatabaseHandler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Utils.logcat(Utils.getTodayYYYYMMDD())
         initLayout()
-        insertData()
+//        insertData()
     }
 
     private fun initLayout(){
@@ -28,7 +29,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
 //        val arrayList = ArrayList<DataInfo>()
         val dataInfo = DataInfo(0,"세일", null, null, null, null, null, null)
 
-        val dataList:ArrayList<DataInfo>? = databaseHandler?.getAllDataInfo()
+        dataList  = databaseHandler?.getAllDataInfo()
         mainListAdapter = MainListAdapter(dataList, this)
 
         recyclerview_MainActivity.adapter = mainListAdapter
@@ -64,6 +65,16 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
                     lin_all_check.visibility = View.GONE
                     txt_bottom_menu_left.text = getString(R.string.common_modify)
                     txt_bottom_menu_right.text = getString(R.string.common_add)
+//                    var dataList = mainListAdapter?.getDataInfoList()!!
+
+                    for(i in 0 until dataList!!.size){
+                        if(dataList?.get(i)?.isDeleteCheck.equals(getString(R.string.common_true))){
+                            val position: Int = dataList?.get(i)?.id!!
+                            databaseHandler?.deleteDataInfo(position)
+                        }
+                    }
+                    dataList = databaseHandler?.getAllDataInfo()!!
+                    mainListAdapter?.setDataInfoList(dataList!!)
                     mainListAdapter?.setDeleteModeOff()
                     mainListAdapter?.notifyDataSetChanged()
                     isDeleteMode = false
@@ -83,21 +94,14 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
         Utils.logcat("deleteModeOn 콜백 왔어!!")
     }
 
-    // DB 생성 코드
+
     private fun insertData() {
-//        val dbHelper = DatabaseOpenHelper(this)
-//        val sqliteDatabases = dbHelper.writableDatabase
-//        databaseHandler = DatabaseHandler(sqliteDatabases, dbHelper)
 
         val dataInfo = DataInfo(0,"세일", null, null, null, null, null, null)
         dataInfo.gainPercent = "10%"
         dataInfo.realPainLossesAmount = "test"
-        databaseHandler?.insertData(dataInfo)
-    }
-    private fun deleteDataInfoList(){
-        val dataInfoList = mainListAdapter?.getDataInfoList()
-        for (i in 0..dataInfoList?.size!!){
-            databaseHandler?.insertData(dataInfoList[i])
+        for(i in 0 until 10){
+            databaseHandler?.insertData(dataInfo)
         }
     }
 }

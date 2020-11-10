@@ -10,10 +10,10 @@ import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.item_main_list.view.*
 
-class MainListAdapter(private val data: ArrayList<DataInfo>?, callback: OnDeleteMode) :
+class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDeleteMode) :
     RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
     private var mContext: Context? = null
-    private var dataInfoList = ArrayList<DataInfo>()
+    private var dataInfoList = ArrayList<DataInfo?>()
     private var onDeleteMode: OnDeleteMode
     private var deleteModeOn: Boolean = false
     private var allCheckClick: Boolean = false
@@ -66,8 +66,12 @@ class MainListAdapter(private val data: ArrayList<DataInfo>?, callback: OnDelete
         allCheckClick = check
     }
 
-    fun getDataInfoList(): ArrayList<DataInfo>{
+    fun getDataInfoList(): ArrayList<DataInfo?>{
         return dataInfoList
+    }
+
+    fun setDataInfoList(dataInfoList: ArrayList<DataInfo?>){
+        this.dataInfoList = dataInfoList
     }
 
     private fun bindCheckBox(holder: ViewHolder, position: Int){
@@ -79,9 +83,9 @@ class MainListAdapter(private val data: ArrayList<DataInfo>?, callback: OnDelete
         holder.itemView.checkbox!!.isChecked = allCheckClick
         holder.itemView.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
-                dataInfoList[position].isDeleteCheck = mContext?.getString(R.string.common_true)
+                dataInfoList[position]?.isDeleteCheck = mContext?.getString(R.string.common_true)
             }else{
-                dataInfoList[position].isDeleteCheck = mContext?.getString(R.string.common_false)
+                dataInfoList[position]?.isDeleteCheck = mContext?.getString(R.string.common_false)
             }
         }
 
@@ -92,8 +96,8 @@ class MainListAdapter(private val data: ArrayList<DataInfo>?, callback: OnDelete
         }
     }
     private fun bindDataList(holder: ViewHolder, position: Int){
-        holder.itemView.list_1.text = dataInfoList[position].dateOfSale + "\n" + dataInfoList[position].subjectName
-        holder.itemView.list_2.text = dataInfoList[position].realPainLossesAmount + "\n" + dataInfoList[position].gainPercent
-        holder.itemView.list_3.text = dataInfoList[position].purchasePrice + "\n" + dataInfoList[position].sellPrice
+        holder.itemView.list_1.text = dataInfoList[position]?.dateOfSale + "\n" + dataInfoList[position]?.subjectName
+        holder.itemView.list_2.text = dataInfoList[position]?.realPainLossesAmount + "\n" + dataInfoList[position]?.gainPercent
+        holder.itemView.list_3.text = dataInfoList[position]?.purchasePrice + "\n" + dataInfoList[position]?.sellPrice
     }
 }
