@@ -19,7 +19,7 @@ class AddActivity: RootActivity(R.layout.activity_add) {
         recyclerview_AddActivity.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         val arrayList = ArrayList<DataInfo>()
         val dataInfo = DataInfo(0,"세일", null, null,
-            null, null, null,null)
+            null, null, null,null,0)
         arrayList.add(dataInfo)
         arrayList.add(dataInfo)
         arrayList.add(dataInfo)

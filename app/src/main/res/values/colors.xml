@@ -4,8 +4,8 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
+    <color name="color_background_fbfbfb">#fbfbfb</color>
+
     <color name="lite_blue">#4E78A0</color>
     <color name="grey">#FF909090</color>
     <color name="orange">#E47833</color>
@@ -19,7 +19,13 @@
     <color name="color_app_icon_green">#32590D</color>
     <color name="color_main_background">#E2EdC5</color>
 
+    <color name="color_000000">#000000</color>
     <color name="color_222222">#222222</color>
+    <color name="color_666666">#666666</color>
+    <color name="color_ffffff">#FFFFFF</color>
     <color name="color_f1f1f1">#f1f1f1</color>
     <color name="color_line_1a000000">#1a000000</color>
+    <color name="color_e52b4e">#e52b4e</color>
+    <color name="color_dddddd">#dddddd</color>
+
 </resources>

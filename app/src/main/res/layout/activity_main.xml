@@ -12,7 +12,7 @@
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
-        android:background="@color/color_app_icon_green"
+        android:background="@color/color_f1f1f1"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -33,8 +33,8 @@
             android:layout_gravity="center"
             android:paddingTop="@dimen/common_10dp"
             android:paddingBottom="@dimen/common_10dp"
-            android:text="@string/common_proceeds"
-            android:textColor="@android:color/white"
+            android:text="주식 포트폴리오"
+            android:textColor="@color/color_222222"
             android:textSize="22sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -59,13 +59,13 @@
         -->
     </Toolbar>
 
+    <!--
     <LinearLayout
         android:id="@+id/lin_MainActivity_TopPanel"
         android:layout_width="@dimen/common_0dp"
         android:layout_height="@dimen/common_80dp"
         android:background="@drawable/border_line_top_bottom_right"
         android:orientation="vertical"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
         app:layout_constraintWidth_percent="0.5">
@@ -110,7 +110,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/common_10dp"
             android:text="@string/common_subject"
-            android:textColor="@color/black"
+            android:textColor="@color/color_000000"
             android:textSize="@dimen/common_18dp" />
 
         <EditText
@@ -124,27 +124,28 @@
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_12dp" />
     </LinearLayout>
+    -->
 
     <LinearLayout
         android:id="@+id/lin_MainActivity_total_gain_losses"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
-        android:background="@drawable/border_line_bottom"
         android:orientation="horizontal"
         android:weightSum="10"
-        app:layout_constraintEnd_toEndOf="@+id/lin_MainActivity_TopPanel"
-        app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_TopPanel"
-        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_TopPanel">
+        app:layout_constraintEnd_toEndOf="@+id/toolbar_main"
+        app:layout_constraintStart_toEndOf="@+id/toolbar_main"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main">
 
         <TextView
             android:layout_width="@dimen/common_0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
             android:layout_weight="2"
-            android:gravity="center"
+            android:gravity="start"
             android:text="@string/common_realization_gains_losses"
             android:textColor="@color/color_222222"
-            android:textSize="@dimen/common_13dp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/txt_total_realization_gains_losses"
@@ -155,9 +156,13 @@
             android:layout_marginEnd="@dimen/common_5dp"
             android:layout_weight="6"
             android:gravity="center"
-            android:text="0원"
+            android:text="650,000"
             android:textColor="@color/red"
-            android:textSize="@dimen/common_18dp" />
+            android:textSize="@dimen/common_18dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            />
 
         <TextView
             android:id="@+id/txt_total_realization_gains_losses_percent"
@@ -165,13 +170,24 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
-            android:gravity="center"
+            android:layout_marginEnd="20dp"
+            android:gravity="end"
             android:text="0%"
             android:textColor="@color/red"
             android:textSize="@dimen/common_15dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_line_1a000000"
+        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
+        />
+    <!--
     <LinearLayout
         android:id="@+id/lin_subtitle"
         android:layout_width="match_parent"
@@ -241,25 +257,89 @@
             />
 
     </LinearLayout>
+    -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lin_MainActivity_Filter"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/txt_MainActivity_Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="날짜순"
+            android:textSize="18sp"
+            android:textColor="@color/color_222222"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/img_MainActivity_Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_gravity="center"
+            android:src="@drawable/arrow_bottom"
+            app:layout_constraintTop_toTopOf="@+id/txt_MainActivity_Filter"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_MainActivity_Filter"
+            app:layout_constraintStart_toEndOf="@+id/txt_MainActivity_Filter"
+            />
+
+        <TextView
+            android:id="@+id/txt_MainActivity_Edit"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="편집"
+            android:textSize="18sp"
+            android:textColor="@color/color_222222"
+            app:layout_constraintTop_toTopOf="@+id/lin_MainActivity_Filter"
+            app:layout_constraintBottom_toBottomOf="@+id/lin_MainActivity_Filter"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/line_2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/color_line_1a000000"
+        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_Filter"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_MainActivity"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/lin_subtitle"
+        app:layout_constraintTop_toBottomOf="@+id/line_2"
         app:layout_constraintBottom_toTopOf="@+id/lin_bottom_menu"
+        app:layout_constraintWidth_percent="0.5"
         />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lin_bottom_menu"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
-        android:weightSum="2"
+        android:weightSum="1"
         android:orientation="horizontal"
         android:background="@color/color_f1f1f1"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         >
+        <!--
         <LinearLayout
             android:id="@+id/lin_bottom_menu_left"
             android:layout_width="0dp"
@@ -297,5 +377,17 @@
                 android:textColor="@color/color_222222"
                 />
         </LinearLayout>
-    </LinearLayout>
+        -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="bottom menu"
+
+            android:textColor="@color/color_222222"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
