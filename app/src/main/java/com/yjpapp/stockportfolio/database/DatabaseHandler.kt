@@ -22,7 +22,7 @@ class DatabaseHandler(var database: SQLiteDatabase, var dbHelper: DatabaseOpenHe
     }
 
     fun insertData(dataInfo: DataInfo?): Boolean{
-        var insertCheck: Long
+        val insertCheck: Long
         val contentValues = ContentValues()
         contentValues.put(Databases.COL_DATE_OF_SALE, dataInfo?.dateOfSale)
         contentValues.put(Databases.COL_SUBJECT_NAME,dataInfo?.subjectName)
@@ -58,18 +58,6 @@ class DatabaseHandler(var database: SQLiteDatabase, var dbHelper: DatabaseOpenHe
                 resultList.add(result)
                 cursor.moveToNext()
             }
-//            while (cursor.moveToNext()){
-//                val result = DataInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_ID)),
-//                        cursor.getString(cursor.getColumnIndex(Databases.COL_DATE_OF_SALE)),
-//                        cursor.getString(cursor.getColumnIndex(Databases.COL_SUBJECT_NAME)),
-//                        cursor.getString(cursor.getColumnIndex(Databases.COL_REAL_GAINS_LOSSES_AMOUNT)),
-//                        cursor.getString(cursor.getColumnIndex(Databases.COL_GAIN_PERCENT)),
-//                        cursor.getString(cursor.getColumnIndex(Databases.COL_PURCHASE_PRICE)),
-//                        cursor.getString(cursor.getColumnIndex(Databases.COL_SELL_PRICE)),
-//                        cursor.getString(cursor.getColumnIndex(Databases.COL_DELETE_CHECK))
-//                    )
-//                resultList.add(result)
-//            }
         }
         cursor?.close()
         return resultList

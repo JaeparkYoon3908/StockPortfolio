@@ -16,6 +16,8 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
     private var isDeleteMode: Boolean = false
     private var mainListAdapter: MainListAdapter? = null
     private var dataList: ArrayList<DataInfo?>? = null
+    private var modeType: Int = 0
+
 //    private lateinit var databaseHandler:DatabaseHandler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,12 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
         }
     }
 
+    /**mode type
+     * 0 : view mode (default, 수정, 추가)
+     * 1 : delete mode (삭제 모드, 취소, 완료)
+     * 2 : add mode (추가 모드, 취소, 완료)
+     * 3 : modify mode (수정 모드, 취소, 완료)
+     */
     private val onClickListener = View.OnClickListener {view: View? ->
         when(view?.id){
             R.id.lin_bottom_menu_left -> {
