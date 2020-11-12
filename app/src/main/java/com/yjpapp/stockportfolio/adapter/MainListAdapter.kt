@@ -7,16 +7,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DataInfo
-import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.item_main_list.view.*
 import kotlinx.android.synthetic.main.item_main_list2.view.*
 
 class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDeleteMode) :
     RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
     private var mContext: Context? = null
     private var dataInfoList = ArrayList<DataInfo?>()
-    private var onDeleteMode: OnDeleteMode
-    private var deleteModeOn: Boolean = false
+    private var onEditMode: OnDeleteMode
+    private var isEditMode: Boolean = false
     private var allCheckClick: Boolean = false
 
     interface OnDeleteMode{
@@ -27,7 +25,7 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
         if (data != null) {
             this.dataInfoList = data
         }
-        this.onDeleteMode = callback
+        this.onEditMode = callback
     }
 
     class ViewHolder(private var view: View) : RecyclerView.ViewHolder(view)
@@ -40,11 +38,13 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // 아이템을 길게 눌렀을 때 삭제모드로 전환.
+        // 아이템을 길게 눌렀을 때 편집모드로 전환.
         holder.itemView.setOnLongClickListener {
-            deleteModeOn = true
-            onDeleteMode.editModeOn()
-            notifyDataSetChanged()
+            if(!isEditMode){
+                isEditMode = true
+                onEditMode.editModeOn()
+                notifyDataSetChanged()
+            }
             return@setOnLongClickListener true
         }
 //        bindCheckBox(holder, position)
@@ -59,13 +59,9 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
         dataInfoList.removeAt(position)
     }
 
-    fun setDeleteModeOff(){
-        deleteModeOn = false
-    }
-
-    fun setAllCheckClicked(check: Boolean){
-        allCheckClick = check
-    }
+//    fun setAllCheckClicked(check: Boolean){
+//        allCheckClick = check
+//    }
 
     fun getDataInfoList(): ArrayList<DataInfo?>{
         return dataInfoList
@@ -73,6 +69,13 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
 
     fun setDataInfoList(dataInfoList: ArrayList<DataInfo?>){
         this.dataInfoList = dataInfoList
+    }
+
+    fun setEditMode(isEditMode: Boolean){
+        this.isEditMode = isEditMode
+    }
+    fun isEditMode():Boolean{
+        return isEditMode
     }
 
 //    private fun bindCheckBox(holder: ViewHolder, position: Int){

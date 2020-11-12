@@ -13,12 +13,23 @@
     <string name="common_real_gains_losses_amount_and_gain_percent_data">%s \n %s</string>
     <string name="common_purchase_price_and_sell_price">매수단가\n매도단가</string>
     <string name="common_purchase_price_and_sell_price_data">%s \n %s</string>
-    <string name="common_add">추가</string>
-    <string name="common_modify">수정</string>
-    <string name="common_delete">삭제</string>
-    <string name="common_complete">완료</string>
-    <string name="common_cancel">취소</string>
-    <string name="common_false">false</string>
-    <string name="common_true">true</string>
+    <string name="Common_Add">추가</string>
+    <string name="Common_Modify">수정</string>
+    <string name="Common_Delete">삭제</string>
+    <string name="Common_Complete">완료</string>
+    <string name="Common_Cancel">취소</string>
+    <string name="Common_False">false</string>
+    <string name="Common_True">true</string>
+    <string name="Common_Dummy_Data">-</string>
+
+    <string name="MainActivity_Gain">수익</string>
+    <string name="MainActivity_Purchase_Price">매수금액</string>
+    <string name="MainActivity_Sell_Price">매도금액</string>
+    <string name="MainActivity_Sell_Count">매도수량</string>
+    <string name="MainActivity_Purchase_Date">매수일</string>
+    <string name="MainActivity_Sell_Date">매도일</string>
+    <string name="MainActivity_GainPercent">수익률</string>
+
     <string name="AddActivity_list1_hint">종목명을 입력해주세요.</string>
+
 </resources>

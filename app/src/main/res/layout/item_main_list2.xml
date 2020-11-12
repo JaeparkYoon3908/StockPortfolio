@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="140dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="10dp"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    android:background="@color/color_background_fbfbfb"
-    >
+    android:background="@color/color_background_fbfbfb">
 
     <TextView
         android:id="@+id/txt_subject_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="@string/Common_Dummy_Data"
         android:textSize="18sp"
         android:textColor="@color/color_222222"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
-        android:text="한국전력"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.5"
+        tools:text="한국전력"
         />
     <LinearLayout
         android:layout_width="0dp"
@@ -39,7 +38,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="수익"
+            android:text="@string/MainActivity_Gain"
             android:textColor="@color/color_666666"
             android:textSize="14sp"
             />
@@ -48,9 +47,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="14,000"
+            android:text="@string/Common_Dummy_Data"
             android:textSize="14sp"
             android:textColor="@color/color_e52b4e"
+            android:textStyle="bold"
+            tools:text="14,000"
             />
     </LinearLayout>
 
@@ -76,7 +77,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="구매일"
+            android:text="@string/MainActivity_Purchase_Date"
             android:textColor="@color/color_666666"
             android:textSize="14sp"
             />
@@ -85,8 +86,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="2020.11.22"
+            android:text="@string/Common_Dummy_Data"
             android:textSize="14sp"
+            android:textColor="@color/color_222222"
+            tools:text="2020.11.22"
             />
 
     </LinearLayout>
@@ -105,7 +108,7 @@
             android:id="@+id/txt_sell_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="판매일"
+            android:text="@string/MainActivity_Sell_Date"
             android:textColor="@color/color_666666"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@+id/txt_purchase_price"
@@ -116,8 +119,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="2020.12.22"
-            android:textColor="@color/color_666666"
+            android:text="@string/Common_Dummy_Data"
+            android:textColor="@color/color_222222"
+            tools:text="2020.12.22"
             />
     </LinearLayout>
 
@@ -135,7 +139,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="매수금액"
+            android:text="@string/MainActivity_Purchase_Price"
             android:textSize="14sp"
             />
         <TextView
@@ -143,10 +147,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="14,000"
+            android:text="@string/Common_Dummy_Data"
             android:textSize="14sp"
             android:textColor="@color/color_222222"
-            android:textStyle="bold"
+            tools:text="14,000"
             />
     </LinearLayout>
 
@@ -164,7 +168,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="매도금액"
+            android:text="@string/MainActivity_Sell_Price"
             android:textSize="14sp"
             android:textColor="@color/color_666666"
             />
@@ -173,9 +177,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="14,000"
+            android:text="@string/Common_Dummy_Data"
             android:textSize="14sp"
             android:textColor="@color/color_222222"
+            tools:text="15,000"
             />
     </LinearLayout>
 
@@ -192,7 +197,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="수익률"
+            android:text="@string/MainActivity_GainPercent"
             android:textSize="14sp"
             />
 
@@ -201,7 +206,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="14%"
+            android:text="@string/Common_Dummy_Data"
+            android:textSize="14sp"
+            android:textColor="@color/color_222222"
+            tools:text="14%"
             />
     </LinearLayout>
 
@@ -218,7 +226,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="매도수량"
+            android:text="@string/MainActivity_Sell_Count"
             />
 
         <TextView
@@ -226,7 +234,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="14"
+            android:text="@string/Common_Dummy_Data"
+            android:textColor="@color/color_222222"
+            tools:text="14"
             />
     </LinearLayout>
 

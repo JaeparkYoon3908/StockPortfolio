@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:paddingTop="@dimen/common_10dp"
             android:paddingBottom="@dimen/common_10dp"
-            android:text="@string/common_add"
+            android:text="@string/Common_Add"
             android:textColor="@android:color/white"
             android:textSize="22sp"
             app:layout_constraintLeft_toLeftOf="parent"
