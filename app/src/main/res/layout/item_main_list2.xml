@@ -240,4 +240,37 @@
             />
     </LinearLayout>
 
+    <!-- Edit Mode -->
+    <LinearLayout
+        android:id="@+id/lin_EditMode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_80000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="편집"
+            android:textSize="20sp"
+            android:textColor="@color/color_ffffff"
+            android:background="@color/color_666666"
+            />
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:gravity="center"
+            android:text="삭제"
+            android:textSize="20sp"
+            android:textColor="@color/color_ffffff"
+            android:background="@color/color_666666"
+            />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

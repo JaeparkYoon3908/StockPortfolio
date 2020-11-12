@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.adapter
 
 import android.content.Context
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
     private var mContext: Context? = null
     private var dataInfoList = ArrayList<DataInfo?>()
     private var onEditMode: OnDeleteMode
-    private var isEditMode: Boolean = false
+    private var editModeOn: Boolean = false
     private var allCheckClick: Boolean = false
 
     interface OnDeleteMode{
@@ -40,8 +41,8 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 아이템을 길게 눌렀을 때 편집모드로 전환.
         holder.itemView.setOnLongClickListener {
-            if(!isEditMode){
-                isEditMode = true
+            if(!editModeOn){
+                editModeOn = true
                 onEditMode.editModeOn()
                 notifyDataSetChanged()
             }
@@ -49,6 +50,8 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
         }
 //        bindCheckBox(holder, position)
         bindDataList(holder, position)
+        bindEditMode(holder, position)
+
     }
 
     override fun getItemCount(): Int {
@@ -72,10 +75,10 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
     }
 
     fun setEditMode(isEditMode: Boolean){
-        this.isEditMode = isEditMode
+        this.editModeOn = isEditMode
     }
     fun isEditMode():Boolean{
-        return isEditMode
+        return editModeOn
     }
 
 //    private fun bindCheckBox(holder: ViewHolder, position: Int){
@@ -115,5 +118,13 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
         holder.itemView.txt_purchase_price_data.text = dataInfoList[position]?.purchasePrice
         holder.itemView.txt_sell_price_data.text = dataInfoList[position]?.sellPrice
         holder.itemView.txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
+    }
+    private fun bindEditMode(holder: ViewHolder, position: Int){
+        if(editModeOn){
+            holder.itemView.lin_EditMode.visibility = View.VISIBLE
+        }else{
+            holder.itemView.lin_EditMode.visibility = View.GONE
+        }
+
     }
 }

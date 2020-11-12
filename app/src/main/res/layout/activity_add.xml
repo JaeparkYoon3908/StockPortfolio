@@ -41,7 +41,7 @@
             android:layout_height="20dp"
             android:layout_marginEnd="20dp"
             android:layout_gravity="end"
-            android:src="@drawable/bottom_btn_add"
+            android:src="@drawable/icon_add"
             />
     </Toolbar>
 

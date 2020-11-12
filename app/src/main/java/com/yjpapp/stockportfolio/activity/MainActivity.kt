@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.adapter.MainListAdapter
@@ -38,6 +39,8 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
         recyclerview_MainActivity.adapter = mainListAdapter
         txt_total_realization_gains_losses.text = NumberFormat.getCurrencyInstance(Locale.KOREA).format(650000)
         txt_total_realization_gains_losses_percent.text = "35%"
+        lin_add.setOnClickListener(onClickListener)
+        txt_MainActivity_Edit.setOnClickListener(onClickListener)
 //        lin_bottom_menu_left.setOnClickListener(onClickListener)
 //        lin_bottom_menu_right.setOnClickListener(onClickListener)
 //        checkbox_all.setOnCheckedChangeListener {view, isChecked ->
@@ -52,8 +55,8 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
 //     * 2 : add mode (추가 모드, 취소, 완료)
 //     * 3 : modify mode (수정 모드, 취소, 완료)
 //     */
-//    private val onClickListener = View.OnClickListener {view: View? ->
-//        when(view?.id){
+    private val onClickListener = View.OnClickListener { view: View? ->
+        when(view?.id){
 //            R.id.lin_bottom_menu_left -> {
 //                delete 모드에서 취소 버튼을 누름
 //                if(isDeleteMode){
@@ -93,8 +96,19 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
 //
 //                }
 //            }
-//        }
-//    }
+            R.id.lin_add -> {
+
+            }
+
+            R.id.txt_MainActivity_Edit -> {
+                if(mainListAdapter?.isEditMode()!!)
+                    mainListAdapter?.setEditMode(false)
+                else
+                    mainListAdapter?.setEditMode(true)
+                mainListAdapter?.notifyDataSetChanged()
+            }
+        }
+    }
     override fun editModeOn() {
         isEditMode = true
 //        lin_all_check.visibility = View.VISIBLE
