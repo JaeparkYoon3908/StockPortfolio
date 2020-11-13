@@ -7,7 +7,7 @@ import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.model.HeadInfo
 import java.lang.StringBuilder
 
-class DatabaseHandler(var database: SQLiteDatabase, var dbHelper: DatabaseOpenHelper) {
+class DatabaseController(var database: SQLiteDatabase, var dbHelper: DatabaseOpenHelper) {
     //TODO DatabaseHandler를 getInst하여 DatabaseHandler.getInst(context).insert.... 할 수 있도록 작업하기.
 
     fun insertHead(headInfo: HeadInfo): Boolean{

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".activity.MainActivity">
+    tools:context=".ui.MainActivity">
 
 
     <Toolbar
@@ -53,7 +53,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:src="@drawable/icon_add"
-                android:tint="@color/color_222222"
+                app:tint="@color/color_222222"
                 />
         </LinearLayout>
     </Toolbar>
@@ -125,43 +125,51 @@
     </LinearLayout>
     -->
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lin_MainActivity_total_gain_losses"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
         android:orientation="horizontal"
-        android:weightSum="10"
+        android:weightSum="20"
         app:layout_constraintEnd_toEndOf="@+id/toolbar_main"
         app:layout_constraintStart_toEndOf="@+id/toolbar_main"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main">
-
-        <TextView
-            android:layout_width="@dimen/common_0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:layout_weight="2"
-            android:gravity="start"
-            android:text="@string/common_realization_gains_losses"
-            android:textColor="@color/color_222222"
-            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/txt_total_realization_gains_losses"
             android:layout_width="@dimen/common_0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:gravity="start"
+            android:text="@string/common_realization_gains_losses"
+            android:textColor="@color/color_222222"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/txt_total_realization_gains_losses_data"
+            android:layout_width="@dimen/common_0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/common_5dp"
             android:layout_marginEnd="@dimen/common_5dp"
-            android:layout_weight="6"
             android:gravity="center"
-            android:text="650,000"
+            android:text="@string/Common_Dummy_Data"
             android:textColor="@color/color_e52b4e"
-            android:textSize="@dimen/common_18dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_total_realization_gains_losses"
+            app:layout_constraintEnd_toStartOf="@+id/txt_total_realization_gains_losses_percent"
+            tools:text="650,000,000,000,000"
             />
 
         <TextView
@@ -169,18 +177,21 @@
             android:layout_width="@dimen/common_0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="2"
-            android:layout_marginEnd="20dp"
             android:gravity="end"
-            android:text="0%"
+            android:layout_marginEnd="20dp"
+            android:text="@string/Common_Dummy_Data"
             android:textColor="@color/color_e52b4e"
             android:textSize="@dimen/common_15dp"
             android:textStyle="bold"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
+            tools:text="15%"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:layout_width="match_parent"

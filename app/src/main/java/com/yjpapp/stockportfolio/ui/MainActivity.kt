@@ -1,11 +1,11 @@
-package com.yjpapp.stockportfolio.activity
+package com.yjpapp.stockportfolio.ui
 
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.adapter.MainListAdapter
 import com.yjpapp.stockportfolio.model.DataInfo
+import com.yjpapp.stockportfolio.ui.dialog.AddPortfolioDialog
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.NumberFormat
@@ -13,7 +13,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDeleteMode {
+class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBController {
 
     private var isEditMode: Boolean = false
     private var mainListAdapter: MainListAdapter? = null
@@ -29,15 +29,15 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
     }
 
     private fun initLayout(){
-        recyclerview_MainActivity.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        recyclerview_MainActivity.layoutManager = LinearLayoutManager(mContext!!, LinearLayoutManager.VERTICAL, false)
 //        val arrayList = ArrayList<DataInfo>()
 //        val dataInfo = DataInfo(0,"세일", null, null, null, null, null, null)
 
-        dataList  = databaseHandler?.getAllDataInfo()
+        dataList  = databaseController?.getAllDataInfo()
         mainListAdapter = MainListAdapter(dataList, this)
 
         recyclerview_MainActivity.adapter = mainListAdapter
-        txt_total_realization_gains_losses.text = NumberFormat.getCurrencyInstance(Locale.KOREA).format(650000)
+        txt_total_realization_gains_losses_data.text = NumberFormat.getCurrencyInstance(Locale.KOREA).format(650000)
         txt_total_realization_gains_losses_percent.text = "35%"
         lin_add.setOnClickListener(onClickListener)
         txt_MainActivity_Edit.setOnClickListener(onClickListener)
@@ -97,7 +97,8 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
 //                }
 //            }
             R.id.lin_add -> {
-
+                val addPortfolioDialog = AddPortfolioDialog(mContext!!)
+                addPortfolioDialog.show()
             }
 
             R.id.txt_MainActivity_Edit -> {
@@ -106,16 +107,28 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
                 else
                     mainListAdapter?.setEditMode(true)
                 mainListAdapter?.notifyDataSetChanged()
+//                if(mainListAdapter?.isEditMode()!!)
+//                    mainListAdapter?.setEditMode(false)
+//                else
+//                    mainListAdapter?.setEditMode(true)
+//                mainListAdapter?.notifyDataSetChanged()
             }
         }
     }
-    override fun editModeOn() {
-        isEditMode = true
-//        lin_all_check.visibility = View.VISIBLE
-//        txt_bottom_menu_left.text = getString(R.string.common_cancel)
-//        txt_bottom_menu_right.text = getString(R.string.common_complete)
+    override fun delete(position: Int) {
+        //TODO 삭제 애니메이션, 팝업창,
+        var dataList = mainListAdapter?.getDataInfoList()!!
+        val id: Int = dataList[position]?.id!!
+        databaseController?.deleteDataInfo(id)
 
-        Utils.logcat("deleteModeOn 콜백 왔어!!")
+        dataList = databaseController?.getAllDataInfo()!!
+        mainListAdapter?.setDataInfoList(dataList)
+        mainListAdapter?.setEditMode(false)
+        mainListAdapter?.notifyDataSetChanged()
+    }
+
+    override fun edit(position: Int) {
+
     }
 
 
@@ -124,7 +137,7 @@ class MainActivity : RootActivity(R.layout.activity_main), MainListAdapter.OnDel
             "2020.10.11", "2020.11.11", "10%",
             "10,000", "11,000", 10)
         for(i in 0 until 10){
-            databaseHandler?.insertData(dataInfo)
+            databaseController?.insertData(dataInfo)
         }
     }
 }

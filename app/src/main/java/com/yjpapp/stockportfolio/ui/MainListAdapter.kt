@@ -1,7 +1,6 @@
-package com.yjpapp.stockportfolio.adapter
+package com.yjpapp.stockportfolio.ui
 
 import android.content.Context
-import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,23 +9,24 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DataInfo
 import kotlinx.android.synthetic.main.item_main_list2.view.*
 
-class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDeleteMode) :
+class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBController) :
     RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
     private var mContext: Context? = null
     private var dataInfoList = ArrayList<DataInfo?>()
-    private var onEditMode: OnDeleteMode
+    private var dbController: DBController
     private var editModeOn: Boolean = false
     private var allCheckClick: Boolean = false
 
-    interface OnDeleteMode{
-        fun editModeOn()
+    interface DBController{
+        fun edit(position: Int)
+        fun delete(position: Int)
     }
 
     init {
         if (data != null) {
             this.dataInfoList = data
         }
-        this.onEditMode = callback
+        this.dbController = callback
     }
 
     class ViewHolder(private var view: View) : RecyclerView.ViewHolder(view)
@@ -41,12 +41,22 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 아이템을 길게 눌렀을 때 편집모드로 전환.
         holder.itemView.setOnLongClickListener {
-            if(!editModeOn){
-                editModeOn = true
-                onEditMode.editModeOn()
-                notifyDataSetChanged()
-            }
+//            if(!editModeOn){
+//                editModeOn = true
+//                onEditMode.delete()
+//                notifyDataSetChanged()
+//            }else{
+//
+//            }
+            editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
+            notifyDataSetChanged()
             return@setOnLongClickListener true
+        }
+        holder.itemView.txt_edit.setOnClickListener {
+            dbController.edit(position)
+        }
+        holder.itemView.txt_delete.setOnClickListener {
+            dbController.delete(position)
         }
 //        bindCheckBox(holder, position)
         bindDataList(holder, position)
@@ -125,6 +135,5 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: OnDelet
         }else{
             holder.itemView.lin_EditMode.visibility = View.GONE
         }
-
     }
 }

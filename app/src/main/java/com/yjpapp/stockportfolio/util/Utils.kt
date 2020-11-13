@@ -12,6 +12,7 @@ object Utils {
         val sdformat = SimpleDateFormat("yyyyMMdd")
         return sdformat.format(todayDate)
     }
+
     fun logcat(msg: String){
         if(BuildConfig.LOG_CAT) Log.d(javaClass.simpleName, msg)
     }
