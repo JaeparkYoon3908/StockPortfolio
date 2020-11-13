@@ -2,12 +2,14 @@ package com.yjpapp.stockportfolio.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DataInfo
-import com.yjpapp.stockportfolio.ui.dialog.AddPortfolioDialog
+import com.yjpapp.stockportfolio.ui.dialog.MainAddListDialog
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_add_portfolio.*
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -20,7 +22,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
     private var dataList: ArrayList<DataInfo?>? = null
     private var modeType: Int = 0
 
-//    private lateinit var databaseHandler:DatabaseHandler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Utils.logcat(Utils.getTodayYYYYMMDD())
@@ -29,9 +30,12 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
     }
 
     private fun initLayout(){
-        recyclerview_MainActivity.layoutManager = LinearLayoutManager(mContext!!, LinearLayoutManager.VERTICAL, false)
-//        val arrayList = ArrayList<DataInfo>()
-//        val dataInfo = DataInfo(0,"세일", null, null, null, null, null, null)
+        val layoutManager = LinearLayoutManager(mContext!!, LinearLayoutManager.VERTICAL, false)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
+        //Scroll item 2 to 20 pixels from the top
+        layoutManager.scrollToPositionWithOffset(2,20)
+        recyclerview_MainActivity.layoutManager = layoutManager
 
         dataList  = databaseController?.getAllDataInfo()
         mainListAdapter = MainListAdapter(dataList, this)
@@ -41,64 +45,66 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         txt_total_realization_gains_losses_percent.text = "35%"
         lin_add.setOnClickListener(onClickListener)
         txt_MainActivity_Edit.setOnClickListener(onClickListener)
-//        lin_bottom_menu_left.setOnClickListener(onClickListener)
-//        lin_bottom_menu_right.setOnClickListener(onClickListener)
-//        checkbox_all.setOnCheckedChangeListener {view, isChecked ->
-//            mainListAdapter?.setAllCheckClicked(isChecked)
-//            mainListAdapter?.notifyDataSetChanged()
-//        }
     }
 
-//    /**mode type
-//     * 0 : view mode (default, 수정, 추가)
-//     * 1 : delete mode (삭제 모드, 취소, 완료)
-//     * 2 : add mode (추가 모드, 취소, 완료)
-//     * 3 : modify mode (수정 모드, 취소, 완료)
-//     */
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
-//            R.id.lin_bottom_menu_left -> {
-//                delete 모드에서 취소 버튼을 누름
-//                if(isDeleteMode){
-//                    Toast.makeText(this@MainActivity, "deleteMode On!!!", Toast.LENGTH_SHORT).show()
-//                    lin_all_check.visibility = View.GONE
-//                    txt_bottom_menu_left.text = getString(R.string.common_modify)
-//                    txt_bottom_menu_right.text = getString(R.string.common_add)
-//                    mainListAdapter?.setDeleteModeOff()
-//                    mainListAdapter?.notifyDataSetChanged()
-//                    isDeleteMode = false
-//                }else{
-//                    Toast.makeText(this@MainActivity, "deleteMode Off!!!", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//            R.id.lin_bottom_menu_right -> {
-//                delete 모드에서 완료 버튼을 누름
-//                if(isDeleteMode){
-//                    Toast.makeText(this@MainActivity, "deleteMode On!!!", Toast.LENGTH_SHORT).show()
-//                    lin_all_check.visibility = View.GONE
-//                    txt_bottom_menu_left.text = getString(R.string.common_modify)
-//                    txt_bottom_menu_right.text = getString(R.string.common_add)
-//                    var dataList = mainListAdapter?.getDataInfoList()!!
-//
-//                    for(i in 0 until dataList!!.size){
-//                        if(dataList?.get(i)?.isDeleteCheck.equals(getString(R.string.common_true))){
-//                            val position: Int = dataList?.get(i)?.id!!
-//                            databaseHandler?.deleteDataInfo(position)
-//                        }
-//                    }
-//                    dataList = databaseHandler?.getAllDataInfo()!!
-//                    mainListAdapter?.setDataInfoList(dataList!!)
-//                    mainListAdapter?.setDeleteModeOff()
-//                    mainListAdapter?.notifyDataSetChanged()
-//                    isDeleteMode = false
-//
-//                }else{
-//
-//                }
-//            }
             R.id.lin_add -> {
-                val addPortfolioDialog = AddPortfolioDialog(mContext!!)
-                addPortfolioDialog.show()
+                val mainAddListDialog = MainAddListDialog(mContext!!)
+                mainAddListDialog.show()
+                mainAddListDialog.txt_complete.setOnClickListener {
+                    //예외처리 (값을 모두 입력하지 않았을 때)
+                    if (mainAddListDialog.et_subject_name.text.isEmpty() ||
+                        mainAddListDialog.et_purchase_date.text.isEmpty() ||
+                        mainAddListDialog.et_sell_date.text.isEmpty() ||
+                        mainAddListDialog.et_purchase_price.text.isEmpty() ||
+                        mainAddListDialog.et_sell_price.text.isEmpty() ||
+                        mainAddListDialog.et_sell_count.text.isEmpty()
+                    ) {
+                        Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
+                        return@setOnClickListener
+                    }
+
+                    val subjectName: String = mainAddListDialog.et_subject_name.text.toString()
+                    val purchaseDate: String = mainAddListDialog.et_purchase_date.text.toString()
+                    val sellDate: String = mainAddListDialog.et_sell_date.text.toString()
+
+                    val purchasePrice = mainAddListDialog.et_purchase_price.text.toString()
+                    var purchasePriceNumber = ""
+                    val etPurchasePriceSplit = mainAddListDialog.et_purchase_price.text.split(",")
+                    for (i in etPurchasePriceSplit.indices) {
+                        purchasePriceNumber += etPurchasePriceSplit[i]
+                    }
+                    val sellPrice = mainAddListDialog.et_sell_price.text.toString()
+                    var sellPriceNumber = ""
+                    val etSellPriceSplit = mainAddListDialog.et_sell_price.text.split(",")
+                    for (i in etSellPriceSplit.indices) {
+                        sellPriceNumber += etSellPriceSplit[i]
+                    }
+                    val sellCount: Int = mainAddListDialog.et_sell_count.text.toString().toInt()
+                    val realPainLossesAmount: String =
+                        ((sellPriceNumber.toInt() - purchasePriceNumber.toInt()) * sellCount).toString()
+                    //TODO 수익률 계산 제대로 하기.
+                    val gainPercent: String =
+                        ((sellPriceNumber.toInt() / purchasePriceNumber.toInt()) * 100).toString() + "%"
+
+                    if (purchaseDate.toInt() > sellDate.toInt()) {
+                        Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG)
+                            .show()
+                        return@setOnClickListener
+                    }
+
+                    if (mainAddListDialog.isShowing) {
+                        mainAddListDialog.dismiss()
+                    }
+                    val dataInfo = DataInfo(0, subjectName, realPainLossesAmount, purchaseDate,
+                        sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
+                    databaseController?.insertData(dataInfo)
+                    val newDataInfo = databaseController?.getAllDataInfo()
+                    mainListAdapter?.setDataInfoList(newDataInfo!!)
+                    mainListAdapter?.notifyDataSetChanged()
+                    recyclerview_MainActivity.scrollToPosition(newDataInfo?.size!! - 1)
+                }
             }
 
             R.id.txt_MainActivity_Edit -> {
@@ -107,11 +113,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
                 else
                     mainListAdapter?.setEditMode(true)
                 mainListAdapter?.notifyDataSetChanged()
-//                if(mainListAdapter?.isEditMode()!!)
-//                    mainListAdapter?.setEditMode(false)
-//                else
-//                    mainListAdapter?.setEditMode(true)
-//                mainListAdapter?.notifyDataSetChanged()
             }
         }
     }

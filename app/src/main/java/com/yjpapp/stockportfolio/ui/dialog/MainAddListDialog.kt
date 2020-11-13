@@ -6,12 +6,16 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
 import com.yjpapp.stockportfolio.R
 import kotlinx.android.synthetic.main.dialog_add_portfolio.*
+import java.text.DecimalFormat
 import java.util.*
 
-class AddPortfolioDialog(context: Context) : Dialog(context, android.R.style.Theme_Translucent_NoTitleBar) {
+class MainAddListDialog(context: Context) : Dialog(context, android.R.style.Theme_Translucent_NoTitleBar) {
     object MSG{
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
@@ -24,6 +28,12 @@ class AddPortfolioDialog(context: Context) : Dialog(context, android.R.style.The
     private var sellMonth: String? = null
     private var sellDay: String? = null
 
+    private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
+
+    interface AddComplete{
+        fun complete()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_add_portfolio)
@@ -34,6 +44,13 @@ class AddPortfolioDialog(context: Context) : Dialog(context, android.R.style.The
         et_purchase_date.setOnClickListener(onClickListener)
         et_sell_date.setOnClickListener(onClickListener)
         txt_cancel.setOnClickListener(onClickListener)
+
+        et_purchase_price.addTextChangedListener(textWatcher)
+        et_sell_price.addTextChangedListener(textWatcher)
+
+
+        txt_purchase_price_symbol.text = moneySymbol
+        txt_sell_price_symbol.text = moneySymbol
     }
 
     private val onClickListener = View.OnClickListener { view: View? ->
@@ -70,12 +87,45 @@ class AddPortfolioDialog(context: Context) : Dialog(context, android.R.style.The
             R.id.txt_cancel -> {
                 dismiss()
             }
-            R.id.txt_complete -> {
-//                val subject
-//                val purchaseDate = purchaseYear + purchaseMonth + purchaseDay
-//                val sellDate = sellYear + sellMonth + sellDay
+        }
+    }
 
+    //3자리마다 콤마 찍어주는 코드
+    private val decimalFormat = DecimalFormat("###,###")
+    private var result = "";
+    private val textWatcher = object: TextWatcher{
+        override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+            if(!TextUtils.isEmpty(charSequence.toString()) && charSequence.toString() != result){
+                result = decimalFormat.format(charSequence.toString().replace(",","").toDouble())
+                if(et_purchase_price.hasFocus()){
+                    et_purchase_price.setText(result)
+                    et_purchase_price.setSelection(result.length) //커서를 오른쪽 끝으로 보낸다.
+                }else if(et_sell_price.hasFocus()){
+                    et_sell_price.setText(result)
+                    et_sell_price.setSelection(result.length)
+                }
             }
+            if(charSequence?.length!! == 0 ){
+                if(et_purchase_price.hasFocus()){
+                    txt_purchase_price_symbol.setTextColor(getContext().getColor(R.color.color_666666))
+                }else if(et_sell_price.hasFocus()){
+                    txt_sell_price_symbol.setTextColor(getContext().getColor(R.color.color_666666))
+                }
+            }else{
+                if(et_purchase_price.hasFocus()){
+                    txt_purchase_price_symbol.setTextColor(getContext().getColor(R.color.color_222222))
+                }else if(et_sell_price.hasFocus()){
+                    txt_sell_price_symbol.setTextColor(getContext().getColor(R.color.color_222222))
+                }
+            }
+        }
+
+        override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+
         }
     }
     private val uiHandler = Handler(UIHandler())

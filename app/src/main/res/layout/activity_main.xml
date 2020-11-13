@@ -33,7 +33,7 @@
             android:layout_gravity="center"
             android:paddingTop="@dimen/common_10dp"
             android:paddingBottom="@dimen/common_10dp"
-            android:text="주식 포트폴리오"
+            android:text="@string/MainActivity_Title"
             android:textColor="@color/color_222222"
             android:textSize="22sp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -42,15 +42,15 @@
 
         <LinearLayout
             android:id="@+id/lin_add"
-            android:layout_width="60dp"
+            android:layout_width="@dimen/common_60dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:gravity="center"
             >
             <ImageView
                 android:id="@+id/img_add"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/common_20dp"
+                android:layout_height="@dimen/common_20dp"
                 android:layout_gravity="center"
                 android:src="@drawable/icon_add"
                 app:tint="@color/color_222222"
@@ -181,7 +181,7 @@
             android:layout_marginEnd="20dp"
             android:text="@string/Common_Dummy_Data"
             android:textColor="@color/color_e52b4e"
-            android:textSize="@dimen/common_15dp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:singleLine="true"
             android:ellipsize="marquee"
@@ -287,7 +287,7 @@
             android:id="@+id/txt_MainActivity_Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="날짜순"
+            android:text="@string/Common_All"
             android:textSize="18sp"
             android:textColor="@color/color_222222"
             app:layout_constraintTop_toTopOf="parent"
@@ -299,7 +299,7 @@
             android:id="@+id/img_MainActivity_Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="@dimen/common_5dp"
             android:layout_gravity="center"
             android:src="@drawable/arrow_bottom"
             app:layout_constraintTop_toTopOf="@+id/txt_MainActivity_Filter"
@@ -309,10 +309,10 @@
 
         <TextView
             android:id="@+id/txt_MainActivity_Edit"
-            android:layout_width="50dp"
+            android:layout_width="@dimen/common_50dp"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="편집"
+            android:text="@string/Common_Edit"
             android:textSize="18sp"
             android:textColor="@color/color_222222"
             app:layout_constraintTop_toTopOf="@+id/lin_MainActivity_Filter"
@@ -325,8 +325,8 @@
     <View
         android:id="@+id/line_2"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="@dimen/common_1dp"
+        android:layout_marginTop="@dimen/common_10dp"
         android:background="@color/color_line_1a000000"
         app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_Filter"
         />
@@ -338,15 +338,12 @@
         android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@+id/line_2"
         app:layout_constraintBottom_toTopOf="@+id/lin_bottom_menu"
-        app:layout_constraintWidth_percent="0.5"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lin_bottom_menu"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
-        android:weightSum="1"
-        android:orientation="horizontal"
         android:background="@color/color_f1f1f1"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -394,12 +391,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="bottom menu"
-
             android:textColor="@color/color_222222"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

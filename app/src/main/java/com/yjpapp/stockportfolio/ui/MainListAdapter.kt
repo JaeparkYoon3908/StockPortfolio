@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DataInfo
 import kotlinx.android.synthetic.main.item_main_list2.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBController) :
     RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
@@ -16,6 +18,7 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
     private var dbController: DBController
     private var editModeOn: Boolean = false
     private var allCheckClick: Boolean = false
+    private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
 
     interface DBController{
         fun edit(position: Int)
@@ -41,13 +44,6 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 아이템을 길게 눌렀을 때 편집모드로 전환.
         holder.itemView.setOnLongClickListener {
-//            if(!editModeOn){
-//                editModeOn = true
-//                onEditMode.delete()
-//                notifyDataSetChanged()
-//            }else{
-//
-//            }
             editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
             notifyDataSetChanged()
             return@setOnLongClickListener true
@@ -72,10 +68,6 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
         dataInfoList.removeAt(position)
     }
 
-//    fun setAllCheckClicked(check: Boolean){
-//        allCheckClick = check
-//    }
-
     fun getDataInfoList(): ArrayList<DataInfo?>{
         return dataInfoList
     }
@@ -91,42 +83,18 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
         return editModeOn
     }
 
-//    private fun bindCheckBox(holder: ViewHolder, position: Int){
-//        if(deleteModeOn){
-//            holder.itemView.rel_checkbox.visibility = View.VISIBLE
-//        }else{
-//            holder.itemView.rel_checkbox.visibility = View.GONE
-//        }
-//        holder.itemView.checkbox!!.isChecked = allCheckClick
-//        holder.itemView.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
-//            if(isChecked){
-//                dataInfoList[position]?.isDeleteCheck = mContext?.getString(R.string.common_true)
-//            }else{
-//                dataInfoList[position]?.isDeleteCheck = mContext?.getString(R.string.common_false)
-//            }
-//        }
-//
-//        if(holder.itemView.checkbox.isChecked){
-//            Utils.logcat("position : $position isChecked!!")
-//        }else{
-//            Utils.logcat("position : $position notChecked!!")
-//        }
-//    }
     private fun bindDataList(holder: ViewHolder, position: Int){
-//        holder.itemView.list_1.text = dataInfoList[position]?.sellDate + "\n" + dataInfoList[position]?.subjectName
-//        holder.itemView.list_2.text = dataInfoList[position]?.realPainLossesAmount + "\n" + dataInfoList[position]?.gainPercent
-//        holder.itemView.list_3.text = dataInfoList[position]?.purchasePrice + "\n" + dataInfoList[position]?.sellPrice
 
         //상단 데이터
         holder.itemView.txt_subject_name.text = dataInfoList[position]?.subjectName
-        holder.itemView.txt_gain_data.text = dataInfoList[position]?.realPainLossesAmount
+        holder.itemView.txt_gain_data.text = moneySymbol + dataInfoList[position]?.realPainLossesAmount
         //왼쪽
         holder.itemView.txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
         holder.itemView.txt_sell_date_data.text = dataInfoList[position]?.sellDate
         holder.itemView.txt_gain_percent_data.text = dataInfoList[position]?.gainPercent
         //오른쪽
-        holder.itemView.txt_purchase_price_data.text = dataInfoList[position]?.purchasePrice
-        holder.itemView.txt_sell_price_data.text = dataInfoList[position]?.sellPrice
+        holder.itemView.txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
+        holder.itemView.txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice
         holder.itemView.txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
     }
     private fun bindEditMode(holder: ViewHolder, position: Int){
