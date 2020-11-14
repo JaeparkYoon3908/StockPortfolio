@@ -1,21 +1,37 @@
 package com.yjpapp.stockportfolio.database
 
 import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.model.HeadInfo
 import java.lang.StringBuilder
 
-class DatabaseController(var database: SQLiteDatabase, var dbHelper: DatabaseOpenHelper) {
-    //TODO DatabaseController getInst하여 DatabaseHandler.getInst(context).insert.... 할 수 있도록 작업하기.
+class DatabaseController {
+    // 싱글톤 패턴 적용 완료
+    companion object {
+        @Volatile private var instance: DatabaseController? = null
+        private lateinit var mContext: Context
+        private lateinit var dbHelper: DatabaseOpenHelper
+        private lateinit var database:SQLiteDatabase
 
+        @JvmStatic
+        fun getInstance(context: Context): DatabaseController =
+            instance ?: synchronized(this) {
+                instance ?: DatabaseController().also {
+                    instance = it
+                    mContext = context
+                    dbHelper = DatabaseOpenHelper(mContext)
+                    database = dbHelper.writableDatabase
+                }
+            }
+    }
     fun insertHead(headInfo: HeadInfo): Boolean{
-        var insertCheck: Long
+        val insertCheck: Long
         val contentValues = ContentValues()
         contentValues.put(Databases.COL_PERIOD, headInfo.period)
         contentValues.put(Databases.COL_SUBJECT, headInfo.subject)
-
         insertCheck = database.insert(Databases.TABLE_HEAD, null, contentValues)
 
         return insertCheck != -1L
@@ -111,7 +127,7 @@ class DatabaseController(var database: SQLiteDatabase, var dbHelper: DatabaseOpe
 //        cursor?.close()
 
 //        database.use {
-            database.delete(Databases.TABLE_DATA, "id = $position", null)
+        database.delete(Databases.TABLE_DATA, "id = $position", null)
 //        }
     }
 

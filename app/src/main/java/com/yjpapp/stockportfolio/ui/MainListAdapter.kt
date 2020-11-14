@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DataInfo
+import kotlinx.android.synthetic.main.dialog_add_portfolio.*
 import kotlinx.android.synthetic.main.item_main_list2.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -96,6 +97,17 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
         holder.itemView.txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
         holder.itemView.txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice
         holder.itemView.txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
+
+        var realPainLossesAmountNumber = ""
+        val realPainLossesAmountSplit = dataInfoList[position]?.realPainLossesAmount!!.split(",")
+        for (i in realPainLossesAmountSplit.indices) {
+            realPainLossesAmountNumber += realPainLossesAmountSplit[i]
+        }
+        if(realPainLossesAmountNumber.toDouble()>0){
+            holder.itemView.txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_e52b4e))
+        }else{
+            holder.itemView.txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
+        }
     }
     private fun bindEditMode(holder: ViewHolder, position: Int){
         if(editModeOn){
