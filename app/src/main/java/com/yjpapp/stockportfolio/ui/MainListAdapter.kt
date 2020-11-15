@@ -103,11 +103,15 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
         for (i in realPainLossesAmountSplit.indices) {
             realPainLossesAmountNumber += realPainLossesAmountSplit[i]
         }
-        if(realPainLossesAmountNumber.toDouble()>0){
+        if(realPainLossesAmountNumber.toDouble()>=0){
             holder.itemView.txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_e52b4e))
+            holder.itemView.txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_e52b4e))
         }else{
             holder.itemView.txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
+            holder.itemView.txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
         }
+        //TODO 수익률 계산 제대로 하기. (마이너스면 파란색, 플러스면 빨간색)
+
     }
     private fun bindEditMode(holder: ViewHolder, position: Int){
         if(editModeOn){

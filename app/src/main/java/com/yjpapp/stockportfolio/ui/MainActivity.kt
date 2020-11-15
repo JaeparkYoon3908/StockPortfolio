@@ -11,10 +11,12 @@ import com.yjpapp.stockportfolio.ui.dialog.MainAddListDialog
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_add_portfolio.*
+import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 
 class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBController {
@@ -29,7 +31,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         Utils.logcat(Utils.getTodayYYYYMMDD())
         initLayout()
         bindLayout()
-//        insertData()
     }
 
     override fun delete(position: Int) {
@@ -37,7 +38,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         var dataList = mainListAdapter?.getDataInfoList()!!
         val id: Int = dataList[position]?.id!!
         DatabaseController.getInstance(mContext).deleteDataInfo(id)
-//        databaseController?.deleteDataInfo(id)
 
         dataList = DatabaseController.getInstance(mContext).getAllDataInfo()!!
         mainListAdapter?.setDataInfoList(dataList)
@@ -81,14 +81,14 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         }
     }
 
-    private fun insertData() {
-        val dataInfo = DataInfo(0,"엘비세미콘", "10,000",
-            "2020.10.11", "2020.11.11", "10%",
-            "10,000", "11,000", 10)
-        for(i in 0 until 10){
-            DatabaseController.getInstance(mContext).insertData(dataInfo)
-        }
-    }
+//    private fun insertData() {
+//        val dataInfo = DataInfo(0,"엘비세미콘", "10,000",
+//            "2020.10.11", "2020.11.11", "10%",
+//            "10,000", "11,000", 10)
+//        for(i in 0 until 10){
+//            DatabaseController.getInstance(mContext).insertData(dataInfo)
+//        }
+//    }
 
     private fun bindLayout(){
         //TODO 실현손익 및 퍼센트 Data Bind 작업
@@ -138,11 +138,11 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
             val sellCount = mainAddListDialog.et_sell_count.text.toString().toInt()
             //수익
             val realPainLossesAmountNumber =
-                ((sellPriceNumber.toInt() - purchasePriceNumber.toInt()) * sellCount).toDouble()
+                ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount).toDouble()
             val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
-            //TODO 수익률 계산 제대로 하기. (마이너스면 파란색, 플러스면 빨간색)
-            val gainPercent =
-                ((sellPriceNumber.toInt() / purchasePriceNumber.toInt()) * 100).toString() + "%"
+
+            val gainPercentNumber = (((sellPriceNumber.toDouble() / purchasePriceNumber.toDouble()) -1) * 100)
+            val gainPercent = String.format("%.2f", gainPercentNumber) + "%"
 
             //날짜오류 예외처리
             if (purchaseDate.toInt() > sellDate.toInt()) {
@@ -156,8 +156,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
             }
             val dataInfo = DataInfo(0, subjectName, realPainLossesAmount, purchaseDate,
                 sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
-//            databaseController?.insertData(dataInfo)
-//            val newDataInfo = databaseController?.getAllDataInfo()
+
             DatabaseController.getInstance(mContext).insertData(dataInfo)
             val newDataInfo = DatabaseController.getInstance(mContext).getAllDataInfo()
             mainListAdapter?.setDataInfoList(newDataInfo!!)

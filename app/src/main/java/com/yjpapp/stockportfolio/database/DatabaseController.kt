@@ -49,8 +49,6 @@ class DatabaseController {
         contentValues.put(Databases.COL_SELL_PRICE, dataInfo?.sellPrice)
         contentValues.put(Databases.COL_SELL_COUNT, dataInfo?.sellCount)
 
-//        contentValues.put(Databases.COL_DELETE_CHECK, dataInfo?.isDeleteCheck)
-
         insertCheck = database.insert(Databases.TABLE_DATA,null, contentValues)
 
         return insertCheck != -1L
@@ -100,19 +98,10 @@ class DatabaseController {
                 cursor.getString(6), //purchasePrice
                 cursor.getString(7), //sellPrice
                 cursor.getInt(8)) //sellCount
-//            result.id = cursor.getInt(0)
-//            result.subjectName = cursor.getString(1)
-//            result.realPainLossesAmount = cursor.getString(2)
-//            result.purchaseDate = cursor.getString(3)
-//            result.sellDate = cursor.getString(4)
-//            result.purchasePrice = cursor.getString(5)
-//            result.sellPrice = cursor.getString(6)
-//            result.gainPercent = cursor.getInt(7)
-//            result.sellCount = cursor.getInt(8)
-//            result.isDeleteCheck = cursor.getString(7)
             cursor?.close()
             return result
         }else{
+            cursor?.close()
             return null
         }
 
