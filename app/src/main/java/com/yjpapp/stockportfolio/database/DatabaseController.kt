@@ -54,6 +54,24 @@ class DatabaseController {
         return insertCheck != -1L
     }
 
+    fun updateData(dataInfo: DataInfo?): Boolean{
+        val updateCheck: Int
+        val contentValues = ContentValues()
+        contentValues.put(Databases.COL_SUBJECT_NAME,dataInfo?.subjectName)
+        contentValues.put(Databases.COL_REAL_GAINS_LOSSES_AMOUNT, dataInfo?.realPainLossesAmount)
+        contentValues.put(Databases.COL_PURCHASE_DATE, dataInfo?.purchaseDate)
+        contentValues.put(Databases.COL_SELL_DATE, dataInfo?.sellDate)
+        contentValues.put(Databases.COL_GAIN_PERCENT, dataInfo?.gainPercent)
+        contentValues.put(Databases.COL_PURCHASE_PRICE, dataInfo?.purchasePrice)
+        contentValues.put(Databases.COL_SELL_PRICE, dataInfo?.sellPrice)
+        contentValues.put(Databases.COL_SELL_COUNT, dataInfo?.sellCount)
+
+        updateCheck = database.update(Databases.TABLE_DATA, contentValues,
+            Databases.COL_ID + " = ? ", arrayOf(dataInfo?.id.toString()))
+
+        return updateCheck != -1
+    }
+
     fun getAllDataInfo(): ArrayList<DataInfo?>? {
         val cursor: Cursor
         val resultList = ArrayList<DataInfo?>()

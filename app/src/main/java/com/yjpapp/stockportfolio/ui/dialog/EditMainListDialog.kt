@@ -10,12 +10,15 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.model.DataInfo
+import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.dialog_add_portfolio.*
 import java.text.DecimalFormat
 import java.util.*
 
-class MainAddListDialog(context: Context) : Dialog(context, android.R.style.Theme_Translucent_NoTitleBar) {
+class EditMainListDialog(context: Context) : Dialog(context, android.R.style.Theme_Translucent_NoTitleBar) {
     object MSG{
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
@@ -29,10 +32,6 @@ class MainAddListDialog(context: Context) : Dialog(context, android.R.style.Them
     private var sellDay: String? = null
 
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
-
-    interface AddComplete{
-        fun complete()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +86,55 @@ class MainAddListDialog(context: Context) : Dialog(context, android.R.style.Them
             R.id.txt_cancel -> {
                 dismiss()
             }
+//            R.id.txt_complete -> {
+//                //예외처리 (값을 모두 입력하지 않았을 때)
+//                if (et_subject_name.text.isEmpty() ||
+//                    et_purchase_date.text.isEmpty() ||
+//                    et_sell_date.text.isEmpty() ||
+//                    et_purchase_price.text.isEmpty() ||
+//                    et_sell_price.text.isEmpty() ||
+//                    et_sell_count.text.isEmpty()
+//                ) {
+//                    Toast.makeText(context, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
+//                    return@OnClickListener
+//                }
+//
+//                //매매한 회사이름
+//                val subjectName = et_subject_name.text.toString()
+//                //매수일
+//                val purchaseDate = et_purchase_date.text.toString()
+//                //매도일
+//                val sellDate = et_sell_date.text.toString()
+//                //매수금액
+//                val purchasePrice = et_purchase_price.text.toString()
+//                val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice)
+//                //매도금액
+//                val sellPrice = et_sell_price.text.toString()
+//                val sellPriceNumber = Utils.getNumDeletedComma(sellPrice)
+//                //매도수량
+//                val sellCount = et_sell_count.text.toString().toInt()
+//                //수익
+//                val realPainLossesAmountNumber =
+//                    ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
+//                val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
+//                //수익률
+//                val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
+//                val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
+//
+//                //날짜오류 예외처리
+//                if (purchaseDate.toInt() > sellDate.toInt()) {
+//                    Toast.makeText(context, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG)
+//                        .show()
+//                    return@OnClickListener
+//                }
+//
+//                if (isShowing) {
+//                    dismiss()
+//                }
+//                val dataInfo = DataInfo(0, subjectName, realPainLossesAmount, purchaseDate,
+//                    sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
+//
+//            }
         }
     }
 
