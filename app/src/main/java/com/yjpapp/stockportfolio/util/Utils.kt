@@ -19,7 +19,7 @@ object Utils {
         if(BuildConfig.LOG_CAT) Log.d(javaClass.simpleName, msg)
     }
 
-    //5,000,000 => 5000000으로 변환
+    //5,000,000 => 5000000 변환
     fun getNumDeletedComma(num: String): String{
         var result: String = ""
         val split = num.split(",")
@@ -29,10 +29,20 @@ object Utils {
         return result
     }
 
-    //14% => 14로 변환.
+    //14% => 14 변환.
     fun getNumDeletedPercent(num: String): String{
         var result: String = ""
         val split = num.split("%")
+        for (i in split.indices) {
+            result += split[i]
+        }
+        return result
+    }
+
+    //2020.11.18 =>20201118 변환.
+    fun getNumDeletedDot(num: String): String{
+        var result: String = ""
+        val split = num.split(".")
         for (i in split.indices) {
             result += split[i]
         }

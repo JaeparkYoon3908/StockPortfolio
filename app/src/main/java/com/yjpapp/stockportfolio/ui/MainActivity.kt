@@ -87,6 +87,9 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
                     mainListAdapter?.setEditMode(true)
                 mainListAdapter?.notifyDataSetChanged()
             }
+            R.id.lin_MainActivity_Filter -> {
+
+            }
         }
     }
 
@@ -148,7 +151,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
 
         //날짜오류 예외처리
-        if (purchaseDate.toInt() > sellDate.toInt()) {
+        if (Utils.getNumDeletedDot(purchaseDate).toInt() > Utils.getNumDeletedDot(sellDate).toInt()) {
             Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG)
                 .show()
             return
@@ -168,6 +171,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         }
         val newDataInfo = DatabaseController.getInstance(mContext).getAllDataInfo()
         mainListAdapter?.setDataInfoList(newDataInfo!!)
+        mainListAdapter?.setEditMode(false)
         mainListAdapter?.notifyDataSetChanged()
         recyclerview_MainActivity.scrollToPosition(newDataInfo?.size!! - 1)
         bindTotalGainData()
@@ -183,5 +187,8 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         totalGainPercent /= dataList!!.size
         txt_total_realization_gains_losses_data.text = NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
         txt_total_realization_gains_losses_percent.text = Utils.getRoundsPercentNumber(totalGainPercent)
+    }
+    private fun initFilterDialog(){
+
     }
 }

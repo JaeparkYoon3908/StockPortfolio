@@ -63,8 +63,16 @@ class EditMainListDialog(context: Context) : Dialog(context, android.R.style.The
                 val datePickerDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
                     purchaseYear = year.toString()
-                    purchaseMonth = (monthOfYear+1).toString()
-                    purchaseDay = dayOfMonth.toString()
+                    purchaseMonth = if(monthOfYear+1 < 10){
+                        "0" + (monthOfYear+1).toString()
+                    }else{
+                        (monthOfYear+1).toString()
+                    }
+                    purchaseDay = if(dayOfMonth < 10){
+                        "0$dayOfMonth"
+                    }else{
+                        dayOfMonth.toString()
+                    }
                     uiHandler.sendEmptyMessage(MSG.PURCHASE_DATE_DATA_INPUT)
                 }, currentYear, currentMonth, currentDay)
                 datePickerDialog.show()
@@ -77,8 +85,16 @@ class EditMainListDialog(context: Context) : Dialog(context, android.R.style.The
                 val datePickerDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
                     sellYear = year.toString()
-                    sellMonth = (monthOfYear+1).toString()
-                    sellDay = dayOfMonth.toString()
+                    sellMonth = if(monthOfYear+1 < 10){
+                        "0" + (monthOfYear+1).toString()
+                    }else{
+                        (monthOfYear+1).toString()
+                    }
+                    sellDay = if(dayOfMonth < 10){
+                        "0$dayOfMonth"
+                    }else{
+                        dayOfMonth.toString()
+                    }
                     uiHandler.sendEmptyMessage(MSG.SELL_DATE_DATA_INPUT)
                 }, currentYear, currentMonth, currentDay)
                 datePickerDialog.show()
@@ -86,55 +102,6 @@ class EditMainListDialog(context: Context) : Dialog(context, android.R.style.The
             R.id.txt_cancel -> {
                 dismiss()
             }
-//            R.id.txt_complete -> {
-//                //예외처리 (값을 모두 입력하지 않았을 때)
-//                if (et_subject_name.text.isEmpty() ||
-//                    et_purchase_date.text.isEmpty() ||
-//                    et_sell_date.text.isEmpty() ||
-//                    et_purchase_price.text.isEmpty() ||
-//                    et_sell_price.text.isEmpty() ||
-//                    et_sell_count.text.isEmpty()
-//                ) {
-//                    Toast.makeText(context, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
-//                    return@OnClickListener
-//                }
-//
-//                //매매한 회사이름
-//                val subjectName = et_subject_name.text.toString()
-//                //매수일
-//                val purchaseDate = et_purchase_date.text.toString()
-//                //매도일
-//                val sellDate = et_sell_date.text.toString()
-//                //매수금액
-//                val purchasePrice = et_purchase_price.text.toString()
-//                val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice)
-//                //매도금액
-//                val sellPrice = et_sell_price.text.toString()
-//                val sellPriceNumber = Utils.getNumDeletedComma(sellPrice)
-//                //매도수량
-//                val sellCount = et_sell_count.text.toString().toInt()
-//                //수익
-//                val realPainLossesAmountNumber =
-//                    ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
-//                val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
-//                //수익률
-//                val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
-//                val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
-//
-//                //날짜오류 예외처리
-//                if (purchaseDate.toInt() > sellDate.toInt()) {
-//                    Toast.makeText(context, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG)
-//                        .show()
-//                    return@OnClickListener
-//                }
-//
-//                if (isShowing) {
-//                    dismiss()
-//                }
-//                val dataInfo = DataInfo(0, subjectName, realPainLossesAmount, purchaseDate,
-//                    sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
-//
-//            }
         }
     }
 
@@ -181,10 +148,10 @@ class EditMainListDialog(context: Context) : Dialog(context, android.R.style.The
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what){
                 MSG.PURCHASE_DATE_DATA_INPUT -> {
-                    et_purchase_date.setText(purchaseYear + purchaseMonth + purchaseDay)
+                    et_purchase_date.setText("$purchaseYear.$purchaseMonth.$purchaseDay")
                 }
                 MSG.SELL_DATE_DATA_INPUT -> {
-                    et_sell_date.setText(sellYear + sellMonth + sellDay)
+                    et_sell_date.setText("$sellYear.$sellMonth.$sellDay")
                 }
             }
             return true

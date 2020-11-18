@@ -58,73 +58,6 @@
         </LinearLayout>
     </Toolbar>
 
-    <!--
-    <LinearLayout
-        android:id="@+id/lin_MainActivity_TopPanel"
-        android:layout_width="@dimen/common_0dp"
-        android:layout_height="@dimen/common_80dp"
-        android:background="@drawable/border_line_top_bottom_right"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
-        app:layout_constraintWidth_percent="0.5">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/common_10dp"
-            android:text="@string/common_term"
-            android:textColor="@color/color_222222"
-            android:textSize="@dimen/common_18dp" />
-
-        <EditText
-            android:id="@+id/txt_MainActivity_period"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="@dimen/common_20dp"
-            android:layout_marginTop="@dimen/common_5dp"
-            android:layout_marginEnd="@dimen/common_20dp"
-            android:background="@null"
-            android:gravity="center"
-            android:hint="@string/common_hint_term"
-            android:textColor="@color/color_222222"
-            android:textSize="@dimen/common_12dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/common_80dp"
-        android:background="@drawable/border_line_top_bottom_right"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
-        app:layout_constraintWidth_percent="0.5">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/common_10dp"
-            android:text="@string/common_subject"
-            android:textColor="@color/color_000000"
-            android:textSize="@dimen/common_18dp" />
-
-        <EditText
-            android:id="@+id/txt_MainActivity_subject"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/common_5dp"
-            android:background="@null"
-            android:hint="@string/common_hint_subject"
-            android:textColor="@color/color_222222"
-            android:textSize="@dimen/common_12dp" />
-    </LinearLayout>
-    -->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lin_MainActivity_total_gain_losses"
         android:layout_width="match_parent"
@@ -199,80 +132,9 @@
         android:background="@color/color_line_1a000000"
         app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
         />
-    <!--
-    <LinearLayout
-        android:id="@+id/lin_subtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="3"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses">
-        <LinearLayout
-            android:id="@+id/lin_all_check"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@drawable/border_line_bottom_right"
-            android:visibility="gone"
-            tools:visibility="visible"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="@color/color_222222"
-                android:text="전체선택"
-                />
-            <CheckBox
-                android:id="@+id/checkbox_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/txt_subject_name"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/common_60dp"
-            android:layout_weight="1"
-            android:background="@drawable/border_line_bottom_right"
-            android:gravity="center"
-            android:text="@string/common_date_of_sale_and_subject_name"
-            android:textColor="@color/color_222222"
-            android:lineSpacingExtra="5sp"
-            />
-
-        <TextView
-            android:id="@+id/lin_gain_losses"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/common_60dp"
-            android:layout_weight="1"
-            android:background="@drawable/border_line_bottom_right"
-            android:gravity="center"
-            android:text="@string/common_real_gains_losses_amount_and_gain_percent"
-            android:textColor="@color/color_222222"
-            android:lineSpacingExtra="5sp"
-            />
-
-        <TextView
-            android:id="@+id/lin_sel"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/common_60dp"
-            android:layout_weight="1"
-            android:background="@drawable/border_line_bottom"
-            android:gravity="center"
-            android:text="@string/common_purchase_price_and_sell_price"
-            android:textColor="@color/color_222222"
-            android:lineSpacingExtra="5sp"
-            />
-
-    </LinearLayout>
-    -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/lin_MainActivity_Filter"
+        android:id="@+id/cons_MainActivity_Edit"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
@@ -283,29 +145,32 @@
         app:layout_constraintStart_toStartOf="parent"
         >
 
-        <TextView
-            android:id="@+id/txt_MainActivity_Filter"
+        <LinearLayout
+            android:id="@+id/lin_MainActivity_Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Common_All"
-            android:textSize="18sp"
-            android:textColor="@color/color_222222"
+            android:orientation="horizontal"
+            android:gravity="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-            android:id="@+id/img_MainActivity_Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_5dp"
-            android:layout_gravity="center"
-            android:src="@drawable/arrow_bottom"
-            app:layout_constraintTop_toTopOf="@+id/txt_MainActivity_Filter"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_MainActivity_Filter"
-            app:layout_constraintStart_toEndOf="@+id/txt_MainActivity_Filter"
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Common_All"
+                android:textSize="18sp"
+                android:textColor="@color/color_222222"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/common_5dp"
+                android:layout_gravity="center"
+                android:src="@drawable/arrow_bottom"
+                />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/txt_MainActivity_Edit"
@@ -315,8 +180,8 @@
             android:text="@string/Common_Edit"
             android:textSize="18sp"
             android:textColor="@color/color_222222"
-            app:layout_constraintTop_toTopOf="@+id/lin_MainActivity_Filter"
-            app:layout_constraintBottom_toBottomOf="@+id/lin_MainActivity_Filter"
+            app:layout_constraintTop_toTopOf="@+id/cons_MainActivity_Edit"
+            app:layout_constraintBottom_toBottomOf="@+id/cons_MainActivity_Edit"
             app:layout_constraintEnd_toEndOf="parent"
             />
 
@@ -328,7 +193,7 @@
         android:layout_height="@dimen/common_1dp"
         android:layout_marginTop="@dimen/common_10dp"
         android:background="@color/color_line_1a000000"
-        app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_Filter"
+        app:layout_constraintTop_toBottomOf="@+id/cons_MainActivity_Edit"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -348,45 +213,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         >
-        <!--
-        <LinearLayout
-            android:id="@+id/lin_bottom_menu_left"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
-            <TextView
-                android:id="@+id/txt_bottom_menu_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/common_modify"
-                android:textSize="16sp"
-                android:textColor="@color/color_222222"
-                />
-        </LinearLayout>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/color_222222"
-            />
-        <LinearLayout
-            android:id="@+id/lin_bottom_menu_right"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
-            <TextView
-                android:id="@+id/txt_bottom_menu_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/common_add"
-                android:textSize="16sp"
-                android:textColor="@color/color_222222"
-                />
-        </LinearLayout>
-        -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
