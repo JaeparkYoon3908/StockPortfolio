@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.model.HeadInfo
+import com.yjpapp.stockportfolio.util.Utils
 import java.lang.StringBuilder
 
 class DatabaseController {
@@ -122,7 +123,70 @@ class DatabaseController {
             cursor?.close()
             return null
         }
+    }
 
+    fun getGainDataInfo(): ArrayList<DataInfo?>?{
+        val cursor: Cursor
+        val resultList = ArrayList<DataInfo?>()
+        val sb = StringBuilder()
+        sb.append("SELECT * FROM " + Databases.TABLE_DATA)
+        cursor = database.rawQuery(sb.toString(), null)
+        if(cursor.count>0){
+            cursor.moveToFirst()
+            for(i in 0 until cursor.count){
+                val realGainLossesAmount
+                        = cursor.getString(cursor.getColumnIndex(Databases.COL_REAL_GAINS_LOSSES_AMOUNT))
+                val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
+                if(realGainLossesAmountNum >= 0){
+                    val result = DataInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_ID)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_SUBJECT_NAME)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_REAL_GAINS_LOSSES_AMOUNT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_PURCHASE_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_SELL_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_GAIN_PERCENT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_PURCHASE_PRICE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_SELL_PRICE)),
+                        cursor.getInt(cursor.getColumnIndex(Databases.COL_SELL_COUNT))
+                    )
+                    resultList.add(result)
+                }
+                cursor.moveToNext()
+            }
+        }
+        cursor?.close()
+        return resultList
+    }
+
+    fun getLossDataInfo(): ArrayList<DataInfo?>?{
+        val cursor: Cursor
+        val resultList = ArrayList<DataInfo?>()
+        val sb = StringBuilder()
+        sb.append("SELECT * FROM " + Databases.TABLE_DATA)
+        cursor = database.rawQuery(sb.toString(), null)
+        if(cursor.count>0){
+            cursor.moveToFirst()
+            for(i in 0 until cursor.count){
+                val realGainLossesAmount
+                        = cursor.getString(cursor.getColumnIndex(Databases.COL_REAL_GAINS_LOSSES_AMOUNT))
+                val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
+                if(realGainLossesAmountNum < 0){
+                    val result = DataInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_ID)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_SUBJECT_NAME)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_REAL_GAINS_LOSSES_AMOUNT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_PURCHASE_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_SELL_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_GAIN_PERCENT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_PURCHASE_PRICE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_SELL_PRICE)),
+                        cursor.getInt(cursor.getColumnIndex(Databases.COL_SELL_COUNT))
+                    )
+                    resultList.add(result)
+                }
+                cursor.moveToNext()
+            }
+        }
+        cursor?.close()
+        return resultList
     }
 
     fun deleteDataInfo(position: Int){

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DataInfo
-import kotlinx.android.synthetic.main.dialog_add_portfolio.*
 import kotlinx.android.synthetic.main.item_main_list2.view.*
 import java.util.*
 import kotlin.collections.ArrayList

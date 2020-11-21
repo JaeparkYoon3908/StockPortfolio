@@ -156,6 +156,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <TextView
+                android:id="@+id/txt_MainActivity_Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Common_All"

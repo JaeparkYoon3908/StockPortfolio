@@ -17,22 +17,21 @@ class MainFilterDialog (context: Context) : Dialog(context, android.R.style.Them
 
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
-            R.id.txt_MainFilterDialog_all -> {
-
+            R.id.cons_MainFilterDialog_MainContainer -> {
+                dismiss()
             }
-            R.id.txt_MainFilterDialog_gain -> {
-
-            }
-            R.id.txt_MainFilterDialog_loss -> {
-
+            R.id.txt_MainFilterDialog_cancel -> {
+                dismiss()
             }
         }
     }
 
     private fun initLayout(){
-        txt_MainFilterDialog_all.setOnClickListener(onClickListener)
-        txt_MainFilterDialog_gain.setOnClickListener(onClickListener)
-        txt_MainFilterDialog_loss.setOnClickListener(onClickListener)
+        cons_MainFilterDialog_MainContainer.setOnClickListener(onClickListener)
+        txt_MainFilterDialog_cancel.setOnClickListener(onClickListener)
+//        txt_MainFilterDialog_all.setOnClickListener(onClickListener)
+//        txt_MainFilterDialog_gain.setOnClickListener(onClickListener)
+//        txt_MainFilterDialog_loss.setOnClickListener(onClickListener)
     }
 
 }

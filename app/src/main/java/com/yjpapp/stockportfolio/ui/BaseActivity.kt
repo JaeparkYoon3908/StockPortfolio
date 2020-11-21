@@ -17,4 +17,8 @@ open class BaseActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
 //        val sqliteDatabases = dbHelper.writableDatabase
 //        databaseController = DatabaseController(sqliteDatabases, dbHelper)
     }
+
+    override fun onBackPressed() {
+
+    }
 }

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cons_MainFilterDialog_MainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_4D000000"
@@ -26,6 +27,19 @@
             android:textColor="@color/color_666666"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/txt_MainFilterDialog_cancel"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_marginTop="18dp"
+            android:text="@string/Common_Cancel"
+            android:textSize="14sp"
+            android:textColor="@color/color_e52b4e"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             />
 
         <TextView
