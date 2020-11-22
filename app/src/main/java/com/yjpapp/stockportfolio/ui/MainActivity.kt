@@ -10,7 +10,7 @@ import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.ui.dialog.EditMainListDialog
 import com.yjpapp.stockportfolio.ui.dialog.MainFilterDialog
 import com.yjpapp.stockportfolio.util.Utils
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
+import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dailog_main_filter.*
 import kotlinx.android.synthetic.main.dialog_add_portfolio.*
@@ -91,7 +91,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
 
         mainListAdapter = MainListAdapter(allDataList, this)
         recyclerview_MainActivity.adapter = mainListAdapter
-        recyclerview_MainActivity.itemAnimator = SlideInLeftAnimator()
+        recyclerview_MainActivity.itemAnimator = FadeInAnimator()
 
     }
 
@@ -187,7 +187,11 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         mainListAdapter?.setDataInfoList(newDataInfo!!)
         mainListAdapter?.setEditMode(false)
         //TODO Insert 애니메이션 적용
-        mainListAdapter?.notifyDataSetChanged()
+        if(insertMode){
+            mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!!-1)
+        }else{
+            mainListAdapter?.notifyDataSetChanged()
+        }
         recyclerview_MainActivity.scrollToPosition(newDataInfo?.size!! - 1)
         bindTotalGainData()
     }
