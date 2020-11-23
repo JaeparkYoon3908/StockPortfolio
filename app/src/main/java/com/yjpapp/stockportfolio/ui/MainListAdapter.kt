@@ -21,8 +21,8 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
 
     interface DBController{
-        fun edit(position: Int)
-        fun delete(position: Int)
+        fun editPortfolioList(position: Int)
+        fun deletePortfolioList(position: Int)
     }
 
     init {
@@ -49,10 +49,10 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
             return@setOnLongClickListener true
         }
         holder.itemView.txt_edit.setOnClickListener {
-            dbController.edit(position)
+            dbController.editPortfolioList(position)
         }
         holder.itemView.txt_delete.setOnClickListener {
-            dbController.delete(position)
+            dbController.deletePortfolioList(position)
         }
 //        bindCheckBox(holder, position)
         bindDataList(holder, position)

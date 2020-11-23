@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.DatabaseController
 import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.ui.dialog.EditMainListDialog
 import com.yjpapp.stockportfolio.ui.dialog.MainFilterDialog
@@ -23,7 +22,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
 
     private var mainListAdapter: MainListAdapter? = null
     private var allDataList: ArrayList<DataInfo?>? = null
-    private var modeType: Int = 0
+//    private var modeType: Int = 0
     private var insertMode: Boolean = false
     private var editSelectPosition = 0
 
@@ -32,7 +31,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         initLayout()
     }
 
-    private fun add(){
+    private fun addPortfolioList(){
         val editMainListDialog = EditMainListDialog(mContext)
         editMainListDialog.show()
         editMainListDialog.txt_complete.setOnClickListener {
@@ -40,24 +39,41 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         }
     }
 
-    override fun delete(position: Int) {
-        //TODO 삭제 애니메이션, 팝업창,
+    override fun deletePortfolioList(position: Int) {
         var dataList = mainListAdapter?.getDataInfoList()!!
         val id: Int = dataList[position]?.id!!
-        DatabaseController.getInstance(mContext).deleteDataInfo(id)
+        databaseController.deleteDataInfo(id)
 
-        dataList = DatabaseController.getInstance(mContext).getAllDataInfo()!!
+        dataList = databaseController.getAllDataInfo()!!
         mainListAdapter?.setDataInfoList(dataList)
         mainListAdapter?.setEditMode(false)
         mainListAdapter?.notifyItemRemoved(position)
         bindTotalGainData()
     }
 
-    override fun edit(position: Int) {
-        //TODO 편집화면 구현
+    override fun editPortfolioList(position: Int) {
         insertMode = false
         editSelectPosition = position
-        editPortfolioList(position)
+        val editMainListDialog = EditMainListDialog(mContext)
+        editMainListDialog.show()
+        editMainListDialog.et_subject_name.setText(allDataList!![position]?.subjectName)
+        editMainListDialog.et_purchase_date.setText(allDataList!![position]?.purchaseDate)
+        editMainListDialog.et_sell_date.setText(allDataList!![position]?.sellDate)
+        editMainListDialog.et_purchase_price.setText(allDataList!![position]?.purchasePrice)
+        editMainListDialog.et_sell_price.setText(allDataList!![position]?.sellPrice)
+        editMainListDialog.et_sell_count.setText(allDataList!![position]?.sellCount.toString())
+        editMainListDialog.txt_complete.setOnClickListener {
+            runDialogCompleteClick(editMainListDialog)
+        }
+    }
+
+    override fun onBackPressed() {
+        if(mainListAdapter?.isEditMode()!!){
+            mainListAdapter?.setEditMode(false)
+            mainListAdapter?.notifyDataSetChanged()
+        }else{
+            finish()
+        }
     }
 
     private fun initLayout(){
@@ -68,15 +84,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         txt_MainActivity_Edit.setOnClickListener(onClickListener)
 
         initRecyclerView()
-    }
-
-    override fun onBackPressed() {
-        if(mainListAdapter?.isEditMode()!!){
-            mainListAdapter?.setEditMode(false)
-            mainListAdapter?.notifyDataSetChanged()
-        }else{
-            finish()
-        }
     }
 
     private fun initRecyclerView(){
@@ -99,7 +106,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         when(view?.id){
             R.id.lin_add -> {
                 insertMode = true
-                add()
+                addPortfolioList()
             }
 
             R.id.txt_MainActivity_Edit -> {
@@ -112,20 +119,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
             R.id.lin_MainActivity_Filter -> {
                 initFilterDialog()
             }
-        }
-    }
-
-    private fun editPortfolioList(position: Int){
-        val editMainListDialog = EditMainListDialog(mContext)
-        editMainListDialog.show()
-        editMainListDialog.et_subject_name.setText(allDataList!![position]?.subjectName)
-        editMainListDialog.et_purchase_date.setText(allDataList!![position]?.purchaseDate)
-        editMainListDialog.et_sell_date.setText(allDataList!![position]?.sellDate)
-        editMainListDialog.et_purchase_price.setText(allDataList!![position]?.purchasePrice)
-        editMainListDialog.et_sell_price.setText(allDataList!![position]?.sellPrice)
-        editMainListDialog.et_sell_count.setText(allDataList!![position]?.sellCount.toString())
-        editMainListDialog.txt_complete.setOnClickListener {
-            runDialogCompleteClick(editMainListDialog)
         }
     }
 
@@ -178,15 +171,14 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
             sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
 
         if(insertMode){
-            DatabaseController.getInstance(mContext).insertData(dataInfo)
+            databaseController.insertData(dataInfo)
         }else{
             dataInfo.id = allDataList!![editSelectPosition]!!.id
-            DatabaseController.getInstance(mContext).updateData(dataInfo)
+            databaseController.updateData(dataInfo)
         }
-        val newDataInfo = DatabaseController.getInstance(mContext).getAllDataInfo()
+        val newDataInfo = databaseController.getAllDataInfo()
         mainListAdapter?.setDataInfoList(newDataInfo!!)
         mainListAdapter?.setEditMode(false)
-        //TODO Insert 애니메이션 적용
         if(insertMode){
             mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!!-1)
         }else{
@@ -196,7 +188,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         bindTotalGainData()
     }
     private fun bindTotalGainData(){
-        allDataList  = DatabaseController.getInstance(mContext).getAllDataInfo()
+        allDataList  = databaseController.getAllDataInfo()
         var totalGainNumber: Double = 0.0
         var totalGainPercent: Double = 0.0
         for(i in allDataList?.indices!!){
@@ -224,21 +216,21 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         }
     }
     private fun allDataFiltering(){
-        allDataList = DatabaseController.getInstance(mContext).getAllDataInfo()
+        allDataList = databaseController.getAllDataInfo()
         mainListAdapter?.setDataInfoList(allDataList!!)
         mainListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_All)
     }
 
     private fun gainDataFiltering(){
-        val gainDataList = DatabaseController.getInstance(mContext).getGainDataInfo()
+        val gainDataList = databaseController.getGainDataInfo()
         mainListAdapter?.setDataInfoList(gainDataList!!)
         mainListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_Gain)
     }
 
     private fun lossDataFiltering(){
-        val lossDataList = DatabaseController.getInstance(mContext).getLossDataInfo()
+        val lossDataList = databaseController.getLossDataInfo()
         mainListAdapter?.setDataInfoList(lossDataList!!)
         mainListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_Loss)
