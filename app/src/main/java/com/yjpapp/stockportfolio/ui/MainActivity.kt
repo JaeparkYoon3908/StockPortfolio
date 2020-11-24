@@ -22,7 +22,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
 
     private var mainListAdapter: MainListAdapter? = null
     private var allDataList: ArrayList<DataInfo?>? = null
-//    private var modeType: Int = 0
     private var insertMode: Boolean = false
     private var editSelectPosition = 0
 
@@ -33,9 +32,11 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
 
     private fun addPortfolioList(){
         val editMainListDialog = EditMainListDialog(mContext)
-        editMainListDialog.show()
-        editMainListDialog.txt_complete.setOnClickListener {
-            runDialogCompleteClick(editMainListDialog)
+        if(!editMainListDialog.isShowing){
+            editMainListDialog.show()
+            editMainListDialog.txt_complete.setOnClickListener {
+                runDialogCompleteClick(editMainListDialog)
+            }
         }
     }
 
@@ -55,15 +56,17 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         insertMode = false
         editSelectPosition = position
         val editMainListDialog = EditMainListDialog(mContext)
-        editMainListDialog.show()
-        editMainListDialog.et_subject_name.setText(allDataList!![position]?.subjectName)
-        editMainListDialog.et_purchase_date.setText(allDataList!![position]?.purchaseDate)
-        editMainListDialog.et_sell_date.setText(allDataList!![position]?.sellDate)
-        editMainListDialog.et_purchase_price.setText(allDataList!![position]?.purchasePrice)
-        editMainListDialog.et_sell_price.setText(allDataList!![position]?.sellPrice)
-        editMainListDialog.et_sell_count.setText(allDataList!![position]?.sellCount.toString())
-        editMainListDialog.txt_complete.setOnClickListener {
-            runDialogCompleteClick(editMainListDialog)
+        if(!editMainListDialog.isShowing){
+            editMainListDialog.show()
+            editMainListDialog.et_subject_name.setText(allDataList!![position]?.subjectName)
+            editMainListDialog.et_purchase_date.setText(allDataList!![position]?.purchaseDate)
+            editMainListDialog.et_sell_date.setText(allDataList!![position]?.sellDate)
+            editMainListDialog.et_purchase_price.setText(allDataList!![position]?.purchasePrice)
+            editMainListDialog.et_sell_price.setText(allDataList!![position]?.sellPrice)
+            editMainListDialog.et_sell_count.setText(allDataList!![position]?.sellCount.toString())
+            editMainListDialog.txt_complete.setOnClickListener {
+                runDialogCompleteClick(editMainListDialog)
+            }
         }
     }
 

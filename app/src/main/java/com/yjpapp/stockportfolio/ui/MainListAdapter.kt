@@ -1,6 +1,8 @@
 package com.yjpapp.stockportfolio.ui
 
 import android.content.Context
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +13,10 @@ import kotlinx.android.synthetic.main.item_main_list2.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBController) :
     RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
-    private var mContext: Context? = null
+    private lateinit var mContext: Context
     private var dataInfoList = ArrayList<DataInfo?>()
     private var dbController: DBController
     private var editModeOn: Boolean = false
@@ -44,6 +47,13 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 아이템을 길게 눌렀을 때 편집모드로 전환.
         holder.itemView.setOnLongClickListener {
+            val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                vibrator!!.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
+            }else{
+                vibrator!!.vibrate(500);
+            }
+
             editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
             notifyDataSetChanged()
             return@setOnLongClickListener true
@@ -54,7 +64,6 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
         holder.itemView.txt_delete.setOnClickListener {
             dbController.deletePortfolioList(position)
         }
-//        bindCheckBox(holder, position)
         bindDataList(holder, position)
         bindEditMode(holder, position)
 
@@ -109,8 +118,6 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
             holder.itemView.txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
             holder.itemView.txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
         }
-        //TODO 수익률 계산 제대로 하기. (마이너스면 파란색, 플러스면 빨간색)
-
     }
     private fun bindEditMode(holder: ViewHolder, position: Int){
         if(editModeOn){

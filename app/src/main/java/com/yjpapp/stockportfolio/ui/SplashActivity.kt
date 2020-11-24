@@ -18,8 +18,4 @@ class SplashActivity: BaseActivity(R.layout.activity_splash) {
             startActivity(intent)
         },5000)
     }
-
-    private fun checkPermission(){
-
-    }
 }

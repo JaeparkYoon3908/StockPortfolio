@@ -8,43 +8,48 @@
     tools:context=".ui.MainActivity">
 
 
-    <Toolbar
+    <RelativeLayout
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
         android:background="@color/color_f1f1f1"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <!--
-        <ImageView
-            android:id="@+id/img_back"
-            android:layout_width="25dp"
-            android:layout_height="35dp"
-            android:src="@drawable/icon_c_back_on"
-            />
-            -->
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <LinearLayout
+            android:id="@+id/lin_memo"
+            android:layout_width="@dimen/common_60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/img_memo"
+                android:layout_width="@dimen/common_20dp"
+                android:layout_height="@dimen/common_20dp"
+                android:src="@drawable/icon_add"
+                app:tint="@color/color_222222"
+                />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/txt_MainActivity_proceed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:paddingTop="@dimen/common_10dp"
             android:paddingBottom="@dimen/common_10dp"
             android:text="@string/MainActivity_Title"
             android:textColor="@color/color_222222"
             android:textSize="22sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            />
 
         <LinearLayout
             android:id="@+id/lin_add"
             android:layout_width="@dimen/common_60dp"
             android:layout_height="match_parent"
-            android:layout_gravity="end"
+            android:layout_alignParentEnd="true"
             android:gravity="center"
             >
             <ImageView
@@ -56,7 +61,7 @@
                 app:tint="@color/color_222222"
                 />
         </LinearLayout>
-    </Toolbar>
+    </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lin_MainActivity_total_gain_losses"
