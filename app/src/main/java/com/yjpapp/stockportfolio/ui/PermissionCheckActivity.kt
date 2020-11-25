@@ -1,9 +1,6 @@
 package com.yjpapp.stockportfolio.ui
 
-import android.content.Intent
-import android.os.Bundle
-import com.yjpapp.stockportfolio.R
-
+/*
 class PermissionCheckActivity: BaseActivity(R.layout.activity_permission_check) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,3 +14,5 @@ class PermissionCheckActivity: BaseActivity(R.layout.activity_permission_check) 
         startActivity(intent)
     }
 }
+
+ */

@@ -14,8 +14,4 @@ open class BaseActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
         databaseController = DatabaseController.getInstance(mContext)
 
     }
-
-    override fun onBackPressed() {
-
-    }
 }

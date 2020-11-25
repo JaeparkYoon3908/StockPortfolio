@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.ui
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,12 +71,21 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         }
     }
 
+    private var allowAppFinish = false
     override fun onBackPressed() {
         if(mainListAdapter?.isEditMode()!!){
             mainListAdapter?.setEditMode(false)
             mainListAdapter?.notifyDataSetChanged()
         }else{
-            finish()
+            if(!allowAppFinish){
+                Toast.makeText(mContext, "앱을 종료하려면 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show()
+                allowAppFinish = true
+                Handler().postDelayed(Runnable {
+                    allowAppFinish = false
+                },3000)
+            }else{
+                finishAffinity()
+            }
         }
     }
 

@@ -49,9 +49,9 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
         holder.itemView.setOnLongClickListener {
             val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                vibrator!!.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
+                vibrator!!.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
             }else{
-                vibrator!!.vibrate(500);
+                vibrator!!.vibrate(100);
             }
 
             editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
