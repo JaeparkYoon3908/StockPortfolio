@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase
 import com.yjpapp.stockportfolio.model.DataInfo
 import com.yjpapp.stockportfolio.model.HeadInfo
 import com.yjpapp.stockportfolio.util.Utils
-import java.lang.StringBuilder
 
 class DatabaseController {
     // 싱글톤 패턴 적용 완료

@@ -46,26 +46,29 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 아이템을 길게 눌렀을 때 편집모드로 전환.
-        holder.itemView.setOnLongClickListener {
-            val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                vibrator!!.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
-            }else{
-                vibrator!!.vibrate(100);
-            }
+        holder.apply {
+            itemView.setOnLongClickListener {
+                val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    vibrator!!.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+                }else{
+                    vibrator!!.vibrate(100);
+                }
 
-            editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
-            notifyDataSetChanged()
-            return@setOnLongClickListener true
+                editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
+                notifyDataSetChanged()
+                return@setOnLongClickListener true
+            }
+            itemView.txt_edit.setOnClickListener {
+                dbController.editPortfolioList(position)
+            }
+            itemView.txt_delete.setOnClickListener {
+                dbController.deletePortfolioList(position)
+            }
+            bindDataList(holder, position)
+            bindEditMode(holder, position)
         }
-        holder.itemView.txt_edit.setOnClickListener {
-            dbController.editPortfolioList(position)
-        }
-        holder.itemView.txt_delete.setOnClickListener {
-            dbController.deletePortfolioList(position)
-        }
-        bindDataList(holder, position)
-        bindEditMode(holder, position)
+
 
     }
 

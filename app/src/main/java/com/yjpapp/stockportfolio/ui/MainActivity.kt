@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DataInfo
+import com.yjpapp.stockportfolio.preference.SettingPrefKey
 import com.yjpapp.stockportfolio.ui.dialog.EditMainListDialog
 import com.yjpapp.stockportfolio.ui.dialog.MainFilterDialog
 import com.yjpapp.stockportfolio.util.Utils
@@ -29,6 +30,8 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initLayout()
+        preferenceUtil.setPreference(SettingPrefKey.KEY_ViBRATION, "완전세게")
+        logcat(preferenceUtil.getPreference(SettingPrefKey.KEY_ViBRATION))
     }
 
     private fun addPortfolioList(){
@@ -56,17 +59,18 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
     override fun editPortfolioList(position: Int) {
         insertMode = false
         editSelectPosition = position
-        val editMainListDialog = EditMainListDialog(mContext)
-        if(!editMainListDialog.isShowing){
-            editMainListDialog.show()
-            editMainListDialog.et_subject_name.setText(allDataList!![position]?.subjectName)
-            editMainListDialog.et_purchase_date.setText(allDataList!![position]?.purchaseDate)
-            editMainListDialog.et_sell_date.setText(allDataList!![position]?.sellDate)
-            editMainListDialog.et_purchase_price.setText(allDataList!![position]?.purchasePrice)
-            editMainListDialog.et_sell_price.setText(allDataList!![position]?.sellPrice)
-            editMainListDialog.et_sell_count.setText(allDataList!![position]?.sellCount.toString())
-            editMainListDialog.txt_complete.setOnClickListener {
-                runDialogCompleteClick(editMainListDialog)
+        EditMainListDialog(mContext).apply {
+            if(!isShowing){
+                show()
+                et_subject_name.setText(allDataList!![position]?.subjectName)
+                et_purchase_date.setText(allDataList!![position]?.purchaseDate)
+                et_sell_date.setText(allDataList!![position]?.sellDate)
+                et_purchase_price.setText(allDataList!![position]?.purchasePrice)
+                et_sell_price.setText(allDataList!![position]?.sellPrice)
+                et_sell_count.setText(allDataList!![position]?.sellCount.toString())
+                txt_complete.setOnClickListener {
+                    runDialogCompleteClick(this)
+                }
             }
         }
     }
@@ -137,68 +141,71 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
 
     private fun runDialogCompleteClick(editMainListDialog: EditMainListDialog){
         //예외처리 (값을 모두 입력하지 않았을 때)
-        if (editMainListDialog.et_subject_name.text.isEmpty() ||
-            editMainListDialog.et_purchase_date.text.isEmpty() ||
-            editMainListDialog.et_sell_date.text.isEmpty() ||
-            editMainListDialog.et_purchase_price.text.isEmpty() ||
-            editMainListDialog.et_sell_price.text.isEmpty() ||
-            editMainListDialog.et_sell_count.text.isEmpty()) {
+        editMainListDialog.run{
+            if (et_subject_name.text.isEmpty() ||
+                et_purchase_date.text.isEmpty() ||
+                et_sell_date.text.isEmpty() ||
+                et_purchase_price.text.isEmpty() ||
+                et_sell_price.text.isEmpty() ||
+                et_sell_count.text.isEmpty()) {
 
-            Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
-            return
+                Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
+                return
+            }
+
+            //매매한 회사이름
+            val subjectName = et_subject_name.text.toString()
+            //매수일
+            val purchaseDate = et_purchase_date.text.toString()
+            //매도일
+            val sellDate = et_sell_date.text.toString()
+            //매수금액
+            val purchasePrice = et_purchase_price.text.toString()
+            val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice)
+            //매도금액
+            val sellPrice = et_sell_price.text.toString()
+            val sellPriceNumber = Utils.getNumDeletedComma(sellPrice)
+            //매도수량
+            val sellCount = et_sell_count.text.toString().toInt()
+            //수익
+            val realPainLossesAmountNumber =
+                ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
+            val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
+            //수익률
+            val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
+            val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
+
+            //날짜오류 예외처리
+            if (Utils.getNumDeletedDot(purchaseDate).toInt() > Utils.getNumDeletedDot(sellDate).toInt()) {
+                Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG)
+                    .show()
+                return
+            }
+
+            if (isShowing) {
+                dismiss()
+            }
+            val dataInfo = DataInfo(0, subjectName, realPainLossesAmount, purchaseDate,
+                sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
+
+            if(insertMode){
+                databaseController.insertData(dataInfo)
+            }else{
+                dataInfo.id = allDataList!![editSelectPosition]!!.id
+                databaseController.updateData(dataInfo)
+            }
+            val newDataInfo = databaseController.getAllDataInfo()
+            mainListAdapter?.setDataInfoList(newDataInfo!!)
+            mainListAdapter?.setEditMode(false)
+            if(insertMode){
+                mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!!-1)
+            }else{
+                mainListAdapter?.notifyDataSetChanged()
+            }
+            recyclerview_MainActivity.scrollToPosition(newDataInfo?.size!! - 1)
+            bindTotalGainData()
         }
 
-        //매매한 회사이름
-        val subjectName = editMainListDialog.et_subject_name.text.toString()
-        //매수일
-        val purchaseDate = editMainListDialog.et_purchase_date.text.toString()
-        //매도일
-        val sellDate = editMainListDialog.et_sell_date.text.toString()
-        //매수금액
-        val purchasePrice = editMainListDialog.et_purchase_price.text.toString()
-        val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice)
-        //매도금액
-        val sellPrice = editMainListDialog.et_sell_price.text.toString()
-        val sellPriceNumber = Utils.getNumDeletedComma(sellPrice)
-        //매도수량
-        val sellCount = editMainListDialog.et_sell_count.text.toString().toInt()
-        //수익
-        val realPainLossesAmountNumber =
-            ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
-        val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
-        //수익률
-        val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
-        val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
-
-        //날짜오류 예외처리
-        if (Utils.getNumDeletedDot(purchaseDate).toInt() > Utils.getNumDeletedDot(sellDate).toInt()) {
-            Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG)
-                .show()
-            return
-        }
-
-        if (editMainListDialog.isShowing) {
-            editMainListDialog.dismiss()
-        }
-        val dataInfo = DataInfo(0, subjectName, realPainLossesAmount, purchaseDate,
-            sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
-
-        if(insertMode){
-            databaseController.insertData(dataInfo)
-        }else{
-            dataInfo.id = allDataList!![editSelectPosition]!!.id
-            databaseController.updateData(dataInfo)
-        }
-        val newDataInfo = databaseController.getAllDataInfo()
-        mainListAdapter?.setDataInfoList(newDataInfo!!)
-        mainListAdapter?.setEditMode(false)
-        if(insertMode){
-            mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!!-1)
-        }else{
-            mainListAdapter?.notifyDataSetChanged()
-        }
-        recyclerview_MainActivity.scrollToPosition(newDataInfo?.size!! - 1)
-        bindTotalGainData()
     }
     private fun bindTotalGainData(){
         allDataList  = databaseController.getAllDataInfo()
@@ -213,19 +220,20 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         txt_total_realization_gains_losses_percent.text = Utils.getRoundsPercentNumber(totalGainPercent)
     }
     private fun initFilterDialog(){
-        val mainFilterDialog = MainFilterDialog(mContext)
-        mainFilterDialog.show()
-        mainFilterDialog.txt_MainFilterDialog_all.setOnClickListener {
-            allDataFiltering()
-            mainFilterDialog.dismiss()
-        }
-        mainFilterDialog.txt_MainFilterDialog_gain.setOnClickListener {
-            gainDataFiltering()
-            mainFilterDialog.dismiss()
-        }
-        mainFilterDialog.txt_MainFilterDialog_loss.setOnClickListener {
-            lossDataFiltering()
-            mainFilterDialog.dismiss()
+        MainFilterDialog(mContext).apply {
+            show()
+            txt_MainFilterDialog_all.setOnClickListener {
+                allDataFiltering()
+                dismiss()
+            }
+            txt_MainFilterDialog_gain.setOnClickListener {
+                gainDataFiltering()
+                dismiss()
+            }
+            txt_MainFilterDialog_loss.setOnClickListener {
+                lossDataFiltering()
+                dismiss()
+            }
         }
     }
     private fun allDataFiltering(){
