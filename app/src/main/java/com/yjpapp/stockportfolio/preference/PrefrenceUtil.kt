@@ -22,7 +22,6 @@ class PreferenceUtil {
                 }
             }
     }
-    //TODO Preference Synchronized 적용
 
     fun setPreference(key: String, value: String){
         synchronized(this){

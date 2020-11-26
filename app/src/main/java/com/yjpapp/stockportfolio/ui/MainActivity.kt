@@ -140,8 +140,9 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
     }
 
     private fun runDialogCompleteClick(editMainListDialog: EditMainListDialog){
-        //예외처리 (값을 모두 입력하지 않았을 때)
+
         editMainListDialog.run{
+            //예외처리 (값을 모두 입력하지 않았을 때)
             if (et_subject_name.text.isEmpty() ||
                 et_purchase_date.text.isEmpty() ||
                 et_sell_date.text.isEmpty() ||
@@ -182,9 +183,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
                 return
             }
 
-            if (isShowing) {
-                dismiss()
-            }
             val dataInfo = DataInfo(0, subjectName, realPainLossesAmount, purchaseDate,
                 sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
 
@@ -194,18 +192,21 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
                 dataInfo.id = allDataList!![editSelectPosition]!!.id
                 databaseController.updateData(dataInfo)
             }
-            val newDataInfo = databaseController.getAllDataInfo()
-            mainListAdapter?.setDataInfoList(newDataInfo!!)
-            mainListAdapter?.setEditMode(false)
-            if(insertMode){
-                mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!!-1)
-            }else{
-                mainListAdapter?.notifyDataSetChanged()
-            }
-            recyclerview_MainActivity.scrollToPosition(newDataInfo?.size!! - 1)
-            bindTotalGainData()
-        }
 
+            if (isShowing) {
+                dismiss()
+            }
+        }
+        val newDataInfo = databaseController.getAllDataInfo()
+        mainListAdapter?.setDataInfoList(newDataInfo!!)
+        mainListAdapter?.setEditMode(false)
+        if(insertMode){
+            mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!!-1)
+        }else{
+            mainListAdapter?.notifyDataSetChanged()
+        }
+        recyclerview_MainActivity.scrollToPosition(newDataInfo?.size!! - 1)
+        bindTotalGainData()
     }
     private fun bindTotalGainData(){
         allDataList  = databaseController.getAllDataInfo()
