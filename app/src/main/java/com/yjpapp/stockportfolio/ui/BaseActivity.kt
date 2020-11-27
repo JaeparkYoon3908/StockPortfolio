@@ -6,17 +6,17 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.database.DatabaseController
-import com.yjpapp.stockportfolio.preference.PreferenceUtil
+import com.yjpapp.stockportfolio.preference.PreferenceController
 
 open class BaseActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
     lateinit var mContext: Context
     lateinit var databaseController: DatabaseController
-    lateinit var preferenceUtil: PreferenceUtil
+    lateinit var preferenceController: PreferenceController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this
         databaseController = DatabaseController.getInstance(mContext)
-        preferenceUtil = PreferenceUtil.getInstance(mContext)
+        preferenceController = PreferenceController.getInstance(mContext)
     }
 
     fun logcat(msg: String){

@@ -9,30 +9,31 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DataInfo
-import kotlinx.android.synthetic.main.item_main_list2.view.*
+import kotlinx.android.synthetic.main.item_main_list.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBController) :
+class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: MainActivityCallBack) :
     RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
     private lateinit var mContext: Context
     private var dataInfoList = ArrayList<DataInfo?>()
-    private var dbController: DBController
+    private var mainActivityCallBack: MainActivityCallBack
     private var editModeOn: Boolean = false
     private var allCheckClick: Boolean = false
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
 
-    interface DBController{
-        fun editPortfolioList(position: Int)
-        fun deletePortfolioList(position: Int)
+    interface MainActivityCallBack{
+        fun onEditClicked(position: Int)
+        fun onDeleteClicked(position: Int)
+        fun onItemLongClicked()
     }
 
     init {
         if (data != null) {
             this.dataInfoList = data
         }
-        this.dbController = callback
+        this.mainActivityCallBack = callback
     }
 
     class ViewHolder(private var view: View) : RecyclerView.ViewHolder(view)
@@ -40,7 +41,7 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
         val inflater = mContext?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view:View = inflater.inflate(R.layout.item_main_list2, parent, false)
+        val view:View = inflater.inflate(R.layout.item_main_list, parent, false)
         return ViewHolder(view)
     }
 
@@ -54,19 +55,19 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
                 }else{
                     vibrator!!.vibrate(100);
                 }
-
                 editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
                 notifyDataSetChanged()
+                mainActivityCallBack.onItemLongClicked()
                 return@setOnLongClickListener true
             }
             itemView.txt_edit.setOnClickListener {
-                dbController.editPortfolioList(position)
+                mainActivityCallBack.onEditClicked(position)
             }
             itemView.txt_delete.setOnClickListener {
-                dbController.deletePortfolioList(position)
+                mainActivityCallBack.onDeleteClicked(position)
             }
             bindDataList(holder, position)
-            bindEditMode(holder, position)
+            bindEditMode(holder)
         }
 
 
@@ -115,14 +116,14 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: DBContr
             realPainLossesAmountNumber += realPainLossesAmountSplit[i]
         }
         if(realPainLossesAmountNumber.toDouble()>=0){
-            holder.itemView.txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_e52b4e))
-            holder.itemView.txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_e52b4e))
+            holder.itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+            holder.itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
         }else{
-            holder.itemView.txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
-            holder.itemView.txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
+            holder.itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+            holder.itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
         }
     }
-    private fun bindEditMode(holder: ViewHolder, position: Int){
+    private fun bindEditMode(holder: ViewHolder){
         if(editModeOn){
             holder.itemView.lin_EditMode.visibility = View.VISIBLE
         }else{

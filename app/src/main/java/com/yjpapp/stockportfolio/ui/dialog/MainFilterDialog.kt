@@ -17,7 +17,7 @@ class MainFilterDialog (context: Context) : Dialog(context, android.R.style.Them
 
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
-            R.id.cons_MainFilterDialog_MainContainer -> {
+            R.id.view_Transparent_Background -> {
                 dismiss()
             }
             R.id.txt_MainFilterDialog_cancel -> {
@@ -27,7 +27,7 @@ class MainFilterDialog (context: Context) : Dialog(context, android.R.style.Them
     }
 
     private fun initLayout(){
-        cons_MainFilterDialog_MainContainer.setOnClickListener(onClickListener)
+        view_Transparent_Background.setOnClickListener(onClickListener)
         txt_MainFilterDialog_cancel.setOnClickListener(onClickListener)
 //        txt_MainFilterDialog_all.setOnClickListener(onClickListener)
 //        txt_MainFilterDialog_gain.setOnClickListener(onClickListener)

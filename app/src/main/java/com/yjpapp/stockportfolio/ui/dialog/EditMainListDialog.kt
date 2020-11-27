@@ -10,10 +10,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
-import android.widget.Toast
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.model.DataInfo
-import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.dialog_add_portfolio.*
 import java.text.DecimalFormat
 import java.util.*
@@ -43,13 +40,15 @@ class EditMainListDialog(context: Context) : Dialog(context, android.R.style.The
         et_purchase_date.setOnClickListener(onClickListener)
         et_sell_date.setOnClickListener(onClickListener)
         txt_cancel.setOnClickListener(onClickListener)
+        EditMainDialog_MainContainer.setOnClickListener(onClickListener)
 
         et_purchase_price.addTextChangedListener(textWatcher)
         et_sell_price.addTextChangedListener(textWatcher)
 
-
         txt_purchase_price_symbol.text = moneySymbol
         txt_sell_price_symbol.text = moneySymbol
+
+        window?.setBackgroundDrawableResource(R.color.color_80000000)
     }
 
     private val onClickListener = View.OnClickListener { view: View? ->
@@ -98,9 +97,6 @@ class EditMainListDialog(context: Context) : Dialog(context, android.R.style.The
                     uiHandler.sendEmptyMessage(MSG.SELL_DATE_DATA_INPUT)
                 }, currentYear, currentMonth, currentDay)
                 datePickerDialog.show()
-            }
-            R.id.txt_cancel -> {
-                dismiss()
             }
         }
     }

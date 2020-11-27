@@ -6,16 +6,16 @@ import android.content.SharedPreferences
 
 private const val FILENAME = "prefs"
 
-class PreferenceUtil {
+class PreferenceController {
     companion object {
-        @Volatile private var instance: PreferenceUtil? = null
+        @Volatile private var instance: PreferenceController? = null
         private lateinit var mContext: Context
         private lateinit var pref: SharedPreferences
 
         @JvmStatic
-        fun getInstance(context: Context): PreferenceUtil =
+        fun getInstance(context: Context): PreferenceController =
             instance ?: synchronized(this) {
-                instance ?: PreferenceUtil().also {
+                instance ?: PreferenceController().also {
                     instance = it
                     mContext = context
                     pref = mContext.getSharedPreferences(FILENAME, Activity.MODE_PRIVATE)

@@ -8,7 +8,7 @@
     tools:context=".ui.MainActivity">
 
 
-    <RelativeLayout
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
@@ -17,27 +17,11 @@
         app:layout_constraintTop_toTopOf="parent"
         >
 
-        <LinearLayout
-            android:id="@+id/lin_memo"
-            android:layout_width="@dimen/common_60dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="center"
-            >
-            <ImageView
-                android:id="@+id/img_memo"
-                android:layout_width="@dimen/common_20dp"
-                android:layout_height="@dimen/common_20dp"
-                android:src="@drawable/icon_add"
-                app:tint="@color/color_222222"
-                />
-        </LinearLayout>
-
         <TextView
             android:id="@+id/txt_MainActivity_proceed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:paddingTop="@dimen/common_10dp"
             android:paddingBottom="@dimen/common_10dp"
             android:text="@string/MainActivity_Title"
@@ -47,10 +31,9 @@
 
         <LinearLayout
             android:id="@+id/lin_add"
-            android:layout_width="@dimen/common_60dp"
+            android:layout_width="@dimen/common_40dp"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:gravity="center"
+            android:layout_gravity="end"
             >
             <ImageView
                 android:id="@+id/img_add"
@@ -61,7 +44,7 @@
                 app:tint="@color/color_222222"
                 />
         </LinearLayout>
-    </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lin_MainActivity_total_gain_losses"

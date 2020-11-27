@@ -20,7 +20,7 @@ import java.text.NumberFormat
 import java.util.*
 
 
-class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBController {
+class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainActivityCallBack {
 
     private var mainListAdapter: MainListAdapter? = null
     private var allDataList: ArrayList<DataInfo?>? = null
@@ -30,21 +30,25 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initLayout()
-        preferenceUtil.setPreference(SettingPrefKey.KEY_ViBRATION, "완전세게")
-        logcat(preferenceUtil.getPreference(SettingPrefKey.KEY_ViBRATION))
+        preferenceController.setPreference(SettingPrefKey.KEY_ViBRATION, "완전세게")
+        logcat(preferenceController.getPreference(SettingPrefKey.KEY_ViBRATION))
     }
 
-    private fun addPortfolioList(){
-        val editMainListDialog = EditMainListDialog(mContext)
-        if(!editMainListDialog.isShowing){
-            editMainListDialog.show()
-            editMainListDialog.txt_complete.setOnClickListener {
-                runDialogCompleteClick(editMainListDialog)
+    private fun addClicked(){
+        EditMainListDialog(mContext).apply {
+            if(!isShowing){
+                show()
+                txt_complete.setOnClickListener {
+                    runDialogCompleteClick(this)
+                }
+                txt_cancel.setOnClickListener {
+                    dismiss()
+                }
             }
         }
     }
 
-    override fun deletePortfolioList(position: Int) {
+    override fun onDeleteClicked(position: Int) {
         var dataList = mainListAdapter?.getDataInfoList()!!
         val id: Int = dataList[position]?.id!!
         databaseController.deleteDataInfo(id)
@@ -56,7 +60,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         bindTotalGainData()
     }
 
-    override fun editPortfolioList(position: Int) {
+    override fun onEditClicked(position: Int) {
         insertMode = false
         editSelectPosition = position
         EditMainListDialog(mContext).apply {
@@ -71,8 +75,15 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
                 txt_complete.setOnClickListener {
                     runDialogCompleteClick(this)
                 }
+                txt_cancel.setOnClickListener {
+                    runDialogCancelClick(this)
+                }
             }
         }
+    }
+
+    override fun onItemLongClicked() {
+        addButtonControll()
     }
 
     private var allowAppFinish = false
@@ -123,7 +134,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         when(view?.id){
             R.id.lin_add -> {
                 insertMode = true
-                addPortfolioList()
+                addClicked()
             }
 
             R.id.txt_MainActivity_Edit -> {
@@ -132,6 +143,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
                 else
                     mainListAdapter?.setEditMode(true)
                 mainListAdapter?.notifyDataSetChanged()
+                addButtonControll()
             }
             R.id.lin_MainActivity_Filter -> {
                 initFilterDialog()
@@ -192,14 +204,11 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
                 dataInfo.id = allDataList!![editSelectPosition]!!.id
                 databaseController.updateData(dataInfo)
             }
-
-            if (isShowing) {
-                dismiss()
-            }
+            dismiss()
         }
         val newDataInfo = databaseController.getAllDataInfo()
         mainListAdapter?.setDataInfoList(newDataInfo!!)
-        mainListAdapter?.setEditMode(false)
+//        mainListAdapter?.setEditMode(false)
         if(insertMode){
             mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!!-1)
         }else{
@@ -208,6 +217,16 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         recyclerview_MainActivity.scrollToPosition(newDataInfo?.size!! - 1)
         bindTotalGainData()
     }
+
+    private fun runDialogCancelClick(editMainListDialog: EditMainListDialog){
+        editMainListDialog.run {
+            mainListAdapter?.setEditMode(false)
+            mainListAdapter?.notifyDataSetChanged()
+            addButtonControll()
+            dismiss()
+        }
+    }
+
     private fun bindTotalGainData(){
         allDataList  = databaseController.getAllDataInfo()
         var totalGainNumber: Double = 0.0
@@ -220,6 +239,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         txt_total_realization_gains_losses_data.text = NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
         txt_total_realization_gains_losses_percent.text = Utils.getRoundsPercentNumber(totalGainPercent)
     }
+
     private fun initFilterDialog(){
         MainFilterDialog(mContext).apply {
             show()
@@ -256,5 +276,13 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.DBCon
         mainListAdapter?.setDataInfoList(lossDataList!!)
         mainListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_Loss)
+    }
+
+    private fun addButtonControll(){
+        if(mainListAdapter?.isEditMode()!!){
+            lin_add.visibility = View.GONE
+        }else{
+            lin_add.visibility = View.VISIBLE
+        }
     }
 }
