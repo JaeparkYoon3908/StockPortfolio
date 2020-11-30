@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui
+package com.yjpapp.stockportfolio.ui.main
 
 import android.content.Context
 import android.os.VibrationEffect
@@ -8,16 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.model.DataInfo
+import com.yjpapp.stockportfolio.model.PortfolioInfo
 import kotlinx.android.synthetic.main.item_main_list.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: MainActivityCallBack) :
+class MainListAdapter(private val data: ArrayList<PortfolioInfo?>?, callback: MainActivityCallBack) :
     RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
     private lateinit var mContext: Context
-    private var dataInfoList = ArrayList<DataInfo?>()
+    private var dataInfoList = ArrayList<PortfolioInfo?>()
     private var mainActivityCallBack: MainActivityCallBack
     private var editModeOn: Boolean = false
     private var allCheckClick: Boolean = false
@@ -40,7 +40,7 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: MainAct
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
-        val inflater = mContext?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view:View = inflater.inflate(R.layout.item_main_list, parent, false)
         return ViewHolder(view)
     }
@@ -81,12 +81,12 @@ class MainListAdapter(private val data: ArrayList<DataInfo?>?, callback: MainAct
         dataInfoList.removeAt(position)
     }
 
-    fun getDataInfoList(): ArrayList<DataInfo?>{
+    fun getDataInfoList(): ArrayList<PortfolioInfo?>{
         return dataInfoList
     }
 
-    fun setDataInfoList(dataInfoList: ArrayList<DataInfo?>){
-        this.dataInfoList = dataInfoList
+    fun setDataInfoList(portfolioInfoList: ArrayList<PortfolioInfo?>){
+        this.dataInfoList = portfolioInfoList
     }
 
     fun setEditMode(isEditMode: Boolean){

@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.main.MainActivity">
 
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_main"
+        android:id="@+id/toolbar_MainActivity"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
         android:background="@color/color_f1f1f1"
@@ -29,21 +29,21 @@
             android:textSize="22sp"
             />
 
-        <LinearLayout
-            android:id="@+id/lin_add"
-            android:layout_width="@dimen/common_40dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            >
-            <ImageView
-                android:id="@+id/img_add"
-                android:layout_width="@dimen/common_20dp"
-                android:layout_height="@dimen/common_20dp"
-                android:layout_gravity="center"
-                android:src="@drawable/icon_add"
-                app:tint="@color/color_222222"
-                />
-        </LinearLayout>
+<!--        <LinearLayout-->
+<!--            android:id="@+id/lin_add"-->
+<!--            android:layout_width="@dimen/common_40dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="end"-->
+<!--            >-->
+<!--            <ImageView-->
+<!--                android:id="@+id/img_add"-->
+<!--                android:layout_width="@dimen/common_20dp"-->
+<!--                android:layout_height="@dimen/common_20dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/icon_add"-->
+<!--                app:tint="@color/color_222222"-->
+<!--                />-->
+<!--        </LinearLayout>-->
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,9 +52,9 @@
         android:layout_height="@dimen/common_50dp"
         android:orientation="horizontal"
         android:weightSum="20"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar_main"
-        app:layout_constraintStart_toEndOf="@+id/toolbar_main"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_main">
+        app:layout_constraintEnd_toEndOf="@+id/toolbar_MainActivity"
+        app:layout_constraintStart_toEndOf="@+id/toolbar_MainActivity"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_MainActivity">
 
         <TextView
             android:id="@+id/txt_total_realization_gains_losses"

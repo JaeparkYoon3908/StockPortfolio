@@ -48,4 +48,8 @@
     <string name="MainFilterDialog_Gain">이익</string>
     <string name="MainFilterDialog_Loss">손해</string>
 
+    <string name="MemoAddActivity_Title_Hint">제목을 입력하세요.</string>
+    <string name="MemoAddActivity_Content_Hint">메모를 입력하세요.</string>
+<!--    <string name="NoteBookListAdapter_NoteCount">%d개의 노트</string>-->
+
 </resources>

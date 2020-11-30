@@ -8,7 +8,7 @@ import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.database.DatabaseController
 import com.yjpapp.stockportfolio.preference.PreferenceController
 
-open class BaseActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
+abstract class BaseActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
     lateinit var mContext: Context
     lateinit var databaseController: DatabaseController
     lateinit var preferenceController: PreferenceController
@@ -17,7 +17,12 @@ open class BaseActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
         mContext = this
         databaseController = DatabaseController.getInstance(mContext)
         preferenceController = PreferenceController.getInstance(mContext)
+
+        initLayout()
     }
+
+    abstract fun initData()
+    abstract fun initLayout()
 
     fun logcat(msg: String){
         if(BuildConfig.LOG_CAT) Log.d(javaClass.simpleName, msg)
