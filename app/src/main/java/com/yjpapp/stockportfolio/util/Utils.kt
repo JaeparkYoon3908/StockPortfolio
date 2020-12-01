@@ -6,11 +6,22 @@ import java.util.*
 object Utils {
     private val sellTex: Double = 0.5
 
+    //yyyymmdd로 변환
     fun getTodayYYYYMMDD(): String {
         val currentTime: Long = System.currentTimeMillis()
         val todayDate = Date(currentTime)
         val sdformat = SimpleDateFormat("yyyyMMdd")
         return sdformat.format(todayDate)
+    }
+
+    //yyyy.mm.dd로 변환
+    fun getTodayYYYY_MM_DD(): String{
+        val yyyymmdd = getTodayYYYYMMDD()
+        var result: String = ""
+        result += yyyymmdd.substring(0,4) + "."
+        result += yyyymmdd.substring(4,6) + "."
+        result += yyyymmdd.substring(6,8)
+        return result
     }
 
     //5,000,000 => 5000000 변환

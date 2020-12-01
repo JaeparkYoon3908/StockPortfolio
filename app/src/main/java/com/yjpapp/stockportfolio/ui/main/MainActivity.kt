@@ -60,7 +60,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
         val id: Int = dataList[position]?.id!!
         databaseController.deleteDataInfo(id, Databases.TABLE_PORTFOLIO)
 
-        dataList = databaseController.getAllPortfolioDataInfo()!!
+        dataList = databaseController.getAllPortfolioDataInfo()
         mainListAdapter?.setDataInfoList(dataList)
         mainListAdapter?.setEditMode(false)
         mainListAdapter?.notifyItemRemoved(position)
@@ -241,13 +241,13 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
             dismiss()
         }
         val newDataInfo = databaseController.getAllPortfolioDataInfo()
-        mainListAdapter?.setDataInfoList(newDataInfo!!)
+        mainListAdapter?.setDataInfoList(newDataInfo)
         if(insertMode){
             mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!!-1)
         }else{
             mainListAdapter?.notifyDataSetChanged()
         }
-        recyclerview_MainActivity.scrollToPosition(newDataInfo?.size!! - 1)
+        recyclerview_MainActivity.scrollToPosition(newDataInfo.size - 1)
         bindTotalGainData()
     }
 

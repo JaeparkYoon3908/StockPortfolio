@@ -10,6 +10,7 @@
         android:id="@+id/toolbar_MemoAddActivity"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
+        android:theme="@style/AppTheme"
         app:layout_constraintTop_toTopOf="parent"
         />
 
@@ -29,6 +30,7 @@
         android:id="@+id/et_MemoAddActivity_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:gravity="top"
         android:layout_marginTop="@dimen/common_10dp"
         android:layout_marginBottom="20dp"
         android:layout_marginStart="@dimen/common_20dp"
