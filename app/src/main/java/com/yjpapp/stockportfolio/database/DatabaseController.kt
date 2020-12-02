@@ -179,7 +179,7 @@ class DatabaseController {
         return resultList
     }
 
-    fun deleteDataInfo(position: Int, table: String){
+    fun deleteData(position: Int, table: String){
 //        val cursor: Cursor
 //        val sb = StringBuilder()
 //        sb.append("DELETE FROM " + Databases.TABLE_DATA + " WHERE ")
@@ -190,18 +190,6 @@ class DatabaseController {
 //        database.use {
         database.delete(table, "id = $position", null)
 //        }
-    }
-
-    fun insertMemoData(memoInfo: MemoInfo?): Boolean{
-        val insertCheck: Long
-        val contentValues = ContentValues()
-        contentValues.put(Databases.COL_MEMO_DATE, memoInfo?.date)
-        contentValues.put(Databases.COL_MEMO_TITLE,memoInfo?.title)
-        contentValues.put(Databases.COL_MEMO_CONTENT, memoInfo?.content)
-
-        insertCheck = database.insert(Databases.TABLE_MEMO,null, contentValues)
-
-        return insertCheck != -1L
     }
 
     fun getAllMemoDataInfo(): ArrayList<MemoInfo?> {
@@ -226,4 +214,28 @@ class DatabaseController {
         return resultList
     }
 
+    fun insertMemoData(memoInfo: MemoInfo?): Boolean{
+        val insertCheck: Long
+        val contentValues = ContentValues()
+        contentValues.put(Databases.COL_MEMO_DATE, memoInfo?.date)
+        contentValues.put(Databases.COL_MEMO_TITLE,memoInfo?.title)
+        contentValues.put(Databases.COL_MEMO_CONTENT, memoInfo?.content)
+
+        insertCheck = database.insert(Databases.TABLE_MEMO,null, contentValues)
+
+        return insertCheck != -1L
+    }
+
+    fun updateMemoData(memoInfo: MemoInfo?): Boolean{
+        val updateCheck: Int
+        val contentValues = ContentValues()
+        contentValues.put(Databases.COL_MEMO_DATE,memoInfo?.date)
+        contentValues.put(Databases.COL_MEMO_TITLE, memoInfo?.title)
+        contentValues.put(Databases.COL_MEMO_TITLE, memoInfo?.content)
+
+        updateCheck = database.update(Databases.TABLE_PORTFOLIO, contentValues,
+            Databases.COL_PORTFOLIO_ID + " = ? ", arrayOf(memoInfo?.id.toString()))
+
+        return updateCheck != -1
+    }
 }

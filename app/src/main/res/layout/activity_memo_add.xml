@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
         android:theme="@style/AppTheme"
+        app:menu="@menu/menu_memo_add"
         app:layout_constraintTop_toTopOf="parent"
         />
 

@@ -93,4 +93,5 @@ class MemoActivity: BaseActivity(R.layout.activity_memo) {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

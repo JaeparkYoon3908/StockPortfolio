@@ -9,9 +9,22 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.MemoInfo
 import kotlinx.android.synthetic.main.item_memo_list.view.*
 
-class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>) :
+class MemoListAdapter(private var data: ArrayList<MemoInfo?>) :
     RecyclerView.Adapter<MemoListAdapter.ViewHolder>(){
+    private var memoListData = ArrayList<MemoInfo?>()
+//    private var memoActivityCallBack: MemoActivityCallBack
+//
+//    interface MemoActivityCallBack{
+//        fun onEditClicked(position: Int)
+//        fun onDeleteClicked(position: Int)
+//        fun onItemLongClicked()
+//    }
     private var mContext: Context? = null
+
+    init {
+        this.memoListData = data
+//        this.memoActivityCallBack = callback
+    }
 
     inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
 

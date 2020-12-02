@@ -58,7 +58,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
     override fun onDeleteClicked(position: Int) {
         var dataList = mainListAdapter?.getDataInfoList()!!
         val id: Int = dataList[position]?.id!!
-        databaseController.deleteDataInfo(id, Databases.TABLE_PORTFOLIO)
+        databaseController.deleteData(id, Databases.TABLE_PORTFOLIO)
 
         dataList = databaseController.getAllPortfolioDataInfo()
         mainListAdapter?.setDataInfoList(dataList)

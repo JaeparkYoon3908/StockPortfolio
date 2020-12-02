@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_MemoAddActivity_Complete"
-        android:title="@string/Common_Complete"
+    <item android:id="@+id/menu_MemoAddActivity_Delete"
+        android:icon="@drawable/icon_delete"
+        android:title="@string/Common_Delete"
         app:showAsAction="ifRoom"
-
         />
 </menu>
