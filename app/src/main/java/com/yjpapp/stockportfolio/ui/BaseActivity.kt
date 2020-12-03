@@ -17,7 +17,6 @@ abstract class BaseActivity(contentLayout: Int) : AppCompatActivity(contentLayou
         mContext = this
         databaseController = DatabaseController.getInstance(mContext)
         preferenceController = PreferenceController.getInstance(mContext)
-
     }
 
     abstract fun initData()

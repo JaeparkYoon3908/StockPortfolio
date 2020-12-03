@@ -1,6 +1,8 @@
 package com.yjpapp.stockportfolio.ui.memo
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +11,8 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.MemoInfo
 import kotlinx.android.synthetic.main.item_memo_list.view.*
 
-class MemoListAdapter(private var data: ArrayList<MemoInfo?>) :
+class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>) :
     RecyclerView.Adapter<MemoListAdapter.ViewHolder>(){
-    private var memoListData = ArrayList<MemoInfo?>()
 //    private var memoActivityCallBack: MemoActivityCallBack
 //
 //    interface MemoActivityCallBack{
@@ -19,18 +20,13 @@ class MemoListAdapter(private var data: ArrayList<MemoInfo?>) :
 //        fun onDeleteClicked(position: Int)
 //        fun onItemLongClicked()
 //    }
-    private var mContext: Context? = null
-
-    init {
-        this.memoListData = data
-//        this.memoActivityCallBack = callback
-    }
+    private lateinit var mContext: Context
 
     inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
-        val inflater = mContext?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view:View = inflater.inflate(R.layout.item_memo_list, parent, false)
         return ViewHolder(view)
     }
@@ -39,17 +35,28 @@ class MemoListAdapter(private var data: ArrayList<MemoInfo?>) :
         holder.view.txt_MemoList_Date.text = memoListData[position]?.date
         holder.view.txt_MemoList_Title.text = memoListData[position]?.title
         holder.view.txt_MemoList_NoteCount.text = memoListData[position]?.content
+
+        holder.view.setOnClickListener {
+            val intent = Intent(mContext, MemoReadWriteActivity::class.java)
+            intent.putExtra(MemoListActivity.INTENT_KEY_LIST_POSITION, position)
+            intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_ID, memoListData[position]?.id)
+            intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_TITLE, memoListData[position]?.title)
+            intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_CONTENT, memoListData[position]?.content)
+            intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_MODE, MemoListActivity.MEMO_READ_MODE)
+
+            (mContext as Activity).startActivityForResult(intent, MemoListActivity.REQUEST_READ)
+        }
     }
 
     override fun getItemCount(): Int {
         return memoListData.size
     }
 
-    public fun setMemoListData(memoListData: ArrayList<MemoInfo?>){
+    fun setMemoListData(memoListData: ArrayList<MemoInfo?>){
         this.memoListData = memoListData
     }
 
-    public fun getMemoListData(): ArrayList<MemoInfo?>{
+    fun getMemoListData(): ArrayList<MemoInfo?>{
         return memoListData
     }
 }

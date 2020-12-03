@@ -23,11 +23,11 @@
             android:screenOrientation="portrait"
             />
 
-        <activity android:name=".ui.memo.MemoActivity"
+        <activity android:name=".ui.memo.MemoListActivity"
             android:screenOrientation="portrait"
             />
 
-        <activity android:name=".ui.memo.MemoAddActivity"
+        <activity android:name=".ui.memo.MemoReadWriteActivity"
             android:screenOrientation="portrait"
             />
 

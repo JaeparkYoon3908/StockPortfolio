@@ -5,6 +5,11 @@
     <item android:id="@+id/menu_MemoAddActivity_Complete"
         android:title="@string/Common_Complete"
         app:showAsAction="ifRoom"
+        />
 
+    <item android:id="@+id/menu_MemoAddActivity_Delete"
+        android:title="@string/Common_Complete"
+        android:icon="@drawable/icon_delete"
+        app:showAsAction="ifRoom"
         />
 </menu>

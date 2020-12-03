@@ -15,8 +15,9 @@ import com.yjpapp.stockportfolio.preference.SettingPrefKey
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import com.yjpapp.stockportfolio.ui.dialog.EditMainListDialog
 import com.yjpapp.stockportfolio.ui.dialog.MainFilterDialog
-import com.yjpapp.stockportfolio.ui.memo.MemoActivity
+import com.yjpapp.stockportfolio.ui.memo.MemoListActivity
 import com.yjpapp.stockportfolio.util.Utils
+import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dailog_main_filter.*
@@ -111,7 +112,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
             }
 
             R.id.menu_MainActivity_Memo -> {
-                val intent = Intent(mContext, MemoActivity::class.java)
+                val intent = Intent(mContext, MemoListActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -125,7 +126,9 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
             mainListAdapter?.notifyDataSetChanged()
         }else{
             if(!allowAppFinish){
-                Toast.makeText(mContext, "앱을 종료하려면 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(mContext, "앱을 종료하려면 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show()
+                Toasty.info(mContext, "앱을 종료하려면 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show()
+
                 allowAppFinish = true
                 Handler().postDelayed(Runnable {
                     allowAppFinish = false

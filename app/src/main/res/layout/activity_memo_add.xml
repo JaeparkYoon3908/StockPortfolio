@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
         android:theme="@style/AppTheme"
-        app:menu="@menu/menu_memo_add"
+        app:menu="@menu/menu_memo_read_write"
         app:layout_constraintTop_toTopOf="parent"
         />
 
@@ -23,6 +23,7 @@
         android:layout_marginStart="@dimen/common_20dp"
         android:layout_marginEnd="@dimen/common_20dp"
         android:hint="@string/MemoAddActivity_Title_Hint"
+        android:textColor="@color/color_222222"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_MemoAddActivity"
         app:layout_constraintStart_toStartOf="parent"
         />
@@ -37,6 +38,7 @@
         android:layout_marginStart="@dimen/common_20dp"
         android:layout_marginEnd="@dimen/common_20dp"
         android:hint="@string/MemoAddActivity_Content_Hint"
+        android:textColor="@color/color_222222"
         app:layout_constraintTop_toBottomOf="@+id/et_MemoAddActivity_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
