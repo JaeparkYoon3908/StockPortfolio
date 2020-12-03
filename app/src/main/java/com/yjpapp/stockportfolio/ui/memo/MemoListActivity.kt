@@ -7,13 +7,14 @@ import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.model.MemoInfo
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import es.dmoral.toasty.Toasty
-import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlinx.android.synthetic.main.activity_memo.*
 
-class MemoListActivity: BaseActivity(R.layout.activity_memo) {
+class MemoListActivity: BaseActivity(R.layout.activity_memo), MemoListAdapter.MemoActivityCallBack {
     companion object {
         const val INTENT_KEY_MEMO_MODE = "INTENT_KEY_MEMO_MODE"
         const val INTENT_KEY_MEMO_INFO_ID = "INTENT_KEY_MEMO_INFO_ID"
@@ -85,6 +86,16 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo) {
         }
     }
 
+    override fun onItemLongClicked(deleteModeOn: Boolean) {
+        if(deleteModeOn){
+            menu?.findItem(R.id.menu_MemoListActivity_Add)?.isVisible = false
+            menu?.findItem(R.id.menu_MemoListActivity_Delete)?.isVisible = true
+        }else{
+            menu?.findItem(R.id.menu_MemoListActivity_Add)?.isVisible = true
+            menu?.findItem(R.id.menu_MemoListActivity_Delete)?.isVisible = false
+        }
+    }
+
     private fun initRecyclerView(){
         val layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         layoutManager.reverseLayout = true
@@ -98,15 +109,15 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo) {
         }
         recyclerview_MemoListActivity.layoutManager = layoutManager
 
-        memoListAdapter = MemoListAdapter(memoData)
+        memoListAdapter = MemoListAdapter(memoData, this)
         recyclerview_MemoListActivity.adapter = memoListAdapter
-        recyclerview_MemoListActivity.itemAnimator = FadeInAnimator()
+        recyclerview_MemoListActivity.itemAnimator = SlideInLeftAnimator()
     }
 
     private var menu: Menu? = null
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         this.menu = menu
-        menuInflater.inflate(R.menu.menu_memo, menu)
+        menuInflater.inflate(R.menu.menu_memo_list, menu)
 
         return true
     }
@@ -116,13 +127,32 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo) {
             android.R.id.home -> {
                 finish()
             }
-            R.id.menu_MemoActivity_Add -> {
+            R.id.menu_MemoListActivity_Add -> {
                 val intent = Intent(mContext, MemoReadWriteActivity::class.java)
                 intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_ADD_MODE)
                 startActivityForResult(intent, REQUEST_ADD)
+            }
+
+            R.id.menu_MemoListActivity_Delete -> {
+                val memoInfo = memoListAdapter?.getMemoListData()
+                for(i in memoInfo?.indices!!){
+                    if(memoInfo[i]?.deleteChecked!!){
+                        databaseController.deleteData(memoInfo[i]?.id!!, Databases.TABLE_MEMO)
+                        memoData = databaseController.getAllMemoDataInfo()
+                        memoListAdapter?.setMemoListData(memoData)
+                        memoListAdapter?.notifyItemRemoved(i)
+                    }
+                }
+                onItemLongClicked(false)
+                memoListAdapter?.setDeleteModeOn(false)
+                memoListAdapter?.notifyDataSetChanged()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+//    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+//
+//        return super.onPrepareOptionsMenu(menu)
+//    }
 }

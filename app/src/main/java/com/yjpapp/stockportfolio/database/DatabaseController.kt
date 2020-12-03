@@ -204,7 +204,8 @@ class DatabaseController {
                 val result = MemoInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_MEMO_ID)),
                     cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_DATE)),
                     cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_TITLE)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_CONTENT))
+                    cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_CONTENT)),
+                    false
                 )
                 resultList.add(result)
                 cursor.moveToNext()

@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/txt_MemoList_Date"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
@@ -17,14 +17,14 @@
         android:textSize="12sp"
         android:textColor="@color/color_999999"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_MemoList_Check"
         app:layout_constraintBottom_toTopOf="@+id/txt_MemoList_Title"
         tools:text="2020.11.30"
         />
 
     <TextView
         android:id="@+id/txt_MemoList_Title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
@@ -37,12 +37,14 @@
         android:textColor="@color/color_222222"
         app:layout_constraintTop_toBottomOf="@+id/txt_MemoList_Date"
         app:layout_constraintBottom_toTopOf="@+id/txt_MemoList_NoteCount"
+        app:layout_constraintStart_toEndOf="@+id/img_MemoList_Check"
+
         tools:text="메모 제목"
         />
 
     <TextView
         android:id="@+id/txt_MemoList_NoteCount"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
@@ -55,6 +57,8 @@
         android:textColor="@color/color_666666"
         app:layout_constraintTop_toBottomOf="@+id/txt_MemoList_Title"
         app:layout_constraintBottom_toTopOf="@+id/line_1"
+        app:layout_constraintStart_toEndOf="@+id/img_MemoList_Check"
+
         />
 
     <View
@@ -64,6 +68,19 @@
         android:layout_marginTop="20dp"
         android:background="@color/color_line_1a000000"
         app:layout_constraintTop_toBottomOf="@+id/txt_MemoList_NoteCount"
+        />
+
+    <ImageView
+        android:id="@+id/img_MemoList_Check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/selector_checkbox"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

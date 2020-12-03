@@ -100,7 +100,7 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_add) {
         val date = Utils.getTodayYYYY_MM_DD()
         val title = et_MemoAddActivity_title.text.toString()
         val content = et_MemoAddActivity_content.text.toString()
-        val memoInfo = MemoInfo(0, date, title, content)
+        val memoInfo = MemoInfo(0, date, title, content, false)
         databaseController.insertMemoData(memoInfo)
 
     }
