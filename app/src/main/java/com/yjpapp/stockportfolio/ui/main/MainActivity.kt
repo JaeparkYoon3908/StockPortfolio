@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.model.PortfolioInfo
-import com.yjpapp.stockportfolio.preference.SettingPrefKey
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import com.yjpapp.stockportfolio.ui.dialog.EditMainListDialog
 import com.yjpapp.stockportfolio.ui.dialog.MainFilterDialog
@@ -38,8 +37,8 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
         super.onCreate(savedInstanceState)
         initData()
         initLayout()
-        preferenceController.setPreference(SettingPrefKey.KEY_ViBRATION, "완전세게")
-        logcat(preferenceController.getPreference(SettingPrefKey.KEY_ViBRATION))
+//        preferenceController.setPreference(SettingPrefKey.KEY_ViBRATION, "완전세게")
+//        logcat(preferenceController.getPreference(SettingPrefKey.KEY_ViBRATION))
     }
 
     private fun addClicked(){
@@ -133,7 +132,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
                 allowAppFinish = true
                 Handler().postDelayed(Runnable {
                     allowAppFinish = false
-                },3000)
+                }, 3000)
             }else{
                 finishAffinity()
             }
@@ -163,7 +162,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
         layoutManager.stackFromEnd = true
         //Scroll item 2 to 20 pixels from the top
         if(allPortfolioList?.size != 0){
-            layoutManager.scrollToPosition(allPortfolioList?.size!!-1)
+            layoutManager.scrollToPosition(allPortfolioList?.size!! - 1)
         }
         recyclerview_MainActivity.layoutManager = layoutManager
 
@@ -176,11 +175,8 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
             R.id.txt_MainActivity_Edit -> {
-                if(allPortfolioList?.size!!>0){
-                    if(mainListAdapter?.isEditMode()!!)
-                        mainListAdapter?.setEditMode(false)
-                    else
-                        mainListAdapter?.setEditMode(true)
+                if (allPortfolioList?.size!! > 0) {
+                    mainListAdapter?.setEditMode(!mainListAdapter?.isEditMode()!!)
                     mainListAdapter?.notifyDataSetChanged()
                     addButtonControl()
                 }
@@ -250,7 +246,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
         val newDataInfo = databaseController.getAllPortfolioDataInfo()
         mainListAdapter?.setDataInfoList(newDataInfo)
         if(insertMode){
-            mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!!-1)
+            mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!! - 1)
         }else{
             mainListAdapter?.notifyDataSetChanged()
         }
@@ -276,8 +272,15 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
             totalGainPercent += Utils.getNumDeletedPercent(allPortfolioList!![i]!!.gainPercent!!).toDouble()
         }
         totalGainPercent /= allPortfolioList!!.size
-        txt_total_realization_gains_losses_data.text = NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
-        txt_total_realization_gains_losses_percent.text = Utils.getRoundsPercentNumber(totalGainPercent)
+        txt_total_realization_gains_losses_data.text = NumberFormat.getCurrencyInstance(Locale.KOREA).format(
+            totalGainNumber)
+        if(totalGainNumber > 0){
+            txt_total_realization_gains_losses_data.setTextColor(getColor(R.color.color_e52b4e))
+        }else{
+            txt_total_realization_gains_losses_data.setTextColor(getColor(R.color.color_4876c7))
+        }
+        txt_total_realization_gains_losses_percent.text = Utils.getRoundsPercentNumber(
+            totalGainPercent)
     }
 
     private fun initFilterDialog(){
@@ -319,6 +322,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
     }
 
     private fun addButtonControl(){
-        menu?.getItem(menu?.size()!!-1)?.isVisible = !mainListAdapter?.isEditMode()!!
+        menu?.getItem(menu?.size()!! - 1)?.isVisible = !mainListAdapter?.isEditMode()!!
     }
 }

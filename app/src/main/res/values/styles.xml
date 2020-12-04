@@ -5,6 +5,13 @@
         <item name="actionMenuTextColor">@color/color_222222</item>
     </style>
 
+    <style name="PauseDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/AnimationPopupStyle</item>
+    </style>
 
+    <style name="AnimationPopupStyle">
+        <item name="android:windowEnterAnimation">@anim/anim_dialog_open</item>
+        <item name="android:windowExitAnimation">@anim/anim_dialog_close</item>
+    </style>
 
 </resources>

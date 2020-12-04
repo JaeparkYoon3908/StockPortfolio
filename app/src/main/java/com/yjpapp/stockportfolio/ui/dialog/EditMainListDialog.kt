@@ -1,7 +1,8 @@
 package com.yjpapp.stockportfolio.ui.dialog
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -15,7 +16,7 @@ import kotlinx.android.synthetic.main.dialog_add_portfolio.*
 import java.text.DecimalFormat
 import java.util.*
 
-class EditMainListDialog(context: Context) : Dialog(context, android.R.style.Theme_Translucent_NoTitleBar) {
+class EditMainListDialog(context: Context) : AlertDialog(context, android.R.style.Theme_Translucent_NoTitleBar) {
     object MSG{
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
@@ -23,13 +24,13 @@ class EditMainListDialog(context: Context) : Dialog(context, android.R.style.The
     private var purchaseYear: String? = null
     private var purchaseMonth: String? = null
     private var purchaseDay: String? = null
-
     private var sellYear: String? = null
     private var sellMonth: String? = null
     private var sellDay: String? = null
 
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
 
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_add_portfolio)
@@ -59,7 +60,7 @@ class EditMainListDialog(context: Context) : Dialog(context, android.R.style.The
                 val currentMonth = calendar.get(Calendar.MONTH)
                 val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-                val datePickerDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                val datePickerDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { _:View, year, monthOfYear, dayOfMonth ->
                     //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
                     purchaseYear = year.toString()
                     purchaseMonth = if(monthOfYear+1 < 10){
@@ -81,7 +82,7 @@ class EditMainListDialog(context: Context) : Dialog(context, android.R.style.The
                 val currentYear = calendar.get(Calendar.YEAR)
                 val currentMonth = calendar.get(Calendar.MONTH)
                 val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
-                val datePickerDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                val datePickerDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { _:View, year, monthOfYear, dayOfMonth ->
                     //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
                     sellYear = year.toString()
                     sellMonth = if(monthOfYear+1 < 10){
