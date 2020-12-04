@@ -24,16 +24,20 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo), MemoListAdapter.Me
 
         const val MEMO_READ_MODE = "MEMO_READ_MODE" //메모 읽기 모드
         const val MEMO_ADD_MODE = "MEMO_WRITE_MODE" //새 메모 추가모드
+        const val MEMO_UPDATE_MODE = "MEMO_UPDATE_MODE" //메모 읽기 모드 -? 업데잍 모드
 
         const val REQUEST_ADD = 0
         const val REQUEST_READ = 1
 
         const val RESULT_EMPTY = 10000
         const val RESULT_DELETE = RESULT_EMPTY + 1
+        const val RESULT_UPDATE = RESULT_EMPTY + 2
     }
 
     private lateinit var memoData: ArrayList<MemoInfo?>
+    private lateinit var layoutManager: LinearLayoutManager
     private var memoListAdapter: MemoListAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,8 +69,9 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo), MemoListAdapter.Me
                         memoData = databaseController.getAllMemoDataInfo()
                         memoListAdapter?.setMemoListData(memoData)
                         memoListAdapter?.notifyItemInserted(memoData.size - 1)
-                        if(memoData.size>0){
+                        if(memoData.size != 0){
                             txt_MemoListActivity_GuideMessage.visibility = View.GONE
+                            layoutManager.scrollToPosition(memoData.size-1)
                         }
                     }
                 }
@@ -83,11 +88,17 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo), MemoListAdapter.Me
                 memoListAdapter?.notifyItemRemoved(data?.getIntExtra(INTENT_KEY_LIST_POSITION,0)!!)
                 memoListAdapter?.notifyDataSetChanged()
             }
+
+            RESULT_UPDATE -> {
+                memoData = databaseController.getAllMemoDataInfo()
+                memoListAdapter?.setMemoListData(memoData)
+                memoListAdapter?.notifyDataSetChanged()
+            }
         }
     }
 
-    override fun onItemLongClicked(deleteModeOn: Boolean) {
-        if(deleteModeOn){
+    override fun onItemLongClicked() {
+        if(memoListAdapter?.getDeleteModeOn()!!){
             menu?.findItem(R.id.menu_MemoListActivity_Add)?.isVisible = false
             menu?.findItem(R.id.menu_MemoListActivity_Delete)?.isVisible = true
         }else{
@@ -97,7 +108,7 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo), MemoListAdapter.Me
     }
 
     private fun initRecyclerView(){
-        val layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
         //Scroll item 2 to 20 pixels from the top
@@ -143,16 +154,27 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo), MemoListAdapter.Me
                         memoListAdapter?.notifyItemRemoved(i)
                     }
                 }
-                onItemLongClicked(false)
-                memoListAdapter?.setDeleteModeOn(false)
-                memoListAdapter?.notifyDataSetChanged()
+                setDeleteModeOff()
+                if(memoData.size == 0){
+                    txt_MemoListActivity_GuideMessage.visibility = View.VISIBLE
+                }
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-//    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-//
-//        return super.onPrepareOptionsMenu(menu)
-//    }
+    override fun onBackPressed() {
+        if(memoListAdapter?.getDeleteModeOn()!!){
+            setDeleteModeOff()
+        }else{
+            finish()
+        }
+    }
+
+    private fun setDeleteModeOff(){
+        memoListAdapter?.setDeleteModeOn(false)
+        memoListAdapter?.notifyDataSetChanged()
+        menu?.findItem(R.id.menu_MemoListActivity_Add)?.isVisible = true
+        menu?.findItem(R.id.menu_MemoListActivity_Delete)?.isVisible = false
+    }
 }

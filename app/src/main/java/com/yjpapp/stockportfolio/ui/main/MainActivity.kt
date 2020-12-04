@@ -65,6 +65,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
         mainListAdapter?.setDataInfoList(dataList)
         mainListAdapter?.setEditMode(false)
         mainListAdapter?.notifyItemRemoved(position)
+        addButtonControl()
         bindTotalGainData()
     }
 
@@ -175,12 +176,15 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
             R.id.txt_MainActivity_Edit -> {
-                if(mainListAdapter?.isEditMode()!!)
-                    mainListAdapter?.setEditMode(false)
-                else
-                    mainListAdapter?.setEditMode(true)
-                mainListAdapter?.notifyDataSetChanged()
-                addButtonControl()
+                if(allPortfolioList?.size!!>0){
+                    if(mainListAdapter?.isEditMode()!!)
+                        mainListAdapter?.setEditMode(false)
+                    else
+                        mainListAdapter?.setEditMode(true)
+                    mainListAdapter?.notifyDataSetChanged()
+                    addButtonControl()
+                }
+
             }
             R.id.lin_MainActivity_Filter -> {
                 initFilterDialog()

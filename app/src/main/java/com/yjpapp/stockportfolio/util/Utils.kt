@@ -1,5 +1,8 @@
 package com.yjpapp.stockportfolio.util
 
+import android.content.Context
+import android.os.VibrationEffect
+import android.os.Vibrator
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -66,5 +69,14 @@ object Utils {
         if(result == "NaN") result = "0"
         result += "%"
         return result
+    }
+
+    fun runVibration(mContext: Context, milliseconds: Long){
+        val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            vibrator!!.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE))
+        }else{
+            vibrator!!.vibrate(milliseconds);
+        }
     }
 }

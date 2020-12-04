@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.MemoInfo
+import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.item_memo_list.view.*
 
 class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private val memoActivityCallBack: MemoListAdapter.MemoActivityCallBack) :
@@ -18,7 +19,7 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
     interface MemoActivityCallBack{
 //        fun onEditClicked(position: Int)
 //        fun onDeleteClicked(position: Int)
-        fun onItemLongClicked(deleteModeOn: Boolean)
+        fun onItemLongClicked()
     }
     private lateinit var mContext: Context
 
@@ -35,11 +36,18 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
         holder.view.txt_MemoList_Date.text = memoListData[position]?.date
         holder.view.txt_MemoList_Title.text = memoListData[position]?.title
         holder.view.txt_MemoList_NoteCount.text = memoListData[position]?.content
+        holder.view.img_MemoList_Check.isSelected = false
+
+        if(memoListData[position]?.deleteChecked!!){
+            holder.view.img_MemoList_Check.isSelected = true
+        }
 
         holder.view.setOnLongClickListener {
+            Utils.runVibration(mContext, 100)
             deleteModeOn = !deleteModeOn
+            memoListData[position]?.deleteChecked = true
             notifyDataSetChanged()
-            memoActivityCallBack.onItemLongClicked(deleteModeOn)
+            memoActivityCallBack.onItemLongClicked()
             return@setOnLongClickListener true
         }
 
@@ -62,7 +70,6 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
                 (mContext as Activity).startActivityForResult(intent, MemoListActivity.REQUEST_READ)
             }
         }
-
     }
 
     override fun getItemCount(): Int {
@@ -77,6 +84,9 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
         return memoListData
     }
 
+    fun getDeleteModeOn(): Boolean{
+        return deleteModeOn
+    }
     fun setDeleteModeOn(deleteModeOn: Boolean){
         this.deleteModeOn = deleteModeOn
     }

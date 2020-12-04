@@ -232,10 +232,10 @@ class DatabaseController {
         val contentValues = ContentValues()
         contentValues.put(Databases.COL_MEMO_DATE,memoInfo?.date)
         contentValues.put(Databases.COL_MEMO_TITLE, memoInfo?.title)
-        contentValues.put(Databases.COL_MEMO_TITLE, memoInfo?.content)
+        contentValues.put(Databases.COL_MEMO_CONTENT, memoInfo?.content)
 
-        updateCheck = database.update(Databases.TABLE_PORTFOLIO, contentValues,
-            Databases.COL_PORTFOLIO_ID + " = ? ", arrayOf(memoInfo?.id.toString()))
+        updateCheck = database.update(Databases.TABLE_MEMO, contentValues,
+            Databases.COL_MEMO_ID + " = ? ", arrayOf(memoInfo?.id.toString()))
 
         return updateCheck != -1
     }

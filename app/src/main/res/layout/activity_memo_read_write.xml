@@ -16,7 +16,7 @@
         />
 
     <EditText
-        android:id="@+id/et_MemoAddActivity_title"
+        android:id="@+id/et_MemoReadWriteActivity_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_10dp"
@@ -29,7 +29,7 @@
         />
 
     <EditText
-        android:id="@+id/et_MemoAddActivity_content"
+        android:id="@+id/et_MemoReadWriteActivity_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="top"
@@ -39,7 +39,7 @@
         android:layout_marginEnd="@dimen/common_20dp"
         android:hint="@string/MemoAddActivity_Content_Hint"
         android:textColor="@color/color_222222"
-        app:layout_constraintTop_toBottomOf="@+id/et_MemoAddActivity_title"
+        app:layout_constraintTop_toBottomOf="@+id/et_MemoReadWriteActivity_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />

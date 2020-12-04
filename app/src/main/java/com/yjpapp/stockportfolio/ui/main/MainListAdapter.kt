@@ -1,14 +1,13 @@
 package com.yjpapp.stockportfolio.ui.main
 
 import android.content.Context
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.PortfolioInfo
+import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.item_main_list.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -49,12 +48,7 @@ class MainListAdapter(private val data: ArrayList<PortfolioInfo?>?, callback: Ma
         // 아이템을 길게 눌렀을 때 편집모드로 전환.
         holder.apply {
             itemView.setOnLongClickListener {
-                val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    vibrator!!.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
-                }else{
-                    vibrator!!.vibrate(100);
-                }
+                Utils.runVibration(mContext, 100)
                 editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
                 notifyDataSetChanged()
                 mainActivityCallBack.onItemLongClicked()

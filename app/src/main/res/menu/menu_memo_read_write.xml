@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_MemoAddActivity_Complete"
+    <item android:id="@+id/menu_MemoReadWriteActivity_Complete"
         android:title="@string/Common_Complete"
         app:showAsAction="ifRoom"
         />
 
-    <item android:id="@+id/menu_MemoAddActivity_Delete"
+    <item android:id="@+id/menu_MemoReadWriteActivity_Delete"
         android:title="@string/Common_Complete"
         android:icon="@drawable/icon_delete"
         app:showAsAction="ifRoom"
