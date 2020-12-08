@@ -175,6 +175,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
             R.id.txt_MainActivity_Edit -> {
+                window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
                 if (allPortfolioList?.size!! > 0) {
                     mainListAdapter?.setEditMode(!mainListAdapter?.isEditMode()!!)
                     mainListAdapter?.notifyDataSetChanged()

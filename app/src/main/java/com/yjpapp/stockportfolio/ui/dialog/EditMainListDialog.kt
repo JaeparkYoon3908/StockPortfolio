@@ -1,6 +1,5 @@
 package com.yjpapp.stockportfolio.ui.dialog
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
@@ -16,7 +15,7 @@ import kotlinx.android.synthetic.main.dialog_add_portfolio.*
 import java.text.DecimalFormat
 import java.util.*
 
-class EditMainListDialog(context: Context) : AlertDialog(context, android.R.style.Theme_Translucent_NoTitleBar) {
+class EditMainListDialog(context: Context) : AlertDialog(context) {
     object MSG{
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
@@ -30,10 +29,10 @@ class EditMainListDialog(context: Context) : AlertDialog(context, android.R.styl
 
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
 
-    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_add_portfolio)
+
         initLayout()
     }
 
