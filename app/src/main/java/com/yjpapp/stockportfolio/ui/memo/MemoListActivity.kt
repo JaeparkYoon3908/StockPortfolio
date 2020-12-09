@@ -12,9 +12,9 @@ import com.yjpapp.stockportfolio.model.MemoInfo
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
-import kotlinx.android.synthetic.main.activity_memo.*
+import kotlinx.android.synthetic.main.activity_memo_list.*
 
-class MemoListActivity: BaseActivity(R.layout.activity_memo), MemoListAdapter.MemoActivityCallBack {
+class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapter.MemoActivityCallBack {
     companion object {
         const val INTENT_KEY_MEMO_MODE = "INTENT_KEY_MEMO_MODE"
         const val INTENT_KEY_MEMO_INFO_ID = "INTENT_KEY_MEMO_INFO_ID"

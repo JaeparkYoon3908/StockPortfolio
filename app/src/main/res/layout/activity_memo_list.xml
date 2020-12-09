@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:paddingTop="@dimen/common_10dp"
             android:paddingBottom="@dimen/common_10dp"
-            android:text="메모"
+            android:text="@string/MemoListActivity_Title"
             android:textColor="@color/color_222222"
             android:textSize="22sp"
             />
@@ -37,7 +37,7 @@
         android:id="@+id/txt_MemoListActivity_GuideMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="첫 메모를 등록해주세요."
+        android:text="@string/MemoListActivity_GuideMessage"
         android:textSize="30sp"
         android:textColor="@color/color_80000000"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_MemoListActivity"

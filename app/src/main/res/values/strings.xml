@@ -51,5 +51,7 @@
     <string name="MemoAddActivity_Title_Hint">제목을 입력하세요.</string>
     <string name="MemoAddActivity_Content_Hint">메모를 입력하세요.</string>
 <!--    <string name="NoteBookListAdapter_NoteCount">%d개의 노트</string>-->
+    <string name="MemoListActivity_Title">메모</string>
+    <string name="MemoListActivity_GuideMessage">첫 메모를 등록해주세요.</string>
 
 </resources>
