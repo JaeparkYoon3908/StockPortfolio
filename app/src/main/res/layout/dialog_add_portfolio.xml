@@ -5,23 +5,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/EditMainDialog_MainContainer"
     android:layout_width="match_parent"
-    android:layout_height="350dp"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@color/color_ffffff"
+    android:background="@android:color/transparent"
     >
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="350dp"
+        android:background="@color/color_ffffff"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_line"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         >
         <TextView
             android:id="@+id/txt_subject_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_20dp"
+            android:layout_marginStart="@dimen/common_20dp"
             android:text="@string/MainActivity_SubjectName"
             android:textSize="18sp"
             android:textColor="@color/color_666666"
@@ -35,6 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_10dp"
+            android:layout_marginEnd="@dimen/common_20dp"
             android:hint="@string/MainAddListDialog_SubjectName_Hint"
             android:textSize="16sp"
             android:background="@drawable/border_line_bottom"
@@ -48,6 +50,8 @@
             android:id="@+id/txt_purchase_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
+            android:layout_marginStart="@dimen/common_20dp"
             android:text="@string/MainActivity_Purchase_Date"
             android:textSize="18sp"
             android:textColor="@color/color_666666"
@@ -92,6 +96,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/MainAddListDialog_Sell_Date_Hint"
+            android:layout_marginEnd="@dimen/common_20dp"
             android:focusable="false"
             android:textSize="16sp"
             android:textColor="@color/color_222222"
@@ -106,6 +111,7 @@
             android:id="@+id/txt_purchase_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_20dp"
             android:text="@string/MainActivity_Purchase_Price"
             android:textColor="@color/color_666666"
             android:textSize="18sp"
@@ -131,6 +137,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_2dp"
+            android:layout_marginEnd="@dimen/common_20dp"
             android:hint="@string/MainAddListDialog_Purchase_Price_Hint"
             android:textColor="@color/color_222222"
             android:textSize="16sp"
@@ -146,6 +153,7 @@
             android:id="@+id/txt_sell_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_20dp"
             android:text="@string/MainActivity_Sell_Price"
             android:textColor="@color/color_666666"
             android:textSize="18sp"
@@ -171,6 +179,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_2dp"
+            android:layout_marginEnd="@dimen/common_20dp"
             android:hint="@string/MainAddListDialog_Sell_Price_Hint"
             android:textSize="16sp"
             android:textColor="@color/color_222222"
@@ -187,11 +196,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/common_20dp"
+            android:layout_marginStart="@dimen/common_20dp"
             android:text="@string/MainActivity_Sell_Count"
             android:textColor="@color/color_666666"
             android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@+id/txt_sell_price"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_line"
             app:layout_constraintStart_toStartOf="parent"
             />
 
@@ -200,6 +210,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_10dp"
+            android:layout_marginEnd="20dp"
             android:hint="@string/MainAddListDialog_Sell_Count_Hint"
             android:textColor="@color/color_222222"
             android:textSize="16sp"
@@ -210,48 +221,48 @@
             app:layout_constraintStart_toEndOf="@+id/txt_sell_count"
             app:layout_constraintEnd_toEndOf="parent"
             />
+
+        <View
+            android:id="@+id/bottom_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_1dp"
+            android:background="@color/color_line_1a000000"
+            app:layout_constraintBottom_toTopOf="@+id/txt_cancel"
+            />
+        <TextView
+            android:id="@+id/txt_cancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_50dp"
+            android:gravity="center"
+            android:text="@string/Common_Cancel"
+            android:textColor="@color/color_e52b4e"
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_complete"
+            />
+
+        <View
+            android:layout_width="@dimen/common_1dp"
+            android:layout_height="@dimen/common_50dp"
+            android:background="@color/color_line_1a000000"
+            app:layout_constraintStart_toEndOf="@+id/txt_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/txt_complete"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_50dp"
+            android:gravity="center"
+            android:text="@string/Common_Complete"
+            android:textColor="@color/color_222222"
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:id="@+id/bottom_line"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/common_1dp"
-        android:background="@color/color_line_1a000000"
-        app:layout_constraintBottom_toTopOf="@+id/txt_cancel"
-        />
-    <TextView
-        android:id="@+id/txt_cancel"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/common_50dp"
-        android:gravity="center"
-        android:text="@string/Common_Cancel"
-        android:textColor="@color/color_e52b4e"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/txt_complete"
-        />
-
-    <View
-        android:layout_width="@dimen/common_1dp"
-        android:layout_height="@dimen/common_50dp"
-        android:background="@color/color_line_1a000000"
-        app:layout_constraintStart_toEndOf="@+id/txt_cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/txt_complete"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/common_50dp"
-        android:gravity="center"
-        android:text="@string/Common_Complete"
-        android:textColor="@color/color_222222"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_cancel"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>

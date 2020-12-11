@@ -12,7 +12,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.model.PortfolioInfo
 import com.yjpapp.stockportfolio.ui.BaseActivity
-import com.yjpapp.stockportfolio.ui.dialog.EditMainListDialog
+import com.yjpapp.stockportfolio.ui.dialog.EditPortfolioDialog
 import com.yjpapp.stockportfolio.ui.dialog.MainFilterDialog
 import com.yjpapp.stockportfolio.ui.memo.MemoListActivity
 import com.yjpapp.stockportfolio.util.Utils
@@ -42,17 +42,27 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
     }
 
     private fun addClicked(){
-        EditMainListDialog(mContext).apply {
-            if(!isShowing){
-                show()
-                txt_complete.setOnClickListener {
-                    runDialogCompleteClick(this)
-                }
-                txt_cancel.setOnClickListener {
-                    dismiss()
-                }
-            }
-        }
+//        EditPortfolioDialog(mContext).apply {
+//            if(!isShowing){
+//                show()
+//                txt_complete.setOnClickListener {
+//                    runDialogCompleteClick(this)
+//                }
+//                txt_cancel.setOnClickListener {
+//                    dismiss()
+//                }
+//            }
+//        }
+//        val lp = WindowManager.LayoutParams()
+//        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+//        lp.height = Utils.dpToPx(550)
+
+//        CustomDialog(mContext).show()
+//        val customDialogFragment = CustomDialogFragment.newInstance("tag")
+//        customDialogFragment.show(supportFragmentManager, "dialog")
+//        customDialogFragment.dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550)
+        val intent = Intent(mContext, EditPortfolioActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onDeleteClicked(position: Int) {
@@ -73,7 +83,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
         mainListAdapter?.setEditMode(false)
         mainListAdapter?.notifyDataSetChanged()
         editSelectPosition = position
-        EditMainListDialog(mContext).apply {
+        EditPortfolioDialog(mContext).apply {
             if(!isShowing){
                 show()
                 et_subject_name.setText(allPortfolioList!![position]?.subjectName)
@@ -189,9 +199,9 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
         }
     }
 
-    private fun runDialogCompleteClick(editMainListDialog: EditMainListDialog){
+    private fun runDialogCompleteClick(editPortfolioDialog: EditPortfolioDialog){
 
-        editMainListDialog.run{
+        editPortfolioDialog.run{
             //예외처리 (값을 모두 입력하지 않았을 때)
             if (et_subject_name.text.isEmpty() ||
                 et_purchase_date.text.isEmpty() ||
@@ -255,8 +265,8 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
         bindTotalGainData()
     }
 
-    private fun runDialogCancelClick(editMainListDialog: EditMainListDialog){
-        editMainListDialog.run {
+    private fun runDialogCancelClick(editPortfolioDialog: EditPortfolioDialog){
+        editPortfolioDialog.run {
 //            mainListAdapter?.setEditMode(false)
 //            mainListAdapter?.notifyDataSetChanged()
             addButtonControl()

@@ -1,8 +1,6 @@
-package com.yjpapp.stockportfolio.ui.dialog
+package com.yjpapp.stockportfolio.ui.main
 
-import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -11,11 +9,13 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.ui.BaseActivity
+import com.yjpapp.stockportfolio.ui.dialog.EditPortfolioDialog
 import kotlinx.android.synthetic.main.dialog_add_portfolio.*
 import java.text.DecimalFormat
 import java.util.*
 
-class EditMainListDialog(context: Context) : AlertDialog(context) {
+class EditPortfolioActivity: BaseActivity(R.layout.dialog_add_portfolio) {
     object MSG{
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
@@ -31,12 +31,26 @@ class EditMainListDialog(context: Context) : AlertDialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_add_portfolio)
 
         initLayout()
+
+//        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        val params = window.attributes
+//        // 화면에 가득 차도록
+//        params.width = WindowManager.LayoutParams.MATCH_PARENT
+//        params.height = WindowManager.LayoutParams.MATCH_PARENT
+//        params.gravity = Gravity.CENTER
+//
+////        // 열기&닫기 시 애니메이션 설정
+////        params.windowAnimations = R.style.AnimationPopupStyle
+//        window.attributes = params
     }
 
-    private fun initLayout(){
+    override fun initData() {
+
+    }
+
+    override fun initLayout() {
         et_purchase_date.setOnClickListener(onClickListener)
         et_sell_date.setOnClickListener(onClickListener)
         txt_cancel.setOnClickListener(onClickListener)
@@ -47,8 +61,6 @@ class EditMainListDialog(context: Context) : AlertDialog(context) {
 
         txt_purchase_price_symbol.text = moneySymbol
         txt_sell_price_symbol.text = moneySymbol
-
-        window?.setBackgroundDrawableResource(R.color.color_80000000)
     }
 
     private val onClickListener = View.OnClickListener { view: View? ->
@@ -59,7 +71,7 @@ class EditMainListDialog(context: Context) : AlertDialog(context) {
                 val currentMonth = calendar.get(Calendar.MONTH)
                 val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-                val datePickerDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { _:View, year, monthOfYear, dayOfMonth ->
+                val datePickerDialog = DatePickerDialog(mContext, DatePickerDialog.OnDateSetListener { _: View, year, monthOfYear, dayOfMonth ->
                     //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
                     purchaseYear = year.toString()
                     purchaseMonth = if(monthOfYear+1 < 10){
@@ -72,7 +84,7 @@ class EditMainListDialog(context: Context) : AlertDialog(context) {
                     }else{
                         dayOfMonth.toString()
                     }
-                    uiHandler.sendEmptyMessage(MSG.PURCHASE_DATE_DATA_INPUT)
+                    uiHandler.sendEmptyMessage(EditPortfolioDialog.MSG.PURCHASE_DATE_DATA_INPUT)
                 }, currentYear, currentMonth, currentDay)
                 datePickerDialog.show()
             }
@@ -81,7 +93,7 @@ class EditMainListDialog(context: Context) : AlertDialog(context) {
                 val currentYear = calendar.get(Calendar.YEAR)
                 val currentMonth = calendar.get(Calendar.MONTH)
                 val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
-                val datePickerDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { _:View, year, monthOfYear, dayOfMonth ->
+                val datePickerDialog = DatePickerDialog(mContext, DatePickerDialog.OnDateSetListener { _: View, year, monthOfYear, dayOfMonth ->
                     //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
                     sellYear = year.toString()
                     sellMonth = if(monthOfYear+1 < 10){
@@ -94,9 +106,12 @@ class EditMainListDialog(context: Context) : AlertDialog(context) {
                     }else{
                         dayOfMonth.toString()
                     }
-                    uiHandler.sendEmptyMessage(MSG.SELL_DATE_DATA_INPUT)
+                    uiHandler.sendEmptyMessage(EditPortfolioDialog.MSG.SELL_DATE_DATA_INPUT)
                 }, currentYear, currentMonth, currentDay)
                 datePickerDialog.show()
+            }
+            R.id.txt_cancel -> {
+                finish()
             }
         }
     }
@@ -104,7 +119,7 @@ class EditMainListDialog(context: Context) : AlertDialog(context) {
     //3자리마다 콤마 찍어주는 코드
     private val decimalFormat = DecimalFormat("###,###")
     private var result = "";
-    private val textWatcher = object: TextWatcher{
+    private val textWatcher = object: TextWatcher {
         override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
             if(!TextUtils.isEmpty(charSequence.toString()) && charSequence.toString() != result){
                 result = decimalFormat.format(charSequence.toString().replace(",","").toDouble())
@@ -118,15 +133,15 @@ class EditMainListDialog(context: Context) : AlertDialog(context) {
             }
             if(charSequence?.length!! == 0 ){
                 if(et_purchase_price.hasFocus()){
-                    txt_purchase_price_symbol.setTextColor(getContext().getColor(R.color.color_666666))
+                    txt_purchase_price_symbol.setTextColor(mContext.getColor(R.color.color_666666))
                 }else if(et_sell_price.hasFocus()){
-                    txt_sell_price_symbol.setTextColor(getContext().getColor(R.color.color_666666))
+                    txt_sell_price_symbol.setTextColor(mContext.getColor(R.color.color_666666))
                 }
             }else{
                 if(et_purchase_price.hasFocus()){
-                    txt_purchase_price_symbol.setTextColor(getContext().getColor(R.color.color_222222))
+                    txt_purchase_price_symbol.setTextColor(mContext.getColor(R.color.color_222222))
                 }else if(et_sell_price.hasFocus()){
-                    txt_sell_price_symbol.setTextColor(getContext().getColor(R.color.color_222222))
+                    txt_sell_price_symbol.setTextColor(mContext.getColor(R.color.color_222222))
                 }
             }
         }

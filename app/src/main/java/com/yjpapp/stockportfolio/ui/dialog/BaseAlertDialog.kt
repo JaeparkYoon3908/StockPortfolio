@@ -5,17 +5,18 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 
 import com.yjpapp.stockportfolio.R
 
-open class BaseAlertDialog(context: Context, layoutId: Int) : AlertDialog(context) {
+open class BaseAlertDialog(context: Context, layoutId: Int): AlertDialog(context) {
     private var mContext: Context
 
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(layoutId)
+        setView(View.inflate(context, R.layout.dialog_add_portfolio, null))
         mContext = context
         val window = window
         if (window != null) {

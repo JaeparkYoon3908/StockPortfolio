@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.util
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.VibrationEffect
 import android.os.Vibrator
 import java.text.SimpleDateFormat
@@ -21,9 +22,9 @@ object Utils {
     fun getTodayYYYY_MM_DD(): String{
         val yyyymmdd = getTodayYYYYMMDD()
         var result: String = ""
-        result += yyyymmdd.substring(0,4) + "."
-        result += yyyymmdd.substring(4,6) + "."
-        result += yyyymmdd.substring(6,8)
+        result += yyyymmdd.substring(0, 4) + "."
+        result += yyyymmdd.substring(4, 6) + "."
+        result += yyyymmdd.substring(6, 8)
         return result
     }
 
@@ -74,9 +75,18 @@ object Utils {
     fun runVibration(mContext: Context, milliseconds: Long){
         val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            vibrator!!.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator!!.vibrate(VibrationEffect.createOneShot(milliseconds,
+                VibrationEffect.DEFAULT_AMPLITUDE))
         }else{
             vibrator!!.vibrate(milliseconds);
         }
+    }
+
+    fun dpToPx(dp: Int): Int {
+        return (dp * Resources.getSystem().displayMetrics.density).toInt()
+    }
+
+    fun pxToDp(px: Int): Int {
+        return (px / Resources.getSystem().displayMetrics.density).toInt()
     }
 }

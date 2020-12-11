@@ -8,7 +8,7 @@ import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.database.DatabaseController
 import com.yjpapp.stockportfolio.preference.PreferenceController
 
-abstract class BaseActivity(contentLayout: Int) : AppCompatActivity(contentLayout) {
+abstract class BaseActivity(contentLayout: Int): AppCompatActivity(contentLayout) {
     lateinit var mContext: Context
     lateinit var databaseController: DatabaseController
     lateinit var preferenceController: PreferenceController
