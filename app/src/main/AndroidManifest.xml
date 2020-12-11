@@ -32,11 +32,6 @@
             android:screenOrientation="portrait"
             />
 
-        <activity android:name=".ui.main.EditPortfolioActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"
-            />
-
     </application>
 
 </manifest>

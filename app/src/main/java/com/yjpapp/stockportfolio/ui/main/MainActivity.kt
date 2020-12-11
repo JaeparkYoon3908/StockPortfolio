@@ -42,17 +42,17 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
     }
 
     private fun addClicked(){
-//        EditPortfolioDialog(mContext).apply {
-//            if(!isShowing){
-//                show()
-//                txt_complete.setOnClickListener {
-//                    runDialogCompleteClick(this)
-//                }
-//                txt_cancel.setOnClickListener {
-//                    dismiss()
-//                }
-//            }
-//        }
+        EditPortfolioDialog(mContext).apply {
+            if(!isShowing){
+                show()
+                txt_complete.setOnClickListener {
+                    runDialogCompleteClick(this)
+                }
+                txt_cancel.setOnClickListener {
+                    dismiss()
+                }
+            }
+        }
 //        val lp = WindowManager.LayoutParams()
 //        lp.width = WindowManager.LayoutParams.MATCH_PARENT
 //        lp.height = Utils.dpToPx(550)
@@ -61,8 +61,8 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
 //        val customDialogFragment = CustomDialogFragment.newInstance("tag")
 //        customDialogFragment.show(supportFragmentManager, "dialog")
 //        customDialogFragment.dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550)
-        val intent = Intent(mContext, EditPortfolioActivity::class.java)
-        startActivity(intent)
+//        val intent = Intent(mContext, EditPortfolioActivity::class.java)
+//        startActivity(intent)
     }
 
     override fun onDeleteClicked(position: Int) {

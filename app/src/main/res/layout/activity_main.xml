@@ -52,6 +52,8 @@
         android:layout_height="@dimen/common_50dp"
         android:orientation="horizontal"
         android:weightSum="20"
+        android:paddingStart="@dimen/common_20dp"
+        android:paddingEnd="@dimen/common_20dp"
         app:layout_constraintEnd_toEndOf="@+id/toolbar_MainActivity"
         app:layout_constraintStart_toEndOf="@+id/toolbar_MainActivity"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_MainActivity">
@@ -61,7 +63,6 @@
             android:layout_width="@dimen/common_0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
             android:gravity="start"
             android:text="@string/common_realization_gains_losses"
             android:textColor="@color/color_222222"
@@ -69,6 +70,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_total_realization_gains_losses_data"
+            app:layout_constraintWidth_percent="0.2"
             />
 
         <TextView
@@ -90,6 +93,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_total_realization_gains_losses"
             app:layout_constraintEnd_toStartOf="@+id/txt_total_realization_gains_losses_percent"
+            app:layout_constraintWidth_percent="0.6"
             tools:text="650,000,000,000,000"
             />
 
@@ -99,7 +103,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="end"
-            android:layout_marginEnd="20dp"
             android:text="@string/Common_Dummy_Data"
             android:textColor="@color/color_e52b4e"
             android:textSize="15sp"
@@ -110,7 +113,9 @@
             tools:text="15%"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_total_realization_gains_losses_data"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.2"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -126,8 +131,8 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:paddingStart="@dimen/common_20dp"
+        android:paddingEnd="@dimen/common_20dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/lin_MainActivity_total_gain_losses"
         app:layout_constraintStart_toStartOf="parent"
