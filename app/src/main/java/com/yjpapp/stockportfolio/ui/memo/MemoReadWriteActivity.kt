@@ -138,7 +138,7 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
 
 //    @SuppressLint("ClickableViewAccessibility")
 //    private val onTouchListener = View.OnTouchListener
-    private val onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+    private val onFocusChangeListener = View.OnFocusChangeListener { _:View, _:Boolean ->
         if(mode == MemoListActivity.MEMO_READ_MODE){
             mode = MemoListActivity.MEMO_UPDATE_MODE
             menu?.findItem(R.id.menu_MemoReadWriteActivity_Complete)?.isVisible = true

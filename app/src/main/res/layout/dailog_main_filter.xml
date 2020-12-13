@@ -3,96 +3,86 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_4D000000"
+    android:layout_height="@dimen/common_190dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:background="@drawable/radius_background"
     >
 
-    <View
-        android:id="@+id/view_Transparent_Background"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+<!--    <View-->
+<!--        android:id="@+id/view_Transparent_Background"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/cons_MainFilterDialog_Filter"-->
+<!--        />-->
+
+    <TextView
+        android:id="@+id/txt_MainFilterDialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="@string/MainFilterDialog_Title"
+        android:textSize="14sp"
+        android:textColor="@color/color_666666"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cons_MainFilterDialog_Filter"
+        app:layout_constraintStart_toStartOf="parent"
         />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cons_MainFilterDialog_Filter"
+    <TextView
+        android:id="@+id/txt_MainFilterDialog_cancel"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginTop="18dp"
+        android:text="@string/Common_Cancel"
+        android:textSize="14sp"
+        android:textColor="@color/color_e52b4e"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/txt_MainFilterDialog_all"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_190dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:background="@drawable/round_box"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/common_5dp"
+        android:paddingBottom="@dimen/common_5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/MainFilterDialog_All"
+        android:textSize="16sp"
+        android:textColor="@color/color_222222"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_title"
+        app:layout_constraintBottom_toTopOf="@+id/txt_MainFilterDialog_gain"
+        />
+
+    <TextView
+        android:id="@+id/txt_MainFilterDialog_gain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/common_5dp"
+        android:paddingBottom="@dimen/common_5dp"
+        android:text="@string/MainFilterDialog_Gain"
+        android:textSize="16sp"
+        android:textColor="@color/color_222222"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_all"
+        app:layout_constraintBottom_toTopOf="@+id/txt_MainFilterDialog_loss"
+        />
+
+    <TextView
+        android:id="@+id/txt_MainFilterDialog_loss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/common_5dp"
+        android:paddingBottom="@dimen/common_5dp"
+        android:text="@string/MainFilterDialog_Loss"
+        android:textSize="16sp"
+        android:textColor="@color/color_222222"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_gain"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
-
-        <TextView
-            android:id="@+id/txt_MainFilterDialog_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="@string/MainFilterDialog_Title"
-            android:textSize="14sp"
-            android:textColor="@color/color_666666"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-
-        <TextView
-            android:id="@+id/txt_MainFilterDialog_cancel"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:layout_marginTop="18dp"
-            android:text="@string/Common_Cancel"
-            android:textSize="14sp"
-            android:textColor="@color/color_e52b4e"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-
-        <TextView
-            android:id="@+id/txt_MainFilterDialog_all"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/common_5dp"
-            android:paddingBottom="@dimen/common_5dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/MainFilterDialog_All"
-            android:textSize="16sp"
-            android:textColor="@color/color_222222"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_title"
-            app:layout_constraintBottom_toTopOf="@+id/txt_MainFilterDialog_gain"
-            />
-
-        <TextView
-            android:id="@+id/txt_MainFilterDialog_gain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/common_5dp"
-            android:paddingBottom="@dimen/common_5dp"
-            android:text="@string/MainFilterDialog_Gain"
-            android:textSize="16sp"
-            android:textColor="@color/color_222222"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_all"
-            app:layout_constraintBottom_toTopOf="@+id/txt_MainFilterDialog_loss"
-            />
-
-        <TextView
-            android:id="@+id/txt_MainFilterDialog_loss"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/common_5dp"
-            android:paddingBottom="@dimen/common_5dp"
-            android:text="@string/MainFilterDialog_Loss"
-            android:textSize="16sp"
-            android:textColor="@color/color_222222"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_gain"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

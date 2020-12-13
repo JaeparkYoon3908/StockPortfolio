@@ -14,8 +14,17 @@
         android:layout_height="@dimen/common_50dp"
         android:background="@color/color_f1f1f1"
         android:orientation="horizontal"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         app:layout_constraintTop_toTopOf="parent"
         >
+
+        <ImageView
+            android:id="@+id/img_MainActivity_Memo"
+            android:layout_width="@dimen/common_28dp"
+            android:layout_height="@dimen/common_28dp"
+            android:src="@drawable/icon_memo2"
+
+            />
 
         <TextView
             android:id="@+id/txt_MainActivity_proceed"
@@ -60,7 +69,7 @@
 
         <TextView
             android:id="@+id/txt_total_realization_gains_losses"
-            android:layout_width="@dimen/common_0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="start"
@@ -71,7 +80,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_total_realization_gains_losses_data"
-            app:layout_constraintWidth_percent="0.2"
             />
 
         <TextView
@@ -79,8 +87,8 @@
             android:layout_width="@dimen/common_0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/common_5dp"
-            android:layout_marginEnd="@dimen/common_5dp"
+            android:layout_marginStart="@dimen/common_10dp"
+            android:layout_marginEnd="@dimen/common_10dp"
             android:gravity="center"
             android:text="@string/Common_Dummy_Data"
             android:textColor="@color/color_e52b4e"
@@ -93,15 +101,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_total_realization_gains_losses"
             app:layout_constraintEnd_toStartOf="@+id/txt_total_realization_gains_losses_percent"
-            app:layout_constraintWidth_percent="0.6"
             tools:text="650,000,000,000,000"
             />
 
         <TextView
             android:id="@+id/txt_total_realization_gains_losses_percent"
-            android:layout_width="@dimen/common_0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="end"
             android:gravity="end"
             android:text="@string/Common_Dummy_Data"
             android:textColor="@color/color_e52b4e"
@@ -115,7 +122,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_total_realization_gains_losses_data"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintWidth_percent="0.2"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

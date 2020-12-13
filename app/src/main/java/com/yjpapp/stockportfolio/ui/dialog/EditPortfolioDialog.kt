@@ -39,6 +39,7 @@ class EditPortfolioDialog(context: Context) : AlertDialog(context) {
     }
 
     private fun initLayout(){
+
         et_purchase_date.setOnClickListener(onClickListener)
         et_sell_date.setOnClickListener(onClickListener)
         txt_cancel.setOnClickListener(onClickListener)

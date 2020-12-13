@@ -19,14 +19,14 @@ import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dailog_main_filter.*
 import kotlinx.android.synthetic.main.dialog_add_portfolio.*
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
 
-class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainActivityCallBack {
+class MainActivity : BaseActivity(R.layout.activity_main),
+    MainListAdapter.MainActivityCallBack, MainFilterDialog.MainFilterClicked {
 
     private var mainListAdapter: MainListAdapter? = null
     private var allPortfolioList: ArrayList<PortfolioInfo?>? = null
@@ -53,16 +53,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
                 }
             }
         }
-//        val lp = WindowManager.LayoutParams()
-//        lp.width = WindowManager.LayoutParams.MATCH_PARENT
-//        lp.height = Utils.dpToPx(550)
-
-//        CustomDialog(mContext).show()
-//        val customDialogFragment = CustomDialogFragment.newInstance("tag")
-//        customDialogFragment.show(supportFragmentManager, "dialog")
-//        customDialogFragment.dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550)
-//        val intent = Intent(mContext, EditPortfolioActivity::class.java)
-//        startActivity(intent)
     }
 
     override fun onDeleteClicked(position: Int) {
@@ -121,10 +111,10 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
                 addClicked()
             }
 
-            R.id.menu_MainActivity_Memo -> {
-                val intent = Intent(mContext, MemoListActivity::class.java)
-                startActivity(intent)
-            }
+//            R.id.menu_MainActivity_Memo -> {
+//                val intent = Intent(mContext, MemoListActivity::class.java)
+//                startActivity(intent)
+//            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -155,11 +145,12 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
     override fun initLayout(){
         //Toolbar
         setSupportActionBar(toolbar_MainActivity)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
         //상단
         bindTotalGainData()
 
+        img_MainActivity_Memo.setOnClickListener(onClickListener)
         lin_MainActivity_Filter.setOnClickListener(onClickListener)
         txt_MainActivity_Edit.setOnClickListener(onClickListener)
         //노트 리스트
@@ -184,6 +175,12 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
 
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
+            R.id.img_MainActivity_Memo -> {
+                //TODO 터치 이펙트 넣기.
+                val intent = Intent(mContext, MemoListActivity::class.java)
+                startActivity(intent)
+            }
+
             R.id.txt_MainActivity_Edit -> {
                 window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
                 if (allPortfolioList?.size!! > 0) {
@@ -194,7 +191,10 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
 
             }
             R.id.lin_MainActivity_Filter -> {
-                initFilterDialog()
+                MainFilterDialog(this).run {
+                    show(supportFragmentManager, tag)
+                }
+//                initFilterDialog()
             }
         }
     }
@@ -294,22 +294,37 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
             totalGainPercent)
     }
 
+    override fun allSelect() {
+        allDataFiltering()
+    }
+
+    override fun gainSelect() {
+        gainDataFiltering()
+    }
+
+    override fun lossSelect() {
+        lossDataFiltering()
+    }
+
     private fun initFilterDialog(){
-        MainFilterDialog(mContext).apply {
-            show()
-            txt_MainFilterDialog_all.setOnClickListener {
-                allDataFiltering()
-                dismiss()
-            }
-            txt_MainFilterDialog_gain.setOnClickListener {
-                gainDataFiltering()
-                dismiss()
-            }
-            txt_MainFilterDialog_loss.setOnClickListener {
-                lossDataFiltering()
-                dismiss()
-            }
-        }
+//        MaiFilternDialog.getInstance(mContext).apply {
+//            show(supportFragmentManager, tag)
+//            rootView.txt_MainFilterDialog_all.setOnClickListener {
+//                allDataFiltering()
+//                dismiss()
+//            }
+//            rootView.txt_MainFilterDialog_gain.setOnClickListener {
+//                gainDataFiltering()
+//
+//            }
+//            rootView.txt_MainFilterDialog_loss.setOnClickListener {
+//                lossDataFiltering()
+//                dismiss()
+//            }
+//        }
+//        MainFilterDialog.getInstance(mContext).apply {
+//
+//        }
     }
     private fun allDataFiltering(){
         allPortfolioList = databaseController.getAllPortfolioDataInfo()
@@ -335,4 +350,6 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainListAdapter.MainA
     private fun addButtonControl(){
         menu?.getItem(menu?.size()!! - 1)?.isVisible = !mainListAdapter?.isEditMode()!!
     }
+
+
 }
