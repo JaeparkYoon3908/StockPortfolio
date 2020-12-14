@@ -2,26 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cons_MainFilterDialog_Parent"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/common_190dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/round_box"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    android:background="@drawable/radius_background"
+    tools:background="@drawable/round_box"
     >
-
-<!--    <View-->
-<!--        android:id="@+id/view_Transparent_Background"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/cons_MainFilterDialog_Filter"-->
-<!--        />-->
 
     <TextView
         android:id="@+id/txt_MainFilterDialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="@dimen/common_12dp"
         android:text="@string/MainFilterDialog_Title"
         android:textSize="14sp"
         android:textColor="@color/color_666666"
@@ -46,23 +42,22 @@
         android:id="@+id/txt_MainFilterDialog_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/common_5dp"
-        android:paddingBottom="@dimen/common_5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:paddingTop="@dimen/common_10dp"
+        android:paddingBottom="@dimen/common_10dp"
         android:text="@string/MainFilterDialog_All"
-        android:textSize="16sp"
         android:textColor="@color/color_222222"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_title"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_MainFilterDialog_gain"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_title" />
 
     <TextView
         android:id="@+id/txt_MainFilterDialog_gain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/common_5dp"
-        android:paddingBottom="@dimen/common_5dp"
+        android:paddingTop="@dimen/common_10dp"
+        android:paddingBottom="@dimen/common_10dp"
         android:text="@string/MainFilterDialog_Gain"
         android:textSize="16sp"
         android:textColor="@color/color_222222"
@@ -75,8 +70,9 @@
         android:id="@+id/txt_MainFilterDialog_loss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/common_5dp"
-        android:paddingBottom="@dimen/common_5dp"
+        android:layout_marginBottom="@dimen/common_5dp"
+        android:paddingTop="@dimen/common_10dp"
+        android:paddingBottom="@dimen/common_10dp"
         android:text="@string/MainFilterDialog_Loss"
         android:textSize="16sp"
         android:textColor="@color/color_222222"

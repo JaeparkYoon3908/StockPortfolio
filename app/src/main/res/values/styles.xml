@@ -3,7 +3,6 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/color_80000000</item>
         <item name="actionMenuTextColor">@color/color_222222</item>
-        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="PauseDialog" parent="@android:style/Theme.Translucent.NoTitleBar">
@@ -40,9 +39,9 @@
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
     </style>
 
-    <style name="AppModalStyle"
-        parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/radius_background</item>
+    <style name="AppModalStyle" parent="">
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
     </style>
 
 </resources>
