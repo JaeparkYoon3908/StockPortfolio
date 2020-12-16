@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.model
+package com.yjpapp.stockportfolio.database.model
 
 data class PortfolioInfo (
     var id: Int,

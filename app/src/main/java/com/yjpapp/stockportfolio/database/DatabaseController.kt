@@ -4,8 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.yjpapp.stockportfolio.model.MemoInfo
-import com.yjpapp.stockportfolio.model.PortfolioInfo
+import com.yjpapp.stockportfolio.database.model.MemoInfo
+import com.yjpapp.stockportfolio.database.model.PortfolioInfo
 import com.yjpapp.stockportfolio.util.Utils
 
 class DatabaseController {

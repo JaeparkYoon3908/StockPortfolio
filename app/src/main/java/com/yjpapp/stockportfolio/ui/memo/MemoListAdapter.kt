@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.model.MemoInfo
+import com.yjpapp.stockportfolio.database.model.MemoInfo
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.item_memo_list.view.*
 

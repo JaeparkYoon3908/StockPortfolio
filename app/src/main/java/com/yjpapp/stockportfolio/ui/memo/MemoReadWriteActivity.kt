@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
-import com.yjpapp.stockportfolio.model.MemoInfo
+import com.yjpapp.stockportfolio.database.model.MemoInfo
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.activity_memo_read_write.*

@@ -8,7 +8,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
-import com.yjpapp.stockportfolio.model.MemoInfo
+import com.yjpapp.stockportfolio.database.model.MemoInfo
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
@@ -43,7 +43,6 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapt
 
         initData()
         initLayout()
-
     }
 
     override fun initData() {

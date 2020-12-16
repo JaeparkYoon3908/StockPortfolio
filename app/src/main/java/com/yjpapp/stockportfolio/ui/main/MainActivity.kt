@@ -10,7 +10,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
-import com.yjpapp.stockportfolio.model.PortfolioInfo
+import com.yjpapp.stockportfolio.database.model.PortfolioInfo
+import com.yjpapp.stockportfolio.network.YahooFinanceProtocolManager
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import com.yjpapp.stockportfolio.ui.dialog.EditPortfolioDialog
 import com.yjpapp.stockportfolio.ui.dialog.MainFilterDialog
@@ -42,17 +43,18 @@ class MainActivity : BaseActivity(R.layout.activity_main),
     }
 
     private fun addClicked(){
-        EditPortfolioDialog(mContext).apply {
-            if(!isShowing){
-                show()
-                txt_complete.setOnClickListener {
-                    runDialogCompleteClick(this)
-                }
-                txt_cancel.setOnClickListener {
-                    dismiss()
-                }
-            }
-        }
+//        EditPortfolioDialog(mContext).apply {
+//            if(!isShowing){
+//                show()
+//                txt_complete.setOnClickListener {
+//                    runDialogCompleteClick(this)
+//                }
+//                txt_cancel.setOnClickListener {
+//                    dismiss()
+//                }
+//            }
+//        }
+        YahooFinanceProtocolManager.getInstance(mContext).getStockProfile()
     }
 
     override fun onDeleteClicked(position: Int) {
@@ -176,7 +178,6 @@ class MainActivity : BaseActivity(R.layout.activity_main),
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
             R.id.img_MainActivity_Memo -> {
-                //TODO 터치 이펙트 넣기.
                 val intent = Intent(mContext, MemoListActivity::class.java)
                 startActivity(intent)
             }
@@ -285,7 +286,7 @@ class MainActivity : BaseActivity(R.layout.activity_main),
         totalGainPercent /= allPortfolioList!!.size
         txt_total_realization_gains_losses_data.text = NumberFormat.getCurrencyInstance(Locale.KOREA).format(
             totalGainNumber)
-        if(totalGainNumber > 0){
+        if(totalGainNumber >= 0){
             txt_total_realization_gains_losses_data.setTextColor(getColor(R.color.color_e52b4e))
         }else{
             txt_total_realization_gains_losses_data.setTextColor(getColor(R.color.color_4876c7))
