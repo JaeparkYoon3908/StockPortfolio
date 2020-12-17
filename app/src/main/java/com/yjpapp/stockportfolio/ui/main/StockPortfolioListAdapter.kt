@@ -13,8 +13,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MainListAdapter(private val data: ArrayList<PortfolioInfo?>?, callback: MainActivityCallBack) :
-    RecyclerView.Adapter<MainListAdapter.ViewHolder>(){
+class StockPortfolioListAdapter(private val data: ArrayList<PortfolioInfo?>?, callback: MainActivityCallBack) :
+    RecyclerView.Adapter<StockPortfolioListAdapter.ViewHolder>(){
     private lateinit var mContext: Context
     private var dataInfoList = ArrayList<PortfolioInfo?>()
     private var mainActivityCallBack: MainActivityCallBack

@@ -3,15 +3,19 @@ package com.yjpapp.stockportfolio.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.database.model.PortfolioInfo
 import com.yjpapp.stockportfolio.network.YahooFinanceProtocolManager
+import com.yjpapp.stockportfolio.network.model.Price
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import com.yjpapp.stockportfolio.ui.dialog.EditPortfolioDialog
 import com.yjpapp.stockportfolio.ui.dialog.MainFilterDialog
@@ -21,15 +25,20 @@ import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_add_portfolio.*
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
 
-class MainActivity : BaseActivity(R.layout.activity_main),
-    MainListAdapter.MainActivityCallBack, MainFilterDialog.MainFilterClicked {
+class StockPortfolio : BaseActivity(R.layout.activity_main),
+    StockPortfolioListAdapter.MainActivityCallBack, MainFilterDialog.MainFilterClicked {
 
-    private var mainListAdapter: MainListAdapter? = null
+    private var stockPortfolioListAdapter: StockPortfolioListAdapter? = null
     private var allPortfolioList: ArrayList<PortfolioInfo?>? = null
     private var insertMode: Boolean = false
     private var editSelectPosition = 0
@@ -54,26 +63,47 @@ class MainActivity : BaseActivity(R.layout.activity_main),
 //                }
 //            }
 //        }
-        YahooFinanceProtocolManager.getInstance(mContext).getStockProfile()
+        val symbol = "005930.KS"
+        val region = "KR"
+        YahooFinanceProtocolManager.getInstance(mContext).getStockProfile(symbol, region,
+            object: Callback<JsonObject?> {
+            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+                if(response.code() == 200 || response.code() == 204){
+                    try {
+//                    val formattedResult = StringBuilder()
+                        val jsonObject = JSONObject(response.body().toString())
+                        val priceJSONArray = jsonObject.getJSONObject("price").toString()
+                        val price: Price = Gson().fromJson(priceJSONArray, Price::class.java)
+                        Log.d("YJP", "price = $price")
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
+                Log.d("RequestResult", "RetrofitExample, Type : get, Result : onFailure, Error Message : " + t.message)
+            }
+        })
     }
 
     override fun onDeleteClicked(position: Int) {
-        var dataList = mainListAdapter?.getDataInfoList()!!
+        var dataList = stockPortfolioListAdapter?.getDataInfoList()!!
         val id: Int = dataList[position]?.id!!
         databaseController.deleteData(id, Databases.TABLE_PORTFOLIO)
 
         dataList = databaseController.getAllPortfolioDataInfo()
-        mainListAdapter?.setDataInfoList(dataList)
-        mainListAdapter?.setEditMode(false)
-        mainListAdapter?.notifyItemRemoved(position)
+        stockPortfolioListAdapter?.setDataInfoList(dataList)
+        stockPortfolioListAdapter?.setEditMode(false)
+        stockPortfolioListAdapter?.notifyItemRemoved(position)
         addButtonControl()
         bindTotalGainData()
     }
 
     override fun onEditClicked(position: Int) {
         insertMode = false
-        mainListAdapter?.setEditMode(false)
-        mainListAdapter?.notifyDataSetChanged()
+        stockPortfolioListAdapter?.setEditMode(false)
+        stockPortfolioListAdapter?.notifyDataSetChanged()
         editSelectPosition = position
         EditPortfolioDialog(mContext).apply {
             if(!isShowing){
@@ -123,9 +153,9 @@ class MainActivity : BaseActivity(R.layout.activity_main),
 
     private var allowAppFinish = false
     override fun onBackPressed() {
-        if(mainListAdapter?.isEditMode()!!){
-            mainListAdapter?.setEditMode(false)
-            mainListAdapter?.notifyDataSetChanged()
+        if(stockPortfolioListAdapter?.isEditMode()!!){
+            stockPortfolioListAdapter?.setEditMode(false)
+            stockPortfolioListAdapter?.notifyDataSetChanged()
         }else{
             if(!allowAppFinish){
 //                Toast.makeText(mContext, "앱을 종료하려면 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show()
@@ -169,8 +199,8 @@ class MainActivity : BaseActivity(R.layout.activity_main),
         }
         recyclerview_MainActivity.layoutManager = layoutManager
 
-        mainListAdapter = MainListAdapter(allPortfolioList, this)
-        recyclerview_MainActivity.adapter = mainListAdapter
+        stockPortfolioListAdapter = StockPortfolioListAdapter(allPortfolioList, this)
+        recyclerview_MainActivity.adapter = stockPortfolioListAdapter
         recyclerview_MainActivity.itemAnimator = FadeInAnimator()
 
     }
@@ -185,8 +215,8 @@ class MainActivity : BaseActivity(R.layout.activity_main),
             R.id.txt_MainActivity_Edit -> {
                 window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
                 if (allPortfolioList?.size!! > 0) {
-                    mainListAdapter?.setEditMode(!mainListAdapter?.isEditMode()!!)
-                    mainListAdapter?.notifyDataSetChanged()
+                    stockPortfolioListAdapter?.setEditMode(!stockPortfolioListAdapter?.isEditMode()!!)
+                    stockPortfolioListAdapter?.notifyDataSetChanged()
                     addButtonControl()
                 }
 
@@ -256,11 +286,11 @@ class MainActivity : BaseActivity(R.layout.activity_main),
             dismiss()
         }
         val newDataInfo = databaseController.getAllPortfolioDataInfo()
-        mainListAdapter?.setDataInfoList(newDataInfo)
+        stockPortfolioListAdapter?.setDataInfoList(newDataInfo)
         if(insertMode){
-            mainListAdapter?.notifyItemInserted(mainListAdapter?.itemCount!! - 1)
+            stockPortfolioListAdapter?.notifyItemInserted(stockPortfolioListAdapter?.itemCount!! - 1)
         }else{
-            mainListAdapter?.notifyDataSetChanged()
+            stockPortfolioListAdapter?.notifyDataSetChanged()
         }
         recyclerview_MainActivity.scrollToPosition(newDataInfo.size - 1)
         bindTotalGainData()
@@ -329,27 +359,27 @@ class MainActivity : BaseActivity(R.layout.activity_main),
     }
     private fun allDataFiltering(){
         allPortfolioList = databaseController.getAllPortfolioDataInfo()
-        mainListAdapter?.setDataInfoList(allPortfolioList!!)
-        mainListAdapter?.notifyDataSetChanged()
+        stockPortfolioListAdapter?.setDataInfoList(allPortfolioList!!)
+        stockPortfolioListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_All)
     }
 
     private fun gainDataFiltering(){
         val gainDataList = databaseController.getGainPortfolioInfo()
-        mainListAdapter?.setDataInfoList(gainDataList!!)
-        mainListAdapter?.notifyDataSetChanged()
+        stockPortfolioListAdapter?.setDataInfoList(gainDataList!!)
+        stockPortfolioListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_Gain)
     }
 
     private fun lossDataFiltering(){
         val lossDataList = databaseController.getLossPortfolioInfo()
-        mainListAdapter?.setDataInfoList(lossDataList!!)
-        mainListAdapter?.notifyDataSetChanged()
+        stockPortfolioListAdapter?.setDataInfoList(lossDataList!!)
+        stockPortfolioListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_Loss)
     }
 
     private fun addButtonControl(){
-        menu?.getItem(menu?.size()!! - 1)?.isVisible = !mainListAdapter?.isEditMode()!!
+        menu?.getItem(menu?.size()!! - 1)?.isVisible = !stockPortfolioListAdapter?.isEditMode()!!
     }
 
 
