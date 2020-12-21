@@ -22,7 +22,7 @@ class YahooFinanceProtocolManager {
                     instance = it
                     mContext = context
                     headerMap = HashMap()
-                }
+                 }
             }
     }
 

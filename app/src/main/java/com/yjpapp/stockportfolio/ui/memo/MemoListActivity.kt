@@ -86,6 +86,9 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapt
                 memoListAdapter?.setMemoListData(memoData)
                 memoListAdapter?.notifyItemRemoved(data?.getIntExtra(INTENT_KEY_LIST_POSITION,0)!!)
                 memoListAdapter?.notifyDataSetChanged()
+                if(memoData.size == 0){
+                    txt_MemoListActivity_GuideMessage.visibility = View.VISIBLE
+                }
             }
 
             RESULT_UPDATE -> {

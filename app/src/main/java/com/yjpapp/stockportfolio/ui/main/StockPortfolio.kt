@@ -3,19 +3,14 @@ package com.yjpapp.stockportfolio.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.database.model.PortfolioInfo
-import com.yjpapp.stockportfolio.network.YahooFinanceProtocolManager
-import com.yjpapp.stockportfolio.network.model.Price
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import com.yjpapp.stockportfolio.ui.dialog.EditPortfolioDialog
 import com.yjpapp.stockportfolio.ui.dialog.MainFilterDialog
@@ -25,11 +20,6 @@ import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_add_portfolio.*
-import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
@@ -52,39 +42,39 @@ class StockPortfolio : BaseActivity(R.layout.activity_main),
     }
 
     private fun addClicked(){
-//        EditPortfolioDialog(mContext).apply {
-//            if(!isShowing){
-//                show()
-//                txt_complete.setOnClickListener {
-//                    runDialogCompleteClick(this)
-//                }
-//                txt_cancel.setOnClickListener {
-//                    dismiss()
-//                }
-//            }
-//        }
-        val symbol = "005930.KS"
-        val region = "KR"
-        YahooFinanceProtocolManager.getInstance(mContext).getStockProfile(symbol, region,
-            object: Callback<JsonObject?> {
-            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
-                if(response.code() == 200 || response.code() == 204){
-                    try {
-//                    val formattedResult = StringBuilder()
-                        val jsonObject = JSONObject(response.body().toString())
-                        val priceJSONArray = jsonObject.getJSONObject("price").toString()
-                        val price: Price = Gson().fromJson(priceJSONArray, Price::class.java)
-                        Log.d("YJP", "price = $price")
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
+        EditPortfolioDialog(mContext).apply {
+            if(!isShowing){
+                show()
+                txt_complete.setOnClickListener {
+                    runDialogCompleteClick(this)
+                }
+                txt_cancel.setOnClickListener {
+                    dismiss()
                 }
             }
-
-            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
-                Log.d("RequestResult", "RetrofitExample, Type : get, Result : onFailure, Error Message : " + t.message)
-            }
-        })
+        }
+//        val symbol = "005930.KS"
+//        val region = "KR"
+//        YahooFinanceProtocolManager.getInstance(mContext).getStockProfile(symbol, region,
+//            object: Callback<JsonObject?> {
+//            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+//                if(response.code() == 200 || response.code() == 204){
+//                    try {
+////                    val formattedResult = StringBuilder()
+//                        val jsonObject = JSONObject(response.body().toString())
+//                        val priceJSONArray = jsonObject.getJSONObject("price").toString()
+//                        val price: Price = Gson().fromJson(priceJSONArray, Price::class.java)
+//                        Log.d("YJP", "price = $price")
+//                    } catch (e: JSONException) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
+//                Log.d("RequestResult", "RetrofitExample, Type : get, Result : onFailure, Error Message : " + t.message)
+//            }
+//        })
     }
 
     override fun onDeleteClicked(position: Int) {
