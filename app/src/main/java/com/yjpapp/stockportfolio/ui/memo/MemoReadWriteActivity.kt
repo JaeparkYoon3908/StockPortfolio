@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.ui.memo
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -42,25 +43,6 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-//        if(currentFocus?.id == et_MemoReadWriteActivity_content.id ||
-//            currentFocus?.id == et_MemoReadWriteActivity_content.id){
-//                if(mode == MemoListActivity.MEMO_READ_MODE){
-//                    mode = MemoListActivity.MEMO_UPDATE_MODE
-//                    menu?.findItem(R.id.menu_MemoReadWriteActivity_Complete)?.isVisible = true
-//                    menu?.findItem(R.id.menu_MemoReadWriteActivity_Delete)?.isVisible = false
-//                }
-//        }
-
-//        et_MemoReadWriteActivity_title.setOnTouchListener(onTouchListener)
-//        et_MemoReadWriteActivity_content.setOnTouchListener(onTouchListener)
-
-//        et_MemoReadWriteActivity_title.setOnClickListener {
-//            logcat("에디트 클릮!!")
-//        }
-//        et_MemoReadWriteActivity_title.setOnTouchListener(OnTouchListener { arg0, arg1 ->
-//            logcat("에디트 클릮!!")
-//            false
-//        })
         et_MemoReadWriteActivity_title.onFocusChangeListener = onFocusChangeListener
         et_MemoReadWriteActivity_content.onFocusChangeListener = onFocusChangeListener
     }
@@ -109,11 +91,20 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
                 }
             }
             R.id.menu_MemoReadWriteActivity_Delete -> {
-                databaseController.deleteData(id, Databases.TABLE_MEMO)
-                val intent = Intent(mContext, MemoListActivity::class.java)
-                intent.putExtra(MemoListActivity.INTENT_KEY_LIST_POSITION, memoListPosition)
-                setResult(MemoListActivity.RESULT_DELETE, intent)
-                finish()
+                AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.MemoListActivity_Delete_Check_Message))
+                    .setPositiveButton(R.string.Common_Ok) {_,_ ->
+                        databaseController.deleteData(id, Databases.TABLE_MEMO)
+                        val intent = Intent(mContext, MemoListActivity::class.java)
+                        intent.putExtra(MemoListActivity.INTENT_KEY_LIST_POSITION, memoListPosition)
+                        setResult(MemoListActivity.RESULT_DELETE, intent)
+                        finish()
+
+                    }
+                    .setNegativeButton(R.string.Common_Cancel) {dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
             }
         }
         return super.onOptionsItemSelected(item)

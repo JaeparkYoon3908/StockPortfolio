@@ -13,6 +13,7 @@
     <string name="common_real_gains_losses_amount_and_gain_percent_data">%s \n %s</string>
     <string name="common_purchase_price_and_sell_price">매수단가\n매도단가</string>
     <string name="common_purchase_price_and_sell_price_data">%s \n %s</string>
+    <string name="Common_Ok">확인</string>
     <string name="Common_Add">추가</string>
     <string name="Common_Modify">수정</string>
     <string name="Common_Delete">삭제</string>
@@ -24,7 +25,7 @@
     <string name="Common_All">전체</string>
     <string name="Common_Edit">편집</string>
 
-    <string name="MainActivity_Title">주식 포트폴리오</string>
+    <string name="MainActivity_Title">손익 노트</string>
     <string name="MainActivity_Gain">수익</string>
     <string name="MainActivity_Purchase_Price">매수금액</string>
     <string name="MainActivity_Sell_Price">매도금액</string>
@@ -53,5 +54,6 @@
 <!--    <string name="NoteBookListAdapter_NoteCount">%d개의 노트</string>-->
     <string name="MemoListActivity_Title">메모</string>
     <string name="MemoListActivity_GuideMessage">첫 메모를 등록해주세요.</string>
+    <string name="MemoListActivity_Delete_Check_Message">정말 삭제하시겠습니까?</string>
 
 </resources>

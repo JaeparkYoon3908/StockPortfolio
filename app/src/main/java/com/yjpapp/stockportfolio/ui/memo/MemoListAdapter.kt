@@ -1,8 +1,6 @@
 package com.yjpapp.stockportfolio.ui.memo
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +15,8 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
     private var deleteModeOn = false
 
     interface MemoActivityCallBack{
-//        fun onEditClicked(position: Int)
-//        fun onDeleteClicked(position: Int)
-        fun onItemLongClicked()
+        fun onAdapterItemLongClicked()
+        fun onAdapterItemClicked(position: Int)
     }
     private lateinit var mContext: Context
 
@@ -47,7 +44,7 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
             deleteModeOn = !deleteModeOn
             memoListData[position]?.deleteChecked = true
             notifyDataSetChanged()
-            memoActivityCallBack.onItemLongClicked()
+            memoActivityCallBack.onAdapterItemLongClicked()
             return@setOnLongClickListener true
         }
 
@@ -60,14 +57,7 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
         }else{
             holder.view.img_MemoList_Check.visibility = View.GONE
             holder.view.setOnClickListener {
-                val intent = Intent(mContext, MemoReadWriteActivity::class.java)
-                intent.putExtra(MemoListActivity.INTENT_KEY_LIST_POSITION, position)
-                intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_ID, memoListData[position]?.id)
-                intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_TITLE, memoListData[position]?.title)
-                intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_CONTENT, memoListData[position]?.content)
-                intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_MODE, MemoListActivity.MEMO_READ_MODE)
-
-                (mContext as Activity).startActivityForResult(intent, MemoListActivity.REQUEST_READ)
+                memoActivityCallBack.onAdapterItemClicked(position)
             }
         }
     }

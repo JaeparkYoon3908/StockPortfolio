@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui.main
+package com.yjpapp.stockportfolio.ui.income_note
 
 import android.content.Intent
 import android.os.Bundle
@@ -25,10 +25,10 @@ import java.text.NumberFormat
 import java.util.*
 
 
-class StockPortfolio : BaseActivity(R.layout.activity_main),
-    StockPortfolioListAdapter.MainActivityCallBack, MainFilterDialog.MainFilterClicked {
+class IncomeNoteActivity : BaseActivity(R.layout.activity_new_main),
+    IncomeNoteListAdapter.MainActivityCallBack, MainFilterDialog.MainFilterClicked {
 
-    private var stockPortfolioListAdapter: StockPortfolioListAdapter? = null
+    private var incomeNoteListAdapter: IncomeNoteListAdapter? = null
     private var allPortfolioList: ArrayList<PortfolioInfo?>? = null
     private var insertMode: Boolean = false
     private var editSelectPosition = 0
@@ -78,22 +78,22 @@ class StockPortfolio : BaseActivity(R.layout.activity_main),
     }
 
     override fun onDeleteClicked(position: Int) {
-        var dataList = stockPortfolioListAdapter?.getDataInfoList()!!
+        var dataList = incomeNoteListAdapter?.getDataInfoList()!!
         val id: Int = dataList[position]?.id!!
         databaseController.deleteData(id, Databases.TABLE_PORTFOLIO)
 
         dataList = databaseController.getAllPortfolioDataInfo()
-        stockPortfolioListAdapter?.setDataInfoList(dataList)
-        stockPortfolioListAdapter?.setEditMode(false)
-        stockPortfolioListAdapter?.notifyItemRemoved(position)
+        incomeNoteListAdapter?.setDataInfoList(dataList)
+        incomeNoteListAdapter?.setEditMode(false)
+        incomeNoteListAdapter?.notifyItemRemoved(position)
         addButtonControl()
         bindTotalGainData()
     }
 
     override fun onEditClicked(position: Int) {
         insertMode = false
-        stockPortfolioListAdapter?.setEditMode(false)
-        stockPortfolioListAdapter?.notifyDataSetChanged()
+        incomeNoteListAdapter?.setEditMode(false)
+        incomeNoteListAdapter?.notifyDataSetChanged()
         editSelectPosition = position
         EditPortfolioDialog(mContext).apply {
             if(!isShowing){
@@ -132,20 +132,15 @@ class StockPortfolio : BaseActivity(R.layout.activity_main),
                 insertMode = true
                 addClicked()
             }
-
-//            R.id.menu_MainActivity_Memo -> {
-//                val intent = Intent(mContext, MemoListActivity::class.java)
-//                startActivity(intent)
-//            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private var allowAppFinish = false
     override fun onBackPressed() {
-        if(stockPortfolioListAdapter?.isEditMode()!!){
-            stockPortfolioListAdapter?.setEditMode(false)
-            stockPortfolioListAdapter?.notifyDataSetChanged()
+        if(incomeNoteListAdapter?.isEditMode()!!){
+            incomeNoteListAdapter?.setEditMode(false)
+            incomeNoteListAdapter?.notifyDataSetChanged()
         }else{
             if(!allowAppFinish){
 //                Toast.makeText(mContext, "앱을 종료하려면 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show()
@@ -166,13 +161,13 @@ class StockPortfolio : BaseActivity(R.layout.activity_main),
     }
     override fun initLayout(){
         //Toolbar
-        setSupportActionBar(toolbar_MainActivity)
+        setSupportActionBar(toolbar_IncomeNoteActivity)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         //상단
         bindTotalGainData()
 
-        img_MainActivity_Memo.setOnClickListener(onClickListener)
+        lin_MainActivity_BottomMenu_Memo.setOnClickListener(onClickListener)
         lin_MainActivity_Filter.setOnClickListener(onClickListener)
         txt_MainActivity_Edit.setOnClickListener(onClickListener)
         //노트 리스트
@@ -189,15 +184,15 @@ class StockPortfolio : BaseActivity(R.layout.activity_main),
         }
         recyclerview_MainActivity.layoutManager = layoutManager
 
-        stockPortfolioListAdapter = StockPortfolioListAdapter(allPortfolioList, this)
-        recyclerview_MainActivity.adapter = stockPortfolioListAdapter
+        incomeNoteListAdapter = IncomeNoteListAdapter(allPortfolioList, this)
+        recyclerview_MainActivity.adapter = incomeNoteListAdapter
         recyclerview_MainActivity.itemAnimator = FadeInAnimator()
 
     }
 
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
-            R.id.img_MainActivity_Memo -> {
+            R.id.lin_MainActivity_BottomMenu_Memo -> {
                 val intent = Intent(mContext, MemoListActivity::class.java)
                 startActivity(intent)
             }
@@ -205,8 +200,8 @@ class StockPortfolio : BaseActivity(R.layout.activity_main),
             R.id.txt_MainActivity_Edit -> {
                 window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
                 if (allPortfolioList?.size!! > 0) {
-                    stockPortfolioListAdapter?.setEditMode(!stockPortfolioListAdapter?.isEditMode()!!)
-                    stockPortfolioListAdapter?.notifyDataSetChanged()
+                    incomeNoteListAdapter?.setEditMode(!incomeNoteListAdapter?.isEditMode()!!)
+                    incomeNoteListAdapter?.notifyDataSetChanged()
                     addButtonControl()
                 }
 
@@ -276,11 +271,11 @@ class StockPortfolio : BaseActivity(R.layout.activity_main),
             dismiss()
         }
         val newDataInfo = databaseController.getAllPortfolioDataInfo()
-        stockPortfolioListAdapter?.setDataInfoList(newDataInfo)
+        incomeNoteListAdapter?.setDataInfoList(newDataInfo)
         if(insertMode){
-            stockPortfolioListAdapter?.notifyItemInserted(stockPortfolioListAdapter?.itemCount!! - 1)
+            incomeNoteListAdapter?.notifyItemInserted(incomeNoteListAdapter?.itemCount!! - 1)
         }else{
-            stockPortfolioListAdapter?.notifyDataSetChanged()
+            incomeNoteListAdapter?.notifyDataSetChanged()
         }
         recyclerview_MainActivity.scrollToPosition(newDataInfo.size - 1)
         bindTotalGainData()
@@ -288,8 +283,6 @@ class StockPortfolio : BaseActivity(R.layout.activity_main),
 
     private fun runDialogCancelClick(editPortfolioDialog: EditPortfolioDialog){
         editPortfolioDialog.run {
-//            mainListAdapter?.setEditMode(false)
-//            mainListAdapter?.notifyDataSetChanged()
             addButtonControl()
             dismiss()
         }
@@ -349,27 +342,27 @@ class StockPortfolio : BaseActivity(R.layout.activity_main),
     }
     private fun allDataFiltering(){
         allPortfolioList = databaseController.getAllPortfolioDataInfo()
-        stockPortfolioListAdapter?.setDataInfoList(allPortfolioList!!)
-        stockPortfolioListAdapter?.notifyDataSetChanged()
+        incomeNoteListAdapter?.setDataInfoList(allPortfolioList!!)
+        incomeNoteListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_All)
     }
 
     private fun gainDataFiltering(){
         val gainDataList = databaseController.getGainPortfolioInfo()
-        stockPortfolioListAdapter?.setDataInfoList(gainDataList!!)
-        stockPortfolioListAdapter?.notifyDataSetChanged()
+        incomeNoteListAdapter?.setDataInfoList(gainDataList!!)
+        incomeNoteListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_Gain)
     }
 
     private fun lossDataFiltering(){
         val lossDataList = databaseController.getLossPortfolioInfo()
-        stockPortfolioListAdapter?.setDataInfoList(lossDataList!!)
-        stockPortfolioListAdapter?.notifyDataSetChanged()
+        incomeNoteListAdapter?.setDataInfoList(lossDataList!!)
+        incomeNoteListAdapter?.notifyDataSetChanged()
         txt_MainActivity_Filter.text = getString(R.string.MainFilterDialog_Loss)
     }
 
     private fun addButtonControl(){
-        menu?.getItem(menu?.size()!! - 1)?.isVisible = !stockPortfolioListAdapter?.isEditMode()!!
+        menu?.getItem(menu?.size()!! - 1)?.isVisible = !incomeNoteListAdapter?.isEditMode()!!
     }
 
 

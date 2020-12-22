@@ -16,7 +16,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/Common_Dummy_Data"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/color_222222"
         android:singleLine="true"
         android:ellipsize="marquee"
@@ -259,7 +259,7 @@
             android:layout_height="50dp"
             android:gravity="center"
             android:text="@string/Common_Edit"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textColor="@color/color_ffffff"
             android:background="@color/color_666666"
             />
@@ -270,7 +270,7 @@
             android:layout_marginStart="20dp"
             android:gravity="center"
             android:text="삭제"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textColor="@color/color_ffffff"
             android:background="@color/color_666666"
             />

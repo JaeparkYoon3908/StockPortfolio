@@ -53,7 +53,6 @@ class EditPortfolioDialog(context: Context) : AlertDialog(context) {
 
         window?.setBackgroundDrawableResource(R.color.color_80000000)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-
     }
 
     private val onClickListener = View.OnClickListener { view: View? ->

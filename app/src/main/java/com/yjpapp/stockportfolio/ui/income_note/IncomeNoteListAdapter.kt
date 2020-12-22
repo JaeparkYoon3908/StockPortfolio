@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui.main
+package com.yjpapp.stockportfolio.ui.income_note
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,8 +13,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class StockPortfolioListAdapter(private val data: ArrayList<PortfolioInfo?>?, callback: MainActivityCallBack) :
-    RecyclerView.Adapter<StockPortfolioListAdapter.ViewHolder>(){
+class IncomeNoteListAdapter(private val data: ArrayList<PortfolioInfo?>?, callback: MainActivityCallBack) :
+    RecyclerView.Adapter<IncomeNoteListAdapter.ViewHolder>(){
     private lateinit var mContext: Context
     private var dataInfoList = ArrayList<PortfolioInfo?>()
     private var mainActivityCallBack: MainActivityCallBack

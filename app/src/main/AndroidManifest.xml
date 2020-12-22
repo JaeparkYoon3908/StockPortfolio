@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.main.StockPortfolio"
+        <activity android:name=".ui.income_note.IncomeNoteActivity"
             android:screenOrientation="portrait"
             />
 
