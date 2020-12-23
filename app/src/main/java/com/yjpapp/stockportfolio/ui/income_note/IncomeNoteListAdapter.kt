@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.model.PortfolioInfo
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.item_main_list.view.*
+import kotlinx.android.synthetic.main.item_income_note_list.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class IncomeNoteListAdapter(private val data: ArrayList<PortfolioInfo?>?, callback: MainActivityCallBack) :
+class IncomeNoteListAdapter(val data: ArrayList<PortfolioInfo?>?, callback: MainActivityCallBack) :
     RecyclerView.Adapter<IncomeNoteListAdapter.ViewHolder>(){
     private lateinit var mContext: Context
     private var dataInfoList = ArrayList<PortfolioInfo?>()
@@ -35,7 +35,7 @@ class IncomeNoteListAdapter(private val data: ArrayList<PortfolioInfo?>?, callba
         this.mainActivityCallBack = callback
     }
 
-    class ViewHolder(private var view: View) : RecyclerView.ViewHolder(view)
+    class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
