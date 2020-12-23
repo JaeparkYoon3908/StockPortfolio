@@ -28,7 +28,7 @@ class DatabaseController {
             }
     }
 
-    fun insertPortfolioData(portfolioInfo: PortfolioInfo?): Boolean{
+    fun insertIncomeNoteData(portfolioInfo: PortfolioInfo?): Boolean{
         val insertCheck: Long
         val contentValues = ContentValues()
         contentValues.put(Databases.COL_PORTFOLIO_SUBJECT_NAME,portfolioInfo?.subjectName)
@@ -40,12 +40,12 @@ class DatabaseController {
         contentValues.put(Databases.COL_PORTFOLIO_SELL_PRICE, portfolioInfo?.sellPrice)
         contentValues.put(Databases.COL_PORTFOLIO_SELL_COUNT, portfolioInfo?.sellCount)
 
-        insertCheck = database.insert(Databases.TABLE_PORTFOLIO,null, contentValues)
+        insertCheck = database.insert(Databases.TABLE_INCOME_NOTE,null, contentValues)
 
         return insertCheck != -1L
     }
 
-    fun updatePortfolioData(portfolioInfo: PortfolioInfo?): Boolean{
+    fun updateIncomeNoteData(portfolioInfo: PortfolioInfo?): Boolean{
         val updateCheck: Int
         val contentValues = ContentValues()
         contentValues.put(Databases.COL_PORTFOLIO_SUBJECT_NAME,portfolioInfo?.subjectName)
@@ -57,17 +57,17 @@ class DatabaseController {
         contentValues.put(Databases.COL_PORTFOLIO_SELL_PRICE, portfolioInfo?.sellPrice)
         contentValues.put(Databases.COL_PORTFOLIO_SELL_COUNT, portfolioInfo?.sellCount)
 
-        updateCheck = database.update(Databases.TABLE_PORTFOLIO, contentValues,
+        updateCheck = database.update(Databases.TABLE_INCOME_NOTE, contentValues,
             Databases.COL_PORTFOLIO_ID + " = ? ", arrayOf(portfolioInfo?.id.toString()))
 
         return updateCheck != -1
     }
 
-    fun getAllPortfolioDataInfo(): ArrayList<PortfolioInfo?> {
+    fun getAllIncomeNoteList(): ArrayList<PortfolioInfo?> {
         val cursor: Cursor
         val resultList = ArrayList<PortfolioInfo?>()
         val sb = StringBuilder()
-        sb.append("SELECT * FROM " + Databases.TABLE_PORTFOLIO)
+        sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE)
         cursor = database.rawQuery(sb.toString(), null)
         if(cursor.count>0){
             cursor.moveToFirst()
@@ -93,7 +93,7 @@ class DatabaseController {
     fun getDataInfo(position: Int): PortfolioInfo? {
         val cursor: Cursor
         val sb = StringBuilder()
-        sb.append("SELECT * FROM " + Databases.TABLE_PORTFOLIO + "WHERE ")
+        sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE + "WHERE ")
         sb.append("id = '$position'")
         cursor = database.rawQuery(sb.toString(), null)
         if(cursor.count == 1){
@@ -115,11 +115,11 @@ class DatabaseController {
         }
     }
 
-    fun getGainPortfolioInfo(): ArrayList<PortfolioInfo?>?{
+    fun getGainIncomeNoteList(): ArrayList<PortfolioInfo?>?{
         val cursor: Cursor
         val resultList = ArrayList<PortfolioInfo?>()
         val sb = StringBuilder()
-        sb.append("SELECT * FROM " + Databases.TABLE_PORTFOLIO)
+        sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE)
         cursor = database.rawQuery(sb.toString(), null)
         if(cursor.count>0){
             cursor.moveToFirst()
@@ -147,11 +147,11 @@ class DatabaseController {
         return resultList
     }
 
-    fun getLossPortfolioInfo(): ArrayList<PortfolioInfo?>?{
+    fun getLossIncomeNoteList(): ArrayList<PortfolioInfo?>?{
         val cursor: Cursor
         val resultList = ArrayList<PortfolioInfo?>()
         val sb = StringBuilder()
-        sb.append("SELECT * FROM " + Databases.TABLE_PORTFOLIO)
+        sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE)
         cursor = database.rawQuery(sb.toString(), null)
         if(cursor.count>0){
             cursor.moveToFirst()

@@ -40,7 +40,7 @@ class IncomeNoteListAdapter(private val data: ArrayList<PortfolioInfo?>?, callba
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
         val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view:View = inflater.inflate(R.layout.item_main_list, parent, false)
+        val view:View = inflater.inflate(R.layout.item_income_note_list, parent, false)
         return ViewHolder(view)
     }
 
@@ -60,6 +60,8 @@ class IncomeNoteListAdapter(private val data: ArrayList<PortfolioInfo?>?, callba
             itemView.txt_delete.setOnClickListener {
                 mainActivityCallBack.onDeleteClicked(position)
             }
+            itemView.txt_gain_data.isSelected = true
+
             bindDataList(holder, position)
             bindEditMode(holder)
         }

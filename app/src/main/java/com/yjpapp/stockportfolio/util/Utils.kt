@@ -66,7 +66,14 @@ object Utils {
     }
 
     fun getRoundsPercentNumber(number: Double): String{
-        var result = String.format("%.2f", number)
+        //TODO 마이너스 적용
+        var result = ""
+        result =
+//            if(number<0)
+//                "-" + String.format("%.2f", number)
+//            else
+            String.format("%.2f", number)
+
         if(result == "NaN") result = "0"
         result += "%"
         return result

@@ -31,7 +31,7 @@ class DatabaseOpenHelper(context: Context): SQLiteOpenHelper(context, "database.
     }
 
     private fun createPortfolioTable(): String{
-        return "create table " + Databases.TABLE_PORTFOLIO + "(" +
+        return "create table " + Databases.TABLE_INCOME_NOTE + "(" +
                 Databases.COL_PORTFOLIO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Databases.COL_PORTFOLIO_SUBJECT_NAME + " TEXT," +
                 Databases.COL_PORTFOLIO_REAL_GAINS_LOSSES_AMOUNT + " TEXT," +

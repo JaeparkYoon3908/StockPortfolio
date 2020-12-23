@@ -52,6 +52,10 @@
             android:textSize="14sp"
             android:textColor="@color/color_e52b4e"
             android:textStyle="bold"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             tools:text="14,000"
             />
     </LinearLayout>

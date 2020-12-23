@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.ui.income_note.IncomeNoteActivity
+import com.yjpapp.stockportfolio.ui.income_note.MainActivity
 
 class SplashActivity: BaseActivity(R.layout.activity_splash) {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,7 @@ class SplashActivity: BaseActivity(R.layout.activity_splash) {
 
     private fun startSplash(){
         Handler().postDelayed({
-            val intent = Intent(mContext, IncomeNoteActivity::class.java)
+            val intent = Intent(mContext, MainActivity::class.java)
             finish()
             startActivity(intent)
         },1500)

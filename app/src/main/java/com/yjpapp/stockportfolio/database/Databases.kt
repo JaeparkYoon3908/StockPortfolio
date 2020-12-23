@@ -5,7 +5,7 @@ object Databases {
      * table name
      */
     const val TABLE_MEMO: String = "memo_table"
-    const val TABLE_PORTFOLIO: String = "portfolio_table"
+    const val TABLE_INCOME_NOTE: String = "income_note_table"
 
     /**
      * memo_table columns
