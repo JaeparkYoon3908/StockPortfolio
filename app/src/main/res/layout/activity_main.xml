@@ -40,13 +40,12 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_IncomeNoteActivity"
-        app:layout_constraintBottom_toTopOf="@+id/line_3"
+        app:layout_constraintBottom_toTopOf="@+id/view_bottom_line"
         >
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <!-- TODO Bottom Menu -->
     <View
-        android:id="@+id/line_3"
+        android:id="@+id/view_bottom_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_1dp"
         android:background="@color/color_line_1a000000"

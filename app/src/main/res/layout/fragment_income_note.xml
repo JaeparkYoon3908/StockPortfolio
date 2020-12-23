@@ -9,7 +9,7 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cons_MainActivity_total_gain_losses"
+        android:id="@+id/cons_IncomeNoteFragment_TotalGainLosses"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_40dp"
         android:layout_gravity="top"
@@ -23,7 +23,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar_IncomeNoteActivity">
 
         <TextView
-            android:id="@+id/txt_total_realization_gains_losses"
+            android:id="@+id/txt_TotalRealizationGainsLosses"
             android:layout_width="@dimen/common_60dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -32,12 +32,12 @@
             android:textColor="@color/color_222222"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txt_total_realization_gains_losses_data"
+            app:layout_constraintEnd_toStartOf="@+id/txt_TotalRealizationGainsLossesData"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/txt_total_realization_gains_losses_data"
+            android:id="@+id/txt_TotalRealizationGainsLossesData"
             android:layout_width="@dimen/common_0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -52,13 +52,13 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txt_total_realization_gains_losses_percent"
-            app:layout_constraintStart_toEndOf="@+id/txt_total_realization_gains_losses"
+            app:layout_constraintEnd_toStartOf="@+id/txt_TotalRealizationGainsLossesPercent"
+            app:layout_constraintStart_toEndOf="@+id/txt_TotalRealizationGainsLosses"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="650,000,000,000,000" />
 
         <TextView
-            android:id="@+id/txt_total_realization_gains_losses_percent"
+            android:id="@+id/txt_TotalRealizationGainsLossesPercent"
             android:layout_width="@dimen/common_60dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -72,7 +72,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txt_total_realization_gains_losses_data"
+            app:layout_constraintStart_toEndOf="@+id/txt_TotalRealizationGainsLossesData"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="15%" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -80,13 +80,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_1dp"
         android:background="@color/color_line_1a000000"
-        app:layout_constraintTop_toBottomOf="@+id/cons_MainActivity_total_gain_losses"
+        app:layout_constraintTop_toBottomOf="@+id/cons_IncomeNoteFragment_TotalGainLosses"
         />
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/common_1dp"
-        app:layout_constraintTop_toBottomOf="@+id/cons_MainActivity_total_gain_losses"
+        app:layout_constraintTop_toBottomOf="@+id/cons_IncomeNoteFragment_TotalGainLosses"
         app:layout_constraintBottom_toBottomOf="parent"
         >
 
@@ -99,7 +99,6 @@
             >
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/collapsingToolbarLayout01"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_40dp"
                 android:fitsSystemWindows="true"
@@ -108,7 +107,7 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlways">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cons_MainActivity_Edit"
+                    android:id="@+id/cons_IncomeNoteFragment_Edit"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/common_40dp"
                     android:layout_gravity="bottom"
@@ -119,19 +118,19 @@
                     >
 
                     <SearchView
-                        android:id="@+id/sv_MainActivity"
+                        android:id="@+id/sv_IncomeNoteFragment"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/common_30dp"
                         android:layout_marginEnd="@dimen/common_10dp"
-                        android:queryHint="종목명 검색"
+                        android:queryHint="@string/IncomeNoteFragment_SearchBar_Hint"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_Filter"
+                        app:layout_constraintEnd_toStartOf="@+id/lin_IncomeNoteFragment_Filter"
                         />
 
                     <LinearLayout
-                        android:id="@+id/lin_MainActivity_Filter"
+                        android:id="@+id/lin_IncomeNoteFragment_Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/common_10dp"
@@ -139,11 +138,11 @@
                         android:gravity="center"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/txt_MainActivity_Edit"
+                        app:layout_constraintEnd_toStartOf="@+id/txt_IncomeNoteFragment_Edit"
                         >
 
                         <TextView
-                            android:id="@+id/txt_MainActivity_Filter"
+                            android:id="@+id/txt_IncomeNoteFragment_Filter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/Common_All"
@@ -161,15 +160,15 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/txt_MainActivity_Edit"
+                        android:id="@+id/txt_IncomeNoteFragment_Edit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:text="@string/Common_Edit"
                         android:textSize="16sp"
                         android:textColor="@color/color_222222"
-                        app:layout_constraintTop_toTopOf="@+id/cons_MainActivity_Edit"
-                        app:layout_constraintBottom_toBottomOf="@+id/cons_MainActivity_Edit"
+                        app:layout_constraintTop_toTopOf="@+id/cons_IncomeNoteFragment_Edit"
+                        app:layout_constraintBottom_toBottomOf="@+id/cons_IncomeNoteFragment_Edit"
                         app:layout_constraintEnd_toEndOf="parent"
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -191,7 +190,7 @@
             app:layout_constraintTop_toBottomOf="@+id/appbar_layout"
             >
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_MainActivity"
+                android:id="@+id/recyclerview_IncomeNoteFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />

@@ -1,22 +1,26 @@
 package com.yjpapp.stockportfolio.ui.income_note
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
-import com.yjpapp.stockportfolio.database.model.PortfolioInfo
+import com.yjpapp.stockportfolio.database.model.IncomeNoteInfo
 import com.yjpapp.stockportfolio.ui.MainActivity
 import com.yjpapp.stockportfolio.ui.dialog.EditIncomeNoteDialog
 import com.yjpapp.stockportfolio.ui.dialog.IncomeNoteFilterDialog
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
+import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.dialog_edit_income_note.*
@@ -24,33 +28,48 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
-class IncomeNoteFragment: Fragment(),
+class IncomeNoteFragment : Fragment(),
     IncomeNoteListAdapter.MainActivityCallBack, IncomeNoteFilterDialog.MainFilterClicked {
     private lateinit var mContext: Context
     private lateinit var mRootView: View
+    private lateinit var callback: OnBackPressedCallback
 
     //layout 변수
-    private lateinit var txt_total_realization_gains_losses_data: TextView
-    private lateinit var txt_total_realization_gains_losses_percent: TextView
-    private lateinit var lin_MainActivity_Filter: LinearLayout
-    private lateinit var txt_MainActivity_Filter: TextView
-    private lateinit var txt_MainActivity_Edit: TextView
-    private lateinit var recyclerview_MainActivity: RecyclerView
+    private lateinit var textView_TotalRealizationGainsLossesData: TextView
+    private lateinit var textView_TotalRealizationGainsLossesPercent: TextView
+    private lateinit var linear_MainActivity_Filter: LinearLayout
+    private lateinit var textView_MainActivity_Filter: TextView
+    private lateinit var textView_MainActivity_Edit: TextView
+    private lateinit var recyclerView_MainActivity: RecyclerView
+    private lateinit var searchView_IncomeNoteFragment: SearchView
 
     private var incomeNoteListAdapter: IncomeNoteListAdapter? = null
-    private var allPortfolioList: ArrayList<PortfolioInfo?>? = null
+    private var allIncomeNoteList: ArrayList<IncomeNoteInfo?>? = null
     private var insertMode: Boolean = false
     private var editSelectPosition = 0
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (incomeNoteListAdapter?.isEditMode()!!) {
+                    incomeNoteListAdapter?.setEditMode(false)
+                    incomeNoteListAdapter?.notifyDataSetChanged()
+                    runAddButtonControl()
+                } else {
+                    Utils.runBackPressAppCloseEvent(mContext, activity as Activity)
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mRootView = inflater.inflate(R.layout.fragment_income_note, container, false)
         return mRootView
@@ -68,6 +87,11 @@ class IncomeNoteFragment: Fragment(),
         activity?.invalidateOptionsMenu()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
+
     private fun addClicked() {
         EditIncomeNoteDialog(mContext).apply {
             if (!isShowing) {
@@ -80,28 +104,6 @@ class IncomeNoteFragment: Fragment(),
                 }
             }
         }
-//        val symbol = "005930.KS"
-//        val region = "KR"
-//        YahooFinanceProtocolManager.getInstance(mContext).getStockProfile(symbol, region,
-//            object: Callback<JsonObject?> {
-//            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
-//                if(response.code() == 200 || response.code() == 204){
-//                    try {
-////                    val formattedResult = StringBuilder()
-//                        val jsonObject = JSONObject(response.body().toString())
-//                        val priceJSONArray = jsonObject.getJSONObject("price").toString()
-//                        val price: Price = Gson().fromJson(priceJSONArray, Price::class.java)
-//                        Log.d("YJP", "price = $price")
-//                    } catch (e: JSONException) {
-//                        e.printStackTrace()
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
-//                Log.d("RequestResult", "RetrofitExample, Type : get, Result : onFailure, Error Message : " + t.message)
-//            }
-//        })
     }
 
     override fun onEditClicked(position: Int) {
@@ -109,15 +111,16 @@ class IncomeNoteFragment: Fragment(),
         incomeNoteListAdapter?.setEditMode(false)
         incomeNoteListAdapter?.notifyDataSetChanged()
         editSelectPosition = position
+        runAddButtonControl()
         EditIncomeNoteDialog(mContext).apply {
-            if(!isShowing){
+            if (!isShowing) {
                 show()
-                et_subject_name.setText(allPortfolioList!![position]?.subjectName)
-                et_purchase_date.setText(allPortfolioList!![position]?.purchaseDate)
-                et_sell_date.setText(allPortfolioList!![position]?.sellDate)
-                et_purchase_price.setText(allPortfolioList!![position]?.purchasePrice)
-                et_sell_price.setText(allPortfolioList!![position]?.sellPrice)
-                et_sell_count.setText(allPortfolioList!![position]?.sellCount.toString())
+                et_subject_name.setText(allIncomeNoteList!![position]?.subjectName)
+                et_purchase_date.setText(allIncomeNoteList!![position]?.purchaseDate)
+                et_sell_date.setText(allIncomeNoteList!![position]?.sellDate)
+                et_purchase_price.setText(allIncomeNoteList!![position]?.purchasePrice)
+                et_sell_price.setText(allIncomeNoteList!![position]?.sellPrice)
+                et_sell_count.setText(allIncomeNoteList!![position]?.sellCount.toString())
                 txt_complete.setOnClickListener {
                     runDialogCompleteClick(this)
                 }
@@ -137,13 +140,13 @@ class IncomeNoteFragment: Fragment(),
         incomeNoteListAdapter?.setDataInfoList(dataList)
 //        incomeNoteListAdapter?.setEditMode(false)
         incomeNoteListAdapter?.notifyItemRemoved(position)
-        incomeNoteListAdapter?.notifyItemRangeRemoved(position,incomeNoteListAdapter?.itemCount!!)
-        addButtonControl()
+        incomeNoteListAdapter?.notifyItemRangeRemoved(position, incomeNoteListAdapter?.itemCount!!)
+        runAddButtonControl()
         bindTotalGainData()
     }
 
     override fun onItemLongClicked() {
-        addButtonControl()
+        runAddButtonControl()
     }
 
     override fun allSelect() {
@@ -166,7 +169,7 @@ class IncomeNoteFragment: Fragment(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             R.id.menu_IncomeNoteActivity_Add -> {
                 insertMode = true
                 addClicked()
@@ -175,48 +178,63 @@ class IncomeNoteFragment: Fragment(),
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initData(){
-        allPortfolioList  = (activity as MainActivity).databaseController.getAllIncomeNoteList()
+    private fun initData() {
+        allIncomeNoteList = (activity as MainActivity).databaseController.getAllIncomeNoteList()
     }
 
 
-    private fun initLayout(){
+    private fun initLayout() {
         setHasOptionsMenu(true)
 
-        txt_total_realization_gains_losses_data = mRootView.findViewById(R.id.txt_total_realization_gains_losses_data)
-        txt_total_realization_gains_losses_percent = mRootView.findViewById(R.id.txt_total_realization_gains_losses_percent)
-        lin_MainActivity_Filter = mRootView.findViewById(R.id.lin_MainActivity_Filter)
-        txt_MainActivity_Filter = mRootView.findViewById(R.id.txt_MainActivity_Filter)
-        txt_MainActivity_Edit = mRootView.findViewById(R.id.txt_MainActivity_Edit)
-        recyclerview_MainActivity = mRootView.findViewById(R.id.recyclerview_MainActivity)
+        textView_TotalRealizationGainsLossesData =
+            mRootView.findViewById(R.id.txt_TotalRealizationGainsLossesData)
+        textView_TotalRealizationGainsLossesPercent =
+            mRootView.findViewById(R.id.txt_TotalRealizationGainsLossesPercent)
+        linear_MainActivity_Filter = mRootView.findViewById(R.id.lin_IncomeNoteFragment_Filter)
+        textView_MainActivity_Filter = mRootView.findViewById(R.id.txt_IncomeNoteFragment_Filter)
+        textView_MainActivity_Edit = mRootView.findViewById(R.id.txt_IncomeNoteFragment_Edit)
+        recyclerView_MainActivity = mRootView.findViewById(R.id.recyclerview_IncomeNoteFragment)
+        searchView_IncomeNoteFragment = mRootView.findViewById(R.id.sv_IncomeNoteFragment)
+        searchView_IncomeNoteFragment.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
 
-        lin_MainActivity_Filter.setOnClickListener(onClickListener)
-        txt_MainActivity_Edit.setOnClickListener(onClickListener)
+            override fun onQueryTextChange(newText: String?): Boolean {
+                startSearch(newText)
+                return false
+            }
 
-        txt_total_realization_gains_losses_data.isSelected = true
-        txt_total_realization_gains_losses_percent.isSelected = true
+        })
+
+        linear_MainActivity_Filter.setOnClickListener(onClickListener)
+        textView_MainActivity_Edit.setOnClickListener(onClickListener)
+
+        textView_TotalRealizationGainsLossesData.isSelected = true
+        textView_TotalRealizationGainsLossesPercent.isSelected = true
 
         bindTotalGainData()
         initRecyclerView()
     }
 
-    private val onClickListener = View.OnClickListener {view: View? ->
-        when(view?.id){
+    private val onClickListener = View.OnClickListener { view: View? ->
+        when (view?.id) {
             R.id.lin_MainActivity_BottomMenu_Memo -> {
                 val intent = Intent(mContext, MemoListFragment::class.java)
                 startActivity(intent)
             }
 
-            R.id.txt_MainActivity_Edit -> {
+            R.id.txt_IncomeNoteFragment_Edit -> {
                 activity?.window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
-                if (allPortfolioList?.size!! > 0) {
+                if (allIncomeNoteList?.size!! > 0) {
                     incomeNoteListAdapter?.setEditMode(!incomeNoteListAdapter?.isEditMode()!!)
                     incomeNoteListAdapter?.notifyDataSetChanged()
-                    addButtonControl()
+                    runAddButtonControl()
                 }
 
             }
-            R.id.lin_MainActivity_Filter -> {
+            R.id.lin_IncomeNoteFragment_Filter -> {
                 val mainFilterDialog = IncomeNoteFilterDialog(this)
                 mainFilterDialog.show(childFragmentManager, tag)
             }
@@ -224,60 +242,63 @@ class IncomeNoteFragment: Fragment(),
 
     }
 
-    private fun bindTotalGainData(){
-        allPortfolioList  = (activity as MainActivity).databaseController.getAllIncomeNoteList()
+    private fun bindTotalGainData() {
+        allIncomeNoteList = (activity as MainActivity).databaseController.getAllIncomeNoteList()
         var totalGainNumber: Double = 0.0
         var totalGainPercent: Double = 0.0
-        for(i in allPortfolioList?.indices!!){
-            totalGainNumber += Utils.getNumDeletedComma(allPortfolioList!![i]!!.realPainLossesAmount!!).toDouble()
-            totalGainPercent += Utils.getNumDeletedPercent(allPortfolioList!![i]!!.gainPercent!!).toDouble()
+        for (i in allIncomeNoteList?.indices!!) {
+            totalGainNumber += Utils.getNumDeletedComma(allIncomeNoteList!![i]!!.realPainLossesAmount!!)
+                .toDouble()
+            totalGainPercent += Utils.getNumDeletedPercent(allIncomeNoteList!![i]!!.gainPercent!!)
+                .toDouble()
         }
-        totalGainPercent /= allPortfolioList!!.size
-        txt_total_realization_gains_losses_data.text = NumberFormat.getCurrencyInstance(Locale.KOREA).format(
-            totalGainNumber)
-        if(totalGainNumber >= 0){
-            txt_total_realization_gains_losses_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-            txt_total_realization_gains_losses_percent.setTextColor(mContext.getColor(R.color.color_e52b4e))
-        }else{
-            txt_total_realization_gains_losses_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-            txt_total_realization_gains_losses_percent.setTextColor(mContext.getColor(R.color.color_4876c7))
+        totalGainPercent /= allIncomeNoteList!!.size
+        textView_TotalRealizationGainsLossesData.text =
+            NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
+        if (totalGainNumber >= 0) {
+            textView_TotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
+            textView_TotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
+        } else {
+            textView_TotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
+            textView_TotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
         }
-        txt_total_realization_gains_losses_percent.text = Utils.getRoundsPercentNumber(totalGainPercent)
+        textView_TotalRealizationGainsLossesPercent.text =
+            Utils.getRoundsPercentNumber(totalGainPercent)
     }
 
-    private fun initRecyclerView(){
+    private fun initRecyclerView() {
         val layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
         //Scroll item 2 to 20 pixels from the top
-        if(allPortfolioList?.size != 0){
-            layoutManager.scrollToPosition(allPortfolioList?.size!! - 1)
+        if (allIncomeNoteList?.size != 0) {
+            layoutManager.scrollToPosition(allIncomeNoteList?.size!! - 1)
         }
-        recyclerview_MainActivity.layoutManager = layoutManager
+        recyclerView_MainActivity.layoutManager = layoutManager
 
-        incomeNoteListAdapter = IncomeNoteListAdapter(allPortfolioList, this)
-        recyclerview_MainActivity.adapter = incomeNoteListAdapter
-        recyclerview_MainActivity.itemAnimator = FadeInAnimator()
+        incomeNoteListAdapter = IncomeNoteListAdapter(allIncomeNoteList, this)
+        recyclerView_MainActivity.adapter = incomeNoteListAdapter
+        recyclerView_MainActivity.itemAnimator = FadeInAnimator()
 
     }
 
-    private fun runDialogCancelClick(editIncomeNoteDialog: EditIncomeNoteDialog){
+    private fun runDialogCancelClick(editIncomeNoteDialog: EditIncomeNoteDialog) {
         editIncomeNoteDialog.run {
-            addButtonControl()
             dismiss()
         }
     }
 
-    private fun runDialogCompleteClick(editIncomeNoteDialog: EditIncomeNoteDialog){
+    private fun runDialogCompleteClick(editIncomeNoteDialog: EditIncomeNoteDialog) {
 
-        editIncomeNoteDialog.run{
+        editIncomeNoteDialog.run {
             //예외처리 (값을 모두 입력하지 않았을 때)
             if (et_subject_name.text.isEmpty() ||
                 et_purchase_date.text.isEmpty() ||
                 et_sell_date.text.isEmpty() ||
                 et_purchase_price.text.isEmpty() ||
                 et_sell_price.text.isEmpty() ||
-                et_sell_count.text.isEmpty()) {
+                et_sell_count.text.isEmpty()
+            ) {
 
                 Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
                 return
@@ -306,56 +327,64 @@ class IncomeNoteFragment: Fragment(),
             val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
 
             //날짜오류 예외처리
-            if (Utils.getNumDeletedDot(purchaseDate).toInt() > Utils.getNumDeletedDot(sellDate).toInt()) {
+            if (Utils.getNumDeletedDot(purchaseDate).toInt() > Utils.getNumDeletedDot(sellDate)
+                    .toInt()
+            ) {
                 Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG)
                     .show()
                 return
             }
 
-            val dataInfo = PortfolioInfo(0, subjectName, realPainLossesAmount, purchaseDate,
+            val dataInfo = IncomeNoteInfo(0, subjectName, realPainLossesAmount, purchaseDate,
                 sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
 
-            if(insertMode){
+            if (insertMode) {
                 (activity as MainActivity).databaseController.insertIncomeNoteData(dataInfo)
-            }else{
-                dataInfo.id = allPortfolioList!![editSelectPosition]!!.id
+            } else {
+                dataInfo.id = allIncomeNoteList!![editSelectPosition]!!.id
                 (activity as MainActivity).databaseController.updateIncomeNoteData(dataInfo)
             }
             dismiss()
         }
         val newDataInfo = (activity as MainActivity).databaseController.getAllIncomeNoteList()
         incomeNoteListAdapter?.setDataInfoList(newDataInfo)
-        if(insertMode){
+        if (insertMode) {
             incomeNoteListAdapter?.notifyItemInserted(incomeNoteListAdapter?.itemCount!! - 1)
-        }else{
+        } else {
             incomeNoteListAdapter?.notifyDataSetChanged()
         }
-        recyclerview_MainActivity.scrollToPosition(newDataInfo.size - 1)
+        recyclerView_MainActivity.scrollToPosition(newDataInfo.size - 1)
         bindTotalGainData()
     }
 
-    private fun allDataFiltering(){
-        allPortfolioList = (activity as MainActivity).databaseController.getAllIncomeNoteList()
-        incomeNoteListAdapter?.setDataInfoList(allPortfolioList!!)
+    private fun allDataFiltering() {
+        allIncomeNoteList = (activity as MainActivity).databaseController.getAllIncomeNoteList()
+        incomeNoteListAdapter?.setDataInfoList(allIncomeNoteList!!)
         incomeNoteListAdapter?.notifyDataSetChanged()
-        txt_MainActivity_Filter.text = getString(R.string.IncomeNoteFilterDialog_All)
+        textView_MainActivity_Filter.text = getString(R.string.IncomeNoteFilterDialog_All)
     }
 
-    private fun gainDataFiltering(){
+    private fun gainDataFiltering() {
         val gainDataList = (activity as MainActivity).databaseController.getGainIncomeNoteList()
         incomeNoteListAdapter?.setDataInfoList(gainDataList!!)
         incomeNoteListAdapter?.notifyDataSetChanged()
-        txt_MainActivity_Filter.text = getString(R.string.IncomeNoteFilterDialog_Gain)
+        textView_MainActivity_Filter.text = getString(R.string.IncomeNoteFilterDialog_Gain)
     }
 
-    private fun lossDataFiltering(){
+    private fun lossDataFiltering() {
         val lossDataList = (activity as MainActivity).databaseController.getLossIncomeNoteList()
         incomeNoteListAdapter?.setDataInfoList(lossDataList!!)
         incomeNoteListAdapter?.notifyDataSetChanged()
-        txt_MainActivity_Filter.text = getString(R.string.IncomeNoteFilterDialog_Loss)
+        textView_MainActivity_Filter.text = getString(R.string.IncomeNoteFilterDialog_Loss)
     }
 
-    private fun addButtonControl(){
+    private fun runAddButtonControl() {
         menu?.getItem(menu?.size()!! - 1)?.isVisible = !incomeNoteListAdapter?.isEditMode()!!
+    }
+
+    //TODO 검색기능 추가.
+    private fun startSearch(newText: String?) {
+        (activity as MainActivity).logcat(newText!!) //로그캣 오는거 확인 ㄱ=>ㄱㄴ=>ㄱㄴㄷ....
+        (activity as MainActivity).logcat(ChoSungSearchQueryUtil.makeQuery(newText))
     }
 }

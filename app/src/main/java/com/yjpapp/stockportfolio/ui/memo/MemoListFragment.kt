@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.ui.memo
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Context
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.TextView
 import android.widget.Toolbar
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +18,7 @@ import com.yjpapp.stockportfolio.database.DatabaseController
 import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.database.model.MemoInfo
 import com.yjpapp.stockportfolio.ui.MainActivity
+import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 
@@ -40,6 +43,7 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
     }
     private lateinit var mContext: Context
     private lateinit var mRootView: View
+    private lateinit var callback: OnBackPressedCallback
 
     private lateinit var memoDataList: ArrayList<MemoInfo?>
     private lateinit var layoutManager: LinearLayoutManager
@@ -52,6 +56,16 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(memoListAdapter?.isDeleteModeOn()!!){
+                    setDeleteModeOff()
+                }else{
+                    Utils.runBackPressAppCloseEvent(mContext, activity as Activity)
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onCreateView(
@@ -125,7 +139,7 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
     }
 
     override fun onAdapterItemLongClicked() {
-        if(memoListAdapter?.getDeleteModeOn()!!){
+        if(memoListAdapter?.isDeleteModeOn()!!){
             menu?.findItem(R.id.menu_MemoListActivity_Add)?.isVisible = false
             menu?.findItem(R.id.menu_MemoListActivity_Delete)?.isVisible = true
         }else{

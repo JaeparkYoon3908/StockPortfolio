@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.model.PortfolioInfo
+import com.yjpapp.stockportfolio.database.model.IncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.item_income_note_list.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class IncomeNoteListAdapter(val data: ArrayList<PortfolioInfo?>?, callback: MainActivityCallBack) :
+class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: MainActivityCallBack) :
     RecyclerView.Adapter<IncomeNoteListAdapter.ViewHolder>(){
     private lateinit var mContext: Context
-    private var dataInfoList = ArrayList<PortfolioInfo?>()
+    private var dataInfoList = ArrayList<IncomeNoteInfo?>()
     private var mainActivityCallBack: MainActivityCallBack
     private var editModeOn: Boolean = false
     private var allCheckClick: Boolean = false
@@ -77,12 +77,12 @@ class IncomeNoteListAdapter(val data: ArrayList<PortfolioInfo?>?, callback: Main
         dataInfoList.removeAt(position)
     }
 
-    fun getDataInfoList(): ArrayList<PortfolioInfo?>{
+    fun getDataInfoList(): ArrayList<IncomeNoteInfo?>{
         return dataInfoList
     }
 
-    fun setDataInfoList(portfolioInfoList: ArrayList<PortfolioInfo?>){
-        this.dataInfoList = portfolioInfoList
+    fun setDataInfoList(incomeNoteInfoList: ArrayList<IncomeNoteInfo?>){
+        this.dataInfoList = incomeNoteInfoList
     }
 
     fun setEditMode(isEditMode: Boolean){

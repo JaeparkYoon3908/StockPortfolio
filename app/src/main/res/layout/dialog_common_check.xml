@@ -5,9 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/EditMainDialog_MainContainer"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/common_195dp"
     android:layout_gravity="center"
     android:background="@color/color_ffffff"
+
     >
 
     <TextView
@@ -15,9 +16,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_20dp"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:textColor="@color/color_666666"
         tools:text="종목명"
+        tools:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +29,9 @@
         android:id="@+id/txt_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:gravity="center"
+        android:textSize="16sp"
+        tools:text="내용 \n입니다."
         app:layout_constraintTop_toBottomOf="@+id/txt_title"
         app:layout_constraintBottom_toTopOf="@+id/bottom_line"
         app:layout_constraintStart_toStartOf="parent"

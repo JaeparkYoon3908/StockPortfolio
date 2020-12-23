@@ -19,13 +19,13 @@ object Databases {
      * portfolio_table columns
      */
     const val COL_PORTFOLIO_ID: String = "id" // primary key, id
-    const val COL_PORTFOLIO_SUBJECT_NAME: String = "subject_name" // 종목명
-    const val COL_PORTFOLIO_REAL_GAINS_LOSSES_AMOUNT: String = "real_gains_losses_amount" // 순손익금액
-    const val COL_PORTFOLIO_PURCHASE_DATE: String = "purchase_date" //매수일
-    const val COL_PORTFOLIO_SELL_DATE: String = "sell_date" // 매도일
-    const val COL_PORTFOLIO_PURCHASE_PRICE: String = "purchase_price" //매수단가
-    const val COL_PORTFOLIO_SELL_PRICE: String ="sell_price" //매도단가
-    const val COL_PORTFOLIO_GAIN_PERCENT: String = "gain_percent" // 수익률
-    const val COL_PORTFOLIO_SELL_COUNT: String = "sell_count" // 매도수량
+    const val COL_INCOME_NOTE_SUBJECT_NAME: String = "subject_name" // 종목명
+    const val COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT: String = "real_gains_losses_amount" // 순손익금액
+    const val COL_INCOME_NOTE_PURCHASE_DATE: String = "purchase_date" //매수일
+    const val COL_INCOME_NOTE_SELL_DATE: String = "sell_date" // 매도일
+    const val COL_INCOME_NOTE_PURCHASE_PRICE: String = "purchase_price" //매수단가
+    const val COL_INCOME_NOTE_SELL_PRICE: String ="sell_price" //매도단가
+    const val COL_INCOME_NOTE_GAIN_PERCENT: String = "gain_percent" // 수익률
+    const val COL_INCOME_NOTE_SELL_COUNT: String = "sell_count" // 매도수량
 
 }

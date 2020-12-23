@@ -5,15 +5,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:id="@+id/txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="준비 중 입니다."
-        android:textSize="@dimen/common_30dp"
+        android:layout_marginStart="@dimen/common_20dp"
+        android:text="현재 삼성전자 주가 : "
+        android:textSize="15sp"
         android:textColor="@color/color_222222"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txt_current_price_data"
         app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/txt_current_price_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="15sp"
+        android:textColor="@color/color_222222"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt"
+        app:layout_constraintEnd_toStartOf="@+id/txt_current_price_change_data"
+        />
+
+    <TextView
+        android:id="@+id/txt_current_price_change_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="15sp"
+        android:textColor="@color/color_222222"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_current_price_data"
         app:layout_constraintEnd_toEndOf="parent"
         />
+
+<!--    <TextView-->
+<!--        android:id="@+id/txt_current_price_change_percent_data"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="-"-->
+<!--        android:textSize="15sp"-->
+<!--        android:textColor="@color/color_222222"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/txt_current_price_change_data"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

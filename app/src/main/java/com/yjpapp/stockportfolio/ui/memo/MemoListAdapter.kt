@@ -74,7 +74,7 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
         return memoListData
     }
 
-    fun getDeleteModeOn(): Boolean{
+    fun isDeleteModeOn(): Boolean{
         return deleteModeOn
     }
     fun setDeleteModeOn(deleteModeOn: Boolean){

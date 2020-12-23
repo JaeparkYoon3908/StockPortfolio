@@ -1,9 +1,15 @@
 package com.yjpapp.stockportfolio.util
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
+import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.preference.PrefKey
+import com.yjpapp.stockportfolio.preference.PreferenceController
+import es.dmoral.toasty.Toasty
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -66,7 +72,7 @@ object Utils {
     }
 
     fun getRoundsPercentNumber(number: Double): String{
-        //TODO 마이너스 적용
+        //TODO +에서 -로 넘어갈 경우 퍼센티지가 변경이 되지 않음. => 기하 평균을 사용해 두 기간의 평균 수익률 계산을 해야함.
         var result = ""
         result =
 //            if(number<0)
@@ -95,5 +101,18 @@ object Utils {
 
     fun pxToDp(px: Int): Int {
         return (px / Resources.getSystem().displayMetrics.density).toInt()
+    }
+
+    fun runBackPressAppCloseEvent(mContext: Context, activity:Activity){
+        val isAllowAppClose = PreferenceController.getInstance(mContext).getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)
+        if(isAllowAppClose == "true"){
+            activity.finish()
+        }else{
+            Toasty.normal(mContext,mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
+            PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "true")
+            Handler().postDelayed(Runnable {
+                PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
+            },3000)
+        }
     }
 }

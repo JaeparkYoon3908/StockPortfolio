@@ -1,258 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/EditMainDialog_MainContainer"
     android:layout_width="match_parent"
     android:layout_height="350dp"
     android:layout_gravity="center"
-    android:background="@color/color_ffffff"
-    >
+    android:background="@color/color_ffffff">
 
     <TextView
-            android:id="@+id/txt_subject_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_20dp"
-            android:layout_marginStart="@dimen/common_20dp"
-            android:text="@string/IncomeNoteFragment_SubjectName"
-            android:textSize="18sp"
-            android:textColor="@color/color_666666"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/txt_purchase_date"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+        android:id="@+id/txt_subject_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_20dp"
+        android:layout_marginTop="@dimen/common_20dp"
+        android:text="@string/IncomeNoteFragment_SubjectName"
+        android:textColor="@color/color_666666"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_purchase_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/et_subject_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_10dp"
-            android:layout_marginEnd="@dimen/common_20dp"
-            android:hint="@string/MainAddListDialog_SubjectName_Hint"
-            android:textSize="16sp"
-            android:background="@drawable/border_line_bottom"
-            app:layout_constraintTop_toTopOf="@+id/txt_subject_name"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_subject_name"
-            app:layout_constraintStart_toEndOf="@+id/txt_subject_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+    <EditText
+        android:id="@+id/et_subject_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:layout_marginEnd="@dimen/common_20dp"
+        android:background="@drawable/border_line_bottom"
+        android:hint="@string/EditIncomeNoteDialog_SubjectName_Hint"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_subject_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_subject_name"
+        app:layout_constraintTop_toTopOf="@+id/txt_subject_name" />
 
-        <TextView
-            android:id="@+id/txt_purchase_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_20dp"
-            android:text="@string/IncomeNoteFragment_Purchase_Date"
-            android:textSize="18sp"
-            android:textColor="@color/color_666666"
-            app:layout_constraintTop_toBottomOf="@+id/et_subject_name"
-            app:layout_constraintBottom_toTopOf="@+id/txt_purchase_price"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+    <TextView
+        android:id="@+id/txt_purchase_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_20dp"
+        android:text="@string/IncomeNoteFragment_Purchase_Date"
+        android:textColor="@color/color_666666"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_purchase_price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_subject_name" />
 
-        <EditText
-            android:id="@+id/et_purchase_date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_10dp"
-            android:textSize="16sp"
-            android:textColor="@color/color_222222"
-            android:hint="@string/MainAddListDialog_Purchase_Date_Hint"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:background="@drawable/border_line_bottom"
-            app:layout_constraintTop_toTopOf="@+id/txt_purchase_date"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_date"
-            app:layout_constraintStart_toEndOf="@+id/txt_purchase_date"
-            />
+    <EditText
+        android:id="@+id/et_purchase_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:background="@drawable/border_line_bottom"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:hint="@string/EditIncomeNoteDialog_Purchase_Date_Hint"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_date"
+        app:layout_constraintStart_toEndOf="@+id/txt_purchase_date"
+        app:layout_constraintTop_toTopOf="@+id/txt_purchase_date" />
 
-        <TextView
-            android:id="@+id/txt_sell_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_10dp"
-            android:layout_marginEnd="@dimen/common_10dp"
-            android:text="@string/IncomeNoteFragment_Sell_Date"
-            android:textSize="18sp"
-            android:textColor="@color/color_666666"
-            app:layout_constraintTop_toTopOf="@+id/txt_purchase_date"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_date"
-            app:layout_constraintEnd_toStartOf="@+id/et_sell_date"
-            />
+    <TextView
+        android:id="@+id/txt_sell_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:layout_marginEnd="@dimen/common_10dp"
+        android:text="@string/IncomeNoteFragment_Sell_Date"
+        android:textColor="@color/color_666666"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_date"
+        app:layout_constraintEnd_toStartOf="@+id/et_sell_date"
+        app:layout_constraintTop_toTopOf="@+id/txt_purchase_date" />
 
-        <EditText
-            android:id="@+id/et_sell_date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/MainAddListDialog_Sell_Date_Hint"
-            android:layout_marginEnd="@dimen/common_20dp"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:textSize="16sp"
-            android:textColor="@color/color_222222"
-            android:background="@drawable/border_line_bottom"
-            app:layout_constraintTop_toTopOf="@+id/txt_sell_date"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_sell_date"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+    <EditText
+        android:id="@+id/et_sell_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/common_20dp"
+        android:background="@drawable/border_line_bottom"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:hint="@string/EditIncomeNoteDialog_Sell_Date_Hint"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_sell_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txt_sell_date" />
 
-        <TextView
-            android:id="@+id/txt_purchase_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_20dp"
-            android:text="@string/IncomeNoteFragment_Purchase_Price"
-            android:textColor="@color/color_666666"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/txt_purchase_date"
-            app:layout_constraintBottom_toTopOf="@+id/txt_sell_price"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+    <TextView
+        android:id="@+id/txt_purchase_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_20dp"
+        android:text="@string/IncomeNoteFragment_Purchase_Price"
+        android:textColor="@color/color_666666"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_sell_price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_purchase_date" />
 
-        <TextView
-            android:id="@+id/txt_purchase_price_symbol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/color_666666"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/txt_purchase_date"
-            app:layout_constraintBottom_toTopOf="@+id/txt_sell_price"
-            app:layout_constraintStart_toEndOf="@+id/txt_purchase_price"
-            />
+    <TextView
+        android:id="@+id/txt_purchase_price_symbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/color_666666"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_sell_price"
+        app:layout_constraintStart_toEndOf="@+id/txt_purchase_price"
+        app:layout_constraintTop_toBottomOf="@+id/txt_purchase_date" />
 
-        <EditText
-            android:id="@+id/et_purchase_price"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_2dp"
-            android:layout_marginEnd="@dimen/common_20dp"
-            android:hint="@string/MainAddListDialog_Purchase_Price_Hint"
-            android:textColor="@color/color_222222"
-            android:textSize="16sp"
-            android:inputType="number"
-            android:background="@drawable/border_line_bottom"
-            app:layout_constraintTop_toTopOf="@+id/txt_purchase_price"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_price"
-            app:layout_constraintStart_toEndOf="@+id/txt_purchase_price_symbol"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+    <EditText
+        android:id="@+id/et_purchase_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_2dp"
+        android:layout_marginEnd="@dimen/common_20dp"
+        android:background="@drawable/border_line_bottom"
+        android:hint="@string/EditIncomeNoteDialog_Purchase_Price_Hint"
+        android:inputType="number"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_price"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_purchase_price_symbol"
+        app:layout_constraintTop_toTopOf="@+id/txt_purchase_price" />
 
-        <TextView
-            android:id="@+id/txt_sell_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_20dp"
-            android:text="@string/IncomeNoteFragment_Sell_Price"
-            android:textColor="@color/color_666666"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/txt_purchase_price"
-            app:layout_constraintBottom_toTopOf="@+id/txt_sell_count"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+    <TextView
+        android:id="@+id/txt_sell_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_20dp"
+        android:text="@string/IncomeNoteFragment_Sell_Price"
+        android:textColor="@color/color_666666"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_sell_count"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_purchase_price" />
 
-        <TextView
-            android:id="@+id/txt_sell_price_symbol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_10dp"
-            android:textColor="@color/color_666666"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/txt_purchase_price"
-            app:layout_constraintBottom_toTopOf="@+id/txt_sell_count"
-            app:layout_constraintStart_toEndOf="@+id/txt_sell_price"
-            />
+    <TextView
+        android:id="@+id/txt_sell_price_symbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:textColor="@color/color_666666"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_sell_count"
+        app:layout_constraintStart_toEndOf="@+id/txt_sell_price"
+        app:layout_constraintTop_toBottomOf="@+id/txt_purchase_price" />
 
-        <EditText
-            android:id="@+id/et_sell_price"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_2dp"
-            android:layout_marginEnd="@dimen/common_20dp"
-            android:hint="@string/MainAddListDialog_Sell_Price_Hint"
-            android:textSize="16sp"
-            android:textColor="@color/color_222222"
-            android:inputType="number"
-            android:background="@drawable/border_line_bottom"
-            app:layout_constraintTop_toTopOf="@+id/txt_sell_price"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_sell_price"
-            app:layout_constraintStart_toEndOf="@+id/txt_sell_price_symbol"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+    <EditText
+        android:id="@+id/et_sell_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_2dp"
+        android:layout_marginEnd="@dimen/common_20dp"
+        android:background="@drawable/border_line_bottom"
+        android:hint="@string/EditIncomeNoteDialog_Sell_Price_Hint"
+        android:inputType="number"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_sell_price"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_sell_price_symbol"
+        app:layout_constraintTop_toTopOf="@+id/txt_sell_price" />
 
-        <TextView
-            android:id="@+id/txt_sell_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/common_20dp"
-            android:layout_marginStart="@dimen/common_20dp"
-            android:text="@string/IncomeNoteFragment_Sell_Count"
-            android:textColor="@color/color_666666"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/txt_sell_price"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_line"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+    <TextView
+        android:id="@+id/txt_sell_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_20dp"
+        android:layout_marginBottom="@dimen/common_20dp"
+        android:text="@string/IncomeNoteFragment_Sell_Count"
+        android:textColor="@color/color_666666"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_sell_price" />
 
-        <EditText
-            android:id="@+id/et_sell_count"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_10dp"
-            android:layout_marginEnd="20dp"
-            android:hint="@string/MainAddListDialog_Sell_Count_Hint"
-            android:textColor="@color/color_222222"
-            android:textSize="16sp"
-            android:inputType="number"
-            android:background="@drawable/border_line_bottom"
-            app:layout_constraintTop_toTopOf="@+id/txt_sell_count"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_sell_count"
-            app:layout_constraintStart_toEndOf="@+id/txt_sell_count"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+    <EditText
+        android:id="@+id/et_sell_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/border_line_bottom"
+        android:hint="@string/EditIncomeNoteDialog_Sell_Count_Hint"
+        android:inputType="number"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_sell_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_sell_count"
+        app:layout_constraintTop_toTopOf="@+id/txt_sell_count" />
 
-        <View
-            android:id="@+id/bottom_line"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/common_1dp"
-            android:background="@color/color_line_1a000000"
-            app:layout_constraintBottom_toTopOf="@+id/txt_cancel"
-            />
-        <TextView
-            android:id="@+id/txt_cancel"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/common_50dp"
-            android:gravity="center"
-            android:text="@string/Common_Cancel"
-            android:textColor="@color/color_e52b4e"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txt_complete"
-            />
+    <View
+        android:id="@+id/bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_1dp"
+        android:background="@color/color_line_1a000000"
+        app:layout_constraintBottom_toTopOf="@+id/txt_cancel" />
 
-        <View
-            android:layout_width="@dimen/common_1dp"
-            android:layout_height="@dimen/common_50dp"
-            android:background="@color/color_line_1a000000"
-            app:layout_constraintStart_toEndOf="@+id/txt_cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+    <TextView
+        android:id="@+id/txt_cancel"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/common_50dp"
+        android:gravity="center"
+        android:text="@string/Common_Cancel"
+        android:textColor="@color/color_e52b4e"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txt_complete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
 
-        <TextView
-            android:id="@+id/txt_complete"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/common_50dp"
-            android:gravity="center"
-            android:text="@string/Common_Complete"
-            android:textColor="@color/color_222222"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txt_cancel"
-            app:layout_constraintEnd_toEndOf="parent"
+    <View
+        android:layout_width="@dimen/common_1dp"
+        android:layout_height="@dimen/common_50dp"
+        android:background="@color/color_line_1a000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_cancel" />
 
-            />
+    <TextView
+        android:id="@+id/txt_complete"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/common_50dp"
+        android:gravity="center"
+        android:text="@string/Common_Complete"
+        android:textColor="@color/color_222222"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_cancel"
+        app:layout_constraintWidth_percent="0.5"
+
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

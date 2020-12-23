@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.database.model
 
-data class PortfolioInfo (
+data class IncomeNoteInfo (
     var id: Int,
     var subjectName: String?, // 종목명
     var realPainLossesAmount: String?, //순손익금액

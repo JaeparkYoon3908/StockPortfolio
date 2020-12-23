@@ -33,13 +33,13 @@ class DatabaseOpenHelper(context: Context): SQLiteOpenHelper(context, "database.
     private fun createPortfolioTable(): String{
         return "create table " + Databases.TABLE_INCOME_NOTE + "(" +
                 Databases.COL_PORTFOLIO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                Databases.COL_PORTFOLIO_SUBJECT_NAME + " TEXT," +
-                Databases.COL_PORTFOLIO_REAL_GAINS_LOSSES_AMOUNT + " TEXT," +
-                Databases.COL_PORTFOLIO_PURCHASE_DATE + " TEXT," +
-                Databases.COL_PORTFOLIO_SELL_DATE + " TEXT," +
-                Databases.COL_PORTFOLIO_GAIN_PERCENT + " TEXT," +
-                Databases.COL_PORTFOLIO_PURCHASE_PRICE + " TEXT," +
-                Databases.COL_PORTFOLIO_SELL_PRICE + " TEXT," +
-                Databases.COL_PORTFOLIO_SELL_COUNT + " TEXT);"
+                Databases.COL_INCOME_NOTE_SUBJECT_NAME + " TEXT," +
+                Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT + " TEXT," +
+                Databases.COL_INCOME_NOTE_PURCHASE_DATE + " TEXT," +
+                Databases.COL_INCOME_NOTE_SELL_DATE + " TEXT," +
+                Databases.COL_INCOME_NOTE_GAIN_PERCENT + " TEXT," +
+                Databases.COL_INCOME_NOTE_PURCHASE_PRICE + " TEXT," +
+                Databases.COL_INCOME_NOTE_SELL_PRICE + " TEXT," +
+                Databases.COL_INCOME_NOTE_SELL_COUNT + " TEXT);"
     }
 }

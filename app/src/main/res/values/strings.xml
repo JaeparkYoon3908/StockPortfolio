@@ -24,6 +24,8 @@
     <string name="Common_Dummy_Data">-</string>
     <string name="Common_All">전체</string>
     <string name="Common_Edit">편집</string>
+    <string name="Common_BackButton_AppClose_Message">종료하시려면 한번 더 눌러주세요.</string>
+
 
     <string name="IncomeNoteFragment_Title">손익 노트</string>
     <string name="IncomeNoteFragment_Gain">수익</string>
@@ -34,15 +36,16 @@
     <string name="IncomeNoteFragment_Sell_Date">매도일</string>
     <string name="IncomeNoteFragment_GainPercent">수익률</string>
     <string name="IncomeNoteFragment_SubjectName">종목명</string>
+    <string name="IncomeNoteFragment_SearchBar_Hint">종목명으로 검색하세요.</string>
 
-    <string name="MainAddListDialog_SubjectName_Hint">매매한 회사 이름</string>
-    <string name="MainAddListDialog_Purchase_Date_Hint">매수한 날짜</string>
-    <string name="MainAddListDialog_Sell_Date_Hint">매도한 날짜</string>
-    <string name="MainAddListDialog_Purchase_Price_Hint">1주당 매수한 금액</string>
-    <string name="MainAddListDialog_Sell_Price_Hint">1주당 매도한 금액</string>
-    <string name="MainAddListDialog_Sell_Count_Hint">매도한 수량</string>
+    <string name="EditIncomeNoteDialog_SubjectName_Hint">매매한 회사 이름</string>
+    <string name="EditIncomeNoteDialog_Purchase_Date_Hint">매수한 날짜</string>
+    <string name="EditIncomeNoteDialog_Sell_Date_Hint">매도한 날짜</string>
+    <string name="EditIncomeNoteDialog_Purchase_Price_Hint">1주당 매수한 금액</string>
+    <string name="EditIncomeNoteDialog_Sell_Price_Hint">1주당 매도한 금액</string>
+    <string name="EditIncomeNoteDialog_Sell_Count_Hint">매도한 수량</string>
+    <string name="EditIncomeNoteDialog_Error_Message">값을 모두 입력해야합니다.</string>
 
-    <string name="AddActivity_list1_hint">종목명을 입력해주세요.</string>
 
     <string name="IncomeNoteFilterDialog_Title">필터링 할 옵션을 선택하세요.</string>
     <string name="IncomeNoteFilterDialog_All">전체</string>
