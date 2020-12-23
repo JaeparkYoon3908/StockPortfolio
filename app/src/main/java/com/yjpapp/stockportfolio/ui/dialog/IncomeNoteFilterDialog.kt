@@ -9,9 +9,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.dailog_main_filter.*
+import kotlinx.android.synthetic.main.dailog_income_note_filter.*
 
-class MainFilterDialog(callback: MainFilterClicked): BottomSheetDialogFragment() {
+class IncomeNoteFilterDialog(callback: MainFilterClicked): BottomSheetDialogFragment() {
     interface MainFilterClicked{
         fun allSelect()
         fun gainSelect()
@@ -33,7 +33,7 @@ class MainFilterDialog(callback: MainFilterClicked): BottomSheetDialogFragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        rootView = inflater.inflate(R.layout.dailog_main_filter, container, false)
+        rootView = inflater.inflate(R.layout.dailog_income_note_filter, container, false)
         return rootView
     }
 

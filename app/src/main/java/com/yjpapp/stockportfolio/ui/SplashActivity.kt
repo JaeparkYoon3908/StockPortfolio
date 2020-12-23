@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.ui.income_note.MainActivity
 
 class SplashActivity: BaseActivity(R.layout.activity_splash) {
     override fun onCreate(savedInstanceState: Bundle?) {

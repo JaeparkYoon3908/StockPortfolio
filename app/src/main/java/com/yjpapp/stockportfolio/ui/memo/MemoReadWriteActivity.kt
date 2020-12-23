@@ -28,12 +28,12 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
 
     }
     override fun initData() {
-        mode = intent.getStringExtra(MemoListActivity.INTENT_KEY_MEMO_MODE)
-        if(mode == MemoListActivity.MEMO_READ_MODE){ // 읽기 모드
-            memoListPosition = intent.getIntExtra(MemoListActivity.INTENT_KEY_LIST_POSITION, 0)
-            id = intent.getIntExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_ID, 0)
-            title = intent.getStringExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_TITLE)
-            content = intent.getStringExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_CONTENT)
+        mode = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_MODE)
+        if(mode == MemoListFragment.MEMO_READ_MODE){ // 읽기 모드
+            memoListPosition = intent.getIntExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, 0)
+            id = intent.getIntExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_ID, 0)
+            title = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_TITLE)
+            content = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_CONTENT)
         }
     }
 
@@ -56,7 +56,7 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        if(mode == MemoListActivity.MEMO_READ_MODE){
+        if(mode == MemoListFragment.MEMO_READ_MODE){
             et_MemoReadWriteActivity_title.setText(title)
             et_MemoReadWriteActivity_content.setText(content)
             menu.findItem(R.id.menu_MemoReadWriteActivity_Complete)?.isVisible = false
@@ -72,19 +72,19 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
                 finish()
             }
             R.id.menu_MemoReadWriteActivity_Complete -> {
-                if (mode == MemoListActivity.MEMO_ADD_MODE) {
+                if (mode == MemoListFragment.MEMO_ADD_MODE) {
                     if (et_MemoReadWriteActivity_title.text.toString() == ("") && et_MemoReadWriteActivity_content.text.toString() == "") {
-                        setResult(MemoListActivity.RESULT_EMPTY)
+                        setResult(MemoListFragment.RESULT_EMPTY)
                     } else {
                         setResult(RESULT_OK)
                         addMemo()
                     }
                     finish()
-                } else if (mode == MemoListActivity.MEMO_UPDATE_MODE) {
+                } else if (mode == MemoListFragment.MEMO_UPDATE_MODE) {
                     if (et_MemoReadWriteActivity_title.text.toString() == ("") && et_MemoReadWriteActivity_content.text.toString() == "") {
-                        setResult(MemoListActivity.RESULT_EMPTY)
+                        setResult(MemoListFragment.RESULT_EMPTY)
                     } else {
-                        setResult(MemoListActivity.RESULT_UPDATE)
+                        setResult(MemoListFragment.RESULT_UPDATE)
                         updateMemo()
                     }
                     finish()
@@ -92,12 +92,12 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
             }
             R.id.menu_MemoReadWriteActivity_Delete -> {
                 AlertDialog.Builder(this)
-                    .setMessage(getString(R.string.MemoListActivity_Delete_Check_Message))
+                    .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
                     .setPositiveButton(R.string.Common_Ok) {_,_ ->
                         databaseController.deleteData(id, Databases.TABLE_MEMO)
-                        val intent = Intent(mContext, MemoListActivity::class.java)
-                        intent.putExtra(MemoListActivity.INTENT_KEY_LIST_POSITION, memoListPosition)
-                        setResult(MemoListActivity.RESULT_DELETE, intent)
+                        val intent = Intent(mContext, MemoListFragment::class.java)
+                        intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, memoListPosition)
+                        setResult(MemoListFragment.RESULT_DELETE, intent)
                         finish()
 
                     }
@@ -127,11 +127,9 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
         databaseController.updateMemoData(memoInfo)
     }
 
-//    @SuppressLint("ClickableViewAccessibility")
-//    private val onTouchListener = View.OnTouchListener
     private val onFocusChangeListener = View.OnFocusChangeListener { _:View, _:Boolean ->
-        if(mode == MemoListActivity.MEMO_READ_MODE){
-            mode = MemoListActivity.MEMO_UPDATE_MODE
+        if(mode == MemoListFragment.MEMO_READ_MODE){
+            mode = MemoListFragment.MEMO_UPDATE_MODE
             menu?.findItem(R.id.menu_MemoReadWriteActivity_Complete)?.isVisible = true
             menu?.findItem(R.id.menu_MemoReadWriteActivity_Delete)?.isVisible = false
         }

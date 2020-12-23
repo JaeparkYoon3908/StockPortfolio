@@ -12,12 +12,12 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
 import com.yjpapp.stockportfolio.R
-import kotlinx.android.synthetic.main.dialog_add_portfolio.*
+import kotlinx.android.synthetic.main.dialog_edit_income_note.*
 import java.text.DecimalFormat
 import java.util.*
 
 
-class EditPortfolioDialog(context: Context) : AlertDialog(context) {
+class EditIncomeNoteDialog(context: Context) : AlertDialog(context) {
     object MSG{
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
@@ -33,7 +33,7 @@ class EditPortfolioDialog(context: Context) : AlertDialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_add_portfolio)
+        setContentView(R.layout.dialog_edit_income_note)
 
         initLayout()
     }

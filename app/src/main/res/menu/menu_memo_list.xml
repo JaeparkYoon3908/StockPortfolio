@@ -5,7 +5,7 @@
 
     <item android:id="@+id/menu_MemoListActivity_Add"
         android:title=""
-        android:icon="@drawable/icon_add"
+        android:icon="@drawable/icon_add2"
         app:showAsAction="ifRoom"
         />
 

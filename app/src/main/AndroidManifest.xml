@@ -21,11 +21,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.income_note.MainActivity"
+        <activity android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
             />
 
-        <activity android:name=".ui.memo.MemoListActivity"
+        <activity android:name=".ui.memo.MemoListFragment"
             android:screenOrientation="portrait"
             />
 

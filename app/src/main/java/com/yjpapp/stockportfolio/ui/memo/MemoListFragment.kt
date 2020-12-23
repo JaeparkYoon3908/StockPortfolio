@@ -1,21 +1,25 @@
 package com.yjpapp.stockportfolio.ui.memo
 
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
+import android.widget.TextView
+import android.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.database.DatabaseController
 import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.database.model.MemoInfo
-import com.yjpapp.stockportfolio.ui.BaseActivity
+import com.yjpapp.stockportfolio.ui.MainActivity
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
-import kotlinx.android.synthetic.main.activity_memo_list.*
 
-class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapter.MemoActivityCallBack {
+class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
     companion object {
         const val INTENT_KEY_MEMO_MODE = "INTENT_KEY_MEMO_MODE"
         const val INTENT_KEY_MEMO_INFO_ID = "INTENT_KEY_MEMO_INFO_ID"
@@ -34,28 +38,48 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapt
         const val RESULT_DELETE = RESULT_EMPTY + 1
         const val RESULT_UPDATE = RESULT_EMPTY + 2
     }
+    private lateinit var mContext: Context
+    private lateinit var mRootView: View
 
     private lateinit var memoDataList: ArrayList<MemoInfo?>
     private lateinit var layoutManager: LinearLayoutManager
     private var memoListAdapter: MemoListAdapter? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var toolbar_MemoListActivity: Toolbar
+    private lateinit var txt_MemoListActivity_GuideMessage: TextView
+    private lateinit var recyclerview_MemoListActivity: RecyclerView
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        mRootView = inflater.inflate(R.layout.fragment_memo_list, container, false)
         initData()
         initLayout()
+        return mRootView
     }
 
-    override fun initData() {
-        memoDataList = databaseController.getAllMemoDataInfo()
+    private fun initData() {
+        memoDataList = DatabaseController.getInstance(mContext).getAllMemoDataInfo()
     }
 
-    override fun initLayout(){
+    private fun initLayout(){
+        setHasOptionsMenu(true)
         //Toolbar
-        setSupportActionBar(toolbar_MemoListActivity)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+//        toolbar_MemoListActivity = findViewById(R.id.toolbar_MemoListActivity)
+//        setSupportActionBar(toolbar_MemoListActivity)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar?.setDisplayShowTitleEnabled(false)
 
+
+        txt_MemoListActivity_GuideMessage = mRootView.findViewById(R.id.txt_MemoListActivity_GuideMessage)
+        recyclerview_MemoListActivity = mRootView.findViewById(R.id.recyclerview_MemoListActivity)
         initRecyclerView()
     }
 
@@ -66,7 +90,7 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapt
             RESULT_OK -> {
                 when (requestCode) {
                     REQUEST_ADD -> {
-                        memoDataList = databaseController.getAllMemoDataInfo()
+                        memoDataList = DatabaseController.getInstance(mContext).getAllMemoDataInfo()
                         memoListAdapter?.setMemoListData(memoDataList)
                         memoListAdapter?.notifyItemInserted(memoDataList.size - 1)
                         if (memoDataList.size != 0) {
@@ -79,11 +103,11 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapt
 
             RESULT_EMPTY -> {
                 val mode = data?.getStringExtra(INTENT_KEY_MEMO_MODE)
-                logcat("mode = $mode")
+                (activity as MainActivity).logcat("mode = $mode")
                 Toasty.normal(mContext, "내용이 없어 메모를 저장하지 않습니다.", Toasty.LENGTH_LONG).show()
             }
             RESULT_DELETE -> {
-                memoDataList = databaseController.getAllMemoDataInfo()
+                memoDataList = DatabaseController.getInstance(mContext).getAllMemoDataInfo()
                 memoListAdapter?.setMemoListData(memoDataList)
                 memoListAdapter?.notifyItemRemoved(data?.getIntExtra(INTENT_KEY_LIST_POSITION, 0)!!)
                 memoListAdapter?.notifyDataSetChanged()
@@ -93,7 +117,7 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapt
             }
 
             RESULT_UPDATE -> {
-                memoDataList = databaseController.getAllMemoDataInfo()
+                memoDataList = DatabaseController.getInstance(mContext).getAllMemoDataInfo()
                 memoListAdapter?.setMemoListData(memoDataList)
                 memoListAdapter?.notifyDataSetChanged()
             }
@@ -112,14 +136,14 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapt
 
     override fun onAdapterItemClicked(position: Int) {
         val intent = Intent(mContext, MemoReadWriteActivity::class.java)
-        intent.putExtra(MemoListActivity.INTENT_KEY_LIST_POSITION, position)
-        intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_ID, memoDataList[position]?.id)
-        intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_TITLE, memoDataList[position]?.title)
-        intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_INFO_CONTENT,
+        intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, position)
+        intent.putExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_ID, memoDataList[position]?.id)
+        intent.putExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_TITLE, memoDataList[position]?.title)
+        intent.putExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_CONTENT,
             memoDataList[position]?.content)
-        intent.putExtra(MemoListActivity.INTENT_KEY_MEMO_MODE, MEMO_READ_MODE)
+        intent.putExtra(MemoListFragment.INTENT_KEY_MEMO_MODE, MEMO_READ_MODE)
 
-        startActivityForResult(intent, REQUEST_READ)
+        activity?.startActivityForResult(intent, REQUEST_READ)
     }
 
     private fun initRecyclerView(){
@@ -141,34 +165,32 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapt
     }
 
     private var menu: Menu? = null
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         this.menu = menu
-        menuInflater.inflate(R.menu.menu_memo_list, menu)
-
-        return true
+        inflater.inflate(R.menu.menu_memo_list, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             android.R.id.home -> {
-                finish()
+//                finish()
             }
             R.id.menu_MemoListActivity_Add -> {
                 val intent = Intent(mContext, MemoReadWriteActivity::class.java)
                 intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_ADD_MODE)
-                startActivityForResult(intent, REQUEST_ADD)
+                activity?.startActivityForResult(intent, REQUEST_ADD)
             }
 
             R.id.menu_MemoListActivity_Delete -> {
-                AlertDialog.Builder(this)
-                    .setMessage(getString(R.string.MemoListActivity_Delete_Check_Message))
+                AlertDialog.Builder(mContext)
+                    .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
                     .setPositiveButton(R.string.Common_Ok) {_,_ ->
                         val memoInfo = memoListAdapter?.getMemoListData()
                         for (i in memoInfo?.indices!!) {
                             if (memoInfo[i]?.deleteChecked!!) {
-                                databaseController.deleteData(memoInfo[i]?.id!!,
+                                DatabaseController.getInstance(mContext).deleteData(memoInfo[i]?.id!!,
                                     Databases.TABLE_MEMO)
-                                memoDataList = databaseController.getAllMemoDataInfo()
+                                memoDataList = DatabaseController.getInstance(mContext).getAllMemoDataInfo()
                                 memoListAdapter?.setMemoListData(memoDataList)
                                 memoListAdapter?.notifyItemRemoved(i)
                             }
@@ -188,13 +210,13 @@ class MemoListActivity: BaseActivity(R.layout.activity_memo_list), MemoListAdapt
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        if(memoListAdapter?.getDeleteModeOn()!!){
-            setDeleteModeOff()
-        }else{
-            finish()
-        }
-    }
+//    override fun onBackPressed() {
+//        if(memoListAdapter?.getDeleteModeOn()!!){
+//            setDeleteModeOff()
+//        }else{
+//            finish()
+//        }
+//    }
 
     private fun setDeleteModeOff(){
         memoListAdapter?.setDeleteModeOn(false)

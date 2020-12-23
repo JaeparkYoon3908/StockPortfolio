@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/MainActivity_Gain"
+            android:text="@string/IncomeNoteFragment_Gain"
             android:textColor="@color/color_666666"
             android:textSize="14sp"
             />
@@ -82,7 +82,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/MainActivity_Purchase_Date"
+            android:text="@string/IncomeNoteFragment_Purchase_Date"
             android:textColor="@color/color_666666"
             android:textSize="14sp"
             />
@@ -113,7 +113,7 @@
             android:id="@+id/txt_sell_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/MainActivity_Sell_Date"
+            android:text="@string/IncomeNoteFragment_Sell_Date"
             android:textColor="@color/color_666666"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@+id/txt_purchase_price"
@@ -144,7 +144,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/MainActivity_Purchase_Price"
+            android:text="@string/IncomeNoteFragment_Purchase_Price"
             android:textSize="14sp"
             />
         <TextView
@@ -173,7 +173,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/MainActivity_Sell_Price"
+            android:text="@string/IncomeNoteFragment_Sell_Price"
             android:textSize="14sp"
             android:textColor="@color/color_666666"
             />
@@ -202,7 +202,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/MainActivity_GainPercent"
+            android:text="@string/IncomeNoteFragment_GainPercent"
             android:textSize="14sp"
             />
 
@@ -231,7 +231,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/MainActivity_Sell_Count"
+            android:text="@string/IncomeNoteFragment_Sell_Count"
             />
 
         <TextView
