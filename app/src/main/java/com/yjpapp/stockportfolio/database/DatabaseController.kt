@@ -90,7 +90,7 @@ class DatabaseController {
         return resultList
     }
 
-    fun getDataInfo(position: Int): IncomeNoteInfo? {
+    fun getIncomeNoteLInfo(position: Int): IncomeNoteInfo? {
         val cursor: Cursor
         val sb = StringBuilder()
         sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE + "WHERE ")
@@ -179,6 +179,7 @@ class DatabaseController {
         return resultList
     }
 
+    //TODO 검색 기능 구현.
     fun getSearchBarIncomeNoteList(): ArrayList<IncomeNoteInfo?> {
         val cursor: Cursor
         val resultList = ArrayList<IncomeNoteInfo?>()
