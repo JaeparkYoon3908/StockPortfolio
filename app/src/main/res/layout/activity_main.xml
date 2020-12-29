@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="나의 주식"
+            android:text="@string/MyStockFragment_Title"
             android:textColor="@color/color_222222" />
 
     </LinearLayout>
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="손익 노트"
+            android:text="@string/IncomeNoteFragment_Title"
             android:textColor="@color/color_222222"
             />
     </LinearLayout>
@@ -131,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="메모장"
+            android:text="@string/MemoListFragment_Title"
             android:textColor="@color/color_222222"
             />
     </LinearLayout>

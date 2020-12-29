@@ -54,7 +54,7 @@
 
     <string name="MemoReadWriteActivity_Title_Hint">제목을 입력하세요.</string>
     <string name="MemoReadWriteActivity_Content_Hint">메모를 입력하세요.</string>
-    <string name="MemoListFragment_Title">메모</string>
+    <string name="MemoListFragment_Title">메모장</string>
     <string name="MemoListFragment_GuideMessage">첫 메모를 등록해주세요.</string>
     <string name="MemoListFragment_Delete_Check_Message">정말 삭제하시겠습니까?</string>
     

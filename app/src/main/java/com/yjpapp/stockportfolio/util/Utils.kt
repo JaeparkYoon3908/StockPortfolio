@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.os.Handler
+import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import com.yjpapp.stockportfolio.R
@@ -110,7 +111,7 @@ object Utils {
         }else{
             Toasty.normal(mContext,mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
             PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "true")
-            Handler().postDelayed(Runnable {
+            Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
             },3000)
         }

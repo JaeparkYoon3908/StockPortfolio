@@ -39,9 +39,9 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val fragmentShortcutEdit = IncomeNoteFragment()
+        val myStockFragment = MyStockFragment()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.cons_MainActivity_fragment, fragmentShortcutEdit)
+            .replace(R.id.cons_MainActivity_fragment, myStockFragment)
             .addToBackStack(null)
             .commit()
         lin_MainActivity_BottomMenu_MyStock.setOnClickListener(onClickListener)
