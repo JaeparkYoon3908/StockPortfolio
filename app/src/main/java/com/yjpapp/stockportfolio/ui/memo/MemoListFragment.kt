@@ -92,8 +92,8 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
 //        supportActionBar?.setDisplayShowTitleEnabled(false)
 
 
-        txt_MemoListActivity_GuideMessage = mRootView.findViewById(R.id.txt_MemoListActivity_GuideMessage)
-        recyclerview_MemoListActivity = mRootView.findViewById(R.id.recyclerview_MemoListActivity)
+        txt_MemoListActivity_GuideMessage = mRootView.findViewById(R.id.txt_MemoListFragment_GuideMessage)
+        recyclerview_MemoListActivity = mRootView.findViewById(R.id.recyclerview_MemoListFragment)
         initRecyclerView()
     }
 
@@ -140,11 +140,11 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
 
     override fun onAdapterItemLongClicked() {
         if(memoListAdapter?.isDeleteModeOn()!!){
-            menu?.findItem(R.id.menu_MemoListActivity_Add)?.isVisible = false
-            menu?.findItem(R.id.menu_MemoListActivity_Delete)?.isVisible = true
+            menu?.findItem(R.id.menu_MemoListFragment_Add)?.isVisible = false
+            menu?.findItem(R.id.menu_MemoListFragment_Delete)?.isVisible = true
         }else{
-            menu?.findItem(R.id.menu_MemoListActivity_Add)?.isVisible = true
-            menu?.findItem(R.id.menu_MemoListActivity_Delete)?.isVisible = false
+            menu?.findItem(R.id.menu_MemoListFragment_Add)?.isVisible = true
+            menu?.findItem(R.id.menu_MemoListFragment_Delete)?.isVisible = false
         }
     }
 
@@ -189,13 +189,13 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
             android.R.id.home -> {
 //                finish()
             }
-            R.id.menu_MemoListActivity_Add -> {
+            R.id.menu_MemoListFragment_Add -> {
                 val intent = Intent(mContext, MemoReadWriteActivity::class.java)
                 intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_ADD_MODE)
                 activity?.startActivityForResult(intent, REQUEST_ADD)
             }
 
-            R.id.menu_MemoListActivity_Delete -> {
+            R.id.menu_MemoListFragment_Delete -> {
                 AlertDialog.Builder(mContext)
                     .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
                     .setPositiveButton(R.string.Common_Ok) {_,_ ->
@@ -235,7 +235,7 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
     private fun setDeleteModeOff(){
         memoListAdapter?.setDeleteModeOn(false)
         memoListAdapter?.notifyDataSetChanged()
-        menu?.findItem(R.id.menu_MemoListActivity_Add)?.isVisible = true
-        menu?.findItem(R.id.menu_MemoListActivity_Delete)?.isVisible = false
+        menu?.findItem(R.id.menu_MemoListFragment_Add)?.isVisible = true
+        menu?.findItem(R.id.menu_MemoListFragment_Delete)?.isVisible = false
     }
 }

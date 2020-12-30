@@ -1,8 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:paddingStart="@dimen/common_10dp"
+    android:paddingEnd="@dimen/common_10dp"
+    >
+
+    <TextView
+        android:id="@+id/txt_Purchase_Price"
+        android:layout_width="@dimen/common_60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:gravity="start"
+        android:text="@string/IncomeNoteFragment_Purchase_Price"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txt_Purchase_Price_Data"
+        />
+
+    <TextView
+        android:id="@+id/txt_Purchase_Price_Data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:ellipsize="marquee"
+        android:gravity="start"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="@string/Common_Dummy_Data"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_Purchase_Price"
+        tools:text="500,000" />
+
+    <TextView
+        android:id="@+id/txt_Evaluation_Amount"
+        android:layout_width="@dimen/common_60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:gravity="start"
+        android:text="@string/MyStockFragment_Evaluation_Amount"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txt_Evaluation_Amount_Data"
+        />
+
+    <TextView
+        android:id="@+id/txt_Evaluation_Amount_Data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:ellipsize="marquee"
+        android:gravity="start"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="@string/Common_Dummy_Data"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
+        app:layout_constraintStart_toEndOf="@+id/txt_Evaluation_Amount"
+        tools:text="500,000" />
+
+    <TextView
+        android:id="@+id/txt_TotalRealizationGainsLosses"
+        android:layout_width="@dimen/common_60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:gravity="start"
+        android:text="@string/Common_gains_losses"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
+        app:layout_constraintEnd_toStartOf="@+id/txt_GainsLosses_Data"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/txt_GainsLosses_Data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:gravity="center"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="@string/Common_Dummy_Data"
+        android:textColor="@color/color_e52b4e"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
+        app:layout_constraintStart_toEndOf="@+id/txt_TotalRealizationGainsLosses"
+        tools:text="650,000,000,000,000" />
+
+    <TextView
+        android:id="@+id/txt_GainPercent"
+        android:layout_width="@dimen/common_60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:gravity="start"
+        android:text="@string/Common_GainPercent"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txt_GainPercent_Data"
+
+        />
+
+    <TextView
+        android:id="@+id/txt_GainPercent_Data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:ellipsize="marquee"
+        android:gravity="start"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="@string/Common_Dummy_Data"
+        android:textColor="@color/color_e52b4e"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
+        app:layout_constraintStart_toEndOf="@+id/txt_GainPercent"
+        tools:text="15%" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_1dp"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:background="@color/color_line_1a000000"
+        app:layout_constraintTop_toBottomOf="@+id/txt_GainPercent_Data"
+        />
 
     <TextView
         android:id="@+id/txt"

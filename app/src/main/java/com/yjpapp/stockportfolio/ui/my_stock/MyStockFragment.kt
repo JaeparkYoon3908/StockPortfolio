@@ -3,9 +3,7 @@ package com.yjpapp.stockportfolio.ui.my_stock
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
@@ -42,6 +40,22 @@ class MyStockFragment: Fragment() {
         return mRootView
     }
 
+    private var menu: Menu? = null
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_my_stock, menu)
+        this.menu = menu
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_MyStockFragment_Add -> {
+                //TODO 추가 메뉴 구성.
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun initData(){
         val symbol = "005930.KS"
         val region = "KR"
@@ -50,12 +64,10 @@ class MyStockFragment: Fragment() {
             override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
                 if(response.code() == 200 || response.code() == 204){
                     try {
-//                    val formattedResult = StringBuilder()
                         val jsonObject = JSONObject(response.body().toString())
                         val priceJSONArray = jsonObject.getJSONObject("price").toString()
                         val price: Price = Gson().fromJson(priceJSONArray, Price::class.java)
                         Log.d("YJP", "price = $price")
-
 
                         Thread(Runnable {
                             // performing some dummy time taking operation

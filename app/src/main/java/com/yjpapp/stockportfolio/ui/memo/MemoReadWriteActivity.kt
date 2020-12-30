@@ -59,9 +59,9 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
         if(mode == MemoListFragment.MEMO_READ_MODE){
             et_MemoReadWriteActivity_title.setText(title)
             et_MemoReadWriteActivity_content.setText(content)
-            menu.findItem(R.id.menu_MemoReadWriteActivity_Complete)?.isVisible = false
+            menu.findItem(R.id.menu_MemoReadWriteFragment_Complete)?.isVisible = false
         }else{
-            menu.findItem(R.id.menu_MemoReadWriteActivity_Delete)?.isVisible = false
+            menu.findItem(R.id.menu_MemoReadWriteFragment_Delete)?.isVisible = false
         }
         return super.onPrepareOptionsMenu(menu)
     }
@@ -71,7 +71,7 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
             android.R.id.home -> {
                 finish()
             }
-            R.id.menu_MemoReadWriteActivity_Complete -> {
+            R.id.menu_MemoReadWriteFragment_Complete -> {
                 if (mode == MemoListFragment.MEMO_ADD_MODE) {
                     if (et_MemoReadWriteActivity_title.text.toString() == ("") && et_MemoReadWriteActivity_content.text.toString() == "") {
                         setResult(MemoListFragment.RESULT_EMPTY)
@@ -90,7 +90,7 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
                     finish()
                 }
             }
-            R.id.menu_MemoReadWriteActivity_Delete -> {
+            R.id.menu_MemoReadWriteFragment_Delete -> {
                 AlertDialog.Builder(this)
                     .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
                     .setPositiveButton(R.string.Common_Ok) {_,_ ->
@@ -130,8 +130,8 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write) {
     private val onFocusChangeListener = View.OnFocusChangeListener { _:View, _:Boolean ->
         if(mode == MemoListFragment.MEMO_READ_MODE){
             mode = MemoListFragment.MEMO_UPDATE_MODE
-            menu?.findItem(R.id.menu_MemoReadWriteActivity_Complete)?.isVisible = true
-            menu?.findItem(R.id.menu_MemoReadWriteActivity_Delete)?.isVisible = false
+            menu?.findItem(R.id.menu_MemoReadWriteFragment_Complete)?.isVisible = true
+            menu?.findItem(R.id.menu_MemoReadWriteFragment_Delete)?.isVisible = false
         }
     }
 }

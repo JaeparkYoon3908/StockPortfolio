@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui.dialog
+package com.yjpapp.stockportfolio.ui.income_note
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -17,7 +17,7 @@ import java.text.DecimalFormat
 import java.util.*
 
 
-class EditIncomeNoteDialog(context: Context) : AlertDialog(context) {
+class IncomeNoteEditDialog(context: Context) : AlertDialog(context) {
     object MSG{
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1

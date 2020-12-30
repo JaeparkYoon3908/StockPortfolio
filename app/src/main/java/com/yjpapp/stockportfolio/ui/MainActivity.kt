@@ -17,7 +17,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     companion object{
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
-        const val FRAGMENT_TAG_MEMO = "memo"
+        const val FRAGMENT_TAG_MEMO_LIST = "memo_list"
     }
     private val myStockFragment = MyStockFragment()
     private val incomeNoteFragment = IncomeNoteFragment()
@@ -45,17 +45,18 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
 
         supportFragmentManager.run {
             beginTransaction()
-                    .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO)
-                    .hide(memoListFragment)
+                    .add(R.id.cons_MainActivity_fragment,myStockFragment, FRAGMENT_TAG_MY_STOCK)
                     .commit()
             beginTransaction()
                     .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
                     .hide(incomeNoteFragment)
                     .commit()
             beginTransaction()
-                    .add(R.id.cons_MainActivity_fragment,myStockFragment, FRAGMENT_TAG_MY_STOCK)
+                    .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
+                    .hide(memoListFragment)
                     .commit()
         }
+        txt_MainActivity_Title.text = getString(R.string.MyStockFragment_Title)
     }
 
     private val onClickListener = View.OnClickListener { view: View? ->
@@ -81,7 +82,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(currentFragment == memoListFragment){
-            val memoListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_MEMO)
+            val memoListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_MEMO_LIST)
             memoListFragment?.onActivityResult(requestCode, resultCode, data)
         }
     }

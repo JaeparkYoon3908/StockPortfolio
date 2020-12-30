@@ -17,8 +17,6 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.database.model.IncomeNoteInfo
 import com.yjpapp.stockportfolio.ui.MainActivity
-import com.yjpapp.stockportfolio.ui.dialog.EditIncomeNoteDialog
-import com.yjpapp.stockportfolio.ui.dialog.IncomeNoteFilterDialog
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
 import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
 import com.yjpapp.stockportfolio.util.Utils
@@ -93,7 +91,7 @@ class IncomeNoteFragment : Fragment(),
     }
 
     private fun addClicked() {
-        EditIncomeNoteDialog(mContext).apply {
+        IncomeNoteEditDialog(mContext).apply {
             if (!isShowing) {
                 show()
                 txt_complete.setOnClickListener {
@@ -112,7 +110,7 @@ class IncomeNoteFragment : Fragment(),
         incomeNoteListAdapter?.notifyDataSetChanged()
         editSelectPosition = position
         runAddButtonControl()
-        EditIncomeNoteDialog(mContext).apply {
+        IncomeNoteEditDialog(mContext).apply {
             if (!isShowing) {
                 show()
                 et_subject_name.setText(allIncomeNoteList!![position]?.subjectName)
@@ -170,7 +168,7 @@ class IncomeNoteFragment : Fragment(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_IncomeNoteActivity_Add -> {
+            R.id.menu_IncomeNoteFragment_Add -> {
                 insertMode = true
                 addClicked()
             }
@@ -280,15 +278,15 @@ class IncomeNoteFragment : Fragment(),
 
     }
 
-    private fun runDialogCancelClick(editIncomeNoteDialog: EditIncomeNoteDialog) {
-        editIncomeNoteDialog.run {
+    private fun runDialogCancelClick(incomeNoteEditDialog: IncomeNoteEditDialog) {
+        incomeNoteEditDialog.run {
             dismiss()
         }
     }
 
-    private fun runDialogCompleteClick(editIncomeNoteDialog: EditIncomeNoteDialog) {
+    private fun runDialogCompleteClick(incomeNoteEditDialog: IncomeNoteEditDialog) {
 
-        editIncomeNoteDialog.run {
+        incomeNoteEditDialog.run {
             //예외처리 (값을 모두 입력하지 않았을 때)
             if (et_subject_name.text.isEmpty() ||
                 et_purchase_date.text.isEmpty() ||

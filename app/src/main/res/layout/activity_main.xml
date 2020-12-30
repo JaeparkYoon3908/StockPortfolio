@@ -29,7 +29,7 @@
             android:layout_gravity="center"
             android:paddingTop="@dimen/common_10dp"
             android:paddingBottom="@dimen/common_10dp"
-            android:text="@string/IncomeNoteFragment_Title"
+            android:text="@string/MyStockFragment_Title"
             android:textColor="@color/color_222222"
             android:textSize="18sp"
             />

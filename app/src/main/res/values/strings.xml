@@ -4,7 +4,9 @@
     <string name="Common_proceeds">수익금</string>
     <string name="Common_term">기간</string>
     <string name="Common_hint_term">기간을 입력해주세요.</string>
+    <string name="Common_gains_losses">손익</string>
     <string name="Common_realization_gains_losses">실현손익</string>
+    <string name="Common_GainPercent">수익률</string>
     <string name="Common_subject">종류</string>
     <string name="Common_hint_subject">종류를 입력해주세요.</string>
     <string name="Common_date_of_sale_and_subject_name">매매일\n종목명</string>
@@ -34,7 +36,6 @@
     <string name="IncomeNoteFragment_Sell_Count">매도수량</string>
     <string name="IncomeNoteFragment_Purchase_Date">매수일</string>
     <string name="IncomeNoteFragment_Sell_Date">매도일</string>
-    <string name="IncomeNoteFragment_GainPercent">수익률</string>
     <string name="IncomeNoteFragment_SubjectName">종목명</string>
     <string name="IncomeNoteFragment_SearchBar_Hint">종목명으로 검색하세요.</string>
 
@@ -59,5 +60,6 @@
     <string name="MemoListFragment_Delete_Check_Message">정말 삭제하시겠습니까?</string>
     
     <string name="MyStockFragment_Title">나의 주식</string>
+    <string name="MyStockFragment_Evaluation_Amount">평가금액</string>
 
 </resources>
