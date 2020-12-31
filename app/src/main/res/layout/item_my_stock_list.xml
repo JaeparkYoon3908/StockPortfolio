@@ -110,23 +110,23 @@
         app:layout_constraintWidth_percent="0.5"
         >
         <TextView
-            android:id="@+id/txt_sell_price"
+            android:id="@+id/txt_holding_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/IncomeNoteFragment_Sell_Date"
+            android:text="@string/MyStockFragment_Holding_Quantity"
             android:textColor="@color/color_666666"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@+id/txt_purchase_price"
             app:layout_constraintStart_toStartOf="parent"
             />
         <TextView
-            android:id="@+id/txt_sell_date_data"
+            android:id="@+id/txt_holding_quantity_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="@string/Common_Dummy_Data"
             android:textColor="@color/color_222222"
-            tools:text="2020.12.22"
+            tools:text="100"
             />
     </LinearLayout>
 
@@ -160,7 +160,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lin_sell_price"
+        android:id="@+id/lin_current_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -173,12 +173,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/IncomeNoteFragment_Sell_Price"
+            android:text="@string/MyStockFragment_Current_Price"
             android:textSize="14sp"
             android:textColor="@color/color_666666"
             />
         <TextView
-            android:id="@+id/txt_sell_price_data"
+            android:id="@+id/txt_current_price_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -218,32 +218,32 @@
             />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="end"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/lin_sell_price"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.5"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/IncomeNoteFragment_Sell_Count"
-            />
+<!--    <LinearLayout-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:gravity="end"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/lin_sell_price"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintWidth_percent="0.5"-->
+<!--        >-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/MyStockFragment_Holding_Quantity"-->
+<!--            />-->
 
-        <TextView
-            android:id="@+id/txt_sell_count_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/Common_Dummy_Data"
-            android:textColor="@color/color_222222"
-            tools:text="14"
-            />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/txt_sell_count_data"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:text="@string/Common_Dummy_Data"-->
+<!--            android:textColor="@color/color_222222"-->
+<!--            tools:text="14"-->
+<!--            />-->
+<!--    </LinearLayout>-->
 
     <!-- Edit Mode -->
     <LinearLayout
@@ -268,6 +268,18 @@
             android:background="@color/color_666666"
             />
         <TextView
+            android:id="@+id/txt_sell"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:gravity="center"
+            android:text="stringsel"
+            android:textSize="16sp"
+            android:textColor="@color/color_ffffff"
+            android:background="@color/color_666666"
+            />
+
+        <TextView
             android:id="@+id/txt_delete"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -278,5 +290,6 @@
             android:textColor="@color/color_ffffff"
             android:background="@color/color_666666"
             />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

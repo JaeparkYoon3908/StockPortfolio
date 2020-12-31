@@ -267,9 +267,9 @@ class IncomeNoteFragment : Fragment(),
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
         //Scroll item 2 to 20 pixels from the top
-        if (allIncomeNoteList?.size != 0) {
-            layoutManager.scrollToPosition(allIncomeNoteList?.size!! - 1)
-        }
+//        if (allIncomeNoteList?.size != 0) {
+//            layoutManager.scrollToPosition(allIncomeNoteList?.size!! - 1)
+//        }
         recyclerView.layoutManager = layoutManager
 
         incomeNoteListAdapter = IncomeNoteListAdapter(allIncomeNoteList, this)

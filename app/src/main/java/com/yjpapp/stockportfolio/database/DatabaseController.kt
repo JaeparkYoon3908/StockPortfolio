@@ -31,14 +31,16 @@ class DatabaseController {
     fun insertIncomeNoteData(incomeNoteInfo: IncomeNoteInfo?): Boolean{
         val insertCheck: Long
         val contentValues = ContentValues()
-        contentValues.put(Databases.COL_INCOME_NOTE_SUBJECT_NAME,incomeNoteInfo?.subjectName)
-        contentValues.put(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT, incomeNoteInfo?.realPainLossesAmount)
-        contentValues.put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo?.purchaseDate)
-        contentValues.put(Databases.COL_INCOME_NOTE_SELL_DATE, incomeNoteInfo?.sellDate)
-        contentValues.put(Databases.COL_INCOME_NOTE_GAIN_PERCENT, incomeNoteInfo?.gainPercent)
-        contentValues.put(Databases.COL_INCOME_NOTE_PURCHASE_PRICE, incomeNoteInfo?.purchasePrice)
-        contentValues.put(Databases.COL_INCOME_NOTE_SELL_PRICE, incomeNoteInfo?.sellPrice)
-        contentValues.put(Databases.COL_INCOME_NOTE_SELL_COUNT, incomeNoteInfo?.sellCount)
+        contentValues.apply {
+            put(Databases.COL_INCOME_NOTE_SUBJECT_NAME,incomeNoteInfo?.subjectName)
+            put(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT, incomeNoteInfo?.realPainLossesAmount)
+            put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo?.purchaseDate)
+            put(Databases.COL_INCOME_NOTE_SELL_DATE, incomeNoteInfo?.sellDate)
+            put(Databases.COL_INCOME_NOTE_GAIN_PERCENT, incomeNoteInfo?.gainPercent)
+            put(Databases.COL_INCOME_NOTE_PURCHASE_PRICE, incomeNoteInfo?.purchasePrice)
+            put(Databases.COL_INCOME_NOTE_SELL_PRICE, incomeNoteInfo?.sellPrice)
+            put(Databases.COL_INCOME_NOTE_SELL_COUNT, incomeNoteInfo?.sellCount)
+        }
 
         insertCheck = database.insert(Databases.TABLE_INCOME_NOTE,null, contentValues)
 
@@ -48,14 +50,16 @@ class DatabaseController {
     fun updateIncomeNoteData(incomeNoteInfo: IncomeNoteInfo?): Boolean{
         val updateCheck: Int
         val contentValues = ContentValues()
-        contentValues.put(Databases.COL_INCOME_NOTE_SUBJECT_NAME,incomeNoteInfo?.subjectName)
-        contentValues.put(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT, incomeNoteInfo?.realPainLossesAmount)
-        contentValues.put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo?.purchaseDate)
-        contentValues.put(Databases.COL_INCOME_NOTE_SELL_DATE, incomeNoteInfo?.sellDate)
-        contentValues.put(Databases.COL_INCOME_NOTE_GAIN_PERCENT, incomeNoteInfo?.gainPercent)
-        contentValues.put(Databases.COL_INCOME_NOTE_PURCHASE_PRICE, incomeNoteInfo?.purchasePrice)
-        contentValues.put(Databases.COL_INCOME_NOTE_SELL_PRICE, incomeNoteInfo?.sellPrice)
-        contentValues.put(Databases.COL_INCOME_NOTE_SELL_COUNT, incomeNoteInfo?.sellCount)
+        contentValues.apply {
+            put(Databases.COL_INCOME_NOTE_SUBJECT_NAME,incomeNoteInfo?.subjectName)
+            put(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT, incomeNoteInfo?.realPainLossesAmount)
+            put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo?.purchaseDate)
+            put(Databases.COL_INCOME_NOTE_SELL_DATE, incomeNoteInfo?.sellDate)
+            put(Databases.COL_INCOME_NOTE_GAIN_PERCENT, incomeNoteInfo?.gainPercent)
+            put(Databases.COL_INCOME_NOTE_PURCHASE_PRICE, incomeNoteInfo?.purchasePrice)
+            put(Databases.COL_INCOME_NOTE_SELL_PRICE, incomeNoteInfo?.sellPrice)
+            put(Databases.COL_INCOME_NOTE_SELL_COUNT, incomeNoteInfo?.sellCount)
+        }
 
         updateCheck = database.update(Databases.TABLE_INCOME_NOTE, contentValues,
             Databases.COL_PORTFOLIO_ID + " = ? ", arrayOf(incomeNoteInfo?.id.toString()))
