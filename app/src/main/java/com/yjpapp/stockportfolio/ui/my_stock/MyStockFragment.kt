@@ -11,18 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.model.IncomeNoteInfo
 import com.yjpapp.stockportfolio.database.model.MyStockInfo
 import com.yjpapp.stockportfolio.network.YahooFinanceProtocolManager
 import com.yjpapp.stockportfolio.network.model.Price
-import com.yjpapp.stockportfolio.ui.income_note.IncomeNoteListAdapter
-import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.ArrayList
+import java.util.*
 
 //TODO 내가 갖고있는 주식 실시간 변동 사항 및 수익 분석 할 수 있는 기능 만들기.
 class MyStockFragment: Fragment() {
@@ -112,23 +109,20 @@ class MyStockFragment: Fragment() {
 
     private fun initLayout(){
         setHasOptionsMenu(true)
-        txt_current_price_data = mRootView.findViewById(R.id.txt_current_price_data)
+//        txt_current_price_data = mRootView.findViewById(R.id.txt_current_price_data)
 //        txt_current_price_change_percent_data = mRootView.findViewById(R.id.txt_current_price_change_percent_data)
         initRecyclerView()
     }
     private fun initRecyclerView(){
-        recyclerView = mRootView.findViewById(R.id.recyclerview_MyStockFragment)
-        layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        layoutManager.reverseLayout = true
-        layoutManager.stackFromEnd = true
-        //Scroll item 2 to 20 pixels from the top
-//        if (allIncomeNoteList?.size != 0) {
-//            layoutManager.scrollToPosition(allIncomeNoteList?.size!! - 1)
-//        }
-        recyclerView.layoutManager = layoutManager
+//        recyclerView = mRootView.findViewById(R.id.recyclerview_MyStockFragment)
+//        layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+//        layoutManager.reverseLayout = true
+//        layoutManager.stackFromEnd = true
 
-        myStockListAdapter = MyStockListAdapter(allMyStockList)
-        recyclerView.adapter = myStockListAdapter
-        recyclerView.itemAnimator = FadeInAnimator()
+//        recyclerView.layoutManager = layoutManager
+//
+//        myStockListAdapter = MyStockListAdapter(allMyStockList)
+//        recyclerView.adapter = myStockListAdapter
+//        recyclerView.itemAnimator = FadeInAnimator()
     }
 }
