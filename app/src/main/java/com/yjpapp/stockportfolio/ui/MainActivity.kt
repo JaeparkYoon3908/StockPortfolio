@@ -3,7 +3,7 @@ package com.yjpapp.stockportfolio.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.Fragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.preference.PrefKey
 import com.yjpapp.stockportfolio.ui.income_note.IncomeNoteFragment
@@ -17,12 +17,12 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     companion object{
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
-        const val FRAGMENT_TAG_MEMO = "memo"
-        const val MENU_POSITION_MY_STOCK = 0
-        const val MENU_POSITION_INCOME_NOTE = 1
-        const val MENU_POSITION_MEMO = 2
-        var menu_position = MENU_POSITION_MY_STOCK
+        const val FRAGMENT_TAG_MEMO_LIST = "memo_list"
     }
+    private val myStockFragment = MyStockFragment()
+    private val incomeNoteFragment = IncomeNoteFragment()
+    private val memoListFragment = MemoListFragment()
+    private var currentFragment: Fragment = myStockFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,66 +39,57 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val fragmentShortcutEdit = IncomeNoteFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.cons_MainActivity_fragment, fragmentShortcutEdit)
-            .addToBackStack(null)
-            .commit()
         lin_MainActivity_BottomMenu_MyStock.setOnClickListener(onClickListener)
         lin_MainActivity_BottomMenu_IncomeNote.setOnClickListener(onClickListener)
         lin_MainActivity_BottomMenu_Memo.setOnClickListener(onClickListener)
 
+        supportFragmentManager.run {
+            beginTransaction()
+                    .add(R.id.cons_MainActivity_fragment,myStockFragment, FRAGMENT_TAG_MY_STOCK)
+                    .commit()
+            beginTransaction()
+                    .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
+                    .hide(incomeNoteFragment)
+                    .commit()
+            beginTransaction()
+                    .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
+                    .hide(memoListFragment)
+                    .commit()
+        }
+        txt_MainActivity_Title.text = getString(R.string.MyStockFragment_Title)
     }
 
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
             R.id.lin_MainActivity_BottomMenu_MyStock -> {
-                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                val myStockFragment = MyStockFragment()
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
-                    .addToBackStack(null)
-                    .commit()
+                supportFragmentManager.beginTransaction().hide(currentFragment).show(myStockFragment).commit()
+                currentFragment = myStockFragment
                 txt_MainActivity_Title.text = getString(R.string.MyStockFragment_Title)
-                menu_position = MENU_POSITION_MY_STOCK
-
             }
             R.id.lin_MainActivity_BottomMenu_IncomeNote -> {
-                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                val incomeNoteFragment = IncomeNoteFragment()
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
-                    .addToBackStack(null)
-                    .commit()
+                supportFragmentManager.beginTransaction().hide(currentFragment).show(incomeNoteFragment).commit()
+                currentFragment = incomeNoteFragment
                 txt_MainActivity_Title.text = getString(R.string.IncomeNoteFragment_Title)
-                menu_position = MENU_POSITION_INCOME_NOTE
             }
             R.id.lin_MainActivity_BottomMenu_Memo -> {
-                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                val memoListFragment = MemoListFragment()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO)
-                    .addToBackStack(null)
-                    .commit()
+                supportFragmentManager.beginTransaction().hide(currentFragment).show(memoListFragment).commit()
+                currentFragment = memoListFragment
                 txt_MainActivity_Title.text = getString(R.string.MemoListFragment_Title)
-                menu_position = MENU_POSITION_MEMO
             }
-
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(menu_position == MENU_POSITION_MEMO){
-            val memoListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_MEMO)
+        if(currentFragment == memoListFragment){
+            val memoListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_MEMO_LIST)
             memoListFragment?.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     override fun onBackPressed() {
-        if(menu_position == MENU_POSITION_INCOME_NOTE ||
-            menu_position == MENU_POSITION_MEMO){
+        if(currentFragment == incomeNoteFragment ||
+                currentFragment == memoListFragment){
             super.onBackPressed()
             return
         }

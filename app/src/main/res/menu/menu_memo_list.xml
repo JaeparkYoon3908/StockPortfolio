@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <item android:id="@+id/menu_MemoListActivity_Add"
+    <item android:id="@+id/menu_MemoListFragment_Add"
         android:title=""
         android:icon="@drawable/icon_add2"
         app:showAsAction="ifRoom"
         />
 
-    <item android:id="@+id/menu_MemoListActivity_Delete"
+    <item android:id="@+id/menu_MemoListFragment_Delete"
         android:title="@string/Common_Complete"
         android:icon="@drawable/icon_delete"
         android:visible="false"
