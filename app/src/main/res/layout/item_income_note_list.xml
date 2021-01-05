@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
-    android:layout_marginBottom="10dp"
-    android:paddingTop="10dp"
+    android:layout_height="@dimen/common_140dp"
+    android:layout_marginBottom="@dimen/common_10dp"
+    android:paddingTop="@dimen/common_10dp"
     android:paddingStart="@dimen/common_15dp"
     android:paddingEnd="@dimen/common_15dp"
     android:background="@color/color_background_fbfbfb">
 
+    <!-- 상단 -->
     <TextView
         android:id="@+id/txt_subject_name"
         android:layout_width="0dp"
@@ -23,18 +24,19 @@
         android:marqueeRepeatLimit="marquee_forever"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintWidth_percent="0.35"
         tools:text="한국전력"
         />
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_5dp"
         android:orientation="horizontal"
         android:gravity="end"
         app:layout_constraintTop_toTopOf="@id/txt_subject_name"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/txt_subject_name"
-        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.65"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -47,7 +49,7 @@
             android:id="@+id/txt_gain_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/common_5dp"
             android:text="@string/Common_Dummy_Data"
             android:textSize="14sp"
             android:textColor="@color/color_e52b4e"
@@ -58,21 +60,35 @@
             android:singleLine="true"
             tools:text="14,000"
             />
+        <TextView
+            android:id="@+id/txt_gain_percent_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_3dp"
+            android:layout_gravity="center"
+            android:text="@string/Common_Dummy_Data"
+            android:textSize="12sp"
+            android:textColor="@color/color_e52b4e"
+            android:textStyle="bold"
+            tools:text="14%"
+            />
     </LinearLayout>
 
     <View
         android:id="@+id/line_1"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="@dimen/common_1dp"
+        android:layout_marginTop="@dimen/common_10dp"
         android:background="@color/color_line_1a000000"
         app:layout_constraintTop_toBottomOf="@+id/txt_subject_name"
         />
+
+    <!-- 왼쪽 -->
     <LinearLayout
         android:id="@+id/lin_buy_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/common_10dp"
         android:gravity="start"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/line_1"
@@ -90,7 +106,7 @@
             android:id="@+id/txt_purchase_date_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/common_10dp"
             android:text="@string/Common_Dummy_Data"
             android:textSize="14sp"
             android:textColor="@color/color_222222"
@@ -103,7 +119,7 @@
         android:id="@+id/lin_sell_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/common_10dp"
         android:gravity="start"
         app:layout_constraintTop_toBottomOf="@+id/lin_buy_date"
         app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +139,7 @@
             android:id="@+id/txt_sell_date_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/common_10dp"
             android:text="@string/Common_Dummy_Data"
             android:textColor="@color/color_222222"
             tools:text="2020.12.22"
@@ -131,10 +147,38 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_10dp"
+        android:gravity="start"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/lin_sell_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.5"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/IncomeNoteFragment_Sell_Count"
+            />
+
+        <TextView
+            android:id="@+id/txt_sell_count_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/Common_Dummy_Data"
+            android:textColor="@color/color_222222"
+            tools:text="14"
+            />
+    </LinearLayout>
+
+    <!-- 오른쪽 -->
+    <LinearLayout
         android:id="@+id/lin_purchase_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/common_10dp"
         android:gravity="end"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/line_1"
@@ -163,7 +207,7 @@
         android:id="@+id/lin_sell_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/common_10dp"
         android:gravity="end"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/lin_purchase_price"
@@ -189,61 +233,34 @@
             />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="start"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/lin_sell_date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.5"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Common_GainPercent"
-            android:textSize="14sp"
-            />
+<!--    <LinearLayout-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:gravity="start"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/lin_sell_date"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintWidth_percent="0.5"-->
+<!--        >-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/Common_GainPercent"-->
+<!--            android:textSize="14sp"-->
+<!--            />-->
 
-        <TextView
-            android:id="@+id/txt_gain_percent_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/Common_Dummy_Data"
-            android:textSize="14sp"
-            android:textColor="@color/color_e52b4e"
-            tools:text="14%"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="end"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/lin_sell_price"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.5"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/IncomeNoteFragment_Sell_Count"
-            />
-
-        <TextView
-            android:id="@+id/txt_sell_count_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/Common_Dummy_Data"
-            android:textColor="@color/color_222222"
-            tools:text="14"
-            />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/txt_gain_percent_data"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:text="@string/Common_Dummy_Data"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="@color/color_e52b4e"-->
+<!--            tools:text="14%"-->
+<!--            />-->
+<!--    </LinearLayout>-->
 
     <!-- Edit Mode -->
     <LinearLayout

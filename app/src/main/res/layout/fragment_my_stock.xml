@@ -5,156 +5,282 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="@dimen/common_15dp"
-    android:paddingEnd="@dimen/common_15dp"
     >
 
-    <TextView
-        android:id="@+id/txt_Purchase_Price"
-        android:layout_width="@dimen/common_60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:gravity="start"
-        android:text="@string/IncomeNoteFragment_Purchase_Price"
-        android:textColor="@color/color_222222"
-        android:textSize="16sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/txt_Purchase_Price_Data"
-        />
-
-    <TextView
-        android:id="@+id/txt_Purchase_Price_Data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:layout_marginStart="@dimen/common_10dp"
-        android:ellipsize="marquee"
-        android:gravity="start"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:text="@string/Common_Dummy_Data"
-        android:textColor="@color/color_222222"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_Purchase_Price"
-        tools:text="500,000" />
-
-    <TextView
-        android:id="@+id/txt_Evaluation_Amount"
-        android:layout_width="@dimen/common_60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:gravity="start"
-        android:text="@string/MyStockFragment_Evaluation_Amount"
-        android:textColor="@color/color_222222"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/txt_Evaluation_Amount_Data"
-        />
-
-    <TextView
-        android:id="@+id/txt_Evaluation_Amount_Data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:layout_marginStart="@dimen/common_10dp"
-        android:ellipsize="marquee"
-        android:gravity="start"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:text="@string/Common_Dummy_Data"
-        android:textColor="@color/color_222222"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
-        app:layout_constraintStart_toEndOf="@+id/txt_Evaluation_Amount"
-        tools:text="500,000" />
-
-    <TextView
-        android:id="@+id/txt_TotalRealizationGainsLosses"
-        android:layout_width="@dimen/common_60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:gravity="start"
-        android:text="@string/Common_gains_losses"
-        android:textColor="@color/color_222222"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
-        app:layout_constraintEnd_toStartOf="@+id/txt_GainsLosses_Data"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/txt_GainsLosses_Data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:layout_marginStart="@dimen/common_10dp"
-        android:gravity="center"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:text="@string/Common_Dummy_Data"
-        android:textColor="@color/color_e52b4e"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
-        app:layout_constraintStart_toEndOf="@+id/txt_TotalRealizationGainsLosses"
-        tools:text="650,000,000,000,000" />
-
-    <TextView
-        android:id="@+id/txt_GainPercent"
-        android:layout_width="@dimen/common_60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:gravity="start"
-        android:text="@string/Common_GainPercent"
-        android:textColor="@color/color_222222"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/txt_GainPercent_Data"
-
-        />
-
-    <TextView
-        android:id="@+id/txt_GainPercent_Data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:layout_marginStart="@dimen/common_10dp"
-        android:ellipsize="marquee"
-        android:gravity="start"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:text="@string/Common_Dummy_Data"
-        android:textColor="@color/color_e52b4e"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
-        app:layout_constraintStart_toEndOf="@+id/txt_GainPercent"
-        tools:text="15%" />
-
-    <View
-        android:id="@+id/line_1"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_MyStockFragment_TotalGainLosses"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_1dp"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:background="@color/color_line_1a000000"
-        app:layout_constraintTop_toBottomOf="@+id/txt_GainPercent_Data"
-        />
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/common_15dp"
+        android:paddingEnd="@dimen/common_15dp"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <TextView
+            android:id="@+id/txt_Purchase_Price"
+            android:layout_width="@dimen/common_60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:gravity="start"
+            android:text="@string/IncomeNoteFragment_Purchase_Price"
+            android:textColor="@color/color_222222"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_Purchase_Price_Data"
+            />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_MyStockFragment"
+        <TextView
+            android:id="@+id/txt_Purchase_Price_Data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:layout_marginStart="@dimen/common_10dp"
+            android:ellipsize="marquee"
+            android:gravity="start"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/Common_Dummy_Data"
+            android:textColor="@color/color_222222"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_Purchase_Price"
+            tools:text="500,000" />
+
+        <TextView
+            android:id="@+id/txt_Evaluation_Amount"
+            android:layout_width="@dimen/common_60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:gravity="start"
+            android:text="@string/MyStockFragment_Evaluation_Amount"
+            android:textColor="@color/color_222222"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_Evaluation_Amount_Data"
+            />
+
+        <TextView
+            android:id="@+id/txt_Evaluation_Amount_Data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:layout_marginStart="@dimen/common_10dp"
+            android:ellipsize="marquee"
+            android:gravity="start"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/Common_Dummy_Data"
+            android:textColor="@color/color_222222"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
+            app:layout_constraintStart_toEndOf="@+id/txt_Evaluation_Amount"
+            tools:text="500,000" />
+
+        <TextView
+            android:id="@+id/txt_TotalRealizationGainsLosses"
+            android:layout_width="@dimen/common_60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:gravity="start"
+            android:text="@string/Common_gains_losses"
+            android:textColor="@color/color_222222"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
+            app:layout_constraintEnd_toStartOf="@+id/txt_GainsLosses_Data"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/txt_GainsLosses_Data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:layout_marginStart="@dimen/common_10dp"
+            android:gravity="center"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/Common_Dummy_Data"
+            android:textColor="@color/color_e52b4e"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
+            app:layout_constraintStart_toEndOf="@+id/txt_TotalRealizationGainsLosses"
+            tools:text="650,000,000,000,000" />
+
+        <TextView
+            android:id="@+id/txt_GainPercent"
+            android:layout_width="@dimen/common_60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:gravity="start"
+            android:text="@string/Common_GainPercent"
+            android:textColor="@color/color_222222"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_GainPercent_Data"
+
+            />
+
+        <TextView
+            android:id="@+id/txt_GainPercent_Data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:layout_marginStart="@dimen/common_10dp"
+            android:ellipsize="marquee"
+            android:gravity="start"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/Common_Dummy_Data"
+            android:textColor="@color/color_e52b4e"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
+            app:layout_constraintStart_toEndOf="@+id/txt_GainPercent"
+            tools:text="15%" />
+
+        <View
+            android:id="@+id/line_1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_1dp"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:background="@color/color_line_1a000000"
+            app:layout_constraintTop_toBottomOf="@+id/txt_GainPercent_Data"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/line_1"
+        android:layout_marginTop="@dimen/common_1dp"
+        app:layout_constraintTop_toBottomOf="@+id/cons_MyStockFragment_TotalGainLosses"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        >
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:background="@color/color_ffffff"
+            >
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_40dp"
+                android:fitsSystemWindows="true"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleMarginStart="48dp"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlways">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cons_IncomeNoteFragment_Edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/common_40dp"
+                    android:layout_gravity="bottom"
+                    android:paddingStart="@dimen/common_10dp"
+                    android:paddingEnd="@dimen/common_20dp"
+                    android:orientation="horizontal"
+                    app:layout_collapseMode="parallax"
+                    >
+
+                    <SearchView
+                        android:id="@+id/sv_IncomeNoteFragment"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/common_30dp"
+                        android:layout_marginEnd="@dimen/common_10dp"
+                        android:queryHint="@string/IncomeNoteFragment_SearchBar_Hint"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/lin_IncomeNoteFragment_Filter"
+                        />
+
+                    <LinearLayout
+                        android:id="@+id/lin_IncomeNoteFragment_Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        >
+
+                        <TextView
+                            android:id="@+id/txt_IncomeNoteFragment_Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Common_All"
+                            android:textSize="16sp"
+                            android:textColor="@color/color_222222"
+                            />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/common_5dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/arrow_bottom"
+                            />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txt_IncomeNoteFragment_Edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@string/Common_Edit"
+                        android:textSize="16sp"
+                        android:textColor="@color/color_222222"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="@+id/cons_IncomeNoteFragment_Edit"
+                        app:layout_constraintBottom_toBottomOf="@+id/cons_IncomeNoteFragment_Edit"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/common_1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="@dimen/common_15dp"
+                    android:layout_marginEnd="@dimen/common_15dp"
+                    android:background="@color/color_line_1a000000"
+                    />
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_ffffff"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintTop_toBottomOf="@+id/appbar_layout"
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_MyStockFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                />
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recyclerview_MyStockFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/line_1"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        />-->
 
 <!--    <TextView-->
 <!--        android:id="@+id/txt_current_price_change_percent_data"-->

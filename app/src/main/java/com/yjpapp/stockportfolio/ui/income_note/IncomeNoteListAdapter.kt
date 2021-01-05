@@ -65,8 +65,6 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: Mai
             bindDataList(holder, position)
             bindEditMode(holder)
         }
-
-
     }
 
     override fun getItemCount(): Int {
@@ -93,6 +91,8 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: Mai
     }
 
     private fun bindDataList(holder: ViewHolder, position: Int){
+        holder.itemView.txt_subject_name.isSelected = true
+        holder.itemView.txt_gain_data.isSelected = true
 
         //상단 데이터
         holder.itemView.txt_subject_name.text = dataInfoList[position]?.subjectName
@@ -100,7 +100,7 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: Mai
         //왼쪽
         holder.itemView.txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
         holder.itemView.txt_sell_date_data.text = dataInfoList[position]?.sellDate
-        holder.itemView.txt_gain_percent_data.text = dataInfoList[position]?.gainPercent
+        holder.itemView.txt_gain_percent_data.text = "(" + dataInfoList[position]?.gainPercent + ")"
         //오른쪽
         holder.itemView.txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
         holder.itemView.txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice

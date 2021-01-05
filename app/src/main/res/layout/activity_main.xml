@@ -57,7 +57,7 @@
     <LinearLayout
         android:id="@+id/lin_MainActivity_BottomMenu_MyStock"
         android:layout_width="0dp"
-        android:layout_height="@dimen/common_40dp"
+        android:layout_height="@dimen/common_50dp"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="visible"
@@ -84,7 +84,7 @@
     <LinearLayout
         android:id="@+id/lin_MainActivity_BottomMenu_IncomeNote"
         android:layout_width="0dp"
-        android:layout_height="@dimen/common_40dp"
+        android:layout_height="@dimen/common_50dp"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="visible"
@@ -111,7 +111,7 @@
     <LinearLayout
         android:id="@+id/lin_MainActivity_BottomMenu_Memo"
         android:layout_width="0dp"
-        android:layout_height="@dimen/common_40dp"
+        android:layout_height="@dimen/common_50dp"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="visible"

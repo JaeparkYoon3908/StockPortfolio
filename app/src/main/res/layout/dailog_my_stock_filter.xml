@@ -14,7 +14,7 @@
     >
 
     <TextView
-        android:id="@+id/txt_MainFilterDialog_title"
+        android:id="@+id/txt_MyStockDialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_12dp"
@@ -30,7 +30,7 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="@dimen/common_18dp"
         android:text="@string/Common_Cancel"
         android:textSize="14sp"
         android:textColor="@color/color_e52b4e"
@@ -39,21 +39,21 @@
         />
 
     <TextView
-        android:id="@+id/txt_MainFilterDialog_all"
+        android:id="@+id/txt_MyStockDialog_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_10dp"
         android:paddingTop="@dimen/common_10dp"
         android:paddingBottom="@dimen/common_10dp"
-        android:text="@string/Common_All"
+        android:text="@string/IncomeNoteFilterDialog_All"
         android:textColor="@color/color_222222"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/txt_MainFilterDialog_gain"
+        app:layout_constraintBottom_toTopOf="@+id/txt_MyStockDialog_gain"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_title" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_MyStockDialog_title" />
 
     <TextView
-        android:id="@+id/txt_MainFilterDialog_gain"
+        android:id="@+id/txt_MyStockDialog_gain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/common_10dp"
@@ -62,12 +62,12 @@
         android:textSize="16sp"
         android:textColor="@color/color_222222"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_all"
-        app:layout_constraintBottom_toTopOf="@+id/txt_MainFilterDialog_loss"
+        app:layout_constraintTop_toBottomOf="@+id/txt_MyStockDialog_all"
+        app:layout_constraintBottom_toTopOf="@+id/txt_MyStockDialog_loss"
         />
 
     <TextView
-        android:id="@+id/txt_MainFilterDialog_loss"
+        android:id="@+id/txt_MyStockDialog_loss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/common_5dp"
@@ -77,7 +77,7 @@
         android:textSize="16sp"
         android:textColor="@color/color_222222"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_MainFilterDialog_gain"
+        app:layout_constraintTop_toBottomOf="@+id/txt_MyStockDialog_gain"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 

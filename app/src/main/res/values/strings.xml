@@ -27,6 +27,8 @@
     <string name="Common_All">전체</string>
     <string name="Common_Edit">편집</string>
     <string name="Common_Sell">매도</string>
+    <string name="Common_Gain">이익</string>
+    <string name="Common_Loss">손해</string>
     <string name="Common_BackButton_AppClose_Message">종료하시려면 한번 더 눌러주세요.</string>
 
 
@@ -48,11 +50,7 @@
     <string name="EditIncomeNoteDialog_Sell_Count_Hint">매도한 수량</string>
     <string name="EditIncomeNoteDialog_Error_Message">값을 모두 입력해야합니다.</string>
 
-
     <string name="IncomeNoteFilterDialog_Title">필터링 할 옵션을 선택하세요.</string>
-    <string name="IncomeNoteFilterDialog_All">전체</string>
-    <string name="IncomeNoteFilterDialog_Gain">이익</string>
-    <string name="IncomeNoteFilterDialog_Loss">손해</string>
 
     <string name="MemoReadWriteActivity_Title_Hint">제목을 입력하세요.</string>
     <string name="MemoReadWriteActivity_Content_Hint">메모를 입력하세요.</string>

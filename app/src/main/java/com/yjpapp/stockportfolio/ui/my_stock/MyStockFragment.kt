@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,17 +15,18 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.model.MyStockInfo
 import com.yjpapp.stockportfolio.network.YahooFinanceProtocolManager
 import com.yjpapp.stockportfolio.network.model.Price
+import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 //TODO 내가 갖고있는 주식 실시간 변동 사항 및 수익 분석 할 수 있는 기능 만들기.
 class MyStockFragment: Fragment() {
     private lateinit var mContext: Context
     private lateinit var mRootView: View
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     private lateinit var txt_current_price_data: TextView
     private lateinit var txt_current_price_change_data: TextView
@@ -37,6 +39,12 @@ class MyStockFragment: Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
+        //Fragment BackPress Event Call
+        onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,8 +52,8 @@ class MyStockFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View{
         mRootView = inflater.inflate(R.layout.fragment_my_stock, container, false)
-        initLayout()
         initData()
+        initLayout()
         return mRootView
     }
 
@@ -66,7 +74,7 @@ class MyStockFragment: Fragment() {
     }
 
     private fun initData(){
-
+        allMyStockList = ArrayList()
         val symbol = "005930.KS"
         val region = "KR"
         YahooFinanceProtocolManager.getInstance(mContext).getStockProfile(symbol, region,
@@ -114,15 +122,19 @@ class MyStockFragment: Fragment() {
         initRecyclerView()
     }
     private fun initRecyclerView(){
-//        recyclerView = mRootView.findViewById(R.id.recyclerview_MyStockFragment)
-//        layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-//        layoutManager.reverseLayout = true
-//        layoutManager.stackFromEnd = true
+        recyclerView = mRootView.findViewById(R.id.recyclerview_MyStockFragment)
+        layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
 
-//        recyclerView.layoutManager = layoutManager
-//
-//        myStockListAdapter = MyStockListAdapter(allMyStockList)
-//        recyclerView.adapter = myStockListAdapter
-//        recyclerView.itemAnimator = FadeInAnimator()
+        recyclerView.layoutManager = layoutManager
+        val myStockInfo = MyStockInfo(0, "코엔텍", "1500", "2020.12.23", "15%", "1000", "1150", "10")
+        for(i in 0 until 10){
+            allMyStockList.add(myStockInfo)
+        }
+
+        myStockListAdapter = MyStockListAdapter(allMyStockList)
+        recyclerView.adapter = myStockListAdapter
+        recyclerView.itemAnimator = FadeInAnimator()
     }
 }

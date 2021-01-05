@@ -43,7 +43,7 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
     }
     private lateinit var mContext: Context
     private lateinit var mRootView: View
-    private lateinit var callback: OnBackPressedCallback
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     private lateinit var memoDataList: ArrayList<MemoInfo?>
     private lateinit var layoutManager: LinearLayoutManager
@@ -56,7 +56,7 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
-        callback = object : OnBackPressedCallback(true) {
+        onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if(memoListAdapter?.isDeleteModeOn()!!){
                     setDeleteModeOff()
@@ -65,7 +65,7 @@ class MemoListFragment: Fragment(), MemoListAdapter.MemoActivityCallBack {
                 }
             }
         }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     override fun onCreateView(

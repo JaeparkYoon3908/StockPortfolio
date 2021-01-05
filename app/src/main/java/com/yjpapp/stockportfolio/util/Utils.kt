@@ -72,15 +72,17 @@ object Utils {
         return (((sellPriceNum.toDouble() / purchasePriceNum.toDouble()) -1) * 100)
     }
 
-    fun getRoundsPercentNumber(number: Double): String{
-        //TODO +에서 -로 넘어갈 경우 퍼센티지가 변경이 되지 않음. => 기하 평균을 사용해 두 기간의 평균 수익률 계산을 해야함.
-        var result = ""
-        result =
-//            if(number<0)
-//                "-" + String.format("%.2f", number)
-//            else
-            String.format("%.2f", number)
+    fun calculateTotalGainPercent(percentList: ArrayList<Double>): Double{
+        var result = percentList[0]
+        for(i in 0 until percentList.size - 1){
+            result = (1+result)*(1+percentList[i+1])-1
+        }
+        return result
+    }
 
+    fun getRoundsPercentNumber(number: Double): String{
+        var result = ""
+        result = String.format("%.2f", number)
         if(result == "NaN") result = "0"
         result += "%"
         return result

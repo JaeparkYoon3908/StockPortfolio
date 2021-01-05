@@ -4,6 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/color_ffffff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -13,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_40dp"
         android:layout_gravity="top"
-        android:background="@color/color_ffffff"
         android:paddingStart="@dimen/common_15dp"
         android:paddingEnd="@dimen/common_15dp"
         android:weightSum="20"
@@ -134,12 +134,11 @@
                         android:id="@+id/lin_IncomeNoteFragment_Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/common_10dp"
                         android:orientation="horizontal"
                         android:gravity="center"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/txt_IncomeNoteFragment_Edit"
+                        app:layout_constraintEnd_toEndOf="parent"
                         >
 
                         <TextView
@@ -168,6 +167,7 @@
                         android:text="@string/Common_Edit"
                         android:textSize="16sp"
                         android:textColor="@color/color_222222"
+                        android:visibility="gone"
                         app:layout_constraintTop_toTopOf="@+id/cons_IncomeNoteFragment_Edit"
                         app:layout_constraintBottom_toBottomOf="@+id/cons_IncomeNoteFragment_Edit"
                         app:layout_constraintEnd_toEndOf="parent"

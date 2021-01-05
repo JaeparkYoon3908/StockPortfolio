@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui.income_note
+package com.yjpapp.stockportfolio.ui.my_stock
 
 import android.content.Context
 import android.os.Bundle
@@ -11,7 +11,8 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.dailog_income_note_filter.*
 
-class IncomeNoteFilterDialog(callback: FilterClicked): BottomSheetDialogFragment() {
+class MyStockFilterDialog (callback: MyStockFilterDialog.FilterClicked): BottomSheetDialogFragment() {
+
     interface FilterClicked{
         fun allSelect()
         fun gainSelect()

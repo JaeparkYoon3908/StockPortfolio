@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.text.Editable
 import android.text.TextUtils
@@ -156,7 +157,7 @@ class IncomeNoteEditDialog(context: Context) : AlertDialog(context) {
 
         }
     }
-    private val uiHandler = Handler(UIHandler())
+    private val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
     private inner class UIHandler: Handler.Callback {
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what){

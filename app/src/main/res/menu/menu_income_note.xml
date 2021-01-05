@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/menu_IncomeNote_Memo"
-        android:title=""
-        app:showAsAction="ifRoom"
-        />
 
     <item android:id="@+id/menu_IncomeNoteFragment_Add"
         android:title=""
         android:icon="@drawable/icon_add2"
+        app:showAsAction="ifRoom"
+        />
+    <item android:id="@+id/menu_IncomeNote_Edit"
+        android:title="편집"
         app:showAsAction="ifRoom"
         />
 </menu>
