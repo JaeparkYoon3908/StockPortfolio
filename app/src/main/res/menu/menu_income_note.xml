@@ -8,7 +8,7 @@
         app:showAsAction="ifRoom"
         />
     <item android:id="@+id/menu_IncomeNote_Edit"
-        android:title="편집"
+        android:title="@string/Common_Edit"
         app:showAsAction="ifRoom"
         />
 </menu>

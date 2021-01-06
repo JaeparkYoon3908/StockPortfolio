@@ -5,8 +5,9 @@ import android.os.Bundle
 import android.view.View
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.preference.PrefKey
-import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
-import com.yjpapp.stockportfolio.ui.my_stock.MyStockFragment
+import com.yjpapp.stockportfolio.ui.fragment.IncomeNoteFragment
+import com.yjpapp.stockportfolio.ui.fragment.MemoListFragment
+import com.yjpapp.stockportfolio.ui.fragment.MyStockFragment
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -18,7 +19,7 @@ class  MainActivity : BaseActivity(R.layout.activity_main) {
         const val FRAGMENT_TAG_MEMO_LIST = "memo_list"
     }
     private val myStockFragment = MyStockFragment()
-    private val incomeNoteFragment = com.yjpapp.stockportfolio.ui.income_note.Fragment()
+    private val incomeNoteFragment = IncomeNoteFragment()
     private val memoListFragment = MemoListFragment()
     private var currentFragment: androidx.fragment.app.Fragment = myStockFragment
 

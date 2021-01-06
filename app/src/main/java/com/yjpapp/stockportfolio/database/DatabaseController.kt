@@ -4,8 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.yjpapp.stockportfolio.database.model.IncomeNoteInfo
-import com.yjpapp.stockportfolio.database.model.MemoInfo
+import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.database.data.MemoInfo
 import com.yjpapp.stockportfolio.util.Utils
 
 class DatabaseController {
@@ -14,7 +14,7 @@ class DatabaseController {
         @Volatile private var instance: DatabaseController? = null
         private lateinit var mContext: Context
         private lateinit var dbHelper: DatabaseOpenHelper
-        private lateinit var database:SQLiteDatabase
+        private lateinit var database: SQLiteDatabase
 
         @JvmStatic
         fun getInstance(context: Context): DatabaseController =
