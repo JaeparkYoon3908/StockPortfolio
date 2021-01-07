@@ -8,13 +8,11 @@ import android.view.*
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.ui.MainActivity
 import com.yjpapp.stockportfolio.ui.adapter.IncomeNoteListAdapter
@@ -26,13 +24,12 @@ import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.dialog_edit_income_note.*
-import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class IncomeNoteFragment : Fragment(),IncomeNoteView,
-        IncomeNoteListAdapter.MainActivityCallBack {
+        IncomeNoteListAdapter.MainActivityCallBack, IncomeNoteFilterDialog.IncomeFilterClickListener {
     private lateinit var incomeNotePresenter: IncomeNotePresenter
     private lateinit var mContext: Context
     private lateinit var mRootView: View
@@ -49,9 +46,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView,
     private lateinit var searchView: SearchView
 
     private var incomeNoteListAdapter: IncomeNoteListAdapter? = null
-    private var allIncomeNoteList: ArrayList<IncomeNoteInfo?>? = null
-    private var insertMode: Boolean = false
-    private var editSelectPosition = 0
+//    private var allIncomeNoteList: ArrayList<IncomeNoteInfo?>? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -62,7 +57,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView,
                 if (incomeNoteListAdapter?.isEditMode()!!) {
                     incomeNoteListAdapter?.setEditMode(false)
                     incomeNoteListAdapter?.notifyDataSetChanged()
-                    runAddButtonControl()
+                    showAddButton()
                 } else {
                     Utils.runBackPressAppCloseEvent(mContext, activity as Activity)
                 }
@@ -96,75 +91,24 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView,
         onBackPressedCallback.remove()
     }
 
-//    private fun addClicked() {
-//        IncomeNoteEditDialog(mContext).apply {
-//            if (!isShowing) {
-//                show()
-//                txt_complete.setOnClickListener {
-//                    runDialogCompleteClick(this)
-//                }
-//                txt_cancel.setOnClickListener {
-//                    dismiss()
-//                }
-//            }
-//        }
-//    }
-
     override fun onEditClicked(position: Int) {
+        showAddButton()
         incomeNotePresenter.onEditButtonClicked(position)
-        insertMode = false
         incomeNoteListAdapter?.setEditMode(false)
         incomeNoteListAdapter?.notifyDataSetChanged()
-        editSelectPosition = position
-        runAddButtonControl()
-        IncomeNoteInputDialog(mContext, incomeNotePresenter, position).apply {
-            if (!isShowing) {
-                show()
-                et_subject_name.setText(allIncomeNoteList!![position]?.subjectName)
-                et_purchase_date.setText(allIncomeNoteList!![position]?.purchaseDate)
-                et_sell_date.setText(allIncomeNoteList!![position]?.sellDate)
-                et_purchase_price.setText(allIncomeNoteList!![position]?.purchasePrice)
-                et_sell_price.setText(allIncomeNoteList!![position]?.sellPrice)
-                et_sell_count.setText(allIncomeNoteList!![position]?.sellCount.toString())
-                txt_complete.setOnClickListener {
-                    runDialogCompleteClick(this)
-                }
-                txt_cancel.setOnClickListener {
-                    runDialogCancelClick(this)
-                }
-            }
-        }
     }
 
-    override fun onDeleteClicked(position: Int) {
-        var dataList = incomeNoteListAdapter?.getDataInfoList()!!
-        val id: Int = dataList[position]?.id!!
-        (activity as MainActivity).databaseController.deleteData(id, Databases.TABLE_INCOME_NOTE)
-
-        dataList = (activity as MainActivity).databaseController.getAllIncomeNoteList()
-        incomeNoteListAdapter?.setDataInfoList(dataList)
-//        incomeNoteListAdapter?.setEditMode(false)
-        incomeNoteListAdapter?.notifyItemRemoved(position)
-        incomeNoteListAdapter?.notifyItemRangeRemoved(position, incomeNoteListAdapter?.itemCount!!)
-        runAddButtonControl()
-        bindTotalGainData()
+    override fun onDeleteClicked(id: Int) {
+        incomeNotePresenter.onDeleteButtonClicked(id)
     }
 
     override fun onItemLongClicked() {
-        runAddButtonControl()
+        if(incomeNoteListAdapter?.isEditMode()!!){
+            hideAddButton()
+        }else{
+            showAddButton()
+        }
     }
-
-//    override fun allSelect() {
-//        allDataFiltering()
-//    }
-//
-//    override fun gainSelect() {
-//        gainDataFiltering()
-//    }
-//
-//    override fun lossSelect() {
-//        lossDataFiltering()
-//    }
 
     private var menu: Menu? = null
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -176,15 +120,19 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView,
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_IncomeNoteFragment_Add -> {
-                insertMode = true
-//                addClicked()
+                incomeNotePresenter.onAddButtonClicked()
             }
             R.id.menu_IncomeNote_Edit -> {
                 activity?.window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
-                if (allIncomeNoteList?.size!! > 0) {
+                val allIncomeNoteList = incomeNotePresenter.getAllIncomeNoteList()
+                if (allIncomeNoteList.size > 0) {
                     incomeNoteListAdapter?.setEditMode(!incomeNoteListAdapter?.isEditMode()!!)
                     incomeNoteListAdapter?.notifyDataSetChanged()
-                    runAddButtonControl()
+                    if(incomeNoteListAdapter?.isEditMode()!!){
+                        hideAddButton()
+                    }else{
+                        showAddButton()
+                    }
                 }
             }
         }
@@ -192,7 +140,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView,
     }
 
     private fun initData() {
-        allIncomeNoteList = (activity as MainActivity).databaseController.getAllIncomeNoteList()
+//        allIncomeNoteList = (activity as MainActivity).databaseController.getAllIncomeNoteList()
         incomeNotePresenter = IncomeNotePresenter(mContext, this)
     }
 
@@ -239,46 +187,23 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView,
 
             R.id.txt_IncomeNoteFragment_Edit -> {
                 activity?.window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
-                if (allIncomeNoteList?.size!! > 0) {
+                val allIncomeNoteList = incomeNotePresenter.getAllIncomeNoteList()
+                if (allIncomeNoteList.size > 0) {
                     incomeNoteListAdapter?.setEditMode(!incomeNoteListAdapter?.isEditMode()!!)
                     incomeNoteListAdapter?.notifyDataSetChanged()
-                    runAddButtonControl()
+                    if(incomeNoteListAdapter?.isEditMode()!!){
+                        hideAddButton()
+                    }else{
+                        showAddButton()
+                    }
                 }
 
             }
             R.id.lin_IncomeNoteFragment_Filter -> {
-                val mainFilterDialog = IncomeNoteFilterDialog(incomeNotePresenter)
-                mainFilterDialog.show(childFragmentManager, tag)
+                showFilterDialog()
             }
         }
 
-    }
-
-    private fun bindTotalGainData() {
-        allIncomeNoteList = (activity as MainActivity).databaseController.getAllIncomeNoteList()
-        var totalGainNumber = 0.0
-        var totalGainPercent = 0.0
-        val gainPercentList = ArrayList<Double>()
-
-        for (i in allIncomeNoteList?.indices!!) {
-            totalGainNumber += Utils.getNumDeletedComma(allIncomeNoteList!![i]!!.realPainLossesAmount!!)
-                .toDouble()
-            totalGainPercent += Utils.getNumDeletedPercent(allIncomeNoteList!![i]!!.gainPercent!!)
-                .toDouble()
-            gainPercentList.add(Utils.getNumDeletedPercent(allIncomeNoteList!![i]!!.gainPercent!!).toDouble())
-        }
-        totalGainPercent = Utils.calculateTotalGainPercent(gainPercentList)
-        textView_TotalRealizationGainsLossesData.text =
-            NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
-        if (totalGainNumber >= 0) {
-            textView_TotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
-            textView_TotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
-        } else {
-            textView_TotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
-            textView_TotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
-        }
-        textView_TotalRealizationGainsLossesPercent.text =
-            Utils.getRoundsPercentNumber(totalGainPercent)
     }
 
     private fun initRecyclerView() {
@@ -291,89 +216,11 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView,
 //        }
         recyclerView.layoutManager = layoutManager
 
+        val allIncomeNoteList = incomeNotePresenter.getAllIncomeNoteList()
         incomeNoteListAdapter = IncomeNoteListAdapter(allIncomeNoteList, this)
         recyclerView.adapter = incomeNoteListAdapter
         recyclerView.itemAnimator = FadeInAnimator()
 
-    }
-
-    private fun runDialogCancelClick(incomeNoteInputDialog: IncomeNoteInputDialog) {
-        incomeNoteInputDialog.run {
-            dismiss()
-        }
-    }
-
-    private fun runDialogCompleteClick(incomeNoteInputDialog: IncomeNoteInputDialog) {
-
-        incomeNoteInputDialog.run {
-            //예외처리 (값을 모두 입력하지 않았을 때)
-            if (et_subject_name.text.isEmpty() ||
-                et_purchase_date.text.isEmpty() ||
-                et_sell_date.text.isEmpty() ||
-                et_purchase_price.text.isEmpty() ||
-                et_sell_price.text.isEmpty() ||
-                et_sell_count.text.isEmpty()
-            ) {
-
-                Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
-                return
-            }
-
-            //매매한 회사이름
-            val subjectName = et_subject_name.text.toString()
-            //매수일
-            val purchaseDate = et_purchase_date.text.toString()
-            //매도일
-            val sellDate = et_sell_date.text.toString()
-            //매수금액
-            val purchasePrice = et_purchase_price.text.toString()
-            val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice)
-            //매도금액
-            val sellPrice = et_sell_price.text.toString()
-            val sellPriceNumber = Utils.getNumDeletedComma(sellPrice)
-            //매도수량
-            val sellCount = et_sell_count.text.toString().toInt()
-            //수익
-            val realPainLossesAmountNumber =
-                ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
-            val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
-            //수익률
-            val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
-            val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
-
-            //날짜오류 예외처리
-            if (Utils.getNumDeletedDot(purchaseDate).toInt() > Utils.getNumDeletedDot(sellDate)
-                    .toInt()
-            ) {
-                Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG)
-                    .show()
-                return
-            }
-
-            val dataInfo = IncomeNoteInfo(0, subjectName, realPainLossesAmount, purchaseDate,
-                    sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
-
-            if (insertMode) {
-                (activity as MainActivity).databaseController.insertIncomeNoteData(dataInfo)
-            } else {
-                dataInfo.id = allIncomeNoteList!![editSelectPosition]!!.id
-                (activity as MainActivity).databaseController.updateIncomeNoteData(dataInfo)
-            }
-            dismiss()
-        }
-        val newDataInfo = (activity as MainActivity).databaseController.getAllIncomeNoteList()
-        incomeNoteListAdapter?.setDataInfoList(newDataInfo)
-        if (insertMode) {
-            incomeNoteListAdapter?.notifyItemInserted(incomeNoteListAdapter?.itemCount!! - 1)
-        } else {
-            incomeNoteListAdapter?.notifyDataSetChanged()
-        }
-        recyclerView.scrollToPosition(newDataInfo.size - 1)
-        bindTotalGainData()
-    }
-
-    private fun runAddButtonControl() {
-        menu?.getItem(0)?.isVisible = !incomeNoteListAdapter?.isEditMode()!!
     }
 
     //TODO 검색기능 추가.
@@ -382,8 +229,31 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView,
         (activity as MainActivity).logcat(ChoSungSearchQueryUtil.makeQuery(newText))
     }
 
-    override fun refreshTotalGain() {
-        TODO("Not yet implemented")
+    override fun bindTotalGainData() {
+        val allIncomeNoteList = incomeNotePresenter.getAllIncomeNoteList()
+        var totalGainNumber = 0.0
+        var totalGainPercent = 0.0
+        val gainPercentList = ArrayList<Double>()
+
+        for (i in allIncomeNoteList.indices) {
+            totalGainNumber += Utils.getNumDeletedComma(allIncomeNoteList[i]!!.realPainLossesAmount!!)
+                    .toDouble()
+            totalGainPercent += Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!)
+                    .toDouble()
+            gainPercentList.add(Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!).toDouble())
+        }
+        totalGainPercent = Utils.calculateTotalGainPercent(gainPercentList)
+        textView_TotalRealizationGainsLossesData.text =
+                NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
+        if (totalGainNumber >= 0) {
+            textView_TotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
+            textView_TotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
+        } else {
+            textView_TotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
+            textView_TotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
+        }
+        textView_TotalRealizationGainsLossesPercent.text =
+                Utils.getRoundsPercentNumber(totalGainPercent)
     }
 
     override fun showAllData(allDataList: ArrayList<IncomeNoteInfo?>) {
@@ -408,37 +278,76 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView,
         menu?.getItem(0)?.isVisible = true
     }
 
-    override fun showFilterDialog() {
-        TODO("Not yet implemented")
-    }
-
-    override fun showEditDialog(ediMode: Boolean, id:Int) {
-
-        IncomeNoteInputDialog(mContext, incomeNotePresenter,id).show()
-        insertMode = !ediMode
-//        IncomeNoteEditDialog(mContext, incomeNotePresenter).apply {
-//            if (!isShowing) {
-//                show()
-//                txt_complete.setOnClickListener {
-//                    runDialogCompleteClick(this)
-//                }
-//                txt_cancel.setOnClickListener {
-//                    dismiss()
-//                }
-//            }
-//        }
-
-    }
-
     override fun hideAddButton() {
         menu?.getItem(0)?.isVisible = false
     }
 
-    override fun addIncomeNote() {
-        TODO("Not yet implemented")
+    override fun showFilterDialog() {
+        val mainFilterDialog = IncomeNoteFilterDialog(this)
+        mainFilterDialog.show(childFragmentManager, tag)
     }
 
-    override fun deleteIncomeNote() {
-        TODO("Not yet implemented")
+    override fun showInputDialog(editMode: Boolean, id: Int, incomeNoteInfo: IncomeNoteInfo?) {
+        if(editMode){
+            IncomeNoteInputDialog(mContext).apply {
+                if (!isShowing) {
+                    show()
+                    et_subject_name.setText(incomeNoteInfo?.subjectName)
+                    et_purchase_date.setText(incomeNoteInfo?.purchaseDate)
+                    et_sell_date.setText(incomeNoteInfo?.sellDate)
+                    et_purchase_price.setText(incomeNoteInfo?.purchasePrice)
+                    et_sell_price.setText(incomeNoteInfo?.sellPrice)
+                    et_sell_count.setText(incomeNoteInfo?.sellCount.toString())
+                    txt_complete.setOnClickListener {
+                        incomeNotePresenter.onInputDialogCompleteClicked(this, editMode, id)
+                    }
+                }
+            }
+        }else{
+            IncomeNoteInputDialog(mContext).apply {
+                if (!isShowing) {
+                    show()
+                    txt_complete.setOnClickListener {
+                        incomeNotePresenter.onInputDialogCompleteClicked(this, editMode, id)
+                    }
+                }
+            }
+        }
     }
+
+    override fun addIncomeNoteData(newDataList: ArrayList<IncomeNoteInfo?>) {
+        showAddButton()
+        incomeNoteListAdapter?.setDataInfoList(newDataList)
+        incomeNoteListAdapter?.notifyItemInserted(incomeNoteListAdapter?.itemCount!! - 1)
+        recyclerView.scrollToPosition(newDataList.size - 1)
+        bindTotalGainData()
+    }
+
+    override fun updateIncomeNoteData(newDataList: ArrayList<IncomeNoteInfo?>) {
+        showAddButton()
+        incomeNoteListAdapter?.setDataInfoList(newDataList)
+        incomeNoteListAdapter?.notifyDataSetChanged()
+        recyclerView.scrollToPosition(newDataList.size - 1)
+        bindTotalGainData()
+    }
+
+    override fun deleteIncomeNoteData(){
+        bindTotalGainData()
+        if(incomeNoteListAdapter?.itemCount == 0){
+            showAddButton()
+        }
+    }
+
+    override fun onAllFilterClicked() {
+        incomeNotePresenter.onAllFilterClicked()
+    }
+
+    override fun onGainFilterClicked() {
+        incomeNotePresenter.onGainFilterClicked()
+    }
+
+    override fun onLossFilterClicked() {
+        incomeNotePresenter.onLossFilterClicked()
+    }
+
 }

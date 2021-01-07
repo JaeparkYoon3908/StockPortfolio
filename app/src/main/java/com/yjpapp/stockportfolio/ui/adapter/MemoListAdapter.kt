@@ -15,8 +15,8 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
     private var deleteModeOn = false
 
     interface MemoActivityCallBack{
-        fun onAdapterItemLongClicked()
-        fun onAdapterItemClicked(position: Int)
+        fun onMemoListLongClicked()
+        fun onMemoListClicked(position: Int)
     }
     private lateinit var mContext: Context
 
@@ -35,16 +35,16 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
         holder.view.txt_MemoList_NoteCount.text = memoListData[position]?.content
         holder.view.img_MemoList_Check.isSelected = false
 
-        if(memoListData[position]?.deleteChecked!!){
+        if(memoListData[position]?.deleteChecked!! == "true"){
             holder.view.img_MemoList_Check.isSelected = true
         }
 
         holder.view.setOnLongClickListener {
             Utils.runVibration(mContext, 100)
             deleteModeOn = !deleteModeOn
-            memoListData[position]?.deleteChecked = true
+            memoListData[position]?.deleteChecked = "true"
             notifyDataSetChanged()
-            memoActivityCallBack.onAdapterItemLongClicked()
+            memoActivityCallBack.onMemoListLongClicked()
             return@setOnLongClickListener true
         }
 
@@ -52,12 +52,17 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
             holder.view.img_MemoList_Check.visibility = View.VISIBLE
             holder.view.setOnClickListener {
                 holder.view.img_MemoList_Check.isSelected = !holder.view.img_MemoList_Check.isSelected
-                memoListData[position]?.deleteChecked = holder.view.img_MemoList_Check.isSelected
+                if(holder.view.img_MemoList_Check.isSelected){
+                    memoListData[position]?.deleteChecked = "true"
+                }else{
+                    memoListData[position]?.deleteChecked = "false"
+                }
+//                memoListData[position]?.deleteChecked = holder.view.img_MemoList_Check.isSelected
             }
         }else{
             holder.view.img_MemoList_Check.visibility = View.GONE
             holder.view.setOnClickListener {
-                memoActivityCallBack.onAdapterItemClicked(position)
+                memoActivityCallBack.onMemoListClicked(position)
             }
         }
     }

@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
-import com.yjpapp.stockportfolio.ui.presenter.IncomeNotePresenter
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.item_income_note_list.view.*
+import java.sql.SQLException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -25,7 +25,7 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: Mai
 
     interface MainActivityCallBack{
         fun onEditClicked(position: Int)
-        fun onDeleteClicked(position: Int)
+        fun onDeleteClicked(id: Int)
         fun onItemLongClicked()
     }
 
@@ -59,7 +59,15 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: Mai
                 mainActivityCallBack.onEditClicked(position)
             }
             itemView.txt_delete.setOnClickListener {
-                mainActivityCallBack.onDeleteClicked(position)
+                try{
+                    val deleteIncomeNoteInfoId = dataInfoList[position]!!.id
+                    mainActivityCallBack.onDeleteClicked(deleteIncomeNoteInfoId)
+                    dataInfoList.removeAt(position)
+                    notifyItemRemoved(position)
+                    notifyItemRangeRemoved(position, itemCount)
+                }catch (e:SQLException){
+                    e.printStackTrace()
+                }
             }
             itemView.txt_gain_data.isSelected = true
 

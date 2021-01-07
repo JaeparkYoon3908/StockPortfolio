@@ -13,16 +13,11 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.ui.presenter.IncomeNotePresenter
 import kotlinx.android.synthetic.main.dialog_edit_income_note.*
 import java.text.DecimalFormat
 import java.util.*
 
-/**
- *
- */
-
-class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePresenter, position: Int) : AlertDialog(mContext) {
+class IncomeNoteInputDialog(mContext: Context) : AlertDialog(mContext) {
     object MSG{
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
@@ -62,8 +57,8 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
 
     private val onClickListener = View.OnClickListener { view: View? ->
         when (view?.id){
-            R.id.txt_complete -> {
-                incomeNotePresenter.onInputDialogCompleteClicked(this, false, position)
+            R.id.txt_cancel -> {
+                dismiss()
             }
             R.id.et_purchase_date -> {
                 val calendar = Calendar.getInstance()

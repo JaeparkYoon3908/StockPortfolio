@@ -11,27 +11,33 @@ import kotlinx.android.synthetic.main.dialog_edit_income_note.*
 import java.text.DecimalFormat
 
 class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: IncomeNoteView) {
-    private val incomeNoteInteractor = IncomeNoteInteractor()
-
+    private val incomeNoteInteractor = IncomeNoteInteractor.getInstance(mContext)
 
     fun onAllFilterClicked(){
-        incomeNoteView.showAllData(incomeNoteInteractor.getAllIncomeNoteInfo(mContext))
+        incomeNoteView.showAllData(incomeNoteInteractor.getAllIncomeNoteInfoList())
     }
 
     fun onGainFilterClicked(){
-        incomeNoteView.showGainData(incomeNoteInteractor.getGainIncomeNoteInfo(mContext))
+        incomeNoteView.showGainData(incomeNoteInteractor.getGainIncomeNoteInfoList())
     }
 
     fun onLossFilterClicked(){
-        incomeNoteView.showLossData(incomeNoteInteractor.getLossIncomeNoteInfo(mContext))
+        incomeNoteView.showLossData(incomeNoteInteractor.getLossIncomeNoteInfoList())
     }
 
     fun onAddButtonClicked(){
-        incomeNoteView.showEditDialog(false, 0)
+        incomeNoteView.showInputDialog(false, -1, null)
     }
 
     fun onEditButtonClicked(position: Int){
-        incomeNoteView.showEditDialog(true, position)
+        val id = incomeNoteInteractor.getAllIncomeNoteInfoList()[position]!!.id
+        val incomeNoteInfo = IncomeNoteInteractor.getInstance(mContext).getIncomeNoteInfo(position)
+        incomeNoteView.showInputDialog(true, id, incomeNoteInfo!!)
+    }
+
+    fun onDeleteButtonClicked(id: Int){
+        incomeNoteInteractor.deleteIncomeNoteInfo(id)
+        incomeNoteView.deleteIncomeNoteData()
     }
 
     fun onInputDialogCompleteClicked(incomeNoteInputDialog: IncomeNoteInputDialog, editMode: Boolean, id: Int){
@@ -83,10 +89,16 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
             val dataInfo = IncomeNoteInfo(id, subjectName, realPainLossesAmount, purchaseDate,
                     sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
             if(editMode){
-                incomeNoteInteractor.insertIncomeNoteInfo(mContext, dataInfo)
+                IncomeNoteInteractor.getInstance(mContext).updateIncomeNoteInfo(dataInfo)
+                incomeNoteView.updateIncomeNoteData(IncomeNoteInteractor.getInstance(mContext).getAllIncomeNoteInfoList())
             }else{
-                incomeNoteInteractor.updateIncomeNoteInfo(mContext, dataInfo)
+                IncomeNoteInteractor.getInstance(mContext).insertIncomeNoteInfo(dataInfo)
+                incomeNoteView.addIncomeNoteData(IncomeNoteInteractor.getInstance(mContext).getAllIncomeNoteInfoList())
             }
+            dismiss()
         }
+    }
+    fun getAllIncomeNoteList(): ArrayList<IncomeNoteInfo?>{
+        return incomeNoteInteractor.getAllIncomeNoteInfoList()
     }
 }

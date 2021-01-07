@@ -73,11 +73,15 @@ object Utils {
     }
 
     fun calculateTotalGainPercent(percentList: ArrayList<Double>): Double{
-        var result = percentList[0]
-        for(i in 0 until percentList.size - 1){
-            result = (1+result)*(1+percentList[i+1])-1
+        return if(percentList.size>0){
+            var result = percentList[0]
+            for(i in 0 until percentList.size - 1){
+                result = (1+result)*(1+percentList[i+1])-1
+            }
+            result
+        }else{
+            0.00
         }
-        return result
     }
 
     fun getRoundsPercentNumber(number: Double): String{

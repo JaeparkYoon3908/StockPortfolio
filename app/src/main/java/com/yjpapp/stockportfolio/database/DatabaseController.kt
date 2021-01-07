@@ -94,11 +94,11 @@ class DatabaseController {
         return resultList
     }
 
-    fun getIncomeNoteLInfo(position: Int): IncomeNoteInfo? {
+    fun getIncomeNoteLInfo(id: Int): IncomeNoteInfo? {
         val cursor: Cursor
         val sb = StringBuilder()
-        sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE + "WHERE ")
-        sb.append("id = '$position'")
+        sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE + " WHERE ")
+        sb.append("id = '$id'")
         cursor = database.rawQuery(sb.toString(), null)
         if(cursor.count == 1){
             cursor.moveToFirst()
@@ -190,7 +190,7 @@ class DatabaseController {
         return resultList
     }
 
-    fun deleteData(position: Int, table: String){
+    fun deleteData(id: Int, table: String){
 //        val cursor: Cursor
 //        val sb = StringBuilder()
 //        sb.append("DELETE FROM " + Databases.TABLE_DATA + " WHERE ")
@@ -199,11 +199,11 @@ class DatabaseController {
 //        cursor?.close()
 
 //        database.use {
-        database.delete(table, "id = $position", null)
+        database.delete(table, "id = $id", null)
 //        }
     }
 
-    fun getAllMemoDataInfo(): ArrayList<MemoInfo?> {
+    fun getAllMemoInfoList(): ArrayList<MemoInfo?> {
         val cursor: Cursor
         val resultList = ArrayList<MemoInfo?>()
         val sb = StringBuilder()
@@ -216,7 +216,7 @@ class DatabaseController {
                     cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_DATE)),
                     cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_TITLE)),
                     cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_CONTENT)),
-                    false
+                    "false"
                 )
                 resultList.add(result)
                 cursor.moveToNext()
@@ -224,6 +224,27 @@ class DatabaseController {
         }
         cursor?.close()
         return resultList
+    }
+
+    fun getMemoInfo(id: Int): MemoInfo?{
+        val cursor: Cursor
+        val sb = StringBuilder()
+        sb.append("SELECT * FROM " + Databases.TABLE_MEMO + " WHERE ")
+        sb.append("id = '$id'")
+        cursor = database.rawQuery(sb.toString(), null)
+        return if(cursor.count == 1){
+            cursor.moveToFirst()
+            val result = MemoInfo(cursor.getInt(0), //id
+                    cursor.getString(1), //date
+                    cursor.getString(2), //title
+                    cursor.getString(3), //content
+                    cursor.getString(4)) //deleteChecked
+            cursor?.close()
+            result
+        }else{
+            cursor?.close()
+            null
+        }
     }
 
     fun insertMemoData(memoInfo: MemoInfo?): Boolean{

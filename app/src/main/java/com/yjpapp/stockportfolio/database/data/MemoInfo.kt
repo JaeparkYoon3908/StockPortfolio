@@ -5,6 +5,6 @@ data class MemoInfo(
     var date: String?,
     var title: String?,
     var content: String?,
-    var deleteChecked: Boolean
+    var deleteChecked: String?
     )
 

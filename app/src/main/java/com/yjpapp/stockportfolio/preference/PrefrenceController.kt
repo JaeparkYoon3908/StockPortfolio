@@ -73,26 +73,22 @@ class PreferenceController {
 
     fun getPreference(key: String): String{
         synchronized(this){
-            try {
-                var result: String
-                result = pref.getString(key, "").toString()
-                return result
+            return try {
+                pref.getString(key, "").toString()
             }catch (e: Exception){
                 e.printStackTrace()
-                return ""
+                ""
             }
         }
     }
 
     fun getPreference(key: String, defValue: String): String{
         synchronized(this){
-            try {
-                var result: String
-                result = pref.getString(key, defValue).toString()
-                return result
+            return try {
+                pref.getString(key, defValue).toString()
             }catch (e: Exception){
                 e.printStackTrace()
-                return ""
+                ""
             }
         }
     }

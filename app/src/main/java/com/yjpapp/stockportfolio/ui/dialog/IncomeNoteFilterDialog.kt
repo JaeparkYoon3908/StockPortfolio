@@ -8,15 +8,20 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.ui.presenter.IncomeNotePresenter
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.dailog_income_note_filter.*
 
-class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSheetDialogFragment() {
+class IncomeNoteFilterDialog(callback: IncomeFilterClickListener): BottomSheetDialogFragment() {
+
+    interface IncomeFilterClickListener{
+        fun onAllFilterClicked()
+        fun onGainFilterClicked()
+        fun onLossFilterClicked()
+    }
 
     private lateinit var rootView: View
-    private lateinit var mContext: Context
 
+    private lateinit var mContext: Context
     override fun onAttach(context: Context) {
         mContext = context
         super.onAttach(context)
@@ -52,15 +57,15 @@ class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSh
                 dismiss()
             }
             R.id.txt_MainFilterDialog_all -> {
-                incomeNotePresenter.onAllFilterClicked()
+                callback.onAllFilterClicked()
                 dismiss()
             }
             R.id.txt_MainFilterDialog_gain -> {
-                incomeNotePresenter.onGainFilterClicked()
+                callback.onGainFilterClicked()
                 dismiss()
             }
             R.id.txt_MainFilterDialog_loss -> {
-                incomeNotePresenter.onLossFilterClicked()
+                callback.onLossFilterClicked()
                 dismiss()
 
             }
