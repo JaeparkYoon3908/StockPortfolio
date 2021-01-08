@@ -15,8 +15,9 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
     private var deleteModeOn = false
 
     interface MemoActivityCallBack{
-        fun onMemoListLongClicked()
+        fun onMemoListLongClicked(position: Int)
         fun onMemoListClicked(position: Int)
+        fun onMemoDeleteCheck(position: Int, deleteCheck: Boolean)
     }
     private lateinit var mContext: Context
 
@@ -44,7 +45,7 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
             deleteModeOn = !deleteModeOn
             memoListData[position]?.deleteChecked = "true"
             notifyDataSetChanged()
-            memoActivityCallBack.onMemoListLongClicked()
+            memoActivityCallBack.onMemoListLongClicked(position)
             return@setOnLongClickListener true
         }
 
@@ -53,9 +54,11 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
             holder.view.setOnClickListener {
                 holder.view.img_MemoList_Check.isSelected = !holder.view.img_MemoList_Check.isSelected
                 if(holder.view.img_MemoList_Check.isSelected){
-                    memoListData[position]?.deleteChecked = "true"
+                    memoActivityCallBack.onMemoDeleteCheck(position, true)
+//                    memoListData[position]?.deleteChecked = "true"
                 }else{
-                    memoListData[position]?.deleteChecked = "false"
+                    memoActivityCallBack.onMemoDeleteCheck(position, false)
+//                    memoListData[position]?.deleteChecked = "false"
                 }
 //                memoListData[position]?.deleteChecked = holder.view.img_MemoList_Check.isSelected
             }

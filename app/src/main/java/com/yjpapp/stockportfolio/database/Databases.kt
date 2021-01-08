@@ -14,6 +14,7 @@ object Databases {
     const val COL_MEMO_DATE: String = "date" //날짜
     const val COL_MEMO_TITLE: String = "title" //제목
     const val COL_MEMO_CONTENT: String = "content" //내용
+    const val COL_MEMO_DELETE_CHECK: String = "delete_check" //삭제 체크
 
     /**
      * portfolio_table columns

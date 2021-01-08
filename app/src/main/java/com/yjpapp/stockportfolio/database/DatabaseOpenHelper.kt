@@ -27,7 +27,8 @@ class DatabaseOpenHelper(context: Context): SQLiteOpenHelper(context, "database.
                 Databases.COL_MEMO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Databases.COL_MEMO_DATE + " TEXT," +
                 Databases.COL_MEMO_TITLE + " TEXT," +
-                Databases.COL_MEMO_CONTENT + " TEXT);"
+                Databases.COL_MEMO_CONTENT + " TEXT," +
+                Databases.COL_MEMO_DELETE_CHECK + " TEXT DEFAULT false);"
     }
 
     private fun createPortfolioTable(): String{

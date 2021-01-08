@@ -11,28 +11,29 @@ import com.yjpapp.stockportfolio.util.Utils
 class DatabaseController {
     // 싱글톤 패턴 적용 완료
     companion object {
-        @Volatile private var instance: DatabaseController? = null
+        @Volatile
+        private var instance: DatabaseController? = null
         private lateinit var mContext: Context
         private lateinit var dbHelper: DatabaseOpenHelper
         private lateinit var database: SQLiteDatabase
 
         @JvmStatic
         fun getInstance(context: Context): DatabaseController =
-            instance ?: synchronized(this) {
-                instance ?: DatabaseController().also {
-                    instance = it
-                    mContext = context
-                    dbHelper = DatabaseOpenHelper(mContext)
-                    database = dbHelper.writableDatabase
+                instance ?: synchronized(this) {
+                    instance ?: DatabaseController().also {
+                        instance = it
+                        mContext = context
+                        dbHelper = DatabaseOpenHelper(mContext)
+                        database = dbHelper.writableDatabase
+                    }
                 }
-            }
     }
 
-    fun insertIncomeNoteData(incomeNoteInfo: IncomeNoteInfo?): Boolean{
+    fun insertIncomeNoteData(incomeNoteInfo: IncomeNoteInfo?): Boolean {
         val insertCheck: Long
         val contentValues = ContentValues()
         contentValues.apply {
-            put(Databases.COL_INCOME_NOTE_SUBJECT_NAME,incomeNoteInfo?.subjectName)
+            put(Databases.COL_INCOME_NOTE_SUBJECT_NAME, incomeNoteInfo?.subjectName)
             put(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT, incomeNoteInfo?.realPainLossesAmount)
             put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo?.purchaseDate)
             put(Databases.COL_INCOME_NOTE_SELL_DATE, incomeNoteInfo?.sellDate)
@@ -42,16 +43,16 @@ class DatabaseController {
             put(Databases.COL_INCOME_NOTE_SELL_COUNT, incomeNoteInfo?.sellCount)
         }
 
-        insertCheck = database.insert(Databases.TABLE_INCOME_NOTE,null, contentValues)
+        insertCheck = database.insert(Databases.TABLE_INCOME_NOTE, null, contentValues)
 
         return insertCheck != -1L
     }
 
-    fun updateIncomeNoteData(incomeNoteInfo: IncomeNoteInfo?): Boolean{
+    fun updateIncomeNoteData(incomeNoteInfo: IncomeNoteInfo?): Boolean {
         val updateCheck: Int
         val contentValues = ContentValues()
         contentValues.apply {
-            put(Databases.COL_INCOME_NOTE_SUBJECT_NAME,incomeNoteInfo?.subjectName)
+            put(Databases.COL_INCOME_NOTE_SUBJECT_NAME, incomeNoteInfo?.subjectName)
             put(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT, incomeNoteInfo?.realPainLossesAmount)
             put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo?.purchaseDate)
             put(Databases.COL_INCOME_NOTE_SELL_DATE, incomeNoteInfo?.sellDate)
@@ -62,7 +63,7 @@ class DatabaseController {
         }
 
         updateCheck = database.update(Databases.TABLE_INCOME_NOTE, contentValues,
-            Databases.COL_PORTFOLIO_ID + " = ? ", arrayOf(incomeNoteInfo?.id.toString()))
+                Databases.COL_PORTFOLIO_ID + " = ? ", arrayOf(incomeNoteInfo?.id.toString()))
 
         return updateCheck != -1
     }
@@ -73,18 +74,18 @@ class DatabaseController {
         val sb = StringBuilder()
         sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE)
         cursor = database.rawQuery(sb.toString(), null)
-        if(cursor.count>0){
+        if (cursor.count > 0) {
             cursor.moveToFirst()
-            for(i in 0 until cursor.count){
+            for (i in 0 until cursor.count) {
                 val result = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_PORTFOLIO_ID)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_PRICE)),
-                    cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_COUNT))
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_PRICE)),
+                        cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_COUNT))
                 )
                 resultList.add(result)
                 cursor.moveToNext()
@@ -100,47 +101,46 @@ class DatabaseController {
         sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE + " WHERE ")
         sb.append("id = '$id'")
         cursor = database.rawQuery(sb.toString(), null)
-        if(cursor.count == 1){
+        if (cursor.count == 1) {
             cursor.moveToFirst()
             val result = IncomeNoteInfo(cursor.getInt(0), //id
-                cursor.getString(1), //subjectName
-                cursor.getString(2), //realPainLossesAmount
-                cursor.getString(3), //purchaseDate
-                cursor.getString(4), //sellDate
-                cursor.getString(5), //gainPercent
-                cursor.getString(6), //purchasePrice
-                cursor.getString(7), //sellPrice
-                cursor.getInt(8)) //sellCount
+                    cursor.getString(1), //subjectName
+                    cursor.getString(2), //realPainLossesAmount
+                    cursor.getString(3), //purchaseDate
+                    cursor.getString(4), //sellDate
+                    cursor.getString(5), //gainPercent
+                    cursor.getString(6), //purchasePrice
+                    cursor.getString(7), //sellPrice
+                    cursor.getInt(8)) //sellCount
             cursor?.close()
             return result
-        }else{
+        } else {
             cursor?.close()
             return null
         }
     }
 
-    fun getGainIncomeNoteList(): ArrayList<IncomeNoteInfo?>{
+    fun getGainIncomeNoteList(): ArrayList<IncomeNoteInfo?> {
         val cursor: Cursor
         val resultList = ArrayList<IncomeNoteInfo?>()
         val sb = StringBuilder()
         sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE)
         cursor = database.rawQuery(sb.toString(), null)
-        if(cursor.count>0){
+        if (cursor.count > 0) {
             cursor.moveToFirst()
-            for(i in 0 until cursor.count){
-                val realGainLossesAmount
-                        = cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT))
+            for (i in 0 until cursor.count) {
+                val realGainLossesAmount = cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT))
                 val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
-                if(realGainLossesAmountNum >= 0){
+                if (realGainLossesAmountNum >= 0) {
                     val result = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_PORTFOLIO_ID)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_PRICE)),
-                        cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_COUNT))
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_PRICE)),
+                            cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_COUNT))
                     )
                     resultList.add(result)
                 }
@@ -151,28 +151,27 @@ class DatabaseController {
         return resultList
     }
 
-    fun getLossIncomeNoteList(): ArrayList<IncomeNoteInfo?>{
+    fun getLossIncomeNoteList(): ArrayList<IncomeNoteInfo?> {
         val cursor: Cursor
         val resultList = ArrayList<IncomeNoteInfo?>()
         val sb = StringBuilder()
         sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE)
         cursor = database.rawQuery(sb.toString(), null)
-        if(cursor.count>0){
+        if (cursor.count > 0) {
             cursor.moveToFirst()
-            for(i in 0 until cursor.count){
-                val realGainLossesAmount
-                        = cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT))
+            for (i in 0 until cursor.count) {
+                val realGainLossesAmount = cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT))
                 val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
-                if(realGainLossesAmountNum < 0){
+                if (realGainLossesAmountNum < 0) {
                     val result = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_PORTFOLIO_ID)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_PRICE)),
-                        cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_COUNT))
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
+                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_PRICE)),
+                            cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_COUNT))
                     )
                     resultList.add(result)
                 }
@@ -190,7 +189,7 @@ class DatabaseController {
         return resultList
     }
 
-    fun deleteData(id: Int, table: String){
+    fun deleteData(id: Int, table: String) {
 //        val cursor: Cursor
 //        val sb = StringBuilder()
 //        sb.append("DELETE FROM " + Databases.TABLE_DATA + " WHERE ")
@@ -209,14 +208,14 @@ class DatabaseController {
         val sb = StringBuilder()
         sb.append("SELECT * FROM " + Databases.TABLE_MEMO)
         cursor = database.rawQuery(sb.toString(), null)
-        if(cursor.count>0){
+        if (cursor.count > 0) {
             cursor.moveToFirst()
-            for(i in 0 until cursor.count){
+            for (i in 0 until cursor.count) {
                 val result = MemoInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_MEMO_ID)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_DATE)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_TITLE)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_CONTENT)),
-                    "false"
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_CONTENT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MEMO_DELETE_CHECK))
                 )
                 resultList.add(result)
                 cursor.moveToNext()
@@ -226,13 +225,13 @@ class DatabaseController {
         return resultList
     }
 
-    fun getMemoInfo(id: Int): MemoInfo?{
+    fun getMemoInfo(id: Int): MemoInfo? {
         val cursor: Cursor
         val sb = StringBuilder()
         sb.append("SELECT * FROM " + Databases.TABLE_MEMO + " WHERE ")
         sb.append("id = '$id'")
         cursor = database.rawQuery(sb.toString(), null)
-        return if(cursor.count == 1){
+        return if (cursor.count == 1) {
             cursor.moveToFirst()
             val result = MemoInfo(cursor.getInt(0), //id
                     cursor.getString(1), //date
@@ -241,33 +240,44 @@ class DatabaseController {
                     cursor.getString(4)) //deleteChecked
             cursor?.close()
             result
-        }else{
+        } else {
             cursor?.close()
             null
         }
     }
 
-    fun insertMemoData(memoInfo: MemoInfo?): Boolean{
+    fun insertMemoData(memoInfo: MemoInfo?): Boolean {
         val insertCheck: Long
         val contentValues = ContentValues()
         contentValues.put(Databases.COL_MEMO_DATE, memoInfo?.date)
-        contentValues.put(Databases.COL_MEMO_TITLE,memoInfo?.title)
+        contentValues.put(Databases.COL_MEMO_TITLE, memoInfo?.title)
         contentValues.put(Databases.COL_MEMO_CONTENT, memoInfo?.content)
 
-        insertCheck = database.insert(Databases.TABLE_MEMO,null, contentValues)
+        insertCheck = database.insert(Databases.TABLE_MEMO, null, contentValues)
 
         return insertCheck != -1L
     }
 
-    fun updateMemoData(memoInfo: MemoInfo?): Boolean{
+    fun updateMemoData(memoInfo: MemoInfo?): Boolean {
         val updateCheck: Int
         val contentValues = ContentValues()
-        contentValues.put(Databases.COL_MEMO_DATE,memoInfo?.date)
+        contentValues.put(Databases.COL_MEMO_DATE, memoInfo?.date)
         contentValues.put(Databases.COL_MEMO_TITLE, memoInfo?.title)
         contentValues.put(Databases.COL_MEMO_CONTENT, memoInfo?.content)
 
         updateCheck = database.update(Databases.TABLE_MEMO, contentValues,
-            Databases.COL_MEMO_ID + " = ? ", arrayOf(memoInfo?.id.toString()))
+                Databases.COL_MEMO_ID + " = ? ", arrayOf(memoInfo?.id.toString()))
+
+        return updateCheck != -1
+    }
+
+    fun updateDeleteCheck(id: Int, deleteCheck: String): Boolean {
+        val updateCheck: Int
+        val contentValues = ContentValues()
+        contentValues.put(Databases.COL_MEMO_DELETE_CHECK, deleteCheck)
+
+        updateCheck = database.update(Databases.TABLE_MEMO, contentValues,
+                Databases.COL_MEMO_ID + " = ? ", arrayOf(id.toString()))
 
         return updateCheck != -1
     }

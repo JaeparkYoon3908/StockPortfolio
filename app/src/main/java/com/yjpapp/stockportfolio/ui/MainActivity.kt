@@ -8,11 +8,12 @@ import com.yjpapp.stockportfolio.preference.PrefKey
 import com.yjpapp.stockportfolio.ui.fragment.IncomeNoteFragment
 import com.yjpapp.stockportfolio.ui.fragment.MemoListFragment
 import com.yjpapp.stockportfolio.ui.fragment.MyStockFragment
+import com.yjpapp.stockportfolio.ui.view.MainView
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class  MainActivity : BaseActivity(R.layout.activity_main) {
+class MainActivity: BaseActivity(R.layout.activity_main), MainView {
     companion object{
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
@@ -154,5 +155,36 @@ class  MainActivity : BaseActivity(R.layout.activity_main) {
             }
         }
     }
+
+    override fun initFragment() {
+
+    }
+
+    override fun showMyStock() {
+        //TODO 정리하기...
+        supportFragmentManager.beginTransaction()
+
+    }
+
+    override fun hideMyStock() {
+        TODO("Not yet implemented")
+    }
+
+    override fun showIncomeNote() {
+        TODO("Not yet implemented")
+    }
+
+    override fun hideIncomeNote() {
+        TODO("Not yet implemented")
+    }
+
+    override fun showMemoList() {
+        TODO("Not yet implemented")
+    }
+
+    override fun hideMemoList() {
+        TODO("Not yet implemented")
+    }
+
 
 }

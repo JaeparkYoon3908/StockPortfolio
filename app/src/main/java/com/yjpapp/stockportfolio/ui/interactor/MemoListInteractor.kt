@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.ui.interactor
 
 import android.content.Context
 import com.yjpapp.stockportfolio.database.DatabaseController
+import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.database.data.MemoInfo
 
 class MemoListInteractor {
@@ -28,5 +29,13 @@ class MemoListInteractor {
 
     fun getAllMemoInfoList(): ArrayList<MemoInfo?>{
         return databaseController.getAllMemoInfoList()
+    }
+
+    fun updateDeleteCheck(id: Int, deleteCheck: String){
+        databaseController.updateDeleteCheck(id, deleteCheck)
+    }
+
+    fun deleteMemoInfoList(id: Int){
+        databaseController.deleteData(id, Databases.TABLE_MEMO)
     }
 }
