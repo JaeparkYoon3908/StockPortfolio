@@ -64,7 +64,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible">
+        tools:visibility="visible"
+        android:onClick="clickBottomMenu"
+        >
 
         <ImageView
             android:layout_width="25dp"
@@ -92,6 +94,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_MyStock"
         app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_Memo"
+        android:onClick="clickBottomMenu"
         >
         <ImageView
             android:layout_width="25dp"
@@ -119,6 +122,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
         app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="clickBottomMenu"
         >
 
         <ImageView

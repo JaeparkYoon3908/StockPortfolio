@@ -105,26 +105,22 @@ class MemoListFragment : Fragment(), MemoListAdapter.MemoActivityCallBack, MemoL
                     }
                 }
             }
-
             RESULT_EMPTY -> {
                 val mode = data?.getStringExtra(INTENT_KEY_MEMO_MODE)
                 (activity as MainActivity).logcat("mode = $mode")
-                Toasty.normal(mContext, "내용이 없어 메모를 저장하지 않습니다.", Toasty.LENGTH_LONG).show()
+                Toasty.normal(mContext, getString(R.string.MemoListFragment_Empty_Data_Message), Toasty.LENGTH_LONG).show()
             }
-            RESULT_DELETE -> {
+            RESULT_DELETE, RESULT_UPDATE -> {
                 val position = data?.getIntExtra(INTENT_KEY_LIST_POSITION, 0)!!
-                memoListPresenter.deleteMemoInfo()
-            }
-
-            RESULT_UPDATE -> {
                 memoListPresenter.updateMemoInfo()
-
             }
+
         }
     }
 
     //Adapter CallBack
     override fun onMemoListLongClicked(position: Int) {
+        //TODO 롱 클릭시 오류 해결하기.
         if (memoListAdapter?.isDeleteModeOn()!!) {
             hideAddButton()
             showDeleteButton()
@@ -144,7 +140,6 @@ class MemoListFragment : Fragment(), MemoListAdapter.MemoActivityCallBack, MemoL
         intent.putExtra(INTENT_KEY_MEMO_INFO_CONTENT,
                 memoDataList[position]?.content)
         intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_READ_MODE)
-
         activity?.startActivityForResult(intent, REQUEST_READ)
     }
 
@@ -264,6 +259,4 @@ class MemoListFragment : Fragment(), MemoListAdapter.MemoActivityCallBack, MemoL
             showGuideMessage()
         }
     }
-
-
 }

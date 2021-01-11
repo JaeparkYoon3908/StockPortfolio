@@ -1,104 +1,134 @@
 package com.yjpapp.stockportfolio.ui.presenter
 
+import android.app.Activity
 import android.content.Context
-import android.widget.Toast
+import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
-import com.yjpapp.stockportfolio.ui.dialog.IncomeNoteInputDialog
+import com.yjpapp.stockportfolio.ui.adapter.IncomeNoteListAdapter
 import com.yjpapp.stockportfolio.ui.interactor.IncomeNoteInteractor
 import com.yjpapp.stockportfolio.ui.view.IncomeNoteView
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.dialog_edit_income_note.*
-import java.text.DecimalFormat
 
 class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: IncomeNoteView) {
+    private var editMode = false
+    private var inputDialogId = -1
     private val incomeNoteInteractor = IncomeNoteInteractor.getInstance(mContext)
-
-    fun onAllFilterClicked(){
-        incomeNoteView.showAllData(incomeNoteInteractor.getAllIncomeNoteInfoList())
+    private lateinit var incomeNoteListAdapter: IncomeNoteListAdapter
+    fun onResume() {
+        val allIncomeNoteInfo = incomeNoteInteractor.getAllIncomeNoteInfoList()
+        incomeNoteListAdapter = IncomeNoteListAdapter(allIncomeNoteInfo, this)
+        incomeNoteView.setAdapter(incomeNoteListAdapter)
     }
 
-    fun onGainFilterClicked(){
-        incomeNoteView.showGainData(incomeNoteInteractor.getGainIncomeNoteInfoList())
+    fun onAllFilterClicked() {
+        val allDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+        incomeNoteListAdapter.setDataInfoList(allDataList)
+        incomeNoteListAdapter.notifyDataSetChanged()
+        val text = mContext.getString(R.string.Common_All)
+        incomeNoteView.changeFilterText(text)
     }
 
-    fun onLossFilterClicked(){
-        incomeNoteView.showLossData(incomeNoteInteractor.getLossIncomeNoteInfoList())
+    fun onGainFilterClicked() {
+        val gainDataList = incomeNoteInteractor.getGainIncomeNoteInfoList()
+        incomeNoteListAdapter.setDataInfoList(gainDataList)
+        incomeNoteListAdapter.notifyDataSetChanged()
+        val text = mContext.getString(R.string.Common_Gain)
+        incomeNoteView.changeFilterText(text)
     }
 
-    fun onAddButtonClicked(){
-        incomeNoteView.showInputDialog(false, -1, null)
+    fun onLossFilterClicked() {
+        val lossDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+        incomeNoteListAdapter.setDataInfoList(lossDataList)
+        incomeNoteListAdapter.notifyDataSetChanged()
+        val text = mContext.getString(R.string.Common_Loss)
+        incomeNoteView.changeFilterText(text)
     }
 
-    fun onEditButtonClicked(position: Int){
-        val id = incomeNoteInteractor.getAllIncomeNoteInfoList()[position]!!.id
-        val incomeNoteInfo = IncomeNoteInteractor.getInstance(mContext).getIncomeNoteInfo(position)
-        incomeNoteView.showInputDialog(true, id, incomeNoteInfo!!)
+    fun onAddButtonClicked() {
+        editMode = false
+        inputDialogId = -1
+        incomeNoteView.showInputDialog(editMode, null)
     }
 
-    fun onDeleteButtonClicked(id: Int){
-        incomeNoteInteractor.deleteIncomeNoteInfo(id)
-        incomeNoteView.deleteIncomeNoteData()
-    }
+    fun onInputDialogCompleteClicked(incomeNoteInfo: IncomeNoteInfo) {
+        //id 설정
+        incomeNoteInfo.id = inputDialogId
 
-    fun onInputDialogCompleteClicked(incomeNoteInputDialog: IncomeNoteInputDialog, editMode: Boolean, id: Int){
-        incomeNoteInputDialog.run {
-            //예외처리 (값을 모두 입력하지 않았을 때)
-            if (et_subject_name.text.isEmpty() ||
-                    et_purchase_date.text.isEmpty() ||
-                    et_sell_date.text.isEmpty() ||
-                    et_purchase_price.text.isEmpty() ||
-                    et_sell_price.text.isEmpty() ||
-                    et_sell_count.text.isEmpty()
-            ) {
-
-                Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
-                return
-            }
-
-            //매매한 회사이름
-            val subjectName = et_subject_name.text.toString()
-            //매수일
-            val purchaseDate = et_purchase_date.text.toString()
-            //매도일
-            val sellDate = et_sell_date.text.toString()
-            //매수금액
-            val purchasePrice = et_purchase_price.text.toString()
-            val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice)
-            //매도금액
-            val sellPrice = et_sell_price.text.toString()
-            val sellPriceNumber = Utils.getNumDeletedComma(sellPrice)
-            //매도수량
-            val sellCount = et_sell_count.text.toString().toInt()
-            //수익
-            val realPainLossesAmountNumber =
-                    ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
-            val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
-            //수익률
-            val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
-            val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
-
-            //날짜오류 예외처리
-            if (Utils.getNumDeletedDot(purchaseDate).toInt() > Utils.getNumDeletedDot(sellDate)
-                            .toInt()
-            ) {
-                Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG)
-                        .show()
-                return
-            }
-
-            val dataInfo = IncomeNoteInfo(id, subjectName, realPainLossesAmount, purchaseDate,
-                    sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
-            if(editMode){
-                IncomeNoteInteractor.getInstance(mContext).updateIncomeNoteInfo(dataInfo)
-                incomeNoteView.updateIncomeNoteData(IncomeNoteInteractor.getInstance(mContext).getAllIncomeNoteInfoList())
-            }else{
-                IncomeNoteInteractor.getInstance(mContext).insertIncomeNoteInfo(dataInfo)
-                incomeNoteView.addIncomeNoteData(IncomeNoteInteractor.getInstance(mContext).getAllIncomeNoteInfoList())
-            }
-            dismiss()
+        if (editMode) {
+            incomeNoteInteractor.updateIncomeNoteInfo(incomeNoteInfo)
+            val newDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+            incomeNoteListAdapter.setDataInfoList(newDataList)
+            incomeNoteListAdapter.notifyDataSetChanged()
+            incomeNoteView.showAddButton()
+            incomeNoteView.scrollTopPosition(newDataList.size - 1)
+            incomeNoteView.bindTotalGainData()
+        } else {
+            incomeNoteInteractor.insertIncomeNoteInfo(incomeNoteInfo)
+            val newDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+            incomeNoteListAdapter.setDataInfoList(newDataList)
+            incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
+            incomeNoteView.scrollTopPosition(newDataList.size - 1)
+            incomeNoteView.showAddButton()
+            incomeNoteView.bindTotalGainData()
         }
     }
-    fun getAllIncomeNoteList(): ArrayList<IncomeNoteInfo?>{
+
+    fun getAllIncomeNoteList(): ArrayList<IncomeNoteInfo?> {
         return incomeNoteInteractor.getAllIncomeNoteInfoList()
+    }
+
+//    fun onAdapterItemClick() {
+//
+//    }
+
+    fun onAdapterItemLongClick(isEditMode: Boolean) {
+        if (isEditMode) {
+            incomeNoteView.hideAddButton()
+        } else {
+            incomeNoteView.showAddButton()
+        }
+    }
+
+    fun onEditButtonClick(position: Int) {
+        editMode = true
+        incomeNoteView.showAddButton()
+        inputDialogId = incomeNoteInteractor.getAllIncomeNoteInfoList()[position]!!.id
+        val incomeNoteInfo = IncomeNoteInteractor.getInstance(mContext).getIncomeNoteInfo(position)
+        incomeNoteView.showInputDialog(editMode, incomeNoteInfo!!)
+    }
+
+    fun onDeleteButtonClick(id: Int) {
+        incomeNoteInteractor.deleteIncomeNoteInfo(id)
+        val allIncomeNoteInfo = incomeNoteInteractor.getAllIncomeNoteInfoList()
+        incomeNoteView.bindTotalGainData()
+        if (allIncomeNoteInfo.size == 0) {
+            incomeNoteView.showAddButton()
+        }
+    }
+
+    fun onBackPressedClick(activity: Activity) {
+        if (incomeNoteListAdapter.isEditMode()) {
+            incomeNoteListAdapter.setEditMode(false)
+            incomeNoteListAdapter.notifyDataSetChanged()
+            incomeNoteView.showAddButton()
+        } else {
+            Utils.runBackPressAppCloseEvent(mContext, activity as Activity)
+        }
+    }
+
+    fun onMenuEditButtonClick() {
+        val allIncomeNoteList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+        if (allIncomeNoteList.size > 0) {
+            incomeNoteListAdapter.setEditMode(!incomeNoteListAdapter.isEditMode())
+            incomeNoteListAdapter.notifyDataSetChanged()
+            if (incomeNoteListAdapter.isEditMode()) {
+                incomeNoteView.hideAddButton()
+            } else {
+                incomeNoteView.showAddButton()
+            }
+        }
+    }
+    fun getEditMode(): Boolean{
+        return editMode
     }
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.ui.presenter.IncomeNotePresenter
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.item_income_note_list.view.*
 import java.sql.SQLException
@@ -14,26 +15,18 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: MainActivityCallBack) :
-    RecyclerView.Adapter<IncomeNoteListAdapter.ViewHolder>(){
+class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val incomeNotePresenter: IncomeNotePresenter) :
+        RecyclerView.Adapter<IncomeNoteListAdapter.ViewHolder>() {
     private lateinit var mContext: Context
     private var dataInfoList = ArrayList<IncomeNoteInfo?>()
-    private var mainActivityCallBack: MainActivityCallBack
     private var editModeOn: Boolean = false
     private var allCheckClick: Boolean = false
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
-
-    interface MainActivityCallBack{
-        fun onEditClicked(position: Int)
-        fun onDeleteClicked(id: Int)
-        fun onItemLongClicked()
-    }
 
     init {
         if (data != null) {
             this.dataInfoList = data
         }
-        this.mainActivityCallBack = callback
     }
 
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
@@ -41,7 +34,7 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: Mai
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
         val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view:View = inflater.inflate(R.layout.item_income_note_list, parent, false)
+        val view: View = inflater.inflate(R.layout.item_income_note_list, parent, false)
         return ViewHolder(view)
     }
 
@@ -52,20 +45,22 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: Mai
                 Utils.runVibration(mContext, 100)
                 editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
                 notifyDataSetChanged()
-                mainActivityCallBack.onItemLongClicked()
+                incomeNotePresenter.onAdapterItemLongClick(editModeOn)
                 return@setOnLongClickListener true
             }
             itemView.txt_edit.setOnClickListener {
-                mainActivityCallBack.onEditClicked(position)
+                incomeNotePresenter.onEditButtonClick(position)
+                setEditMode(false)
+                notifyDataSetChanged()
             }
             itemView.txt_delete.setOnClickListener {
-                try{
+                try {
                     val deleteIncomeNoteInfoId = dataInfoList[position]!!.id
-                    mainActivityCallBack.onDeleteClicked(deleteIncomeNoteInfoId)
+                    incomeNotePresenter.onDeleteButtonClick(deleteIncomeNoteInfoId)
                     dataInfoList.removeAt(position)
                     notifyItemRemoved(position)
                     notifyItemRangeRemoved(position, itemCount)
-                }catch (e:SQLException){
+                } catch (e: SQLException) {
                     e.printStackTrace()
                 }
             }
@@ -80,26 +75,27 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: Mai
         return dataInfoList.size
     }
 
-    fun deleteList(position: Int){
+    fun deleteList(position: Int) {
         dataInfoList.removeAt(position)
     }
 
-    fun getDataInfoList(): ArrayList<IncomeNoteInfo?>{
+    fun getDataInfoList(): ArrayList<IncomeNoteInfo?> {
         return dataInfoList
     }
 
-    fun setDataInfoList(incomeNoteInfoList: ArrayList<IncomeNoteInfo?>){
+    fun setDataInfoList(incomeNoteInfoList: ArrayList<IncomeNoteInfo?>) {
         this.dataInfoList = incomeNoteInfoList
     }
 
-    fun setEditMode(isEditMode: Boolean){
+    fun setEditMode(isEditMode: Boolean) {
         this.editModeOn = isEditMode
     }
-    fun isEditMode():Boolean{
+
+    fun isEditMode(): Boolean {
         return editModeOn
     }
 
-    private fun bindDataList(holder: ViewHolder, position: Int){
+    private fun bindDataList(holder: ViewHolder, position: Int) {
         holder.itemView.txt_subject_name.isSelected = true
         holder.itemView.txt_gain_data.isSelected = true
 
@@ -120,18 +116,19 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, callback: Mai
         for (i in realPainLossesAmountSplit.indices) {
             realPainLossesAmountNumber += realPainLossesAmountSplit[i]
         }
-        if(realPainLossesAmountNumber.toDouble()>=0){
+        if (realPainLossesAmountNumber.toDouble() >= 0) {
             holder.itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
             holder.itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-        }else{
+        } else {
             holder.itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
             holder.itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
         }
     }
-    private fun bindEditMode(holder: ViewHolder){
-        if(editModeOn){
+
+    private fun bindEditMode(holder: ViewHolder) {
+        if (editModeOn) {
             holder.itemView.lin_EditMode.visibility = View.VISIBLE
-        }else{
+        } else {
             holder.itemView.lin_EditMode.visibility = View.GONE
         }
     }

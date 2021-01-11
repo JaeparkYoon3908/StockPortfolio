@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.preference.PrefKey
 import com.yjpapp.stockportfolio.ui.fragment.IncomeNoteFragment
@@ -13,16 +14,17 @@ import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity: BaseActivity(R.layout.activity_main), MainView {
-    companion object{
+class MainActivity : BaseActivity(R.layout.activity_main), MainView {
+    companion object {
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
         const val FRAGMENT_TAG_MEMO_LIST = "memo_list"
     }
+
     private val myStockFragment = MyStockFragment()
     private val incomeNoteFragment = IncomeNoteFragment()
     private val memoListFragment = MemoListFragment()
-    private var currentFragment: androidx.fragment.app.Fragment = myStockFragment
+    private var currentFragment: Fragment = myStockFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,152 +41,123 @@ class MainActivity: BaseActivity(R.layout.activity_main), MainView {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        lin_MainActivity_BottomMenu_MyStock.setOnClickListener(onClickListener)
-        lin_MainActivity_BottomMenu_IncomeNote.setOnClickListener(onClickListener)
-        lin_MainActivity_BottomMenu_Memo.setOnClickListener(onClickListener)
-
+        addFragment()
         startFirstFragment()
-    }
-
-    private val onClickListener = View.OnClickListener { view: View? ->
-        when(view?.id){
-            R.id.lin_MainActivity_BottomMenu_MyStock -> {
-                supportFragmentManager.beginTransaction().hide(currentFragment).show(myStockFragment).commit()
-                currentFragment = myStockFragment
-                preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_MY_STOCK)
-                txt_MainActivity_Title.text = getString(R.string.MyStockFragment_Title)
-            }
-            R.id.lin_MainActivity_BottomMenu_IncomeNote -> {
-                supportFragmentManager.beginTransaction().hide(currentFragment).show(incomeNoteFragment).commit()
-                currentFragment = incomeNoteFragment
-                preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_INCOME_NOTE)
-                txt_MainActivity_Title.text = getString(R.string.IncomeNoteFragment_Title)
-            }
-            R.id.lin_MainActivity_BottomMenu_Memo -> {
-                supportFragmentManager.beginTransaction().hide(currentFragment).show(memoListFragment).commit()
-                currentFragment = memoListFragment
-                preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_MEMO_LIST)
-                txt_MainActivity_Title.text = getString(R.string.MemoListFragment_Title)
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(currentFragment == memoListFragment){
+        if (currentFragment == memoListFragment) {
             val memoListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_MEMO_LIST)
             memoListFragment?.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     override fun onBackPressed() {
-        if(currentFragment == incomeNoteFragment ||
-                currentFragment == memoListFragment){
+        if (currentFragment == incomeNoteFragment ||
+                currentFragment == memoListFragment) {
             super.onBackPressed()
             return
         }
         Utils.runBackPressAppCloseEvent(mContext, this)
     }
 
-    private fun startFirstFragment(){
-        supportFragmentManager.run {
-            if(preferenceController.isExists(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)){
-                when (preferenceController.getPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)){
-                    FRAGMENT_TAG_MY_STOCK -> {
-                        beginTransaction()
-                            .add(R.id.cons_MainActivity_fragment,myStockFragment, FRAGMENT_TAG_MY_STOCK)
-                            .commit()
-                        beginTransaction()
-                            .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
-                            .hide(incomeNoteFragment)
-                            .commit()
-                        beginTransaction()
-                            .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
-                            .hide(memoListFragment)
-                            .commit()
-                        currentFragment = myStockFragment
-                        txt_MainActivity_Title.text = getString(R.string.MyStockFragment_Title)
-                    }
-                    FRAGMENT_TAG_INCOME_NOTE -> {
-                        beginTransaction()
-                            .add(R.id.cons_MainActivity_fragment,myStockFragment, FRAGMENT_TAG_MY_STOCK)
-                            .hide(myStockFragment)
-                            .commit()
-                        beginTransaction()
-                            .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
-                            .commit()
-                        beginTransaction()
-                            .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
-                            .hide(memoListFragment)
-                            .commit()
-                        currentFragment = incomeNoteFragment
-                        txt_MainActivity_Title.text = getString(R.string.IncomeNoteFragment_Title)
-                    }
-                    FRAGMENT_TAG_MEMO_LIST -> {
-                        beginTransaction()
-                            .add(R.id.cons_MainActivity_fragment,myStockFragment, FRAGMENT_TAG_MY_STOCK)
-                            .hide(myStockFragment)
-                            .commit()
-                        beginTransaction()
-                            .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
-                            .hide(incomeNoteFragment)
-                            .commit()
-                        beginTransaction()
-                            .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
-                            .commit()
-                        currentFragment = memoListFragment
-                        txt_MainActivity_Title.text = getString(R.string.MemoListFragment_Title)
-                    }
+    private fun startFirstFragment() {
+        if (preferenceController.isExists(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)) {
+            when (preferenceController.getPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)) {
+                FRAGMENT_TAG_MY_STOCK -> {
+                    showMyStock()
                 }
-
-            }else{
-                beginTransaction()
-                    .add(R.id.cons_MainActivity_fragment,myStockFragment, FRAGMENT_TAG_MY_STOCK)
-                    .commit()
-                beginTransaction()
-                    .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
-                    .hide(incomeNoteFragment)
-                    .commit()
-                beginTransaction()
-                    .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
-                    .hide(memoListFragment)
-                    .commit()
-                currentFragment = myStockFragment
-                txt_MainActivity_Title.text = getString(R.string.MyStockFragment_Title)
-                preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_MY_STOCK)
+                FRAGMENT_TAG_INCOME_NOTE -> {
+                    showIncomeNote()
+                }
+                FRAGMENT_TAG_MEMO_LIST -> {
+                    showMemoList()
+                }
             }
+        } else {
+            showMyStock()
         }
     }
 
-    override fun initFragment() {
+    override fun addFragment() {
+        supportFragmentManager.beginTransaction()
+                .add(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
+                .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
+                .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
+                .hide(myStockFragment)
+                .hide(incomeNoteFragment)
+                .hide(memoListFragment)
+                .commit()
 
     }
 
     override fun showMyStock() {
-        //TODO 정리하기...
         supportFragmentManager.beginTransaction()
+                .replace(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
+                .show(myStockFragment)
+                .commit()
+        currentFragment = myStockFragment
+        txt_MainActivity_Title.text = getString(R.string.MyStockFragment_Title)
+        preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_MY_STOCK)
 
     }
 
     override fun hideMyStock() {
-        TODO("Not yet implemented")
+        supportFragmentManager.beginTransaction()
+                .hide(myStockFragment)
+                .commit()
     }
 
     override fun showIncomeNote() {
-        TODO("Not yet implemented")
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
+                .show(incomeNoteFragment)
+                .commit()
+        currentFragment = incomeNoteFragment
+        preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_INCOME_NOTE)
+        txt_MainActivity_Title.text = getString(R.string.IncomeNoteFragment_Title)
     }
 
     override fun hideIncomeNote() {
-        TODO("Not yet implemented")
+        supportFragmentManager.beginTransaction()
+                .hide(incomeNoteFragment)
+                .commit()
     }
 
     override fun showMemoList() {
-        TODO("Not yet implemented")
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
+                .show(memoListFragment)
+                .commit()
+        currentFragment = memoListFragment
+        preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_MEMO_LIST)
+        txt_MainActivity_Title.text = getString(R.string.MemoListFragment_Title)
     }
 
     override fun hideMemoList() {
-        TODO("Not yet implemented")
+        supportFragmentManager.beginTransaction()
+                .hide(memoListFragment)
+                .commit()
     }
 
+    override fun hideCurrentFragment() {
+        supportFragmentManager.beginTransaction()
+                .hide(currentFragment)
+                .commit()
+    }
 
+    override fun clickBottomMenu(view: View?) {
+        when (view?.id) {
+            R.id.lin_MainActivity_BottomMenu_MyStock -> {
+                showMyStock()
+            }
+            R.id.lin_MainActivity_BottomMenu_IncomeNote -> {
+                showIncomeNote()
+            }
+            R.id.lin_MainActivity_BottomMenu_Memo -> {
+                showMemoList()
+            }
+        }
+    }
 }

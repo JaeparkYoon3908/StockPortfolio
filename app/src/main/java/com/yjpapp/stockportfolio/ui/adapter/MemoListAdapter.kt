@@ -55,12 +55,9 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
                 holder.view.img_MemoList_Check.isSelected = !holder.view.img_MemoList_Check.isSelected
                 if(holder.view.img_MemoList_Check.isSelected){
                     memoActivityCallBack.onMemoDeleteCheck(position, true)
-//                    memoListData[position]?.deleteChecked = "true"
                 }else{
                     memoActivityCallBack.onMemoDeleteCheck(position, false)
-//                    memoListData[position]?.deleteChecked = "false"
                 }
-//                memoListData[position]?.deleteChecked = holder.view.img_MemoList_Check.isSelected
             }
         }else{
             holder.view.img_MemoList_Check.visibility = View.GONE
