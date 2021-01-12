@@ -16,7 +16,11 @@ import com.yjpapp.stockportfolio.database.data.MyStockInfo
 import com.yjpapp.stockportfolio.network.YahooFinanceProtocolManager
 import com.yjpapp.stockportfolio.network.data.Price
 import com.yjpapp.stockportfolio.ui.adapter.MyStockListAdapter
+import com.yjpapp.stockportfolio.ui.dialog.MyStockInputDialog
+import com.yjpapp.stockportfolio.ui.presenter.MyStockPresenter
+import com.yjpapp.stockportfolio.ui.view.MyStockView
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import kotlinx.android.synthetic.main.dialog_input_my_stock.*
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -24,7 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 //TODO 내가 갖고있는 주식 실시간 변동 사항 및 수익 분석 할 수 있는 기능 만들기.
-class MyStockFragment: Fragment() {
+class MyStockFragment: Fragment(), MyStockView {
     private lateinit var mContext: Context
     private lateinit var mRootView: View
     private lateinit var onBackPressedCallback: OnBackPressedCallback
@@ -36,7 +40,7 @@ class MyStockFragment: Fragment() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var myStockListAdapter: MyStockListAdapter
     private lateinit var allMyStockList: ArrayList<MyStockInfo>
-
+    private lateinit var myStockPresenter: MyStockPresenter
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -58,6 +62,11 @@ class MyStockFragment: Fragment() {
         return mRootView
     }
 
+    override fun onResume() {
+        super.onResume()
+        myStockPresenter.onResume()
+    }
+
     private var menu: Menu? = null
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -68,13 +77,19 @@ class MyStockFragment: Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Add -> {
-                //TODO 추가 메뉴 구성.
+                myStockPresenter.onAddButtonClick()
+                showInputDialog(false, null)
+            }
+
+            R.id.menu_MyStockFragment_Edit -> {
+
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun initData(){
+        myStockPresenter = MyStockPresenter(mContext, this)
         allMyStockList = ArrayList()
         val symbol = "005930.KS"
         val region = "KR"
@@ -134,8 +149,53 @@ class MyStockFragment: Fragment() {
             allMyStockList.add(myStockInfo)
         }
 
-        myStockListAdapter = MyStockListAdapter(allMyStockList)
-        recyclerView.adapter = myStockListAdapter
+//        myStockListAdapter = MyStockListAdapter(allMyStockList, myStockPresenter)
+//        recyclerView.adapter = myStockListAdapter
         recyclerView.itemAnimator = FadeInAnimator()
     }
+
+    override fun addButtonClick() {
+        TODO("Not yet implemented")
+    }
+
+    override fun showInputDialog(editMode: Boolean, myStockInfo: MyStockInfo?) {
+        MyStockInputDialog(mContext, myStockPresenter).apply {
+            if(editMode){
+                if(!isShowing){
+                    show()
+                    et_subject_name.setText(myStockInfo?.subjectName)
+                    et_purchase_date.setText(myStockInfo?.purchaseDate)
+                    et_purchase_price.setText(myStockInfo?.purchasePrice)
+                    et_purchase_count.setText(myStockInfo?.holdingQuantity.toString())
+                }
+            }else{
+                if(!isShowing) {
+                    show()
+                }
+            }
+        }
+
+    }
+
+    override fun showAddButton() {
+        menu?.findItem(R.id.menu_MyStockFragment_Add)?.isVisible = true
+    }
+
+    override fun hideAddButton() {
+        menu?.findItem(R.id.menu_MyStockFragment_Add)?.isVisible = false
+    }
+
+    override fun showEditButton() {
+        menu?.findItem(R.id.menu_MyStockFragment_Edit)?.isVisible = true
+    }
+
+    override fun hideEditButton() {
+        menu?.findItem(R.id.menu_MyStockFragment_Edit)?.isVisible = false
+    }
+
+    override fun setAdapter(myStockListAdapter: MyStockListAdapter) {
+        recyclerView.adapter = myStockListAdapter
+    }
+
+
 }

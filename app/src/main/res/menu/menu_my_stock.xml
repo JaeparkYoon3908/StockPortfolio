@@ -6,7 +6,7 @@
         android:icon="@drawable/icon_add2"
         app:showAsAction="ifRoom"
         />
-    <item android:id="@+id/menu_IncomeNote_Edit"
+    <item android:id="@+id/menu_MyStockFragment_Edit"
         android:title="@string/Common_Edit"
         app:showAsAction="ifRoom"
         />

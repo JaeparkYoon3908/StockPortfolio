@@ -1,13 +1,10 @@
 package com.yjpapp.stockportfolio.ui.view
 
-import com.yjpapp.stockportfolio.database.data.MemoInfo
+import android.content.Intent
+import com.yjpapp.stockportfolio.ui.adapter.MemoListAdapter
 
 interface MemoListView {
-    fun startMemoReadWriteActivity()
-
-    fun refreshMemoListData(updateMemoList: ArrayList<MemoInfo?>)
-
-    fun setDeleteModeOff()
+    fun startReadWriteActivityForResult(intent: Intent, requestCode: Int)
 
     fun showAddButton()
 
@@ -21,9 +18,7 @@ interface MemoListView {
 
     fun hideGuideMessage()
 
-    fun addMemoListView(updateMemoList: ArrayList<MemoInfo?>)
+    fun showDeleteCheckDialog()
 
-    fun updateMemoListView(updateMemoList: ArrayList<MemoInfo?>)
-
-    fun deleteMemoListView(updateMemoList: ArrayList<MemoInfo?>, position: Int)
+    fun setAdapter(memoListAdapter: MemoListAdapter)
 }

@@ -17,7 +17,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.ui.presenter.IncomeNotePresenter
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.dialog_edit_income_note.*
+import kotlinx.android.synthetic.main.dialog_input_income_note.*
 import java.text.DecimalFormat
 import java.util.*
 
@@ -37,7 +37,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_edit_income_note)
+        setContentView(R.layout.dialog_input_income_note)
 
         initLayout()
     }

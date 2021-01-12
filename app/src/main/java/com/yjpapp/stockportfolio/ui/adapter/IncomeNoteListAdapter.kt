@@ -96,40 +96,45 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
     }
 
     private fun bindDataList(holder: ViewHolder, position: Int) {
-        holder.itemView.txt_subject_name.isSelected = true
-        holder.itemView.txt_gain_data.isSelected = true
+        holder.apply {
+            itemView.txt_subject_name.isSelected = true
+            itemView.txt_gain_data.isSelected = true
 
-        //상단 데이터
-        holder.itemView.txt_subject_name.text = dataInfoList[position]?.subjectName
-        holder.itemView.txt_gain_data.text = moneySymbol + dataInfoList[position]?.realPainLossesAmount
-        //왼쪽
-        holder.itemView.txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
-        holder.itemView.txt_sell_date_data.text = dataInfoList[position]?.sellDate
-        holder.itemView.txt_gain_percent_data.text = "(" + dataInfoList[position]?.gainPercent + ")"
-        //오른쪽
-        holder.itemView.txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
-        holder.itemView.txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice
-        holder.itemView.txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
+            //상단 데이터
+            itemView.txt_subject_name.text = dataInfoList[position]?.subjectName
+            itemView.txt_gain_data.text = moneySymbol + dataInfoList[position]?.realPainLossesAmount
+            //왼쪽
+            itemView.txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
+            itemView.txt_sell_date_data.text = dataInfoList[position]?.sellDate
+            itemView.txt_gain_percent_data.text = "(" + dataInfoList[position]?.gainPercent + ")"
+            //오른쪽
+            itemView.txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
+            itemView.txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice
+            itemView.txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
 
-        var realPainLossesAmountNumber = ""
-        val realPainLossesAmountSplit = dataInfoList[position]?.realPainLossesAmount!!.split(",")
-        for (i in realPainLossesAmountSplit.indices) {
-            realPainLossesAmountNumber += realPainLossesAmountSplit[i]
-        }
-        if (realPainLossesAmountNumber.toDouble() >= 0) {
-            holder.itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-            holder.itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-        } else {
-            holder.itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-            holder.itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+            var realPainLossesAmountNumber = ""
+            val realPainLossesAmountSplit = dataInfoList[position]?.realPainLossesAmount!!.split(",")
+            for (i in realPainLossesAmountSplit.indices) {
+                realPainLossesAmountNumber += realPainLossesAmountSplit[i]
+            }
+            if (realPainLossesAmountNumber.toDouble() >= 0) {
+                itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+            } else {
+                itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+                itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+            }
         }
     }
 
     private fun bindEditMode(holder: ViewHolder) {
-        if (editModeOn) {
-            holder.itemView.lin_EditMode.visibility = View.VISIBLE
-        } else {
-            holder.itemView.lin_EditMode.visibility = View.GONE
+        holder.apply {
+            if (editModeOn) {
+                itemView.lin_EditMode.visibility = View.VISIBLE
+            } else {
+                itemView.lin_EditMode.visibility = View.GONE
+            }
         }
+
     }
 }

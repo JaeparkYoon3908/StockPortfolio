@@ -11,7 +11,7 @@ import com.yjpapp.stockportfolio.util.Utils
 
 class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: IncomeNoteView) {
     private var editMode = false
-    private var inputDialogId = -1
+    private var incomeNoteId = -1
     private val incomeNoteInteractor = IncomeNoteInteractor.getInstance(mContext)
     private lateinit var incomeNoteListAdapter: IncomeNoteListAdapter
     fun onResume() {
@@ -46,13 +46,13 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
     fun onAddButtonClicked() {
         editMode = false
-        inputDialogId = -1
+        incomeNoteId = -1
         incomeNoteView.showInputDialog(editMode, null)
     }
 
     fun onInputDialogCompleteClicked(incomeNoteInfo: IncomeNoteInfo) {
         //id 설정
-        incomeNoteInfo.id = inputDialogId
+        incomeNoteInfo.id = incomeNoteId
 
         if (editMode) {
             incomeNoteInteractor.updateIncomeNoteInfo(incomeNoteInfo)
@@ -73,14 +73,6 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         }
     }
 
-    fun getAllIncomeNoteList(): ArrayList<IncomeNoteInfo?> {
-        return incomeNoteInteractor.getAllIncomeNoteInfoList()
-    }
-
-//    fun onAdapterItemClick() {
-//
-//    }
-
     fun onAdapterItemLongClick(isEditMode: Boolean) {
         if (isEditMode) {
             incomeNoteView.hideAddButton()
@@ -92,7 +84,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     fun onEditButtonClick(position: Int) {
         editMode = true
         incomeNoteView.showAddButton()
-        inputDialogId = incomeNoteInteractor.getAllIncomeNoteInfoList()[position]!!.id
+        incomeNoteId = incomeNoteInteractor.getAllIncomeNoteInfoList()[position]!!.id
         val incomeNoteInfo = IncomeNoteInteractor.getInstance(mContext).getIncomeNoteInfo(position)
         incomeNoteView.showInputDialog(editMode, incomeNoteInfo!!)
     }
@@ -112,7 +104,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
             incomeNoteListAdapter.notifyDataSetChanged()
             incomeNoteView.showAddButton()
         } else {
-            Utils.runBackPressAppCloseEvent(mContext, activity as Activity)
+            Utils.runBackPressAppCloseEvent(mContext, activity)
         }
     }
 
@@ -128,6 +120,14 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
             }
         }
     }
+
+    fun getAllIncomeNoteList(): ArrayList<IncomeNoteInfo?> {
+        return incomeNoteInteractor.getAllIncomeNoteInfoList()
+    }
+
+//    fun onAdapterItemClick() {
+//
+//    }
     fun getEditMode(): Boolean{
         return editMode
     }

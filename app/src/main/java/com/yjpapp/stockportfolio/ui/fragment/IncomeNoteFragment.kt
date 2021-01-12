@@ -22,7 +22,7 @@ import com.yjpapp.stockportfolio.ui.view.IncomeNoteView
 import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
-import kotlinx.android.synthetic.main.dialog_edit_income_note.*
+import kotlinx.android.synthetic.main.dialog_input_income_note.*
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -101,11 +101,6 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
         }
         return super.onOptionsItemSelected(item)
     }
-
-//    private fun initData() {
-////        allIncomeNoteList = (activity as MainActivity).databaseController.getAllIncomeNoteList()
-//        incomeNotePresenter = IncomeNotePresenter(mContext, this)
-//    }
 
     private fun initLayout() {
         setHasOptionsMenu(true)
@@ -234,8 +229,8 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
     }
 
     override fun showInputDialog(editMode: Boolean, incomeNoteInfo: IncomeNoteInfo?) {
-        if(editMode){
-            IncomeNoteInputDialog(mContext, incomeNotePresenter).apply {
+        IncomeNoteInputDialog(mContext, incomeNotePresenter).apply {
+            if(editMode){
                 if (!isShowing) {
                     show()
                     et_subject_name.setText(incomeNoteInfo?.subjectName)
@@ -245,9 +240,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
                     et_sell_price.setText(incomeNoteInfo?.sellPrice)
                     et_sell_count.setText(incomeNoteInfo?.sellCount.toString())
                 }
-            }
-        }else{
-            IncomeNoteInputDialog(mContext, incomeNotePresenter).apply {
+            }else{
                 if (!isShowing) {
                     show()
                 }

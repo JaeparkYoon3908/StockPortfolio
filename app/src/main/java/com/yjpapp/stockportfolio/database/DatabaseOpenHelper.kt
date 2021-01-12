@@ -8,8 +8,10 @@ class DatabaseOpenHelper(context: Context): SQLiteOpenHelper(context, "database.
     private val DB_VERSION = 1
 
     override fun onCreate(db: SQLiteDatabase?) {
+        db?.version = DB_VERSION
         db?.execSQL(createMemoTable())
-        db?.execSQL(createPortfolioTable())
+        db?.execSQL(createIncomeNoteTable())
+        db?.execSQL(createMyStockTable())
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -31,9 +33,9 @@ class DatabaseOpenHelper(context: Context): SQLiteOpenHelper(context, "database.
                 Databases.COL_MEMO_DELETE_CHECK + " TEXT DEFAULT false);"
     }
 
-    private fun createPortfolioTable(): String{
+    private fun createIncomeNoteTable(): String{
         return "create table " + Databases.TABLE_INCOME_NOTE + "(" +
-                Databases.COL_PORTFOLIO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                Databases.COL_INCOME_NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Databases.COL_INCOME_NOTE_SUBJECT_NAME + " TEXT," +
                 Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT + " TEXT," +
                 Databases.COL_INCOME_NOTE_PURCHASE_DATE + " TEXT," +
@@ -42,5 +44,17 @@ class DatabaseOpenHelper(context: Context): SQLiteOpenHelper(context, "database.
                 Databases.COL_INCOME_NOTE_PURCHASE_PRICE + " TEXT," +
                 Databases.COL_INCOME_NOTE_SELL_PRICE + " TEXT," +
                 Databases.COL_INCOME_NOTE_SELL_COUNT + " TEXT);"
+    }
+
+    private fun createMyStockTable(): String{
+        return "create table " + Databases.TABLE_MY_STOCK + "(" +
+                Databases.COL_MY_STOCK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                Databases.COL_MY_STOCK_SUBJECT_NAME + " TEXT," +
+                Databases.COL_MY_STOCK_REAL_GAINS_LOSSES_AMOUNT + " TEXT," +
+                Databases.COL_MY_STOCK_GAIN_PERCENT + " TEXT," +
+                Databases.COL_MY_STOCK_PURCHASE_DATE + " TEXT," +
+                Databases.COL_MY_STOCK_PURCHASE_PRICE + " TEXT," +
+                Databases.COL_MY_STOCK_CURRENT_PRICE + " TEXT," +
+                Databases.COL_MY_STOCK_PURCHASE_COUNT + " TEXT);"
     }
 }

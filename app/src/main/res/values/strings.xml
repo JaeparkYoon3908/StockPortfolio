@@ -64,4 +64,7 @@
     <string name="MyStockFragment_Current_Price">현재가</string>
     <string name="MyStockFragment_Holding_Quantity">보유수량</string>
 
+    <string name="MyStockInputDialog_Purchase_Count">매수수량</string>
+    <string name="MyStockInputDialog_Purchase_Count_Hint">매수한 수량</string>
+
 </resources>
