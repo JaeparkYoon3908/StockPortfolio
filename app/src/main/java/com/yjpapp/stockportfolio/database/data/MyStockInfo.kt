@@ -8,5 +8,5 @@ data class MyStockInfo
      var gainPercent: String?, // 수익률
      var purchasePrice: String?, // 매수단가
      var currentPrice: String?, // 현재가
-     var holdingQuantity: String? // 보유 수량
+     var purchaseCount: Int // 보유 수량
      )

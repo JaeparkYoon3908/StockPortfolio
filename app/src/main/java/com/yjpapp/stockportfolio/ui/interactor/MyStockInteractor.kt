@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.ui.interactor
 
 import android.content.Context
 import com.yjpapp.stockportfolio.database.DatabaseController
+import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.database.data.MyStockInfo
 
 class MyStockInteractor {
@@ -23,5 +24,18 @@ class MyStockInteractor {
 
     fun getAllMyStockList(): ArrayList<MyStockInfo?> {
         return databaseController.getAllMyStockList()
+    }
+
+    fun insertMyStockInfo(myStockInfo: MyStockInfo){
+        databaseController.insertMyStockData(myStockInfo)
+    }
+
+    fun updateMyStockInfo(myStockInfo: MyStockInfo){
+        databaseController.updateMyStockData(myStockInfo)
+    }
+
+    fun deleteMyStockInfo(id: Int){
+        databaseController.deleteData(id, Databases.TABLE_MY_STOCK)
+
     }
 }

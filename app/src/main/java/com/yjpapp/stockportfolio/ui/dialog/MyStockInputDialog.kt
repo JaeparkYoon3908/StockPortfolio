@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.database.data.MyStockInfo
 import com.yjpapp.stockportfolio.ui.presenter.MyStockPresenter
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.dialog_input_my_stock.*
@@ -36,7 +37,7 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_input_income_note)
+        setContentView(R.layout.dialog_input_my_stock)
 
         initLayout()
     }
@@ -68,7 +69,6 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
                         et_purchase_price.text.isEmpty() ||
                         et_purchase_count.text.isEmpty()
                 ) {
-
                     Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
                     return@OnClickListener
                 }
@@ -82,8 +82,8 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
                 val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice)
 
                 //매수수량
-                val sellCount = et_purchase_count.text.toString().toInt()
-//                //수익
+                val purchaseCount = et_purchase_count.text.toString().toInt()
+                //수익
 //                val realPainLossesAmountNumber =
 //                        ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
 //                val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
@@ -96,6 +96,9 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
                     Toast.makeText(mContext, "매수한 날짜가 현재 날짜보다 앞서있습니다.", Toast.LENGTH_LONG).show()
                     return@OnClickListener
                 }
+                val myStockInfo = MyStockInfo(0, subjectName, "0",
+                        purchaseDate, "0%", purchasePrice, "0", purchaseCount)
+                myStockPresenter.onInputDialogCompleteClicked(myStockInfo)
 
 //                val dataInfo = IncomeNoteInfo(0, subjectName, realPainLossesAmount, purchaseDate,
 //                        sellDate, gainPercent, purchasePrice, sellPrice, sellCount)

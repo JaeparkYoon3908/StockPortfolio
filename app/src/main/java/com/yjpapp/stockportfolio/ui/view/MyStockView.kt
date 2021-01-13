@@ -17,4 +17,8 @@ interface MyStockView {
     fun hideEditButton()
 
     fun setAdapter(myStockListAdapter: MyStockListAdapter)
+
+    fun scrollTopPosition(topPosition: Int)
+
+    fun bindTotalGainData()
 }

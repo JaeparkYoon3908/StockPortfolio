@@ -295,11 +295,11 @@ class DatabaseController {
                 val result = MyStockInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_MY_STOCK_ID)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_SUBJECT_NAME)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_REAL_GAINS_LOSSES_AMOUNT)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_GAIN_PERCENT)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_GAIN_PERCENT)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_PRICE)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_CURRENT_PRICE)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_COUNT))
+                        cursor.getInt(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_COUNT))
                 )
                 resultList.add(result)
                 cursor.moveToNext()
@@ -307,5 +307,55 @@ class DatabaseController {
         }
         cursor?.close()
         return resultList
+    }
+
+    fun insertMyStockData(myStockInfo: MyStockInfo?): Boolean {
+        val insertCheck: Long
+        val contentValues = ContentValues()
+        contentValues.apply {
+            put(Databases.COL_MY_STOCK_SUBJECT_NAME, myStockInfo?.subjectName)
+            put(Databases.COL_MY_STOCK_REAL_GAINS_LOSSES_AMOUNT, myStockInfo?.realPainLossesAmount)
+            put(Databases.COL_MY_STOCK_GAIN_PERCENT, myStockInfo?.gainPercent)
+            put(Databases.COL_MY_STOCK_PURCHASE_DATE, myStockInfo?.purchaseDate)
+            put(Databases.COL_MY_STOCK_PURCHASE_PRICE, myStockInfo?.purchasePrice)
+            put(Databases.COL_MY_STOCK_CURRENT_PRICE, myStockInfo?.currentPrice)
+            put(Databases.COL_MY_STOCK_PURCHASE_COUNT, myStockInfo?.purchaseCount)
+        }
+
+        insertCheck = database.insert(Databases.TABLE_MY_STOCK, null, contentValues)
+
+        return insertCheck != -1L
+    }
+
+    fun updateMyStockData(myStockInfo: MyStockInfo?): Boolean {
+        val updateCheck: Int
+        val contentValues = ContentValues()
+        contentValues.apply {
+            put(Databases.COL_MY_STOCK_SUBJECT_NAME, myStockInfo?.subjectName)
+            put(Databases.COL_MY_STOCK_REAL_GAINS_LOSSES_AMOUNT, myStockInfo?.realPainLossesAmount)
+            put(Databases.COL_MY_STOCK_GAIN_PERCENT, myStockInfo?.gainPercent)
+            put(Databases.COL_MY_STOCK_PURCHASE_DATE, myStockInfo?.purchaseDate)
+            put(Databases.COL_MY_STOCK_PURCHASE_PRICE, myStockInfo?.purchasePrice)
+            put(Databases.COL_MY_STOCK_CURRENT_PRICE, myStockInfo?.currentPrice)
+            put(Databases.COL_MY_STOCK_PURCHASE_COUNT, myStockInfo?.purchaseCount)
+        }
+
+        updateCheck = database.update(Databases.TABLE_MY_STOCK, contentValues,
+                Databases.COL_MY_STOCK_ID + " = ? ", arrayOf(myStockInfo?.id.toString()))
+
+        return updateCheck != -1
+    }
+
+    fun updateCurrentPrice(id: Int, currentPrice: String?): Boolean{
+        val updateCheck: Int
+        val contentValues = ContentValues()
+        contentValues.apply {
+            put(Databases.COL_MY_STOCK_CURRENT_PRICE, currentPrice)
+        }
+
+        updateCheck = database.update(Databases.TABLE_MY_STOCK, contentValues,
+                Databases.COL_MY_STOCK_ID + " = ? ", arrayOf(id.toString()))
+
+        return updateCheck != -1
     }
 }

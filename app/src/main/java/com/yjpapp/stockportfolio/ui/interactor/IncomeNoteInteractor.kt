@@ -28,7 +28,6 @@ class IncomeNoteInteractor {
 
     fun updateIncomeNoteInfo(incomeNoteInfo: IncomeNoteInfo){
         databaseController.updateIncomeNoteData(incomeNoteInfo)
-
     }
 
     fun deleteIncomeNoteInfo(id: Int){

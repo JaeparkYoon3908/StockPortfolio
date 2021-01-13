@@ -11,7 +11,8 @@ import com.yjpapp.stockportfolio.ui.presenter.MyStockPresenter
 import kotlinx.android.synthetic.main.item_my_stock_list.view.*
 import java.util.*
 
-class MyStockListAdapter(private val allMySockList: ArrayList<MyStockInfo?>, val myStockPresenter: MyStockPresenter) :
+class MyStockListAdapter(private var allMySockList: ArrayList<MyStockInfo?>,
+                         private val myStockPresenter: MyStockPresenter) :
     RecyclerView.Adapter<MyStockListAdapter.ViewHolder>(){
     private var mContext: Context? = null
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
@@ -43,7 +44,7 @@ class MyStockListAdapter(private val allMySockList: ArrayList<MyStockInfo?>, val
             itemView.txt_gain_percent_data.text = "("+ allMySockList[position]?.gainPercent + ")"
             //왼쪽
             itemView.txt_purchase_date_data.text = allMySockList[position]?.purchaseDate
-            itemView.txt_holding_quantity_data.text = allMySockList[position]?.holdingQuantity
+            itemView.txt_holding_quantity_data.text = allMySockList[position]?.purchaseCount.toString()
             //오른쪽
             itemView.txt_purchase_price_data.text = moneySymbol + allMySockList[position]?.purchasePrice
             itemView.txt_current_price_data.text = moneySymbol + allMySockList[position]?.currentPrice
@@ -75,7 +76,7 @@ class MyStockListAdapter(private val allMySockList: ArrayList<MyStockInfo?>, val
             }
             //삭제 버튼
             itemView.txt_delete.setOnClickListener {
-                myStockPresenter.onDeleteButtonClick()
+                myStockPresenter.onDeleteButtonClick(position)
             }
         }
     }
@@ -89,10 +90,14 @@ class MyStockListAdapter(private val allMySockList: ArrayList<MyStockInfo?>, val
         }
     }
 
-    fun isEditModeOn(): Boolean{
+    fun isEditMode(): Boolean{
         return editModeOn
     }
-    fun setEditModeOn(deleteModeOn: Boolean){
+    fun setEditMode(deleteModeOn: Boolean){
         this.editModeOn = deleteModeOn
+    }
+
+    fun setMyStockList(allMyStockList: ArrayList<MyStockInfo?>){
+        this.allMySockList = allMyStockList
     }
 }
