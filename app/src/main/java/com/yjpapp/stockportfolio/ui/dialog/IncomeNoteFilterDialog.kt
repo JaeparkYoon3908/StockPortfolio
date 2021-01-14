@@ -14,12 +14,6 @@ import kotlinx.android.synthetic.main.dailog_income_note_filter.*
 
 class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSheetDialogFragment() {
 
-    interface IncomeFilterClickListener{
-        fun onAllFilterClicked()
-        fun onGainFilterClicked()
-        fun onLossFilterClicked()
-    }
-
     private lateinit var rootView: View
 
     private lateinit var mContext: Context

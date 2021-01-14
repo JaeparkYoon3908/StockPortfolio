@@ -21,4 +21,6 @@ interface MyStockView {
     fun scrollTopPosition(topPosition: Int)
 
     fun bindTotalGainData()
+
+    fun changeFilterText(text: String)
 }

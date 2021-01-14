@@ -19,7 +19,7 @@ class MyStockService: Service() {
         when (msg.what) {
             // activity로부터 가져옴
             MSG_REGISTER_CLIENT -> {
-                msg.data.get("presenter")
+//                msg.data.get("presenter")
 
                 mClient = msg.replyTo
 

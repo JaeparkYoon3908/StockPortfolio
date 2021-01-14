@@ -8,16 +8,11 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.ui.presenter.MyStockPresenter
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.dailog_income_note_filter.*
 
-class MyStockFilterDialog (callback: FilterClicked): BottomSheetDialogFragment() {
-
-    interface FilterClicked{
-        fun allSelect()
-        fun gainSelect()
-        fun lossSelect()
-    }
+class MyStockFilterDialog (myStockPresenter: MyStockPresenter): BottomSheetDialogFragment() {
 
     private lateinit var rootView: View
     private lateinit var mContext: Context
@@ -57,15 +52,15 @@ class MyStockFilterDialog (callback: FilterClicked): BottomSheetDialogFragment()
                 dismiss()
             }
             R.id.txt_MainFilterDialog_all -> {
-                callback.allSelect()
+                myStockPresenter.onAllFilterClicked()
                 dismiss()
             }
             R.id.txt_MainFilterDialog_gain -> {
-                callback.gainSelect()
+                myStockPresenter.onGainFilterClicked()
                 dismiss()
             }
             R.id.txt_MainFilterDialog_loss -> {
-                callback.lossSelect()
+                myStockPresenter.onLossFilterClicked()
                 dismiss()
             }
         }

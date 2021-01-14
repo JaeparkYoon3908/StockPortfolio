@@ -358,4 +358,63 @@ class DatabaseController {
 
         return updateCheck != -1
     }
+
+    fun getGainMyStockList(): ArrayList<MyStockInfo?> {
+        val cursor: Cursor
+        val resultList = ArrayList<MyStockInfo?>()
+        val sb = StringBuilder()
+        sb.append("SELECT * FROM " + Databases.TABLE_MY_STOCK)
+        cursor = database.rawQuery(sb.toString(), null)
+        if (cursor.count > 0) {
+            cursor.moveToFirst()
+            for (i in 0 until cursor.count) {
+                val realGainLossesAmount = cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT))
+                val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
+                if (realGainLossesAmountNum >= 0) {
+                    val result = MyStockInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_MY_STOCK_ID)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_SUBJECT_NAME)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_REAL_GAINS_LOSSES_AMOUNT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_GAIN_PERCENT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_PRICE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_CURRENT_PRICE)),
+                        cursor.getInt(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_COUNT)))
+                    resultList.add(result)
+                }
+                cursor.moveToNext()
+            }
+        }
+        cursor?.close()
+        return resultList
+    }
+
+    fun getLossMyStockList(): ArrayList<MyStockInfo?> {
+        val cursor: Cursor
+        val resultList = ArrayList<MyStockInfo?>()
+        val sb = StringBuilder()
+        sb.append("SELECT * FROM " + Databases.TABLE_MY_STOCK)
+        cursor = database.rawQuery(sb.toString(), null)
+        if (cursor.count > 0) {
+            cursor.moveToFirst()
+            for (i in 0 until cursor.count) {
+                val realGainLossesAmount = cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT))
+                val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
+                if (realGainLossesAmountNum < 0) {
+                    val result = MyStockInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_MY_STOCK_ID)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_SUBJECT_NAME)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_REAL_GAINS_LOSSES_AMOUNT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_DATE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_GAIN_PERCENT)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_PRICE)),
+                        cursor.getString(cursor.getColumnIndex(Databases.COL_MY_STOCK_CURRENT_PRICE)),
+                        cursor.getInt(cursor.getColumnIndex(Databases.COL_MY_STOCK_PURCHASE_COUNT))
+                    )
+                    resultList.add(result)
+                }
+                cursor.moveToNext()
+            }
+        }
+        cursor?.close()
+        return resultList
+    }
 }

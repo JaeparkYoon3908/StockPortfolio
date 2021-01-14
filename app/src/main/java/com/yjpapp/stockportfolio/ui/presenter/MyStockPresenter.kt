@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.*
 import android.util.Log
+import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.MyStockInfo
 import com.yjpapp.stockportfolio.ui.adapter.MyStockListAdapter
 import com.yjpapp.stockportfolio.ui.interactor.MyStockInteractor
@@ -22,6 +23,35 @@ class MyStockPresenter(val mContext: Context, private val myStockView: MyStockVi
         val myStockList = myStockInteractor.getAllMyStockList()
         myStockListAdapter = MyStockListAdapter(myStockList, this)
         myStockView.setAdapter(myStockListAdapter)
+        startService()
+    }
+
+    fun onDestroy(){
+        stopService()
+    }
+
+    fun onAllFilterClicked() {
+        val allMyStockList = myStockInteractor.getAllMyStockList()
+        myStockListAdapter.setMyStockList(allMyStockList)
+        myStockListAdapter.notifyDataSetChanged()
+        val text = mContext.getString(R.string.Common_All)
+        myStockView.changeFilterText(text)
+    }
+
+    fun onGainFilterClicked() {
+//        val gainDataList = incomeNoteInteractor.getGainIncomeNoteInfoList()
+//        myStockListAdapter.setDataInfoList(gainDataList)
+        myStockListAdapter.notifyDataSetChanged()
+        val text = mContext.getString(R.string.Common_Gain)
+        myStockView.changeFilterText(text)
+    }
+
+    fun onLossFilterClicked() {
+//        val lossDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+//        myStockListAdapter.setDataInfoList(gainDataList)
+        myStockListAdapter.notifyDataSetChanged()
+        val text = mContext.getString(R.string.Common_Loss)
+        myStockView.changeFilterText(text)
     }
 
     fun onMyStockListLongClick(){

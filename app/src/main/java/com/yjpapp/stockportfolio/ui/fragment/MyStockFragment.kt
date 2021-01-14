@@ -16,6 +16,7 @@ import com.yjpapp.stockportfolio.ui.presenter.MyStockPresenter
 import com.yjpapp.stockportfolio.ui.view.MyStockView
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.dialog_input_my_stock.*
+import kotlinx.android.synthetic.main.fragment_my_stock.*
 
 
 //TODO 내가 갖고있는 주식 실시간 변동 사항 및 수익 분석 할 수 있는 기능 만들기.
@@ -56,6 +57,11 @@ class MyStockFragment: Fragment(), MyStockView {
     override fun onResume() {
         super.onResume()
         myStockPresenter.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myStockPresenter.onDestroy()
     }
 
     private var menu: Menu? = null
@@ -186,5 +192,9 @@ class MyStockFragment: Fragment(), MyStockView {
 
     override fun bindTotalGainData() {
 
+    }
+
+    override fun changeFilterText(text: String) {
+        txt_MyStockFragment_Edit.text = text
     }
 }
