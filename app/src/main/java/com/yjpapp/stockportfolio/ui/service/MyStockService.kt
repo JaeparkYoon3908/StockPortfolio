@@ -4,6 +4,15 @@ import android.app.Service
 import android.content.Intent
 import android.os.*
 import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.yjpapp.stockportfolio.network.YahooFinanceProtocolManager
+import com.yjpapp.stockportfolio.network.data.Price
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MyStockService: Service() {
@@ -11,6 +20,8 @@ class MyStockService: Service() {
         const val MSG_SEND_TO_ACTIVITY = 0
         const val MSG_SEND_TO_SERVICE = 1
         const val MSG_REGISTER_CLIENT = 2
+        const val MSG_DATA_REQUEST = 3
+        const val MSG_CLIENT_REGI_SUCCESS = 4
     }
     private lateinit var mClient: Messenger
     /** activity로부터 binding 된 Messenger  */
@@ -20,9 +31,12 @@ class MyStockService: Service() {
             // activity로부터 가져옴
             MSG_REGISTER_CLIENT -> {
 //                msg.data.get("presenter")
-
                 mClient = msg.replyTo
+                dataRequest()
 
+            }
+            MSG_DATA_REQUEST -> {
+                dataRequest()
             }
         }
         false
@@ -63,28 +77,6 @@ class MyStockService: Service() {
 
 //        sendMsgToActivity(1234)
 
-//        val symbol = "005930.KS"
-//        val region = "KR"
-//        YahooFinanceProtocolManager.getInstance(applicationContext).getStockProfile(symbol, region,
-//                object : Callback<JsonObject?> {
-//                    override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
-//                        if (response.code() == 200 || response.code() == 204) {
-//                            try {
-//                                val jsonObject = JSONObject(response.body().toString())
-//                                val priceJSONArray = jsonObject.getJSONObject("price").toString()
-//                                val price: Price = Gson().fromJson(priceJSONArray, Price::class.java)
-//                                Log.d("YJP", "price = $price")
-//                            } catch (e: JSONException) {
-//                                e.printStackTrace()
-//                            }
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
-//                        Log.d("RequestResult", "RetrofitExample, Type : get, Result : onFailure, Error Message : " + t.message)
-//                    }
-//                })
-
         return mMessenger.binder
     }
 
@@ -98,4 +90,40 @@ class MyStockService: Service() {
         //서비스가 종료될 때 실행.
     }
 
+    private fun dataRequest(){
+        val symbol = "005930.KS"
+        val region = "KR"
+        YahooFinanceProtocolManager.getInstance(applicationContext).getStockProfile(symbol, region,
+            object : Callback<JsonObject?> {
+                override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+                    if (response.code() == 200 || response.code() == 204) {
+                        try {
+                            val jsonObject = JSONObject(response.body().toString())
+                            val priceJSONArray = jsonObject.getJSONObject("price").toString()
+                            val price: Price = Gson().fromJson(priceJSONArray, Price::class.java)
+
+                            //10초마다 한번씩 메시지 보내기.
+                            Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                                val bundle = Bundle()
+                                bundle.putString("currentPrice", price.regularMarketPrice.raw.toString())
+                                val msg = Message.obtain(null, MSG_SEND_TO_ACTIVITY)
+                                msg.data = bundle
+                                mClient.send(msg)
+                            },1000)
+
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        } catch (e: RemoteException){
+                            e.printStackTrace()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
+                    Log.d("RequestResult", "RetrofitExample, Type : get, Result : onFailure, Error Message : " + t.message)
+                    val msg = Message.obtain(null, MSG_SEND_TO_ACTIVITY)
+                    mClient.send(msg)
+                }
+            })
+    }
 }

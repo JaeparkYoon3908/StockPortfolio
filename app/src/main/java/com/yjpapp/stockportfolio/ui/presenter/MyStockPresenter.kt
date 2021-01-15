@@ -172,7 +172,16 @@ class MyStockPresenter(val mContext: Context, private val myStockView: MyStockVi
         Log.w("test", "ControlService - message what : " + msg.what + " , msg.obj " + msg.obj)
         when (msg.what) {
             MyStockService.MSG_SEND_TO_ACTIVITY -> {
-                Log.d("yjp", "service로부터 msg 받음")
+                val currentPrice = msg.data.getString("currentPrice")
+                val allMyStockList = myStockInteractor.getAllMyStockList()
+                if(currentPrice != null){
+                    myStockInteractor.updateCurrentPrice(allMyStockList[0]!!.id, currentPrice)
+                }
+                val updateMyStockList = myStockInteractor.getAllMyStockList()
+                myStockListAdapter.setMyStockList(updateMyStockList)
+                myStockListAdapter.notifyDataSetChanged()
+                val newMsg: Message = Message.obtain(null, MyStockService.MSG_DATA_REQUEST)
+                mServiceMessenger!!.send(newMsg)
             }
         }
         false

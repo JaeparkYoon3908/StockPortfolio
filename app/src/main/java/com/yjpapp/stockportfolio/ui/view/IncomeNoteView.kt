@@ -8,10 +8,6 @@ interface IncomeNoteView {
 
     fun changeFilterText(text: String)
 
-//    fun showGainData(gainDataList: ArrayList<IncomeNoteInfo?>)
-//
-//    fun showLossData(lossDataList: ArrayList<IncomeNoteInfo?>)
-
     fun showAddButton()
 
     fun showFilterDialog()
@@ -19,12 +15,6 @@ interface IncomeNoteView {
     fun showInputDialog(editMode: Boolean, incomeNoteInfo: IncomeNoteInfo?)
 
     fun hideAddButton()
-
-//    fun addIncomeNoteView(newDataList: ArrayList<IncomeNoteInfo?>)
-
-//    fun updateIncomeNoteView(newDataList: ArrayList<IncomeNoteInfo?>)
-
-//    fun deleteIncomeNoteView(newDataList: ArrayList<IncomeNoteInfo?>)
 
     fun scrollTopPosition(topPosition: Int)
 

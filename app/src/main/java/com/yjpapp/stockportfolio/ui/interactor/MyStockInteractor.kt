@@ -34,6 +34,10 @@ class MyStockInteractor {
         databaseController.updateMyStockData(myStockInfo)
     }
 
+    fun updateCurrentPrice(id: Int, currentPrice: String){
+        databaseController.updateCurrentPrice(id, currentPrice)
+    }
+
     fun deleteMyStockInfo(id: Int){
         databaseController.deleteData(id, Databases.TABLE_MY_STOCK)
 
