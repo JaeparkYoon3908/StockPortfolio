@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_IncomeNoteActivity"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_40dp"
+        android:layout_height="@dimen/common_50dp"
         android:background="@color/color_f1f1f1"
         android:orientation="horizontal"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"

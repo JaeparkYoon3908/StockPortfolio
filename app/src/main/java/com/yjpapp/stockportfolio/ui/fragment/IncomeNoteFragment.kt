@@ -4,15 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.LinearLayout
 import android.widget.SearchView
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.ui.MainActivity
 import com.yjpapp.stockportfolio.ui.adapter.IncomeNoteListAdapter
 import com.yjpapp.stockportfolio.ui.dialog.IncomeNoteFilterDialog
@@ -30,20 +28,12 @@ import kotlin.collections.ArrayList
 class IncomeNoteFragment : Fragment(),IncomeNoteView {
     private lateinit var incomeNotePresenter: IncomeNotePresenter
     private lateinit var mContext: Context
-    private lateinit var mRootView: View
+
     private lateinit var onBackPressedCallback: OnBackPressedCallback
-
-    //layout 변수
-    private lateinit var textView_TotalRealizationGainsLossesData: TextView
-    private lateinit var textView_TotalRealizationGainsLossesPercent: TextView
-    private lateinit var linear_Filter: LinearLayout
-    private lateinit var textView_Filter: TextView
-    private lateinit var textView_Edit: TextView
-    private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var searchView: SearchView
 
-//    private var incomeNoteListAdapter: IncomeNoteListAdapter? = null
+    private var _viewBinding: FragmentIncomeNoteBinding? = null
+    private val viewBinding get() = _viewBinding!!
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -62,8 +52,11 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
             container: ViewGroup?,
             savedInstanceState: Bundle?,
     ): View {
-        mRootView = inflater.inflate(R.layout.fragment_income_note, container, false)
-        return mRootView
+
+//        mRootView = inflater.inflate(R.layout.fragment_income_note, container, false)
+        _viewBinding = FragmentIncomeNoteBinding.inflate(inflater, container, false)
+
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -80,6 +73,11 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
     override fun onDetach() {
         super.onDetach()
         onBackPressedCallback.remove()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 
     private var menu: Menu? = null
@@ -105,32 +103,24 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
     private fun initLayout() {
         setHasOptionsMenu(true)
         incomeNotePresenter = IncomeNotePresenter(mContext, this)
-        textView_TotalRealizationGainsLossesData =
-            mRootView.findViewById(R.id.txt_TotalRealizationGainsLossesData)
-        textView_TotalRealizationGainsLossesPercent =
-            mRootView.findViewById(R.id.txt_TotalRealizationGainsLossesPercent)
-        linear_Filter = mRootView.findViewById(R.id.lin_IncomeNoteFragment_Filter)
-        textView_Filter = mRootView.findViewById(R.id.txt_IncomeNoteFragment_Filter)
-//        textView_Edit = mRootView.findViewById(R.id.txt_IncomeNoteFragment_Edit)
-        recyclerView = mRootView.findViewById(R.id.recyclerview_IncomeNoteFragment)
-        searchView = mRootView.findViewById(R.id.sv_IncomeNoteFragment)
-        searchView.setOnQueryTextListener(object :
-                SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                startSearch(newText)
-                return false
-            }
-        })
+        viewBinding.apply {
+            svIncomeNoteFragment.setOnQueryTextListener(object :
+                    SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
 
-        linear_Filter.setOnClickListener(onClickListener)
-//        textView_Edit.setOnClickListener(onClickListener)
-
-        textView_TotalRealizationGainsLossesData.isSelected = true
-        textView_TotalRealizationGainsLossesPercent.isSelected = true
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    startSearch(newText)
+                    return false
+                }
+            })
+            linIncomeNoteFragmentFilter.setOnClickListener(onClickListener)
+            txtTotalRealizationGainsLosses.isSelected = true
+            txtTotalRealizationGainsLossesData.isSelected = true
+            txtTotalRealizationGainsLossesPercent.isSelected = true
+        }
 
         bindTotalGainData()
         initRecyclerView()
@@ -172,9 +162,9 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
 //        if (allIncomeNoteList?.size != 0) {
 //            layoutManager.scrollToPosition(allIncomeNoteList?.size!! - 1)
 //        }
-        recyclerView.layoutManager = layoutManager
+        viewBinding.recyclerviewIncomeNoteFragment.layoutManager = layoutManager
 
-        recyclerView.itemAnimator = FadeInAnimator()
+        viewBinding.recyclerviewIncomeNoteFragment.itemAnimator = FadeInAnimator()
 
     }
 
@@ -198,21 +188,25 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
             gainPercentList.add(Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!).toDouble())
         }
         totalGainPercent = Utils.calculateTotalGainPercent(gainPercentList)
-        textView_TotalRealizationGainsLossesData.text =
-                NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
-        if (totalGainNumber >= 0) {
-            textView_TotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
-            textView_TotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
-        } else {
-            textView_TotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
-            textView_TotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
+
+        viewBinding.apply {
+            txtTotalRealizationGainsLossesData.text =
+                    NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
+            if(totalGainNumber >= 0){
+                txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
+            }else{
+                txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
+                txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
+            }
+            txtTotalRealizationGainsLossesPercent.text =
+                    Utils.getRoundsPercentNumber(totalGainPercent)
         }
-        textView_TotalRealizationGainsLossesPercent.text =
-                Utils.getRoundsPercentNumber(totalGainPercent)
+
     }
 
     override fun changeFilterText(text: String) {
-        textView_Filter.text = text
+        viewBinding.txtIncomeNoteFragmentFilter.text = text
     }
 
     override fun showAddButton() {
@@ -249,11 +243,11 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
     }
 
     override fun scrollTopPosition(topPosition: Int) {
-        recyclerView.scrollToPosition(topPosition)
+        viewBinding.recyclerviewIncomeNoteFragment.scrollToPosition(topPosition)
     }
 
     override fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter) {
-        recyclerView.adapter = incomeNoteListAdapter
+        viewBinding.recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
     }
 
 }

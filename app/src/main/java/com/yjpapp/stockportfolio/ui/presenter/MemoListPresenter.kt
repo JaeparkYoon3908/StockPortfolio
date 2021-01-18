@@ -79,6 +79,7 @@ class MemoListPresenter(val mContext: Context, private val memoListView: MemoLis
     fun getAllMemoInfoList(): ArrayList<MemoInfo?>{
        return memoListInteractor.getAllMemoInfoList()
     }
+
     fun onMemoListLongClicked(position: Int){
         if (!memoListAdapter.isDeleteModeOn()) {
             memoListView.hideAddButton()
