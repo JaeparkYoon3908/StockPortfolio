@@ -7,13 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
-import android.widget.Toolbar
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
 import com.yjpapp.stockportfolio.ui.MainActivity
 import com.yjpapp.stockportfolio.ui.adapter.MemoListAdapter
 import com.yjpapp.stockportfolio.ui.presenter.MemoListPresenter
@@ -42,16 +40,12 @@ class MemoListFragment : Fragment(), MemoListView {
     }
 
     private lateinit var mContext: Context
-    private lateinit var mRootView: View
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private lateinit var memoListPresenter: MemoListPresenter
-
     private lateinit var layoutManager: LinearLayoutManager
-//    private var memoListAdapter: MemoListAdapter? = null
 
-    private lateinit var toolbar_MemoListActivity: Toolbar
-    private lateinit var txt_MemoListActivity_GuideMessage: TextView
-    private lateinit var recyclerview_MemoListActivity: RecyclerView
+    private var _viewBinding: FragmentMemoListBinding? = null
+    private val viewBinding get() = _viewBinding!!
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -69,10 +63,12 @@ class MemoListFragment : Fragment(), MemoListView {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        mRootView = inflater.inflate(R.layout.fragment_memo_list, container, false)
+//        mRootView = inflater.inflate(R.layout.fragment_memo_list, container, false)
+        _viewBinding = FragmentMemoListBinding.inflate(inflater, container, false)
+
         initData()
         initLayout()
-        return mRootView
+        return viewBinding.root
     }
 
     override fun onResume() {
@@ -87,8 +83,8 @@ class MemoListFragment : Fragment(), MemoListView {
     private fun initLayout() {
         setHasOptionsMenu(true)
 
-        txt_MemoListActivity_GuideMessage = mRootView.findViewById(R.id.txt_MemoListFragment_GuideMessage)
-        recyclerview_MemoListActivity = mRootView.findViewById(R.id.recyclerview_MemoListFragment)
+//        txt_MemoListActivity_GuideMessage = mRootView.findViewById(R.id.txt_MemoListFragment_GuideMessage)
+//        recyclerview_MemoListActivity = mRootView.findViewById(R.id.recyclerview_MemoListFragment)
         initRecyclerView()
     }
 
@@ -123,17 +119,20 @@ class MemoListFragment : Fragment(), MemoListView {
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
         //Scroll item 2 to 20 pixels from the top
-        if (memoDataList.size != 0) {
-            layoutManager.scrollToPosition(memoDataList.size - 1)
-            txt_MemoListActivity_GuideMessage.visibility = View.GONE
-        } else {
-            txt_MemoListActivity_GuideMessage.visibility = View.VISIBLE
-        }
-        recyclerview_MemoListActivity.layoutManager = layoutManager
+        viewBinding.apply {
+            if (memoDataList.size != 0) {
+                layoutManager.scrollToPosition(memoDataList.size - 1)
+                txtMemoListFragmentGuideMessage.visibility = View.GONE
+            } else {
+                txtMemoListFragmentGuideMessage.visibility = View.VISIBLE
+            }
+            recyclerviewMemoListFragment.layoutManager = layoutManager
 
 //        memoListAdapter = MemoListAdapter(memoDataList, memoListPresenter)
 //        recyclerview_MemoListActivity.adapter = memoListAdapter
-        recyclerview_MemoListActivity.itemAnimator = SlideInLeftAnimator()
+            recyclerviewMemoListFragment.itemAnimator = SlideInLeftAnimator()
+        }
+
     }
 
     private var menu: Menu? = null
@@ -193,12 +192,17 @@ class MemoListFragment : Fragment(), MemoListView {
     }
 
     override fun showGuideMessage() {
-        txt_MemoListActivity_GuideMessage.visibility = View.VISIBLE
+        viewBinding.apply {
+            txtMemoListFragmentGuideMessage.visibility = View.VISIBLE
+        }
+
     }
 
     override fun hideGuideMessage() {
         val memoDataList = memoListPresenter.getAllMemoInfoList()
-        txt_MemoListActivity_GuideMessage.visibility = View.GONE
+        viewBinding.apply {
+            txtMemoListFragmentGuideMessage.visibility = View.GONE
+        }
         layoutManager.scrollToPosition(memoDataList.size - 1)
     }
 
@@ -215,6 +219,8 @@ class MemoListFragment : Fragment(), MemoListView {
     }
 
     override fun setAdapter(memoListAdapter: MemoListAdapter) {
-        recyclerview_MemoListActivity.adapter = memoListAdapter
+        viewBinding.apply {
+            recyclerviewMemoListFragment.adapter = memoListAdapter
+        }
     }
 }
