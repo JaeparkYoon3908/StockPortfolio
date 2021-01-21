@@ -8,13 +8,15 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.databinding.DialogIncomeNoteFilterBinding
 import com.yjpapp.stockportfolio.ui.presenter.IncomeNotePresenter
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.dailog_income_note_filter.*
 
 class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSheetDialogFragment() {
 
-    private lateinit var rootView: View
+//    private lateinit var rootView: View
+    private var _viewBinding: DialogIncomeNoteFilterBinding? = null
+    private val viewBinding get() = _viewBinding!!
 
     private lateinit var mContext: Context
     override fun onAttach(context: Context) {
@@ -29,8 +31,10 @@ class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSh
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        rootView = inflater.inflate(R.layout.dailog_income_note_filter, container, false)
-        return rootView
+//        rootView = inflater.inflate(R.layout.dialog_income_note_filter, container, false)
+        _viewBinding = DialogIncomeNoteFilterBinding.inflate(inflater, container, false)
+
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,18 +52,18 @@ class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSh
     private val onClickListener = View.OnClickListener { view: View? ->
         when(view?.id){
 
-            R.id.txt_MainFilterDialog_cancel -> {
+            R.id.txt_IncomeNoteFilterDialog_cancel -> {
                 dismiss()
             }
-            R.id.txt_MainFilterDialog_all -> {
+            R.id.txt_IncomeNoteFilterDialog_all -> {
                 incomeNotePresenter.onAllFilterClicked()
                 dismiss()
             }
-            R.id.txt_MainFilterDialog_gain -> {
+            R.id.txt_IncomeNoteFilterDialog_gain -> {
                 incomeNotePresenter.onGainFilterClicked()
                 dismiss()
             }
-            R.id.txt_MainFilterDialog_loss -> {
+            R.id.txt_IncomeNoteFilterDialog_loss -> {
                 incomeNotePresenter.onLossFilterClicked()
                 dismiss()
 
@@ -68,11 +72,11 @@ class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSh
     }
 
     private fun initLayout(){
-        rootView.apply {
-            txt_MainFilterDialog_cancel.setOnClickListener(onClickListener)
-            txt_MainFilterDialog_all.setOnClickListener(onClickListener)
-            txt_MainFilterDialog_gain.setOnClickListener(onClickListener)
-            txt_MainFilterDialog_loss.setOnClickListener(onClickListener)
+        viewBinding.apply {
+            txtIncomeNoteFilterDialogCancel.setOnClickListener(onClickListener)
+            txtIncomeNoteFilterDialogAll.setOnClickListener(onClickListener)
+            txtIncomeNoteFilterDialogGain.setOnClickListener(onClickListener)
+            txtIncomeNoteFilterDialogLoss.setOnClickListener(onClickListener)
         }
     }
 

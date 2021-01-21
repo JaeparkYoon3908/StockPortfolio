@@ -5,16 +5,21 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
 import com.yjpapp.stockportfolio.preference.PrefKey
 import com.yjpapp.stockportfolio.ui.fragment.IncomeNoteFragment
 import com.yjpapp.stockportfolio.ui.fragment.MemoListFragment
 import com.yjpapp.stockportfolio.ui.fragment.MyStockFragment
 import com.yjpapp.stockportfolio.ui.view.MainView
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.activity_main.*
 
-
-class MainActivity : BaseActivity(R.layout.activity_main), MainView {
+/**
+ * Main
+ *
+ * @author Yun Jae-park
+ * @since 2020.12
+ */
+class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
     companion object {
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
@@ -37,7 +42,10 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainView {
     }
 
     override fun initLayout() {
-        setSupportActionBar(toolbar_IncomeNoteActivity)
+        binding.apply {
+            setSupportActionBar(toolbarMainActivity)
+        }
+
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
@@ -98,7 +106,9 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainView {
                 .show(myStockFragment)
                 .commit()
         currentFragment = myStockFragment
-        txt_MainActivity_Title.text = getString(R.string.MyStockFragment_Title)
+        binding.apply {
+            txtMainActivityTitle.text = getString(R.string.MyStockFragment_Title)
+        }
         preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_MY_STOCK)
 
     }
@@ -116,7 +126,9 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainView {
                 .commit()
         currentFragment = incomeNoteFragment
         preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_INCOME_NOTE)
-        txt_MainActivity_Title.text = getString(R.string.IncomeNoteFragment_Title)
+        binding.apply {
+            txtMainActivityTitle.text = getString(R.string.IncomeNoteFragment_Title)
+        }
     }
 
     override fun hideIncomeNote() {
@@ -132,7 +144,9 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainView {
                 .commit()
         currentFragment = memoListFragment
         preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_MEMO_LIST)
-        txt_MainActivity_Title.text = getString(R.string.MemoListFragment_Title)
+        binding.apply {
+            txtMainActivityTitle.text = getString(R.string.MemoListFragment_Title)
+        }
     }
 
     override fun hideMemoList() {
@@ -159,5 +173,9 @@ class MainActivity : BaseActivity(R.layout.activity_main), MainView {
                 showMemoList()
             }
         }
+    }
+
+    override fun getViewBinding(): ActivityMainBinding {
+        return ActivityMainBinding.inflate(layoutInflater)
     }
 }

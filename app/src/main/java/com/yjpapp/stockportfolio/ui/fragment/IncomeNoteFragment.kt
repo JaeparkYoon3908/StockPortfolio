@@ -25,6 +25,12 @@ import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+/**
+ * 수익노트 화면
+ *
+ * @author Yun Jae-park
+ * @since 2020.08
+ */
 class IncomeNoteFragment : Fragment(),IncomeNoteView {
     private lateinit var incomeNotePresenter: IncomeNotePresenter
     private lateinit var mContext: Context
@@ -151,7 +157,6 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
                 showFilterDialog()
             }
         }
-
     }
 
     private fun initRecyclerView() {
@@ -249,5 +254,4 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
     override fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter) {
         viewBinding.recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
     }
-
 }

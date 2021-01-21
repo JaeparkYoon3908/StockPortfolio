@@ -19,6 +19,12 @@ import com.yjpapp.stockportfolio.ui.view.MemoListView
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 
+/**
+ * 메모리스트 화면
+ *
+ * @author Yun Jae-park
+ * @since 2020.11
+ */
 class MemoListFragment : Fragment(), MemoListView {
     companion object {
         const val INTENT_KEY_MEMO_MODE = "INTENT_KEY_MEMO_MODE"
@@ -95,7 +101,6 @@ class MemoListFragment : Fragment(), MemoListView {
             RESULT_OK -> {
                 when (requestCode) {
                     REQUEST_ADD -> {
-                        // TODO refresh 되는 상황 실질적 DB Add는 ReadWriteActivity에서 하는듯함
                         memoListPresenter.addMemoInfo()
                     }
                 }

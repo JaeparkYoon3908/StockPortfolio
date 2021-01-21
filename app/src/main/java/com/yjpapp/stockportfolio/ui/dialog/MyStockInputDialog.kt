@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.constance.AppConfig
 import com.yjpapp.stockportfolio.database.data.MyStockInfo
 import com.yjpapp.stockportfolio.ui.presenter.MyStockPresenter
 import com.yjpapp.stockportfolio.util.Utils
@@ -29,11 +30,7 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
     private var purchaseYear: String? = null
     private var purchaseMonth: String? = null
     private var purchaseDay: String? = null
-//    private var sellYear: String? = null
-//    private var sellMonth: String? = null
-//    private var sellDay: String? = null
 
-    private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +48,7 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
 
         et_purchase_price.addTextChangedListener(textWatcher)
 
-        txt_purchase_price_symbol.text = moneySymbol
+        txt_purchase_price_symbol.text = AppConfig.moneySymbol
 
         window?.setBackgroundDrawableResource(R.color.color_80000000)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)

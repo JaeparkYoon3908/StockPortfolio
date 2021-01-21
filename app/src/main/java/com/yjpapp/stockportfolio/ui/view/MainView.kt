@@ -2,6 +2,13 @@ package com.yjpapp.stockportfolio.ui.view
 
 import android.view.View
 
+/**
+ * MainActivity의 View
+ *
+ * @author Yun Jae-park
+ * @since 2020.12
+ */
+
 interface MainView {
     fun addFragment()
 

@@ -11,6 +11,12 @@ import com.yjpapp.stockportfolio.ui.presenter.MyStockPresenter
 import kotlinx.android.synthetic.main.item_my_stock_list.view.*
 import java.util.*
 
+/**
+ * MyStockListFragment와 연결된 RecyclerView Adapter
+ *
+ * @author Yun Jae-park
+ * @since 2020.08
+ */
 class MyStockListAdapter(private var allMySockList: ArrayList<MyStockInfo?>,
                          private val myStockPresenter: MyStockPresenter) :
     RecyclerView.Adapter<MyStockListAdapter.ViewHolder>(){

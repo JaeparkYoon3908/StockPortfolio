@@ -10,13 +10,20 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.MyStockInfo
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
 import com.yjpapp.stockportfolio.ui.adapter.MyStockListAdapter
+import com.yjpapp.stockportfolio.ui.dialog.MyStockFilterDialog
 import com.yjpapp.stockportfolio.ui.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.ui.presenter.MyStockPresenter
 import com.yjpapp.stockportfolio.ui.view.MyStockView
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.dialog_input_my_stock.*
-import kotlinx.android.synthetic.main.fragment_my_stock.*
 
+
+/**
+ * 나의 주식 화면
+ *
+ * @author Yun Jae-park
+ * @since 2020.12
+ */
 
 //TODO 내가 갖고있는 주식 실시간 변동 사항 및 수익 분석 할 수 있는 기능 만들기.
 class MyStockFragment: Fragment(), MyStockView {
@@ -37,6 +44,7 @@ class MyStockFragment: Fragment(), MyStockView {
         //Fragment BackPress Event Call
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
@@ -126,8 +134,11 @@ class MyStockFragment: Fragment(), MyStockView {
 
     private fun initLayout(){
         setHasOptionsMenu(true)
-//        txt_current_price_data = mRootView.findViewById(R.id.txt_current_price_data)
-//        txt_current_price_change_percent_data = mRootView.findViewById(R.id.txt_current_price_change_percent_data)
+        viewBinding.apply {
+            txtIncomeNoteFragmentFilter.setOnClickListener {
+                showFilterDialog()
+            }
+        }
         initRecyclerView()
     }
     private fun initRecyclerView(){
@@ -144,8 +155,6 @@ class MyStockFragment: Fragment(), MyStockView {
 
             recyclerviewMyStockFragment.itemAnimator = FadeInAnimator()
         }
-
-
     }
 
     override fun addButtonClick() {
@@ -204,6 +213,13 @@ class MyStockFragment: Fragment(), MyStockView {
     }
 
     override fun changeFilterText(text: String) {
-        txt_MyStockFragment_Edit.text = text
+        viewBinding.apply {
+            txtIncomeNoteFragmentFilter.text = text
+        }
+    }
+
+    override fun showFilterDialog() {
+        val myStockFilterDialog = MyStockFilterDialog(myStockPresenter)
+        myStockFilterDialog.show(childFragmentManager, tag)
     }
 }

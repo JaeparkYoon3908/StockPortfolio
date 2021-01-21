@@ -5,6 +5,13 @@ import com.yjpapp.stockportfolio.database.data.MemoInfo
 import com.yjpapp.stockportfolio.ui.interactor.MemoReadWriteInteractor
 import com.yjpapp.stockportfolio.ui.view.MemoReadWriteView
 
+/**
+ * MemoReadWriteActivity의 Presenter
+ *
+ * @author Yun Jae-park
+ * @since 2020.12
+ */
+
 class MemoReadWritePresenter(val mContext: Context, private val memoReadWriteView: MemoReadWriteView) {
     private val memoReadWriteInteractor = MemoReadWriteInteractor.getInstance(mContext)
 

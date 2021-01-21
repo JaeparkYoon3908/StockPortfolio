@@ -14,6 +14,12 @@ import es.dmoral.toasty.Toasty
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * 개발에 필요한 함수들
+ *
+ * @author Yun Jae-park
+ * @since 2020.07
+ */
 object Utils {
     private val sellTex: Double = 0.5
 

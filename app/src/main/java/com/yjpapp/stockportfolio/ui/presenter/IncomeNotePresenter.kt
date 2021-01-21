@@ -9,6 +9,13 @@ import com.yjpapp.stockportfolio.ui.interactor.IncomeNoteInteractor
 import com.yjpapp.stockportfolio.ui.view.IncomeNoteView
 import com.yjpapp.stockportfolio.util.Utils
 
+/**
+ * IncomeNoteFragment의 Presenter
+ *
+ * @author Yun Jae-park
+ * @since 2020.12
+ */
+
 class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: IncomeNoteView) {
     private var editMode = false
     private var incomeNoteId = -1

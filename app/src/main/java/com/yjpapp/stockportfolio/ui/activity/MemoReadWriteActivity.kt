@@ -8,21 +8,28 @@ import android.view.MenuItem
 import android.view.View
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
+import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
 import com.yjpapp.stockportfolio.ui.BaseActivity
 import com.yjpapp.stockportfolio.ui.fragment.MemoListFragment
 import com.yjpapp.stockportfolio.ui.presenter.MemoReadWritePresenter
 import com.yjpapp.stockportfolio.ui.view.MemoReadWriteView
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.activity_memo_read_write.*
 
-
-class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write), MemoReadWriteView {
+/**
+ * 메모 읽기 및 추가 화면
+ *
+ * @author Yun Jae-park
+ * @since 2020.12.27
+ */
+class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(), MemoReadWriteView {
     private lateinit var memoReadWritePresenter: MemoReadWritePresenter
     private var mode: String? = null
     private var memoListPosition = 0
     private var id = 0
     private var title: String? = null
     private var content: String? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,12 +50,15 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write), Me
 
     override fun initLayout() {
         //Toolbar
-        setSupportActionBar(toolbar_MemoAddActivity)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        binding.apply {
+            setSupportActionBar(toolbarMemoReadWriteActivity)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        et_MemoReadWriteActivity_title.onFocusChangeListener = onFocusChangeListener
-        et_MemoReadWriteActivity_content.onFocusChangeListener = onFocusChangeListener
+            etMemoReadWriteActivityTitle.onFocusChangeListener = onFocusChangeListener
+            etMemoReadWriteActivityContent.onFocusChangeListener = onFocusChangeListener
+        }
+
     }
 
     private var menu: Menu? = null
@@ -60,13 +70,16 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write), Me
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        if(mode == MemoListFragment.MEMO_READ_MODE){
-            et_MemoReadWriteActivity_title.setText(title)
-            et_MemoReadWriteActivity_content.setText(content)
-            hideCompleteButton()
-        }else{
-            hideDeleteButton()
+        binding.apply {
+            if(mode == MemoListFragment.MEMO_READ_MODE){
+                etMemoReadWriteActivityTitle.setText(title)
+                etMemoReadWriteActivityContent.setText(content)
+                hideCompleteButton()
+            }else{
+                hideDeleteButton()
+            }
         }
+
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -127,28 +140,34 @@ class MemoReadWriteActivity: BaseActivity(R.layout.activity_memo_read_write), Me
     }
 
     override fun onCompleteButtonClick() {
-        if (mode == MemoListFragment.MEMO_ADD_MODE) {
-            if (et_MemoReadWriteActivity_title.text.toString() == ("") && et_MemoReadWriteActivity_content.text.toString() == "") {
-                setResult(MemoListFragment.RESULT_EMPTY)
-            } else {
-                val date = Utils.getTodayYYYY_MM_DD()
-                val title = et_MemoReadWriteActivity_title.text.toString()
-                val content = et_MemoReadWriteActivity_content.text.toString()
-                memoReadWritePresenter.requestAddMemoData(date, title, content)
-                setResult(RESULT_OK)
+        binding.apply {
+            if (mode == MemoListFragment.MEMO_ADD_MODE) {
+                if (etMemoReadWriteActivityTitle.text.toString() == ("") && etMemoReadWriteActivityContent.text.toString() == "") {
+                    setResult(MemoListFragment.RESULT_EMPTY)
+                } else {
+                    val date = Utils.getTodayYYYY_MM_DD()
+                    val title = etMemoReadWriteActivityTitle.text.toString()
+                    val content = etMemoReadWriteActivityContent.text.toString()
+                    memoReadWritePresenter.requestAddMemoData(date, title, content)
+                    setResult(RESULT_OK)
+                }
+                finish()
+            } else if (mode == MemoListFragment.MEMO_UPDATE_MODE) {
+                if (etMemoReadWriteActivityTitle.text.toString() == ("") && etMemoReadWriteActivityContent.text.toString() == "") {
+                    setResult(MemoListFragment.RESULT_EMPTY)
+                } else {
+                    val date = Utils.getTodayYYYY_MM_DD()
+                    val title = etMemoReadWriteActivityTitle.text.toString()
+                    val content = etMemoReadWriteActivityContent.text.toString()
+                    memoReadWritePresenter.requestUpdateMemoData(id, date, title, content)
+                    setResult(MemoListFragment.RESULT_UPDATE)
+                }
+                finish()
             }
-            finish()
-        } else if (mode == MemoListFragment.MEMO_UPDATE_MODE) {
-            if (et_MemoReadWriteActivity_title.text.toString() == ("") && et_MemoReadWriteActivity_content.text.toString() == "") {
-                setResult(MemoListFragment.RESULT_EMPTY)
-            } else {
-                val date = Utils.getTodayYYYY_MM_DD()
-                val title = et_MemoReadWriteActivity_title.text.toString()
-                val content = et_MemoReadWriteActivity_content.text.toString()
-                memoReadWritePresenter.requestUpdateMemoData(id, date, title, content)
-                setResult(MemoListFragment.RESULT_UPDATE)
-            }
-            finish()
         }
+    }
+
+    override fun getViewBinding(): ActivityMemoReadWriteBinding {
+        return ActivityMemoReadWriteBinding.inflate(layoutInflater)
     }
 }

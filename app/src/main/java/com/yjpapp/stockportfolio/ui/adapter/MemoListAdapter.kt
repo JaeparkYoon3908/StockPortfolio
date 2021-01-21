@@ -10,6 +10,12 @@ import com.yjpapp.stockportfolio.database.data.MemoInfo
 import com.yjpapp.stockportfolio.ui.presenter.MemoListPresenter
 import kotlinx.android.synthetic.main.item_memo_list.view.*
 
+/**
+ * MemoListPresenter와 연결된 RecyclerView Adapter
+ *
+ * @author Yun Jae-park
+ * @since 2020.08
+ */
 class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private val memoListPresenter: MemoListPresenter) :
     RecyclerView.Adapter<MemoListAdapter.ViewHolder>(){
     private var deleteModeOn = false

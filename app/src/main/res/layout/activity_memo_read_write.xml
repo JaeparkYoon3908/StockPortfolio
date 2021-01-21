@@ -7,7 +7,7 @@
     >
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_MemoAddActivity"
+        android:id="@+id/toolbar_MemoReadWriteActivity"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_50dp"
         android:theme="@style/AppTheme"
@@ -24,7 +24,7 @@
         android:layout_marginEnd="@dimen/common_20dp"
         android:hint="@string/MemoReadWriteActivity_Title_Hint"
         android:textColor="@color/color_222222"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_MemoAddActivity"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_MemoReadWriteActivity"
         app:layout_constraintStart_toStartOf="parent"
         />
 

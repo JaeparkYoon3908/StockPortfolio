@@ -11,6 +11,13 @@ import com.yjpapp.stockportfolio.ui.interactor.MemoListInteractor
 import com.yjpapp.stockportfolio.ui.view.MemoListView
 import com.yjpapp.stockportfolio.util.Utils
 
+/**
+ * MemoListFragmentt의 Presenter
+ *
+ * @author Yun Jae-park
+ * @since 2020.12
+ */
+
 class MemoListPresenter(val mContext: Context, private val memoListView: MemoListView) {
 
 

@@ -5,6 +5,12 @@ import com.yjpapp.stockportfolio.database.DatabaseController
 import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 
+/**
+ * IncomeNoteFragment의 Model 역할하는 class
+ *
+ * @author Yun Jae-park
+ * @since 2020.12
+ */
 class IncomeNoteInteractor {
 
     companion object {

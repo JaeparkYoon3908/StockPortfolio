@@ -14,7 +14,12 @@ import java.sql.SQLException
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * IncomeNotePresenter와 연결된 RecyclerView Adapter
+ *
+ * @author Yun Jae-park
+ * @since 2020.08
+ */
 class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val incomeNotePresenter: IncomeNotePresenter) :
         RecyclerView.Adapter<IncomeNoteListAdapter.ViewHolder>() {
     private lateinit var mContext: Context

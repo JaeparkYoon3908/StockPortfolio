@@ -13,6 +13,13 @@ import com.yjpapp.stockportfolio.ui.interactor.MyStockInteractor
 import com.yjpapp.stockportfolio.ui.service.MyStockService
 import com.yjpapp.stockportfolio.ui.view.MyStockView
 
+/**
+ * MyStockFragment의 Presenter
+ *
+ * @author Yun Jae-park
+ * @since 2020.12
+ */
+
 class MyStockPresenter(val mContext: Context, private val myStockView: MyStockView) {
     private lateinit var myStockListAdapter: MyStockListAdapter
     private val myStockInteractor = MyStockInteractor.getInstance(mContext)
@@ -39,6 +46,7 @@ class MyStockPresenter(val mContext: Context, private val myStockView: MyStockVi
     }
 
     fun onGainFilterClicked() {
+        //TODO 이익 부분만 필터링
 //        val gainDataList = incomeNoteInteractor.getGainIncomeNoteInfoList()
 //        myStockListAdapter.setDataInfoList(gainDataList)
         myStockListAdapter.notifyDataSetChanged()
@@ -47,6 +55,7 @@ class MyStockPresenter(val mContext: Context, private val myStockView: MyStockVi
     }
 
     fun onLossFilterClicked() {
+        //TODO 손해 부분만 필터링
 //        val lossDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
 //        myStockListAdapter.setDataInfoList(gainDataList)
         myStockListAdapter.notifyDataSetChanged()

@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.constance.AppConfig
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.ui.presenter.IncomeNotePresenter
 import com.yjpapp.stockportfolio.util.Utils
@@ -33,8 +34,6 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     private var sellMonth: String? = null
     private var sellDay: String? = null
 
-    private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_input_income_note)
@@ -53,8 +52,8 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         et_purchase_price.addTextChangedListener(textWatcher)
         et_sell_price.addTextChangedListener(textWatcher)
 
-        txt_purchase_price_symbol.text = moneySymbol
-        txt_sell_price_symbol.text = moneySymbol
+        txt_purchase_price_symbol.text = AppConfig.moneySymbol
+        txt_sell_price_symbol.text = AppConfig.moneySymbol
 
         window?.setBackgroundDrawableResource(R.color.color_80000000)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
