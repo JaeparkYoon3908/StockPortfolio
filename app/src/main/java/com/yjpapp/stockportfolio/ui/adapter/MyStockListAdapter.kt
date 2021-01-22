@@ -43,17 +43,17 @@ class MyStockListAdapter(private var allMySockList: ArrayList<MyStockInfo?>,
     }
 
     private fun bindDataList(holder: ViewHolder, position: Int){
-        holder.apply {
+        holder.itemView.apply {
             //상단 데이터
-            itemView.txt_subject_name.text = allMySockList[position]?.subjectName
-            itemView.txt_gain_data.text = allMySockList[position]?.realPainLossesAmount
-            itemView.txt_gain_percent_data.text = "("+ allMySockList[position]?.gainPercent + ")"
+            txt_subject_name.text = allMySockList[position]?.subjectName
+            txt_gain_data.text = allMySockList[position]?.realPainLossesAmount
+            txt_gain_percent_data.text = "("+ allMySockList[position]?.gainPercent + ")"
             //왼쪽
-            itemView.txt_purchase_date_data.text = allMySockList[position]?.purchaseDate
-            itemView.txt_holding_quantity_data.text = allMySockList[position]?.purchaseCount.toString()
+            txt_purchase_date_data.text = allMySockList[position]?.purchaseDate
+            txt_holding_quantity_data.text = allMySockList[position]?.purchaseCount.toString()
             //오른쪽
-            itemView.txt_purchase_price_data.text = moneySymbol + allMySockList[position]?.purchasePrice
-            itemView.txt_current_price_data.text = moneySymbol + allMySockList[position]?.currentPrice
+            txt_purchase_price_data.text = moneySymbol + allMySockList[position]?.purchasePrice
+            txt_current_price_data.text = moneySymbol + allMySockList[position]?.currentPrice
 
             var realPainLossesAmountNumber = ""
             val realPainLossesAmountSplit = allMySockList[position]?.realPainLossesAmount!!.split(",")
@@ -61,37 +61,37 @@ class MyStockListAdapter(private var allMySockList: ArrayList<MyStockInfo?>,
                 realPainLossesAmountNumber += realPainLossesAmountSplit[i]
             }
             if(realPainLossesAmountNumber.toDouble()>=0){
-                itemView.txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_e52b4e))
-                itemView.txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_e52b4e))
+                txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_e52b4e))
+                txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_e52b4e))
             }else{
-                itemView.txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
-                itemView.txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
+                txt_gain_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
+                txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
             }
 
-            itemView.setOnLongClickListener {
+            setOnLongClickListener {
                 myStockPresenter.onMyStockListLongClick()
                 return@setOnLongClickListener true
             }
             //편집 버튼
-            itemView.txt_edit.setOnClickListener {
+            txt_edit.setOnClickListener {
                 myStockPresenter.onEditButtonClick(position)
             }
             //매도 버튼
-            itemView.txt_sell.setOnClickListener {
+            txt_sell.setOnClickListener {
                 myStockPresenter.onSellButtonClick(position)
             }
             //삭제 버튼
-            itemView.txt_delete.setOnClickListener {
+            txt_delete.setOnClickListener {
                 myStockPresenter.onDeleteButtonClick(position)
             }
         }
     }
     private fun bindEditMode(holder: MyStockListAdapter.ViewHolder){
-        holder.apply {
+        holder.itemView.apply {
             if(editModeOn){
-                itemView.lin_EditMode.visibility = View.VISIBLE
+                lin_EditMode.visibility = View.VISIBLE
             }else{
-                itemView.lin_EditMode.visibility = View.GONE
+                lin_EditMode.visibility = View.GONE
             }
         }
     }

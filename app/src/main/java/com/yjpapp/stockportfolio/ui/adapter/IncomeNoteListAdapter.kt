@@ -45,20 +45,20 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 아이템을 길게 눌렀을 때 편집모드로 전환.
-        holder.apply {
-            itemView.setOnLongClickListener {
+        holder.itemView.apply {
+            setOnLongClickListener {
                 Utils.runVibration(mContext, 100)
                 editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
                 notifyDataSetChanged()
                 incomeNotePresenter.onAdapterItemLongClick(editModeOn)
                 return@setOnLongClickListener true
             }
-            itemView.txt_edit.setOnClickListener {
+            txt_edit.setOnClickListener {
                 incomeNotePresenter.onEditButtonClick(position)
                 setEditMode(false)
                 notifyDataSetChanged()
             }
-            itemView.txt_delete.setOnClickListener {
+            txt_delete.setOnClickListener {
                 try {
                     val deleteIncomeNoteInfoId = dataInfoList[position]!!.id
                     incomeNotePresenter.onDeleteButtonClick(deleteIncomeNoteInfoId)
@@ -69,7 +69,7 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
                     e.printStackTrace()
                 }
             }
-            itemView.txt_gain_data.isSelected = true
+            txt_gain_data.isSelected = true
 
             bindDataList(holder, position)
             bindEditMode(holder)

@@ -31,22 +31,22 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.apply {
-            view.txt_MemoList_Date.text = memoListData[position]?.date
-            view.txt_MemoList_Title.text = memoListData[position]?.title
-            view.txt_MemoList_NoteCount.text = memoListData[position]?.content
-            view.img_MemoList_Check.isSelected = memoListData[position]?.deleteChecked!! == "true"
+        holder.view.apply {
+            txt_MemoList_Date.text = memoListData[position]?.date
+            txt_MemoList_Title.text = memoListData[position]?.title
+            txt_MemoList_NoteCount.text = memoListData[position]?.content
+            img_MemoList_Check.isSelected = memoListData[position]?.deleteChecked!! == "true"
 
-            view.setOnLongClickListener {
+            setOnLongClickListener {
                 memoListPresenter.onMemoListLongClicked(position)
                 return@setOnLongClickListener true
             }
 
             if(deleteModeOn){
-                view.img_MemoList_Check.visibility = View.VISIBLE
-                view.setOnClickListener {
-                    view.img_MemoList_Check.isSelected = !view.img_MemoList_Check.isSelected
-                    if(view.img_MemoList_Check.isSelected){
+                img_MemoList_Check.visibility = View.VISIBLE
+                setOnClickListener {
+                    img_MemoList_Check.isSelected = !img_MemoList_Check.isSelected
+                    if(img_MemoList_Check.isSelected){
                         memoListPresenter.clickMemoDeleteCheck(position, true)
 
                     }else{
@@ -54,8 +54,8 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
                     }
                 }
             }else{
-                view.img_MemoList_Check.visibility = View.GONE
-                view.setOnClickListener {
+                img_MemoList_Check.visibility = View.GONE
+                setOnClickListener {
                     memoListPresenter.onMemoListClicked(position)
                 }
             }
