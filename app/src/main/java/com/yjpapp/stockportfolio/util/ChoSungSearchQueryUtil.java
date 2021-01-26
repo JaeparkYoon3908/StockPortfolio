@@ -63,7 +63,7 @@ public class ChoSungSearchQueryUtil {
      * @param strSearch 검색 문자열
      * @return SQL Query 조건 문자열
      */
-    public static String makeQuery(String strSearch){
+    public static String makeQuery(String strSearch, String columnName){
         strSearch = strSearch == null ? "null" : strSearch.trim();
 
         StringBuilder retQuery = new StringBuilder();
@@ -124,23 +124,30 @@ public class ChoSungSearchQueryUtil {
 
             //Log.d("SearchQuery","query "+strSearch.codePointAt(nIndex));
             if( StartUnicode > 0 && EndUnicode > 0 ){
-                if( StartUnicode == EndUnicode )
-                    query.append("substr(name,"+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'");
-                else
-                    query.append("(substr(name,"+(nIndex+1)+",1)>='"+convertUnicodeToChar(StartUnicode)
-                            +"' AND substr(name,"+(nIndex+1)+",1)<'"+convertUnicodeToChar(EndUnicode)+"')");
+                if( StartUnicode == EndUnicode ){
+                    query.append("substr(" + columnName + ","+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'");
+//                    query.append("substr(name,"+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'");
+                }
+                else{
+                    query.append("(substr("+columnName+","+(nIndex+1)+",1)>='"+convertUnicodeToChar(StartUnicode)
+                            +"' AND substr("+columnName+","+(nIndex+1)+",1)<'"+convertUnicodeToChar(EndUnicode)+"')");
+//                    query.append("(substr(name,"+(nIndex+1)+",1)>='"+convertUnicodeToChar(StartUnicode)
+//                            +"' AND substr(name,"+(nIndex+1)+",1)<'"+convertUnicodeToChar(EndUnicode)+"')");
+                }
             }
             else{
                 if( Character.isLowerCase(strSearch.charAt(nIndex))){ //영문 소문자
-                    query.append("(substr(name,"+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'"
-                            + " OR substr(name,"+(nIndex+1)+",1)='"+Character.toUpperCase(strSearch.charAt(nIndex))+"')");
+//                    query.append("(substr(name,"+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'"
+//                            + " OR substr(name,"+(nIndex+1)+",1)='"+Character.toUpperCase(strSearch.charAt(nIndex))+"')");
+                    query.append("(substr("+columnName+","+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'"
+                            + " OR substr("+columnName+","+(nIndex+1)+",1)='"+Character.toUpperCase(strSearch.charAt(nIndex))+"')");
                 }
                 else if( Character.isUpperCase(strSearch.charAt(nIndex))){ //영문 대문자
-                    query.append("(substr(name,"+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'"
-                            + " OR substr(name,"+(nIndex+1)+",1)='"+Character.toLowerCase(strSearch.charAt(nIndex))+"')");
+                    query.append("(substr("+columnName+","+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'"
+                            + " OR substr("+columnName+","+(nIndex+1)+",1)='"+Character.toLowerCase(strSearch.charAt(nIndex))+"')");
                 }
                 else //기타 문자
-                    query.append("substr(name,"+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'");
+                    query.append("substr("+columnName+","+(nIndex+1)+",1)='"+strSearch.charAt(nIndex)+"'");
             }
             nQueryIndex++;
         }
@@ -159,11 +166,11 @@ public class ChoSungSearchQueryUtil {
                     if(i != 0) {
                         retQuery.append(" AND ");
                     }
-                    retQuery.append("name LIKE '%"+token+"%'");
+                    retQuery.append(columnName+" LIKE '%"+token+"%'");
                 }
                 retQuery.append(")");
             } else {
-                retQuery.append(" OR name LIKE '%"+strSearch+"%'");
+                retQuery.append(" OR "+columnName+" LIKE '%"+strSearch+"%'");
             }
         } else {
             retQuery.append(query.toString());

@@ -40,6 +40,8 @@ class MyStockFragment: Fragment(), MyStockView {
     private val viewBinding get() = _viewBinding!!
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        myStockPresenter = MyStockPresenter(this)
+        myStockPresenter.onAttach(context)
         mContext = context
         //Fragment BackPress Event Call
         onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -97,7 +99,6 @@ class MyStockFragment: Fragment(), MyStockView {
     }
 
     private fun initData(){
-        myStockPresenter = MyStockPresenter(mContext, this)
         allMyStockList = ArrayList()
 //        val symbol = "005930.KS"
 //        val region = "KR"

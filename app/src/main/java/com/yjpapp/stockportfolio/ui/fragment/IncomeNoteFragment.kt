@@ -11,13 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
-import com.yjpapp.stockportfolio.ui.MainActivity
 import com.yjpapp.stockportfolio.ui.adapter.IncomeNoteListAdapter
 import com.yjpapp.stockportfolio.ui.dialog.IncomeNoteFilterDialog
 import com.yjpapp.stockportfolio.ui.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.ui.presenter.IncomeNotePresenter
 import com.yjpapp.stockportfolio.ui.view.IncomeNoteView
-import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.dialog_input_income_note.*
@@ -175,8 +173,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
 
     //TODO 검색기능 추가.
     private fun startSearch(newText: String?) {
-        (activity as MainActivity).logcat(newText!!) //로그캣 오는거 확인 ㄱ=>ㄱㄴ=>ㄱㄴㄷ....
-        (activity as MainActivity).logcat(ChoSungSearchQueryUtil.makeQuery(newText))
+        incomeNotePresenter.onStartSearch(newText)
     }
 
     override fun bindTotalGainData() {

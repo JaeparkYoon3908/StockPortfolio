@@ -44,7 +44,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     }
 
     fun onLossFilterClicked() {
-        val lossDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+        val lossDataList = incomeNoteInteractor.getLossIncomeNoteInfoList()
         incomeNoteListAdapter.setDataInfoList(lossDataList)
         incomeNoteListAdapter.notifyDataSetChanged()
         val text = mContext.getString(R.string.Common_Loss)
@@ -137,5 +137,16 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 //    }
     fun getEditMode(): Boolean{
         return editMode
+    }
+
+    fun onStartSearch(newText: String?){
+        if(newText?.length!!>0){
+            val searchIncomeNoteList = incomeNoteInteractor.getSearchNoteList(newText)
+            incomeNoteListAdapter.setDataInfoList(searchIncomeNoteList)
+        }else{
+            val allIncomeNoteList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+            incomeNoteListAdapter.setDataInfoList(allIncomeNoteList)
+        }
+        incomeNoteListAdapter.notifyDataSetChanged()
     }
 }

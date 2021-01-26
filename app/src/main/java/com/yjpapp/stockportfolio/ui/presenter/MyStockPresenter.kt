@@ -20,13 +20,19 @@ import com.yjpapp.stockportfolio.ui.view.MyStockView
  * @since 2020.12
  */
 
-class MyStockPresenter(val mContext: Context, private val myStockView: MyStockView) {
+class MyStockPresenter(private val myStockView: MyStockView) {
+    private lateinit var mContext: Context
     private lateinit var myStockListAdapter: MyStockListAdapter
-    private val myStockInteractor = MyStockInteractor.getInstance(mContext)
+    private lateinit var myStockInteractor: MyStockInteractor
     private var myStockId = -1
     private var editMode = false
 
+    fun onAttach(context: Context){
+        mContext = context
+    }
+
     fun onResume(){
+        myStockInteractor = MyStockInteractor.getInstance(mContext)
         val myStockList = myStockInteractor.getAllMyStockList()
         myStockListAdapter = MyStockListAdapter(myStockList, this)
         myStockView.setAdapter(myStockListAdapter)

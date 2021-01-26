@@ -17,7 +17,7 @@
         >
         <TextView
             android:id="@+id/txt_Purchase_Price"
-            android:layout_width="@dimen/common_60dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_10dp"
             android:gravity="start"
@@ -27,6 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_Purchase_Price_Data"
+            app:layout_constraintWidth_percent="0.2"
             />
 
         <TextView
@@ -45,11 +46,12 @@
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_Purchase_Price"
+            app:layout_constraintWidth_percent="0.8"
             tools:text="500,000" />
 
         <TextView
             android:id="@+id/txt_Evaluation_Amount"
-            android:layout_width="@dimen/common_60dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_10dp"
             android:gravity="start"
@@ -59,6 +61,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_Evaluation_Amount_Data"
+            app:layout_constraintWidth_percent="0.2"
             />
 
         <TextView
@@ -77,11 +80,12 @@
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
             app:layout_constraintStart_toEndOf="@+id/txt_Evaluation_Amount"
+            app:layout_constraintWidth_percent="0.8"
             tools:text="500,000" />
 
         <TextView
             android:id="@+id/txt_TotalRealizationGainsLosses"
-            android:layout_width="@dimen/common_60dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_10dp"
             android:gravity="start"
@@ -91,6 +95,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
             app:layout_constraintEnd_toStartOf="@+id/txt_GainsLosses_Data"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.2"
             />
 
         <TextView
@@ -100,7 +105,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="@dimen/common_10dp"
             android:layout_marginStart="@dimen/common_10dp"
-            android:gravity="center"
+            android:gravity="start"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
@@ -110,11 +115,12 @@
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
             app:layout_constraintStart_toEndOf="@+id/txt_TotalRealizationGainsLosses"
+            app:layout_constraintWidth_percent="0.8"
             tools:text="650,000,000,000,000" />
 
         <TextView
             android:id="@+id/txt_GainPercent"
-            android:layout_width="@dimen/common_60dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_10dp"
             android:gravity="start"
@@ -124,6 +130,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_GainPercent_Data"
+            app:layout_constraintWidth_percent="0.2"
 
             />
 
@@ -143,6 +150,7 @@
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
             app:layout_constraintStart_toEndOf="@+id/txt_GainPercent"
+            app:layout_constraintWidth_percent="0.8"
             tools:text="15%" />
 
         <View

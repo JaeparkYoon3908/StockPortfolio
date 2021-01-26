@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.database.data.MemoInfo
 import com.yjpapp.stockportfolio.database.data.MyStockInfo
+import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
 import com.yjpapp.stockportfolio.util.Utils
 
 class DatabaseController {
@@ -184,9 +185,30 @@ class DatabaseController {
     }
 
     //TODO 검색 기능 구현.
-    fun getSearchBarIncomeNoteList(): ArrayList<IncomeNoteInfo?> {
+    fun getSearchBarIncomeNoteList(newText: String?): ArrayList<IncomeNoteInfo?> {
         val cursor: Cursor
+        val sb = StringBuilder()
+        sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE + " WHERE ")
+        sb.append(Databases.COL_INCOME_NOTE_SUBJECT_NAME + " LIKE '%" + newText + "%' OR" + ChoSungSearchQueryUtil.makeQuery(newText, Databases.COL_INCOME_NOTE_SUBJECT_NAME)+ " ;")
+//        val searchQuery = "SELECT * FROM ${Databases.TABLE_INCOME_NOTE} WHERE ${Databases.COL_INCOME_NOTE_SUBJECT_NAME} LIKE '%" + newText + "%' OR " + ChoSungSearchQueryUtil.makeQuery(newText) + " ;"
         val resultList = ArrayList<IncomeNoteInfo?>()
+
+        cursor = database.rawQuery(sb.toString(), null)
+        while(cursor.moveToNext()){
+            val incomeNoteInfo = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_ID)),
+                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
+                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
+                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
+                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
+                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
+                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_PRICE)),
+                    cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_COUNT))
+            )
+            resultList.add(incomeNoteInfo)
+        }
+
+        cursor.close()
         return resultList
     }
 

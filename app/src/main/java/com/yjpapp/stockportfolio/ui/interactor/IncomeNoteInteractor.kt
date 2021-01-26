@@ -57,4 +57,8 @@ class IncomeNoteInteractor {
         val id = getAllIncomeNoteInfoList()[position]!!.id
         return databaseController.getIncomeNoteLInfo(id)
     }
+
+    fun getSearchNoteList(newText: String?): ArrayList<IncomeNoteInfo?>{
+        return databaseController.getSearchBarIncomeNoteList(newText)
+    }
 }
