@@ -6,3 +6,5 @@
 ![device-2021-01-26-104948](https://user-images.githubusercontent.com/54883589/105790053-e2e8c100-5fc6-11eb-8d79-caba3b19fd35.png)
 ![device-2021-01-26-105128](https://user-images.githubusercontent.com/54883589/105790055-e419ee00-5fc6-11eb-89fd-96c4d915aac2.png)
 ![device-2021-01-26-105140](https://user-images.githubusercontent.com/54883589/105790064-e7ad7500-5fc6-11eb-9286-0f204388c869.png)
+
+### 기능 소개
