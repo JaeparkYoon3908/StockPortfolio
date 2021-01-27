@@ -1,5 +1,6 @@
 나만의 주식 성적을 기록할 수 있는 앱을 만드는 중 입니다.
 
+### 어플리케이션 화면
 ![device-2021-01-26-104626](https://user-images.githubusercontent.com/54883589/105790044-dfedd080-5fc6-11eb-9362-a12e6d751c56.png)
 ![device-2021-01-26-104742](https://user-images.githubusercontent.com/54883589/105790047-e1b79400-5fc6-11eb-9e35-1e4ea30b4347.png)
 ![device-2021-01-26-104757](https://user-images.githubusercontent.com/54883589/105790050-e2502a80-5fc6-11eb-95b6-901cf628ff29.png)
