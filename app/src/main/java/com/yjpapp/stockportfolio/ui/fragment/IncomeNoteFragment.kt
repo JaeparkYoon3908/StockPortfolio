@@ -116,7 +116,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    startSearch(newText)
+                    incomeNotePresenter.onStartSearch(newText)
                     return false
                 }
             })
@@ -169,11 +169,6 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
 
         viewBinding.recyclerviewIncomeNoteFragment.itemAnimator = FadeInAnimator()
 
-    }
-
-    //TODO 검색기능 추가.
-    private fun startSearch(newText: String?) {
-        incomeNotePresenter.onStartSearch(newText)
     }
 
     override fun bindTotalGainData() {
@@ -248,7 +243,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
         viewBinding.recyclerviewIncomeNoteFragment.scrollToPosition(topPosition)
     }
 
-    override fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter) {
+    override fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter?) {
         viewBinding.recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
     }
 }

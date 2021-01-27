@@ -32,7 +32,7 @@ class MyStockPresenter(private val myStockView: MyStockView) {
     }
 
     fun onResume(){
-        myStockInteractor = MyStockInteractor.getInstance(mContext)
+        myStockInteractor = MyStockInteractor()
         val myStockList = myStockInteractor.getAllMyStockList()
         myStockListAdapter = MyStockListAdapter(myStockList, this)
         myStockView.setAdapter(myStockListAdapter)

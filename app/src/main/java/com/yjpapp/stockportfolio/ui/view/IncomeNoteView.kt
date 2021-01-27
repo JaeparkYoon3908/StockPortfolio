@@ -24,6 +24,6 @@ interface IncomeNoteView {
 
     fun scrollTopPosition(topPosition: Int)
 
-    fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter)
+    fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter?)
 
 }

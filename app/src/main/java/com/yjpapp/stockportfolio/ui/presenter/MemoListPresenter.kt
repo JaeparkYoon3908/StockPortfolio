@@ -21,7 +21,7 @@ import com.yjpapp.stockportfolio.util.Utils
 class MemoListPresenter(val mContext: Context, private val memoListView: MemoListView) {
 
 
-    private val memoListInteractor = MemoListInteractor.getInstance(mContext)
+    private val memoListInteractor = MemoListInteractor()
     private lateinit var memoListAdapter: MemoListAdapter
 
     fun onResume(){

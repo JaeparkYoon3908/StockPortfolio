@@ -8,6 +8,7 @@ import androidx.viewbinding.ViewBinding
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.database.DatabaseController
 import com.yjpapp.stockportfolio.preference.PreferenceController
+import com.yjpapp.stockportfolio.ui.interactor.BaseInteractor
 
 /**
  * @author Yun Jae-park
@@ -18,12 +19,13 @@ abstract class BaseActivity<VB: ViewBinding>: AppCompatActivity() {
     lateinit var databaseController: DatabaseController
     lateinit var preferenceController: PreferenceController
     lateinit var binding: VB
+    lateinit var baseInteractor: BaseInteractor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this
         databaseController = DatabaseController.getInstance(mContext)
         preferenceController = PreferenceController.getInstance(mContext)
-
+        baseInteractor = BaseInteractor.getInstance(mContext)
         binding = getViewBinding()
         setContentView(binding.root)
     }
