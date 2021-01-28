@@ -192,13 +192,13 @@ class IncomeNoteInteractor: BaseInteractor() {
         }
     }
 
-    fun getSearchNoteList(newText: String?): ArrayList<IncomeNoteInfo?>{
+    fun getSearchNoteList(newText: String?): MutableList<IncomeNoteInfo?>{
         val cursor: Cursor
         val sb = StringBuilder()
         sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE + " WHERE ")
         sb.append(Databases.COL_INCOME_NOTE_SUBJECT_NAME + " LIKE '%" + newText + "%' OR" + ChoSungSearchQueryUtil.makeQuery(newText, Databases.COL_INCOME_NOTE_SUBJECT_NAME)+ " ;")
 //        val searchQuery = "SELECT * FROM ${Databases.TABLE_INCOME_NOTE} WHERE ${Databases.COL_INCOME_NOTE_SUBJECT_NAME} LIKE '%" + newText + "%' OR " + ChoSungSearchQueryUtil.makeQuery(newText) + " ;"
-        val resultList = ArrayList<IncomeNoteInfo?>()
+        val resultList:MutableList<IncomeNoteInfo?> = mutableListOf()
 
         cursor = database.rawQuery(sb.toString(), null)
         while(cursor.moveToNext()){

@@ -15,11 +15,11 @@ import com.yjpapp.stockportfolio.ui.interactor.BaseInteractor
  * @since 2020.12
  */
 abstract class BaseActivity<VB: ViewBinding>: AppCompatActivity() {
+    private lateinit var baseInteractor: BaseInteractor
     lateinit var mContext: Context
     lateinit var databaseController: DatabaseController
     lateinit var preferenceController: PreferenceController
     lateinit var binding: VB
-    lateinit var baseInteractor: BaseInteractor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this

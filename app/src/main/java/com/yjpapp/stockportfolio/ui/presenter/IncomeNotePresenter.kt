@@ -8,6 +8,7 @@ import com.yjpapp.stockportfolio.ui.adapter.IncomeNoteListAdapter
 import com.yjpapp.stockportfolio.ui.interactor.IncomeNoteInteractor
 import com.yjpapp.stockportfolio.ui.view.IncomeNoteView
 import com.yjpapp.stockportfolio.util.Utils
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * IncomeNoteFragment의 Presenter
@@ -21,7 +22,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     private val FILTER_TYPE_GAIN = 1
     private val FILTER_TYPE_LOSS = 2
     private var filterType: Int = FILTER_TYPE_ALL
-
+    private var filterText = mContext.getString(R.string.Common_All)
+    private var searchText: String? = null
     private var editMode = false
     private var incomeNoteId = -1
     private val incomeNoteInteractor = IncomeNoteInteractor()
@@ -35,29 +37,41 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
     fun onAllFilterClicked() {
         filterType = FILTER_TYPE_ALL
-        val allDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
-        incomeNoteListAdapter?.setDataInfoList(allDataList)
-        incomeNoteListAdapter?.notifyDataSetChanged()
-        val text = mContext.getString(R.string.Common_All)
-        incomeNoteView.changeFilterText(text)
+        filterText = mContext.getString(R.string.Common_All)
+        incomeNoteView.changeFilterText(filterText)
+        if (searchText == null || searchText?.length == 0) {
+            val allDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+            incomeNoteListAdapter?.setDataInfoList(allDataList)
+            incomeNoteListAdapter?.notifyDataSetChanged()
+        } else {
+            onStartSearch(searchText)
+        }
     }
 
     fun onGainFilterClicked() {
         filterType = FILTER_TYPE_GAIN
-        val gainDataList = incomeNoteInteractor.getGainIncomeNoteInfoList()
-        incomeNoteListAdapter?.setDataInfoList(gainDataList)
-        incomeNoteListAdapter?.notifyDataSetChanged()
-        val text = mContext.getString(R.string.Common_Gain)
-        incomeNoteView.changeFilterText(text)
+        filterText = mContext.getString(R.string.Common_Gain)
+        incomeNoteView.changeFilterText(filterText)
+        if (searchText == null || searchText?.length == 0) {
+            val gainDataList = incomeNoteInteractor.getGainIncomeNoteInfoList()
+            incomeNoteListAdapter?.setDataInfoList(gainDataList)
+            incomeNoteListAdapter?.notifyDataSetChanged()
+        } else {
+            onStartSearch(searchText)
+        }
     }
 
     fun onLossFilterClicked() {
         filterType = FILTER_TYPE_LOSS
-        val lossDataList = incomeNoteInteractor.getLossIncomeNoteInfoList()
-        incomeNoteListAdapter?.setDataInfoList(lossDataList)
-        incomeNoteListAdapter?.notifyDataSetChanged()
-        val text = mContext.getString(R.string.Common_Loss)
-        incomeNoteView.changeFilterText(text)
+        filterText = mContext.getString(R.string.Common_Loss)
+        incomeNoteView.changeFilterText(filterText)
+        if (searchText == null || searchText?.length == 0) {
+            val lossDataList = incomeNoteInteractor.getLossIncomeNoteInfoList()
+            incomeNoteListAdapter?.setDataInfoList(lossDataList)
+            incomeNoteListAdapter?.notifyDataSetChanged()
+        } else {
+            onStartSearch(searchText)
+        }
     }
 
     fun onAddButtonClicked() {
@@ -141,43 +155,50 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         return incomeNoteInteractor.getAllIncomeNoteInfoList()
     }
 
-//    fun onAdapterItemClick() {
+    //    fun onAdapterItemClick() {
 //
 //    }
-    fun getEditMode(): Boolean{
+    fun getEditMode(): Boolean {
         return editMode
     }
 
-    fun onStartSearch(newText: String?){
+    fun onStartSearch(newText: String?) {
         //검색을 시작했을 때
-        if(newText?.length!!>0){
+        searchText = newText
+        if (newText?.length!! > 0) {
             //필터 타입에 따라서 검색 내용을 보여준다.
+            //검색바에서 필터링 한 List 선언
             val searchIncomeNoteList = incomeNoteInteractor.getSearchNoteList(newText)
-            when(filterType){
+            //검색바 및 전체, 이익, 손해 필터링 두개가 반영된 List 초기화
+            val filteredIncomeNoteList = CopyOnWriteArrayList<IncomeNoteInfo>()
+            filteredIncomeNoteList.addAll(searchIncomeNoteList)
+
+            when (filterType) {
                 FILTER_TYPE_ALL -> {
                     incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
                 }
                 FILTER_TYPE_GAIN -> {
-                    searchIncomeNoteList.forEachIndexed { index, incomeNoteInfo ->
+                    filteredIncomeNoteList.forEach { incomeNoteInfo ->
                         val realGainLossesAmount = incomeNoteInfo?.realPainLossesAmount!!
                         val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
-                        if(realGainLossesAmountNum<0){
-                            searchIncomeNoteList.removeAt(index)
+                        if (realGainLossesAmountNum < 0) {
+                            filteredIncomeNoteList.remove(incomeNoteInfo)
                         }
                     }
-                    incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
+                    incomeNoteListAdapter?.setDataInfoList(filteredIncomeNoteList)
                 }
 
                 FILTER_TYPE_LOSS -> {
-                    searchIncomeNoteList.forEachIndexed{ index, incomeNoteInfo ->
+                    filteredIncomeNoteList.forEach { incomeNoteInfo ->
                         //실현손익
                         val realGainLossesAmount = incomeNoteInfo?.realPainLossesAmount!!
                         val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
-                        if(realGainLossesAmountNum>0){
-                            searchIncomeNoteList.removeAt(index)
+                        if (realGainLossesAmountNum > 0) {
+                            filteredIncomeNoteList.remove(incomeNoteInfo)
                         }
                     }
-                    incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
+
+                    incomeNoteListAdapter?.setDataInfoList(filteredIncomeNoteList)
                 }
                 else -> {
                     incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
@@ -185,8 +206,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
             }
         }
         //검색을 하다가 모두 지웠을 때 FilterType에 따라 보여줌.
-        else{
-            when(filterType){
+        else {
+            when (filterType) {
                 FILTER_TYPE_ALL -> {
                     val allIncomeNoteList = incomeNoteInteractor.getAllIncomeNoteInfoList()
                     incomeNoteListAdapter?.setDataInfoList(allIncomeNoteList)
@@ -208,4 +229,5 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         }
         incomeNoteListAdapter?.notifyDataSetChanged()
     }
+
 }

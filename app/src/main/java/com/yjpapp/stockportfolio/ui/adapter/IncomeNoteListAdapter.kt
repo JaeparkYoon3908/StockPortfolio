@@ -12,7 +12,6 @@ import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.android.synthetic.main.item_income_note_list.view.*
 import java.sql.SQLException
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * IncomeNotePresenter와 연결된 RecyclerView Adapter
@@ -23,7 +22,7 @@ import kotlin.collections.ArrayList
 class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val incomeNotePresenter: IncomeNotePresenter) :
         RecyclerView.Adapter<IncomeNoteListAdapter.ViewHolder>() {
     private lateinit var mContext: Context
-    private var dataInfoList = ArrayList<IncomeNoteInfo?>()
+    private var dataInfoList:MutableList<IncomeNoteInfo?> = mutableListOf()
     private var editModeOn: Boolean = false
     private var allCheckClick: Boolean = false
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
@@ -84,11 +83,11 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
         dataInfoList.removeAt(position)
     }
 
-    fun getDataInfoList(): ArrayList<IncomeNoteInfo?> {
+    fun getDataInfoList(): MutableList<IncomeNoteInfo?> {
         return dataInfoList
     }
 
-    fun setDataInfoList(incomeNoteInfoList: ArrayList<IncomeNoteInfo?>) {
+    fun setDataInfoList(incomeNoteInfoList: MutableList<IncomeNoteInfo?>) {
         this.dataInfoList = incomeNoteInfoList
     }
 

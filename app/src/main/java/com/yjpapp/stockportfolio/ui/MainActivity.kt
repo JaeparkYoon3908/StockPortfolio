@@ -12,6 +12,7 @@ import com.yjpapp.stockportfolio.ui.fragment.MemoListFragment
 import com.yjpapp.stockportfolio.ui.fragment.MyStockFragment
 import com.yjpapp.stockportfolio.ui.view.MainView
 import com.yjpapp.stockportfolio.util.Utils
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * Main
@@ -35,6 +36,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
         super.onCreate(savedInstanceState)
         initData()
         initLayout()
+        val copyOnWriteArrayList = CopyOnWriteArrayList<String>()
+        copyOnWriteArrayList.add("0")
+        copyOnWriteArrayList.add("1")
+        copyOnWriteArrayList.add("2")
+        //......
+//        val copyOnWriteArrayList = CopyOnWriteArrayList<String>()
+//        copyOnWriteArrayList.addAll(mutableList)
+        copyOnWriteArrayList.forEach {
+            if(it == "1" || it == "2"){
+                copyOnWriteArrayList.remove(it)
+            }
+        }
+        logcat("copyOnWriteArrayList size: " + copyOnWriteArrayList.size)
+        //이후 copyOnWriteArrayList를 이용하여 데이터 적용
     }
 
     override fun initData() {

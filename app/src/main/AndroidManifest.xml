@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:launchMode="singleTop"
+        android:largeHeap="true"
         >
         <activity android:name=".ui.activity.SplashActivity"
             android:screenOrientation="portrait">

@@ -40,6 +40,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
     private val viewBinding get() = _viewBinding!!
 
     override fun onAttach(context: Context) {
+
         super.onAttach(context)
         mContext = context
         //Fragment BackPress Event Call
