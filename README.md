@@ -9,3 +9,6 @@
 ![device-2021-01-26-105140](https://user-images.githubusercontent.com/54883589/105790064-e7ad7500-5fc6-11eb-9286-0f204388c869.png)
 
 ### 2. 기능 소개
+- 나의 주식
+- 수익 노트
+- 메모
