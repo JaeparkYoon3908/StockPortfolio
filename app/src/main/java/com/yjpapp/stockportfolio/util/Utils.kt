@@ -8,6 +8,7 @@ import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.preference.PrefKey
 import com.yjpapp.stockportfolio.preference.PreferenceController
 import es.dmoral.toasty.Toasty
@@ -21,14 +22,13 @@ import java.util.*
  * @since 2020.07
  */
 object Utils {
-    private val sellTex: Double = 0.5
-
     //yyyymmdd로 변환
     fun getTodayYYYYMMDD(): String {
         val currentTime: Long = System.currentTimeMillis()
         val todayDate = Date(currentTime)
         val sdformat = SimpleDateFormat("yyyyMMdd")
         return sdformat.format(todayDate)
+
     }
 
     //yyyy.mm.dd로 변환
@@ -75,25 +75,48 @@ object Utils {
     fun calculateGainPercent(purchasePrice: String, sellPrice: String): Double{
         val purchasePriceNum = getNumDeletedComma(purchasePrice)
         val sellPriceNum = getNumDeletedComma(sellPrice)
+
         return (((sellPriceNum.toDouble() / purchasePriceNum.toDouble()) -1) * 100)
     }
 
-    fun calculateTotalGainPercent(percentList: ArrayList<Double>): Double{
-        return if(percentList.size>0){
-            var result = percentList[0]
-            for(i in 0 until percentList.size - 1){
-                result = (1+result)*(1+percentList[i+1])-1
+    //전체 수익률 계산 함수 -> (수익률) = (매도총금액) / (매수총금액) * 100 - 100
+    fun calculateTotalGainPercent(incomeNoteInfoList: ArrayList<IncomeNoteInfo?>): Double{
+        var allPurchasePrice = 0.0
+        var allSellPrice = 0.0
+        incomeNoteInfoList.forEach {
+            if(it?.purchasePrice != null && it.realPainLossesAmount != null){
+                allPurchasePrice += getNumDeletedComma(it.purchasePrice!!).toDouble() * it.sellCount
+                allSellPrice += getNumDeletedComma(it.sellPrice!!).toDouble() * it.sellCount
             }
-            result
-        }else{
-            0.00
         }
+        return ((allSellPrice / allPurchasePrice) * 100) - 100
     }
 
+//    fun calculateTotalGainPercent(percentList: ArrayList<Double>): Double{
+//
+//
+//        return if(percentList.size>0){
+//            var result = percentList[0]
+////            percentList.forEach {
+////                result = (1+result)*(1+it)-1
+////            }
+//            for(i in 0 until percentList.size - 1){
+//                result = (1+result)*(1+percentList[i+1])-1
+//            }
+//            result
+//        }else{
+//            0.00
+//        }
+//    }
+
+    //퍼센티지 붙이기
     fun getRoundsPercentNumber(number: Double): String{
         var result = ""
-        result = String.format("%.2f", number)
-        if(result == "NaN") result = "0"
+        try{
+            result = String.format("%.2f", number)
+        }catch (e: Exception){
+            result = "0"
+        }
         result += "%"
         return result
     }

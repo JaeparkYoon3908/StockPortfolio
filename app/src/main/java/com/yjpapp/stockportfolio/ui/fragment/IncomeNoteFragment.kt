@@ -185,7 +185,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
                     .toDouble()
             gainPercentList.add(Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!).toDouble())
         }
-        totalGainPercent = Utils.calculateTotalGainPercent(gainPercentList)
+        totalGainPercent = Utils.calculateTotalGainPercent(allIncomeNoteList)
 
         viewBinding.apply {
             txtTotalRealizationGainsLossesData.text =
