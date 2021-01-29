@@ -29,7 +29,7 @@ class MyStockFilterDialog (myStockPresenter: MyStockPresenter): BottomSheetDialo
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _viewBinding = DialogMyStockFilterBinding.inflate(inflater, container, false)
 //        rootView = inflater.inflate(R.layout.dialog_income_note_filter, container, false)
