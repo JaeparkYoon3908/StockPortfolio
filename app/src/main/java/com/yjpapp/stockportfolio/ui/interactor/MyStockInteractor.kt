@@ -54,6 +54,68 @@ class MyStockInteractor: BaseInteractor() {
         return resultList
     }
 
+//    fun getGainMyStockList(): ArrayList<IncomeNoteInfo?>{
+//        val cursor: Cursor
+//        val resultList = ArrayList<IncomeNoteInfo?>()
+//        val sb = StringBuilder()
+//        sb.append("SELECT * FROM " + Databases.TABLE_INCOME_NOTE)
+//        cursor = database.rawQuery(sb.toString(), null)
+//        if (cursor.count > 0) {
+//            cursor.moveToFirst()
+//            for (i in 0 until cursor.count) {
+//                val realGainLossesAmount = cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT))
+//                val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
+//                if (realGainLossesAmountNum >= 0) {
+//                    val result = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_ID)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_PRICE)),
+//                        cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_COUNT))
+//                    )
+//                    resultList.add(result)
+//                }
+//                cursor.moveToNext()
+//            }
+//        }
+//        cursor?.close()
+//        return resultList
+//    }
+//
+//    fun getLossMyStockList(): ArrayList<IncomeNoteInfo?>{
+//        val cursor: Cursor
+//        val resultList = ArrayList<IncomeNoteInfo?>()
+//        val sb = StringBuilder()
+//        sb.append("SELECT * FROM " + Databases.TABLE_MY_STOCK)
+//        cursor = database.rawQuery(sb.toString(), null)
+//        if (cursor.count > 0) {
+//            cursor.moveToFirst()
+//            for (i in 0 until cursor.count) {
+//                val realGainLossesAmount = cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT))
+//                val realGainLossesAmountNum = Utils.getNumDeletedComma(realGainLossesAmount).toDouble()
+//                if (realGainLossesAmountNum < 0) {
+//                    val result = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_ID)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_PRICE)),
+//                        cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_COUNT))
+//                    )
+//                    resultList.add(result)
+//                }
+//                cursor.moveToNext()
+//            }
+//        }
+//        cursor?.close()
+//        return resultList
+//    }
+
     fun insertMyStockInfo(myStockInfo: MyStockInfo): Boolean{
         val insertCheck: Long
         val contentValues = ContentValues()

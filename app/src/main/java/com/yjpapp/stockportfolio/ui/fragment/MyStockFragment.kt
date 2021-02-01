@@ -136,9 +136,9 @@ class MyStockFragment: Fragment(), MyStockView {
     private fun initLayout(){
         setHasOptionsMenu(true)
         viewBinding.apply {
-            txtIncomeNoteFragmentFilter.setOnClickListener {
-                showFilterDialog()
-            }
+//            txtIncomeNoteFragmentFilter.setOnClickListener {
+//                showFilterDialog()
+//            }
         }
         initRecyclerView()
     }
@@ -214,9 +214,9 @@ class MyStockFragment: Fragment(), MyStockView {
     }
 
     override fun changeFilterText(text: String) {
-        viewBinding.apply {
-            txtIncomeNoteFragmentFilter.text = text
-        }
+//        viewBinding.apply {
+//            txtIncomeNoteFragmentFilter.text = text
+//        }
     }
 
     override fun showFilterDialog() {

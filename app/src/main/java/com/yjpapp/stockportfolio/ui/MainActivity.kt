@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.rewarded.RewardedAd
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
 import com.yjpapp.stockportfolio.preference.PrefKey
@@ -12,7 +13,6 @@ import com.yjpapp.stockportfolio.ui.fragment.MemoListFragment
 import com.yjpapp.stockportfolio.ui.fragment.MyStockFragment
 import com.yjpapp.stockportfolio.ui.view.MainView
 import com.yjpapp.stockportfolio.util.Utils
-import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * Main
@@ -31,25 +31,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
     private val incomeNoteFragment = IncomeNoteFragment()
     private val memoListFragment = MemoListFragment()
     private var currentFragment: Fragment = myStockFragment
+    private lateinit var rewardedAd: RewardedAd
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initData()
         initLayout()
-        val copyOnWriteArrayList = CopyOnWriteArrayList<String>()
-        copyOnWriteArrayList.add("0")
-        copyOnWriteArrayList.add("1")
-        copyOnWriteArrayList.add("2")
-        //......
-//        val copyOnWriteArrayList = CopyOnWriteArrayList<String>()
-//        copyOnWriteArrayList.addAll(mutableList)
-        copyOnWriteArrayList.forEach {
-            if(it == "1" || it == "2"){
-                copyOnWriteArrayList.remove(it)
-            }
-        }
-        logcat("copyOnWriteArrayList size: " + copyOnWriteArrayList.size)
-        //이후 copyOnWriteArrayList를 이용하여 데이터 적용
+//        MobileAds.initialize(this)
+//        rewardedAd = RewardedAd(this, "ca-app-pub-4132154272836445~8488670395")
+//        val activityContext: Activity = this@MainActivity
+//        val adCallback = object: RewardedAdCallback() {
+//            override fun onRewardedAdOpened() {
+//                // Ad opened.
+//            }
+//            override fun onRewardedAdClosed() {
+//                // Ad closed.
+//            }
+//            override fun onUserEarnedReward(@NonNull reward: RewardItem) {
+//                // User earned reward.
+//            }
+//            override fun onRewardedAdFailedToShow(adError: AdError) {
+//                // Ad failed to display.
+//            }
+//        }
+//        rewardedAd.show(activityContext, adCallback)
     }
 
     override fun initData() {
@@ -124,7 +129,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
         binding.apply {
             txtMainActivityTitle.text = getString(R.string.MyStockFragment_Title)
         }
-        preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_MY_STOCK)
+        preferenceController.setPreference(
+            PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
+            FRAGMENT_TAG_MY_STOCK
+        )
 
     }
 
@@ -136,11 +144,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
 
     override fun showIncomeNote() {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
+                .replace(
+                    R.id.cons_MainActivity_fragment,
+                    incomeNoteFragment,
+                    FRAGMENT_TAG_INCOME_NOTE
+                )
                 .show(incomeNoteFragment)
                 .commit()
         currentFragment = incomeNoteFragment
-        preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_INCOME_NOTE)
+        preferenceController.setPreference(
+            PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
+            FRAGMENT_TAG_INCOME_NOTE
+        )
         binding.apply {
             txtMainActivityTitle.text = getString(R.string.IncomeNoteFragment_Title)
         }
@@ -158,7 +173,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
                 .show(memoListFragment)
                 .commit()
         currentFragment = memoListFragment
-        preferenceController.setPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION, FRAGMENT_TAG_MEMO_LIST)
+        preferenceController.setPreference(
+            PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
+            FRAGMENT_TAG_MEMO_LIST
+        )
         binding.apply {
             txtMainActivityTitle.text = getString(R.string.MemoListFragment_Title)
         }
