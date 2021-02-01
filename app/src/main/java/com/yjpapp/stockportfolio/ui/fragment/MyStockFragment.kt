@@ -28,11 +28,9 @@ import kotlinx.android.synthetic.main.dialog_input_my_stock.*
 //TODO 내가 갖고있는 주식 실시간 변동 사항 및 수익 분석 할 수 있는 기능 만들기.
 class MyStockFragment: Fragment(), MyStockView {
     private lateinit var mContext: Context
-//    private lateinit var mRootView: View
     private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     private lateinit var layoutManager: LinearLayoutManager
-//    private lateinit var myStockListAdapter: MyStockListAdapter
     private lateinit var allMyStockList: ArrayList<MyStockInfo>
     private lateinit var myStockPresenter: MyStockPresenter
 
@@ -56,8 +54,6 @@ class MyStockFragment: Fragment(), MyStockView {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View{
-//        mRootView = inflater.inflate(R.layout.fragment_my_stock, container, false)
-
         _viewBinding = FragmentMyStockBinding.inflate(inflater, container, false)
 
         initData()
