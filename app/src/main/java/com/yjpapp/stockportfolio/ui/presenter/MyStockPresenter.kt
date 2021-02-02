@@ -12,6 +12,7 @@ import com.yjpapp.stockportfolio.ui.adapter.MyStockListAdapter
 import com.yjpapp.stockportfolio.ui.interactor.MyStockInteractor
 import com.yjpapp.stockportfolio.ui.service.MyStockService
 import com.yjpapp.stockportfolio.ui.view.MyStockView
+import com.yjpapp.stockportfolio.util.Utils
 
 /**
  * MyStockFragment의 Presenter
@@ -70,6 +71,7 @@ class MyStockPresenter(private val myStockView: MyStockView) {
     }
 
     fun onMyStockListLongClick(){
+        Utils.runVibration(mContext, 100)
         myStockListAdapter.setEditMode(!myStockListAdapter.isEditMode())
         myStockListAdapter.notifyDataSetChanged()
         if(myStockListAdapter.isEditMode()){

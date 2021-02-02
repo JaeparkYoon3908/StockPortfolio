@@ -104,7 +104,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
                 }
             }
         } else {
-            showMyStock()
+//            showMyStock()
+            showIncomeNote()
         }
     }
 

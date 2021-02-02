@@ -51,7 +51,7 @@
         android:background="@color/color_line_1a000000"
         android:visibility="visible"
         tools:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/lin_MainActivity_BottomMenu_MyStock"
+        app:layout_constraintBottom_toTopOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
         />
 
     <LinearLayout
@@ -60,11 +60,11 @@
         android:layout_height="@dimen/common_50dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible"
+        tools:visibility="gone"
         android:onClick="clickBottomMenu"
         >
 
@@ -110,6 +110,14 @@
             android:textColor="@color/color_222222"
             />
     </LinearLayout>
+<!--    <View-->
+<!--        android:layout_width="@dimen/common_1dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/color_line_1a000000"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        />-->
 
     <LinearLayout
         android:id="@+id/lin_MainActivity_BottomMenu_Memo"

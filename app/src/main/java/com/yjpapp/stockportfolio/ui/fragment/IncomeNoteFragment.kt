@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.ui.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
@@ -125,6 +126,20 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
             txtTotalRealizationGainsLosses.isSelected = true
             txtTotalRealizationGainsLossesData.isSelected = true
             txtTotalRealizationGainsLossesPercent.isSelected = true
+
+            toggle.setOnCheckedChangeListener { buttonView, isChecked ->
+                //종목명 -> 기간별
+                if(isChecked){
+                    txtDate.visibility = View.GONE
+                    svIncomeNoteFragment.visibility = View.VISIBLE
+                }
+                //기간별 -> 종목명
+                else{
+                    Log.d("YJP", "!isChecked")
+                    txtDate.visibility = View.VISIBLE
+                    svIncomeNoteFragment.visibility = View.GONE
+                }
+            }
         }
 
         bindTotalGainData()

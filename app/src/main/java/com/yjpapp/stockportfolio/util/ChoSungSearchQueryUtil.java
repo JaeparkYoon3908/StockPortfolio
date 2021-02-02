@@ -155,7 +155,7 @@ public class ChoSungSearchQueryUtil {
         if(query.length() > 0 && strSearch != null && strSearch.trim().length() > 0) {
             retQuery.append("("+query.toString()+")");
 
-            if(strSearch.indexOf(" ") != -1) {
+            if(strSearch.contains(" ")) {
                 // 공백 구분 단어에 대해 단어 모두 포함 검색
                 String[] tokens = strSearch.split(" ");
                 retQuery.append(" OR (");
