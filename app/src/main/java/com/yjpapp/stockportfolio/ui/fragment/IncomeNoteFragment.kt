@@ -68,6 +68,7 @@ class IncomeNoteFragment : Fragment(),IncomeNoteView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initLayout()
+
     }
 
     override fun onResume() {

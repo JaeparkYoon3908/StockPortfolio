@@ -12,7 +12,9 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
+import android.widget.DatePicker
 import android.widget.Toast
+import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.AppConfig
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
@@ -22,7 +24,8 @@ import kotlinx.android.synthetic.main.dialog_input_income_note.*
 import java.text.DecimalFormat
 import java.util.*
 
-class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePresenter) : AlertDialog(mContext) {
+class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePresenter) : AlertDialog(mContext)
+        , SupportedDatePickerDialog.OnDateSetListener{
     object MSG{
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
@@ -73,7 +76,6 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                         et_sell_price.text.isEmpty() ||
                         et_sell_count.text.isEmpty()
                 ) {
-
                     Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
                     return@OnClickListener
                 }
@@ -112,13 +114,14 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                 dismiss()
             }
             R.id.et_purchase_date -> {
+
                 val calendar = Calendar.getInstance()
                 val currentYear = calendar.get(Calendar.YEAR)
                 val currentMonth = calendar.get(Calendar.MONTH)
                 val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-                val datePickerDialog = DatePickerDialog(mContext,
-                    DatePickerDialog.OnDateSetListener { _: View, year, monthOfYear, dayOfMonth ->
+                val datePickerDialog = DatePickerDialog(mContext, R.style.MySpinnerDatePickerStyle, /*this,*/
+                        DatePickerDialog.OnDateSetListener { _: View, year, monthOfYear, dayOfMonth ->
                         //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
                         purchaseYear = year.toString()
                         purchaseMonth = if (monthOfYear + 1 < 10) {
@@ -223,5 +226,20 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
             }
             return true
         }
+    }
+
+    override fun onDateSet(view: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
+        purchaseYear = year.toString()
+        purchaseMonth = if (month + 1 < 10) {
+            "0" + (month + 1).toString()
+        } else {
+            (month + 1).toString()
+        }
+        purchaseDay = if (dayOfMonth < 10) {
+            "0$dayOfMonth"
+        } else {
+            dayOfMonth.toString()
+        }
+        uiHandler.sendEmptyMessage(MSG.PURCHASE_DATE_DATA_INPUT)
     }
 }
