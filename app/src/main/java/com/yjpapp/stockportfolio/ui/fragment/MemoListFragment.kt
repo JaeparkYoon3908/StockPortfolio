@@ -35,7 +35,7 @@ class MemoListFragment : Fragment(), MemoListView {
 
         const val MEMO_READ_MODE = "MEMO_READ_MODE" //메모 읽기 모드
         const val MEMO_ADD_MODE = "MEMO_WRITE_MODE" //새 메모 추가모드
-        const val MEMO_UPDATE_MODE = "MEMO_UPDATE_MODE" //메모 읽기 모드 -? 업데잍 모드
+        const val MEMO_UPDATE_MODE = "MEMO_UPDATE_MODE" //메모 읽기 모드
 
         const val REQUEST_ADD = 0
         const val REQUEST_READ = 1
@@ -46,21 +46,22 @@ class MemoListFragment : Fragment(), MemoListView {
     }
 
     private lateinit var mContext: Context
-    private lateinit var onBackPressedCallback: OnBackPressedCallback
     private lateinit var memoListPresenter: MemoListPresenter
     private lateinit var layoutManager: LinearLayoutManager
 
     private var _viewBinding: FragmentMemoListBinding? = null
     private val viewBinding get() = _viewBinding!!
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            memoListPresenter.onBackPressedClick(activity as Activity)
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
-        onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                memoListPresenter.onBackPressedClick(activity as Activity)
-            }
-        }
+
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
@@ -71,15 +72,24 @@ class MemoListFragment : Fragment(), MemoListView {
     ): View {
 //        mRootView = inflater.inflate(R.layout.fragment_memo_list, container, false)
         _viewBinding = FragmentMemoListBinding.inflate(inflater, container, false)
+        return viewBinding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initData()
         initLayout()
-        return viewBinding.root
     }
 
     override fun onResume() {
         super.onResume()
         memoListPresenter.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _viewBinding = null
+
     }
 
     private fun initData() {
@@ -88,9 +98,6 @@ class MemoListFragment : Fragment(), MemoListView {
 
     private fun initLayout() {
         setHasOptionsMenu(true)
-
-//        txt_MemoListActivity_GuideMessage = mRootView.findViewById(R.id.txt_MemoListFragment_GuideMessage)
-//        recyclerview_MemoListActivity = mRootView.findViewById(R.id.recyclerview_MemoListFragment)
         initRecyclerView()
     }
 
