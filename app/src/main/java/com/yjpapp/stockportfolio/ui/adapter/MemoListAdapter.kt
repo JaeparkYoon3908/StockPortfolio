@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_memo_list.view.*
 /**
  * MemoListPresenter와 연결된 RecyclerView Adapter
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.08
  */
 class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private val memoListPresenter: MemoListPresenter) :

@@ -16,7 +16,7 @@ import java.util.*
 /**
  * IncomeNotePresenter와 연결된 RecyclerView Adapter
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.08
  */
 class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val incomeNotePresenter: IncomeNotePresenter) :
@@ -33,7 +33,7 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
         }
     }
 
-    class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
+    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context

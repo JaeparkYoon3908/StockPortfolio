@@ -5,7 +5,7 @@ import android.view.View
 /**
  * MainActivity의 View
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 

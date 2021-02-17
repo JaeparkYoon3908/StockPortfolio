@@ -11,7 +11,7 @@ import com.yjpapp.stockportfolio.preference.PreferenceController
 import com.yjpapp.stockportfolio.ui.interactor.BaseInteractor
 
 /**
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 abstract class BaseActivity<VB: ViewBinding>: AppCompatActivity() {

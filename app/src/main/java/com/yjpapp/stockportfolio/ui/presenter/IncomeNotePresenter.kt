@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 /**
  * IncomeNoteFragment의 Presenter
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 

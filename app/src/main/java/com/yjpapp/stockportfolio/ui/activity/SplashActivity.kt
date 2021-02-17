@@ -10,7 +10,7 @@ import com.yjpapp.stockportfolio.ui.MainActivity
 /**
  * 앱 실행 시 오프닝 화면
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.10
  */
 

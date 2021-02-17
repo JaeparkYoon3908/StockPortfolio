@@ -3,7 +3,7 @@ package com.yjpapp.stockportfolio.ui.view
 /**
  * MemoReadWriteActivity의 View
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 interface MemoReadWriteView {

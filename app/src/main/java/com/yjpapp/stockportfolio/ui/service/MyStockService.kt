@@ -18,7 +18,7 @@ import retrofit2.Response
  * MyStockFragment와 연결된 Service
  * 백그라운드에서 현재 주가를 갖고오기 위해 만듬.
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 class MyStockService: Service() {

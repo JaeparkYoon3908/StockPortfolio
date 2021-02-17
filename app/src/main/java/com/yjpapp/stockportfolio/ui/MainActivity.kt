@@ -17,7 +17,7 @@ import com.yjpapp.stockportfolio.util.Utils
 /**
  * Main
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {

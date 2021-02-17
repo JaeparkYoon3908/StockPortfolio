@@ -6,7 +6,7 @@ import com.yjpapp.stockportfolio.ui.adapter.MyStockListAdapter
 /**
  * MyStockFragment의 View
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 interface MyStockView {

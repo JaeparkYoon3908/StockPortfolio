@@ -8,7 +8,7 @@ import com.yjpapp.stockportfolio.ui.view.MemoReadWriteView
 /**
  * MemoReadWriteActivity의 Presenter
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 

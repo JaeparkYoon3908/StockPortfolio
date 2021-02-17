@@ -14,7 +14,7 @@ import java.util.*
 /**
  * MyStockListFragment와 연결된 RecyclerView Adapter
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.08
  */
 class MyStockListAdapter(private var allMySockList: ArrayList<MyStockInfo?>,

@@ -14,7 +14,7 @@ import com.yjpapp.stockportfolio.util.Utils
 /**
  * MemoListFragmentt의 Presenter
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 

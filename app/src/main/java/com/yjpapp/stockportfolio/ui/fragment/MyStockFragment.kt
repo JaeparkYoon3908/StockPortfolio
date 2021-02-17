@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.dialog_input_my_stock.*
 /**
  * 나의 주식 화면
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 

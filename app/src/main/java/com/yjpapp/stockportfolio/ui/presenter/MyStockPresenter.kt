@@ -17,7 +17,7 @@ import com.yjpapp.stockportfolio.util.Utils
 /**
  * MyStockFragment의 Presenter
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 

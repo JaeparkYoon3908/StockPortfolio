@@ -27,7 +27,7 @@ import kotlin.collections.ArrayList
 /**
  * 수익노트 화면
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.08
  */
 class IncomeNoteFragment : Fragment(),IncomeNoteView {

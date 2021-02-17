@@ -18,7 +18,7 @@ import java.util.*
 /**
  * 개발에 필요한 함수들
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.07
  */
 object Utils {

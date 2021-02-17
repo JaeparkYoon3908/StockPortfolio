@@ -22,7 +22,7 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 /**
  * 메모리스트 화면
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.11
  */
 class MemoListFragment : Fragment(), MemoListView {

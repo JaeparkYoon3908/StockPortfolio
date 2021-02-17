@@ -8,7 +8,7 @@ import com.yjpapp.stockportfolio.database.data.MemoInfo
 /**
  * MemoListFragment의 Model 역할하는 class
  *
- * @author Yun Jae-park
+ * @author Yoon Jae-park
  * @since 2020.12
  */
 class MemoListInteractor: BaseInteractor() {
