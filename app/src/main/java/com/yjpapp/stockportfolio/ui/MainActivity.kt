@@ -118,7 +118,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
                 .hide(incomeNoteFragment)
                 .hide(memoListFragment)
                 .commit()
-
     }
 
     override fun showMyStock() {
