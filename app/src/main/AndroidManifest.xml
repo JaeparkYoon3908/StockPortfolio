@@ -15,7 +15,7 @@
         android:launchMode="singleTop"
         android:largeHeap="true"
         >
-        <activity android:name=".ui.activity.SplashActivity"
+        <activity android:name=".ui.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity"
+        <activity android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
             />
 
@@ -31,10 +31,10 @@
 <!--            android:screenOrientation="portrait"-->
 <!--            />-->
 
-        <activity android:name=".ui.activity.MemoReadWriteActivity"
+        <activity android:name=".ui.memo.MemoReadWriteActivity"
             android:screenOrientation="portrait"
             />
-        <service android:name=".ui.service.MyStockService"/>
+        <service android:name=".ui.mystock.MyStockService"/>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
