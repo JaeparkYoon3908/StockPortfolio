@@ -20,7 +20,7 @@ import com.yjpapp.stockportfolio.util.Utils
  * @author Yoon Jae-park
  * @since 2020.12
  */
-class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
+class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
     companion object {
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"

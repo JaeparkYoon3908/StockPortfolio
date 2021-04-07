@@ -9,7 +9,7 @@ import android.view.View
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.Databases
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
-import com.yjpapp.stockportfolio.ui.BaseActivity
+import com.yjpapp.stockportfolio.ui.BaseMVPActivity
 import com.yjpapp.stockportfolio.ui.fragment.MemoListFragment
 import com.yjpapp.stockportfolio.ui.presenter.MemoReadWritePresenter
 import com.yjpapp.stockportfolio.ui.view.MemoReadWriteView
@@ -21,7 +21,7 @@ import com.yjpapp.stockportfolio.util.Utils
  * @author Yoon Jae-park
  * @since 2020.12.27
  */
-class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(), MemoReadWriteView {
+class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), MemoReadWriteView {
     private lateinit var memoReadWritePresenter: MemoReadWritePresenter
     private var mode: String? = null
     private var memoListPosition = 0

@@ -14,7 +14,7 @@ import com.yjpapp.stockportfolio.ui.interactor.BaseInteractor
  * @author Yoon Jae-park
  * @since 2020.12
  */
-abstract class BaseActivity<VB: ViewBinding>: AppCompatActivity() {
+abstract class BaseMVPActivity<VB: ViewBinding>: AppCompatActivity() {
     private lateinit var baseInteractor: BaseInteractor
     lateinit var mContext: Context
     lateinit var databaseController: DatabaseController

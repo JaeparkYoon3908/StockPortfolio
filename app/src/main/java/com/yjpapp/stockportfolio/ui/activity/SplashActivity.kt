@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.yjpapp.stockportfolio.databinding.ActivitySplashBinding
-import com.yjpapp.stockportfolio.ui.BaseActivity
+import com.yjpapp.stockportfolio.ui.BaseMVPActivity
 import com.yjpapp.stockportfolio.ui.MainActivity
 /**
  * 앱 실행 시 오프닝 화면
@@ -14,7 +14,7 @@ import com.yjpapp.stockportfolio.ui.MainActivity
  * @since 2020.10
  */
 
-class SplashActivity: BaseActivity<ActivitySplashBinding>() {
+class SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startSplash()

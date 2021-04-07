@@ -9,6 +9,7 @@
         />
     <item android:id="@+id/menu_IncomeNote_Edit"
         android:title="@string/Common_Edit"
+        android:icon="@drawable/icon_setting"
         app:showAsAction="ifRoom"
         />
 </menu>
