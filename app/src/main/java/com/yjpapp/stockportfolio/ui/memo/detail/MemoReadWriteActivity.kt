@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui.activity
+package com.yjpapp.stockportfolio.ui.memo.detail
 
 import android.app.AlertDialog
 import android.content.Intent

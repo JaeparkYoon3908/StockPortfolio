@@ -1,12 +1,17 @@
 package com.yjpapp.stockportfolio.util
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Context.TELEPHONY_SERVICE
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Handler
 import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.telephony.TelephonyManager
+import androidx.core.app.ActivityCompat
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.preference.PrefKey
@@ -150,5 +155,24 @@ object Utils {
                 PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
             },3000)
         }
+    }
+
+    fun getMyPhoneNum(mContext: Context): String{
+        val telManager = mContext.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return ""
+        }
+        var phoneNum: String = telManager.line1Number
+        phoneNum?.let {
+            if(phoneNum!!.startsWith("+82")){
+                phoneNum = phoneNum!!.replace("+82", "0")
+            }
+        }
+        if(phoneNum==null){
+            phoneNum = ""
+        }
+        return phoneNum
     }
 }

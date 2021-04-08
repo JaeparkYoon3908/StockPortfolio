@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui
+package com.yjpapp.stockportfolio.ui.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,6 @@ import com.yjpapp.stockportfolio.base.BaseMVPActivity
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
 import com.yjpapp.stockportfolio.preference.PrefKey
 import com.yjpapp.stockportfolio.ui.incomenote.IncomeNoteFragment
-import com.yjpapp.stockportfolio.ui.main.MainView
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
 import com.yjpapp.stockportfolio.ui.mystock.MyStockFragment
 import com.yjpapp.stockportfolio.util.Utils

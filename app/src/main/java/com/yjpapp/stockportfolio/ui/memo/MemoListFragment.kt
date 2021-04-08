@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
-import com.yjpapp.stockportfolio.ui.MainActivity
+import com.yjpapp.stockportfolio.ui.main.MainActivity
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 

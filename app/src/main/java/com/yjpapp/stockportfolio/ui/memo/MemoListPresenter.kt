@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import com.yjpapp.stockportfolio.database.data.MemoInfo
-import com.yjpapp.stockportfolio.ui.activity.MemoReadWriteActivity
+import com.yjpapp.stockportfolio.ui.memo.detail.MemoReadWriteActivity
 import com.yjpapp.stockportfolio.util.Utils
 
 /**

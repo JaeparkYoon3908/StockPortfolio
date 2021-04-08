@@ -12,6 +12,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
+import com.yjpapp.stockportfolio.ui.smsauth.SMSAuthActivity
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.dialog_input_income_note.*
@@ -161,7 +162,9 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 //
 //            }
             R.id.lin_IncomeNoteFragment_Filter -> {
-                showFilterDialog()
+//                showFilterDialog()
+                val intent = Intent(mContext, SMSAuthActivity::class.java)
+                startActivity(intent)
             }
         }
     }
