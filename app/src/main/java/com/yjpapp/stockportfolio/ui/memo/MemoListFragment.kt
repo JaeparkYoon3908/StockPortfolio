@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
-import com.yjpapp.stockportfolio.ui.main.MainActivity
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 
@@ -111,7 +110,7 @@ class MemoListFragment : Fragment(), MemoListView {
             }
             RESULT_EMPTY -> {
                 val mode = data?.getStringExtra(INTENT_KEY_MEMO_MODE)
-                (activity as MainActivity).logcat("mode = $mode")
+//                (activity as MainActivity).logcat("mode = $mode")
                 Toasty.normal(mContext, getString(R.string.MemoListFragment_Empty_Data_Message), Toasty.LENGTH_LONG).show()
             }
             RESULT_DELETE, RESULT_UPDATE -> {

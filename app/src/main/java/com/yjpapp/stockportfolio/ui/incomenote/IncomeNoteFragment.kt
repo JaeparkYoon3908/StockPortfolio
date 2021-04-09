@@ -12,10 +12,8 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
-import com.yjpapp.stockportfolio.ui.smsauth.SMSAuthActivity
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
-import kotlinx.android.synthetic.main.dialog_input_income_note.*
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -162,9 +160,9 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 //
 //            }
             R.id.lin_IncomeNoteFragment_Filter -> {
-//                showFilterDialog()
-                val intent = Intent(mContext, SMSAuthActivity::class.java)
-                startActivity(intent)
+                showFilterDialog()
+//                val intent = Intent(mContext, SMSAuthActivity::class.java)
+//                startActivity(intent)
             }
         }
     }
@@ -236,12 +234,14 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             if(editMode){
                 if (!isShowing) {
                     show()
-                    et_subject_name.setText(incomeNoteInfo?.subjectName)
-                    et_purchase_date.setText(incomeNoteInfo?.purchaseDate)
-                    et_sell_date.setText(incomeNoteInfo?.sellDate)
-                    et_purchase_price.setText(incomeNoteInfo?.purchasePrice)
-                    et_sell_price.setText(incomeNoteInfo?.sellPrice)
-                    et_sell_count.setText(incomeNoteInfo?.sellCount.toString())
+                    viewBinding.apply {
+                        etSubjectName.setText(incomeNoteInfo?.subjectName)
+                        etPurchaseDate.setText(incomeNoteInfo?.purchaseDate)
+                        etSellDate.setText(incomeNoteInfo?.sellDate)
+                        etPurchasePrice.setText(incomeNoteInfo?.purchasePrice)
+                        etSellPrice.setText(incomeNoteInfo?.sellPrice)
+                        etSellCount.setText(incomeNoteInfo?.sellCount.toString())
+                    }
                 }
             }else{
                 if (!isShowing) {

@@ -4,9 +4,6 @@ import android.os.Bundle
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMActivity
 import com.yjpapp.stockportfolio.databinding.ActivitySmsAuthBinding
-import kotlinx.android.synthetic.main.activity_sms_auth.*
-import kotlinx.android.synthetic.main.dialog_input_income_note.*
-import kotlinx.android.synthetic.main.item_my_stock_list.*
 
 class SMSAuthActivity: BaseMVVMActivity()  {
     private val binding by binding<ActivitySmsAuthBinding>(R.layout.activity_sms_auth)
@@ -22,8 +19,7 @@ class SMSAuthActivity: BaseMVVMActivity()  {
 
     private fun setMyPhoneNum(){
 //        et_phone_num.setText(Utils.getMyPhoneNum(this))
-        et_phone_num.setText("01048533908")
-        smsAuthViewModel.phoneNum.value = et_phone_num.text.toString()
+        binding.etPhoneNum.setText("01048533908")
+        smsAuthViewModel.phoneNum.value = binding.etPhoneNum.text.toString()
     }
-
 }

@@ -4,10 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.MemoInfo
-import kotlinx.android.synthetic.main.item_memo_list.view.*
 
 /**
  * MemoListPresenter와 연결된 RecyclerView Adapter
@@ -20,7 +21,13 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
     private var deleteModeOn = false
     private lateinit var mContext: Context
 
-    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
+    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view){
+        val txt_MemoList_Date = view.findViewById<TextView>(R.id.txt_MemoList_Date)
+        val txt_MemoList_Title = view.findViewById<TextView>(R.id.txt_MemoList_Title)
+        val txt_MemoList_NoteCount = view.findViewById<TextView>(R.id.txt_MemoList_NoteCount)
+        val img_MemoList_Check = view.findViewById<ImageView>(R.id.img_MemoList_Check)
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
@@ -30,20 +37,20 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.view.apply {
+        holder.apply {
             txt_MemoList_Date.text = memoListData[position]?.date
             txt_MemoList_Title.text = memoListData[position]?.title
             txt_MemoList_NoteCount.text = memoListData[position]?.content
             img_MemoList_Check.isSelected = memoListData[position]?.deleteChecked!! == "true"
 
-            setOnLongClickListener {
+            itemView.setOnLongClickListener {
                 memoListPresenter.onMemoListLongClicked(position)
                 return@setOnLongClickListener true
             }
 
             if(deleteModeOn){
                 img_MemoList_Check.visibility = View.VISIBLE
-                setOnClickListener {
+                itemView.setOnClickListener {
                     img_MemoList_Check.isSelected = !img_MemoList_Check.isSelected
                     if(img_MemoList_Check.isSelected){
                         memoListPresenter.clickMemoDeleteCheck(position, true)
@@ -54,7 +61,7 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
                 }
             }else{
                 img_MemoList_Check.visibility = View.GONE
-                setOnClickListener {
+                itemView.setOnClickListener {
                     memoListPresenter.onMemoListClicked(position)
                 }
             }

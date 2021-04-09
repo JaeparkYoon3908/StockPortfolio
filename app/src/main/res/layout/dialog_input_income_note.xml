@@ -58,6 +58,7 @@
         android:hint="@string/EditIncomeNoteDialog_Purchase_Date_Hint"
         android:textColor="@color/color_222222"
         android:textSize="16sp"
+
         app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_date"
         app:layout_constraintStart_toEndOf="@+id/txt_purchase_date"
         app:layout_constraintTop_toTopOf="@+id/txt_purchase_date" />

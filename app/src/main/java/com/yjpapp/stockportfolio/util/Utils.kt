@@ -157,22 +157,24 @@ object Utils {
         }
     }
 
-    fun getMyPhoneNum(mContext: Context): String{
-        val telManager = mContext.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return ""
-        }
-        var phoneNum: String = telManager.line1Number
-        phoneNum?.let {
-            if(phoneNum!!.startsWith("+82")){
-                phoneNum = phoneNum!!.replace("+82", "0")
-            }
-        }
-        if(phoneNum==null){
-            phoneNum = ""
-        }
-        return phoneNum
-    }
+//    fun getMyPhoneNum(mContext: Context): String{
+//        var phoneNum = ""
+//        val telManager = mContext.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+//        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED &&
+//                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED &&
+//                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//            return ""
+//        }
+//        phoneNum = telManager.line1Number
+//        if(phoneNum.isNotEmpty()){
+//            if(phoneNum.startsWith("+82")){
+//                phoneNum = phoneNum.replace("+82", "0")
+//            }
+//        }
+//
+//        if(phoneNum==null){
+//            phoneNum = ""
+//        }
+//        return phoneNum
+//    }
 }

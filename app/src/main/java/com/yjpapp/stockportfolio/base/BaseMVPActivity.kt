@@ -2,10 +2,8 @@ package com.yjpapp.stockportfolio.base
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.database.DatabaseController
 import com.yjpapp.stockportfolio.preference.PreferenceController
 
@@ -32,9 +30,9 @@ abstract class BaseMVPActivity<VB: ViewBinding>: AppCompatActivity() {
     abstract fun initData()
     abstract fun initLayout()
 
-    fun logcat(msg: String){
-        if(BuildConfig.LOG_CAT) Log.d(javaClass.simpleName, msg)
-    }
+//    fun logcat(msg: String){
+//        if(BuildConfig.LOG_CAT) Log.d(javaClass.simpleName, msg)
+//    }
 
     abstract fun getViewBinding(): VB
 }

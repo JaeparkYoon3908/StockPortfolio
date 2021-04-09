@@ -10,8 +10,6 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.MyStockInfo
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
-import kotlinx.android.synthetic.main.dialog_input_my_stock.*
-
 
 /**
  * 나의 주식 화면
@@ -158,10 +156,10 @@ class MyStockFragment: Fragment(), MyStockView {
             if(editMode){
                 if(!isShowing){
                     show()
-                    et_subject_name.setText(myStockInfo?.subjectName)
-                    et_purchase_date.setText(myStockInfo?.purchaseDate)
-                    et_purchase_price.setText(myStockInfo?.purchasePrice)
-                    et_purchase_count.setText(myStockInfo?.purchaseCount.toString())
+                    etSubjectName.setText(myStockInfo?.subjectName)
+                    etPurchaseDate.setText(myStockInfo?.purchaseDate)
+                    etPurchasePrice.setText(myStockInfo?.purchasePrice)
+                    etPurchaseCount.setText(myStockInfo?.purchaseCount.toString())
                 }
             }else{
                 if(!isShowing) {

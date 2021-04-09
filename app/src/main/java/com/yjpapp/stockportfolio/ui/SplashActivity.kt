@@ -24,22 +24,23 @@ import java.util.*
 
 class SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
     private val permissionList = arrayOf<String>(
-            Manifest.permission.READ_SMS,
-            Manifest.permission.READ_PHONE_NUMBERS,
-            Manifest.permission.READ_PHONE_STATE,
-
+        Manifest.permission.READ_PHONE_STATE
+//            Manifest.permission.READ_SMS,
+//            Manifest.permission.READ_PHONE_NUMBERS,
+//            Manifest.permission.READ_PHONE_STATE,
     )
 
-    protected val PERMISSION_REQUEST_CODE = 0 // 임의 설정
+    private val PERMISSION_REQUEST_CODE = 0 // 임의 설정
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        startSplash()
-        if(checkPermission()){
-            startMainActivity()
-        }else{
-            requestPermission()
-        }
+//        if(checkPermission()){
+//            startMainActivity()
+//        }else{
+//            requestPermission()
+//        }
+        startMainActivity()
     }
 
     override fun initData() {
@@ -75,6 +76,9 @@ class SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
         }
     }
 
+    /**
+     * 퍼미션 부분.
+     */
     private fun checkPermissions(vararg permissions: String): Boolean {
         var result: Int
         val permissionsNeeded: MutableList<String> = ArrayList()

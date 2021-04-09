@@ -4,11 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.item_income_note_list.view.*
 import java.sql.SQLException
 import java.util.*
 
@@ -25,14 +26,25 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
     private var editModeOn: Boolean = false
     private var allCheckClick: Boolean = false
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
-
     init {
         if (data != null) {
             this.dataInfoList = data
         }
     }
 
-    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
+    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view){
+        val txt_edit = view.findViewById<TextView>(R.id.txt_edit)
+        val txt_delete = view.findViewById<TextView>(R.id.txt_delete)
+        val txt_gain_data = view.findViewById<TextView>(R.id.txt_gain_data)
+        val txt_subject_name = view.findViewById<TextView>(R.id.txt_subject_name)
+        val txt_purchase_date_data = view.findViewById<TextView>(R.id.txt_purchase_date_data)
+        val txt_sell_date_data = view.findViewById<TextView>(R.id.txt_sell_date_data)
+        val txt_gain_percent_data = view.findViewById<TextView>(R.id.txt_gain_percent_data)
+        val txt_purchase_price_data = view.findViewById<TextView>(R.id.txt_purchase_price_data)
+        val txt_sell_price_data = view.findViewById<TextView>(R.id.txt_sell_price_data)
+        val txt_sell_count_data = view.findViewById<TextView>(R.id.txt_sell_count_data)
+        val lin_EditMode = view.findViewById<LinearLayout>(R.id.lin_EditMode)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
@@ -43,14 +55,15 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 아이템을 길게 눌렀을 때 편집모드로 전환.
-        holder.itemView.apply {
-            setOnLongClickListener {
+        holder.apply {
+            itemView.setOnLongClickListener {
                 Utils.runVibration(mContext, 100)
                 editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
                 notifyDataSetChanged()
                 incomeNotePresenter.onAdapterItemLongClick(editModeOn)
                 return@setOnLongClickListener true
             }
+
             txt_edit.setOnClickListener {
                 incomeNotePresenter.onEditButtonClick(position)
                 setEditMode(false)
@@ -100,20 +113,20 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
 
     private fun bindDataList(holder: ViewHolder, position: Int) {
         holder.apply {
-            itemView.txt_subject_name.isSelected = true
-            itemView.txt_gain_data.isSelected = true
+            txt_subject_name.isSelected = true
+            txt_gain_data.isSelected = true
 
             //상단 데이터
-            itemView.txt_subject_name.text = dataInfoList[position]?.subjectName
-            itemView.txt_gain_data.text = moneySymbol + dataInfoList[position]?.realPainLossesAmount
+            txt_subject_name.text = dataInfoList[position]?.subjectName
+            txt_gain_data.text = moneySymbol + dataInfoList[position]?.realPainLossesAmount
             //왼쪽
-            itemView.txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
-            itemView.txt_sell_date_data.text = dataInfoList[position]?.sellDate
-            itemView.txt_gain_percent_data.text = "(" + dataInfoList[position]?.gainPercent + ")"
+            txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
+            txt_sell_date_data.text = dataInfoList[position]?.sellDate
+            txt_gain_percent_data.text = "(" + dataInfoList[position]?.gainPercent + ")"
             //오른쪽
-            itemView.txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
-            itemView.txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice
-            itemView.txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
+            txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
+            txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice
+            txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
 
             var realPainLossesAmountNumber = ""
             val realPainLossesAmountSplit = dataInfoList[position]?.realPainLossesAmount!!.split(",")
@@ -121,11 +134,11 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
                 realPainLossesAmountNumber += realPainLossesAmountSplit[i]
             }
             if (realPainLossesAmountNumber.toDouble() >= 0) {
-                itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-                itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
             } else {
-                itemView.txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-                itemView.txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+                txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
             }
         }
     }
@@ -133,9 +146,9 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
     private fun bindEditMode(holder: ViewHolder) {
         holder.apply {
             if (editModeOn) {
-                itemView.lin_EditMode.visibility = View.VISIBLE
+                lin_EditMode.visibility = View.VISIBLE
             } else {
-                itemView.lin_EditMode.visibility = View.GONE
+                lin_EditMode.visibility = View.GONE
             }
         }
 

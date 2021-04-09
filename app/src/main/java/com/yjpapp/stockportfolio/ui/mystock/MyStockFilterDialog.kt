@@ -5,18 +5,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.databinding.DialogMyStockFilterBinding
 import com.yjpapp.stockportfolio.util.Utils
 
 class MyStockFilterDialog (myStockPresenter: MyStockPresenter): BottomSheetDialogFragment() {
 
-//    private lateinit var rootView: View
-    private var _viewBinding: DialogMyStockFilterBinding? = null
-    private val viewBinding get() = _viewBinding!!
+    private lateinit var rootView: View
+//    private var _viewBinding: DialogMyStockFilterBinding? = null
+//    private val viewBinding get() = _viewBinding!!
     private lateinit var mContext: Context
+    lateinit var txtMyStockDialogCancel: TextView
+    lateinit var txtMyStockDialogAll: TextView
+    lateinit var txtMyStockDialogGain: TextView
+    lateinit var txtMyStockDialogLoss: TextView
 
     override fun onAttach(context: Context) {
         mContext = context
@@ -30,9 +34,9 @@ class MyStockFilterDialog (myStockPresenter: MyStockPresenter): BottomSheetDialo
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        _viewBinding = DialogMyStockFilterBinding.inflate(inflater, container, false)
-//        rootView = inflater.inflate(R.layout.dialog_income_note_filter, container, false)
-        return viewBinding.root
+//        _viewBinding = DialogMyStockFilterBinding.inflate(inflater, container, false)
+        rootView = inflater.inflate(R.layout.dialog_income_note_filter, container, false)
+        return rootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -69,12 +73,10 @@ class MyStockFilterDialog (myStockPresenter: MyStockPresenter): BottomSheetDialo
     }
 
     private fun initLayout(){
-        viewBinding.apply {
-            txtMyStockDialogCancel.setOnClickListener(onClickListener)
-            txtMyStockDialogAll.setOnClickListener(onClickListener)
-            txtMyStockDialogGain.setOnClickListener(onClickListener)
-            txtMyStockDialogLoss.setOnClickListener(onClickListener)
-        }
+        txtMyStockDialogCancel.setOnClickListener(onClickListener)
+        txtMyStockDialogAll.setOnClickListener(onClickListener)
+        txtMyStockDialogGain.setOnClickListener(onClickListener)
+        txtMyStockDialogLoss.setOnClickListener(onClickListener)
     }
 
 }

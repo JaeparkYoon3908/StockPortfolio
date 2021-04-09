@@ -4,10 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.data.MyStockInfo
-import kotlinx.android.synthetic.main.item_my_stock_list.view.*
 import java.util.*
 
 /**
@@ -24,7 +25,19 @@ class MyStockListAdapter(private var allMySockList: ArrayList<MyStockInfo?>,
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
     private var editModeOn = false
 
-    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view)
+    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view){
+        val txt_subject_name = view.findViewById<TextView>(R.id.txt_subject_name)
+        val txt_gain_data = view.findViewById<TextView>(R.id.txt_gain_data)
+        val txt_gain_percent_data = view.findViewById<TextView>(R.id.txt_gain_percent_data)
+        val txt_purchase_date_data = view.findViewById<TextView>(R.id.txt_purchase_date_data)
+        val txt_holding_quantity_data = view.findViewById<TextView>(R.id.txt_holding_quantity_data)
+        val txt_purchase_price_data = view.findViewById<TextView>(R.id.txt_purchase_price_data)
+        val txt_current_price_data = view.findViewById<TextView>(R.id.txt_current_price_data)
+        val txt_edit = view.findViewById<TextView>(R.id.txt_edit)
+        val txt_sell = view.findViewById<TextView>(R.id.txt_sell)
+        val txt_delete = view.findViewById<TextView>(R.id.txt_delete)
+        val lin_EditMode = view.findViewById<LinearLayout>(R.id.lin_EditMode)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
@@ -43,7 +56,7 @@ class MyStockListAdapter(private var allMySockList: ArrayList<MyStockInfo?>,
     }
 
     private fun bindDataList(holder: ViewHolder, position: Int){
-        holder.itemView.apply {
+        holder.apply {
             //상단 데이터
             txt_subject_name.text = allMySockList[position]?.subjectName
             txt_gain_data.text = allMySockList[position]?.realPainLossesAmount
@@ -68,7 +81,7 @@ class MyStockListAdapter(private var allMySockList: ArrayList<MyStockInfo?>,
                 txt_gain_percent_data.setTextColor(mContext!!.getColor(R.color.color_4876c7))
             }
 
-            setOnLongClickListener {
+            itemView.setOnLongClickListener {
                 myStockPresenter.onMyStockListLongClick()
                 return@setOnLongClickListener true
             }
@@ -87,7 +100,7 @@ class MyStockListAdapter(private var allMySockList: ArrayList<MyStockInfo?>,
         }
     }
     private fun bindEditMode(holder: ViewHolder){
-        holder.itemView.apply {
+        holder.apply {
             if(editModeOn){
                 lin_EditMode.visibility = View.VISIBLE
             }else{

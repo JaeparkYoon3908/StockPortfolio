@@ -12,12 +12,14 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.AppConfig
 import com.yjpapp.stockportfolio.database.data.MyStockInfo
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.android.synthetic.main.dialog_input_my_stock.*
 import java.text.DecimalFormat
 import java.util.*
 
@@ -29,25 +31,39 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
     private var purchaseYear: String? = null
     private var purchaseMonth: String? = null
     private var purchaseDay: String? = null
-
+    lateinit var etPurchaseDate: EditText
+    lateinit var txtCancel: TextView
+    lateinit var txtComplete: TextView
+    lateinit var EditMainDialogMainContainer: ConstraintLayout
+    lateinit var etPurchasePrice: EditText
+    lateinit var txtPurchasePriceSymbol: TextView
+    lateinit var etSubjectName: EditText
+    lateinit var etPurchaseCount: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_input_my_stock)
-
         initLayout()
     }
 
     private fun initLayout(){
+        etPurchaseDate = findViewById(R.id.et_purchase_date)
+        txtCancel = findViewById(R.id.txt_cancel)
+        txtComplete = findViewById(R.id.txt_complete)
+        EditMainDialogMainContainer = findViewById(R.id.EditMainDialog_MainContainer)
+        etPurchasePrice = findViewById(R.id.et_purchase_price)
+        txtPurchasePriceSymbol = findViewById(R.id.txt_purchase_price_symbol)
+        etSubjectName = findViewById(R.id.et_subject_name)
+        etPurchaseCount = findViewById(R.id.et_purchase_count)
 
-        et_purchase_date.setOnClickListener(onClickListener)
-        txt_cancel.setOnClickListener(onClickListener)
-        txt_complete.setOnClickListener(onClickListener)
-        EditMainDialog_MainContainer.setOnClickListener(onClickListener)
+        etPurchaseDate.setOnClickListener(onClickListener)
+        txtCancel.setOnClickListener(onClickListener)
+        txtComplete.setOnClickListener(onClickListener)
+        EditMainDialogMainContainer.setOnClickListener(onClickListener)
 
-        et_purchase_price.addTextChangedListener(textWatcher)
+        etPurchasePrice.addTextChangedListener(textWatcher)
 
-        txt_purchase_price_symbol.text = AppConfig.moneySymbol
+        txtPurchasePriceSymbol.text = AppConfig.moneySymbol
 
         window?.setBackgroundDrawableResource(R.color.color_80000000)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
@@ -60,25 +76,25 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
             }
             R.id.txt_complete -> {
                 //예외처리 (값을 모두 입력하지 않았을 때)
-                if (et_subject_name.text.isEmpty() ||
-                        et_purchase_date.text.isEmpty() ||
-                        et_purchase_price.text.isEmpty() ||
-                        et_purchase_count.text.isEmpty()
+                if (etSubjectName.text.isEmpty() ||
+                    etPurchaseDate.text.isEmpty() ||
+                    etPurchasePrice.text.isEmpty() ||
+                    etPurchaseCount.text.isEmpty()
                 ) {
                     Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
                     return@OnClickListener
                 }
 
                 //매매한 회사이름
-                val subjectName = et_subject_name.text.toString()
+                val subjectName = etSubjectName.text.toString()
                 //매수일
-                val purchaseDate = et_purchase_date.text.toString()
+                val purchaseDate = etPurchaseDate.text.toString()
                 //매수금액
-                val purchasePrice = et_purchase_price.text.toString()
+                val purchasePrice = etPurchasePrice.text.toString()
                 val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice)
 
                 //매수수량
-                val purchaseCount = et_purchase_count.text.toString().toInt()
+                val purchaseCount = etPurchaseCount.text.toString().toInt()
                 //수익
 //                val realPainLossesAmountNumber =
 //                        ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
@@ -93,7 +109,7 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
                     return@OnClickListener
                 }
                 val myStockInfo = MyStockInfo(0, subjectName, "0",
-                        purchaseDate, "0%", purchasePrice, "0", purchaseCount)
+                    purchaseDate, "0%", purchasePrice, "0", purchaseCount)
                 myStockPresenter.onInputDialogCompleteClicked(myStockInfo)
 
 //                val dataInfo = IncomeNoteInfo(0, subjectName, realPainLossesAmount, purchaseDate,
@@ -165,15 +181,15 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
         override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
             if(!TextUtils.isEmpty(charSequence.toString()) && charSequence.toString() != result){
                 result = decimalFormat.format(charSequence.toString().replace(",", "").toDouble())
-                if(et_purchase_price.hasFocus()){
-                    et_purchase_price.setText(result)
-                    et_purchase_price.setSelection(result.length) //커서를 오른쪽 끝으로 보낸다.
+                if(etPurchasePrice.hasFocus()){
+                    etPurchasePrice.setText(result)
+                    etPurchasePrice.setSelection(result.length) //커서를 오른쪽 끝으로 보낸다.
                 }
             }
-            if(charSequence?.length!! == 0 && et_purchase_price.hasFocus()){
-                txt_purchase_price_symbol.setTextColor(context.getColor(R.color.color_666666))
-            }else if(et_purchase_price.hasFocus()){
-                txt_purchase_price_symbol.setTextColor(context.getColor(R.color.color_222222))
+            if(charSequence?.length!! == 0 && etPurchasePrice.hasFocus()){
+                txtPurchasePriceSymbol.setTextColor(context.getColor(R.color.color_666666))
+            }else if(etPurchasePrice.hasFocus()){
+                txtPurchasePriceSymbol.setTextColor(context.getColor(R.color.color_222222))
             }
         }
 
@@ -195,7 +211,7 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what){
                 MSG.PURCHASE_DATE_DATA_INPUT -> {
-                    et_purchase_date.setText("$purchaseYear.$purchaseMonth.$purchaseDay")
+                    etPurchaseDate.setText("$purchaseYear.$purchaseMonth.$purchaseDay")
                 }
                 MSG.SELL_DATE_DATA_INPUT -> {
                 }

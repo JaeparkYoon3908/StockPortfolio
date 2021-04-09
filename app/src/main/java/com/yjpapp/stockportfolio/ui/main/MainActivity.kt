@@ -133,7 +133,6 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
             PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
             FRAGMENT_TAG_MY_STOCK
         )
-
     }
 
     override fun hideMyStock() {
