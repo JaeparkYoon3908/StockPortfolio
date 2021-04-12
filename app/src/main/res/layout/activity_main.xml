@@ -69,9 +69,10 @@
         >
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/icon_memo2" />
+            android:id="@+id/img_MainActivity_BottomMenu_MyStock"
+            android:layout_width="@dimen/common_25dp"
+            android:layout_height="@dimen/common_25dp"
+            android:src="@drawable/selector_icon_my_stock" />
 
         <TextView
             android:id="@+id/txt_MainActivity_BottomMenu_MyStock"
@@ -79,7 +80,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/MyStockFragment_Title"
-            android:textColor="@color/color_222222" />
+            android:textColor="@color/selector_bottom_text_color" />
 
     </LinearLayout>
 
@@ -97,9 +98,10 @@
         android:onClick="clickBottomMenu"
         >
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/icon_memo2"
+            android:id="@+id/img_MainActivity_BottomMenu_IncomeNote"
+            android:layout_width="@dimen/common_25dp"
+            android:layout_height="@dimen/common_25dp"
+            android:src="@drawable/selector_icon_income_note"
             />
         <TextView
             android:id="@+id/txt_MainActivity_BottomMenu_IncomeNote"
@@ -107,7 +109,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/IncomeNoteFragment_Title"
-            android:textColor="@color/color_222222"
+            android:textColor="@color/selector_bottom_text_color"
             />
     </LinearLayout>
 <!--    <View-->
@@ -129,14 +131,15 @@
         tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_Ad"
         android:onClick="clickBottomMenu"
         >
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/icon_memo2"
+            android:id="@+id/img_MainActivity_BottomMenu_Memo"
+            android:layout_width="@dimen/common_25dp"
+            android:layout_height="@dimen/common_25dp"
+            android:src="@drawable/selector_icon_memo"
             />
         <TextView
             android:id="@+id/txt_MainActivity_BottomMenu_Memo"
@@ -144,7 +147,37 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/MemoListFragment_Title"
-            android:textColor="@color/color_222222"
+            android:textColor="@color/selector_bottom_text_color"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_MainActivity_BottomMenu_Ad"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/common_50dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_Memo"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="clickBottomMenu"
+        >
+
+        <ImageView
+            android:id="@+id/img_MainActivity_BottomMenu_Ad"
+            android:layout_width="@dimen/common_25dp"
+            android:layout_height="@dimen/common_25dp"
+            android:src="@drawable/selector_icon_advertise"
+            />
+        <TextView
+            android:id="@+id/txt_MainActivity_BottomMenu_Ad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/AdFragment_Title"
+            android:textColor="@color/selector_bottom_text_color"
             />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

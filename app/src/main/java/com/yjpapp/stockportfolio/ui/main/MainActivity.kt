@@ -194,15 +194,39 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
     }
 
     override fun clickBottomMenu(view: View?) {
+        when (currentFragment){
+            myStockFragment -> {
+                binding.imgMainActivityBottomMenuMyStock.isSelected = false
+                binding.txtMainActivityBottomMenuMyStock.isSelected = false
+            }
+            incomeNoteFragment -> {
+                binding.imgMainActivityBottomMenuIncomeNote.isSelected = false
+                binding.txtMainActivityBottomMenuIncomeNote.isSelected = false
+            }
+            memoListFragment -> {
+                binding.imgMainActivityBottomMenuMemo.isSelected = false
+                binding.txtMainActivityBottomMenuMemo.isSelected = false
+            }
+        }
         when (view?.id) {
             R.id.lin_MainActivity_BottomMenu_MyStock -> {
                 showMyStock()
+                binding.imgMainActivityBottomMenuMyStock.isSelected = !binding.imgMainActivityBottomMenuMyStock.isSelected
+                binding.txtMainActivityBottomMenuMyStock.isSelected = !binding.txtMainActivityBottomMenuMyStock.isSelected
             }
             R.id.lin_MainActivity_BottomMenu_IncomeNote -> {
                 showIncomeNote()
+                binding.imgMainActivityBottomMenuIncomeNote.isSelected = !binding.imgMainActivityBottomMenuIncomeNote.isSelected
+                binding.txtMainActivityBottomMenuIncomeNote.isSelected = !binding.txtMainActivityBottomMenuIncomeNote.isSelected
             }
             R.id.lin_MainActivity_BottomMenu_Memo -> {
                 showMemoList()
+                binding.imgMainActivityBottomMenuMemo.isSelected = !binding.imgMainActivityBottomMenuMemo.isSelected
+                binding.txtMainActivityBottomMenuMemo.isSelected = !binding.txtMainActivityBottomMenuMemo.isSelected
+            }
+            R.id.lin_MainActivity_BottomMenu_Ad -> {
+                binding.imgMainActivityBottomMenuAd.isSelected = !binding.imgMainActivityBottomMenuAd.isSelected
+                binding.txtMainActivityBottomMenuAd.isSelected = !binding.txtMainActivityBottomMenuAd.isSelected
             }
         }
     }
