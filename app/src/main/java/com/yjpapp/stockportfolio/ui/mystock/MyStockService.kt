@@ -6,8 +6,8 @@ import android.os.*
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.yjpapp.stockportfolio.network.YahooFinanceProtocolManager
-import com.yjpapp.stockportfolio.network.data.Price
+import com.yjpapp.stockportfolio.network.yahoofinance.YahooFinanceProtocolManager
+import com.yjpapp.stockportfolio.network.yahoofinance.data.Price
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call

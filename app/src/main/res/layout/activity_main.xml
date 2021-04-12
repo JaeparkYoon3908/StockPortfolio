@@ -60,11 +60,11 @@
         android:layout_height="@dimen/common_50dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone"
+        tools:visibility="visible"
         android:onClick="clickBottomMenu"
         >
 
