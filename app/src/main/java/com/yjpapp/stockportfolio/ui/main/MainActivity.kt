@@ -95,17 +95,22 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
             when (preferenceController.getPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)) {
                 FRAGMENT_TAG_MY_STOCK -> {
                     showMyStock()
+                    switchingBottomIconMyStock()
                 }
                 FRAGMENT_TAG_INCOME_NOTE -> {
                     showIncomeNote()
+                    switchingBottomIconIncomeNote()
                 }
                 FRAGMENT_TAG_MEMO_LIST -> {
                     showMemoList()
+                    switchingBottomIconMemo()
                 }
             }
         } else {
-            showMyStock()
+//            showMyStock()
             showIncomeNote()
+            switchingBottomIconIncomeNote()
+
         }
     }
 
@@ -196,42 +201,56 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
     override fun clickBottomMenu(view: View?) {
         when (currentFragment){
             myStockFragment -> {
-                binding.imgMainActivityBottomMenuMyStock.isSelected = false
-                binding.txtMainActivityBottomMenuMyStock.isSelected = false
+                switchingBottomIconMyStock()
             }
             incomeNoteFragment -> {
-                binding.imgMainActivityBottomMenuIncomeNote.isSelected = false
-                binding.txtMainActivityBottomMenuIncomeNote.isSelected = false
+                switchingBottomIconIncomeNote()
             }
             memoListFragment -> {
-                binding.imgMainActivityBottomMenuMemo.isSelected = false
-                binding.txtMainActivityBottomMenuMemo.isSelected = false
+                switchingBottomIconMemo()
             }
         }
         when (view?.id) {
             R.id.lin_MainActivity_BottomMenu_MyStock -> {
                 showMyStock()
-                binding.imgMainActivityBottomMenuMyStock.isSelected = !binding.imgMainActivityBottomMenuMyStock.isSelected
-                binding.txtMainActivityBottomMenuMyStock.isSelected = !binding.txtMainActivityBottomMenuMyStock.isSelected
+                switchingBottomIconMyStock()
             }
             R.id.lin_MainActivity_BottomMenu_IncomeNote -> {
                 showIncomeNote()
-                binding.imgMainActivityBottomMenuIncomeNote.isSelected = !binding.imgMainActivityBottomMenuIncomeNote.isSelected
-                binding.txtMainActivityBottomMenuIncomeNote.isSelected = !binding.txtMainActivityBottomMenuIncomeNote.isSelected
+                switchingBottomIconIncomeNote()
             }
             R.id.lin_MainActivity_BottomMenu_Memo -> {
                 showMemoList()
-                binding.imgMainActivityBottomMenuMemo.isSelected = !binding.imgMainActivityBottomMenuMemo.isSelected
-                binding.txtMainActivityBottomMenuMemo.isSelected = !binding.txtMainActivityBottomMenuMemo.isSelected
+                switchingBottomIconMemo()
             }
             R.id.lin_MainActivity_BottomMenu_Ad -> {
-                binding.imgMainActivityBottomMenuAd.isSelected = !binding.imgMainActivityBottomMenuAd.isSelected
-                binding.txtMainActivityBottomMenuAd.isSelected = !binding.txtMainActivityBottomMenuAd.isSelected
+                switchingBottomIconAd()
             }
         }
     }
 
     override fun getViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    //나의 주식 바텀 아이콘 on off 스위칭
+    private fun switchingBottomIconMyStock(){
+        binding.imgMainActivityBottomMenuMyStock.isSelected = !binding.imgMainActivityBottomMenuMyStock.isSelected
+        binding.txtMainActivityBottomMenuMyStock.isSelected = !binding.txtMainActivityBottomMenuMyStock.isSelected
+    }
+
+    private fun switchingBottomIconIncomeNote(){
+        binding.imgMainActivityBottomMenuIncomeNote.isSelected = !binding.imgMainActivityBottomMenuIncomeNote.isSelected
+        binding.txtMainActivityBottomMenuIncomeNote.isSelected = !binding.txtMainActivityBottomMenuIncomeNote.isSelected
+    }
+
+    private fun switchingBottomIconMemo(){
+        binding.imgMainActivityBottomMenuMemo.isSelected = !binding.imgMainActivityBottomMenuMemo.isSelected
+        binding.txtMainActivityBottomMenuMemo.isSelected = !binding.txtMainActivityBottomMenuMemo.isSelected
+    }
+
+    private fun switchingBottomIconAd(){
+        binding.imgMainActivityBottomMenuAd.isSelected = !binding.imgMainActivityBottomMenuAd.isSelected
+        binding.txtMainActivityBottomMenuAd.isSelected = !binding.txtMainActivityBottomMenuAd.isSelected
     }
 }

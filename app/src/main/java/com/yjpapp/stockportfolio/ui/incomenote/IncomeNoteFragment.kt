@@ -187,16 +187,19 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         var totalGainPercent = 0.0
         val gainPercentList = ArrayList<Double>()
 
-        for (i in allIncomeNoteList.indices) {
-            totalGainNumber += Utils.getNumDeletedComma(allIncomeNoteList[i]!!.realPainLossesAmount!!)
+        if(allIncomeNoteList.size!=0){
+            for (i in allIncomeNoteList.indices) {
+                totalGainNumber += Utils.getNumDeletedComma(allIncomeNoteList[i]!!.realPainLossesAmount!!)
                     .toDouble()
-            totalGainPercent += Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!)
+                totalGainPercent += Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!)
                     .toDouble()
-            gainPercentList.add(Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!).toDouble())
+                gainPercentList.add(Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!).toDouble())
+            }
+            totalGainPercent = Utils.calculateTotalGainPercent(allIncomeNoteList)
         }
-        totalGainPercent = Utils.calculateTotalGainPercent(allIncomeNoteList)
 
         viewBinding.apply {
+
             txtTotalRealizationGainsLossesData.text =
                     NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
             if(totalGainNumber >= 0){
