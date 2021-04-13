@@ -167,7 +167,6 @@ class MyStockFragment: Fragment(), MyStockView {
                 }
             }
         }
-
     }
 
     override fun showAddButton() {
