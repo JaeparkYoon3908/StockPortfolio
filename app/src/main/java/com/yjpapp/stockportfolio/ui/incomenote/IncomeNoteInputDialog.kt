@@ -17,13 +17,16 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentManager
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.AppConfig
 import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import java.text.DecimalFormat
 import java.util.*
+
 
 class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePresenter) : AlertDialog(mContext)
         , SupportedDatePickerDialog.OnDateSetListener{
@@ -31,14 +34,14 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
     }
-    private var purchaseYear: String? = null
-    private var purchaseMonth: String? = null
-    private var purchaseDay: String? = null
+    var purchaseYear: String? = null
+    var purchaseMonth: String? = null
+//    private var purchaseDay: String? = null
     private var sellYear: String? = null
     private var sellMonth: String? = null
     private var sellDay: String? = null
-    lateinit var etPurchaseDate: EditText
     lateinit var etSellDate: EditText
+//    lateinit var etSellDate: EditText
     lateinit var txtCancel: TextView
     lateinit var txtComplete: TextView
     lateinit var EditMainDialogMainContainer: ConstraintLayout
@@ -56,8 +59,8 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     }
 
     private fun initLayout(){
-        etPurchaseDate = findViewById(R.id.et_purchase_date)
         etSellDate = findViewById(R.id.et_sell_date)
+//        etSellDate = findViewById(R.id.et_sell_date)
         txtCancel = findViewById(R.id.txt_cancel)
         txtComplete = findViewById(R.id.txt_complete)
         EditMainDialogMainContainer = findViewById(R.id.EditMainDialog_MainContainer)
@@ -68,8 +71,8 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         etSubjectName = findViewById(R.id.et_subject_name)
         etSellCount = findViewById(R.id.et_sell_count)
 
-        etPurchaseDate.setOnClickListener(onClickListener)
         etSellDate.setOnClickListener(onClickListener)
+//        etSellDate.setOnClickListener(onClickListener)
         txtCancel.setOnClickListener(onClickListener)
         txtComplete.setOnClickListener(onClickListener)
         EditMainDialogMainContainer.setOnClickListener(onClickListener)
@@ -92,20 +95,18 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
             txtComplete.id -> {
                 //예외처리 (값을 모두 입력하지 않았을 때)
                 if (etSubjectName.text.isEmpty() ||
-                    etPurchaseDate.text.isEmpty() ||
-                    etSellDate.text.isEmpty() ||
-                    etPurchasePrice.text.isEmpty() ||
-                    etSellPrice.text.isEmpty() ||
-                    etSellCount.text.isEmpty()
+//                    etPurchaseDate.text.isEmpty() ||
+//                    etSellDate.text.isEmpty() ||
+                        etPurchasePrice.text.isEmpty() ||
+                        etSellPrice.text.isEmpty() ||
+                        etSellCount.text.isEmpty()
                 ) {
-                    Toast.makeText(mContext, "값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(mContext, "필수 값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
                     return@OnClickListener
                 }
 
                 //매매한 회사이름
                 val subjectName = etSubjectName.text.toString()
-                //매수일
-                val purchaseDate = etPurchaseDate.text.toString()
                 //매도일
                 val sellDate = etSellDate.text.toString()
                 //매수금액
@@ -118,76 +119,60 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                 val sellCount = etSellCount.text.toString().toInt()
                 //수익
                 val realPainLossesAmountNumber =
-                    ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
+                        ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
                 val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
                 //수익률
                 val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
                 val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
 
-                //날짜오류 예외처리
-                if (Utils.getNumDeletedDot(purchaseDate).toInt() > Utils.getNumDeletedDot(sellDate).toInt()) {
-                    Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG).show()
-                    return@OnClickListener
-                }
+//                //날짜오류 예외처리
+//                if (Utils.getNumDeletedDot(sellDate).toInt() > Utils.getNumDeletedDot(sellDate).toInt()) {
+//                    Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG).show()
+//                    return@OnClickListener
+//                }
 
-                val dataInfo = IncomeNoteInfo(0, subjectName, realPainLossesAmount, purchaseDate,
-                    sellDate, gainPercent, purchasePrice, sellPrice, sellCount)
+                val dataInfo = IncomeNoteInfo(0, subjectName, realPainLossesAmount, sellDate,
+                        gainPercent, purchasePrice, sellPrice, sellCount)
                 incomeNotePresenter.onInputDialogCompleteClicked(dataInfo)
                 dismiss()
             }
-            etPurchaseDate.id -> {
-
-                val calendar = Calendar.getInstance()
-                val currentYear = calendar.get(Calendar.YEAR)
-                val currentMonth = calendar.get(Calendar.MONTH)
-                val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
-
-                val datePickerDialog = DatePickerDialog(mContext, R.style.MySpinnerDatePickerStyle, /*this,*/
-                        DatePickerDialog.OnDateSetListener { _: View, year, monthOfYear, dayOfMonth ->
-                        //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
-                        purchaseYear = year.toString()
-                        purchaseMonth = if (monthOfYear + 1 < 10) {
-                            "0" + (monthOfYear + 1).toString()
-                        } else {
-                            (monthOfYear + 1).toString()
-                        }
-                        purchaseDay = if (dayOfMonth < 10) {
-                            "0$dayOfMonth"
-                        } else {
-                            dayOfMonth.toString()
-                        }
-                        uiHandler.sendEmptyMessage(MSG.PURCHASE_DATE_DATA_INPUT)
-                    },
-                    currentYear,
-                    currentMonth,
-                    currentDay)
-                datePickerDialog.show()
-            }
             etSellDate.id -> {
-                val calendar = Calendar.getInstance()
-                val currentYear = calendar.get(Calendar.YEAR)
-                val currentMonth = calendar.get(Calendar.MONTH)
-                val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
-                val datePickerDialog = DatePickerDialog(mContext, R.style.MySpinnerDatePickerStyle,
-                    DatePickerDialog.OnDateSetListener { _: View, year, monthOfYear, dayOfMonth ->
-                        //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
-                        sellYear = year.toString()
-                        sellMonth = if (monthOfYear + 1 < 10) {
-                            "0" + (monthOfYear + 1).toString()
-                        } else {
-                            (monthOfYear + 1).toString()
-                        }
-                        sellDay = if (dayOfMonth < 10) {
-                            "0$dayOfMonth"
-                        } else {
-                            dayOfMonth.toString()
-                        }
-                        uiHandler.sendEmptyMessage(MSG.SELL_DATE_DATA_INPUT)
-                    },
-                    currentYear,
-                    currentMonth,
-                    currentDay)
-                datePickerDialog.show()
+
+//                val calendar = Calendar.getInstance()
+//                val currentYear = calendar.get(Calendar.YEAR)
+//                val currentMonth = calendar.get(Calendar.MONTH)
+//                val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+//                val date = Date()
+//
+//                MonthYearPickerDialog(date).apply {
+//                    setListener { view, year, month, dayOfMonth ->
+//                        Toast.makeText(requireContext(), "Set date: $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
+//                        findViewById<EditText>(R.id.et_sell_date).setText(year+month)
+//                        etSellDate.setText(year+month)
+//                    }
+//                    show(childFragmentManager, "MonthYearPickerDialog")
+//                }
+
+//                val datePickerDialog = DatePickerDialog(mContext, R.style.MySpinnerDatePickerStyle, /*this,*/
+//                        DatePickerDialog.OnDateSetListener { _: View, year, monthOfYear, dayOfMonth ->
+//                            //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
+//                            purchaseYear = year.toString()
+//                            purchaseMonth = if (monthOfYear + 1 < 10) {
+//                                "0" + (monthOfYear + 1).toString()
+//                            } else {
+//                                (monthOfYear + 1).toString()
+//                            }
+//                            purchaseDay = if (dayOfMonth < 10) {
+//                                "0$dayOfMonth"
+//                            } else {
+//                                dayOfMonth.toString()
+//                            }
+//                            uiHandler.sendEmptyMessage(MSG.PURCHASE_DATE_DATA_INPUT)
+//                        },
+//                        currentYear,
+//                        currentMonth,
+//                        currentDay)
+//                datePickerDialog.show()
             }
         }
     }
@@ -223,10 +208,10 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         }
 
         override fun beforeTextChanged(
-            charSequence: CharSequence?,
-            start: Int,
-            count: Int,
-            after: Int
+                charSequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
         ) {
 
         }
@@ -235,12 +220,12 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
 
         }
     }
-    private val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
+    val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
     private inner class UIHandler: Handler.Callback {
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what){
                 MSG.PURCHASE_DATE_DATA_INPUT -> {
-                    etPurchaseDate.setText("$purchaseYear.$purchaseMonth.$purchaseDay")
+                    etSellDate.setText("$purchaseYear.$purchaseMonth")
                 }
                 MSG.SELL_DATE_DATA_INPUT -> {
                     etSellDate.setText("$sellYear.$sellMonth.$sellDay")
@@ -257,11 +242,11 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         } else {
             (month + 1).toString()
         }
-        purchaseDay = if (dayOfMonth < 10) {
-            "0$dayOfMonth"
-        } else {
-            dayOfMonth.toString()
-        }
+//        purchaseDay = if (dayOfMonth < 10) {
+//            "0$dayOfMonth"
+//        } else {
+//            dayOfMonth.toString()
+//        }
         uiHandler.sendEmptyMessage(MSG.PURCHASE_DATE_DATA_INPUT)
     }
 }

@@ -47,7 +47,7 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
     }
 
     private fun initLayout(){
-        etPurchaseDate = findViewById(R.id.et_purchase_date)
+        etPurchaseDate = findViewById(R.id.et_sell_date)
         txtCancel = findViewById(R.id.txt_cancel)
         txtComplete = findViewById(R.id.txt_complete)
         EditMainDialogMainContainer = findViewById(R.id.EditMainDialog_MainContainer)
@@ -118,7 +118,7 @@ class MyStockInputDialog (mContext: Context, myStockPresenter: MyStockPresenter)
 
                 dismiss()
             }
-            R.id.et_purchase_date -> {
+            R.id.et_sell_date -> {
                 val calendar = Calendar.getInstance()
                 val currentYear = calendar.get(Calendar.YEAR)
                 val currentMonth = calendar.get(Calendar.MONTH)

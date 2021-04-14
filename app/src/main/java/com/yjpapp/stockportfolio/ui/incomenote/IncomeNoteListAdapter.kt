@@ -44,6 +44,7 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
         val txt_sell_price_data = view.findViewById<TextView>(R.id.txt_sell_price_data)
         val txt_sell_count_data = view.findViewById<TextView>(R.id.txt_sell_count_data)
         val lin_EditMode = view.findViewById<LinearLayout>(R.id.lin_EditMode)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -80,8 +81,6 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
                     e.printStackTrace()
                 }
             }
-            txt_gain_data.isSelected = true
-
             bindDataList(holder, position)
             bindEditMode(holder)
         }
@@ -115,13 +114,19 @@ class IncomeNoteListAdapter(val data: ArrayList<IncomeNoteInfo?>?, private val i
         holder.apply {
             txt_subject_name.isSelected = true
             txt_gain_data.isSelected = true
+            txt_purchase_price_data.isSelected = true
+            txt_sell_price_data.isSelected = true
+            txt_gain_percent_data.isSelected = true
 
             //상단 데이터
             txt_subject_name.text = dataInfoList[position]?.subjectName
             txt_gain_data.text = moneySymbol + dataInfoList[position]?.realPainLossesAmount
             //왼쪽
-            txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
+//            txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
             txt_sell_date_data.text = dataInfoList[position]?.sellDate
+            if(dataInfoList[position]?.sellDate == ""){
+                txt_sell_date_data.text = "-"
+            }
             txt_gain_percent_data.text = "(" + dataInfoList[position]?.gainPercent + ")"
             //오른쪽
             txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice

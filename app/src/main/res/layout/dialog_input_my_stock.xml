@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/et_subject_name" />
 
     <EditText
-        android:id="@+id/et_purchase_date"
+        android:id="@+id/et_sell_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_10dp"

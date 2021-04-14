@@ -38,7 +38,7 @@ class DatabaseOpenHelper(context: Context): SQLiteOpenHelper(context, "database.
                 Databases.COL_INCOME_NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Databases.COL_INCOME_NOTE_SUBJECT_NAME + " TEXT," +
                 Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT + " TEXT," +
-                Databases.COL_INCOME_NOTE_PURCHASE_DATE + " TEXT," +
+//                Databases.COL_INCOME_NOTE_PURCHASE_DATE + " TEXT," +
                 Databases.COL_INCOME_NOTE_SELL_DATE + " TEXT," +
                 Databases.COL_INCOME_NOTE_GAIN_PERCENT + " TEXT," +
                 Databases.COL_INCOME_NOTE_PURCHASE_PRICE + " TEXT," +
