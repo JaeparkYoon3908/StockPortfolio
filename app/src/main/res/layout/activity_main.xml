@@ -57,14 +57,14 @@
     <LinearLayout
         android:id="@+id/lin_MainActivity_BottomMenu_MyStock"
         android:layout_width="0dp"
-        android:layout_height="@dimen/common_50dp"
+        android:layout_height="@dimen/common_60dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone"
+        tools:visibility="visible"
         android:onClick="clickBottomMenu"
         >
 
@@ -87,7 +87,7 @@
     <LinearLayout
         android:id="@+id/lin_MainActivity_BottomMenu_IncomeNote"
         android:layout_width="0dp"
-        android:layout_height="@dimen/common_50dp"
+        android:layout_height="@dimen/common_60dp"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="visible"
@@ -124,7 +124,7 @@
     <LinearLayout
         android:id="@+id/lin_MainActivity_BottomMenu_Memo"
         android:layout_width="0dp"
-        android:layout_height="@dimen/common_50dp"
+        android:layout_height="@dimen/common_60dp"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="visible"
@@ -154,11 +154,11 @@
     <LinearLayout
         android:id="@+id/lin_MainActivity_BottomMenu_Ad"
         android:layout_width="0dp"
-        android:layout_height="@dimen/common_50dp"
+        android:layout_height="@dimen/common_60dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:visibility="gone"
-        tools:visibility="gone"
+        android:visibility="visible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_Memo"
         app:layout_constraintEnd_toEndOf="parent"

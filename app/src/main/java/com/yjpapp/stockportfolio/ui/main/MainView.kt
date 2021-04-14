@@ -10,19 +10,23 @@ import android.view.View
  */
 
 interface MainView {
-    fun addFragment()
+//    fun addFragment()
 
     fun showMyStock()
 
-    fun hideMyStock()
+//    fun hideMyStock()
 
     fun showIncomeNote()
 
-    fun hideIncomeNote()
+//    fun hideIncomeNote()
 
     fun showMemoList()
 
-    fun hideMemoList()
+//    fun hideMemoList()
+
+    fun showAdFragment()
+
+    fun hideAdFragment()
 
     fun hideCurrentFragment()
 

@@ -8,6 +8,7 @@
         />
     <item android:id="@+id/menu_MyStockFragment_Edit"
         android:title="@string/Common_Edit"
+        android:icon="@drawable/icon_setting_2"
         app:showAsAction="ifRoom"
         />
 </menu>

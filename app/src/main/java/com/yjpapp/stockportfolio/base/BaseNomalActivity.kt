@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 /**
  *
  */
-open class BaseActivity(resId: Int): AppCompatActivity(resId) {
+open class BaseNomalActivity(resId: Int): AppCompatActivity(resId) {
     lateinit var mContext: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {

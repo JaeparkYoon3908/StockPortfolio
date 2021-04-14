@@ -25,6 +25,8 @@ abstract class BaseMVPActivity<VB: ViewBinding>: AppCompatActivity() {
         baseInteractor = BaseInteractor.getInstance(mContext)
         binding = getViewBinding()
         setContentView(binding.root)
+        initData()
+        initLayout()
     }
 
     abstract fun initData()

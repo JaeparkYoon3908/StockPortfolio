@@ -30,10 +30,8 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        initData()
-        initLayout()
-
+        //initData()
+        //initLayout()
     }
     override fun initData() {
         memoReadWritePresenter = MemoReadWritePresenter(mContext, this)
