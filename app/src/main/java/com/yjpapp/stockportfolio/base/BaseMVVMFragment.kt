@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 
 abstract class BaseMVVMFragment<T : ViewDataBinding>: Fragment() {
     lateinit var mDataBinding: T
+    lateinit var mContext: Context
 
     /**
      * @return layout resource id
@@ -22,6 +24,11 @@ abstract class BaseMVVMFragment<T : ViewDataBinding>: Fragment() {
      * BaseMVVMFragment를 상속 받은 Class에서 viewModel을 선언
      */
     abstract fun setViewModel()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

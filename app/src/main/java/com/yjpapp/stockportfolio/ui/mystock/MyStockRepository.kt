@@ -1,4 +1,4 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
-class MyStockAdpater {
+class MyStockRepository {
 }

@@ -1,69 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/common_110dp"
-    android:layout_marginBottom="@dimen/common_10dp"
-    android:paddingTop="@dimen/common_10dp"
-    android:paddingStart="@dimen/common_20dp"
-    android:paddingEnd="@dimen/common_20dp"
-    android:background="@color/color_background_fbfbfb"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/txt_company"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="@dimen/common_100dp"
-        android:text="네이버"
-        android:textSize="@dimen/common_13dp"
-        android:textColor="@color/color_222222"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintTop_toTopOf="@+id/txt_change_price_percent"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_change_price_percent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/txt_current_price"
-        />
-    <TextView
-        android:id="@+id/txt_current_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="@dimen/common_100dp"
-        android:gravity="end"
-        android:text="480,000"
-        android:textSize="@dimen/common_13dp"
-        android:textColor="@color/color_222222"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintTop_toTopOf="@+id/txt_change_price_percent"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_change_price_percent"
-        app:layout_constraintStart_toEndOf="@+id/txt_company"
-        app:layout_constraintEnd_toStartOf="@+id/txt_change_price_percent"
-        />
+    <data>
+        <variable
+            name="viewModel"
+            type="com.yjpapp.stockportfolio.ui.mystock.MyStockViewModel" />
+    </data>
 
-    <TextView
-        android:id="@+id/txt_change_price_percent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="@dimen/common_50dp"
-        android:gravity="end"
-        android:text="1,000\n10%"
-        android:textSize="@dimen/common_10dp"
-        android:textColor="@color/color_222222"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_current_price"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_50dp"
+        android:layout_marginBottom="@dimen/common_10dp"
+        android:paddingStart="@dimen/common_20dp"
+        android:paddingEnd="@dimen/common_20dp"
+        android:background="@color/color_background_fbfbfb"
+        >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/txt_company"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="@dimen/common_100dp"
+            android:text="네이버"
+            android:textSize="@dimen/common_13dp"
+            android:textColor="@color/color_222222"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toTopOf="@+id/txt_change_price_percent"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_change_price_percent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_current_price"
+            />
+        <TextView
+            android:id="@+id/txt_current_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="@dimen/common_100dp"
+            android:gravity="end"
+            android:text="@{viewModel.currentPrice}"
+            android:textSize="@dimen/common_13dp"
+            android:textColor="@color/color_222222"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toTopOf="@+id/txt_change_price_percent"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_change_price_percent"
+            app:layout_constraintStart_toEndOf="@+id/txt_company"
+            app:layout_constraintEnd_toStartOf="@+id/txt_change_price_percent"
+            />
+
+        <TextView
+            android:id="@+id/txt_change_price_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="@dimen/common_50dp"
+            android:gravity="end"
+            android:text="1,000\n10%"
+            android:textSize="@dimen/common_10dp"
+            android:textColor="@color/color_222222"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_current_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
