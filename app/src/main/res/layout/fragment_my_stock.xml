@@ -25,6 +25,7 @@
             android:paddingEnd="@dimen/common_15dp"
             app:layout_constraintTop_toTopOf="parent"
             >
+
             <TextView
                 android:id="@+id/txt_Purchase_Price"
                 android:layout_width="0dp"
@@ -37,7 +38,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/txt_Purchase_Price_Data"
-                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintWidth_percent="0.25"
                 />
 
             <TextView
@@ -56,7 +57,7 @@
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txt_Purchase_Price"
-                app:layout_constraintWidth_percent="0.8"
+                app:layout_constraintWidth_percent="0.75"
                 tools:text="500,000" />
 
             <TextView
@@ -65,13 +66,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/common_10dp"
                 android:gravity="start"
-                android:text="@string/MyStockFragment_Evaluation_Amount"
+                android:text="@string/MyStockFragment_Total_Evaluation_Amount"
                 android:textColor="@color/color_222222"
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/txt_Evaluation_Amount_Data"
-                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintWidth_percent="0.25"
                 />
 
             <TextView
@@ -90,7 +91,7 @@
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/txt_Purchase_Price"
                 app:layout_constraintStart_toEndOf="@+id/txt_Evaluation_Amount"
-                app:layout_constraintWidth_percent="0.8"
+                app:layout_constraintWidth_percent="0.75"
                 tools:text="500,000" />
 
             <TextView
@@ -105,7 +106,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
                 app:layout_constraintEnd_toStartOf="@+id/txt_GainsLosses_Data"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintWidth_percent="0.25"
                 />
 
             <TextView
@@ -125,7 +126,7 @@
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
                 app:layout_constraintStart_toEndOf="@+id/txt_TotalRealizationGainsLosses"
-                app:layout_constraintWidth_percent="0.8"
+                app:layout_constraintWidth_percent="0.75"
                 tools:text="650,000,000,000,000" />
 
             <TextView
@@ -140,7 +141,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/txt_GainPercent_Data"
-                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintWidth_percent="0.25"
 
                 />
 
@@ -160,7 +161,7 @@
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
                 app:layout_constraintStart_toEndOf="@+id/txt_GainPercent"
-                app:layout_constraintWidth_percent="0.8"
+                app:layout_constraintWidth_percent="0.75"
                 tools:text="15%" />
 
             <View

@@ -1,7 +1,6 @@
 package com.yjpapp.stockportfolio.ui.incomenote
 
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -17,12 +16,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.FragmentManager
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.AppConfig
-import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
-import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
+import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import java.text.DecimalFormat
 import java.util.*

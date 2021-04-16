@@ -1,7 +1,7 @@
 package com.yjpapp.stockportfolio.ui.memo.detail
 
 import android.content.Context
-import com.yjpapp.stockportfolio.database.data.MemoInfo
+import com.yjpapp.stockportfolio.database.sqlte.data.MemoInfo
 
 /**
  * MemoReadWriteActivity의 Presenter

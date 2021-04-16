@@ -3,6 +3,8 @@ package com.yjpapp.stockportfolio.ui.smsauth
 import android.os.Bundle
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMActivity
+import com.yjpapp.stockportfolio.database.room.MyStockDao
+import com.yjpapp.stockportfolio.database.room.MyRoomDatabase
 import com.yjpapp.stockportfolio.databinding.ActivitySmsAuthBinding
 
 class SMSAuthActivity: BaseMVVMActivity()  {

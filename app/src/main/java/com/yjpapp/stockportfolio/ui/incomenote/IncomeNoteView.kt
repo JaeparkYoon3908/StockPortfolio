@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.ui.incomenote
 
-import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
 
 /**
  * IncomeNoteFragment의 View

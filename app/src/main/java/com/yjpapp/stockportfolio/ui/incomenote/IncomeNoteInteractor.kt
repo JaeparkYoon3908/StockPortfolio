@@ -2,8 +2,8 @@ package com.yjpapp.stockportfolio.ui.incomenote
 
 import android.content.ContentValues
 import android.database.Cursor
-import com.yjpapp.stockportfolio.database.Databases
-import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.database.sqlte.Databases
+import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.base.BaseInteractor
 import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
 import com.yjpapp.stockportfolio.util.Utils
@@ -67,7 +67,8 @@ class IncomeNoteInteractor: BaseInteractor() {
             put(Databases.COL_INCOME_NOTE_SELL_COUNT, incomeNoteInfo.sellCount)
         }
 
-        updateCheck = database.update(Databases.TABLE_INCOME_NOTE, contentValues,
+        updateCheck = database.update(
+            Databases.TABLE_INCOME_NOTE, contentValues,
                 Databases.COL_INCOME_NOTE_ID + " = ? ", arrayOf(incomeNoteInfo.id.toString()))
 
         return updateCheck != -1

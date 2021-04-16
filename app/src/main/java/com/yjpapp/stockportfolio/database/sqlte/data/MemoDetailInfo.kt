@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.database.data
+package com.yjpapp.stockportfolio.database.sqlte.data
 
 data class MemoDetailInfo (
     var date: String,

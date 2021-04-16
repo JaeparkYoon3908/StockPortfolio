@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.database
+package com.yjpapp.stockportfolio.database.sqlte
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -8,7 +8,6 @@ class DatabaseController {
     companion object {
         @Volatile
         private var instance: DatabaseController? = null
-        private lateinit var mContext: Context
         private lateinit var dbHelper: DatabaseOpenHelper
         private lateinit var database: SQLiteDatabase
 
@@ -17,8 +16,7 @@ class DatabaseController {
                 instance ?: synchronized(this) {
                     instance ?: DatabaseController().also {
                         instance = it
-                        mContext = context
-                        dbHelper = DatabaseOpenHelper(mContext)
+                        dbHelper = DatabaseOpenHelper(context)
                         database = dbHelper.writableDatabase
                     }
                 }

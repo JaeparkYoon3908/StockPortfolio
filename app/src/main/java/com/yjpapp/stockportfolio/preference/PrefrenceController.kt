@@ -9,7 +9,7 @@ private const val FILENAME = "prefs"
 class PreferenceController {
     companion object {
         @Volatile private var instance: PreferenceController? = null
-        private lateinit var mContext: Context
+//        private lateinit var mContext: Context
         private lateinit var pref: SharedPreferences
 
         @JvmStatic
@@ -17,8 +17,8 @@ class PreferenceController {
             instance ?: synchronized(this) {
                 instance ?: PreferenceController().also {
                     instance = it
-                    mContext = context
-                    pref = mContext.getSharedPreferences(FILENAME, Activity.MODE_PRIVATE)
+//                    mContext = context
+                    pref = context.getSharedPreferences(FILENAME, Activity.MODE_PRIVATE)
                 }
             }
     }

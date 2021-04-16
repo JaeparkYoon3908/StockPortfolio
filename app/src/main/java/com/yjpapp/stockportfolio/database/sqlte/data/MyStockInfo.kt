@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.database.data
+package com.yjpapp.stockportfolio.database.sqlte.data
 
 data class MyStockInfo
     (var id: Int,
@@ -8,5 +8,5 @@ data class MyStockInfo
      var gainPercent: String?, // 수익률
      var purchasePrice: String?, // 매수단가
      var currentPrice: String?, // 현재가
-     var purchaseCount: Int // 보유 수량
+     var purchaseCount: String? // 보유 수량
      )

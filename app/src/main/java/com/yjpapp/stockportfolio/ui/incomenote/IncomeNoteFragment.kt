@@ -4,14 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.EditText
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
 import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog

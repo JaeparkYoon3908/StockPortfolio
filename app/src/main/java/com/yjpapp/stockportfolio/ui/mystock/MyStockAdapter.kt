@@ -7,8 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
 
-class MyStockAdapter(val myStockViewModel: MyStockViewModel): RecyclerView.Adapter<MyStockAdapter.ViewHolder>() {
-
+/**
+ * @link MyStockFragment에 붙어있는 RecyclerView Adapter
+ *
+ * @author Yoon Jae-park
+ * @since 2021.04
+ */
+class MyStockAdapter(private val myStockViewModel: MyStockViewModel): RecyclerView.Adapter<MyStockAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         DataBindingUtil.inflate<ItemMyStockListBinding>(
                 LayoutInflater.from(parent.context),
@@ -21,14 +26,26 @@ class MyStockAdapter(val myStockViewModel: MyStockViewModel): RecyclerView.Adapt
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mBinding.txtCurrentPrice.text = myStockViewModel.currentPrice.value
+        myStockViewModel.position = position
+        holder.mBinding.apply {
+            txtCompany.isSelected = true
+            txtCurrentPrice.isSelected = true
+            txtChangePricePercent.isSelected = true
+            txtPurchasePrice.isSelected = true
+            txtPurchaseCount.isSelected = true
+            txtGainData.isSelected = true
+            txtGainPercentData.isSelected = true
+        }
     }
 
     override fun getItemCount(): Int {
-        return 5
+        myStockViewModel.myStockInfoList.value?.let {
+            return it.size
+        }
+        return 0
     }
 
-    inner class ViewHolder(private val binding: ItemMyStockListBinding) :
+    inner class ViewHolder(binding: ItemMyStockListBinding) :
             RecyclerView.ViewHolder(binding.root) {
                 val mBinding = binding
     }

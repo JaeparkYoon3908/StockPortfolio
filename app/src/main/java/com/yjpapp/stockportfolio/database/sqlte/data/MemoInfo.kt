@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.database.data
+package com.yjpapp.stockportfolio.database.sqlte.data
 
 data class MemoInfo(
     var id: Int,

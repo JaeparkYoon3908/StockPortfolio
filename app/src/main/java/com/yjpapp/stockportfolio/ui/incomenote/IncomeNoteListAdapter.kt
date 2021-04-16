@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import java.sql.SQLException
 import java.util.*
