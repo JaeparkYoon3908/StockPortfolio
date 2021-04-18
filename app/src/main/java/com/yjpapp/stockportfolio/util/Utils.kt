@@ -41,6 +41,13 @@ object Utils {
         return result
     }
 
+    fun getTodayYYMM(): List<String> {
+        val currentTime: Long = System.currentTimeMillis()
+        val todayDate = Date(currentTime)
+        val sdformat = SimpleDateFormat("yyyy-MM")
+        return sdformat.format(todayDate).split("-")
+    }
+
     //5,000,000 => 5000000 변환
     fun getNumDeletedComma(num: String): String{
         var result: String = ""

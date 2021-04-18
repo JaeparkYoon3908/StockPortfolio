@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.di
 
+import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.database.room.MyRoomDatabase
 import com.yjpapp.stockportfolio.ui.mystock.MyStockInputDialog
 import com.yjpapp.stockportfolio.ui.mystock.MyStockRepository
@@ -12,5 +13,4 @@ val mMyStockViewModel = module {
     single { MyRoomDatabase.getInstance(androidContext()).myStockDao() }
     factory { MyStockRepository(get()) }
     viewModel { MyStockViewModel(get()) }
-    single {MyStockInputDialog(androidContext())}
 }

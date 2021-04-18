@@ -67,9 +67,9 @@
     <string name="MyStockFragment_Current_Price">현재가</string>
     <string name="MyStockFragment_Holding_Quantity">보유수량</string>
 
-    <string name="MyStockInputDialog_Purchase_Count">매수수량</string>
-    <string name="MyStockInputDialog_Purchase_Count_Hint">보유한 주식 수</string>
-    <string name="MyStockInputDialog_Purchase_Price_Hint">1주당 매수한 평균 금액(단가)</string>
+    <string name="MyStockInputDialog_Purchase_Count">보유수량</string>
+    <string name="MyStockInputDialog_Purchase_Count_Hint">보유한 주식 수(필수)</string>
+    <string name="MyStockInputDialog_Purchase_Price_Hint">1주당 매수한 평균 금액(필수)</string>
     
     <string name="AdFragment_Title">후원</string>
 

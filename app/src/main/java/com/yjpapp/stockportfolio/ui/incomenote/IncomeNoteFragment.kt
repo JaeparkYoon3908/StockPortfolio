@@ -261,11 +261,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                     year = split[0]
                     month = split[1]
                 }
-//                val calendar = Calendar.getInstance()
-//                val currentYear = calendar.get(Calendar.YEAR)
-//                val currentMonth = calendar.get(Calendar.MONTH)
-//                val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
-//                val date = Date()
 
                 MonthYearPickerDialog(year, month).apply {
                     setListener { view, year, month, dayOfMonth ->
