@@ -24,6 +24,7 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
      * MyStockFragment 영역
      */
     fun onViewCreated(){
+        //TODO ROOM DB의 my_stock 테이블 전체 데이터를 잘못 가져오는 문제 해결
         myStockInfoList.value = myStockRepository.getAllMyStock()
     }
     fun onAddButtonClick(myStockInputDialog: MyStockInputDialog, fragmentManager: FragmentManager) {
