@@ -14,6 +14,7 @@ import com.yjpapp.stockportfolio.preference.PreferenceController
 import es.dmoral.toasty.Toasty
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.system.exitProcess
 
 /**
  * 개발에 필요한 함수들
@@ -149,7 +150,9 @@ object Utils {
     fun runBackPressAppCloseEvent(mContext: Context, activity:Activity){
         val isAllowAppClose = PreferenceController.getInstance(mContext).getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)
         if(isAllowAppClose == "true"){
-            activity.finish()
+            activity.finishAffinity()
+            System.runFinalization()
+            exitProcess(0)
         }else{
             Toasty.normal(mContext,mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
             PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "true")

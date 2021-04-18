@@ -65,7 +65,8 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
 
     override fun onBackPressed() {
         if (currentFragment == incomeNoteFragment ||
-            currentFragment == memoListFragment) {
+            currentFragment == memoListFragment
+        ) {
             super.onBackPressed()
             return
         }
@@ -93,10 +94,10 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
                 }
             }
         } else {
-//            showMyStock()
-            showIncomeNote()
-            switchingBottomIconIncomeNote()
-
+            showMyStock()
+            switchingBottomIconMyStock()
+//            showIncomeNote()
+//            switchingBottomIconIncomeNote()
         }
     }
 
@@ -202,7 +203,7 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
     }
 
     override fun clickBottomMenu(view: View?) {
-        when (currentFragment){
+        when (currentFragment) {
             myStockFragment -> {
                 switchingBottomIconMyStock()
             }
@@ -241,23 +242,31 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
     }
 
     //나의 주식 바텀 아이콘 on off 스위칭
-    private fun switchingBottomIconMyStock(){
-        binding.imgMainActivityBottomMenuMyStock.isSelected = !binding.imgMainActivityBottomMenuMyStock.isSelected
-        binding.txtMainActivityBottomMenuMyStock.isSelected = !binding.txtMainActivityBottomMenuMyStock.isSelected
+    private fun switchingBottomIconMyStock() {
+        binding.imgMainActivityBottomMenuMyStock.isSelected =
+            !binding.imgMainActivityBottomMenuMyStock.isSelected
+        binding.txtMainActivityBottomMenuMyStock.isSelected =
+            !binding.txtMainActivityBottomMenuMyStock.isSelected
     }
 
-    private fun switchingBottomIconIncomeNote(){
-        binding.imgMainActivityBottomMenuIncomeNote.isSelected = !binding.imgMainActivityBottomMenuIncomeNote.isSelected
-        binding.txtMainActivityBottomMenuIncomeNote.isSelected = !binding.txtMainActivityBottomMenuIncomeNote.isSelected
+    private fun switchingBottomIconIncomeNote() {
+        binding.imgMainActivityBottomMenuIncomeNote.isSelected =
+            !binding.imgMainActivityBottomMenuIncomeNote.isSelected
+        binding.txtMainActivityBottomMenuIncomeNote.isSelected =
+            !binding.txtMainActivityBottomMenuIncomeNote.isSelected
     }
 
-    private fun switchingBottomIconMemo(){
-        binding.imgMainActivityBottomMenuMemo.isSelected = !binding.imgMainActivityBottomMenuMemo.isSelected
-        binding.txtMainActivityBottomMenuMemo.isSelected = !binding.txtMainActivityBottomMenuMemo.isSelected
+    private fun switchingBottomIconMemo() {
+        binding.imgMainActivityBottomMenuMemo.isSelected =
+            !binding.imgMainActivityBottomMenuMemo.isSelected
+        binding.txtMainActivityBottomMenuMemo.isSelected =
+            !binding.txtMainActivityBottomMenuMemo.isSelected
     }
 
-    private fun switchingBottomIconAd(){
-        binding.imgMainActivityBottomMenuAd.isSelected = !binding.imgMainActivityBottomMenuAd.isSelected
-        binding.txtMainActivityBottomMenuAd.isSelected = !binding.txtMainActivityBottomMenuAd.isSelected
+    private fun switchingBottomIconAd() {
+        binding.imgMainActivityBottomMenuAd.isSelected =
+            !binding.imgMainActivityBottomMenuAd.isSelected
+        binding.txtMainActivityBottomMenuAd.isSelected =
+            !binding.txtMainActivityBottomMenuAd.isSelected
     }
 }

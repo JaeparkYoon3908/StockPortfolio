@@ -28,7 +28,7 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository): BaseVi
      */
     fun onAddButtonClick(myStockInputDialog: MyStockInputDialog, fragmentManager: FragmentManager){
         mMyStockInputDialog = myStockInputDialog
-        myStockInputDialog.apply {
+        mMyStockInputDialog.apply {
             show()
             binding.etSellDate.setOnClickListener {
                 var year = ""
@@ -79,6 +79,6 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository): BaseVi
      */
 
     private fun showInputDialog(){
-        
+
     }
 }
