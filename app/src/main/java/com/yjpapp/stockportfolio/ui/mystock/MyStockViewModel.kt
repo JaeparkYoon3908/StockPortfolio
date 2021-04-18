@@ -1,17 +1,14 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
 
-import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.database.room.MyStockEntity
 import com.yjpapp.stockportfolio.database.sqlte.data.MyStockInfo
-import com.yjpapp.stockportfolio.ui.incomenote.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.Event
 
 class MyStockViewModel(private val myStockRepository: MyStockRepository): BaseViewModel() {
     var currentPrice = MutableLiveData<String>()
@@ -22,6 +19,8 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository): BaseVi
     var inputDialogPurchasePrice = ""
     var inputDialogPurchaseCount = ""
     lateinit var mMyStockInputDialog: MyStockInputDialog
+    val showCompleteToast = MutableLiveData<Event<Boolean>>()
+//    val showErrorToast: LiveData<Event<Boolean>> = _showErrorToast
 
     /**
      * MyStockFragment 영역
@@ -48,6 +47,7 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository): BaseVi
                         } else {
                             month.toString()
                         }
+                        inputDialogPurchaseDate = purchaseYear+purchaseMonth
                     }
                     show(fragmentManager, "MonthYearPickerDialog")
                 }
@@ -59,15 +59,37 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository): BaseVi
 
     }
 
+    /**
+     * MyStockInputDialog 영역
+     */
+    //종목명
     fun onSubjectNameChange(s: CharSequence, start :Int, before : Int, count: Int){
         inputDialogSubjectName = s.toString()
     }
 
-    /**
-     * MyStockInputDialog 영역
-     */
-    fun inputDialogCompleteClick(){
+    //평균단가
+    fun onPurchasePriceChange(s: CharSequence, start :Int, before : Int, count: Int){
+        inputDialogPurchasePrice = s.toString()
+    }
 
+    //보유수량
+    fun onPurchaseCountChange(s: CharSequence, start :Int, before : Int, count: Int){
+        inputDialogPurchaseCount = s.toString()
+    }
+
+    fun inputDialogCompleteClick(){
+        if(inputDialogSubjectName.isNotEmpty() &&
+                inputDialogPurchaseDate.isNotEmpty() &&
+                inputDialogPurchasePrice.isNotEmpty() &&
+                inputDialogPurchaseCount.isNotEmpty()){
+            showCompleteToast.value = Event(true)
+            val myStockEntity = MyStockEntity(0, inputDialogSubjectName,
+                    inputDialogPurchaseDate, inputDialogPurchasePrice, inputDialogPurchaseCount)
+            myStockRepository.insertMyStock(myStockEntity)
+        }
+        else{
+
+        }
     }
 
     fun inputDialogCancelClick(){

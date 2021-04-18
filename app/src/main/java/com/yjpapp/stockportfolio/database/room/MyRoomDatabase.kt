@@ -8,6 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(entities = [MyStockEntity::class], version = 1, exportSchema = false)
 abstract class MyRoomDatabase: RoomDatabase() {
+    //TODO DB를 저장, 수정, 삭제를 했을 때 예외처리는 어떻게 하는지 구현하기
     abstract fun myStockDao(): MyStockDao
 
     companion object {

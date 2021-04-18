@@ -15,7 +15,6 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.database.sqlte.data.MyStockInfo
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
-import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
 import org.koin.android.ext.android.inject
 
 /**
@@ -98,6 +97,12 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>() {
     private fun setObserver() {
         mySockViewModel.myStockInfoList.observe(this, Observer {
             myStockAdapter.notifyDataSetChanged()
+        })
+
+        mySockViewModel.showCompleteToast.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                Toast.makeText(mContext, "값을 모두 입력했습니다.", Toast.LENGTH_SHORT).show()
+            }
         })
     }
 }
