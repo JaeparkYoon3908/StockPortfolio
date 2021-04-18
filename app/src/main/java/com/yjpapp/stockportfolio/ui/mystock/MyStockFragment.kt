@@ -2,8 +2,6 @@ package com.yjpapp.stockportfolio.ui.mystock
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -13,8 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
-import com.yjpapp.stockportfolio.database.sqlte.data.MyStockInfo
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
+import es.dmoral.toasty.Toasty
 import org.koin.android.ext.android.inject
 
 /**
@@ -45,34 +43,37 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>() {
         myStockInputDialog = MyStockInputDialog.getInstance(mContext, mySockViewModel)
         myStockAdapter = MyStockAdapter(mySockViewModel)
         val layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
         mDataBinding.apply {
             recyclerviewMyStockFragment.layoutManager = layoutManager
             recyclerviewMyStockFragment.adapter = myStockAdapter
         }
-        val myStockInfo = MyStockInfo(0,
-                "가나다라마바사아자차카파타하",
-                "500,000",
-                "2021.04.16",
-                "15%",
-                "485,000",
-                "500,000",
-                "10")
-        val myStockInfo2 = MyStockInfo(0,
-                "카카오",
-                "500,000",
-                "2021.02.11",
-                "5%",
-                "600,000",
-                "600,000",
-                "51")
-        val arrayList = mutableListOf<MyStockInfo>()
-        arrayList.add(myStockInfo)
-        mySockViewModel.myStockInfoList.value = arrayList
+        mySockViewModel.onViewCreated()
         setObserver()
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            arrayList.add(myStockInfo2)
-            mySockViewModel.myStockInfoList.postValue(arrayList)
-        }, 3000)
+//        val myStockInfo = MyStockInfo(0,
+//                "가나다라마바사아자차카파타하",
+//                "500,000",
+//                "2021.04.16",
+//                "15%",
+//                "485,000",
+//                "500,000",
+//                "10")
+//        val myStockInfo2 = MyStockInfo(0,
+//                "카카오",
+//                "500,000",
+//                "2021.02.11",
+//                "5%",
+//                "600,000",
+//                "600,000",
+//                "51")
+//        val arrayList = mutableListOf<MyStockInfo>()
+//        arrayList.add(myStockInfo)
+//        mySockViewModel.myStockInfoList.value = arrayList
+//        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+//            arrayList.add(myStockInfo2)
+//            mySockViewModel.myStockInfoList.postValue(arrayList)
+//        }, 3000)
     }
 
     private var menu: Menu? = null
@@ -97,11 +98,12 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>() {
     private fun setObserver() {
         mySockViewModel.myStockInfoList.observe(this, Observer {
             myStockAdapter.notifyDataSetChanged()
+            mDataBinding.recyclerviewMyStockFragment.scrollToPosition(it.size - 1)
         })
 
-        mySockViewModel.showCompleteToast.observe(this, Observer {
+        mySockViewModel.showErrorToast.observe(this, Observer {
             it.getContentIfNotHandled()?.let {
-                Toast.makeText(mContext, "값을 모두 입력했습니다.", Toast.LENGTH_SHORT).show()
+                Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()
             }
         })
     }

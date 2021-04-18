@@ -15,9 +15,9 @@ interface MyStockDao {
     fun delete(myStockEntity: MyStockEntity)
 
     //Query
-    @Query("SELECT * FROM MY_STOCK")
+    @Query("SELECT * FROM my_stock")
     fun getAll(): MutableList<MyStockEntity>
 
-    @Query("SELECT * FROM MY_STOCK WHERE subjectName = :subjectName")
+    @Query("SELECT * FROM my_stock WHERE subjectName = :subjectName")
     fun getSubjectName(subjectName: String): MyStockEntity
 }

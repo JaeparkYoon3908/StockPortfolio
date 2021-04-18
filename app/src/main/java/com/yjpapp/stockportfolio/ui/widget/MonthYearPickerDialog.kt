@@ -17,7 +17,6 @@ class MonthYearPickerDialog(var year: String, var month: String) : DialogFragmen
 
     companion object {
         private const val MIN_YEAR = 2010
-
     }
 
     private lateinit var binding: DialogMonthYearPickerBinding

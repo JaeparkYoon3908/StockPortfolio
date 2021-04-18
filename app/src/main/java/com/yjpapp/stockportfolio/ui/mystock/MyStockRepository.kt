@@ -17,5 +17,7 @@ class MyStockRepository(private val myStockDao: MyStockDao): BaseRepository() {
         myStockDao.delete(myStockEntity)
     }
 
-
+    fun getAllMyStock(): MutableList<MyStockEntity>{
+        return myStockDao.getAll()
+    }
 }

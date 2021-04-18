@@ -2,7 +2,6 @@ package com.yjpapp.stockportfolio.ui.mystock
 
 import android.app.AlertDialog
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModel
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.DialogInputMyStockBinding
