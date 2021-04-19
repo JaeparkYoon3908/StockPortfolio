@@ -9,6 +9,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
 import com.yjpapp.stockportfolio.preference.PrefKey
+import com.yjpapp.stockportfolio.ui.advertisement.AdFragment
 import com.yjpapp.stockportfolio.ui.incomenote.IncomeNoteFragment
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
 import com.yjpapp.stockportfolio.ui.mystock.MyStockFragment
@@ -25,36 +26,17 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
         const val FRAGMENT_TAG_MEMO_LIST = "memo_list"
+        const val FRAGMENT_TAG_AD = "ad"
     }
 
     private val myStockFragment = MyStockFragment()
     private val incomeNoteFragment = IncomeNoteFragment()
     private val memoListFragment = MemoListFragment()
+    private val adFragment = AdFragment()
     private var currentFragment: Fragment = myStockFragment
-    private lateinit var rewardedAd: RewardedAd
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initData()
-        initLayout()
-//        MobileAds.initialize(this)
-//        rewardedAd = RewardedAd(this, "ca-app-pub-4132154272836445~8488670395")
-//        val activityContext: Activity = this@MainActivity
-//        val adCallback = object: RewardedAdCallback() {
-//            override fun onRewardedAdOpened() {
-//                // Ad opened.
-//            }
-//            override fun onRewardedAdClosed() {
-//                // Ad closed.
-//            }
-//            override fun onUserEarnedReward(@NonNull reward: RewardItem) {
-//                // User earned reward.
-//            }
-//            override fun onRewardedAdFailedToShow(adError: AdError) {
-//                // Ad failed to display.
-//            }
-//        }
-//        rewardedAd.show(activityContext, adCallback)
     }
 
     override fun initData() {
@@ -69,7 +51,7 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        addFragment()
+//        addFragment()
         startFirstFragment()
     }
 
@@ -83,7 +65,8 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
 
     override fun onBackPressed() {
         if (currentFragment == incomeNoteFragment ||
-            currentFragment == memoListFragment) {
+            currentFragment == memoListFragment
+        ) {
             super.onBackPressed()
             return
         }
@@ -105,30 +88,33 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
                     showMemoList()
                     switchingBottomIconMemo()
                 }
+                FRAGMENT_TAG_AD -> {
+                    showAdFragment()
+                    switchingBottomIconAd()
+                }
             }
         } else {
-//            showMyStock()
-            showIncomeNote()
-            switchingBottomIconIncomeNote()
-
+            showMyStock()
+            switchingBottomIconMyStock()
+//            showIncomeNote()
+//            switchingBottomIconIncomeNote()
         }
     }
 
-    override fun addFragment() {
-        supportFragmentManager.beginTransaction()
-            .add(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
-            .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
-            .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
-            .hide(myStockFragment)
-            .hide(incomeNoteFragment)
-            .hide(memoListFragment)
-            .commit()
-    }
+//    override fun addFragment() {
+//        supportFragmentManager.beginTransaction()
+//            .add(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
+//            .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
+//            .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
+//            .hide(myStockFragment)
+//            .hide(incomeNoteFragment)
+//            .hide(memoListFragment)
+//            .commit()
+//    }
 
     override fun showMyStock() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
-            .show(myStockFragment)
             .commit()
         currentFragment = myStockFragment
         binding.apply {
@@ -140,20 +126,15 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         )
     }
 
-    override fun hideMyStock() {
-        supportFragmentManager.beginTransaction()
-            .hide(myStockFragment)
-            .commit()
-    }
+//    override fun hideMyStock() {
+//        supportFragmentManager.beginTransaction()
+//            .hide(myStockFragment)
+//            .commit()
+//    }
 
     override fun showIncomeNote() {
         supportFragmentManager.beginTransaction()
-            .replace(
-                R.id.cons_MainActivity_fragment,
-                incomeNoteFragment,
-                FRAGMENT_TAG_INCOME_NOTE
-            )
-            .show(incomeNoteFragment)
+            .replace(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
             .commit()
         currentFragment = incomeNoteFragment
         preferenceController.setPreference(
@@ -165,16 +146,15 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         }
     }
 
-    override fun hideIncomeNote() {
-        supportFragmentManager.beginTransaction()
-            .hide(incomeNoteFragment)
-            .commit()
-    }
+//    override fun hideIncomeNote() {
+//        supportFragmentManager.beginTransaction()
+//            .hide(incomeNoteFragment)
+//            .commit()
+//    }
 
     override fun showMemoList() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
-            .show(memoListFragment)
             .commit()
         currentFragment = memoListFragment
         preferenceController.setPreference(
@@ -186,9 +166,33 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         }
     }
 
-    override fun hideMemoList() {
+//    override fun hideMemoList() {
+//        supportFragmentManager.beginTransaction()
+//            .hide(memoListFragment)
+//            .commit()
+//    }
+
+    override fun showAdFragment() {
         supportFragmentManager.beginTransaction()
-            .hide(memoListFragment)
+            .replace(
+                R.id.cons_MainActivity_fragment,
+                adFragment,
+                FRAGMENT_TAG_AD
+            )
+            .commit()
+        currentFragment = adFragment
+        preferenceController.setPreference(
+            PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
+            FRAGMENT_TAG_AD
+        )
+        binding.apply {
+            txtMainActivityTitle.text = getString(R.string.AdFragment_Title)
+        }
+    }
+
+    override fun hideAdFragment() {
+        supportFragmentManager.beginTransaction()
+            .hide(adFragment)
             .commit()
     }
 
@@ -199,7 +203,7 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
     }
 
     override fun clickBottomMenu(view: View?) {
-        when (currentFragment){
+        when (currentFragment) {
             myStockFragment -> {
                 switchingBottomIconMyStock()
             }
@@ -208,6 +212,9 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
             }
             memoListFragment -> {
                 switchingBottomIconMemo()
+            }
+            adFragment -> {
+                switchingBottomIconAd()
             }
         }
         when (view?.id) {
@@ -224,6 +231,7 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
                 switchingBottomIconMemo()
             }
             R.id.lin_MainActivity_BottomMenu_Ad -> {
+                showAdFragment()
                 switchingBottomIconAd()
             }
         }
@@ -233,24 +241,32 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
-    //≥™¿« ¡÷Ωƒ πŸ≈“ æ∆¿Ãƒ‹ on off Ω∫¿ßƒ™
-    private fun switchingBottomIconMyStock(){
-        binding.imgMainActivityBottomMenuMyStock.isSelected = !binding.imgMainActivityBottomMenuMyStock.isSelected
-        binding.txtMainActivityBottomMenuMyStock.isSelected = !binding.txtMainActivityBottomMenuMyStock.isSelected
+    //ÎÇòÏùò Ï£ºÏãù Î∞îÌÖÄ ÏïÑÏù¥ÏΩò on off Ïä§ÏúÑÏπ≠
+    private fun switchingBottomIconMyStock() {
+        binding.imgMainActivityBottomMenuMyStock.isSelected =
+            !binding.imgMainActivityBottomMenuMyStock.isSelected
+        binding.txtMainActivityBottomMenuMyStock.isSelected =
+            !binding.txtMainActivityBottomMenuMyStock.isSelected
     }
 
-    private fun switchingBottomIconIncomeNote(){
-        binding.imgMainActivityBottomMenuIncomeNote.isSelected = !binding.imgMainActivityBottomMenuIncomeNote.isSelected
-        binding.txtMainActivityBottomMenuIncomeNote.isSelected = !binding.txtMainActivityBottomMenuIncomeNote.isSelected
+    private fun switchingBottomIconIncomeNote() {
+        binding.imgMainActivityBottomMenuIncomeNote.isSelected =
+            !binding.imgMainActivityBottomMenuIncomeNote.isSelected
+        binding.txtMainActivityBottomMenuIncomeNote.isSelected =
+            !binding.txtMainActivityBottomMenuIncomeNote.isSelected
     }
 
-    private fun switchingBottomIconMemo(){
-        binding.imgMainActivityBottomMenuMemo.isSelected = !binding.imgMainActivityBottomMenuMemo.isSelected
-        binding.txtMainActivityBottomMenuMemo.isSelected = !binding.txtMainActivityBottomMenuMemo.isSelected
+    private fun switchingBottomIconMemo() {
+        binding.imgMainActivityBottomMenuMemo.isSelected =
+            !binding.imgMainActivityBottomMenuMemo.isSelected
+        binding.txtMainActivityBottomMenuMemo.isSelected =
+            !binding.txtMainActivityBottomMenuMemo.isSelected
     }
 
-    private fun switchingBottomIconAd(){
-        binding.imgMainActivityBottomMenuAd.isSelected = !binding.imgMainActivityBottomMenuAd.isSelected
-        binding.txtMainActivityBottomMenuAd.isSelected = !binding.txtMainActivityBottomMenuAd.isSelected
+    private fun switchingBottomIconAd() {
+        binding.imgMainActivityBottomMenuAd.isSelected =
+            !binding.imgMainActivityBottomMenuAd.isSelected
+        binding.txtMainActivityBottomMenuAd.isSelected =
+            !binding.txtMainActivityBottomMenuAd.isSelected
     }
 }

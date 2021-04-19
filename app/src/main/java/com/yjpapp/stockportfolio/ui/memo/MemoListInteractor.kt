@@ -2,8 +2,8 @@ package com.yjpapp.stockportfolio.ui.memo
 
 import android.content.ContentValues
 import android.database.Cursor
-import com.yjpapp.stockportfolio.database.Databases
-import com.yjpapp.stockportfolio.database.data.MemoInfo
+import com.yjpapp.stockportfolio.database.sqlte.Databases
+import com.yjpapp.stockportfolio.database.sqlte.data.MemoInfo
 import com.yjpapp.stockportfolio.base.BaseInteractor
 
 /**
@@ -83,7 +83,8 @@ class MemoListInteractor: BaseInteractor() {
         val contentValues = ContentValues()
         contentValues.put(Databases.COL_MEMO_DELETE_CHECK, deleteCheck)
 
-        updateCheck = database.update(Databases.TABLE_MEMO, contentValues,
+        updateCheck = database.update(
+            Databases.TABLE_MEMO, contentValues,
                 Databases.COL_MEMO_ID + " = ? ", arrayOf(id.toString()))
 
         return updateCheck != -1

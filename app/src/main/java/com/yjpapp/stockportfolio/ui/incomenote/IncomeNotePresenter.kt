@@ -3,7 +3,7 @@ package com.yjpapp.stockportfolio.ui.incomenote
 import android.app.Activity
 import android.content.Context
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import java.util.concurrent.CopyOnWriteArrayList
 

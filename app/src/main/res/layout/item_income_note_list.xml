@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/common_140dp"
+    android:layout_height="@dimen/common_110dp"
     android:layout_marginBottom="@dimen/common_10dp"
     android:paddingTop="@dimen/common_10dp"
     android:paddingStart="@dimen/common_15dp"
@@ -29,7 +29,7 @@
         />
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/common_5dp"
         android:orientation="horizontal"
         android:gravity="end"
@@ -41,21 +41,23 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/IncomeNoteFragment_Gain"
             android:textColor="@color/color_666666"
-            android:textSize="14sp"
+            android:textSize="@dimen/common_13dp"
             />
         <TextView
             android:id="@+id/txt_gain_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="@dimen/common_90dp"
             android:layout_marginStart="@dimen/common_5dp"
+            android:layout_gravity="center"
             android:text="@string/Common_Dummy_Data"
-            android:textSize="14sp"
+            android:textSize="@dimen/common_13dp"
             android:textColor="@color/color_e52b4e"
             android:textStyle="bold"
             android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             tools:text="14,000"
@@ -64,12 +66,16 @@
             android:id="@+id/txt_gain_percent_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="@dimen/common_50dp"
             android:layout_marginStart="@dimen/common_3dp"
             android:layout_gravity="center"
             android:text="@string/Common_Dummy_Data"
-            android:textSize="12sp"
+            android:textSize="@dimen/common_11dp"
             android:textColor="@color/color_e52b4e"
             android:textStyle="bold"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             tools:text="14%"
             />
     </LinearLayout>
@@ -91,6 +97,7 @@
         android:layout_marginTop="@dimen/common_10dp"
         android:gravity="start"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/line_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.5"
@@ -160,6 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/IncomeNoteFragment_Sell_Count"
+            android:textSize="@dimen/common_13dp"
             />
 
         <TextView
@@ -169,6 +177,7 @@
             android:layout_marginStart="10dp"
             android:text="@string/Common_Dummy_Data"
             android:textColor="@color/color_222222"
+            android:textSize="@dimen/common_13dp"
             tools:text="14"
             />
     </LinearLayout>
@@ -189,7 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/IncomeNoteFragment_Purchase_Price"
-            android:textSize="14sp"
+            android:textSize="@dimen/common_13dp"
             />
         <TextView
             android:id="@+id/txt_purchase_price_data"
@@ -197,8 +206,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="@string/Common_Dummy_Data"
-            android:textSize="14sp"
+            android:textSize="@dimen/common_13dp"
             android:textColor="@color/color_222222"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             tools:text="14,000"
             />
     </LinearLayout>
@@ -218,7 +230,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/IncomeNoteFragment_Sell_Price"
-            android:textSize="14sp"
+            android:textSize="@dimen/common_13dp"
             android:textColor="@color/color_666666"
             />
         <TextView
@@ -227,8 +239,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="@string/Common_Dummy_Data"
-            android:textSize="14sp"
+            android:textSize="@dimen/common_13dp"
             android:textColor="@color/color_222222"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             tools:text="15,000"
             />
     </LinearLayout>
@@ -280,7 +295,7 @@
             android:layout_height="50dp"
             android:gravity="center"
             android:text="@string/Common_Edit"
-            android:textSize="16sp"
+            android:textSize="@dimen/common_14dp"
             android:textColor="@color/color_ffffff"
             android:background="@color/color_666666"
             />
@@ -291,7 +306,7 @@
             android:layout_marginStart="20dp"
             android:gravity="center"
             android:text="@string/Common_Delete"
-            android:textSize="16sp"
+            android:textSize="@dimen/common_14dp"
             android:textColor="@color/color_ffffff"
             android:background="@color/color_666666"
             />

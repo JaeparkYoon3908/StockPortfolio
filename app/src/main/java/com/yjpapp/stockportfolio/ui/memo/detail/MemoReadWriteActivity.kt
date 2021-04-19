@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
-import com.yjpapp.stockportfolio.database.Databases
+import com.yjpapp.stockportfolio.database.sqlte.Databases
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
 import com.yjpapp.stockportfolio.util.Utils
@@ -30,10 +30,8 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        initData()
-        initLayout()
-
+        //initData()
+        //initLayout()
     }
     override fun initData() {
         memoReadWritePresenter = MemoReadWritePresenter(mContext, this)

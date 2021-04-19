@@ -2,8 +2,8 @@ package com.yjpapp.stockportfolio.ui.incomenote
 
 import android.content.ContentValues
 import android.database.Cursor
-import com.yjpapp.stockportfolio.database.Databases
-import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.database.sqlte.Databases
+import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.base.BaseInteractor
 import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
 import com.yjpapp.stockportfolio.util.Utils
@@ -40,7 +40,7 @@ class IncomeNoteInteractor: BaseInteractor() {
         contentValues.apply {
             put(Databases.COL_INCOME_NOTE_SUBJECT_NAME, incomeNoteInfo.subjectName)
             put(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT, incomeNoteInfo.realPainLossesAmount)
-            put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo.purchaseDate)
+//            put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo.purchaseDate)
             put(Databases.COL_INCOME_NOTE_SELL_DATE, incomeNoteInfo.sellDate)
             put(Databases.COL_INCOME_NOTE_GAIN_PERCENT, incomeNoteInfo.gainPercent)
             put(Databases.COL_INCOME_NOTE_PURCHASE_PRICE, incomeNoteInfo.purchasePrice)
@@ -59,7 +59,7 @@ class IncomeNoteInteractor: BaseInteractor() {
         contentValues.apply {
             put(Databases.COL_INCOME_NOTE_SUBJECT_NAME, incomeNoteInfo.subjectName)
             put(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT, incomeNoteInfo.realPainLossesAmount)
-            put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo.purchaseDate)
+//            put(Databases.COL_INCOME_NOTE_PURCHASE_DATE, incomeNoteInfo.purchaseDate)
             put(Databases.COL_INCOME_NOTE_SELL_DATE, incomeNoteInfo.sellDate)
             put(Databases.COL_INCOME_NOTE_GAIN_PERCENT, incomeNoteInfo.gainPercent)
             put(Databases.COL_INCOME_NOTE_PURCHASE_PRICE, incomeNoteInfo.purchasePrice)
@@ -67,7 +67,8 @@ class IncomeNoteInteractor: BaseInteractor() {
             put(Databases.COL_INCOME_NOTE_SELL_COUNT, incomeNoteInfo.sellCount)
         }
 
-        updateCheck = database.update(Databases.TABLE_INCOME_NOTE, contentValues,
+        updateCheck = database.update(
+            Databases.TABLE_INCOME_NOTE, contentValues,
                 Databases.COL_INCOME_NOTE_ID + " = ? ", arrayOf(incomeNoteInfo.id.toString()))
 
         return updateCheck != -1
@@ -90,7 +91,7 @@ class IncomeNoteInteractor: BaseInteractor() {
                 val result = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_ID)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
-                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+//                        cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
                         cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
@@ -120,7 +121,7 @@ class IncomeNoteInteractor: BaseInteractor() {
                     val result = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_ID)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
-                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+//                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
@@ -151,7 +152,7 @@ class IncomeNoteInteractor: BaseInteractor() {
                     val result = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_ID)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
-                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+//                            cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
                             cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),
@@ -179,12 +180,12 @@ class IncomeNoteInteractor: BaseInteractor() {
             val result = IncomeNoteInfo(cursor.getInt(0), //id
                     cursor.getString(1), //subjectName
                     cursor.getString(2), //realPainLossesAmount
-                    cursor.getString(3), //purchaseDate
-                    cursor.getString(4), //sellDate
-                    cursor.getString(5), //gainPercent
-                    cursor.getString(6), //purchasePrice
-                    cursor.getString(7), //sellPrice
-                    cursor.getInt(8)) //sellCount
+//                    cursor.getString(3), //purchaseDate
+                    cursor.getString(3), //sellDate
+                    cursor.getString(4), //gainPercent
+                    cursor.getString(5), //purchasePrice
+                    cursor.getString(6), //sellPrice
+                    cursor.getInt(7)) //sellCount
             cursor?.close()
             return result
         } else {
@@ -206,7 +207,7 @@ class IncomeNoteInteractor: BaseInteractor() {
             val incomeNoteInfo = IncomeNoteInfo(cursor.getInt(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_ID)),
                     cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SUBJECT_NAME)),
                     cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_REAL_GAINS_LOSSES_AMOUNT)),
-                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
+//                    cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_DATE)),
                     cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_SELL_DATE)),
                     cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_GAIN_PERCENT)),
                     cursor.getString(cursor.getColumnIndex(Databases.COL_INCOME_NOTE_PURCHASE_PRICE)),

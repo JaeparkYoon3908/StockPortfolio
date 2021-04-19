@@ -2,67 +2,78 @@ package com.yjpapp.stockportfolio.ui.mystock
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
-import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.data.MyStockInfo
+import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
-import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import es.dmoral.toasty.Toasty
+import org.koin.android.ext.android.inject
 
 /**
  * 나의 주식 화면
  *
  * @author Yoon Jae-park
- * @since 2020.12
+ * @since 2021.04
  */
+class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>() {
+    private val mySockViewModel: MyStockViewModel by inject()
+    private lateinit var myStockInputDialog: MyStockInputDialog
+    private lateinit var myStockAdapter: MyStockAdapter
+    override fun getLayoutId(): Int {
+        return R.layout.fragment_my_stock
+    }
 
-//TODO 내가 갖고있는 주식 실시간 변동 사항 및 수익 분석 할 수 있는 기능 만들기.
-class MyStockFragment: Fragment(), MyStockView {
-    private lateinit var mContext: Context
-    private lateinit var onBackPressedCallback: OnBackPressedCallback
+    override fun setViewModel() {
+        mDataBinding.viewModel = mySockViewModel
+    }
 
-    private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var allMyStockList: ArrayList<MyStockInfo>
-    private lateinit var myStockPresenter: MyStockPresenter
-
-    private var _viewBinding: FragmentMyStockBinding? = null
-    private val viewBinding get() = _viewBinding!!
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        myStockPresenter = MyStockPresenter(this)
-        myStockPresenter.onAttach(context)
-        mContext = context
-        //Fragment BackPress Event Call
-        onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
+    }
 
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+        myStockInputDialog = MyStockInputDialog.getInstance(mContext, mySockViewModel)
+        myStockAdapter = MyStockAdapter(mySockViewModel)
+        val layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
+        mDataBinding.apply {
+            recyclerviewMyStockFragment.layoutManager = layoutManager
+            recyclerviewMyStockFragment.adapter = myStockAdapter
         }
-        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-    }
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View{
-        _viewBinding = FragmentMyStockBinding.inflate(inflater, container, false)
-
-        initData()
-        initLayout()
-
-        return viewBinding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        myStockPresenter.onResume()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        myStockPresenter.onDestroy()
+        mySockViewModel.onViewCreated()
+        setObserver()
+//        val myStockInfo = MyStockInfo(0,
+//                "가나다라마바사아자차카파타하",
+//                "500,000",
+//                "2021.04.16",
+//                "15%",
+//                "485,000",
+//                "500,000",
+//                "10")
+//        val myStockInfo2 = MyStockInfo(0,
+//                "카카오",
+//                "500,000",
+//                "2021.02.11",
+//                "5%",
+//                "600,000",
+//                "600,000",
+//                "51")
+//        val arrayList = mutableListOf<MyStockInfo>()
+//        arrayList.add(myStockInfo)
+//        mySockViewModel.myStockInfoList.value = arrayList
+//        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+//            arrayList.add(myStockInfo2)
+//            mySockViewModel.myStockInfoList.postValue(arrayList)
+//        }, 3000)
     }
 
     private var menu: Menu? = null
@@ -75,140 +86,25 @@ class MyStockFragment: Fragment(), MyStockView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Add -> {
-                myStockPresenter.onAddButtonClick()
-                showInputDialog(false, null)
+                mySockViewModel.onAddButtonClick(myStockInputDialog, this@MyStockFragment.childFragmentManager)
             }
-
             R.id.menu_MyStockFragment_Edit -> {
-                myStockPresenter.onMenuEditButtonClick()
-//                startService()
+                mySockViewModel.onEditButtonClick()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initData(){
-        allMyStockList = ArrayList()
-//        val symbol = "005930.KS"
-//        val region = "KR"
-//        YahooFinanceProtocolManager.getInstance(mContext).getStockProfile(symbol, region,
-//            object: Callback<JsonObject?> {
-//            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
-//                if(response.code() == 200 || response.code() == 204){
-//                    try {
-//                        val jsonObject = JSONObject(response.body().toString())
-//                        val priceJSONArray = jsonObject.getJSONObject("price").toString()
-//                        val price: Price = Gson().fromJson(priceJSONArray, Price::class.java)
-//                        Log.d("YJP", "price = $price")
-//
-//                        Thread(Runnable {
-//                            // performing some dummy time taking operation
-//                            activity?.runOnUiThread {
-//                                val currentPrice = price.regularMarketPrice.raw.toString()
-//                                val change = (price.regularMarketPrice.raw.toDouble() - price.regularMarketPreviousClose.raw.toDouble()) //변동 가격
-//                                val changePercent = price.regularMarketChangePercent.fmt
-//
-//                            }
-//                        }).start()
-//
-//                    } catch (e: JSONException) {
-//                        e.printStackTrace()
-//                    }
-//                }
-//            }
-//            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
-//                Log.d("RequestResult", "RetrofitExample, Type : get, Result : onFailure, Error Message : " + t.message)
-//            }
-//        })
-    }
+    private fun setObserver() {
+        mySockViewModel.myStockInfoList.observe(this, Observer {
+            myStockAdapter.notifyDataSetChanged()
+            mDataBinding.recyclerviewMyStockFragment.scrollToPosition(it.size - 1)
+        })
 
-    private fun initLayout(){
-        setHasOptionsMenu(true)
-        viewBinding.apply {
-//            txtIncomeNoteFragmentFilter.setOnClickListener {
-//                showFilterDialog()
-//            }
-        }
-        initRecyclerView()
-    }
-    private fun initRecyclerView(){
-        layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        layoutManager.reverseLayout = true
-        layoutManager.stackFromEnd = true
-
-        viewBinding.apply {
-            recyclerviewMyStockFragment.layoutManager = layoutManager
-            val myStockInfo = MyStockInfo(0, "코엔텍", "1500", "2020.12.23", "15%", "1000", "1150", 10)
-            for(i in 0 until 10){
-                allMyStockList.add(myStockInfo)
+        mySockViewModel.showErrorToast.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()
             }
-
-            recyclerviewMyStockFragment.itemAnimator = FadeInAnimator()
-        }
-    }
-
-    override fun addButtonClick() {
-        myStockPresenter.onAddButtonClick()
-    }
-
-    override fun showInputDialog(editMode: Boolean, myStockInfo: MyStockInfo?) {
-        MyStockInputDialog(mContext, myStockPresenter).apply {
-            if(editMode){
-                if(!isShowing){
-                    show()
-                    etSubjectName.setText(myStockInfo?.subjectName)
-                    etPurchaseDate.setText(myStockInfo?.purchaseDate)
-                    etPurchasePrice.setText(myStockInfo?.purchasePrice)
-                    etPurchaseCount.setText(myStockInfo?.purchaseCount.toString())
-                }
-            }else{
-                if(!isShowing) {
-                    show()
-                }
-            }
-        }
-    }
-
-    override fun showAddButton() {
-        menu?.findItem(R.id.menu_MyStockFragment_Add)?.isVisible = true
-    }
-
-    override fun hideAddButton() {
-        menu?.findItem(R.id.menu_MyStockFragment_Add)?.isVisible = false
-    }
-
-    override fun showEditButton() {
-        menu?.findItem(R.id.menu_MyStockFragment_Edit)?.isVisible = true
-    }
-
-    override fun hideEditButton() {
-        menu?.findItem(R.id.menu_MyStockFragment_Edit)?.isVisible = false
-    }
-
-    override fun setAdapter(myStockListAdapter: MyStockListAdapter) {
-        viewBinding.apply {
-            recyclerviewMyStockFragment.adapter = myStockListAdapter
-        }
-    }
-
-    override fun scrollTopPosition(topPosition: Int) {
-        viewBinding.apply {
-            recyclerviewMyStockFragment.scrollToPosition(topPosition)
-        }
-    }
-
-    override fun bindTotalGainData() {
-
-    }
-
-    override fun changeFilterText(text: String) {
-//        viewBinding.apply {
-//            txtIncomeNoteFragmentFilter.text = text
-//        }
-    }
-
-    override fun showFilterDialog() {
-        val myStockFilterDialog = MyStockFilterDialog(myStockPresenter)
-        myStockFilterDialog.show(childFragmentManager, tag)
+        })
     }
 }

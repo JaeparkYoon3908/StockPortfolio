@@ -5,13 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
+import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import java.text.NumberFormat
@@ -237,18 +239,41 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             if(editMode){
                 if (!isShowing) {
                     show()
-                    viewBinding.apply {
-                        etSubjectName.setText(incomeNoteInfo?.subjectName)
-                        etPurchaseDate.setText(incomeNoteInfo?.purchaseDate)
-                        etSellDate.setText(incomeNoteInfo?.sellDate)
-                        etPurchasePrice.setText(incomeNoteInfo?.purchasePrice)
-                        etSellPrice.setText(incomeNoteInfo?.sellPrice)
-                        etSellCount.setText(incomeNoteInfo?.sellCount.toString())
-                    }
+                    etSubjectName.setText(incomeNoteInfo?.subjectName)
+//                        etSellDate.setText(incomeNoteInfo?.purchaseDate)
+                    etSellDate.setText(incomeNoteInfo?.sellDate)
+                    etPurchasePrice.setText(incomeNoteInfo?.purchasePrice)
+                    etSellPrice.setText(incomeNoteInfo?.sellPrice)
+                    etSellCount.setText(incomeNoteInfo?.sellCount.toString())
+
                 }
             }else{
                 if (!isShowing) {
                     show()
+                }
+            }
+
+            etSellDate.setOnClickListener{
+                var year = ""
+                var month = ""
+                if(etSellDate.text.toString() != ""){
+                    val split = etSellDate.text.toString().split(".")
+                    year = split[0]
+                    month = split[1]
+                }
+
+                MonthYearPickerDialog(year, month).apply {
+                    setListener { view, year, month, dayOfMonth ->
+                        Toast.makeText(requireContext(), "Set date: $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
+                        uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
+                        purchaseYear = year.toString()
+                        purchaseMonth = if(month<10){
+                            "0$month"
+                        }else{
+                            month.toString()
+                        }
+                    }
+                    show(this@IncomeNoteFragment.childFragmentManager, "MonthYearPickerDialog")
                 }
             }
         }
