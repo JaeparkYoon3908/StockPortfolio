@@ -42,6 +42,7 @@ object Utils {
         return result
     }
 
+    //현재 yyyy.mm 반환
     fun getTodayYYMM(): List<String> {
         val currentTime: Long = System.currentTimeMillis()
         val todayDate = Date(currentTime)

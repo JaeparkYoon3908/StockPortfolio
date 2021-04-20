@@ -1,7 +1,9 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -23,21 +25,14 @@ class MyStockAdapter(private val myStockViewModel: MyStockViewModel): RecyclerVi
                 parent,
                 false
         ).let {
-            it.viewModel = myStockViewModel
             ViewHolder(it)
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        myStockViewModel.position = position
         holder.mBinding.apply {
-            txtCompany.isSelected = true
-            txtCurrentPrice.isSelected = true
-            txtChangePricePercent.isSelected = true
-            txtPurchasePrice.isSelected = true
-            txtPurchaseCount.isSelected = true
-            txtGainData.isSelected = true
-            txtGainPercentData.isSelected = true
+            myStockEntity = myStockViewModel.myStockInfoList.value?.get(position)
         }
+        myStockViewModel.position = position
     }
 
     override fun getItemCount(): Int {

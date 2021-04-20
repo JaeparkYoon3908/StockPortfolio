@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.ui.mystock
 
 
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.database.room.MyStockEntity
@@ -11,7 +12,7 @@ import com.yjpapp.stockportfolio.util.Event
 class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseViewModel() {
     var currentPrice = MutableLiveData<String>()
     var myStockInfoList = MutableLiveData<MutableList<MyStockEntity>>()
-    var position: Int = 0
+    var position = 0
     var inputDialogSubjectName = ""
     var inputDialogPurchaseDate = ""
     var inputDialogPurchasePrice = ""
@@ -24,7 +25,6 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
      * MyStockFragment 영역
      */
     fun onViewCreated(){
-        //TODO ROOM DB의 my_stock 테이블 전체 데이터를 잘못 가져오는 문제 해결
         myStockInfoList.value = myStockRepository.getAllMyStock()
     }
     fun onAddButtonClick(myStockInputDialog: MyStockInputDialog, fragmentManager: FragmentManager) {
@@ -53,7 +53,7 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
                         } else {
                             month.toString()
                         }
-                        inputDialogPurchaseDate = purchaseYear + purchaseMonth
+                        inputDialogPurchaseDate = "$purchaseYear.$purchaseMonth"
                     }
                     show(fragmentManager, "MonthYearPickerDialog")
                 }
@@ -83,23 +83,23 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
         inputDialogPurchaseCount = s.toString()
     }
 
+    //확인버튼 클릭
     fun inputDialogCompleteClick() {
         if (inputDialogSubjectName.isNotEmpty() &&
             inputDialogPurchasePrice.isNotEmpty() &&
             inputDialogPurchaseCount.isNotEmpty()
         ) {
-            val myStockEntity = MyStockEntity(
-                0, inputDialogSubjectName,
-                inputDialogPurchaseDate, inputDialogPurchasePrice, inputDialogPurchaseCount
-            )
             try {
-
+                val myStockEntity = MyStockEntity(
+                    0, inputDialogSubjectName,
+                    inputDialogPurchaseDate, inputDialogPurchasePrice, inputDialogPurchaseCount
+                )
+                myStockRepository.insertMyStock(myStockEntity)
+                myStockInfoList.value = myStockRepository.getAllMyStock()
+                mMyStockInputDialog.dismiss()
             }catch (e: Exception){
                 e.stackTrace
             }
-            myStockRepository.insertMyStock(myStockEntity)
-            myStockInfoList.value = myStockRepository.getAllMyStock()
-            mMyStockInputDialog.dismiss()
 
         } else {
             showErrorToast.value = Event(true)

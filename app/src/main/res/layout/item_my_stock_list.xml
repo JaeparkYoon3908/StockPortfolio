@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
         <variable
-            name="viewModel"
-            type="com.yjpapp.stockportfolio.ui.mystock.MyStockViewModel" />
+            name="myStockEntity"
+            type="com.yjpapp.stockportfolio.database.room.MyStockEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,12 +26,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxWidth="@dimen/common_100dp"
-            android:text="@{viewModel.myStockInfoList.get(viewModel.position).subjectName}"
+            android:text="@{myStockEntity.subjectName}"
             android:textSize="@dimen/common_13dp"
             android:textColor="@color/color_222222"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
+            bind:isSelected="@{true}"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintWidth_percent="0.3"
             app:layout_constraintTop_toTopOf="@+id/txt_change_price_percent"
@@ -52,6 +53,8 @@
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
+            bind:isSelected="@{true}"
+            android:text="12312321214214214124124421"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintWidth_percent="0.4"
             app:layout_constraintTop_toTopOf="@+id/txt_change_price_percent"
@@ -73,6 +76,7 @@
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
+            bind:isSelected="@{true}"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintWidth_percent="0.3"
             app:layout_constraintTop_toTopOf="parent"
@@ -111,12 +115,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/common_10dp"
-                android:text="@{viewModel.myStockInfoList.get(viewModel.position).purchaseDate}"
+                android:text="@{myStockEntity.purchaseDate}"
                 android:textColor="@color/color_222222"
                 android:textSize="@dimen/common_13dp"
                 android:singleLine="true"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
+                bind:isSelected="@{true}"
                 />
 
         </LinearLayout>
@@ -141,12 +146,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/common_10dp"
-                android:text="@{viewModel.myStockInfoList.get(viewModel.position).purchaseCount}"
+                android:text="@{myStockEntity.purchaseCount}"
                 android:textColor="@color/color_222222"
                 android:textSize="@dimen/common_13dp"
                 android:singleLine="true"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
+                bind:isSelected="@{true}"
                 />
         </LinearLayout>
 
@@ -174,12 +180,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/common_10dp"
-                android:text="@{viewModel.myStockInfoList.get(viewModel.position).purchasePrice}"
+                android:text="@{myStockEntity.purchasePrice}"
                 android:textColor="@color/color_222222"
                 android:textSize="@dimen/common_13dp"
                 android:singleLine="true"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
+                bind:isSelected="@{true}"
                 />
         </LinearLayout>
 
@@ -219,9 +226,10 @@
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/color_222222"
                 android:textSize="@dimen/common_10dp"
-                android:singleLine="true"
-                android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                bind:isSelected="@{true}"
                 tools:text="(10%)"
                 />
         </LinearLayout>
