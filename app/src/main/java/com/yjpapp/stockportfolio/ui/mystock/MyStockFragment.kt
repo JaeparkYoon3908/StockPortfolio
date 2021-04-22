@@ -11,7 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
+import com.yjpapp.stockportfolio.database.room.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
+import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
 import es.dmoral.toasty.Toasty
 import org.koin.android.ext.android.inject
 
@@ -23,7 +25,6 @@ import org.koin.android.ext.android.inject
  */
 class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>() {
     private val mySockViewModel: MyStockViewModel by inject()
-    private lateinit var myStockInputDialog: MyStockInputDialog
     private lateinit var myStockAdapter: MyStockAdapter
     override fun getLayoutId(): Int {
         return R.layout.fragment_my_stock
@@ -39,9 +40,14 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mySockViewModel.onViewCreated()
         setHasOptionsMenu(true)
-        myStockInputDialog = MyStockInputDialog.getInstance(mContext, mySockViewModel)
-        myStockAdapter = MyStockAdapter(mySockViewModel)
+
+        val tempMyStockList = mutableListOf<MyStockEntity>()
+        myStockAdapter = MyStockAdapter(tempMyStockList)
+        mySockViewModel.myStockInfoList.value?.let {
+            myStockAdapter = MyStockAdapter(it)
+        }
         val layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
@@ -49,31 +55,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>() {
             recyclerviewMyStockFragment.layoutManager = layoutManager
             recyclerviewMyStockFragment.adapter = myStockAdapter
         }
-        mySockViewModel.onViewCreated()
         setObserver()
-//        val myStockInfo = MyStockInfo(0,
-//                "가나다라마바사아자차카파타하",
-//                "500,000",
-//                "2021.04.16",
-//                "15%",
-//                "485,000",
-//                "500,000",
-//                "10")
-//        val myStockInfo2 = MyStockInfo(0,
-//                "카카오",
-//                "500,000",
-//                "2021.02.11",
-//                "5%",
-//                "600,000",
-//                "600,000",
-//                "51")
-//        val arrayList = mutableListOf<MyStockInfo>()
-//        arrayList.add(myStockInfo)
-//        mySockViewModel.myStockInfoList.value = arrayList
-//        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-//            arrayList.add(myStockInfo2)
-//            mySockViewModel.myStockInfoList.postValue(arrayList)
-//        }, 3000)
     }
 
     private var menu: Menu? = null
@@ -86,25 +68,74 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Add -> {
-                mySockViewModel.onAddButtonClick(myStockInputDialog, this@MyStockFragment.childFragmentManager)
+                showInputDialog()
             }
             R.id.menu_MyStockFragment_Edit -> {
-                mySockViewModel.onEditButtonClick()
+
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun setObserver() {
-        mySockViewModel.myStockInfoList.observe(this, Observer {
-            myStockAdapter.notifyDataSetChanged()
-            mDataBinding.recyclerviewMyStockFragment.scrollToPosition(it.size - 1)
-        })
+        mySockViewModel.run {
+            myStockInfoList.observe(this@MyStockFragment, Observer {
+                myStockAdapter.setMyStockList(it)
+                mDataBinding.recyclerviewMyStockFragment.scrollToPosition(it.size - 1)
+            })
+            showErrorToast.observe(this@MyStockFragment, Observer {
+                it.getContentIfNotHandled()?.let {
+                    Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()
+                }
+            })
+            showDBSaveErrorToast.observe(this@MyStockFragment, Observer {
+                it.getContentIfNotHandled()?.let{
+                    Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
 
-        mySockViewModel.showErrorToast.observe(this, Observer {
-            it.getContentIfNotHandled()?.let {
-                Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()
+    private fun showInputDialog(){
+        MyStockInputDialog.getInstance(mContext).apply {
+            mySockViewModel.inputDialogNavigator = this
+            binding.viewModel = mySockViewModel
+            binding.etSellDate.setOnClickListener {
+                var year = ""
+                var month = ""
+                if (binding.etSellDate.text.toString() != "") {
+                    val split = binding.etSellDate.text.toString().split(".")
+                    year = split[0]
+                    month = split[1]
+                }
+                //매수 날짜 선택 다이얼로그 show
+                MonthYearPickerDialog(year, month).apply {
+                    setListener { view, year, month, dayOfMonth ->
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "Set date: $year/$month/$dayOfMonth",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+                        uiHandler.sendEmptyMessage(MyStockInputDialog.MSG.SELL_DATE_DATA_INPUT)
+                        purchaseYear = year.toString()
+                        purchaseMonth = if (month < 10) {
+                            "0$month"
+                        } else {
+                            month.toString()
+                        }
+                        mySockViewModel.inputDialogPurchaseDate = "$purchaseYear.$purchaseMonth"
+                    }
+                    show(this@MyStockFragment.childFragmentManager, "MonthYearPickerDialog")
+                }
             }
-        })
+            binding.txtCancel.setOnClickListener { dismiss() }
+            binding.txtComplete.setOnClickListener {
+                if(mySockViewModel.saveMyStock()){
+                    dismiss()
+                }
+            }
+
+            show()
+        }
     }
 }

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="com.yjpapp.stockportfolio.constance.AppConfig"/>
         <variable
             name="viewModel"
             type="com.yjpapp.stockportfolio.ui.mystock.MyStockViewModel" />
@@ -92,6 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:text="@{AppConfig.INSTANCE.moneySymbol}"
             android:textColor="@color/color_666666"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/txt_purchase_count"
@@ -164,7 +166,7 @@
             android:text="@string/Common_Cancel"
             android:textSize="@dimen/common_15dp"
             android:textColor="@color/color_e52b4e"
-            android:onClick="@{()-> viewModel.inputDialogCancelClick()}"
+            android:onClick="onCancelButtonClick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_complete"
@@ -186,7 +188,7 @@
             android:text="@string/Common_Complete"
             android:textSize="@dimen/common_15dp"
             android:textColor="@color/color_222222"
-            android:onClick="@{()->viewModel.inputDialogCompleteClick()}"
+            android:onClick="onCompleteButtonClick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_cancel"

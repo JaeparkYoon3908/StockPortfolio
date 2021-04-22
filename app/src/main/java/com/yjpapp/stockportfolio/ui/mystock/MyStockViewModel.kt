@@ -1,15 +1,18 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
 
+import android.text.TextUtils
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.database.room.MyStockEntity
 import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Event
+import java.text.DecimalFormat
 
 class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseViewModel() {
+
     var currentPrice = MutableLiveData<String>()
     var myStockInfoList = MutableLiveData<MutableList<MyStockEntity>>()
     var position = 0
@@ -19,7 +22,10 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
     var inputDialogPurchaseCount = ""
     lateinit var mMyStockInputDialog: MyStockInputDialog
     val showErrorToast = MutableLiveData<Event<Boolean>>()
-//    val showErrorToast: LiveData<Event<Boolean>> = _showErrorToast
+    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>()
+
+    var purchasePriceTextColorRes = MutableLiveData<Int>()
+    lateinit var inputDialogNavigator: MyStockInputDialogNavigator
 
     /**
      * MyStockFragment 영역
@@ -27,55 +33,31 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
     fun onViewCreated(){
         myStockInfoList.value = myStockRepository.getAllMyStock()
     }
-    fun onAddButtonClick(myStockInputDialog: MyStockInputDialog, fragmentManager: FragmentManager) {
-        mMyStockInputDialog = myStockInputDialog
-        mMyStockInputDialog.apply {
-            show()
-            binding.etSellDate.setOnClickListener {
-                var year = ""
-                var month = ""
-                if (binding.etSellDate.text.toString() != "") {
-                    val split = binding.etSellDate.text.toString().split(".")
-                    year = split[0]
-                    month = split[1]
-                }
-                MonthYearPickerDialog(year, month).apply {
-                    setListener { view, year, month, dayOfMonth ->
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "Set date: $year/$month/$dayOfMonth",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-                        uiHandler.sendEmptyMessage(MyStockInputDialog.MSG.SELL_DATE_DATA_INPUT)
-                        purchaseYear = year.toString()
-                        purchaseMonth = if (month < 10) {
-                            "0$month"
-                        } else {
-                            month.toString()
-                        }
-                        inputDialogPurchaseDate = "$purchaseYear.$purchaseMonth"
-                    }
-                    show(fragmentManager, "MonthYearPickerDialog")
-                }
-            }
-        }
-    }
-
-    fun onEditButtonClick() {
-
-    }
 
     /**
      * MyStockInputDialog 영역
      */
+    //3자리마다 콤마 찍어주는 변수
+    private val decimalFormat = DecimalFormat("###,###")
+    private var result = "";
     //종목명
     fun onSubjectNameChange(s: CharSequence, start: Int, before: Int, count: Int) {
         inputDialogSubjectName = s.toString()
     }
 
     //평균단가
-    fun onPurchasePriceChange(s: CharSequence, start: Int, before: Int, count: Int) {
-        inputDialogPurchasePrice = s.toString()
+    fun onPurchasePriceChange(charSequence: CharSequence, start: Int, before: Int, count: Int) {
+//        inputDialogPurchasePrice = charSequence.toString()
+        if(!TextUtils.isEmpty(charSequence.toString()) && charSequence.toString() != result){
+            inputDialogPurchasePrice = decimalFormat.format(charSequence.toString().replace(",", "").toDouble())
+        }
+
+        if(charSequence.isEmpty()){
+            inputDialogNavigator.changeMoneySymbolTextColor(R.color.color_666666)
+        }else{
+            inputDialogNavigator.changeMoneySymbolTextColor(R.color.color_222222)
+        }
+
     }
 
     //보유수량
@@ -83,8 +65,8 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
         inputDialogPurchaseCount = s.toString()
     }
 
-    //확인버튼 클릭
-    fun inputDialogCompleteClick() {
+    //확인버튼 클릭 후 Save
+    fun saveMyStock(): Boolean {
         if (inputDialogSubjectName.isNotEmpty() &&
             inputDialogPurchasePrice.isNotEmpty() &&
             inputDialogPurchaseCount.isNotEmpty()
@@ -96,18 +78,17 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
                 )
                 myStockRepository.insertMyStock(myStockEntity)
                 myStockInfoList.value = myStockRepository.getAllMyStock()
-                mMyStockInputDialog.dismiss()
+                return true
             }catch (e: Exception){
                 e.stackTrace
+                showDBSaveErrorToast.value = Event(true)
+                return false
             }
 
         } else {
             showErrorToast.value = Event(true)
+            return false
         }
-    }
-
-    fun inputDialogCancelClick() {
-        mMyStockInputDialog.dismiss()
     }
 
     /**

@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.database.room.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
 
 /**
@@ -17,7 +18,7 @@ import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
  * @author Yoon Jae-park
  * @since 2021.04
  */
-class MyStockAdapter(private val myStockViewModel: MyStockViewModel): RecyclerView.Adapter<MyStockAdapter.ViewHolder>() {
+class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): RecyclerView.Adapter<MyStockAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         DataBindingUtil.inflate<ItemMyStockListBinding>(
                 LayoutInflater.from(parent.context),
@@ -30,20 +31,21 @@ class MyStockAdapter(private val myStockViewModel: MyStockViewModel): RecyclerVi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.mBinding.apply {
-            myStockEntity = myStockViewModel.myStockInfoList.value?.get(position)
+            myStockEntity = myStockList[position]
         }
-        myStockViewModel.position = position
     }
 
     override fun getItemCount(): Int {
-        myStockViewModel.myStockInfoList.value?.let {
-            return it.size
-        }
-        return 0
+        return myStockList.size
     }
 
     inner class ViewHolder(binding: ItemMyStockListBinding) :
             RecyclerView.ViewHolder(binding.root) {
                 val mBinding = binding
+    }
+
+    fun setMyStockList(myStockList: MutableList<MyStockEntity>){
+        this.myStockList = myStockList
+        notifyDataSetChanged()
     }
 }
