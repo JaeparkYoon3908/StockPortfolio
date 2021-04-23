@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">수익얼마</string>
+    <string name="default_notification_channel_id">AlertChannel</string>
 
     <string name="Common_proceeds">수익금</string>
     <string name="Common_term">기간</string>

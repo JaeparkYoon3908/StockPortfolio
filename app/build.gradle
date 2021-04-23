@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
@@ -81,4 +82,10 @@ dependencies {
     // koin dependencies
     implementation "org.koin:koin-android:2.0.1"
     implementation "org.koin:koin-android-viewmodel:2.0.1"
+
+    //FireBase
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
+
 }
