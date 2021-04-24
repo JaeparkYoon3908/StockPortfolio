@@ -25,16 +25,22 @@
     <color name="color_777777">#777777</color>
     <color name="color_888888">#888888</color>
     <color name="color_999999">#999999</color>
+    <color name="color_aaaaaa">#aaaaaa</color>
+    <color name="color_bbbbbb">#bbbbbb</color>
+    <color name="color_cccccc">#cccccc</color>
+    <color name="color_dddddd">#dddddd</color>
+
     <color name="color_ffffff">#FFFFFF</color>
     <color name="color_f1f1f1">#f1f1f1</color>
     <color name="color_line_1a000000">#1a000000</color>
     <color name="color_e52b4e">#e52b4e</color>
-    <color name="color_dddddd">#dddddd</color>
     <color name="color_4876c7">#4876c7</color>
     <color name="color_b5b5b6">#b5b5b6</color>
 
     <color name="color_80000000">#80000000</color>
     <color name="color_4D000000">#4D000000</color>
 
+    <color name="color_cd4632">#cd4632</color>
+    <color name="color_skeleton">#a2878787</color>
 
 </resources>

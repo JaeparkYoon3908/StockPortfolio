@@ -173,6 +173,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_GainPercent_Data"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_MyStockFragment"
             android:layout_width="match_parent"
@@ -181,6 +182,29 @@
             app:layout_constraintTop_toBottomOf="@+id/cons_MyStockFragment_TotalGainLosses"
             app:layout_constraintBottom_toBottomOf="parent"
             />
+
+<!--        <io.supercharge.shimmerlayout.ShimmerLayout-->
+<!--            android:id="@+id/shimmerLayout"-->
+<!--            android:background="@color/color_ffffff"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:shimmer_angle="10"-->
+<!--            android:visibility="gone"-->
+<!--            tools:visibility="visible"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/cons_MyStockFragment_TotalGainLosses"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:shimmer_animation_duration="1500"-->
+<!--            app:shimmer_color="@color/color_ffffff"-->
+<!--            app:shimmer_mask_width="0.2"-->
+<!--            >-->
+<!--            <LinearLayout-->
+<!--                android:id="@+id/skeletonLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                >-->
+<!--            </LinearLayout>-->
+<!--        </io.supercharge.shimmerlayout.ShimmerLayout>-->
 
         <!--    <androidx.coordinatorlayout.widget.CoordinatorLayout-->
         <!--        android:layout_width="match_parent"-->

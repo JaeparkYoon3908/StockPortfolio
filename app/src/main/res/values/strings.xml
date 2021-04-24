@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">수익얼마</string>
+    <string name="default_notification_channel_id">AlertChannel</string>
 
     <string name="Common_proceeds">수익금</string>
     <string name="Common_term">기간</string>
@@ -71,6 +72,7 @@
     <string name="MyStockInputDialog_Purchase_Count_Hint">보유한 주식 수(필수)</string>
     <string name="MyStockInputDialog_Purchase_Price_Hint">1주당 매수한 평균 금액(필수)</string>
     <string name="MyStockInputDialog_Error_Message">필수 값을 모두 입력해주세요.</string>
+    <string name="MyStockInputDialog_DBSaveError_Message">데이터베이스 문제로 저장에 실패했습니다.</string>
 
     <string name="AdFragment_Title">후원</string>
 

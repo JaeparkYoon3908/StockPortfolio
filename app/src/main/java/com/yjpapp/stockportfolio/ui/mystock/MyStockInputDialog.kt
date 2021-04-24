@@ -16,18 +16,17 @@ import com.yjpapp.stockportfolio.databinding.DialogInputMyStockBinding
 import com.yjpapp.stockportfolio.ui.incomenote.IncomeNoteInputDialog
 
 
-class MyStockInputDialog(context: Context, private val myStockViewModel: MyStockViewModel):
-        AlertDialog(context), SupportedDatePickerDialog.OnDateSetListener {
+class MyStockInputDialog(context: Context):
+        AlertDialog(context), SupportedDatePickerDialog.OnDateSetListener, MyStockInputDialogController {
     companion object{
         @Volatile private var instance: MyStockInputDialog? = null
         @JvmStatic
-        fun getInstance(context: Context, myStockViewModel: MyStockViewModel): MyStockInputDialog =
+        fun getInstance(context: Context): MyStockInputDialog =
                 instance ?: synchronized(this) {
-                    instance ?: MyStockInputDialog(context, myStockViewModel).also {
+                    instance ?: MyStockInputDialog(context).also {
                         instance = it
                     }
                 }
-
     }
     object MSG{
         const val SELL_DATE_DATA_INPUT: Int = 0
@@ -44,15 +43,10 @@ class MyStockInputDialog(context: Context, private val myStockViewModel: MyStock
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.viewModel = myStockViewModel
         window?.setBackgroundDrawableResource(R.color.color_80000000)
         //EditText focus 했을 때 키보드가 보이도록 설정
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-        initLayout()
-    }
-
-    private fun initLayout(){
-
+        binding.executePendingBindings()
     }
 
     val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
@@ -60,7 +54,7 @@ class MyStockInputDialog(context: Context, private val myStockViewModel: MyStock
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what){
                 MSG.SELL_DATE_DATA_INPUT -> {
-                    binding.etSellDate.setText("$purchaseYear.$purchaseMonth")
+                    binding.etPurchaseDate.setText("$purchaseYear.$purchaseMonth")
                 }
             }
             return true
@@ -76,4 +70,13 @@ class MyStockInputDialog(context: Context, private val myStockViewModel: MyStock
         }
         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
     }
+
+    override fun changeMoneySymbolTextColor(color: Int) {
+        binding.txtPurchasePriceSymbol.setTextColor(context.getColor(color))
+    }
+
+    private fun onCancelButtonClick(){
+        dismiss()
+    }
+
 }

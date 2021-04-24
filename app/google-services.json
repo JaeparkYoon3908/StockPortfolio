@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "248238742829",
+    "project_id": "stockportfoilo",
+    "storage_bucket": "stockportfoilo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248238742829:android:b05354a162f201674247a4",
+        "android_client_info": {
+          "package_name": "com.yjpapp.stockportfolio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "248238742829-7ei4lth5ug2ggb9bjtim07aflv5v7kvs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yjpapp.stockportfolio",
+            "certificate_hash": "92e8ec8f14bd63b3aefa8633b57c79a039cbc270"
+          }
+        },
+        {
+          "client_id": "248238742829-qpv6ae8nfugs9kn3c6akj9jri3vq99mg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAK1a9fn5vstkSikcWPelGzQSrV1PGQCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "248238742829-qpv6ae8nfugs9kn3c6akj9jri3vq99mg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
