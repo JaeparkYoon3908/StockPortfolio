@@ -56,7 +56,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     }
 
     private fun initLayout(){
-        etSellDate = findViewById(R.id.et_sell_date)
+        etSellDate = findViewById(R.id.et_purchase_date)
 //        etSellDate = findViewById(R.id.et_sell_date)
         txtCancel = findViewById(R.id.txt_cancel)
         txtComplete = findViewById(R.id.txt_complete)

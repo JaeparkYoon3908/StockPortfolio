@@ -2,12 +2,10 @@ package com.yjpapp.stockportfolio.ui.mystock
 
 
 import android.text.TextUtils
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.database.room.MyStockEntity
-import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Event
 import java.text.DecimalFormat
 
@@ -25,7 +23,7 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
     val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>()
 
     var purchasePriceTextColorRes = MutableLiveData<Int>()
-    lateinit var inputDialogNavigator: MyStockInputDialogNavigator
+    lateinit var inputDialogController: MyStockInputDialogController
 
     /**
      * MyStockFragment 영역
@@ -53,11 +51,10 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
         }
 
         if(charSequence.isEmpty()){
-            inputDialogNavigator.changeMoneySymbolTextColor(R.color.color_666666)
+            inputDialogController.changeMoneySymbolTextColor(R.color.color_666666)
         }else{
-            inputDialogNavigator.changeMoneySymbolTextColor(R.color.color_222222)
+            inputDialogController.changeMoneySymbolTextColor(R.color.color_222222)
         }
-
     }
 
     //보유수량
@@ -89,6 +86,11 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
             showErrorToast.value = Event(true)
             return false
         }
+    }
+
+    fun deleteMyStock(myStockEntity: MyStockEntity): MutableList<MyStockEntity>{
+        myStockRepository.deleteMyStock((myStockEntity))
+        return myStockRepository.getAllMyStock()
     }
 
     /**

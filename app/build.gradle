@@ -73,11 +73,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:20.0.0'
 
     implementation 'com.github.Ibotta:Supported-Picker-Dialogs:1.0.0'
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
 
     //Room
-    implementation "androidx.room:room-runtime:2.3.0-rc01"
-    annotationProcessor "androidx.room:room-compiler:2.3.0-rc01"
-    kapt "androidx.room:room-compiler:2.3.0-rc01"
+    implementation "androidx.room:room-runtime:2.4.0-alpha01"
+    annotationProcessor "androidx.room:room-compiler:2.4.0-alpha01"
+    kapt "androidx.room:room-compiler:2.4.0-alpha01"
 
     // koin dependencies
     implementation "org.koin:koin-android:2.0.1"
@@ -88,4 +89,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
 
+    //Skeleton Animation
+    implementation 'com.ethanhua:skeleton:1.1.2'
+    implementation 'io.supercharge:shimmerlayout:2.1.0'
 }

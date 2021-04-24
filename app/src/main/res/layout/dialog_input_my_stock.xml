@@ -39,6 +39,7 @@
             android:layout_marginEnd="@dimen/common_20dp"
             android:background="@drawable/border_line_bottom"
             android:hint="@string/EditIncomeNoteDialog_SubjectName_Hint"
+            android:text="@{viewModel.inputDialogSubjectName}"
             android:textSize="@dimen/common_15dp"
             android:onTextChanged="@{viewModel::onSubjectNameChange}"
             app:layout_constraintBottom_toBottomOf="@+id/txt_subject_name"
@@ -60,7 +61,7 @@
             app:layout_constraintTop_toBottomOf="@+id/et_subject_name" />
 
         <EditText
-            android:id="@+id/et_sell_date"
+            android:id="@+id/et_purchase_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_10dp"
@@ -68,6 +69,7 @@
             android:cursorVisible="false"
             android:focusable="false"
             android:hint="@string/EditIncomeNoteDialog_Purchase_Date_Hint"
+            android:text="@{viewModel.inputDialogPurchaseDate}"
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_15dp"
             app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_date"
@@ -110,6 +112,7 @@
             android:hint="@string/MyStockInputDialog_Purchase_Price_Hint"
             android:inputType="number"
             android:textColor="@color/color_222222"
+            android:text="@{viewModel.inputDialogPurchasePrice}"
             android:textSize="@dimen/common_15dp"
             android:onTextChanged="@{viewModel::onPurchasePriceChange}"
             app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_price"
@@ -141,6 +144,7 @@
             android:background="@drawable/border_line_bottom"
             android:hint="@string/MyStockInputDialog_Purchase_Count_Hint"
             android:inputType="number"
+            android:text="@{viewModel.inputDialogPurchaseCount}"
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_15dp"
             android:onTextChanged="@{viewModel::onPurchaseCountChange}"

@@ -7,21 +7,17 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.view.LayoutInflater
-import android.view.View
 import android.view.WindowManager
 import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.DialogInputMyStockBinding
-import com.yjpapp.stockportfolio.di.mMyStockViewModel
 import com.yjpapp.stockportfolio.ui.incomenote.IncomeNoteInputDialog
 
 
 class MyStockInputDialog(context: Context):
-        AlertDialog(context), SupportedDatePickerDialog.OnDateSetListener, MyStockInputDialogNavigator {
+        AlertDialog(context), SupportedDatePickerDialog.OnDateSetListener, MyStockInputDialogController {
     companion object{
         @Volatile private var instance: MyStockInputDialog? = null
         @JvmStatic
@@ -50,6 +46,7 @@ class MyStockInputDialog(context: Context):
         window?.setBackgroundDrawableResource(R.color.color_80000000)
         //EditText focus 했을 때 키보드가 보이도록 설정
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        binding.executePendingBindings()
     }
 
     val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
@@ -57,7 +54,7 @@ class MyStockInputDialog(context: Context):
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what){
                 MSG.SELL_DATE_DATA_INPUT -> {
-                    binding.etSellDate.setText("$purchaseYear.$purchaseMonth")
+                    binding.etPurchaseDate.setText("$purchaseYear.$purchaseMonth")
                 }
             }
             return true
