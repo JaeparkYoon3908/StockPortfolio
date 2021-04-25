@@ -7,3 +7,8 @@ import androidx.databinding.BindingAdapter
 fun setSelected(view: View, selected: Boolean) {
     view.isSelected = selected
 }
+
+@BindingAdapter
+fun setGainColor(){
+
+}

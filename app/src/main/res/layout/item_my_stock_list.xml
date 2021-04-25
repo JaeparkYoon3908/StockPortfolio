@@ -19,11 +19,22 @@
             name="callBack"
             type="com.yjpapp.stockportfolio.ui.mystock.MyStockAdapter.AdapterCallBack" />
 
+        <variable
+            name="pos"
+            type="Integer" />
+
+        <variable
+            name="moneySymbol"
+            type="String" />
+
     </data>
     <com.daimajia.swipe.SwipeLayout
+        android:id="@+id/swipeLayoutMyStock"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_108dp"
         android:layout_marginBottom="@dimen/common_20dp"
+        android:nestedScrollingEnabled="false"
+        app:clickToClose="true"
         >
         <LinearLayout
             android:tag="Bottom2"
@@ -69,7 +80,7 @@
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
                 android:background="@color/color_cd4632"
-                android:onClick="@{() -> callBack.onDeleteClick(myStockEntity)}"
+                android:onClick="@{() -> callBack.onDeleteClick(myStockEntity, pos)}"
                 android:text="@string/Common_Delete"
                 android:textSize="@dimen/common_15dp"
                 android:textColor="@color/color_ffffff"
@@ -276,7 +287,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/common_10dp"
-                    android:text="@{myStockEntity.purchasePrice}"
+                    android:text="@{moneySymbol+myStockEntity.purchasePrice}"
                     android:textColor="@color/color_222222"
                     android:textSize="@dimen/common_13dp"
                     android:singleLine="true"

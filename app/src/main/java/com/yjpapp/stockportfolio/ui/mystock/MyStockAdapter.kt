@@ -1,18 +1,19 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
-import android.content.Context
-import android.content.Intent
-import android.os.Looper
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.daimajia.swipe.SwipeLayout
+import com.daimajia.swipe.SwipeLayout.SwipeListener
+import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
+import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl
+import com.daimajia.swipe.interfaces.SwipeAdapterInterface
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.constance.AppConfig
 import com.yjpapp.stockportfolio.database.room.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
-import com.yjpapp.stockportfolio.ui.main.MainActivity
-import java.util.logging.Handler
 
 
 /**
@@ -21,8 +22,9 @@ import java.util.logging.Handler
  * @author Yoon Jae-park
  * @since 2021.04
  */
-class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): RecyclerView.Adapter<MyStockAdapter.ViewHolder>() {
+class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): RecyclerSwipeAdapter<MyStockAdapter.ViewHolder>(), SwipeAdapterInterface {
     private lateinit var adapterCallBack: AdapterCallBack
+    private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         DataBindingUtil.inflate<ItemMyStockListBinding>(
@@ -35,9 +37,24 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        swipeItemManger.bindView(holder.itemView, position)
         holder.mBinding.apply {
+            //dataBinding
             myStockEntity = myStockList[position]
             callBack = adapterCallBack
+            pos = position
+            moneySymbol = AppConfig.moneySymbol
+            //init
+            swipeLayoutMyStock.addSwipeListener(object : SwipeListener {
+                override fun onStartOpen(layout: SwipeLayout) {
+                    swipeItemManger.closeAllExcept(layout)
+                }
+                override fun onOpen(layout: SwipeLayout) {}
+                override fun onStartClose(layout: SwipeLayout) {}
+                override fun onClose(layout: SwipeLayout) {}
+                override fun onUpdate(layout: SwipeLayout, leftOffset: Int, topOffset: Int) {}
+                override fun onHandRelease(layout: SwipeLayout, xvel: Float, yvel: Float) {}
+            })
         }
     }
 
@@ -52,7 +69,11 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
 
     fun setMyStockList(myStockList: MutableList<MyStockEntity>){
         this.myStockList = myStockList
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
+    }
+
+    fun closeSwipeLayout(){
+        swipeItemManger.closeAllItems()
     }
 
     fun setCallBack(callBack: AdapterCallBack){
@@ -62,6 +83,10 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
     interface AdapterCallBack{
         fun onEditClick(myStockEntity: MyStockEntity?)
         fun onSellClick(myStockEntity: MyStockEntity?)
-        fun onDeleteClick(myStockEntity: MyStockEntity?)
+        fun onDeleteClick(myStockEntity: MyStockEntity?, position: Int)
+    }
+
+    override fun getSwipeLayoutResourceId(position: Int): Int {
+        return R.id.swipeLayoutMyStock
     }
 }

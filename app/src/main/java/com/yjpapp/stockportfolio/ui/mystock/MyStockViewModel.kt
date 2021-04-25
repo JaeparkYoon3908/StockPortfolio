@@ -10,17 +10,21 @@ import com.yjpapp.stockportfolio.util.Event
 import java.text.DecimalFormat
 
 class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseViewModel() {
+    val NOTIFY_HANDLER_INSERT = "NOTIFY_INSERT"
+    val NOTIFY_HANDLER_DELETE = "NOTIFY_DELETE"
+    val NOTIFY_HANDLER_UPDATE = "NOTIFY_UPDATE"
 
     var currentPrice = MutableLiveData<String>()
     var myStockInfoList = MutableLiveData<MutableList<MyStockEntity>>()
-    var position = 0
     var inputDialogSubjectName = ""
     var inputDialogPurchaseDate = ""
-    var inputDialogPurchasePrice = ""
+    var inputDialogPurchasePrice = MutableLiveData<String>()
+
     var inputDialogPurchaseCount = ""
     lateinit var mMyStockInputDialog: MyStockInputDialog
     val showErrorToast = MutableLiveData<Event<Boolean>>()
     val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>()
+    var notifyHandler = "Delete"
 
     var purchasePriceTextColorRes = MutableLiveData<Int>()
     lateinit var inputDialogController: MyStockInputDialogController
@@ -37,20 +41,21 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
      */
     //3자리마다 콤마 찍어주는 변수
     private val decimalFormat = DecimalFormat("###,###")
-    private var result = "";
+    private var convertText = ""
+
     //종목명
     fun onSubjectNameChange(s: CharSequence, start: Int, before: Int, count: Int) {
         inputDialogSubjectName = s.toString()
     }
 
     //평균단가
-    fun onPurchasePriceChange(charSequence: CharSequence, start: Int, before: Int, count: Int) {
-//        inputDialogPurchasePrice = charSequence.toString()
-        if(!TextUtils.isEmpty(charSequence.toString()) && charSequence.toString() != result){
-            inputDialogPurchasePrice = decimalFormat.format(charSequence.toString().replace(",", "").toDouble())
+    fun onPurchasePriceChange(s: CharSequence, start: Int, before: Int, count: Int) {
+        if(!TextUtils.isEmpty(s.toString()) && s.toString() != convertText){
+            convertText = decimalFormat.format(s.toString().replace(",", "").toDouble())
+            inputDialogPurchasePrice.value = convertText
         }
 
-        if(charSequence.isEmpty()){
+        if(s.isEmpty()){
             inputDialogController.changeMoneySymbolTextColor(R.color.color_666666)
         }else{
             inputDialogController.changeMoneySymbolTextColor(R.color.color_222222)
@@ -63,17 +68,23 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
     }
 
     //확인버튼 클릭 후 Save
-    fun saveMyStock(): Boolean {
+    fun saveMyStock(isInsertMode: Boolean, id: Int): Boolean {
         if (inputDialogSubjectName.isNotEmpty() &&
-            inputDialogPurchasePrice.isNotEmpty() &&
+            inputDialogPurchasePrice.value?.length!=0 &&
             inputDialogPurchaseCount.isNotEmpty()
         ) {
             try {
                 val myStockEntity = MyStockEntity(
-                    0, inputDialogSubjectName,
-                    inputDialogPurchaseDate, inputDialogPurchasePrice, inputDialogPurchaseCount
+                    id, inputDialogSubjectName,
+                    inputDialogPurchaseDate, inputDialogPurchasePrice.value!!, inputDialogPurchaseCount
                 )
-                myStockRepository.insertMyStock(myStockEntity)
+                if(isInsertMode){
+                    myStockRepository.insertMyStock(myStockEntity)
+                    notifyHandler = NOTIFY_HANDLER_INSERT
+                }else{
+                    myStockRepository.updateMyStock(myStockEntity)
+                    notifyHandler = NOTIFY_HANDLER_UPDATE
+                }
                 myStockInfoList.value = myStockRepository.getAllMyStock()
                 return true
             }catch (e: Exception){
@@ -81,16 +92,16 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
                 showDBSaveErrorToast.value = Event(true)
                 return false
             }
-
         } else {
             showErrorToast.value = Event(true)
             return false
         }
     }
 
-    fun deleteMyStock(myStockEntity: MyStockEntity): MutableList<MyStockEntity>{
+    fun deleteMyStock(myStockEntity: MyStockEntity){
         myStockRepository.deleteMyStock((myStockEntity))
-        return myStockRepository.getAllMyStock()
+        notifyHandler = NOTIFY_HANDLER_DELETE
+        myStockInfoList.value = myStockRepository.getAllMyStock()
     }
 
     /**
