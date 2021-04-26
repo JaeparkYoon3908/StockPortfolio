@@ -8,7 +8,7 @@ fun setSelected(view: View, selected: Boolean) {
     view.isSelected = selected
 }
 
-@BindingAdapter
-fun setGainColor(){
-
-}
+//@BindingAdapter
+//fun setGainColor(){
+//
+//}

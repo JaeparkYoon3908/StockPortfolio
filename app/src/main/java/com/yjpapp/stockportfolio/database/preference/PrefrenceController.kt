@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.preference
+package com.yjpapp.stockportfolio.database.preference
 
 import android.app.Activity
 import android.content.Context

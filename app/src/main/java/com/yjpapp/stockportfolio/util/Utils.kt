@@ -8,9 +8,9 @@ import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.database.preference.PrefKey
+import com.yjpapp.stockportfolio.database.preference.PreferenceController
 import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
-import com.yjpapp.stockportfolio.preference.PrefKey
-import com.yjpapp.stockportfolio.preference.PreferenceController
 import es.dmoral.toasty.Toasty
 import java.text.SimpleDateFormat
 import java.util.*

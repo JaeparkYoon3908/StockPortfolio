@@ -4,11 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.google.android.gms.ads.rewarded.RewardedAd
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
+import com.yjpapp.stockportfolio.database.preference.PrefKey
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
-import com.yjpapp.stockportfolio.preference.PrefKey
 import com.yjpapp.stockportfolio.ui.advertisement.AdFragment
 import com.yjpapp.stockportfolio.ui.incomenote.IncomeNoteFragment
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment

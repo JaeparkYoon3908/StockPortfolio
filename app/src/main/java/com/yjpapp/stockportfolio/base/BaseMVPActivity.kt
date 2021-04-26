@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.yjpapp.stockportfolio.database.preference.PreferenceController
 import com.yjpapp.stockportfolio.database.sqlte.DatabaseController
-import com.yjpapp.stockportfolio.preference.PreferenceController
 
 /**
  * @author Yoon Jae-park
