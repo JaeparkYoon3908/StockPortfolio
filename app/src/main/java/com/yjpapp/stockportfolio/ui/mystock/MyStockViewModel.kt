@@ -7,6 +7,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.database.room.MyStockEntity
 import com.yjpapp.stockportfolio.util.Event
+import com.yjpapp.stockportfolio.util.Utils
 import java.text.DecimalFormat
 
 class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseViewModel() {
@@ -14,20 +15,23 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
     val NOTIFY_HANDLER_DELETE = "NOTIFY_DELETE"
     val NOTIFY_HANDLER_UPDATE = "NOTIFY_UPDATE"
 
+    val totalPurchasePrice = MutableLiveData<String>() //상단 총 매수금액
+    val totalEvaluationAmount = MutableLiveData<String>() //상단 총 평가금액
+    val totalGainPrice = MutableLiveData<String>() //상단 손익
+    val totalGainPricePercent = MutableLiveData<String>() //상단 수익률
+
     var currentPrice = MutableLiveData<String>()
-    var myStockInfoList = MutableLiveData<MutableList<MyStockEntity>>()
-    var inputDialogSubjectName = ""
-    var inputDialogPurchaseDate = ""
-    var inputDialogPurchasePrice = MutableLiveData<String>()
+    val myStockInfoList = MutableLiveData<MutableList<MyStockEntity>>() //나의 주식 목록 List
+    var inputDialogSubjectName = "" //InputDialog 회사명
+    var inputDialogPurchaseDate = "" //InputDialog 매수일
+    val inputDialogPurchasePrice = MutableLiveData<String>() //InputDialog 평균단가
+    var inputDialogPurchaseCount = "" //보유수량
 
-    var inputDialogPurchaseCount = ""
-    lateinit var mMyStockInputDialog: MyStockInputDialog
-    val showErrorToast = MutableLiveData<Event<Boolean>>()
-    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>()
-    var notifyHandler = "Delete"
+    val showErrorToast = MutableLiveData<Event<Boolean>>() //필수 값을 모두 입력해주세요 Toast
+    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
+    var notifyHandler = NOTIFY_HANDLER_INSERT //RecyclerView adapter notify handler
 
-    var purchasePriceTextColorRes = MutableLiveData<Int>()
-    lateinit var inputDialogController: MyStockInputDialogController
+    lateinit var inputDialogController: MyStockInputDialogController //InputDialog와 연결 된 interface
 
     /**
      * MyStockFragment 영역
@@ -40,7 +44,6 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
      * MyStockInputDialog 영역
      */
     //3자리마다 콤마 찍어주는 변수
-    private val decimalFormat = DecimalFormat("###,###")
     private var convertText = ""
 
     //종목명
@@ -51,7 +54,7 @@ class MyStockViewModel(private val myStockRepository: MyStockRepository) : BaseV
     //평균단가
     fun onPurchasePriceChange(s: CharSequence, start: Int, before: Int, count: Int) {
         if(!TextUtils.isEmpty(s.toString()) && s.toString() != convertText){
-            convertText = decimalFormat.format(s.toString().replace(",", "").toDouble())
+            convertText = Utils.getNumInsertComma(s.toString())
             inputDialogPurchasePrice.value = convertText
         }
 

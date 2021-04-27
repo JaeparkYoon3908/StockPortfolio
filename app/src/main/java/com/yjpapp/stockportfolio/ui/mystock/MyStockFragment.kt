@@ -15,9 +15,12 @@ import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.database.room.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
 import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
+import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import org.koin.android.ext.android.inject
+import java.text.NumberFormat
+import java.util.*
 
 
 /**
@@ -121,6 +124,11 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                         myStockAdapter.notifyItemRangeRemoved(deletePosition, it.size)
                     }
                 }
+                var mTotalPurchasePrice = 0.0
+                it.forEach { myStockEntity ->
+                    mTotalPurchasePrice += Utils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
+                }
+                totalPurchasePrice.value = NumberFormat.getCurrencyInstance(Locale.KOREA).format(mTotalPurchasePrice)
             })
             showErrorToast.observe(this@MyStockFragment, Observer {
                 it.getContentIfNotHandled()?.let {

@@ -175,12 +175,11 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     }
 
     //3자리마다 콤마 찍어주는 코드
-    private val decimalFormat = DecimalFormat("###,###")
     private var convertText = ""
     private val textWatcher = object: TextWatcher{
         override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
             if(!TextUtils.isEmpty(charSequence.toString()) && charSequence.toString() != convertText){
-                convertText = decimalFormat.format(charSequence.toString().replace(",", "").toDouble())
+                convertText = Utils.getNumInsertComma(charSequence.toString())
                 if(etPurchasePrice.hasFocus()){
                     etPurchasePrice.setText(convertText)
                     etPurchasePrice.setSelection(convertText.length) //커서를 오른쪽 끝으로 보낸다.
