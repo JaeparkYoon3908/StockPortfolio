@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.preference
+package com.yjpapp.stockportfolio.database.preference
 
 object PrefKey {
     const val KEY_BACK_BUTTON_APP_CLOSE = "back_button_app_close"

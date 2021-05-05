@@ -126,27 +126,27 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     }
 
     fun onBackPressedClick(activity: Activity) {
-        if (incomeNoteListAdapter?.isEditMode()!!) {
-            incomeNoteListAdapter?.setEditMode(false)
-            incomeNoteListAdapter?.notifyDataSetChanged()
-            incomeNoteView.showAddButton()
-        } else {
+//        if (incomeNoteListAdapter?.isEditMode()!!) {
+//            incomeNoteListAdapter?.setEditMode(false)
+//            incomeNoteListAdapter?.notifyDataSetChanged()
+//            incomeNoteView.showAddButton()
+//        } else {
             Utils.runBackPressAppCloseEvent(mContext, activity)
-        }
+//        }
     }
 
-    fun onMenuEditButtonClick() {
-        val allIncomeNoteList = incomeNoteInteractor.getAllIncomeNoteInfoList()
-        if (allIncomeNoteList.size > 0) {
-            incomeNoteListAdapter?.setEditMode(!incomeNoteListAdapter?.isEditMode()!!)
-            incomeNoteListAdapter?.notifyDataSetChanged()
-            if (incomeNoteListAdapter?.isEditMode()!!) {
-                incomeNoteView.hideAddButton()
-            } else {
-                incomeNoteView.showAddButton()
-            }
-        }
-    }
+//    fun onMenuEditButtonClick() {
+//        val allIncomeNoteList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+//        if (allIncomeNoteList.size > 0) {
+//            incomeNoteListAdapter?.setEditMode(!incomeNoteListAdapter?.isEditMode()!!)
+//            incomeNoteListAdapter?.notifyDataSetChanged()
+//            if (incomeNoteListAdapter?.isEditMode()!!) {
+//                incomeNoteView.hideAddButton()
+//            } else {
+//                incomeNoteView.showAddButton()
+//            }
+//        }
+//    }
 
     fun getAllIncomeNoteList(): ArrayList<IncomeNoteInfo?> {
         return incomeNoteInteractor.getAllIncomeNoteInfoList()
@@ -226,5 +226,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         }
         incomeNoteListAdapter?.notifyDataSetChanged()
     }
-
+    fun closeSwipeLayout() {
+        incomeNoteListAdapter?.closeSwipeLayout()
+    }
 }

@@ -8,10 +8,12 @@ import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.database.preference.PrefKey
+import com.yjpapp.stockportfolio.database.preference.PreferenceController
 import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
-import com.yjpapp.stockportfolio.preference.PrefKey
-import com.yjpapp.stockportfolio.preference.PreferenceController
 import es.dmoral.toasty.Toasty
+import java.lang.StringBuilder
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.system.exitProcess
@@ -52,11 +54,18 @@ object Utils {
 
     //5,000,000 => 5000000 변환
     fun getNumDeletedComma(num: String): String{
-        var result: String = ""
+        val result = StringBuilder()
         val split = num.split(",")
         for (i in split.indices) {
-            result += split[i]
+            result.append(split[i])
         }
+        return result.toString()
+    }
+
+    fun getNumInsertComma(num: String): String{
+        var result: String = ""
+        val decimalFormat = DecimalFormat("###,###")
+        result = decimalFormat.format(num.replace(",", "").toDouble())
         return result
     }
 

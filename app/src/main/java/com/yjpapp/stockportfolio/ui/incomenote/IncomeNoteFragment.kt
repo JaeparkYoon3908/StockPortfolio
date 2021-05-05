@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
@@ -92,10 +93,10 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             R.id.menu_IncomeNoteFragment_Add -> {
                 incomeNotePresenter.onAddButtonClicked()
             }
-            R.id.menu_IncomeNote_Edit -> {
+//            R.id.menu_IncomeNote_Edit -> {
 //                activity?.window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
-                incomeNotePresenter.onMenuEditButtonClick()
-            }
+//                incomeNotePresenter.onMenuEditButtonClick()
+//            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -177,10 +178,22 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 //        if (allIncomeNoteList?.size != 0) {
 //            layoutManager.scrollToPosition(allIncomeNoteList?.size!! - 1)
 //        }
-        viewBinding.recyclerviewIncomeNoteFragment.layoutManager = layoutManager
-
-        viewBinding.recyclerviewIncomeNoteFragment.itemAnimator = FadeInAnimator()
-
+        viewBinding.apply {
+            recyclerviewIncomeNoteFragment.layoutManager = layoutManager
+            recyclerviewIncomeNoteFragment.itemAnimator = FadeInAnimator()
+            recyclerviewIncomeNoteFragment.addOnItemTouchListener(object: RecyclerView.OnItemTouchListener{
+                override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                    when(e.actionMasked){
+                        MotionEvent.ACTION_UP, MotionEvent.ACTION_DOWN -> {
+                            incomeNotePresenter.closeSwipeLayout()
+                        }
+                    }
+                    return false
+                }
+                override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+                override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+            })
+        }
     }
 
     override fun bindTotalGainData() {
@@ -191,10 +204,8 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
         if(allIncomeNoteList.size!=0){
             for (i in allIncomeNoteList.indices) {
-                totalGainNumber += Utils.getNumDeletedComma(allIncomeNoteList[i]!!.realPainLossesAmount!!)
-                    .toDouble()
-                totalGainPercent += Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!)
-                    .toDouble()
+                totalGainNumber += Utils.getNumDeletedComma(allIncomeNoteList[i]!!.realPainLossesAmount!!).toDouble()
+                totalGainPercent += Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!).toDouble()
                 gainPercentList.add(Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!).toDouble())
             }
             totalGainPercent = Utils.calculateTotalGainPercent(allIncomeNoteList)
@@ -245,7 +256,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                     etPurchasePrice.setText(incomeNoteInfo?.purchasePrice)
                     etSellPrice.setText(incomeNoteInfo?.sellPrice)
                     etSellCount.setText(incomeNoteInfo?.sellCount.toString())
-
                 }
             }else{
                 if (!isShowing) {

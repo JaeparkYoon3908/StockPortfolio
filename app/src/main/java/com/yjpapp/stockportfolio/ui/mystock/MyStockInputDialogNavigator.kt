@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
-interface MyStockInputDialogController {
+interface MyStockInputDialogNavigator {
+
     fun changeMoneySymbolTextColor(color: Int)
 }
