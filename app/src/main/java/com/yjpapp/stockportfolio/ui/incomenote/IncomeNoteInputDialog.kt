@@ -33,21 +33,19 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     }
     var purchaseYear: String? = null
     var purchaseMonth: String? = null
-//    private var purchaseDay: String? = null
-    private var sellYear: String? = null
-    private var sellMonth: String? = null
-    private var sellDay: String? = null
-    lateinit var etSellDate: EditText
-//    lateinit var etSellDate: EditText
-    lateinit var txtCancel: TextView
-    lateinit var txtComplete: TextView
-    lateinit var EditMainDialogMainContainer: ConstraintLayout
-    lateinit var etPurchasePrice: EditText
-    lateinit var etSellPrice: EditText
-    lateinit var txtPurchasePriceSymbol: TextView
-    lateinit var txtSellPriceSymbol: TextView
-    lateinit var etSubjectName: EditText
-    lateinit var etSellCount: EditText
+    var sellYear: String? = null
+    var sellMonth: String? = null
+    var sellDay: String? = null
+    val etSellDate: EditText by lazy { findViewById(R.id.et_purchase_date) }
+    val txtCancel: TextView by lazy { findViewById(R.id.txt_cancel) }
+    val txtComplete: TextView by lazy { findViewById(R.id.txt_complete) }
+    val etPurchasePrice:EditText by lazy { findViewById(R.id.et_purchase_price) }
+    private val EditMainDialogMainContainer:ConstraintLayout by lazy { findViewById(R.id.EditMainDialog_MainContainer) }
+    val etSellPrice: EditText by lazy { findViewById(R.id.et_sell_price) }
+    val txtPurchasePriceSymbol: TextView by lazy { findViewById(R.id.txt_purchase_price_symbol) }
+    val txtSellPriceSymbol: TextView by lazy { findViewById(R.id.txt_sell_price_symbol) }
+    val etSubjectName: EditText by lazy { findViewById(R.id.et_subject_name) }
+    val etSellCount: EditText by lazy { findViewById(R.id.et_sell_count) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,20 +54,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     }
 
     private fun initLayout(){
-        etSellDate = findViewById(R.id.et_purchase_date)
-//        etSellDate = findViewById(R.id.et_sell_date)
-        txtCancel = findViewById(R.id.txt_cancel)
-        txtComplete = findViewById(R.id.txt_complete)
-        EditMainDialogMainContainer = findViewById(R.id.EditMainDialog_MainContainer)
-        etPurchasePrice = findViewById(R.id.et_purchase_price)
-        etSellPrice = findViewById(R.id.et_sell_price)
-        txtPurchasePriceSymbol = findViewById(R.id.txt_purchase_price_symbol)
-        txtSellPriceSymbol = findViewById(R.id.txt_sell_price_symbol)
-        etSubjectName = findViewById(R.id.et_subject_name)
-        etSellCount = findViewById(R.id.et_sell_count)
-
         etSellDate.setOnClickListener(onClickListener)
-//        etSellDate.setOnClickListener(onClickListener)
         txtCancel.setOnClickListener(onClickListener)
         txtComplete.setOnClickListener(onClickListener)
         EditMainDialogMainContainer.setOnClickListener(onClickListener)
