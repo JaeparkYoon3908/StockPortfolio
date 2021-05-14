@@ -85,7 +85,7 @@
                 android:gravity="start"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
-                android:text="@string/Common_Dummy_Data"
+                android:text="@{viewModel.totalEvaluationAmount}"
                 android:textColor="@color/color_222222"
                 android:textSize="16sp"
                 android:textStyle="bold"
