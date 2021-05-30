@@ -18,11 +18,12 @@ class MemoListPresenter(val mContext: Context, private val memoListView: MemoLis
 
 
     private val memoListInteractor = MemoListInteractor()
-    private lateinit var memoListAdapter: MemoListAdapter
+    private val memoDataList by lazy { getAllMemoInfoList() }
+    private var memoListAdapter = MemoListAdapter(memoDataList, this)
 
     fun onResume(){
-        val memoDataList = getAllMemoInfoList()
-        memoListAdapter = MemoListAdapter(memoDataList, this)
+        //val memoDataList = getAllMemoInfoList()
+        //memoListAdapter = MemoListAdapter(memoDataList, this)
         memoListView.setAdapter(memoListAdapter)
     }
 
