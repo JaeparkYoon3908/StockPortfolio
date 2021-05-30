@@ -16,23 +16,24 @@ import com.yjpapp.stockportfolio.database.sqlte.data.MemoInfo
  * @author Yoon Jae-park
  * @since 2020.08
  */
-class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private val memoListPresenter: MemoListPresenter) :
-    RecyclerView.Adapter<MemoListAdapter.ViewHolder>(){
+class MemoListAdapter(
+    private var memoListData: ArrayList<MemoInfo?>,
+    private val memoListPresenter: MemoListPresenter
+) :
+    RecyclerView.Adapter<MemoListAdapter.ViewHolder>() {
     private var deleteModeOn = false
-    private lateinit var mContext: Context
 
-    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view){
-        val txt_MemoList_Date = view.findViewById<TextView>(R.id.txt_MemoList_Date)
-        val txt_MemoList_Title = view.findViewById<TextView>(R.id.txt_MemoList_Title)
-        val txt_MemoList_NoteCount = view.findViewById<TextView>(R.id.txt_MemoList_NoteCount)
-        val img_MemoList_Check = view.findViewById<ImageView>(R.id.img_MemoList_Check)
+    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
+        val txt_MemoList_Date: TextView = view.findViewById(R.id.txt_MemoList_Date)
+        val txt_MemoList_Title: TextView = view.findViewById(R.id.txt_MemoList_Title)
+        val txt_MemoList_NoteCount: TextView = view.findViewById(R.id.txt_MemoList_NoteCount)
+        val img_MemoList_Check: ImageView = view.findViewById(R.id.img_MemoList_Check)
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        mContext = parent.context
-        val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view:View = inflater.inflate(R.layout.item_memo_list, parent, false)
+        val inflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view: View = inflater.inflate(R.layout.item_memo_list, parent, false)
         return ViewHolder(view)
     }
 
@@ -48,18 +49,18 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
                 return@setOnLongClickListener true
             }
 
-            if(deleteModeOn){
+            if (deleteModeOn) {
                 img_MemoList_Check.visibility = View.VISIBLE
                 itemView.setOnClickListener {
                     img_MemoList_Check.isSelected = !img_MemoList_Check.isSelected
-                    if(img_MemoList_Check.isSelected){
+                    if (img_MemoList_Check.isSelected) {
                         memoListPresenter.clickMemoDeleteCheck(position, true)
 
-                    }else{
+                    } else {
                         memoListPresenter.clickMemoDeleteCheck(position, false)
                     }
                 }
-            }else{
+            } else {
                 img_MemoList_Check.visibility = View.GONE
                 itemView.setOnClickListener {
                     memoListPresenter.onMemoListClicked(position)
@@ -73,18 +74,19 @@ class MemoListAdapter(private var memoListData: ArrayList<MemoInfo?>, private va
         return memoListData.size
     }
 
-    fun setMemoListData(memoListData: ArrayList<MemoInfo?>){
+    fun setMemoListData(memoListData: ArrayList<MemoInfo?>) {
         this.memoListData = memoListData
     }
 
-    fun getMemoListData(): ArrayList<MemoInfo?>{
+    fun getMemoListData(): ArrayList<MemoInfo?> {
         return memoListData
     }
 
-    fun isDeleteModeOn(): Boolean{
+    fun isDeleteModeOn(): Boolean {
         return deleteModeOn
     }
-    fun setDeleteModeOn(deleteModeOn: Boolean){
+
+    fun setDeleteModeOn(deleteModeOn: Boolean) {
         this.deleteModeOn = deleteModeOn
     }
 
