@@ -13,7 +13,7 @@ from django.core.wsgi import get_wsgi_application
 
 sys.path.append('/home/ubuntu/docker-server/ReviewServer/login')
 
-sys.path.append('/home/ubuntu/docker-server/ReviewServer/venv/Scripts/')
+sys.path.append('/home/ubuntu/docker-server/ReviewServer/venv/Lib/site-packages')
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server_dev.settings')
 
