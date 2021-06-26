@@ -11,7 +11,7 @@ import os, sys
 
 from django.core.wsgi import get_wsgi_application
 
-sys.path.append('/home/ubuntu/docker-server/ReviewServer/')
+sys.path.append('/home/ubuntu/docker-server/ReviewServer/login')
 
 sys.path.append('/home/ubuntu/docker-server/ReviewServer/venv/Scripts/')
 
