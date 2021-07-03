@@ -7,17 +7,15 @@ For more information on this file, see
 https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 """
 
-import os, sys
+import os
+import sys
+
+path = os.path.abspath(__file__ + '/../..')
+if path not in sys.path:
+    sys.path.append(path)
 
 from django.core.wsgi import get_wsgi_application
-
-sys.path.append('/home/pi/my_server/ReviewServer/login')
-
-sys.path.append('/home/pi/my_server/ReviewServer/venv/Lib/site-packages')
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server_dev.settings')
 
-from django.core.wsgi import get_wsgi_application
-
 application = get_wsgi_application()
-
