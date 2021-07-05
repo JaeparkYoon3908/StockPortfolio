@@ -33,11 +33,11 @@
             android:screenOrientation="portrait"
             />
 
-        <activity android:name=".ui.smsauth.SMSAuthActivity"
+        <activity android:name=".ui.mystock.StockSearchActivity"
             android:screenOrientation="portrait"
             />
 
-        <activity android:name=".ui.mystock.StockSearchActivity"
+        <activity android:name=".ui.login.LoginActivity"
             android:screenOrientation="portrait"
             />
 
