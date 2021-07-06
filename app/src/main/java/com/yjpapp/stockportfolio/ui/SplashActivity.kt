@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
 import com.yjpapp.stockportfolio.databinding.ActivitySplashBinding
+import com.yjpapp.stockportfolio.ui.login.LoginActivity
 import com.yjpapp.stockportfolio.ui.main.MainActivity
 import java.util.*
 
@@ -51,7 +52,7 @@ class SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
 
     private fun startMainActivity(){
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(mContext, MainActivity::class.java)
+            val intent = Intent(mContext, LoginActivity::class.java)
             finish()
             startActivity(intent)
 

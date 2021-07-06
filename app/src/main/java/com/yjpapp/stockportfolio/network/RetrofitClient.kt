@@ -1,26 +1,25 @@
-package com.yjpapp.stockportfolio.network.yahoofinance
+package com.yjpapp.stockportfolio.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class YahooFinanceClient {
+class RetrofitClient {
     companion object {
-        val ourInstance = YahooFinanceClient()
-        const val url =
-            "https://apidojo-yahoo-finance-v1.p.rapidapi.com"
-//        fun getInstance():RetrofitKtClient{
-//            return ourInstance
-//        }
+        val ourInstance = RetrofitClient()
+        const val baseUrl = "http://112.147.50.202/"
+        fun getInstance(): RetrofitClient {
+            return ourInstance
+        }
     }
 
     private val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     private val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
     private val retrofit = Retrofit.Builder()
-        .baseUrl(url)
+        .baseUrl(baseUrl)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create()) // 파싱등록
         .build()
-    val service: YahooFinanceServerApi = retrofit.create(YahooFinanceServerApi::class.java)
+    val service: RetrofitService = retrofit.create(RetrofitService::class.java)
 }
