@@ -1,4 +1,4 @@
-#uesr/models.py
+#user/models.py
 from django.db import models
 
 
