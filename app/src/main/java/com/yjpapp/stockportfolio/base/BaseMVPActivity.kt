@@ -11,17 +11,11 @@ import com.yjpapp.stockportfolio.database.sqlte.DatabaseController
  * @author Yoon Jae-park
  * @since 2020.12
  */
-abstract class BaseMVPActivity<VB: ViewBinding>: AppCompatActivity() {
+abstract class BaseMVPActivity<VB: ViewBinding>: BaseActivity() {
     private lateinit var baseInteractor: BaseInteractor
-    lateinit var mContext: Context
-    lateinit var databaseController: DatabaseController
-    lateinit var preferenceController: PreferenceController
     lateinit var binding: VB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mContext = this
-        databaseController = DatabaseController.getInstance(mContext)
-        preferenceController = PreferenceController.getInstance(mContext)
         baseInteractor = BaseInteractor.getInstance(mContext)
         binding = getViewBinding()
         setContentView(binding.root)
