@@ -1,4 +1,4 @@
-#login/models.py
+#uesr/models.py
 from django.db import models
 
 

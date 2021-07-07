@@ -1,4 +1,4 @@
-# login/views.py
+# uesr/views.py
 import stat
 
 from rest_framework.views import APIView
