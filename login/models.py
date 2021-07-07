@@ -2,10 +2,10 @@
 from django.db import models
 
 
-class LoginUser(models.Model):
-    user_id = models.CharField(max_length=20, null=False, default=False)
-    user_pw = models.CharField(max_length=20, null=False, default=False)
+class UserInfo(models.Model):
+    user_email = models.CharField(max_length=20, null=False, default=False)
+    user_name = models.CharField(max_length=20, null=False, default=False)
 
     class Meta:
-        db_table = 'login_user'
-        verbose_name = '로그인 테스트 테이블'
+        db_table = 'user_info'
+        verbose_name = '유저 정보'
