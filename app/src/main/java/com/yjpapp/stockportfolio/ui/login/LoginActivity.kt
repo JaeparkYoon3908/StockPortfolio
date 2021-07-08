@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -31,6 +32,7 @@ class LoginActivity : BaseMVVMActivity() {
             .build()
     }
     private val mGoogleSignInClient by lazy { GoogleSignIn.getClient(applicationContext, gso) }
+    private val loginViewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
 
     interface LoginCallBack {
         fun onClick(view: View)
@@ -38,9 +40,19 @@ class LoginActivity : BaseMVVMActivity() {
 
     private val loginCallBack = object : LoginCallBack {
         override fun onClick(view: View) {
-            when (view.id) {
-                binding.value.btnGoogleLogin.id -> {
-                    googleSignIn()
+            binding.value.run {
+                when (view.id) {
+                    btnGoogleLogin.id -> {
+
+                    }
+
+                    btnNaverLogin.id -> {
+
+                    }
+
+                    btnKakaoLogin.id -> {
+
+                    }
                 }
             }
         }
@@ -52,11 +64,20 @@ class LoginActivity : BaseMVVMActivity() {
         initData()
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
     private fun initView() {
 
     }
 
     private fun initData() {
+
         binding.value.apply {
             lifecycleOwner = this@LoginActivity
             callback = loginCallBack

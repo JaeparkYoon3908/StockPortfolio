@@ -76,5 +76,7 @@
 
     <string name="AdFragment_Title">후원</string>
 
-
+    <string name="Login_Google_Id_Login">구글 아이디 로그인</string>
+    <string name="Login_Naver_Id_Login">네이버 아이디 로그인</string>
+    <string name="Login_Kakao_Id_Login">카카오 아이디 로그인</string>
 </resources>

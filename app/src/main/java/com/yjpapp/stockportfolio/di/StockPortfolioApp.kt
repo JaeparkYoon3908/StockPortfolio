@@ -12,7 +12,8 @@ class StockPortfolioApp: Application() {
         startKoin {
             androidLogger()
             androidContext(this@StockPortfolioApp)
-            modules(mMyStockViewModel)
+//            modules(mMyStockViewModel)
+//            modules(adViewModel)
         }
     }
 }
