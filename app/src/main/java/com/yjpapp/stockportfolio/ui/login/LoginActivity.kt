@@ -17,6 +17,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMActivity
 import com.yjpapp.stockportfolio.constance.AppConfig
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
+import com.yjpapp.stockportfolio.ui.main.MainActivity
 
 /**
  * @author 윤재박
@@ -40,6 +41,7 @@ class LoginActivity : BaseMVVMActivity() {
 
     private val loginCallBack = object : LoginCallBack {
         override fun onClick(view: View) {
+            startMainActivity()
             binding.value.run {
                 when (view.id) {
                     btnGoogleLogin.id -> {
@@ -117,5 +119,11 @@ class LoginActivity : BaseMVVMActivity() {
                 Log.e(TAG, "signInResult:failed code=" + e.statusCode)
             }
         }
+    }
+
+    private fun startMainActivity(){
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

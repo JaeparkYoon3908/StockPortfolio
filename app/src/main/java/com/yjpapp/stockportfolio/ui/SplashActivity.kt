@@ -53,7 +53,6 @@ class SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
     private fun startMainActivity(){
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(mContext, LoginActivity::class.java)
-//            val intent = Intent(mContext, MainActivity::class.java)
             finish()
             startActivity(intent)
 
