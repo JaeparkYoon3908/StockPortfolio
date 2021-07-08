@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.database.room.MyRoomDatabase
 import com.yjpapp.stockportfolio.database.room.MyStockEntity
+import com.yjpapp.stockportfolio.model.TestModel
+import com.yjpapp.stockportfolio.network.RetrofitClient
 import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.Utils
 import org.koin.android.ext.koin.androidContext
@@ -116,4 +118,8 @@ class MyStockViewModel(context: Context) : ViewModel() {
     /**
      * viewModel 자체 함수 영역
      */
+
+    suspend fun testRequest(){
+        val testModel = TestModel("A1001", "코엔텍")
+    }
 }
