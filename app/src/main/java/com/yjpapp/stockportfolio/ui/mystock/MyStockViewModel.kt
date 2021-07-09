@@ -4,6 +4,7 @@ package com.yjpapp.stockportfolio.ui.mystock
 import android.app.Application
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +15,11 @@ import com.yjpapp.stockportfolio.model.TestModel
 import com.yjpapp.stockportfolio.network.RetrofitClient
 import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
+import java.net.ConnectException
 
 class MyStockViewModel(context: Context) : ViewModel() {
     val NOTIFY_HANDLER_INSERT = "NOTIFY_INSERT"
@@ -43,15 +48,14 @@ class MyStockViewModel(context: Context) : ViewModel() {
     /**
      * MyStockFragment 영역
      */
-    fun onViewCreated(){
+    fun onViewCreated() {
 
         myStockInfoList.value = myStockRepository.getAll()
     }
 
     /**
      * MyStockInputDialog 영역
-     */
-    //3자리마다 콤마 찍어주는 변수
+     */ //3자리마다 콤마 찍어주는 변수
     private var convertText = ""
 
     //종목명
@@ -61,14 +65,14 @@ class MyStockViewModel(context: Context) : ViewModel() {
 
     //평균단가
     fun onPurchasePriceChange(s: CharSequence, start: Int, before: Int, count: Int) {
-        if(!TextUtils.isEmpty(s.toString()) && s.toString() != convertText){
+        if (!TextUtils.isEmpty(s.toString()) && s.toString() != convertText) {
             convertText = Utils.getNumInsertComma(s.toString())
             inputDialogPurchasePrice.value = convertText
         }
 
-        if(s.isEmpty()){
+        if (s.isEmpty()) {
             inputDialogController.changeMoneySymbolTextColor(R.color.color_666666)
-        }else{
+        } else {
             inputDialogController.changeMoneySymbolTextColor(R.color.color_222222)
         }
     }
@@ -80,25 +84,21 @@ class MyStockViewModel(context: Context) : ViewModel() {
 
     //확인버튼 클릭 후 Save
     fun saveMyStock(isInsertMode: Boolean, id: Int): Boolean {
-        if (inputDialogSubjectName.isNotEmpty() &&
-            inputDialogPurchasePrice.value?.length!=0 &&
-            inputDialogPurchaseCount.isNotEmpty()
-        ) {
+        if (inputDialogSubjectName.isNotEmpty() && inputDialogPurchasePrice.value?.length != 0 && inputDialogPurchaseCount.isNotEmpty()) {
             try {
                 val myStockEntity = MyStockEntity(
-                    id, inputDialogSubjectName,
-                    inputDialogPurchaseDate, inputDialogPurchasePrice.value!!, inputDialogPurchaseCount
-                )
-                if(isInsertMode){
+                    id, inputDialogSubjectName, inputDialogPurchaseDate, inputDialogPurchasePrice.value!!, inputDialogPurchaseCount
+                                                 )
+                if (isInsertMode) {
                     myStockRepository.insert(myStockEntity)
                     notifyHandler = NOTIFY_HANDLER_INSERT
-                }else{
-                    myStockRepository.insert(myStockEntity)
+                } else {
+                    myStockRepository.update(myStockEntity)
                     notifyHandler = NOTIFY_HANDLER_UPDATE
                 }
                 myStockInfoList.value = myStockRepository.getAll()
                 return true
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.stackTrace
                 showDBSaveErrorToast.value = Event(true)
                 return false
@@ -109,7 +109,7 @@ class MyStockViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun deleteMyStock(myStockEntity: MyStockEntity){
+    fun deleteMyStock(myStockEntity: MyStockEntity) {
         myStockRepository.delete((myStockEntity))
         notifyHandler = NOTIFY_HANDLER_DELETE
         myStockInfoList.value = myStockRepository.getAll()
@@ -119,7 +119,21 @@ class MyStockViewModel(context: Context) : ViewModel() {
      * viewModel 자체 함수 영역
      */
 
-    suspend fun testRequest(){
-        val testModel = TestModel("A1001", "코엔텍")
+    fun testRequest(context: Context) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+//                RetrofitClient.getService()?.let {
+//                    it.getMyJsonObject().let { response ->
+//                        if (response.isSuccessful) {
+//                            Log.d("YJP", "response.body() = " + response.body())
+//                        } else {
+//                            Log.d("YJP", "response.body() = " + response.errorBody())
+//                        }
+//                    }
+//                }
+            } catch (e: ConnectException) {
+
+            }
+        }
     }
 }

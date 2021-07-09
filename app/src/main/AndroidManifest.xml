@@ -16,6 +16,7 @@
         android:theme="@style/AppTheme"
         android:launchMode="singleTop"
         android:largeHeap="true"
+        android:usesCleartextTraffic="true"
         >
         <activity android:name=".ui.SplashActivity"
             android:screenOrientation="portrait">

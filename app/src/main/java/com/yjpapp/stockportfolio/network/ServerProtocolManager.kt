@@ -45,9 +45,6 @@ class ServerProtocolManager {
 //            }
 //
 //        })
-        val testModel = TestModel("A1001", "코엔텍")
-        RetrofitClient.ourInstance.service.getMyJsonObject(testModel).apply {
-        }
     }
 
 }

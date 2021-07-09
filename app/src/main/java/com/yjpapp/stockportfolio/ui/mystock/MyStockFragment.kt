@@ -48,6 +48,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
         setHasOptionsMenu(true)
         initLayout()
         setObserver()
+        myStockViewModel.testRequest(mContext)
 //        startSkeletonAnimation()
     }
 
