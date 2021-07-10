@@ -1,10 +1,12 @@
 package com.yjpapp.stockportfolio.network
 
 import com.google.gson.JsonObject
+import com.yjpapp.stockportfolio.model.TestModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlin.coroutines.Continuation
 
 /**
  * Repository로 이동 추천
@@ -27,22 +29,22 @@ class ServerProtocolManager {
 
     }
 
-    fun getStockProfile(symbol: String, region: String, callback: Callback<JsonObject?>){
+    suspend fun getStockProfile(symbol: String, region: String, callback: Callback<JsonObject?>){
         addHeaderMap()
-        val queryMap: HashMap<String, String> = HashMap()
-        queryMap["symbol"] = symbol
-        queryMap["region"] = region
-
-        RetrofitClient.ourInstance.service.getMyJsonObject(headerMap, queryMap)?.enqueue(object : Callback<JsonObject?>{
-            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-
-        })
+//        val queryMap: HashMap<String, String> = HashMap()
+//        queryMap["symbol"] = symbol
+//        queryMap["region"] = region
+//
+//        RetrofitClient.ourInstance.service.getMyJsonObject(headerMap, queryMap)?.enqueue(object : Callback<JsonObject?>{
+//            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+//                TODO("Not yet implemented")
+//            }
+//
+//            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
+//                TODO("Not yet implemented")
+//            }
+//
+//        })
     }
 
 }

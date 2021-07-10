@@ -43,4 +43,8 @@
     <color name="color_cd4632">#cd4632</color>
     <color name="color_skeleton">#a2878787</color>
 
+    <color name="color_1a000000">#1a000000</color>
+    <color name="color_00000000">#00000000</color>
+    <color name="color_4dffffff">#4dffffff</color>
+
 </resources>

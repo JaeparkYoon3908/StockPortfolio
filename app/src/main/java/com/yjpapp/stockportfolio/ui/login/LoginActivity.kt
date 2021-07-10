@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -16,6 +17,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMActivity
 import com.yjpapp.stockportfolio.constance.AppConfig
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
+import com.yjpapp.stockportfolio.ui.main.MainActivity
 
 /**
  * @author 윤재박
@@ -31,6 +33,7 @@ class LoginActivity : BaseMVVMActivity() {
             .build()
     }
     private val mGoogleSignInClient by lazy { GoogleSignIn.getClient(applicationContext, gso) }
+    private val loginViewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
 
     interface LoginCallBack {
         fun onClick(view: View)
@@ -38,9 +41,20 @@ class LoginActivity : BaseMVVMActivity() {
 
     private val loginCallBack = object : LoginCallBack {
         override fun onClick(view: View) {
-            when (view.id) {
-                binding.value.btnGoogleLogin.id -> {
-                    googleSignIn()
+            startMainActivity()
+            binding.value.run {
+                when (view.id) {
+                    btnGoogleLogin.id -> {
+
+                    }
+
+                    btnNaverLogin.id -> {
+
+                    }
+
+                    btnKakaoLogin.id -> {
+
+                    }
                 }
             }
         }
@@ -52,11 +66,20 @@ class LoginActivity : BaseMVVMActivity() {
         initData()
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
     private fun initView() {
 
     }
 
     private fun initData() {
+
         binding.value.apply {
             lifecycleOwner = this@LoginActivity
             callback = loginCallBack
@@ -96,5 +119,11 @@ class LoginActivity : BaseMVVMActivity() {
                 Log.e(TAG, "signInResult:failed code=" + e.statusCode)
             }
         }
+    }
+
+    private fun startMainActivity(){
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

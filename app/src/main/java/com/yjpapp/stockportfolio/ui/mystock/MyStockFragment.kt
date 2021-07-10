@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.*
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ethanhua.skeleton.Skeleton
@@ -31,7 +32,7 @@ import java.util.*
  */
 class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapter.AdapterCallBack {
 
-    private val myStockViewModel: MyStockViewModel by inject()
+    private val myStockViewModel by lazy { MyStockViewModel(this.mContext) }
     private lateinit var myStockAdapter: MyStockAdapter
     override fun getLayoutId(): Int {
         return R.layout.fragment_my_stock
@@ -47,6 +48,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
         setHasOptionsMenu(true)
         initLayout()
         setObserver()
+        myStockViewModel.testRequest(mContext)
 //        startSkeletonAnimation()
     }
 
@@ -108,7 +110,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
 
     private fun setObserver() {
         myStockViewModel.run {
-            myStockInfoList.observe(this@MyStockFragment, Observer {
+            myStockInfoList.observe(viewLifecycleOwner, Observer {
                 myStockAdapter.setMyStockList(it)
                 when (notifyHandler) {
                     NOTIFY_HANDLER_INSERT -> {
@@ -130,12 +132,12 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                 }
                 totalPurchasePrice.value = NumberFormat.getCurrencyInstance(Locale.KOREA).format(mTotalPurchasePrice)
             })
-            showErrorToast.observe(this@MyStockFragment, Observer {
+            showErrorToast.observe(viewLifecycleOwner, Observer {
                 it.getContentIfNotHandled()?.let {
                     Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()
                 }
             })
-            showDBSaveErrorToast.observe(this@MyStockFragment, Observer {
+            showDBSaveErrorToast.observe(viewLifecycleOwner, Observer {
                 it.getContentIfNotHandled()?.let {
                     Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()
                 }
