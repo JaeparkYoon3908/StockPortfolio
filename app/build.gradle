@@ -95,4 +95,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:20.2.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
+    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
+    implementation 'com.facebook.android:facebook-login:5.15.3'
 }
