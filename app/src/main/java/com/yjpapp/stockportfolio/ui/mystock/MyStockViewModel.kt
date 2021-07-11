@@ -120,19 +120,16 @@ class MyStockViewModel(context: Context) : ViewModel() {
      */
 
     fun testRequest(context: Context) {
+        //코루틴
         CoroutineScope(Dispatchers.IO).launch {
-            try {
-//                RetrofitClient.getService()?.let {
-//                    it.getMyJsonObject().let { response ->
-//                        if (response.isSuccessful) {
-//                            Log.d("YJP", "response.body() = " + response.body())
-//                        } else {
-//                            Log.d("YJP", "response.body() = " + response.errorBody())
-//                        }
-//                    }
-//                }
-            } catch (e: ConnectException) {
-
+            RetrofitClient.getService(context)?.let {
+                it.getMyJsonObject().let { response ->
+                    if (response.isSuccessful) {
+                        Log.d("YJP", "response.body() = " + response.body())
+                    } else {
+                        Log.d("YJP", "response.body() = " + response.errorBody())
+                    }
+                }
             }
         }
     }

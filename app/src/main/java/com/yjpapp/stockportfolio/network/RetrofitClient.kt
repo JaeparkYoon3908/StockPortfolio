@@ -4,26 +4,29 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
-import java.net.ConnectException
 import java.util.concurrent.TimeUnit
 
 class RetrofitClient {
     companion object {
-        val ourInstance = RetrofitClient()
+//        @Volatile
+//        private var instance: RetrofitClient? = null
         const val BASE_URL = "http://112.147.50.202/"
-        const val CONNECT_TIMEOUT_OUT_MINUTE:Long = 3
-        const val READ_TIMEOUT_OUT_MINUTE:Long = 3
+        const val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
+        const val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
-        fun getInstance(): RetrofitClient {
-            return ourInstance
-        }
+//        @JvmStatic
+//        fun getInstance(): RetrofitClient =
+//            instance ?: synchronized(this) {
+//                instance ?: RetrofitClient().also {
+//                    instance = it
+//                }
+//            }
+
 
         fun getService(context: Context): RetrofitService? {
             if (isInternetAvailable(context)) {
@@ -78,6 +81,7 @@ class RetrofitClient {
             return result
         }
     }
+
     class NetworkNotConnectException : IOException() {
         override val message: String
             get() = "NetworkNotConnectException"

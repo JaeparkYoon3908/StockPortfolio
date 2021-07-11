@@ -20,8 +20,8 @@
         >
 
         <ImageView
-            android:layout_width="@dimen/common_320dp"
-            android:layout_height="@dimen/common_270dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,7 @@
             android:layout_marginEnd="@dimen/common_32dp"
             android:onClick="@{callback::onClick}"
             android:background="@drawable/btn_login_btn_selector"
-            app:layout_constraintBottom_toTopOf="@+id/btn_kakao_login"
+            app:layout_constraintBottom_toTopOf="@+id/btn_facebook_login"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 
@@ -93,10 +93,10 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/btn_kakao_login"
+            android:id="@+id/btn_facebook_login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/common_56dp"
-            android:layout_marginBottom="@dimen/common_80dp"
+            android:layout_marginBottom="@dimen/common_100dp"
             android:layout_marginStart="@dimen/common_32dp"
             android:layout_marginEnd="@dimen/common_32dp"
             android:onClick="@{callback::onClick}"
@@ -109,8 +109,8 @@
                 android:layout_width="@dimen/common_28dp"
                 android:layout_height="@dimen/common_28dp"
                 android:layout_marginStart="@dimen/common_20dp"
-                android:background="@drawable/ic_kakao"
                 android:layout_centerVertical="true"
+                android:background="@drawable/ic_facebook"
                 />
 
             <TextView

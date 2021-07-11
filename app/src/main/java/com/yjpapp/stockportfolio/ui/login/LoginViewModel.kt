@@ -9,11 +9,10 @@ import androidx.lifecycle.ViewModel
  * @since 2021.07
  */
 class LoginViewModel(application: Application): AndroidViewModel(application) {
-    enum class LoginType{
-        GOOGLE,
-        NAVER,
-        KAKAO
+
+    fun requestUserReg(){
+
     }
 
-    var loginType = LoginType.GOOGLE
+
 }
