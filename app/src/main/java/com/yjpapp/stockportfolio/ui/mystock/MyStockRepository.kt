@@ -1,7 +1,7 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
-import com.yjpapp.stockportfolio.database.room.MyStockDao
-import com.yjpapp.stockportfolio.database.room.MyStockEntity
+import com.yjpapp.stockportfolio.localdb.room.MyStockDao
+import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
 
 class MyStockRepository(private val myStockDao: MyStockDao) {
     fun insertMyStock(myStockEntity: MyStockEntity) {

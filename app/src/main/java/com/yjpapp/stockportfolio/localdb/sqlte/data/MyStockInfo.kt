@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.database.sqlte.data
+package com.yjpapp.stockportfolio.localdb.sqlte.data
 
 data class MyStockInfo
     (var id: Int,

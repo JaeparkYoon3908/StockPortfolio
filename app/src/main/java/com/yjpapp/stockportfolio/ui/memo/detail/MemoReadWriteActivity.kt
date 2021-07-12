@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
-import com.yjpapp.stockportfolio.database.sqlte.Databases
+import com.yjpapp.stockportfolio.localdb.sqlte.Databases
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
 import com.yjpapp.stockportfolio.ui.memo.MemoListFragment
 import com.yjpapp.stockportfolio.util.Utils

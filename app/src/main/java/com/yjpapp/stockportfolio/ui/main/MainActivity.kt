@@ -6,7 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
-import com.yjpapp.stockportfolio.database.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
 import com.yjpapp.stockportfolio.ui.advertisement.AdFragment
 import com.yjpapp.stockportfolio.ui.incomenote.IncomeNoteFragment

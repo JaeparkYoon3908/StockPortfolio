@@ -2,6 +2,8 @@ package com.yjpapp.stockportfolio.ui.login
 
 import android.content.Context
 import android.content.Intent
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 
 class SNSLogoutManager {
     private val TAG = SNSLogoutManager::class.java.simpleName
@@ -18,9 +20,13 @@ class SNSLogoutManager {
 
     }
     fun logout(context: Context) {
-        //TODO 프리퍼런스 추가
+        //프리퍼런스 reset
+        PreferenceController.getInstance(context).setPreference(PrefKey.KEY_AUTO_LOGIN, false)
+        PreferenceController.getInstance(context).setPreference(PrefKey.KEY_USER_INDEX, "")
+        PreferenceController.getInstance(context).setPreference(PrefKey.KEY_USER_TOKEN, "")
+
         val intent = Intent(context, LoginActivity::class.java)
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK, Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
     }
 

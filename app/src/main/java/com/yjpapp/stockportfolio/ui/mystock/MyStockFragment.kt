@@ -1,25 +1,22 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ethanhua.skeleton.Skeleton
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
-import com.yjpapp.stockportfolio.database.room.MyStockEntity
+import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
 import com.yjpapp.stockportfolio.ui.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
-import org.koin.android.ext.android.inject
 import java.text.NumberFormat
 import java.util.*
 
@@ -48,7 +45,6 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
         setHasOptionsMenu(true)
         initLayout()
         setObserver()
-        myStockViewModel.testRequest(mContext)
 //        startSkeletonAnimation()
     }
 
@@ -109,8 +105,8 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
     }
 
     private fun setObserver() {
-        myStockViewModel.run {
-            myStockInfoList.observe(viewLifecycleOwner, Observer {
+        myStockViewModel.apply {
+            myStockInfoList.observe(viewLifecycleOwner, {
                 myStockAdapter.setMyStockList(it)
                 when (notifyHandler) {
                     NOTIFY_HANDLER_INSERT -> {

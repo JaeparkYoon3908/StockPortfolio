@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.database.sqlte
+package com.yjpapp.stockportfolio.localdb.sqlte
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

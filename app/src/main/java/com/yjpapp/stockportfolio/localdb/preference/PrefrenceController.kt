@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.database.preference
+package com.yjpapp.stockportfolio.localdb.preference
 
 import android.app.Activity
 import android.content.Context
@@ -23,7 +23,7 @@ class PreferenceController {
             }
     }
 
-    fun setPreference(key: String, value: String){
+    fun setPreference(key: String, value: String?){
         synchronized(this){
             try{
                 val editor = pref.edit()
@@ -71,13 +71,13 @@ class PreferenceController {
         }
     }
 
-    fun getPreference(key: String): String{
+    fun getPreference(key: String): String?{
         synchronized(this){
             return try {
                 pref.getString(key, "").toString()
             }catch (e: Exception){
                 e.printStackTrace()
-                ""
+                null
             }
         }
     }

@@ -1,25 +1,15 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
 
-import android.app.Application
 import android.content.Context
 import android.text.TextUtils
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.room.MyRoomDatabase
-import com.yjpapp.stockportfolio.database.room.MyStockEntity
-import com.yjpapp.stockportfolio.model.TestModel
-import com.yjpapp.stockportfolio.network.RetrofitClient
+import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
+import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
 import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.Utils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.koin.android.ext.koin.androidContext
-import java.net.ConnectException
 
 class MyStockViewModel(context: Context) : ViewModel() {
     val NOTIFY_HANDLER_INSERT = "NOTIFY_INSERT"
@@ -119,18 +109,4 @@ class MyStockViewModel(context: Context) : ViewModel() {
      * viewModel 자체 함수 영역
      */
 
-    fun testRequest(context: Context) {
-        //코루틴
-        CoroutineScope(Dispatchers.IO).launch {
-            RetrofitClient.getService(context)?.let {
-                it.getMyJsonObject().let { response ->
-                    if (response.isSuccessful) {
-                        Log.d("YJP", "response.body() = " + response.body())
-                    } else {
-                        Log.d("YJP", "response.body() = " + response.errorBody())
-                    }
-                }
-            }
-        }
-    }
 }

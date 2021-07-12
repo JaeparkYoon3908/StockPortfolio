@@ -10,7 +10,7 @@
 
         <variable
             name="myStockEntity"
-            type="com.yjpapp.stockportfolio.database.room.MyStockEntity" />
+            type="com.yjpapp.stockportfolio.localdb.room.MyStockEntity" />
 
         <variable
             name="isEditMode"

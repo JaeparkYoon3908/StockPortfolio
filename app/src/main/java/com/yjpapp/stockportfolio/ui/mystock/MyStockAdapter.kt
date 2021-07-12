@@ -2,7 +2,6 @@ package com.yjpapp.stockportfolio.ui.mystock
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.daimajia.swipe.SwipeLayout
@@ -12,7 +11,7 @@ import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl
 import com.daimajia.swipe.interfaces.SwipeAdapterInterface
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.AppConfig
-import com.yjpapp.stockportfolio.database.room.MyStockEntity
+import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
 
 

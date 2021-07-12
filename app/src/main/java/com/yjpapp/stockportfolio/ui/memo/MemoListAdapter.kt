@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.sqlte.data.MemoInfo
+import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 
 /**
  * MemoListPresenter와 연결된 RecyclerView Adapter

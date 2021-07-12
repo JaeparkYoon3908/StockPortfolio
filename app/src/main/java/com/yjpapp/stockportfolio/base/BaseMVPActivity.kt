@@ -1,11 +1,7 @@
 package com.yjpapp.stockportfolio.base
 
-import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-import com.yjpapp.stockportfolio.database.preference.PreferenceController
-import com.yjpapp.stockportfolio.database.sqlte.DatabaseController
 
 /**
  * @author Yoon Jae-park

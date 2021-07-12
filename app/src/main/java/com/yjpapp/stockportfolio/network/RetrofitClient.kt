@@ -13,20 +13,9 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitClient {
     companion object {
-//        @Volatile
-//        private var instance: RetrofitClient? = null
         const val BASE_URL = "http://112.147.50.202/"
         const val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
         const val READ_TIMEOUT_OUT_MINUTE: Long = 3
-
-//        @JvmStatic
-//        fun getInstance(): RetrofitClient =
-//            instance ?: synchronized(this) {
-//                instance ?: RetrofitClient().also {
-//                    instance = it
-//                }
-//            }
-
 
         fun getService(context: Context): RetrofitService? {
             if (isInternetAvailable(context)) {
@@ -38,12 +27,12 @@ class RetrofitClient {
                     .connectTimeout(CONNECT_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
                     .readTimeout(READ_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
                     .build()
+
                 val retrofit = Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create()) // 파싱등록
                     .build()
-
                 return retrofit.create(RetrofitService::class.java)
             } else {
                 return null

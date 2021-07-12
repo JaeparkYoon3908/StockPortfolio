@@ -2,7 +2,7 @@ package com.yjpapp.stockportfolio.base
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import com.yjpapp.stockportfolio.database.sqlte.DatabaseOpenHelper
+import com.yjpapp.stockportfolio.localdb.sqlte.DatabaseOpenHelper
 
 open class BaseInteractor {
     companion object {

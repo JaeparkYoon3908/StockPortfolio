@@ -3,7 +3,7 @@ package com.yjpapp.stockportfolio.ui.memo
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.yjpapp.stockportfolio.database.sqlte.data.MemoInfo
+import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 import com.yjpapp.stockportfolio.ui.memo.detail.MemoReadWriteActivity
 import com.yjpapp.stockportfolio.util.Utils
 

@@ -2,8 +2,8 @@ package com.yjpapp.stockportfolio.ui.incomenote
 
 import android.content.ContentValues
 import android.database.Cursor
-import com.yjpapp.stockportfolio.database.sqlte.Databases
-import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.localdb.sqlte.Databases
+import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.base.BaseInteractor
 import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
 import com.yjpapp.stockportfolio.util.Utils

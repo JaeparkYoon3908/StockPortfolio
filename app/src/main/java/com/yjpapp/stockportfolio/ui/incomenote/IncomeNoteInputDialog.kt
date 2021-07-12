@@ -19,7 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.AppConfig
-import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import java.text.DecimalFormat
 import java.util.*

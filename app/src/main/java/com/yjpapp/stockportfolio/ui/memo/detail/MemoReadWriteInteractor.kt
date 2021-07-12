@@ -1,8 +1,8 @@
 package com.yjpapp.stockportfolio.ui.memo.detail
 
 import android.content.ContentValues
-import com.yjpapp.stockportfolio.database.sqlte.Databases
-import com.yjpapp.stockportfolio.database.sqlte.data.MemoInfo
+import com.yjpapp.stockportfolio.localdb.sqlte.Databases
+import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 import com.yjpapp.stockportfolio.base.BaseInteractor
 
 /**

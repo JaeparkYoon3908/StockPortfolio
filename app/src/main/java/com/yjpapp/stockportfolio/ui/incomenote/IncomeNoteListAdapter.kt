@@ -4,15 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.daimajia.swipe.SwipeLayout
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
 import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.database.sqlte.data.IncomeNoteInfo
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import java.sql.SQLException
 import java.util.*
 

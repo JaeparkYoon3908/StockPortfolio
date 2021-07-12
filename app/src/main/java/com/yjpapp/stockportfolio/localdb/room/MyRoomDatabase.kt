@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.database.room
+package com.yjpapp.stockportfolio.localdb.room
 
 import android.content.Context
 import androidx.room.Database
