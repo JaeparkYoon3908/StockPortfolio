@@ -33,6 +33,7 @@ import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.SNSLoginRequest
 import com.yjpapp.stockportfolio.model.SNSLoginResult
+import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.ui.main.MainActivity
 import com.yjpapp.stockportfolio.util.StockLog
 import java.security.MessageDigest
@@ -123,6 +124,18 @@ class LoginActivity : BaseMVVMActivity() {
                 StockLog.d(TAG, "userIndex = ${it.userIndex}")
                 StockLog.d(TAG, "token = ${it.token}")
 
+            })
+
+            autoLoginStatus.observe(this@LoginActivity, {
+                when (it) {
+                    ServerRespCode.OK -> {
+
+                    }
+
+                    ServerRespCode.BadRequest -> {
+
+                    }
+                }
             })
         }
     }
@@ -253,7 +266,8 @@ class LoginActivity : BaseMVVMActivity() {
     }
 
     private fun snsLoginSuccess(snsLoginRequest: SNSLoginRequest) {
-        loginViewModel.requestUserReg(applicationContext, snsLoginRequest)
+        SNSLoginRequest("a", "f", "a")
+//        loginViewModel.requestUserReg(applicationContext, snsLoginRequest)
     }
 
     private fun startAutoLogin() {
