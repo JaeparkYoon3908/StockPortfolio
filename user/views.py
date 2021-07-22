@@ -50,7 +50,7 @@ class RegistUser(APIView):
         return Response(data=data)
 class SelectUser(APIView):
     def get(self, request):
-        user_index = request.data.get('user_index', "")
+        user_index = request.GET.get('user_index', "")
 
         try:
             cursor = connection.cursor()
