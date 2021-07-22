@@ -10,7 +10,7 @@
 
         <variable
             name="callback"
-            type="com.yjpapp.stockportfolio.ui.login.LoginActivity.LoginCallBack" />
+            type="com.yjpapp.stockportfolio.function.login.LoginActivity.LoginCallBack" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

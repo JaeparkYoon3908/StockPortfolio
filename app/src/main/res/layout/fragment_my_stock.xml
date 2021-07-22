@@ -9,7 +9,7 @@
         <import type="android.view.View" />
         <variable
             name="viewModel"
-            type="com.yjpapp.stockportfolio.ui.mystock.MyStockViewModel" />
+            type="com.yjpapp.stockportfolio.function.mystock.MyStockViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

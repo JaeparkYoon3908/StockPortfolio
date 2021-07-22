@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".function.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,19 +27,19 @@
         </activity>
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".function.main.MainActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.memo.detail.MemoReadWriteActivity"
+            android:name=".function.memo.detail.MemoReadWriteActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.mystock.StockSearchActivity"
+            android:name=".function.mystock.StockSearchActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".function.login.LoginActivity"
             android:screenOrientation="portrait" />
 
         <service

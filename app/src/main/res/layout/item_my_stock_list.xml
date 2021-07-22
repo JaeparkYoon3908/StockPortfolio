@@ -18,7 +18,7 @@
 
         <variable
             name="callBack"
-            type="com.yjpapp.stockportfolio.ui.mystock.MyStockAdapter.AdapterCallBack" />
+            type="com.yjpapp.stockportfolio.function.mystock.MyStockAdapter.AdapterCallBack" />
 
         <variable
             name="pos"

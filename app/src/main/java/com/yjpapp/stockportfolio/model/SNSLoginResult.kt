@@ -9,6 +9,6 @@ data class SNSLoginResult(
     var email: String?,
     @SerializedName("name")
     var name: String?,
-    @SerializedName("token")
-    var token: String?
+    @SerializedName("login_type")
+    var login_type: String?
     )
