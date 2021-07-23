@@ -28,7 +28,7 @@ class RegistUser(APIView):
         UserInfo.objects.create(user_email=user_email, user_name=user_name, login_type=login_type) # LoginUser 모델에 새로운 object 생성
 
         response = requests.post(
-            "http://localhost:8000/api/token/",
+            "http://112.147.50.202/api/token/",
             json={"username": "yunjaepark", "password": "fnclrkakql3#"}
         )
         token = response.json().get("token")
@@ -65,7 +65,7 @@ class SelectUser(APIView):
     def get(self, request):
         user_index = request.GET.get('user_index', "")
         response = requests.post(
-            "http://localhost:8000/api/token/",
+            "http://112.147.50.202/api/token/",
             json={"username": "yunjaepark", "password": "fnclrkakql3#"}
         )
         token = "jwt " + response.json().get("token")
