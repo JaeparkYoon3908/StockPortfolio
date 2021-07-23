@@ -98,3 +98,12 @@ class SelectUser(APIView):
             )
 
         return Response(data=data)
+
+class TestTokenAuth(APIView):
+    def get(self, request):
+        data = dict(
+            status=200,
+            msg="성공"
+        )
+
+        return Response(data=data)
