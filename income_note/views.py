@@ -1,4 +1,4 @@
-# user/views.py
+# income_note/views.py
 
 from django.core.paginator import Paginator
 from rest_framework.response import Response
