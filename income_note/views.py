@@ -1,6 +1,6 @@
 # user/views.py
+
 from django.core.paginator import Paginator
-from django.db import connection
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -42,38 +42,29 @@ class IncomeNoteAPI(APIView):
         user_index = request.META.get('HTTP_USER_INDEX')
         page = request.GET.get('page')
         page_size = request.GET.get('size')
-        try:
-            cursor = connection.cursor()
-
-            query = "SELECT * FROM income_note WHERE user_index="+user_index
-            cursor.execute(query)
-            all_income_note = cursor.fetchall()
-            total_elements = len(all_income_note)
-            paginator = Paginator(all_income_note, page_size)
-            income_note = paginator.get_page(page).object_list
-            if int(page) * int(page_size) > total_elements + int(page_size):
-                data = dict(
-                    page_info=dict(
-                        page=page,
-                        page_size=page_size,
-                        total_elements=total_elements
-                    ),
-                    income_note=""
-                )
-            else:
-                data = dict(
-                    page_info=dict(
-                        page=page,
-                        page_size=page_size,
-                        total_elements=total_elements
-                    ),
-                    income_note=income_note
-                )
-            connection.commit()
-            connection.close()
-        except:
-            connection.rollback()
-            data = CustomResponse.no_index
+        all_income_note = IncomeNote.objects.filter(user_index=user_index)
+        total_elements = len(all_income_note)
+        paginator = Paginator(all_income_note, page_size)
+        income_note_list = paginator.get_page(page).object_list
+        income_note = [obj.as_json() for obj in income_note_list]
+        if int(page) * int(page_size) > total_elements + int(page_size):
+            data = dict(
+                page_info=dict(
+                    page=page,
+                    page_size=page_size,
+                    total_elements=total_elements
+                ),
+                income_note=""
+            )
+        else:
+            data = dict(
+                page_info=dict(
+                    page=page,
+                    page_size=page_size,
+                    total_elements=total_elements
+                ),
+                income_note=income_note
+            )
 
         return Response(data=data)
 
