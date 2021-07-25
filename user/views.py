@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 import requests
 
 from .models import UserInfo
+from response_set.response import CustomResponse
 
 
 class RegistUser(APIView):
@@ -53,10 +54,7 @@ class RegistUser(APIView):
 
         except:
             connection.rollback()
-            data = dict(
-                status=610,
-                msg="user_index를 찾을 수 없습니다."
-            )
+            data = CustomResponse.no_index
 
         return Response(data=data)
 class SelectUser(APIView):
@@ -92,18 +90,12 @@ class SelectUser(APIView):
 
         except:
             connection.rollback()
-            data = dict(
-                status=610,
-                msg="user_index를 찾을 수 없습니다."
-            )
+            data = CustomResponse.no_index
 
         return Response(data=data)
 
 class TestTokenAuth(APIView):
     def get(self, request):
-        data = dict(
-            status=200,
-            msg="성공"
-        )
+        data = CustomResponse.ok
 
         return Response(data=data)
