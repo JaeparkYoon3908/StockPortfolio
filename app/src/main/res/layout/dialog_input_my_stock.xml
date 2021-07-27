@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="com.yjpapp.stockportfolio.constance.AppConfig"/>
+        <import type="com.yjpapp.stockportfolio.constance.StockPortfolioConfig"/>
         <variable
             name="viewModel"
             type="com.yjpapp.stockportfolio.function.mystock.MyStockViewModel" />
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@{AppConfig.INSTANCE.moneySymbol}"
+            android:text="@{StockPortfolioConfig.INSTANCE.moneySymbol}"
             android:textColor="@color/color_666666"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/txt_purchase_count"

@@ -17,6 +17,7 @@ import com.yjpapp.stockportfolio.function.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import org.koin.android.ext.android.inject
 import java.text.NumberFormat
 import java.util.*
 
@@ -29,7 +30,7 @@ import java.util.*
  */
 class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapter.AdapterCallBack {
 
-    private val myStockViewModel by lazy { MyStockViewModel(this.mContext) }
+    private val myStockViewModel: MyStockViewModel by inject()
     private lateinit var myStockAdapter: MyStockAdapter
     override fun getLayoutId(): Int {
         return R.layout.fragment_my_stock

@@ -1,17 +1,23 @@
 package com.yjpapp.stockportfolio.function.mystock
 
 
+import android.app.Application
 import android.content.Context
 import android.text.TextUtils
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
 import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
+import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.Utils
 
-class MyStockViewModel(context: Context) : ViewModel() {
+class MyStockViewModel(
+    application: Application,
+    private val myStockRepository: MyStockRepository)
+: AndroidViewModel(application) {
     val NOTIFY_HANDLER_INSERT = "NOTIFY_INSERT"
     val NOTIFY_HANDLER_DELETE = "NOTIFY_DELETE"
     val NOTIFY_HANDLER_UPDATE = "NOTIFY_UPDATE"
@@ -33,14 +39,13 @@ class MyStockViewModel(context: Context) : ViewModel() {
     var notifyHandler = NOTIFY_HANDLER_INSERT //RecyclerView adapter notify handler
 
     lateinit var inputDialogController: MyStockInputDialogController //InputDialog와 연결 된 interface
-    private val myStockRepository by lazy { MyRoomDatabase.getInstance(context).myStockDao() }
 
     /**
      * MyStockFragment 영역
      */
     fun onViewCreated() {
 
-        myStockInfoList.value = myStockRepository.getAll()
+        myStockInfoList.value = myStockRepository.getAllMyStock()
     }
 
     /**
@@ -80,13 +85,13 @@ class MyStockViewModel(context: Context) : ViewModel() {
                     id, inputDialogSubjectName, inputDialogPurchaseDate, inputDialogPurchasePrice.value!!, inputDialogPurchaseCount
                                                  )
                 if (isInsertMode) {
-                    myStockRepository.insert(myStockEntity)
+                    myStockRepository.insertMyStock(myStockEntity)
                     notifyHandler = NOTIFY_HANDLER_INSERT
                 } else {
-                    myStockRepository.update(myStockEntity)
+                    myStockRepository.updateMyStock(myStockEntity)
                     notifyHandler = NOTIFY_HANDLER_UPDATE
                 }
-                myStockInfoList.value = myStockRepository.getAll()
+                myStockInfoList.value = myStockRepository.getAllMyStock()
                 return true
             } catch (e: Exception) {
                 e.stackTrace
@@ -100,9 +105,9 @@ class MyStockViewModel(context: Context) : ViewModel() {
     }
 
     fun deleteMyStock(myStockEntity: MyStockEntity) {
-        myStockRepository.delete((myStockEntity))
+        myStockRepository.deleteMyStock((myStockEntity))
         notifyHandler = NOTIFY_HANDLER_DELETE
-        myStockInfoList.value = myStockRepository.getAll()
+        myStockInfoList.value = myStockRepository.getAllMyStock()
     }
 
     /**

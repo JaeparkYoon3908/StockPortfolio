@@ -4,49 +4,80 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import com.yjpapp.stockportfolio.BuildConfig
+import com.yjpapp.stockportfolio.util.StockLog
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class RetrofitClient {
     companion object {
+        private val TAG = RetrofitClient::class.java.simpleName
         const val BASE_URL = "http://112.147.50.202/"
         const val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
         const val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
         fun getService(context: Context): RetrofitService? {
             if (isInternetAvailable(context)) {
-                val interceptor = HttpLoggingInterceptor()
-                interceptor.level = HttpLoggingInterceptor.Level.BODY
-                val client = OkHttpClient.Builder()
-                    .addInterceptor(interceptor)
-                    .retryOnConnectionFailure(true)
-                    .connectTimeout(CONNECT_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
-                    .readTimeout(READ_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
-                    .build()
 
-                val retrofit = Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create()) // 파싱등록
-                    .build()
+                val interceptor: Interceptor = object : Interceptor {
+                    @Throws(IOException::class)
+                    override fun intercept(chain: Interceptor.Chain): Response {
+                        val builder = getClientBuilderWithToken(context, chain)
+                        val response: Response = chain.proceed(builder.build())
+                        response.peekBody(Int.MAX_VALUE.toLong())
+                        try {
+                            if (!response.isSuccessful) {
+                                StockLog.d(TAG, "getClient() error code: " + response.code)
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                        return response
+                    }
+                }
+
+                val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+
+                val okHttpBuilder = OkHttpClient.Builder().apply {
+                    addInterceptor(interceptor)
+                    if (BuildConfig.DEBUG) {
+                            addInterceptor(httpLoggingInterceptor)
+                    }
+                    retryOnConnectionFailure(true)
+                    connectTimeout(CONNECT_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
+                    readTimeout(READ_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
+                }
+                val client = okHttpBuilder.build()
+
+                val retrofit = Retrofit.Builder().apply {
+                    baseUrl(BASE_URL)
+                    client(client)
+                    addConverterFactory(GsonConverterFactory.create()) // 파싱등록
+                }.build()
+
                 return retrofit.create(RetrofitService::class.java)
             } else {
                 return null
             }
         }
 
+        //인터넷 사용 가능한지 여부
         private fun isInternetAvailable(context: Context): Boolean {
             var result = false
-            val connectivityManager =
-                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val networkCapabilities = connectivityManager.activeNetwork ?: return false
-                val actNw =
-                    connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+                val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
                 result = when {
                     actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
                     actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
@@ -69,10 +100,11 @@ class RetrofitClient {
 
             return result
         }
-    }
 
-    class NetworkNotConnectException : IOException() {
-        override val message: String
-            get() = "NetworkNotConnectException"
+        private fun getClientBuilderWithToken(context: Context, chain: Interceptor.Chain): Request.Builder {
+            return chain.request().newBuilder()
+                .addHeader("token", "TEST_TOKEN")
+                .addHeader("Content-Type", "application/json")
+        }
     }
 }

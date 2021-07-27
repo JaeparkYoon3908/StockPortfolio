@@ -18,7 +18,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.constance.AppConfig
+import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import java.text.DecimalFormat
@@ -62,8 +62,8 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         etPurchasePrice.addTextChangedListener(textWatcher)
         etSellPrice.addTextChangedListener(textWatcher)
 
-        txtPurchasePriceSymbol.text = AppConfig.moneySymbol
-        txtSellPriceSymbol.text = AppConfig.moneySymbol
+        txtPurchasePriceSymbol.text = StockPortfolioConfig.moneySymbol
+        txtSellPriceSymbol.text = StockPortfolioConfig.moneySymbol
 
         window?.setBackgroundDrawableResource(R.color.color_80000000)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)

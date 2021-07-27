@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.facebook.*
 import com.facebook.GraphRequest.GraphJSONObjectCallback
@@ -26,7 +25,7 @@ import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMActivity
-import com.yjpapp.stockportfolio.constance.AppConfig
+import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
 import com.yjpapp.stockportfolio.function.main.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
@@ -47,7 +46,7 @@ class LoginActivity : BaseMVVMActivity() {
     private val TAG = LoginActivity::class.simpleName
     private val binding = binding<ActivityLoginBinding>(R.layout.activity_login)
     private val gso by lazy {
-        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(AppConfig.GOOGLE_SIGN_CLIENT_ID)
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(StockPortfolioConfig.GOOGLE_SIGN_CLIENT_ID)
             .requestEmail() // email addresses도 요청함
             .build()
     }
@@ -66,7 +65,8 @@ class LoginActivity : BaseMVVMActivity() {
             binding.value.run {
                 when (view.id) {
                     btnGoogleLogin.id -> {
-                        googleSignIn()
+//                        googleSignIn()
+                        startMainActivity()
                     }
 
                     btnNaverLogin.id -> {
@@ -99,7 +99,7 @@ class LoginActivity : BaseMVVMActivity() {
     }
 
     private fun initView() {
-        getHashKey()
+
     }
 
     private fun initData() {
@@ -167,6 +167,7 @@ class LoginActivity : BaseMVVMActivity() {
                     StockLog.d(TAG, "handleSignInResult:personId $personId")
                     StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
                     StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
+                    snsLoginSuccess(SNSLoginRequest(personEmail, personName, StockPortfolioConfig.SIGN_TYPE_GOOGLE))
                 }
             } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -178,7 +179,7 @@ class LoginActivity : BaseMVVMActivity() {
     private fun naverSignIn() {
         val mOAuthLoginModule = OAuthLogin.getInstance()
         mOAuthLoginModule.init(
-            this, AppConfig.NAVER_SIGN_CLIENT_ID, AppConfig.NAVER_SIGN_CLIENT_SECRET, getString(R.string.app_name)
+            this, StockPortfolioConfig.NAVER_SIGN_CLIENT_ID, StockPortfolioConfig.NAVER_SIGN_CLIENT_SECRET, getString(R.string.app_name)
                               )
         val mOAuthLoginHandler = @SuppressLint("HandlerLeak") object : OAuthLoginHandler() {
             override fun run(success: Boolean) {
@@ -195,9 +196,7 @@ class LoginActivity : BaseMVVMActivity() {
                 } else {
                     val errorCode: String = mOAuthLoginModule.getLastErrorCode(applicationContext).code
                     val errorDesc: String = mOAuthLoginModule.getLastErrorDesc(applicationContext)
-                    Toast.makeText(
-                        applicationContext, "errorCode:" + errorCode + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT
-                                  ).show()
+                    StockLog.d(TAG, "errorCode:$errorCode, errorDesc:$errorDesc")
                 }
             }
         }
@@ -224,6 +223,7 @@ class LoginActivity : BaseMVVMActivity() {
                 parameters.putString("fields", originField)
                 request.parameters = parameters
                 request.executeAsync()
+
             }
 
             override fun onCancel() {
@@ -268,8 +268,7 @@ class LoginActivity : BaseMVVMActivity() {
     }
 
     private fun snsLoginSuccess(snsLoginRequest: SNSLoginRequest) {
-        SNSLoginRequest("a", "f", "a")
-//        loginViewModel.requestUserReg(applicationContext, snsLoginRequest)
+        loginViewModel.postUserInfo(applicationContext, snsLoginRequest)
     }
 
     private fun startAutoLogin() {

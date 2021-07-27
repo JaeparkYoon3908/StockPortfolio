@@ -14,6 +14,7 @@ class StockPortfolioApp: Application() {
             androidLogger()
             androidContext(this@StockPortfolioApp)
             modules(loginViewModel)
+            modules(myStockViewModel)
         }
     }
 }

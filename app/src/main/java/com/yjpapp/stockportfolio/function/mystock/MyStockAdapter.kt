@@ -10,7 +10,7 @@ import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
 import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl
 import com.daimajia.swipe.interfaces.SwipeAdapterInterface
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.constance.AppConfig
+import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
 import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
 
@@ -42,7 +42,7 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
             myStockEntity = myStockList[position]
             callBack = adapterCallBack
             pos = position
-            moneySymbol = AppConfig.moneySymbol
+            moneySymbol = StockPortfolioConfig.moneySymbol
             //init
             swipeLayoutMyStock.addSwipeListener(object : SwipeListener {
                 override fun onStartOpen(layout: SwipeLayout) {
