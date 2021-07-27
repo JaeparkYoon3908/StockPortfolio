@@ -2,7 +2,7 @@ package com.yjpapp.stockportfolio.model
 
 import com.google.gson.annotations.SerializedName
 
-data class SNSLoginResult(
+data class LoginUserInfo(
     @SerializedName("userIndex")
     var userIndex: Int,
     @SerializedName("email")
@@ -10,5 +10,7 @@ data class SNSLoginResult(
     @SerializedName("name")
     var name: String?,
     @SerializedName("login_type")
-    var login_type: String?
+    var login_type: String?,
+    @SerializedName("token")
+    var token: String?
     )

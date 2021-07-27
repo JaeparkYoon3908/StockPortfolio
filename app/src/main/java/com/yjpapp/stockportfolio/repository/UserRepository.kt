@@ -11,10 +11,14 @@ import com.yjpapp.stockportfolio.function.login.LoginActivity
 class UserRepository {
 
     suspend fun postUserInfo(context: Context, snsLoginRequest: SNSLoginRequest) =
-        RetrofitClient.getService(context)?.requestRegiUser(snsLoginRequest)
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestRegUser(snsLoginRequest)
 
     suspend fun getUserInfo(context: Context, params: HashMap<String, String>) =
-        RetrofitClient.getService(context)?.requestUserInfo(params)
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestUserInfo(params)
+
+    suspend fun getNaverUserInfo(context: Context, params: HashMap<String, String>) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.NAVER)?.requestNaverUserInfo(params)
+
 
     fun logout(context: Context) {
         //프리퍼런스 reset

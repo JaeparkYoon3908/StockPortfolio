@@ -4,9 +4,8 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.model.SNSLoginRequest
-import com.yjpapp.stockportfolio.model.SNSLoginResult
+import com.yjpapp.stockportfolio.model.LoginUserInfo
 import com.yjpapp.stockportfolio.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,9 +17,9 @@ import kotlinx.coroutines.launch
  */
 
 class LoginViewModel(application: Application, private val userRepository: UserRepository): AndroidViewModel(application) {
-    val loginResultData = MutableLiveData<SNSLoginResult>()
+    val loginResultData = MutableLiveData<LoginUserInfo>()
     val autoLoginStatus = MutableLiveData<Int>()
-    val userInfo = MutableLiveData<SNSLoginResult>()
+    val userInfo = MutableLiveData<LoginUserInfo>()
 
     fun postUserInfo(context: Context, snsLoginRequest: SNSLoginRequest) {
         CoroutineScope(Dispatchers.IO).launch {
