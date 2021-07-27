@@ -29,3 +29,4 @@ class IncomeNote(models.Model):
     class Meta:
         db_table = 'income_note'
         verbose_name = '수익노트 테이블'
+        ordering = ['-id']
