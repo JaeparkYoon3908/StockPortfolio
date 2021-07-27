@@ -14,9 +14,9 @@ class IncomeNote(models.Model):
     sellPrice = models.CharField(max_length=100, null=False, default=False)
     sellCount = models.IntegerField(null=False, default=False)
 
-    def as_json(self):
+    def get_resp_json(self):
         return dict(
-            user_index=self.user_index,
+            id=self.pk,
             subjectName=self.subjectName,
             realPainLossesAmount=self.realPainLossesAmount,
             sellDate=self.sellDate,

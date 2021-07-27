@@ -46,7 +46,7 @@ class IncomeNoteAPI(APIView):
         total_elements = len(all_income_note)
         paginator = Paginator(all_income_note, page_size)
         income_note_list = paginator.get_page(page).object_list
-        income_note = [obj.as_json() for obj in income_note_list]
+        income_note = [obj.get_resp_json() for obj in income_note_list]
         if int(page) * int(page_size) > total_elements + int(page_size):
             data = dict(
                 page_info=dict(
