@@ -4,5 +4,5 @@ from . import views
 
 
 urlpatterns = [
-    url('income_note', views.IncomeNoteAPI.as_view(), name='income_note'),
+    url('list', views.IncomeNoteAPI.as_view(), name='income_note'),
 ]
