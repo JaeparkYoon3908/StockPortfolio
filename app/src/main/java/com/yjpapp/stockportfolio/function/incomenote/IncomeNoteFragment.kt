@@ -14,7 +14,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
-import com.yjpapp.stockportfolio.function.widget.MonthYearPickerDialog
+import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import java.text.NumberFormat

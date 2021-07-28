@@ -8,7 +8,7 @@ public class ChoSungSearchQueryUtil {
     public static final int DIGIT_BEGIN_UNICODE = 0x30; //0
     public static final int DIGIT_END_UNICODE = 0x3A; //9
 
-    public static final int QUERY_DELIM = 39;//'
+    public static final int QUERY_DELIM = 39;//
     public static final int LARGE_ALPHA_BEGIN_UNICODE = 0;
 
     public static final int HANGUL_BEGIN_UNICODE = 0xAC00; // 가

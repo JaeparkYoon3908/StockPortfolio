@@ -100,4 +100,7 @@ dependencies {
     implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
     implementation 'com.facebook.android:facebook-login:5.15.3'
 
+    //Paging
+    implementation "androidx.paging:paging-runtime-ktx:3.0.1"
+
 }
