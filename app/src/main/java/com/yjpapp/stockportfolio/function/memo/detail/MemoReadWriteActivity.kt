@@ -15,7 +15,7 @@ import com.yjpapp.stockportfolio.util.Utils
 
 /**
  * 메모 읽기 및 추가 화면
- *
+ * 디자인 패턴 : MVP
  * @author Yoon Jae-park
  * @since 2020.12.27
  */

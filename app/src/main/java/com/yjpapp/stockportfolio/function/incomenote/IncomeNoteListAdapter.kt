@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.daimajia.swipe.SwipeLayout
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
 import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.model.IncomeNoteModel
 import java.sql.SQLException
 import java.util.*
 
@@ -23,15 +26,14 @@ import java.util.*
 class IncomeNoteListAdapter(
     val data: ArrayList<IncomeNoteInfo?>?,
     private val incomeNotePresenter: IncomeNotePresenter
-) :
-    RecyclerSwipeAdapter<IncomeNoteListAdapter.ViewHolder>() {
+) : PagingDataAdapter<IncomeNoteModel.IncomeNoteList, IncomeNoteListAdapter.ViewHolder>(DIFF_CALLBACK) {
     private lateinit var mContext: Context
     private var dataInfoList: MutableList<IncomeNoteInfo?> = mutableListOf()
 
     //    private var editModeOn: Boolean = false
 //    private var allCheckClick: Boolean = false
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
-    private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
+//    private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
 
     init {
         if (data != null) {
@@ -106,33 +108,33 @@ class IncomeNoteListAdapter(
             txt_gain_percent_data.isSelected = true
 
             //상단 데이터
-            txt_subject_name.text = dataInfoList[position]?.subjectName
-            txt_gain_data.text = moneySymbol + dataInfoList[position]?.realPainLossesAmount
-            //왼쪽
-//            txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
-            txt_sell_date_data.text = dataInfoList[position]?.sellDate
-            if (dataInfoList[position]?.sellDate == "") {
-                txt_sell_date_data.text = "-"
-            }
-            txt_gain_percent_data.text = "(" + dataInfoList[position]?.gainPercent + ")"
-            //오른쪽
-            txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
-            txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice
-            txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
-
-            var realPainLossesAmountNumber = ""
-            val realPainLossesAmountSplit =
-                dataInfoList[position]?.realPainLossesAmount!!.split(",")
-            for (i in realPainLossesAmountSplit.indices) {
-                realPainLossesAmountNumber += realPainLossesAmountSplit[i]
-            }
-            if (realPainLossesAmountNumber.toDouble() >= 0) {
-                txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-            } else {
-                txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-            }
+            txt_subject_name.text = getItem(position)?.subjectName
+//            txt_gain_data.text = moneySymbol + dataInfoList[position]?.realPainLossesAmount
+//            //왼쪽
+////            txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
+//            txt_sell_date_data.text = dataInfoList[position]?.sellDate
+//            if (dataInfoList[position]?.sellDate == "") {
+//                txt_sell_date_data.text = "-"
+//            }
+//            txt_gain_percent_data.text = "(" + dataInfoList[position]?.gainPercent + ")"
+//            //오른쪽
+//            txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
+//            txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice
+//            txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
+//
+//            var realPainLossesAmountNumber = ""
+//            val realPainLossesAmountSplit =
+//                dataInfoList[position]?.realPainLossesAmount!!.split(",")
+//            for (i in realPainLossesAmountSplit.indices) {
+//                realPainLossesAmountNumber += realPainLossesAmountSplit[i]
+//            }
+//            if (realPainLossesAmountNumber.toDouble() >= 0) {
+//                txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+//                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+//            } else {
+//                txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+//                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+//            }
         }
     }
 
@@ -146,20 +148,22 @@ class IncomeNoteListAdapter(
 //        }
 //
 //    }
-    private fun bindSwipeLayout(holder: ViewHolder, position: Int) {
-        swipeItemManger.bindView(holder.itemView, position)
-        holder.apply {
-            swipeLayout_incomeNote.addSwipeListener(object : SwipeLayout.SwipeListener {
-                override fun onStartOpen(layout: SwipeLayout) {
-                    swipeItemManger.closeAllExcept(layout)
-                }
 
-                override fun onOpen(layout: SwipeLayout) {}
-                override fun onStartClose(layout: SwipeLayout) {}
-                override fun onClose(layout: SwipeLayout) {}
-                override fun onUpdate(layout: SwipeLayout, leftOffset: Int, topOffset: Int) {}
-                override fun onHandRelease(layout: SwipeLayout, xvel: Float, yvel: Float) {}
-            })
+    private fun bindSwipeLayout(holder: ViewHolder, position: Int) {
+//        swipeItemManger.bindView(holder.itemView, position)
+
+        holder.apply {
+//            swipeLayout_incomeNote.addSwipeListener(object : SwipeLayout.SwipeListener {
+//                override fun onStartOpen(layout: SwipeLayout) {
+//                    swipeItemManger.closeAllExcept(layout)
+//                }
+//
+//                override fun onOpen(layout: SwipeLayout) {}
+//                override fun onStartClose(layout: SwipeLayout) {}
+//                override fun onClose(layout: SwipeLayout) {}
+//                override fun onUpdate(layout: SwipeLayout, leftOffset: Int, topOffset: Int) {}
+//                override fun onHandRelease(layout: SwipeLayout, xvel: Float, yvel: Float) {}
+//            })
             txt_edit.setOnClickListener {
                 incomeNotePresenter.onEditButtonClick(position)
                 notifyDataSetChanged()
@@ -178,13 +182,13 @@ class IncomeNoteListAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return dataInfoList.size
-    }
+//    override fun getItemCount(): Int {
+//        return super.getItemCount()
+//    }
 
-    override fun getSwipeLayoutResourceId(position: Int): Int {
-        return R.id.swipeLayout_incomeNote
-    }
+//    override fun getSwipeLayoutResourceId(position: Int): Int {
+//        return R.id.swipeLayout_incomeNote
+//    }
 
 //    fun deleteList(position: Int) {
 //        dataInfoList.removeAt(position)
@@ -206,6 +210,18 @@ class IncomeNoteListAdapter(
 //        return editModeOn
 //    }
     fun closeSwipeLayout() {
-        swipeItemManger.closeAllItems()
+//        swipeItemManger.closeAllItems()
+    }
+
+    companion object{
+        private val DIFF_CALLBACK = object: DiffUtil.ItemCallback<IncomeNoteModel.IncomeNoteList>() {
+            override fun areItemsTheSame(oldItem: IncomeNoteModel.IncomeNoteList, newItem: IncomeNoteModel.IncomeNoteList): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: IncomeNoteModel.IncomeNoteList, newItem: IncomeNoteModel.IncomeNoteList): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

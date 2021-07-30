@@ -39,6 +39,7 @@ import java.security.NoSuchAlgorithmException
 
 
 /**
+ * 디자인 패턴 : MVVM
  * @author 윤재박
  * @since 2021.07
  */

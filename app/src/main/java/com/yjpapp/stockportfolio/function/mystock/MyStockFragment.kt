@@ -24,7 +24,7 @@ import java.util.*
 
 /**
  * 나의 주식 화면
- *
+ * 디자인 패턴 : MVVM
  * @author Yoon Jae-park
  * @since 2021.04
  */

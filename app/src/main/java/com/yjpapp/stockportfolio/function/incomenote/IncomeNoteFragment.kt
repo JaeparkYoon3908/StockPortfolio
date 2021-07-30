@@ -8,22 +8,26 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
+import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 /**
  * 수익노트 화면
- *
+ * 디자인 패턴 : MVP
  * @author Yoon Jae-park
  * @since 2020.08
  */
@@ -63,6 +67,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initLayout()
+        subScribeUI()
     }
 
     override fun onResume() {
@@ -295,5 +300,14 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
     override fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter?) {
         viewBinding.recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
+    }
+
+    private fun subScribeUI(){
+        lifecycleScope.launch {
+            incomeNotePresenter.getIncomeNoteList(mContext).collectLatest {
+                StockLog.d("YJP", "서버 연동 데이터 : ${it}" )
+                incomeNotePresenter.submitData(it)
+            }
+        }
     }
 }

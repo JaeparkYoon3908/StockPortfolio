@@ -2,9 +2,17 @@ package com.yjpapp.stockportfolio.function.incomenote
 
 import android.app.Activity
 import android.content.Context
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.model.IncomeNoteModel
 import com.yjpapp.stockportfolio.util.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
@@ -228,5 +236,14 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     }
     fun closeSwipeLayout() {
         incomeNoteListAdapter?.closeSwipeLayout()
+    }
+
+    fun getIncomeNoteList(context: Context): Flow<PagingData<IncomeNoteModel.IncomeNoteList>> {
+        return incomeNoteInteractor.getIncomeNoteListByPaging(context)
+            .cachedIn(CoroutineScope(Dispatchers.Main))
+    }
+
+    suspend fun submitData(pagingData: PagingData<IncomeNoteModel.IncomeNoteList>){
+        incomeNoteListAdapter?.submitData(pagingData)
     }
 }

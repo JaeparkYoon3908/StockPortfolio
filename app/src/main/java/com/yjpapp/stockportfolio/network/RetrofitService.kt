@@ -29,7 +29,7 @@ interface RetrofitService {
     suspend fun requestPostIncomeNote(@Body incomeNoteModel: IncomeNoteModel)
 
     @GET("/api/income_note/list")
-    suspend fun requestGetIncomeNote(@QueryMap params: HashMap<String, String>): Response<ArrayList<IncomeNoteModel>>
+    suspend fun requestGetIncomeNote(@QueryMap params: HashMap<String, String>): Response<IncomeNoteModel>
 
     @PUT("/api/income_note/list")
     suspend fun requestPutIncomeNote(@Body incomeNoteModel: IncomeNoteModel)

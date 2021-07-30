@@ -18,8 +18,8 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
     enum class BaseServerURL(val url: String) {
-        MY("https://openapi.naver.com"),
-        NAVER("http://112.147.50.202")
+        MY("http://112.147.50.202"),
+        NAVER("https://openapi.naver.com")
     }
     private val TAG = RetrofitClient::class.java.simpleName
     const val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
@@ -103,7 +103,8 @@ object RetrofitClient {
 
     private fun getClientBuilderWithToken(context: Context, chain: Interceptor.Chain): Request.Builder {
         return chain.request().newBuilder()
-            .addHeader("token", "TEST_TOKEN")
+            .addHeader("Authorization", "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Inl1bmphZXBhcmsiLCJleHAiOjE2MjgyNDg1NjUsImVtYWlsIjoiZGJzd29xa3IxMjNAZ21haWwuY29tIiwib3JpZ19pYXQiOjE2Mjc2NDM3NjV9.G0jfGtKFLJnckeRuxUwv201q-Hhqicb8W9HdtHGSPjI")
             .addHeader("Content-Type", "application/json")
+            .addHeader("user-index", "10005")
     }
 }
