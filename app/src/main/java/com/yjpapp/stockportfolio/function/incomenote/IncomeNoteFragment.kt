@@ -15,6 +15,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
+import com.yjpapp.stockportfolio.model.IncomeNoteModel
 import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
@@ -250,7 +251,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         mainFilterDialog.show(childFragmentManager, tag)
     }
 
-    override fun showInputDialog(editMode: Boolean, incomeNoteInfo: IncomeNoteInfo?) {
+    override fun showInputDialog(editMode: Boolean, incomeNoteInfo: IncomeNoteModel.IncomeNoteList?) {
         IncomeNoteInputDialog(mContext, incomeNotePresenter).apply {
             if(editMode){
                 if (!isShowing) {

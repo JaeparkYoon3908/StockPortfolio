@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 
 data class IncomeNoteModel(
-    @SerializedName("pageInfo")
-    var pageInfo: PageInfo,
+    @SerializedName("page_info")
+    var page_info: PageInfo,
     @SerializedName("income_note")
     var income_note: ArrayList<IncomeNoteList>
 ){

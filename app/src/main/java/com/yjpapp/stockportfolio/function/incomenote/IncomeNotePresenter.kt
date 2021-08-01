@@ -36,7 +36,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
     fun onResume() {
         val allIncomeNoteInfo = incomeNoteInteractor.getAllIncomeNoteInfoList()
-        incomeNoteListAdapter = IncomeNoteListAdapter(allIncomeNoteInfo, this)
+        incomeNoteListAdapter = IncomeNoteListAdapter(this)
         incomeNoteView.setAdapter(incomeNoteListAdapter)
     }
 
@@ -46,7 +46,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         incomeNoteView.changeFilterText(filterText)
         if (searchText == null || searchText?.length == 0) {
             val allDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
-            incomeNoteListAdapter?.setDataInfoList(allDataList)
+//            incomeNoteListAdapter?.setDataInfoList(allDataList)
             incomeNoteListAdapter?.notifyDataSetChanged()
         } else {
             onStartSearch(searchText)
@@ -59,7 +59,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         incomeNoteView.changeFilterText(filterText)
         if (searchText == null || searchText?.length == 0) {
             val gainDataList = incomeNoteInteractor.getGainIncomeNoteInfoList()
-            incomeNoteListAdapter?.setDataInfoList(gainDataList)
+//            incomeNoteListAdapter?.setDataInfoList(gainDataList)
             incomeNoteListAdapter?.notifyDataSetChanged()
         } else {
             onStartSearch(searchText)
@@ -72,7 +72,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         incomeNoteView.changeFilterText(filterText)
         if (searchText == null || searchText?.length == 0) {
             val lossDataList = incomeNoteInteractor.getLossIncomeNoteInfoList()
-            incomeNoteListAdapter?.setDataInfoList(lossDataList)
+//            incomeNoteListAdapter?.setDataInfoList(lossDataList)
             incomeNoteListAdapter?.notifyDataSetChanged()
         } else {
             onStartSearch(searchText)
@@ -85,26 +85,31 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         incomeNoteView.showInputDialog(editMode, null)
     }
 
-    fun onInputDialogCompleteClicked(incomeNoteInfo: IncomeNoteInfo) {
+    fun onInputDialogCompleteClicked(context: Context, incomeNoteList: IncomeNoteModel.IncomeNoteList?) {
         //id 설정
-        incomeNoteInfo.id = incomeNoteId
+        incomeNoteList?.id = incomeNoteId
 
         if (editMode) {
-            incomeNoteInteractor.updateIncomeNoteInfo(incomeNoteInfo)
-            val newDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
-            incomeNoteListAdapter?.setDataInfoList(newDataList)
-            incomeNoteListAdapter?.notifyDataSetChanged()
-            incomeNoteView.showAddButton()
-            incomeNoteView.scrollTopPosition(newDataList.size - 1)
-            incomeNoteView.bindTotalGainData()
+//            incomeNoteInteractor.updateIncomeNoteInfo(incomeNoteInfo)
+            CoroutineScope(Dispatchers.IO).launch {
+                incomeNoteInteractor.requestPutIncomeNote(context, incomeNoteList)
+
+            }
+//                val newDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+//                            incomeNoteListAdapter?.setDataInfoList(newDataList)
+//                incomeNoteListAdapter?.notifyDataSetChanged()
+//                incomeNoteView.showAddButton()
+//                incomeNoteView.scrollTopPosition(newDataList.size - 1)
+//                incomeNoteView.bindTotalGainData()
+
         } else {
-            incomeNoteInteractor.insertIncomeNoteInfo(incomeNoteInfo)
-            val newDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
-            incomeNoteListAdapter?.setDataInfoList(newDataList)
-            incomeNoteListAdapter?.notifyItemInserted(incomeNoteListAdapter?.itemCount!! - 1)
-            incomeNoteView.scrollTopPosition(newDataList.size - 1)
-            incomeNoteView.showAddButton()
-            incomeNoteView.bindTotalGainData()
+//            incomeNoteInteractor.insertIncomeNoteInfo(incomeNoteInfo)
+//            val newDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
+//            incomeNoteListAdapter?.setDataInfoList(newDataList)
+//            incomeNoteListAdapter?.notifyItemInserted(incomeNoteListAdapter?.itemCount!! - 1)
+//            incomeNoteView.scrollTopPosition(newDataList.size - 1)
+//            incomeNoteView.showAddButton()
+//            incomeNoteView.bindTotalGainData()
         }
     }
 
@@ -116,20 +121,28 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         }
     }
 
-    fun onEditButtonClick(position: Int) {
-        editMode = true
-        incomeNoteView.showAddButton()
-        incomeNoteId = incomeNoteInteractor.getAllIncomeNoteInfoList()[position]!!.id
-        val incomeNoteInfo = incomeNoteInteractor.getIncomeNoteInfo(position)
-        incomeNoteView.showInputDialog(editMode, incomeNoteInfo!!)
+    fun onEditButtonClick(incomeNoteList: IncomeNoteModel.IncomeNoteList?) {
+        incomeNoteList?.let {
+            editMode = true
+            incomeNoteView.showAddButton()
+            incomeNoteId = it.id
+            //        val incomeNoteInfo = incomeNoteInteractor.getIncomeNoteInfo(position)
+            incomeNoteView.showInputDialog(editMode, incomeNoteList)
+        }
     }
 
-    fun onDeleteButtonClick(id: Int) {
-        incomeNoteInteractor.deleteIncomeNoteInfo(id)
-        val allIncomeNoteInfo = incomeNoteInteractor.getAllIncomeNoteInfoList()
-        incomeNoteView.bindTotalGainData()
-        if (allIncomeNoteInfo.size == 0) {
-            incomeNoteView.showAddButton()
+    suspend fun onDeleteButtonClick(context: Context, id: Int) {
+//        incomeNoteInteractor.deleteIncomeNoteInfo(id)
+//        val allIncomeNoteInfo = incomeNoteInteractor.getAllIncomeNoteInfoList()
+//        incomeNoteView.bindTotalGainData()
+//        if (allIncomeNoteInfo.size == 0) {
+//            incomeNoteView.showAddButton()
+//        }
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = incomeNoteInteractor.requestDeleteIncomeNote(context, id)
+            if (result!!.isSuccessful) {
+
+            }
         }
     }
 
@@ -180,7 +193,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
             when (filterType) {
                 FILTER_TYPE_ALL -> {
-                    incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
+//                    incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
                 }
                 FILTER_TYPE_GAIN -> {
                     filteredIncomeNoteList.forEach { incomeNoteInfo ->
@@ -190,7 +203,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                             filteredIncomeNoteList.remove(incomeNoteInfo)
                         }
                     }
-                    incomeNoteListAdapter?.setDataInfoList(filteredIncomeNoteList)
+//                    incomeNoteListAdapter?.setDataInfoList(filteredIncomeNoteList)
                 }
 
                 FILTER_TYPE_LOSS -> {
@@ -203,10 +216,10 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                         }
                     }
 
-                    incomeNoteListAdapter?.setDataInfoList(filteredIncomeNoteList)
+//                    incomeNoteListAdapter?.setDataInfoList(filteredIncomeNoteList)
                 }
                 else -> {
-                    incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
+//                    incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
                 }
             }
         }
@@ -215,20 +228,20 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
             when (filterType) {
                 FILTER_TYPE_ALL -> {
                     val allIncomeNoteList = incomeNoteInteractor.getAllIncomeNoteInfoList()
-                    incomeNoteListAdapter?.setDataInfoList(allIncomeNoteList)
+//                    incomeNoteListAdapter?.setDataInfoList(allIncomeNoteList)
                 }
                 FILTER_TYPE_GAIN -> {
                     val gainIncomeNoteList = incomeNoteInteractor.getGainIncomeNoteInfoList()
-                    incomeNoteListAdapter?.setDataInfoList(gainIncomeNoteList)
+//                    incomeNoteListAdapter?.setDataInfoList(gainIncomeNoteList)
                 }
 
                 FILTER_TYPE_LOSS -> {
                     val lossIncomeNoteList = incomeNoteInteractor.getLossIncomeNoteInfoList()
-                    incomeNoteListAdapter?.setDataInfoList(lossIncomeNoteList)
+//                    incomeNoteListAdapter?.setDataInfoList(lossIncomeNoteList)
                 }
                 else -> {
                     val allIncomeNoteList = incomeNoteInteractor.getAllIncomeNoteInfoList()
-                    incomeNoteListAdapter?.setDataInfoList(allIncomeNoteList)
+//                    incomeNoteListAdapter?.setDataInfoList(allIncomeNoteList)
                 }
             }
         }

@@ -4,6 +4,7 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelable
 import com.yjpapp.stockportfolio.localdb.sqlte.data.MyStockInfo
 import com.yjpapp.stockportfolio.model.IncomeNoteModel
 import com.yjpapp.stockportfolio.model.LoginUserInfo
+import com.yjpapp.stockportfolio.model.ResponseStatus
 import com.yjpapp.stockportfolio.model.SNSLoginRequest
 import retrofit2.Response
 import retrofit2.http.*
@@ -26,14 +27,14 @@ interface RetrofitService {
      * 수익노트 API
      */
     @POST("/api/income_note/list")
-    suspend fun requestPostIncomeNote(@Body incomeNoteModel: IncomeNoteModel)
+    suspend fun requestPostIncomeNote(@Body incomeNoteModel: IncomeNoteModel): Response<ResponseStatus>
 
     @GET("/api/income_note/list")
     suspend fun requestGetIncomeNote(@QueryMap params: HashMap<String, String>): Response<IncomeNoteModel>
 
     @PUT("/api/income_note/list")
-    suspend fun requestPutIncomeNote(@Body incomeNoteModel: IncomeNoteModel)
+    suspend fun requestPutIncomeNote(@Body incomeNoteModel: IncomeNoteModel.IncomeNoteList?): Response<ResponseStatus>
 
     @DELETE("/api/income_note/list")
-    suspend fun requestDeleteIncomeNote(@Body id: Int)
+    suspend fun requestDeleteIncomeNote(@Body id: Int): Response<ResponseStatus>
 }

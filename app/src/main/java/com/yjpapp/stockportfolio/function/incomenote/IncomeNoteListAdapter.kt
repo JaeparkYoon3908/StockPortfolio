@@ -14,6 +14,9 @@ import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.model.IncomeNoteModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.sql.SQLException
 import java.util.*
 
@@ -24,22 +27,14 @@ import java.util.*
  * @since 2020.08
  */
 class IncomeNoteListAdapter(
-    val data: ArrayList<IncomeNoteInfo?>?,
     private val incomeNotePresenter: IncomeNotePresenter
 ) : PagingDataAdapter<IncomeNoteModel.IncomeNoteList, IncomeNoteListAdapter.ViewHolder>(DIFF_CALLBACK) {
     private lateinit var mContext: Context
-    private var dataInfoList: MutableList<IncomeNoteInfo?> = mutableListOf()
 
     //    private var editModeOn: Boolean = false
 //    private var allCheckClick: Boolean = false
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
 //    private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
-
-    init {
-        if (data != null) {
-            this.dataInfoList = data
-        }
-    }
 
     inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
         val txt_edit = view.findViewById<TextView>(R.id.txt_edit)
@@ -109,32 +104,33 @@ class IncomeNoteListAdapter(
 
             //상단 데이터
             txt_subject_name.text = getItem(position)?.subjectName
-//            txt_gain_data.text = moneySymbol + dataInfoList[position]?.realPainLossesAmount
-//            //왼쪽
-////            txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
-//            txt_sell_date_data.text = dataInfoList[position]?.sellDate
-//            if (dataInfoList[position]?.sellDate == "") {
-//                txt_sell_date_data.text = "-"
-//            }
-//            txt_gain_percent_data.text = "(" + dataInfoList[position]?.gainPercent + ")"
-//            //오른쪽
-//            txt_purchase_price_data.text = moneySymbol + dataInfoList[position]?.purchasePrice
-//            txt_sell_price_data.text = moneySymbol + dataInfoList[position]?.sellPrice
-//            txt_sell_count_data.text = dataInfoList[position]?.sellCount.toString()
-//
-//            var realPainLossesAmountNumber = ""
-//            val realPainLossesAmountSplit =
-//                dataInfoList[position]?.realPainLossesAmount!!.split(",")
-//            for (i in realPainLossesAmountSplit.indices) {
-//                realPainLossesAmountNumber += realPainLossesAmountSplit[i]
-//            }
-//            if (realPainLossesAmountNumber.toDouble() >= 0) {
-//                txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-//                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-//            } else {
-//                txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-//                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-//            }
+            txt_gain_data.text = moneySymbol + getItem(position)?.realPainLossesAmount
+
+            //왼쪽
+//            txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
+            txt_sell_date_data.text = getItem(position)?.sellDate
+            if (getItem(position)?.sellDate == "") {
+                txt_sell_date_data.text = "-"
+            }
+            txt_gain_percent_data.text = "(${getItem(position)?.gainPercent})"
+            //오른쪽
+            txt_purchase_price_data.text = moneySymbol + getItem(position)?.purchasePrice
+            txt_sell_price_data.text = moneySymbol + getItem(position)?.sellPrice
+            txt_sell_count_data.text = getItem(position)?.sellCount.toString()
+
+            var realPainLossesAmountNumber = ""
+            val realPainLossesAmountSplit =
+                getItem(position)?.realPainLossesAmount!!.split(",")
+            for (i in realPainLossesAmountSplit.indices) {
+                realPainLossesAmountNumber += realPainLossesAmountSplit[i]
+            }
+            if (realPainLossesAmountNumber.toDouble() >= 0) {
+                txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+            } else {
+                txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+            }
         }
     }
 
@@ -165,14 +161,16 @@ class IncomeNoteListAdapter(
 //                override fun onHandRelease(layout: SwipeLayout, xvel: Float, yvel: Float) {}
 //            })
             txt_edit.setOnClickListener {
-                incomeNotePresenter.onEditButtonClick(position)
+                incomeNotePresenter.onEditButtonClick(getItem(position))
                 notifyDataSetChanged()
             }
             txt_delete.setOnClickListener {
                 try {
-                    val deleteIncomeNoteInfoId = dataInfoList[position]!!.id
-                    incomeNotePresenter.onDeleteButtonClick(deleteIncomeNoteInfoId)
-                    dataInfoList.removeAt(position)
+                    val deleteIncomeNoteInfoId = getItem(position)?.id!!
+                    CoroutineScope(Dispatchers.IO).launch {
+                        incomeNotePresenter.onDeleteButtonClick(mContext, getItem(position)?.id!!)
+                    }
+//                    dataInfoList.removeAt(position)
                     notifyItemRemoved(position)
                     notifyItemRangeRemoved(position, itemCount)
                 } catch (e: SQLException) {
@@ -197,10 +195,6 @@ class IncomeNoteListAdapter(
 //    fun getDataInfoList(): MutableList<IncomeNoteInfo?> {
 //        return dataInfoList
 //    }
-
-    fun setDataInfoList(incomeNoteInfoList: MutableList<IncomeNoteInfo?>) {
-        this.dataInfoList = incomeNoteInfoList
-    }
 
 //    fun setEditMode(isEditMode: Boolean) {
 //        this.editModeOn = isEditMode

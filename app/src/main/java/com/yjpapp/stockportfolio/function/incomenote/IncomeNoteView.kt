@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.function.incomenote
 
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.model.IncomeNoteModel
 
 /**
  * IncomeNoteFragment의 View
@@ -17,7 +18,7 @@ interface IncomeNoteView {
 
     fun showFilterDialog()
 
-    fun showInputDialog(editMode: Boolean, incomeNoteInfo: IncomeNoteInfo?)
+    fun showInputDialog(editMode: Boolean, incomeNoteInfo: IncomeNoteModel.IncomeNoteList?)
 
     fun hideAddButton()
 

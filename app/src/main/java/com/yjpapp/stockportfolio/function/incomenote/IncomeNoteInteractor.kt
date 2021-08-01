@@ -234,7 +234,7 @@ class IncomeNoteInteractor: BaseInteractor() {
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteIncomeNote(id)
 
 
-    suspend fun requestPutIncomeNote(context: Context, incomeNoteList: IncomeNoteModel) =
+    suspend fun requestPutIncomeNote(context: Context, incomeNoteList: IncomeNoteModel.IncomeNoteList?) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(incomeNoteList)
 
     suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>) =
