@@ -227,7 +227,7 @@ class IncomeNoteInteractor: BaseInteractor() {
     }
 
     //TODO 네트워크로 전환 예정
-    suspend fun requestPostIncomeNote(context: Context, incomeNoteModel: IncomeNoteModel) =
+    suspend fun requestPostIncomeNote(context: Context, incomeNoteModel: IncomeNoteModel.IncomeNoteList?) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(incomeNoteModel)
 
     suspend fun requestDeleteIncomeNote(context: Context, id: Int) =

@@ -9,6 +9,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.model.IncomeNoteModel
 import com.yjpapp.stockportfolio.util.Utils
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -92,8 +93,12 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         if (editMode) {
 //            incomeNoteInteractor.updateIncomeNoteInfo(incomeNoteInfo)
             CoroutineScope(Dispatchers.IO).launch {
-                incomeNoteInteractor.requestPutIncomeNote(context, incomeNoteList)
-
+                val result = incomeNoteInteractor.requestPutIncomeNote(context, incomeNoteList)
+                result?.let {
+                    if (it.isSuccessful) {
+                        Toasty.normal(context, "수정완료")
+                    }
+                }
             }
 //                val newDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
 //                            incomeNoteListAdapter?.setDataInfoList(newDataList)
@@ -103,6 +108,14 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 //                incomeNoteView.bindTotalGainData()
 
         } else {
+            CoroutineScope(Dispatchers.IO).launch {
+                val result = incomeNoteInteractor.requestPostIncomeNote(context, incomeNoteList)
+                result?.let {
+                    if (it.isSuccessful) {
+                        Toasty.info(context, "추가완료")
+                    }
+                }
+            }
 //            incomeNoteInteractor.insertIncomeNoteInfo(incomeNoteInfo)
 //            val newDataList = incomeNoteInteractor.getAllIncomeNoteInfoList()
 //            incomeNoteListAdapter?.setDataInfoList(newDataList)
