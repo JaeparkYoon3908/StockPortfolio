@@ -19,6 +19,7 @@ import com.yjpapp.stockportfolio.model.IncomeNoteModel
 import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
+import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -301,6 +302,10 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
     override fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter?) {
         viewBinding.recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
+    }
+
+    override fun showToast(toast: Toast) {
+        toast.show()
     }
 
     private fun subScribeUI(){

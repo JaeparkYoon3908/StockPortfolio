@@ -96,7 +96,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                 val result = incomeNoteInteractor.requestPutIncomeNote(context, incomeNoteList)
                 result?.let {
                     if (it.isSuccessful) {
-                        Toasty.normal(context, "수정완료")
+                        incomeNoteView.showToast(Toasty.normal(context, "수정완료"))
                     }
                 }
             }
@@ -112,7 +112,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                 val result = incomeNoteInteractor.requestPostIncomeNote(context, incomeNoteList)
                 result?.let {
                     if (it.isSuccessful) {
-                        Toasty.info(context, "추가완료")
+                        incomeNoteView.showToast(Toasty.info(context, "추가완료"))
                     }
                 }
             }

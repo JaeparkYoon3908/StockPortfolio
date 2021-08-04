@@ -1,7 +1,8 @@
 package com.yjpapp.stockportfolio.function.incomenote
 
-import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
+import android.widget.Toast
 import com.yjpapp.stockportfolio.model.IncomeNoteModel
+import es.dmoral.toasty.Toasty
 
 /**
  * IncomeNoteFragment의 View
@@ -25,5 +26,7 @@ interface IncomeNoteView {
     fun scrollTopPosition(topPosition: Int)
 
     fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter?)
+
+    fun showToast(toast: Toast)
 
 }
