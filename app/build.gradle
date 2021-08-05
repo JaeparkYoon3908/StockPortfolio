@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
 
     implementation 'com.github.Ibotta:Supported-Picker-Dialogs:1.0.0'
-    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+    implementation project(':swipeLayout')
 
     //Room
     implementation "androidx.room:room-runtime:2.3.0"
