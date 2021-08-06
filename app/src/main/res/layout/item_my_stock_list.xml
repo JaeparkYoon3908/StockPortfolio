@@ -30,7 +30,7 @@
 
     </data>
 
-    <com.daimajia.swipe.SwipeLayout
+    <com.yjpapp.swipelayout.SwipeLayout
         android:id="@+id/swipeLayoutMyStock"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_108dp"
@@ -329,5 +329,5 @@
                     tools:text="(10%)" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.daimajia.swipe.SwipeLayout>
+    </com.yjpapp.swipelayout.SwipeLayout>
 </layout>

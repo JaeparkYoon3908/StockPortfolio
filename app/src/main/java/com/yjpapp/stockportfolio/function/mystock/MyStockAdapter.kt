@@ -4,15 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.daimajia.swipe.SwipeLayout
-import com.daimajia.swipe.SwipeLayout.SwipeListener
-import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
-import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl
-import com.daimajia.swipe.interfaces.SwipeAdapterInterface
+
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
 import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
+import com.yjpapp.swipelayout.SwipeLayout
+import com.yjpapp.swipelayout.adapters.RecyclerSwipeAdapter
+import com.yjpapp.swipelayout.implments.SwipeItemMangerImpl
+import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface
 
 
 /**
@@ -23,7 +23,7 @@ import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
  */
 class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): RecyclerSwipeAdapter<MyStockAdapter.ViewHolder>(), SwipeAdapterInterface {
     private lateinit var adapterCallBack: AdapterCallBack
-    private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
+    private val swipeItemManger = SwipeItemMangerImpl(this)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         DataBindingUtil.inflate<ItemMyStockListBinding>(
@@ -36,7 +36,6 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        swipeItemManger.bindView(holder.itemView, position)
         holder.mBinding.apply {
             //dataBinding
             myStockEntity = myStockList[position]
@@ -44,7 +43,7 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
             pos = position
             moneySymbol = StockPortfolioConfig.moneySymbol
             //init
-            swipeLayoutMyStock.addSwipeListener(object : SwipeListener {
+            swipeLayoutMyStock.addSwipeListener(object : SwipeLayout.SwipeListener {
                 override fun onStartOpen(layout: SwipeLayout) {
                     swipeItemManger.closeAllExcept(layout)
                 }

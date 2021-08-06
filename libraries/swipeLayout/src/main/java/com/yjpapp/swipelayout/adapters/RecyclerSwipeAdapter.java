@@ -1,5 +1,6 @@
 package com.yjpapp.swipelayout.adapters;
 
+import android.view.View;
 import android.view.ViewGroup;
 
 

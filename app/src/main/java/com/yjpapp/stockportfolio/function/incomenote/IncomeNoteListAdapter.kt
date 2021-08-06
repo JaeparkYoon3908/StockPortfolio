@@ -5,15 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.daimajia.swipe.SwipeLayout
-import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
-import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.model.IncomeNoteModel
+import com.yjpapp.swipelayout.SwipeLayout
+import com.yjpapp.swipelayout.adapters.PagingSwipeAdapter
+import com.yjpapp.swipelayout.implments.SwipeItemMangerImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,13 +26,11 @@ import java.util.*
  */
 class IncomeNoteListAdapter(
     private val incomeNotePresenter: IncomeNotePresenter
-) : PagingDataAdapter<IncomeNoteModel.IncomeNoteList, IncomeNoteListAdapter.ViewHolder>(DIFF_CALLBACK) {
+) : PagingSwipeAdapter<IncomeNoteModel.IncomeNoteList, IncomeNoteListAdapter.ViewHolder>(DIFF_CALLBACK) {
     private lateinit var mContext: Context
 
-    //    private var editModeOn: Boolean = false
-//    private var allCheckClick: Boolean = false
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
-//    private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
+    private val swipeItemManger = SwipeItemMangerImpl(this)
 
     inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
         val txt_edit = view.findViewById<TextView>(R.id.txt_edit)
@@ -48,9 +44,7 @@ class IncomeNoteListAdapter(
         val txt_sell_price_data = view.findViewById<TextView>(R.id.txt_sell_price_data)
         val txt_sell_count_data = view.findViewById<TextView>(R.id.txt_sell_count_data)
 
-        //        val lin_EditMode = view.findViewById<LinearLayout>(R.id.lin_EditMode)
         val swipeLayout_incomeNote = view.findViewById<SwipeLayout>(R.id.swipeLayout_incomeNote)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -63,34 +57,8 @@ class IncomeNoteListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 아이템을 길게 눌렀을 때 편집모드로 전환.
         holder.apply {
-//            itemView.setOnLongClickListener {
-//                Utils.runVibration(mContext, 100)
-//                editModeOn = !isEditMode() //edit 모드가 꺼져있으면 키고, 켜져 있으면 끈다.
-//                notifyDataSetChanged()
-//                incomeNotePresenter.onAdapterItemLongClick(editModeOn)
-//                return@setOnLongClickListener true
-//            }
-
-//            txt_edit.setOnClickListener {
-//                incomeNotePresenter.onEditButtonClick(position)
-//                setEditMode(false)
-//                notifyDataSetChanged()
-//            }
-//            txt_delete.setOnClickListener {
-//                try {
-//                    val deleteIncomeNoteInfoId = dataInfoList[position]!!.id
-//                    incomeNotePresenter.onDeleteButtonClick(deleteIncomeNoteInfoId)
-//                    dataInfoList.removeAt(position)
-//                    notifyItemRemoved(position)
-//                    notifyItemRangeRemoved(position, itemCount)
-//                } catch (e: SQLException) {
-//                    e.printStackTrace()
-//                }
-//            }
             bindDataList(holder, position)
-//            bindEditMode(holder)
             bindSwipeLayout(holder, position)
-
         }
     }
 
@@ -134,43 +102,29 @@ class IncomeNoteListAdapter(
         }
     }
 
-    //    private fun bindEditMode(holder: ViewHolder) {
-//        holder.apply {
-//            if (editModeOn) {
-//                lin_EditMode.visibility = View.VISIBLE
-//            } else {
-//                lin_EditMode.visibility = View.GONE
-//            }
-//        }
-//
-//    }
-
     private fun bindSwipeLayout(holder: ViewHolder, position: Int) {
-//        swipeItemManger.bindView(holder.itemView, position)
+        swipeItemManger.bind(holder.itemView, position)
 
         holder.apply {
-//            swipeLayout_incomeNote.addSwipeListener(object : SwipeLayout.SwipeListener {
-//                override fun onStartOpen(layout: SwipeLayout) {
-//                    swipeItemManger.closeAllExcept(layout)
-//                }
-//
-//                override fun onOpen(layout: SwipeLayout) {}
-//                override fun onStartClose(layout: SwipeLayout) {}
-//                override fun onClose(layout: SwipeLayout) {}
-//                override fun onUpdate(layout: SwipeLayout, leftOffset: Int, topOffset: Int) {}
-//                override fun onHandRelease(layout: SwipeLayout, xvel: Float, yvel: Float) {}
-//            })
+            swipeLayout_incomeNote.addSwipeListener(object : SwipeLayout.SwipeListener {
+                override fun onStartOpen(layout: SwipeLayout) {
+                    swipeItemManger.closeAllExcept(layout)
+                }
+                override fun onOpen(layout: SwipeLayout) {}
+                override fun onStartClose(layout: SwipeLayout) {}
+                override fun onClose(layout: SwipeLayout) {}
+                override fun onUpdate(layout: SwipeLayout, leftOffset: Int, topOffset: Int) {}
+                override fun onHandRelease(layout: SwipeLayout, xvel: Float, yvel: Float) {}
+            })
             txt_edit.setOnClickListener {
                 incomeNotePresenter.onEditButtonClick(getItem(position))
                 notifyDataSetChanged()
             }
             txt_delete.setOnClickListener {
                 try {
-                    val deleteIncomeNoteInfoId = getItem(position)?.id!!
                     CoroutineScope(Dispatchers.IO).launch {
                         incomeNotePresenter.onDeleteButtonClick(mContext, getItem(position)?.id!!)
                     }
-//                    dataInfoList.removeAt(position)
                     notifyItemRemoved(position)
                     notifyItemRangeRemoved(position, itemCount)
                 } catch (e: SQLException) {
@@ -180,31 +134,12 @@ class IncomeNoteListAdapter(
         }
     }
 
-//    override fun getItemCount(): Int {
-//        return super.getItemCount()
-//    }
+    override fun getSwipeLayoutResourceId(position: Int): Int {
+        return R.id.swipeLayout_incomeNote
+    }
 
-//    override fun getSwipeLayoutResourceId(position: Int): Int {
-//        return R.id.swipeLayout_incomeNote
-//    }
-
-//    fun deleteList(position: Int) {
-//        dataInfoList.removeAt(position)
-//    }
-//
-//    fun getDataInfoList(): MutableList<IncomeNoteInfo?> {
-//        return dataInfoList
-//    }
-
-//    fun setEditMode(isEditMode: Boolean) {
-//        this.editModeOn = isEditMode
-//    }
-
-    //    fun isEditMode(): Boolean {
-//        return editModeOn
-//    }
     fun closeSwipeLayout() {
-//        swipeItemManger.closeAllItems()
+        swipeItemManger.closeAllItems()
     }
 
     companion object{
