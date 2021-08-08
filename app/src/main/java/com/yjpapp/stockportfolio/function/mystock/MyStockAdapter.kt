@@ -12,6 +12,7 @@ import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.RecyclerSwipeAdapter
 import com.yjpapp.swipelayout.implments.SwipeItemMangerImpl
+import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
 import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface
 
 
@@ -23,7 +24,7 @@ import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface
  */
 class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): RecyclerSwipeAdapter<MyStockAdapter.ViewHolder>(), SwipeAdapterInterface {
     private lateinit var adapterCallBack: AdapterCallBack
-    private val swipeItemManger = SwipeItemMangerImpl(this)
+    private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         DataBindingUtil.inflate<ItemMyStockListBinding>(
@@ -36,6 +37,7 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        swipeItemManger.bindView(holder.itemView, position)
         holder.mBinding.apply {
             //dataBinding
             myStockEntity = myStockList[position]

@@ -103,7 +103,7 @@ object RetrofitClient {
 
     private fun getClientBuilderWithToken(context: Context, chain: Interceptor.Chain): Request.Builder {
         return chain.request().newBuilder()
-            .addHeader("Authorization", "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Inl1bmphZXBhcmsiLCJleHAiOjE2MjgyNDg1NjUsImVtYWlsIjoiZGJzd29xa3IxMjNAZ21haWwuY29tIiwib3JpZ19pYXQiOjE2Mjc2NDM3NjV9.G0jfGtKFLJnckeRuxUwv201q-Hhqicb8W9HdtHGSPjI")
+            .addHeader("Authorization", "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Inl1bmphZXBhcmsiLCJleHAiOjE2MjkwMTIzNDAsImVtYWlsIjoiZGJzd29xa3IxMjNAZ21haWwuY29tIiwib3JpZ19pYXQiOjE2Mjg0MDc1NDB9.AOMp70cV6HDRpcowJKpk1euZfa4QovEAlAu1NcS-LeE")
             .addHeader("Content-Type", "application/json")
             .addHeader("user-index", "10005")
     }

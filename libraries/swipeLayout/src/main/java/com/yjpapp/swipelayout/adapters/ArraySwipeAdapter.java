@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 
 
 import com.yjpapp.swipelayout.SwipeLayout;
+import com.yjpapp.swipelayout.implments.SwipeItemAdapterMangerImpl;
 import com.yjpapp.swipelayout.implments.SwipeItemMangerImpl;
 import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface;
 import com.yjpapp.swipelayout.interfaces.SwipeItemMangerInterface;
@@ -14,9 +15,9 @@ import com.yjpapp.swipelayout.util.Attributes;
 
 import java.util.List;
 
-public abstract class ArraySwipeAdapter<T> extends ArrayAdapter implements SwipeItemMangerInterface, SwipeAdapterInterface {
+public abstract class ArraySwipeAdapter<T> extends ArrayAdapter implements SwipeItemMangerInterface,SwipeAdapterInterface {
 
-    private SwipeItemMangerImpl mItemManger = new SwipeItemMangerImpl(this);
+    private SwipeItemAdapterMangerImpl mItemManger = new SwipeItemAdapterMangerImpl(this);
     {}
     public ArraySwipeAdapter(Context context, int resource) {
         super(context, resource);
@@ -43,14 +44,14 @@ public abstract class ArraySwipeAdapter<T> extends ArrayAdapter implements Swipe
     }
 
     @Override
-    public void notifyDatasetChanged() {
-        super.notifyDataSetChanged();
-    }
-
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        boolean convertViewIsNull = convertView == null;
         View v = super.getView(position, convertView, parent);
-        mItemManger.bind(v, position);
+        if(convertViewIsNull){
+            mItemManger.initialize(v, position);
+        }else{
+            mItemManger.updateConvertView(v, position);
+        }
         return v;
     }
 

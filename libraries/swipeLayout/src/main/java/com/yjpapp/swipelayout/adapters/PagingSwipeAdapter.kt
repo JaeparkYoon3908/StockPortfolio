@@ -5,19 +5,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.implments.SwipeItemMangerImpl
+import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
 import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface
 import com.yjpapp.swipelayout.interfaces.SwipeItemMangerInterface
 import com.yjpapp.swipelayout.util.Attributes
 
 abstract class PagingSwipeAdapter<T : Any, VH : RecyclerView.ViewHolder>(diffCallBack: DiffUtil.ItemCallback<T>) :
     PagingDataAdapter<T, VH>(diffCallBack), SwipeItemMangerInterface, SwipeAdapterInterface {
-    var mItemManger = SwipeItemMangerImpl(this)
+    var mItemManger = SwipeItemRecyclerMangerImpl(this)
 
     abstract override fun onBindViewHolder(viewHolder: VH, position: Int)
-
-    override fun notifyDatasetChanged() {
-        super.notifyDataSetChanged()
-    }
 
     override fun openItem(position: Int) {
         mItemManger.openItem(position)

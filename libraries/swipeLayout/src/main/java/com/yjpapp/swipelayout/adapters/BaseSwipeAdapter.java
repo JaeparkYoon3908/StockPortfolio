@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.yjpapp.swipelayout.SwipeLayout;
+import com.yjpapp.swipelayout.implments.SwipeItemAdapterMangerImpl;
 import com.yjpapp.swipelayout.implments.SwipeItemMangerImpl;
 import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface;
 import com.yjpapp.swipelayout.interfaces.SwipeItemMangerInterface;
@@ -14,10 +15,10 @@ import java.util.List;
 
 public abstract class BaseSwipeAdapter extends BaseAdapter implements SwipeItemMangerInterface, SwipeAdapterInterface {
 
-    protected SwipeItemMangerImpl mItemManger = new SwipeItemMangerImpl(this);
+    protected SwipeItemAdapterMangerImpl mItemManger = new SwipeItemAdapterMangerImpl(this);
 
     /**
-     * return the {@link com.yjpapp.swipelayout.SwipeLayout} resource id, int the view item.
+     * return the {@link com.daimajia.swipe.SwipeLayout} resource id, int the view item.
      * @param position
      * @return
      */
@@ -41,19 +42,16 @@ public abstract class BaseSwipeAdapter extends BaseAdapter implements SwipeItemM
      */
     public abstract void fillValues(int position, View convertView);
 
-    @Override
-    public void notifyDatasetChanged() {
-        super.notifyDataSetChanged();
-    }
-
 
     @Override
     public final View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if(v == null){
             v = generateView(position, parent);
+            mItemManger.initialize(v, position);
+        }else{
+            mItemManger.updateConvertView(v, position);
         }
-        mItemManger.bind(v, position);
         fillValues(position, v);
         return v;
     }

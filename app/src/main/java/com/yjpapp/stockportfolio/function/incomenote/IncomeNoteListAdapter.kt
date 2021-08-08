@@ -11,7 +11,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.IncomeNoteModel
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.PagingSwipeAdapter
-import com.yjpapp.swipelayout.implments.SwipeItemMangerImpl
+import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,11 +26,13 @@ import java.util.*
  */
 class IncomeNoteListAdapter(
     private val incomeNotePresenter: IncomeNotePresenter
-) : PagingSwipeAdapter<IncomeNoteModel.IncomeNoteList, IncomeNoteListAdapter.ViewHolder>(DIFF_CALLBACK) {
+) : PagingSwipeAdapter<IncomeNoteModel.IncomeNoteList, IncomeNoteListAdapter.ViewHolder>(
+    DIFF_CALLBACK
+) {
     private lateinit var mContext: Context
 
     private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
-    private val swipeItemManger = SwipeItemMangerImpl(this)
+    private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
 
     inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
         val txt_edit = view.findViewById<TextView>(R.id.txt_edit)
@@ -103,13 +105,14 @@ class IncomeNoteListAdapter(
     }
 
     private fun bindSwipeLayout(holder: ViewHolder, position: Int) {
-        swipeItemManger.bind(holder.itemView, position)
+        swipeItemManger.bindView(holder.itemView, position)
 
         holder.apply {
             swipeLayout_incomeNote.addSwipeListener(object : SwipeLayout.SwipeListener {
                 override fun onStartOpen(layout: SwipeLayout) {
                     swipeItemManger.closeAllExcept(layout)
                 }
+
                 override fun onOpen(layout: SwipeLayout) {}
                 override fun onStartClose(layout: SwipeLayout) {}
                 override fun onClose(layout: SwipeLayout) {}
@@ -142,15 +145,22 @@ class IncomeNoteListAdapter(
         swipeItemManger.closeAllItems()
     }
 
-    companion object{
-        private val DIFF_CALLBACK = object: DiffUtil.ItemCallback<IncomeNoteModel.IncomeNoteList>() {
-            override fun areItemsTheSame(oldItem: IncomeNoteModel.IncomeNoteList, newItem: IncomeNoteModel.IncomeNoteList): Boolean {
-                return oldItem.id == newItem.id
-            }
+    companion object {
+        private val DIFF_CALLBACK =
+            object : DiffUtil.ItemCallback<IncomeNoteModel.IncomeNoteList>() {
+                override fun areItemsTheSame(
+                    oldItem: IncomeNoteModel.IncomeNoteList,
+                    newItem: IncomeNoteModel.IncomeNoteList
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
 
-            override fun areContentsTheSame(oldItem: IncomeNoteModel.IncomeNoteList, newItem: IncomeNoteModel.IncomeNoteList): Boolean {
-                return oldItem == newItem
+                override fun areContentsTheSame(
+                    oldItem: IncomeNoteModel.IncomeNoteList,
+                    newItem: IncomeNoteModel.IncomeNoteList
+                ): Boolean {
+                    return oldItem == newItem
+                }
             }
-        }
     }
 }

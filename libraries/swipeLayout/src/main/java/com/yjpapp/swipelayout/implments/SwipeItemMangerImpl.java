@@ -1,158 +1,211 @@
 package com.yjpapp.swipelayout.implments;
 
 import android.view.View;
+import android.widget.BaseAdapter;
 
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.yjpapp.swipelayout.SimpleSwipeListener;
 import com.yjpapp.swipelayout.SwipeLayout;
 import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface;
 import com.yjpapp.swipelayout.interfaces.SwipeItemMangerInterface;
-import com.yjpapp.swipelayout.util.Attributes;
+import com.yjpapp.swipelayout.util.Attributes.Mode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 /**
  * SwipeItemMangerImpl is a helper class to help all the adapters to maintain open status.
  */
-public class SwipeItemMangerImpl implements SwipeItemMangerInterface {
+public abstract class SwipeItemMangerImpl implements SwipeItemMangerInterface {
+    private Mode mode;
+    public final int INVALID_POSITION;
+    protected int mOpenPosition;
+    protected Set<Integer> mOpenPositions;
+    protected Set<SwipeLayout> mShownLayouts;
+    protected BaseAdapter mBaseAdapter;
+    protected RecyclerView.Adapter mRecyclerAdapter;
 
-    private Attributes.Mode mode = Attributes.Mode.Single;
-    public final int INVALID_POSITION = -1;
-
-    protected int mOpenPosition = INVALID_POSITION;
-
-    protected Set<Integer> mOpenPositions = new HashSet<Integer>();
-    protected Set<SwipeLayout> mShownLayouts = new HashSet<SwipeLayout>();
-
-    protected SwipeAdapterInterface swipeAdapterInterface;
-
-    public SwipeItemMangerImpl(SwipeAdapterInterface swipeAdapterInterface) {
-        if (swipeAdapterInterface == null)
-            throw new IllegalArgumentException("SwipeAdapterInterface can not be null");
-
-        this.swipeAdapterInterface = swipeAdapterInterface;
+    public SwipeItemMangerImpl(BaseAdapter adapter) {
+        this.mode = Mode.Single;
+        this.INVALID_POSITION = -1;
+        this.mOpenPosition = -1;
+        this.mOpenPositions = new HashSet();
+        this.mShownLayouts = new HashSet();
+        if (adapter == null) {
+            throw new IllegalArgumentException("Adapter can not be null");
+        } else if (!(adapter instanceof SwipeItemMangerInterface)) {
+            throw new IllegalArgumentException("adapter should implement the SwipeAdapterInterface");
+        } else {
+            this.mBaseAdapter = adapter;
+        }
     }
 
-    public Attributes.Mode getMode() {
-        return mode;
+    public SwipeItemMangerImpl(RecyclerView.Adapter adapter) {
+        this.mode = Mode.Single;
+        this.INVALID_POSITION = -1;
+        this.mOpenPosition = -1;
+        this.mOpenPositions = new HashSet();
+        this.mShownLayouts = new HashSet();
+        if (adapter == null) {
+            throw new IllegalArgumentException("Adapter can not be null");
+        } else if (!(adapter instanceof SwipeItemMangerInterface)) {
+            throw new IllegalArgumentException("adapter should implement the SwipeAdapterInterface");
+        } else {
+            this.mRecyclerAdapter = adapter;
+        }
     }
 
-    public void setMode(Attributes.Mode mode) {
+    public Mode getMode() {
+        return this.mode;
+    }
+
+    public void setMode(Mode mode) {
         this.mode = mode;
-        mOpenPositions.clear();
-        mShownLayouts.clear();
-        mOpenPosition = INVALID_POSITION;
+        this.mOpenPositions.clear();
+        this.mShownLayouts.clear();
+        this.mOpenPosition = -1;
     }
 
-    public void bind(View view, int position) {
-        int resId = swipeAdapterInterface.getSwipeLayoutResourceId(position);
-        SwipeLayout swipeLayout = (SwipeLayout) view.findViewById(resId);
-        if (swipeLayout == null)
-            throw new IllegalStateException("can not find SwipeLayout in target view");
+    public abstract void initialize(View var1, int var2);
 
-        if (swipeLayout.getTag(resId) == null) {
-            OnLayoutListener onLayoutListener = new OnLayoutListener(position);
-            SwipeMemory swipeMemory = new SwipeMemory(position);
-            swipeLayout.addSwipeListener(swipeMemory);
-            swipeLayout.addOnLayoutListener(onLayoutListener);
-            swipeLayout.setTag(resId, new ValueBox(position, swipeMemory, onLayoutListener));
-            mShownLayouts.add(swipeLayout);
+    public abstract void updateConvertView(View var1, int var2);
+
+    public abstract void bindView(View var1, int var2);
+
+    public int getSwipeLayoutId(int position) {
+        if (this.mBaseAdapter != null) {
+            return ((SwipeAdapterInterface)((SwipeAdapterInterface)this.mBaseAdapter)).getSwipeLayoutResourceId(position);
         } else {
-            ValueBox valueBox = (ValueBox) swipeLayout.getTag(resId);
-            valueBox.swipeMemory.setPosition(position);
-            valueBox.onLayoutListener.setPosition(position);
-            valueBox.position = position;
+            return this.mRecyclerAdapter != null ? ((SwipeAdapterInterface)((SwipeAdapterInterface)this.mRecyclerAdapter)).getSwipeLayoutResourceId(position) : -1;
         }
     }
 
-    @Override
     public void openItem(int position) {
-        if (mode == Attributes.Mode.Multiple) {
-            if (!mOpenPositions.contains(position))
-                mOpenPositions.add(position);
+        if (this.mode == Mode.Multiple) {
+            if (!this.mOpenPositions.contains(position)) {
+                this.mOpenPositions.add(position);
+            }
         } else {
-            mOpenPosition = position;
+            this.mOpenPosition = position;
         }
-        swipeAdapterInterface.notifyDatasetChanged();
+
+        if (this.mBaseAdapter != null) {
+            this.mBaseAdapter.notifyDataSetChanged();
+        } else if (this.mRecyclerAdapter != null) {
+            this.mRecyclerAdapter.notifyDataSetChanged();
+        }
+
     }
 
-    @Override
     public void closeItem(int position) {
-        if (mode == Attributes.Mode.Multiple) {
-            mOpenPositions.remove(position);
-        } else {
-            if (mOpenPosition == position)
-                mOpenPosition = INVALID_POSITION;
+        if (this.mode == Mode.Multiple) {
+            this.mOpenPositions.remove(position);
+        } else if (this.mOpenPosition == position) {
+            this.mOpenPosition = -1;
         }
-        swipeAdapterInterface.notifyDatasetChanged();
+
+        if (this.mBaseAdapter != null) {
+            this.mBaseAdapter.notifyDataSetChanged();
+        } else if (this.mRecyclerAdapter != null) {
+            this.mRecyclerAdapter.notifyDataSetChanged();
+        }
+
     }
 
-    @Override
     public void closeAllExcept(SwipeLayout layout) {
-        for (SwipeLayout s : mShownLayouts) {
-            if (s != layout)
+        Iterator i$ = this.mShownLayouts.iterator();
+
+        while(i$.hasNext()) {
+            SwipeLayout s = (SwipeLayout)i$.next();
+            if (s != layout) {
                 s.close();
+            }
         }
+
     }
 
-    @Override
     public void closeAllItems() {
-        if (mode == Attributes.Mode.Multiple) {
-            mOpenPositions.clear();
+        if (this.mode == Mode.Multiple) {
+            this.mOpenPositions.clear();
         } else {
-            mOpenPosition = INVALID_POSITION;
+            this.mOpenPosition = -1;
         }
-        for (SwipeLayout s : mShownLayouts) {
+
+        Iterator i$ = this.mShownLayouts.iterator();
+
+        while(i$.hasNext()) {
+            SwipeLayout s = (SwipeLayout)i$.next();
             s.close();
         }
+
     }
 
-    @Override
     public void removeShownLayouts(SwipeLayout layout) {
-        mShownLayouts.remove(layout);
+        this.mShownLayouts.remove(layout);
     }
 
-    @Override
     public List<Integer> getOpenItems() {
-        if (mode == Attributes.Mode.Multiple) {
-            return new ArrayList<Integer>(mOpenPositions);
-        } else {
-            return Collections.singletonList(mOpenPosition);
-        }
+        return (List)(this.mode == Mode.Multiple ? new ArrayList(this.mOpenPositions) : Arrays.asList(this.mOpenPosition));
     }
 
-    @Override
     public List<SwipeLayout> getOpenLayouts() {
-        return new ArrayList<SwipeLayout>(mShownLayouts);
+        return new ArrayList(this.mShownLayouts);
     }
 
-    @Override
     public boolean isOpen(int position) {
-        if (mode == Attributes.Mode.Multiple) {
-            return mOpenPositions.contains(position);
+        if (this.mode == Mode.Multiple) {
+            return this.mOpenPositions.contains(position);
         } else {
-            return mOpenPosition == position;
+            return this.mOpenPosition == position;
         }
     }
 
-    class ValueBox {
-        OnLayoutListener onLayoutListener;
-        SwipeMemory swipeMemory;
-        int position;
+    class SwipeMemory extends SimpleSwipeListener {
+        private int position;
 
-        ValueBox(int position, SwipeMemory swipeMemory, OnLayoutListener onLayoutListener) {
-            this.swipeMemory = swipeMemory;
-            this.onLayoutListener = onLayoutListener;
+        SwipeMemory(int position) {
+            this.position = position;
+        }
+
+        public void onClose(SwipeLayout layout) {
+            if (SwipeItemMangerImpl.this.mode == Mode.Multiple) {
+                SwipeItemMangerImpl.this.mOpenPositions.remove(this.position);
+            } else {
+                SwipeItemMangerImpl.this.mOpenPosition = -1;
+            }
+
+        }
+
+        public void onStartOpen(SwipeLayout layout) {
+            if (SwipeItemMangerImpl.this.mode == Mode.Single) {
+                SwipeItemMangerImpl.this.closeAllExcept(layout);
+            }
+
+        }
+
+        public void onOpen(SwipeLayout layout) {
+            if (SwipeItemMangerImpl.this.mode == Mode.Multiple) {
+                SwipeItemMangerImpl.this.mOpenPositions.add(this.position);
+            } else {
+                SwipeItemMangerImpl.this.closeAllExcept(layout);
+                SwipeItemMangerImpl.this.mOpenPosition = this.position;
+            }
+
+        }
+
+        public void setPosition(int position) {
             this.position = position;
         }
     }
 
     class OnLayoutListener implements SwipeLayout.OnLayout {
-
         private int position;
 
         OnLayoutListener(int position) {
@@ -163,54 +216,25 @@ public class SwipeItemMangerImpl implements SwipeItemMangerInterface {
             this.position = position;
         }
 
-        @Override
         public void onLayout(SwipeLayout v) {
-            if (isOpen(position)) {
+            if (SwipeItemMangerImpl.this.isOpen(this.position)) {
                 v.open(false, false);
             } else {
                 v.close(false, false);
             }
-        }
 
-    }
-
-    class SwipeMemory extends SimpleSwipeListener {
-
-        private int position;
-
-        SwipeMemory(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public void onClose(SwipeLayout layout) {
-            if (mode == Attributes.Mode.Multiple) {
-                mOpenPositions.remove(position);
-            } else {
-                mOpenPosition = INVALID_POSITION;
-            }
-        }
-
-        @Override
-        public void onStartOpen(SwipeLayout layout) {
-            if (mode == Attributes.Mode.Single) {
-                closeAllExcept(layout);
-            }
-        }
-
-        @Override
-        public void onOpen(SwipeLayout layout) {
-            if (mode == Attributes.Mode.Multiple)
-                mOpenPositions.add(position);
-            else {
-                closeAllExcept(layout);
-                mOpenPosition = position;
-            }
-        }
-
-        public void setPosition(int position) {
-            this.position = position;
         }
     }
 
+    class ValueBox {
+        SwipeItemMangerImpl.OnLayoutListener onLayoutListener;
+        SwipeItemMangerImpl.SwipeMemory swipeMemory;
+        int position;
+
+        ValueBox(int position, SwipeItemMangerImpl.SwipeMemory swipeMemory, SwipeItemMangerImpl.OnLayoutListener onLayoutListener) {
+            this.swipeMemory = swipeMemory;
+            this.onLayoutListener = onLayoutListener;
+            this.position = position;
+        }
+    }
 }
