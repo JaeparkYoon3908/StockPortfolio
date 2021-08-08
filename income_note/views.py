@@ -95,16 +95,15 @@ class IncomeNoteAPI(APIView):
 
         return Response(data=data)
 
-    def delete(self, request):
+class DeleteIncomeNote(APIView):
+    def delete(self, request, income_note_id):
         user_index = request.META.get('HTTP_USER_INDEX')
-        id = request.data.get("id")
-
         if UserInfo.objects.filter(user_index=user_index).exists() is False:
             data = CustomResponse.no_index
             return Response(data=data)
 
         try:
-            income_note = IncomeNote.objects.get(pk=id)
+            income_note = IncomeNote.objects.get(pk=income_note_id)
             income_note.delete()
             data = CustomResponse.ok
             return Response(data=data)
