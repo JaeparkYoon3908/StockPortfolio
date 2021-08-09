@@ -10,6 +10,7 @@ import com.yjpapp.stockportfolio.base.BaseInteractor
 import com.yjpapp.stockportfolio.model.IncomeNoteModel
 import com.yjpapp.stockportfolio.network.RetrofitClient
 import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
+import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.coroutines.flow.Flow
 
@@ -241,36 +242,36 @@ class IncomeNoteInteractor: BaseInteractor() {
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestGetIncomeNote(params)
 
     inner class IncomeNotePagingSource(val context: Context): PagingSource<Int, IncomeNoteModel.IncomeNoteList>() {
+        private val pageSize = "20"
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, IncomeNoteModel.IncomeNoteList> {
             val page = params.key ?: 1
             return try {
                 //TODO 코드 개선하기.
                 val hashMap = HashMap<String, String>()
                 hashMap["page"] = page.toString()
-                hashMap["size"] = params.loadSize.toString()
+                hashMap["size"] = pageSize
                 val data = requestGetIncomeNote(context, hashMap)
                 LoadResult.Page(
                     data = data?.body()?.income_note!!,
                     prevKey = if (page == 1) null else page - 1,
-                    nextKey = if (data.body()?.income_note?.isEmpty()!!) null else page + (params.loadSize / 20)
-                               )
+                    nextKey = if (data.body()?.income_note?.isEmpty()!!) null else page + 1)
             } catch (e: Exception) {
                 return LoadResult.Error(e)
             }
         }
 
         override fun getRefreshKey(state: PagingState<Int, IncomeNoteModel.IncomeNoteList>): Int? {
-            return state.anchorPosition?.let { anchorPosition ->
-                state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
-                    ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
-            }
+//            return state.anchorPosition?.let { anchorPosition ->
+//                state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+//                    ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+//            }
+            return 1
         }
     }
 
     fun getIncomeNoteListByPaging(context: Context): Flow<PagingData<IncomeNoteModel.IncomeNoteList>> {
         return Pager(
             config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { IncomeNotePagingSource(context) }
-                    ).flow
+            pagingSourceFactory = { IncomeNotePagingSource(context) }).flow
     }
 }

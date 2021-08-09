@@ -35,6 +35,7 @@ interface RetrofitService {
     @PUT("/api/income_note/list")
     suspend fun requestPutIncomeNote(@Body incomeNoteModel: IncomeNoteModel.IncomeNoteList?): Response<ResponseStatus>
 
-    @DELETE("/api/income_note/list")
-    suspend fun requestDeleteIncomeNote(@Body id: Int): Response<ResponseStatus>
+    @DELETE("/api/income_note/delete/{id}")
+    suspend fun requestDeleteIncomeNote(@Path("id")id: Int): Response<ResponseStatus>
+
 }

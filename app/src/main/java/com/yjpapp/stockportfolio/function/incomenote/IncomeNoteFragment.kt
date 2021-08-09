@@ -75,7 +75,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
     override fun onResume() {
         super.onResume()
         activity?.invalidateOptionsMenu()
-        incomeNotePresenter.onResume()
     }
 
     override fun onDetach() {

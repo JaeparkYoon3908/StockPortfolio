@@ -42,7 +42,7 @@
     <string name="IncomeNoteFragment_Sell_Date">매도일</string>
     <string name="IncomeNoteFragment_SubjectName">종목명</string>
     <string name="IncomeNoteFragment_SearchBar_Hint">종목명으로 검색하세요.</string>
-    <string name="IncomeNoteFragment_Term">기간별</string>
+    <string name="IncomeNoteFragment_Term">기간</string>
 
     <string name="EditIncomeNoteDialog_SubjectName_Hint">매매한 회사 이름(필수)</string>
     <string name="EditIncomeNoteDialog_Purchase_Date_Hint">매수한 날짜(선택)</string>
