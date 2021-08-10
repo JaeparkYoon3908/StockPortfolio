@@ -112,35 +112,23 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         incomeNotePresenter = IncomeNotePresenter(mContext, this)
 
         viewBinding.apply {
-            svIncomeNoteFragment.setOnQueryTextListener(object :
-                    SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    incomeNotePresenter.onStartSearch(newText)
-                    return false
-                }
-            })
+//            svIncomeNoteFragment.setOnQueryTextListener(object :
+//                    SearchView.OnQueryTextListener {
+//                override fun onQueryTextSubmit(query: String?): Boolean {
+//                    return false
+//                }
+//
+//                override fun onQueryTextChange(newText: String?): Boolean {
+//                    incomeNotePresenter.onStartSearch(newText)
+//                    return false
+//                }
+//            })
             linIncomeNoteFragmentFilter.setOnClickListener(onClickListener)
+            btnDate.setOnClickListener(onClickListener)
             txtTotalRealizationGainsLosses.isSelected = true
             txtTotalRealizationGainsLossesData.isSelected = true
             txtTotalRealizationGainsLossesPercent.isSelected = true
 
-//            toggle.setOnCheckedChangeListener { buttonView, isChecked ->
-//                //종목명 -> 기간별
-//                if(isChecked){
-//                    txtDate.visibility = View.GONE
-//                    svIncomeNoteFragment.visibility = View.VISIBLE
-//                }
-//                //기간별 -> 종목명
-//                else{
-//                    Log.d("YJP", "!isChecked")
-//                    txtDate.visibility = View.VISIBLE
-//                    svIncomeNoteFragment.visibility = View.GONE
-//                }
-//            }
         }
 
         bindTotalGainData()
@@ -154,24 +142,12 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                 startActivity(intent)
             }
 
-//            R.id.txt_IncomeNoteFragment_Edit -> {
-//                activity?.window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
-//                val allIncomeNoteList = incomeNotePresenter.getAllIncomeNoteList()
-//                if (allIncomeNoteList.size > 0) {
-//                    incomeNoteListAdapter?.setEditMode(!incomeNoteListAdapter?.isEditMode()!!)
-//                    incomeNoteListAdapter?.notifyDataSetChanged()
-//                    if(incomeNoteListAdapter?.isEditMode()!!){
-//                        hideAddButton()
-//                    }else{
-//                        showAddButton()
-//                    }
-//                }
-//
+//            R.id.lin_IncomeNoteFragment_Filter -> {
+//                showFilterDialog()
 //            }
-            R.id.lin_IncomeNoteFragment_Filter -> {
-                showFilterDialog()
-//                val intent = Intent(mContext, SMSAuthActivity::class.java)
-//                startActivity(intent)
+
+            R.id.btn_date -> {
+
             }
         }
     }

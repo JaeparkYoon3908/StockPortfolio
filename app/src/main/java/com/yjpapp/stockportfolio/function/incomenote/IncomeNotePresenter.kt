@@ -155,7 +155,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
             filteredIncomeNoteList.addAll(searchIncomeNoteList)
 
             when (filterType) {
-                FILTER_TYPE_ALL -> { //                    incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
+                FILTER_TYPE_ALL -> {
+
                 }
                 FILTER_TYPE_GAIN -> {
                     filteredIncomeNoteList.forEach { incomeNoteInfo ->
@@ -164,9 +165,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                         if (realGainLossesAmountNum < 0) {
                             filteredIncomeNoteList.remove(incomeNoteInfo)
                         }
-                    } //                    incomeNoteListAdapter?.setDataInfoList(filteredIncomeNoteList)
+                    }
                 }
-
                 FILTER_TYPE_LOSS -> {
                     filteredIncomeNoteList.forEach { incomeNoteInfo -> //실현손익
                         val realGainLossesAmount = incomeNoteInfo?.realPainLossesAmount!!
@@ -176,9 +176,9 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                         }
                     }
 
-                    //                    incomeNoteListAdapter?.setDataInfoList(filteredIncomeNoteList)
                 }
-                else -> { //                    incomeNoteListAdapter?.setDataInfoList(searchIncomeNoteList)
+                else -> {
+
                 }
             }
         } //검색을 하다가 모두 지웠을 때 FilterType에 따라 보여줌.

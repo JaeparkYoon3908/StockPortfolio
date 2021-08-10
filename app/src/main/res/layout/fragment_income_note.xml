@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_IncomeNoteFragment_TotalGainLosses"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_40dp"
+        android:layout_height="@dimen/common_60dp"
         android:layout_gravity="top"
         android:paddingStart="@dimen/common_15dp"
         android:paddingEnd="@dimen/common_15dp"
@@ -103,7 +103,7 @@
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/common_50dp"
+                android:layout_height="@dimen/common_60dp"
                 android:fitsSystemWindows="true"
                 app:expandedTitleMarginEnd="64dp"
                 app:expandedTitleMarginStart="48dp"
@@ -112,7 +112,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cons_IncomeNoteFragment_Edit"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/common_50dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="bottom"
                     android:orientation="horizontal"
                     android:paddingStart="@dimen/common_15dp"
@@ -131,21 +131,28 @@
                         app:layout_constraintStart_toStartOf="parent"
                         />
 
-                    <Button
+                    <LinearLayout
                         android:id="@+id/btn_date"
                         android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_height="@dimen/common_35dp"
                         android:layout_marginStart="@dimen/common_10dp"
                         android:layout_marginEnd="70dp"
-                        android:text="@string/Common_All"
-                        android:textColor="@color/color_222222"
-                        android:textSize="14sp"
                         android:background="@drawable/selector_income_note_btn"
+                        android:gravity="center"
+                        android:orientation="horizontal"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/txt_subject_name"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        />
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Common_All"
+                            android:textColor="@color/color_222222"
+                            android:textSize="14sp"
+                            />
+                    </LinearLayout>
 
                     <SearchView
                         android:id="@+id/sv_IncomeNoteFragment"

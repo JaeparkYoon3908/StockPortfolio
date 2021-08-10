@@ -75,6 +75,8 @@
     <string name="MyStockInputDialog_DBSaveError_Message">데이터베이스 문제로 저장에 실패했습니다.</string>
 
     <string name="AdFragment_Title">후원</string>
+    <string name="MyFragment_Title">마이</string>
+
 
     <string name="Login_Google_Id_Login">구글 아이디 로그인</string>
     <string name="Login_Naver_Id_Login">네이버 아이디 로그인</string>
