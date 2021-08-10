@@ -115,21 +115,36 @@
                     android:layout_height="@dimen/common_50dp"
                     android:layout_gravity="bottom"
                     android:orientation="horizontal"
-                    android:paddingStart="@dimen/common_10dp"
+                    android:paddingStart="@dimen/common_15dp"
                     android:paddingEnd="@dimen/common_20dp"
                     android:visibility="visible"
                     app:layout_collapseMode="parallax">
                     <TextView
                         android:id="@+id/txt_subject_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/common_60_3dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/common_5dp"
                         android:text="@string/IncomeNoteFragment_Term"
                         android:textColor="@color/color_222222"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <Button
+                        android:id="@+id/btn_date"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="@dimen/common_10dp"
+                        android:layout_marginEnd="70dp"
+                        android:text="@string/Common_All"
+                        android:textColor="@color/color_222222"
+                        android:textSize="14sp"
+                        android:background="@drawable/selector_income_note_btn"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/txt_subject_name"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         />
 
                     <SearchView
@@ -171,6 +186,7 @@
                             android:layout_marginStart="@dimen/common_5dp"
                             android:src="@drawable/arrow_bottom" />
                     </LinearLayout>
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
