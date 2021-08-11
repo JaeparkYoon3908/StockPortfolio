@@ -37,7 +37,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     var sellYear: String? = null
     var sellMonth: String? = null
     var sellDay: String? = null
-    val etSellDate: EditText by lazy { findViewById(R.id.et_purchase_date) }
+    val etSellDate: EditText by lazy { findViewById(R.id.et_sell_date) }
     val txtCancel: TextView by lazy { findViewById(R.id.txt_cancel) }
     val txtComplete: TextView by lazy { findViewById(R.id.txt_complete) }
     val etPurchasePrice:EditText by lazy { findViewById(R.id.et_purchase_price) }
@@ -108,12 +108,6 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                 val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
                 val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
 
-//                //날짜오류 예외처리
-//                if (Utils.getNumDeletedDot(sellDate).toInt() > Utils.getNumDeletedDot(sellDate).toInt()) {
-//                    Toast.makeText(mContext, "매도한 날짜가 매수한 날짜보다 앞서있습니다.", Toast.LENGTH_LONG).show()
-//                    return@OnClickListener
-//                }
-
                 val dataInfo = IncomeNoteModel.IncomeNoteList(0, subjectName, realPainLossesAmount, sellDate,
                                                                    gainPercent, purchasePrice, sellPrice, sellCount)
                 incomeNotePresenter.onInputDialogCompleteClicked(mContext, dataInfo)
@@ -121,41 +115,6 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
             }
             etSellDate.id -> {
 
-//                val calendar = Calendar.getInstance()
-//                val currentYear = calendar.get(Calendar.YEAR)
-//                val currentMonth = calendar.get(Calendar.MONTH)
-//                val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
-//                val date = Date()
-//
-//                MonthYearPickerDialog(date).apply {
-//                    setListener { view, year, month, dayOfMonth ->
-//                        Toast.makeText(requireContext(), "Set date: $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
-//                        findViewById<EditText>(R.id.et_sell_date).setText(year+month)
-//                        etSellDate.setText(year+month)
-//                    }
-//                    show(childFragmentManager, "MonthYearPickerDialog")
-//                }
-
-//                val datePickerDialog = DatePickerDialog(mContext, R.style.MySpinnerDatePickerStyle, /*this,*/
-//                        DatePickerDialog.OnDateSetListener { _: View, year, monthOfYear, dayOfMonth ->
-//                            //사용자가 캘린더에서 확인버튼을 눌렀을 때 콜백
-//                            purchaseYear = year.toString()
-//                            purchaseMonth = if (monthOfYear + 1 < 10) {
-//                                "0" + (monthOfYear + 1).toString()
-//                            } else {
-//                                (monthOfYear + 1).toString()
-//                            }
-//                            purchaseDay = if (dayOfMonth < 10) {
-//                                "0$dayOfMonth"
-//                            } else {
-//                                dayOfMonth.toString()
-//                            }
-//                            uiHandler.sendEmptyMessage(MSG.PURCHASE_DATE_DATA_INPUT)
-//                        },
-//                        currentYear,
-//                        currentMonth,
-//                        currentDay)
-//                datePickerDialog.show()
             }
         }
     }

@@ -34,6 +34,7 @@ import kotlin.collections.ArrayList
  * @since 2020.08
  */
 class IncomeNoteFragment : Fragment(), IncomeNoteView {
+    private val TAG = IncomeNoteFragment::class.java.simpleName
     private lateinit var incomeNotePresenter: IncomeNotePresenter
     private lateinit var mContext: Context
 
@@ -142,12 +143,10 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                 startActivity(intent)
             }
 
-//            R.id.lin_IncomeNoteFragment_Filter -> {
-//                showFilterDialog()
-//            }
-
             R.id.btn_date -> {
-
+                IncomeNoteDatePickerDialog(incomeNotePresenter).apply {
+                    show(this@IncomeNoteFragment.childFragmentManager, TAG)
+                }
             }
         }
     }
@@ -156,10 +155,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
-        //Scroll item 2 to 20 pixels from the top
-//        if (allIncomeNoteList?.size != 0) {
-//            layoutManager.scrollToPosition(allIncomeNoteList?.size!! - 1)
-//        }
+
         viewBinding.apply {
             recyclerviewIncomeNoteFragment.layoutManager = layoutManager
             recyclerviewIncomeNoteFragment.itemAnimator = FadeInAnimator()

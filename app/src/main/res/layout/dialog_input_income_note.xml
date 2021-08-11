@@ -17,7 +17,7 @@
         android:text="@string/IncomeNoteFragment_SubjectName"
         android:textColor="@color/color_666666"
         android:textSize="@dimen/common_16dp"
-        app:layout_constraintBottom_toTopOf="@+id/txt_purchase_date"
+        app:layout_constraintBottom_toTopOf="@+id/txt_sell_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="@+id/txt_subject_name" />
 
     <TextView
-        android:id="@+id/txt_purchase_date"
+        android:id="@+id/txt_sell_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_20dp"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/et_subject_name" />
 
     <EditText
-        android:id="@+id/et_purchase_date"
+        android:id="@+id/et_sell_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_10dp"
@@ -58,9 +58,9 @@
         android:hint="@string/EditIncomeNoteDialog_Sell_Date_Hint"
         android:textColor="@color/color_222222"
         android:textSize="@dimen/common_15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_date"
-        app:layout_constraintStart_toEndOf="@+id/txt_purchase_date"
-        app:layout_constraintTop_toTopOf="@+id/txt_purchase_date" />
+        app:layout_constraintBottom_toBottomOf="@+id/txt_sell_date"
+        app:layout_constraintStart_toEndOf="@+id/txt_sell_date"
+        app:layout_constraintTop_toTopOf="@+id/txt_sell_date" />
 
 <!--    <TextView-->
 <!--        android:id="@+id/txt_sell_date"-->
@@ -100,7 +100,7 @@
         android:textSize="@dimen/common_16dp"
         app:layout_constraintBottom_toTopOf="@+id/txt_sell_price"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_purchase_date" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_sell_date" />
 
     <TextView
         android:id="@+id/txt_purchase_price_symbol"
@@ -111,7 +111,7 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_sell_price"
         app:layout_constraintStart_toEndOf="@+id/txt_purchase_price"
-        app:layout_constraintTop_toBottomOf="@+id/txt_purchase_date" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_sell_date" />
 
     <EditText
         android:id="@+id/et_purchase_price"
