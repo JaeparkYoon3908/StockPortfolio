@@ -51,10 +51,19 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter): 
         super.onViewCreated(view, savedInstanceState)
         initLayout()
     }
+    private val onClickListener = View.OnClickListener {
+        when (it.id) {
+            viewBinding.btnConfirm.id -> {
+
+            }
+        }
+    }
 
     private fun initLayout() {
         val nowYYMM: List<String> = Utils.getTodayYYMM()
-
+        viewBinding.apply {
+            btnConfirm.setOnClickListener(onClickListener)
+        }
         //시작 월
         viewBinding.startPickerMonth.run {
             minValue = 1

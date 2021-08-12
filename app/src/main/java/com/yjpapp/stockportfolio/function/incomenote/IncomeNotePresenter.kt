@@ -217,4 +217,11 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     suspend fun submitData(pagingData: PagingData<IncomeNoteModel.IncomeNoteList>) {
         incomeNoteListAdapter?.submitData(pagingData)
     }
+
+    /**
+     * DatePickerDialog 영역
+     */
+    fun datePickerDialogConfirmClick() {
+        
+    }
 }
