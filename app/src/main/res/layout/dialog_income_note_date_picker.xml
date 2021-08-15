@@ -76,16 +76,41 @@
         />
 
     <LinearLayout
-        android:id="@+id/btn_confirm"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/common_60dp"
+        android:id="@+id/btn_cancel"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/common_50dp"
         android:layout_marginTop="@dimen/common_20dp"
         android:layout_marginStart="@dimen/common_20dp"
         android:layout_marginEnd="@dimen/common_20dp"
         android:gravity="center"
-        android:background="@drawable/bg_222222_r12"
+        android:background="@drawable/selector_income_note_btn"
         app:layout_constraintTop_toBottomOf="@+id/endPickerYear"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_confirm">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Common_Cancel"
+            android:textSize="@dimen/common_16dp"
+            android:textColor="@color/color_222222"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btn_confirm"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/common_50dp"
+        android:layout_marginTop="@dimen/common_20dp"
+        android:layout_marginStart="@dimen/common_20dp"
+        android:layout_marginEnd="@dimen/common_20dp"
+        android:gravity="center"
+        android:background="@drawable/selector_income_note_btn"
+        app:layout_constraintTop_toBottomOf="@+id/endPickerYear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_cancel">
 
         <TextView
             android:layout_width="wrap_content"
@@ -95,5 +120,6 @@
             android:textColor="@color/color_222222"
             />
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

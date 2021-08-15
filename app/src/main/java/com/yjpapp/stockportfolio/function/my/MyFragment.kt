@@ -1,16 +1,15 @@
-package com.yjpapp.stockportfolio.function.advertisement
+package com.yjpapp.stockportfolio.function.my
 
 import android.os.Bundle
 import android.view.View
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
-import com.yjpapp.stockportfolio.databinding.FragmentAdBinding
-import org.koin.android.ext.android.inject
+import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
 
-class AdFragment : BaseMVVMFragment<FragmentAdBinding>() {
+class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
 
-    private val adViewModel by lazy { AdViewModel(this.mContext) }
+    private val myViewModel by lazy { MyViewModel(this.mContext) }
     private lateinit var rewardedAd: RewardedAd
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -19,16 +18,16 @@ class AdFragment : BaseMVVMFragment<FragmentAdBinding>() {
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.fragment_ad
+        return R.layout.fragment_my
     }
 
     override fun setViewModel() {
-        mDataBinding.viewModel = adViewModel
+        mDataBinding.viewModel = myViewModel
     }
 
     private fun setMyPhoneNum() {
         mDataBinding.etPhoneNum.setText("01048533908")
-        adViewModel.phoneNum.value = mDataBinding.etPhoneNum.text.toString()
+        myViewModel.phoneNum.value = mDataBinding.etPhoneNum.text.toString()
     }
 
     //    private fun setAdvertise(){

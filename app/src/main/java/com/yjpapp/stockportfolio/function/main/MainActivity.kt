@@ -8,7 +8,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
-import com.yjpapp.stockportfolio.function.advertisement.AdFragment
+import com.yjpapp.stockportfolio.function.my.MyFragment
 import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteFragment
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.function.mystock.MyStockFragment
@@ -31,7 +31,7 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
     private val myStockFragment = MyStockFragment()
     private val incomeNoteFragment = IncomeNoteFragment()
     private val memoListFragment = MemoListFragment()
-    private val adFragment = AdFragment()
+    private val adFragment = MyFragment()
     private var currentFragment: Fragment = myStockFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {

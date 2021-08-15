@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.model.IncomeNoteModel
+import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  */
 
 class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: IncomeNoteView) {
+    private val TAG = IncomeNotePresenter::class.java.simpleName
     private val FILTER_TYPE_ALL = 0
     private val FILTER_TYPE_GAIN = 1
     private val FILTER_TYPE_LOSS = 2
@@ -221,7 +223,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     /**
      * DatePickerDialog 영역
      */
-    fun datePickerDialogConfirmClick() {
-        
+    fun datePickerDialogConfirmClick(startYYYYMM: String, endYYYYMM: String) {
+        StockLog.d(TAG, "startYYYYMM = $startYYYYMM")
+        StockLog.d(TAG, "endYYYYMM = $endYYYYMM")
     }
 }

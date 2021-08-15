@@ -12,9 +12,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.DialogIncomeNoteDatePickerBinding
 import com.yjpapp.stockportfolio.util.Utils
-import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
 
-class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter): BottomSheetDialogFragment() {
+class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
+    BottomSheetDialogFragment() {
     private val TAG = IncomeNoteDatePickerDialog::class.java.simpleName
     private lateinit var mContext: Context
     private var _viewBinding: DialogIncomeNoteDatePickerBinding? = null
@@ -41,7 +41,11 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter): 
         return dialog
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         _viewBinding = DialogIncomeNoteDatePickerBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -51,10 +55,30 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter): 
         super.onViewCreated(view, savedInstanceState)
         initLayout()
     }
-    private val onClickListener = View.OnClickListener {
-        when (it.id) {
-            viewBinding.btnConfirm.id -> {
 
+    private val onClickListener = View.OnClickListener { view ->
+        viewBinding.run {
+            when (view.id) {
+                btnConfirm.id -> {
+                    val startYYYY = startPickerYear.value.toString()
+                    val startMM =
+                        if (startPickerMonth.value < 10) "0" + startPickerMonth.value.toString()
+                        else startPickerMonth.value.toString()
+
+                    val endYYYY = endPickerYear.value.toString()
+                    val endMM =
+                        if (endPickerMonth.value < 10) "0" + endPickerMonth.value.toString()
+                        else endPickerMonth.value.toString()
+
+                    val startYYYYMM = startYYYY + startMM
+                    val endYYYYMM = endYYYY + endMM
+                    incomeNotePresenter.datePickerDialogConfirmClick(startYYYYMM, endYYYYMM)
+                    dismiss()
+                }
+
+                btnCancel.id -> {
+                    dismiss()
+                }
             }
         }
     }
@@ -68,21 +92,23 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter): 
         viewBinding.startPickerMonth.run {
             minValue = 1
             maxValue = 12
-            value = if(initStartMonth.isEmpty() || initStartMonth.isEmpty()){
+            value = if (initStartMonth.isEmpty() || initStartMonth.isEmpty()) {
                 nowYYMM[1].toInt()
-            }else{
+            } else {
                 initStartMonth.toInt()
             }
-            displayedValues = arrayOf("01", "02", "03", "04", "05", "06", "07",
-                "08", "09", "10", "11", "12")
+            displayedValues = arrayOf(
+                "01", "02", "03", "04", "05", "06", "07",
+                "08", "09", "10", "11", "12"
+            )
         }
         //시작 연도
         viewBinding.startPickerYear.run {
             minValue = MIN_YEAR
             maxValue = nowYYMM[0].toInt()
-            value = if(initStartYear.isEmpty() || initStartYear.isEmpty()){
+            value = if (initStartYear.isEmpty() || initStartYear.isEmpty()) {
                 nowYYMM[0].toInt()
-            }else{
+            } else {
                 initStartYear.toInt()
             }
         }
@@ -90,21 +116,23 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter): 
         viewBinding.endPickerMonth.run {
             minValue = 1
             maxValue = 12
-            value = if(initEndMonth.isEmpty() || initEndMonth.isEmpty()){
+            value = if (initEndMonth.isEmpty() || initEndMonth.isEmpty()) {
                 nowYYMM[1].toInt()
-            }else{
+            } else {
                 initEndMonth.toInt()
             }
-            displayedValues = arrayOf("01", "02", "03", "04", "05", "06", "07",
-                "08", "09", "10", "11", "12")
+            displayedValues = arrayOf(
+                "01", "02", "03", "04", "05", "06", "07",
+                "08", "09", "10", "11", "12"
+            )
         }
         //종료 연도
         viewBinding.endPickerYear.run {
             minValue = MIN_YEAR
             maxValue = nowYYMM[0].toInt()
-            value = if(initEndYear.isEmpty() || initEndYear.isEmpty()){
+            value = if (initEndYear.isEmpty() || initEndYear.isEmpty()) {
                 nowYYMM[0].toInt()
-            }else{
+            } else {
                 initEndYear.toInt()
             }
         }

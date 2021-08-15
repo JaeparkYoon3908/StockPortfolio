@@ -1,12 +1,10 @@
-package com.yjpapp.stockportfolio.function.advertisement
+package com.yjpapp.stockportfolio.function.my
 
-import android.app.Application
 import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class AdViewModel(context: Context): ViewModel() {
+class MyViewModel(context: Context): ViewModel() {
     var phoneNum = MutableLiveData<String>()
 
     fun onTextChanged(s: CharSequence, start :Int, before : Int, count: Int){

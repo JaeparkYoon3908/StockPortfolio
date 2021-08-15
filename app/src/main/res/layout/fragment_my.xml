@@ -7,7 +7,7 @@
         <import type="android.view.View" />
         <variable
             name="viewModel"
-            type="com.yjpapp.stockportfolio.function.advertisement.AdViewModel" />
+            type="com.yjpapp.stockportfolio.function.my.MyViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
