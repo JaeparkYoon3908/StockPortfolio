@@ -8,7 +8,7 @@ class IncomeNote(models.Model):
     user_index = models.IntegerField(null=False, auto_created=False, default=False)
     subjectName = models.CharField(max_length=20, null=False, default=False)
     realPainLossesAmount = models.CharField(max_length=100, null=False, default=False)
-    sellDate = models.CharField(max_length=100, null=False, default=False)
+    sellDate = models.DateField(auto_now=False)
     gainPercent = models.CharField(max_length=100, null=False, default=False)
     purchasePrice = models.CharField(max_length=100, null=False, default=False)
     sellPrice = models.CharField(max_length=100, null=False, default=False)

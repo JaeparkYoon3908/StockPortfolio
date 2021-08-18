@@ -14,7 +14,7 @@ class IncomeNoteAPI(APIView):
         user_index = request.META.get('HTTP_USER_INDEX')
         subjectName = request.data.get("subjectName")
         realPainLossesAmount = request.data.get("realPainLossesAmount")
-        sellDate = request.data.get("sellDate").replace(".", "")
+        sellDate = request.data.get("sellDate")
         gainPercent = request.data.get("gainPercent")
         purchasePrice = request.data.get("purchasePrice")
         sellPrice = request.data.get("sellPrice")
