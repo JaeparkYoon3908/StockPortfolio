@@ -42,7 +42,14 @@ class IncomeNoteAPI(APIView):
         user_index = request.META.get('HTTP_USER_INDEX')
         page = request.GET.get('page')
         page_size = request.GET.get('size')
-        all_income_note = IncomeNote.objects.filter(user_index=user_index)
+        startDate = request.GET.get('startDate')
+        endDate = request.GET.get('endDate')
+
+        if not startDate or not endDate:
+            all_income_note = IncomeNote.objects.filter(user_index=user_index)
+        else:
+            all_income_note = IncomeNote.objects.filter(user_index=user_index).filter(sellDate__range=[startDate, endDate])
+
         total_elements = len(all_income_note)
         paginator = Paginator(all_income_note, page_size)
         income_note_list = paginator.get_page(page).object_list
