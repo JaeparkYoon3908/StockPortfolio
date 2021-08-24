@@ -176,7 +176,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/AdFragment_Title"
+            android:text="@string/MyFragment_Title"
             android:textColor="@color/selector_bottom_text_color"
             />
     </LinearLayout>

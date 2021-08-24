@@ -55,15 +55,15 @@ class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSh
                 dismiss()
             }
             R.id.txt_IncomeNoteFilterDialog_all -> {
-                incomeNotePresenter.onAllFilterClicked()
+//                incomeNotePresenter.onAllFilterClicked()
                 dismiss()
             }
             R.id.txt_IncomeNoteFilterDialog_gain -> {
-                incomeNotePresenter.onGainFilterClicked()
+//                incomeNotePresenter.onGainFilterClicked()
                 dismiss()
             }
             R.id.txt_IncomeNoteFilterDialog_loss -> {
-                incomeNotePresenter.onLossFilterClicked()
+//                incomeNotePresenter.onLossFilterClicked()
                 dismiss()
 
             }

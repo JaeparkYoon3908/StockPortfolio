@@ -70,8 +70,8 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
                         if (endPickerMonth.value < 10) "0" + endPickerMonth.value.toString()
                         else endPickerMonth.value.toString()
 
-                    val startYYYYMM = startYYYY + startMM
-                    val endYYYYMM = endYYYY + endMM
+                    val startYYYYMM = "$startYYYY-$startMM-01"
+                    val endYYYYMM = "$endYYYY-$endMM-01"
                     incomeNotePresenter.datePickerDialogConfirmClick(startYYYYMM, endYYYYMM)
                     dismiss()
                 }
@@ -87,6 +87,7 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
         val nowYYMM: List<String> = Utils.getTodayYYMM()
         viewBinding.apply {
             btnConfirm.setOnClickListener(onClickListener)
+            btnCancel.setOnClickListener(onClickListener)
         }
         //시작 월
         viewBinding.startPickerMonth.run {

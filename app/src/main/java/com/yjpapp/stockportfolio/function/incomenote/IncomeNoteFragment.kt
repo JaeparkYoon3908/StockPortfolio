@@ -37,7 +37,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
     private val TAG = IncomeNoteFragment::class.java.simpleName
     private lateinit var incomeNotePresenter: IncomeNotePresenter
     private lateinit var mContext: Context
-
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private lateinit var layoutManager: LinearLayoutManager
 
@@ -70,7 +69,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initLayout()
-        subScribeUI()
+        initData()
     }
 
     override fun onResume() {
@@ -279,12 +278,9 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         toast.show()
     }
 
-    private fun subScribeUI(){
+    private fun initData() {
         lifecycleScope.launch {
-            incomeNotePresenter.getIncomeNoteList(mContext).collectLatest {
-                StockLog.d("YJP", "서버 연동 데이터 : ${it}" )
-                incomeNotePresenter.submitData(it)
-            }
+            incomeNotePresenter.getIncomeNoteList(mContext)
         }
     }
 }

@@ -185,7 +185,7 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
             FRAGMENT_TAG_AD
         )
         binding.apply {
-            txtMainActivityTitle.text = getString(R.string.AdFragment_Title)
+            txtMainActivityTitle.text = getString(R.string.MyFragment_Title)
         }
     }
 

@@ -10,60 +10,25 @@
             type="com.yjpapp.stockportfolio.function.my.MyViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/common_20dp"
+        android:paddingEnd="@dimen/common_20dp"
         >
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="후원은 개발자에게 큰 힘이됩니다."-->
-<!--            android:textSize="@dimen/common_18dp"-->
-<!--            android:textColor="@color/color_222222"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            />-->
-        <EditText
-            android:id="@+id/et_phone_num"
-            android:layout_width="@dimen/common_200dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="@dimen/common_20dp"
-            android:onTextChanged="@{viewModel::onTextChanged}"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/bt_send"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            />
-
-        <Button
-            android:id="@+id/bt_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="인증 요청"
-            android:onClick="@{() -> viewModel.sendButtonClicked()}"
-            app:layout_constraintStart_toEndOf="@+id/et_phone_num"
-            app:layout_constraintTop_toTopOf="@+id/et_phone_num"
-            app:layout_constraintBottom_toBottomOf="@+id/et_phone_num"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-
         <TextView
-            android:id="@+id/txt_phone_num_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_50dp"
-            android:text="@{viewModel.phoneNum}"
-            android:textSize="@dimen/common_20dp"
-            android:textColor="@color/color_222222"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="계정"
+            android:textSize="@dimen/common_14dp"
             />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        </RelativeLayout>
+    </LinearLayout>
 </layout>
