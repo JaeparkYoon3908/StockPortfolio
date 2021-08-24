@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -12,16 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
-import com.yjpapp.stockportfolio.model.IncomeNoteModel
-import com.yjpapp.stockportfolio.util.StockLog
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
-import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
@@ -99,10 +94,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             R.id.menu_IncomeNoteFragment_Add -> {
                 incomeNotePresenter.onAddButtonClicked()
             }
-//            R.id.menu_IncomeNote_Edit -> {
-//                activity?.window?.attributes?.windowAnimations = R.style.AnimationPopupStyle
-//                incomeNotePresenter.onMenuEditButtonClick()
-//            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -112,23 +103,11 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         incomeNotePresenter = IncomeNotePresenter(mContext, this)
 
         viewBinding.apply {
-//            svIncomeNoteFragment.setOnQueryTextListener(object :
-//                    SearchView.OnQueryTextListener {
-//                override fun onQueryTextSubmit(query: String?): Boolean {
-//                    return false
-//                }
-//
-//                override fun onQueryTextChange(newText: String?): Boolean {
-//                    incomeNotePresenter.onStartSearch(newText)
-//                    return false
-//                }
-//            })
             linIncomeNoteFragmentFilter.setOnClickListener(onClickListener)
             btnDate.setOnClickListener(onClickListener)
             txtTotalRealizationGainsLosses.isSelected = true
             txtTotalRealizationGainsLossesData.isSelected = true
             txtTotalRealizationGainsLossesPercent.isSelected = true
-
         }
 
         bindTotalGainData()
@@ -222,17 +201,17 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         mainFilterDialog.show(childFragmentManager, tag)
     }
 
-    override fun showInputDialog(editMode: Boolean, incomeNoteInfo: IncomeNoteModel.IncomeNoteList?) {
+    override fun showInputDialog(editMode: Boolean, respIncomeNoteInfo: RespIncomeNoteInfo.IncomeNoteList?) {
         IncomeNoteInputDialog(mContext, incomeNotePresenter).apply {
             if(editMode){
                 if (!isShowing) {
                     show()
-                    etSubjectName.setText(incomeNoteInfo?.subjectName)
+                    etSubjectName.setText(respIncomeNoteInfo?.subjectName)
 //                        etSellDate.setText(incomeNoteInfo?.purchaseDate)
-                    etSellDate.setText(incomeNoteInfo?.sellDate)
-                    etPurchasePrice.setText(incomeNoteInfo?.purchasePrice)
-                    etSellPrice.setText(incomeNoteInfo?.sellPrice)
-                    etSellCount.setText(incomeNoteInfo?.sellCount.toString())
+                    etSellDate.setText(respIncomeNoteInfo?.sellDate)
+                    etPurchasePrice.setText(respIncomeNoteInfo?.purchasePrice)
+                    etSellPrice.setText(respIncomeNoteInfo?.sellPrice)
+                    etSellCount.setText(respIncomeNoteInfo?.sellCount.toString())
                 }
             }else{
                 if (!isShowing) {
@@ -278,9 +257,17 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         toast.show()
     }
 
+    override fun initFilterDateText(startDate: String, endDate: String) {
+        viewBinding.txtFilterDate.text = "$startDate ~ $endDate"
+    }
+
     private fun initData() {
+        val toDayYYYYMM = Utils.getTodayYYMM()
+        val startDate = "${toDayYYYYMM[0]}-01-01"
+        val endDate = "${toDayYYYYMM[0]}-12-01"
         lifecycleScope.launch {
-            incomeNotePresenter.getIncomeNoteList(mContext)
+            incomeNotePresenter.getIncomeNoteList(mContext, startDate, endDate)
         }
+        initFilterDateText(startDate, endDate)
     }
 }

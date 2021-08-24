@@ -30,7 +30,7 @@ import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
 import com.yjpapp.stockportfolio.function.main.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
-import com.yjpapp.stockportfolio.model.SNSLoginRequest
+import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import org.koin.android.ext.android.inject
@@ -168,7 +168,7 @@ class LoginActivity : BaseMVVMActivity() {
                     StockLog.d(TAG, "handleSignInResult:personId $personId")
                     StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
                     StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
-                    snsLoginSuccess(SNSLoginRequest(personEmail, personName, StockPortfolioConfig.SIGN_TYPE_GOOGLE))
+                    snsLoginSuccess(ReqSNSLogin(personEmail, personName, StockPortfolioConfig.SIGN_TYPE_GOOGLE))
                 }
             } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -268,8 +268,8 @@ class LoginActivity : BaseMVVMActivity() {
         facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private fun snsLoginSuccess(snsLoginRequest: SNSLoginRequest) {
-        loginViewModel.postUserInfo(applicationContext, snsLoginRequest)
+    private fun snsLoginSuccess(reqSnsLogin: ReqSNSLogin) {
+        loginViewModel.postUserInfo(applicationContext, reqSnsLogin)
     }
 
     private fun startAutoLogin() {

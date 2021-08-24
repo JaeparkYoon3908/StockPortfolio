@@ -7,10 +7,9 @@ import androidx.paging.*
 import com.yjpapp.stockportfolio.localdb.sqlte.Databases
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.base.BaseInteractor
-import com.yjpapp.stockportfolio.model.IncomeNoteModel
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.network.RetrofitClient
 import com.yjpapp.stockportfolio.util.ChoSungSearchQueryUtil
-import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.coroutines.flow.Flow
 
@@ -228,28 +227,30 @@ class IncomeNoteInteractor: BaseInteractor() {
     }
 
     //TODO 네트워크로 전환 예정
-    suspend fun requestPostIncomeNote(context: Context, incomeNoteModel: IncomeNoteModel.IncomeNoteList?) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(incomeNoteModel)
+    suspend fun requestPostIncomeNote(context: Context, respIncomeNoteInfo: RespIncomeNoteInfo.IncomeNoteList?) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(respIncomeNoteInfo)
 
     suspend fun requestDeleteIncomeNote(context: Context, id: Int) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteIncomeNote(id)
 
 
-    suspend fun requestPutIncomeNote(context: Context, incomeNoteList: IncomeNoteModel.IncomeNoteList?) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(incomeNoteList)
+    suspend fun requestPutIncomeNote(context: Context, respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(respIncomeNoteList)
 
     suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestGetIncomeNote(params)
 
-    inner class IncomeNotePagingSource(val context: Context): PagingSource<Int, IncomeNoteModel.IncomeNoteList>() {
+    inner class IncomeNotePagingSource(val context: Context, var startDate: String, var endDate: String): PagingSource<Int, RespIncomeNoteInfo.IncomeNoteList>() {
         private val pageSize = "20"
-        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, IncomeNoteModel.IncomeNoteList> {
+        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RespIncomeNoteInfo.IncomeNoteList> {
             val page = params.key ?: 1
             return try {
                 //TODO 코드 개선하기.
                 val hashMap = HashMap<String, String>()
                 hashMap["page"] = page.toString()
                 hashMap["size"] = pageSize
+                hashMap["startDate"] = startDate
+                hashMap["endDate"] = endDate
                 val data = requestGetIncomeNote(context, hashMap)
                 LoadResult.Page(
                     data = data?.body()?.income_note!!,
@@ -260,7 +261,7 @@ class IncomeNoteInteractor: BaseInteractor() {
             }
         }
 
-        override fun getRefreshKey(state: PagingState<Int, IncomeNoteModel.IncomeNoteList>): Int? {
+        override fun getRefreshKey(state: PagingState<Int, RespIncomeNoteInfo.IncomeNoteList>): Int? {
 //            return state.anchorPosition?.let { anchorPosition ->
 //                state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
 //                    ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
@@ -269,9 +270,9 @@ class IncomeNoteInteractor: BaseInteractor() {
         }
     }
 
-    fun getIncomeNoteListByPaging(context: Context): Flow<PagingData<IncomeNoteModel.IncomeNoteList>> {
+    fun getIncomeNoteListByPaging(context: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteInfo.IncomeNoteList>> {
         return Pager(
             config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { IncomeNotePagingSource(context) }).flow
+            pagingSourceFactory = { IncomeNotePagingSource(context, startDate, endDate) }).flow
     }
 }

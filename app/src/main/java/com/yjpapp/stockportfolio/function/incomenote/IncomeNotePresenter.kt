@@ -2,20 +2,16 @@ package com.yjpapp.stockportfolio.function.incomenote
 
 import android.app.Activity
 import android.content.Context
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
-import com.yjpapp.stockportfolio.model.IncomeNoteModel
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * IncomeNoteFragment의 Presenter
@@ -42,11 +38,11 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         incomeNoteView.showInputDialog(editMode, null)
     }
 
-    fun onInputDialogCompleteClicked(context: Context, incomeNoteList: IncomeNoteModel.IncomeNoteList?) { //id 설정
-        incomeNoteList?.id = incomeNoteId
+    fun onInputDialogCompleteClicked(context: Context, respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?) { //id 설정
+        respIncomeNoteList?.id = incomeNoteId
         if (editMode) {
             CoroutineScope(Dispatchers.Main).launch {
-                val result = incomeNoteInteractor.requestPutIncomeNote(context, incomeNoteList)
+                val result = incomeNoteInteractor.requestPutIncomeNote(context, respIncomeNoteList)
                 result?.let {
                     if (it.isSuccessful) {
                         incomeNoteView.showToast(Toasty.normal(context, "수정완료"))
@@ -57,7 +53,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
         } else {
             CoroutineScope(Dispatchers.Main).launch {
-                val result = incomeNoteInteractor.requestPostIncomeNote(context, incomeNoteList)
+                val result = incomeNoteInteractor.requestPostIncomeNote(context, respIncomeNoteList)
                 result?.let {
                     if (it.isSuccessful) {
                         incomeNoteView.showToast(Toasty.info(context, "추가완료"))
@@ -68,12 +64,12 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         }
     }
 
-    fun onEditButtonClick(incomeNoteList: IncomeNoteModel.IncomeNoteList?) {
-        incomeNoteList?.let {
+    fun onEditButtonClick(respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?) {
+        respIncomeNoteList?.let {
             editMode = true
             incomeNoteView.showAddButton()
             incomeNoteId = it.id //        val incomeNoteInfo = incomeNoteInteractor.getIncomeNoteInfo(position)
-            incomeNoteView.showInputDialog(editMode, incomeNoteList)
+            incomeNoteView.showInputDialog(editMode, respIncomeNoteList)
         }
     }
 
@@ -98,8 +94,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         incomeNoteListAdapter?.closeSwipeLayout()
     }
 
-    suspend fun getIncomeNoteList(context: Context) {
-        val incomeNoteList = incomeNoteInteractor.getIncomeNoteListByPaging(context).cachedIn(CoroutineScope(Dispatchers.Main))
+    suspend fun getIncomeNoteList(context: Context, startDate: String, endDate: String) {
+        val incomeNoteList = incomeNoteInteractor.getIncomeNoteListByPaging(context, startDate, endDate).cachedIn(CoroutineScope(Dispatchers.Main))
         incomeNoteList.collectLatest {
             incomeNoteListAdapter?.submitData(it)
         }
@@ -108,8 +104,12 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     /**
      * DatePickerDialog 영역
      */
-    fun datePickerDialogConfirmClick(startYYYYMM: String, endYYYYMM: String) {
-        StockLog.d(TAG, "startYYYYMM = $startYYYYMM")
-        StockLog.d(TAG, "endYYYYMM = $endYYYYMM")
+    fun datePickerDialogConfirmClick(startDate: String, endDate: String) {
+        StockLog.d(TAG, "startDate = $startDate")
+        StockLog.d(TAG, "endDate = $endDate")
+        CoroutineScope(Dispatchers.IO).launch {
+            getIncomeNoteList(mContext, startDate, endDate)
+        }
+        incomeNoteView.initFilterDateText(startDate, endDate)
     }
 }

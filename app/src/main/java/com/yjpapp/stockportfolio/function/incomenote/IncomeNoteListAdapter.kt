@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.model.IncomeNoteModel
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.PagingSwipeAdapter
 import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
@@ -26,7 +26,7 @@ import java.util.*
  */
 class IncomeNoteListAdapter(
     private val incomeNotePresenter: IncomeNotePresenter
-) : PagingSwipeAdapter<IncomeNoteModel.IncomeNoteList, IncomeNoteListAdapter.ViewHolder>(
+) : PagingSwipeAdapter<RespIncomeNoteInfo.IncomeNoteList, IncomeNoteListAdapter.ViewHolder>(
     DIFF_CALLBACK
 ) {
     private lateinit var mContext: Context
@@ -147,17 +147,17 @@ class IncomeNoteListAdapter(
 
     companion object {
         private val DIFF_CALLBACK =
-            object : DiffUtil.ItemCallback<IncomeNoteModel.IncomeNoteList>() {
+            object : DiffUtil.ItemCallback<RespIncomeNoteInfo.IncomeNoteList>() {
                 override fun areItemsTheSame(
-                    oldItem: IncomeNoteModel.IncomeNoteList,
-                    newItem: IncomeNoteModel.IncomeNoteList
+                    oldItem: RespIncomeNoteInfo.IncomeNoteList,
+                    newItem: RespIncomeNoteInfo.IncomeNoteList
                 ): Boolean {
                     return oldItem.id == newItem.id
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: IncomeNoteModel.IncomeNoteList,
-                    newItem: IncomeNoteModel.IncomeNoteList
+                    oldItem: RespIncomeNoteInfo.IncomeNoteList,
+                    newItem: RespIncomeNoteInfo.IncomeNoteList
                 ): Boolean {
                     return oldItem == newItem
                 }

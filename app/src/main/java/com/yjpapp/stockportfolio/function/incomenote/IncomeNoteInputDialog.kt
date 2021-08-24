@@ -19,8 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
-import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
-import com.yjpapp.stockportfolio.model.IncomeNoteModel
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import java.text.DecimalFormat
 import java.util.*
@@ -108,7 +107,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                 val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
                 val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
 
-                val dataInfo = IncomeNoteModel.IncomeNoteList(0, subjectName, realPainLossesAmount, sellDate,
+                val dataInfo = RespIncomeNoteInfo.IncomeNoteList(0, subjectName, realPainLossesAmount, sellDate,
                                                                    gainPercent, purchasePrice, sellPrice, sellCount)
                 incomeNotePresenter.onInputDialogCompleteClicked(mContext, dataInfo)
                 dismiss()

@@ -1,6 +1,6 @@
-package com.yjpapp.stockportfolio.model
+package com.yjpapp.stockportfolio.model.request
 
-data class SNSLoginRequest(
+data class ReqSNSLogin(
     var email: String?,
     var name: String?,
     var loginType: String?

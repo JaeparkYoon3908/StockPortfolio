@@ -1,8 +1,7 @@
 package com.yjpapp.stockportfolio.function.incomenote
 
 import android.widget.Toast
-import com.yjpapp.stockportfolio.model.IncomeNoteModel
-import es.dmoral.toasty.Toasty
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 
 /**
  * IncomeNoteFragment의 View
@@ -19,7 +18,7 @@ interface IncomeNoteView {
 
     fun showFilterDialog()
 
-    fun showInputDialog(editMode: Boolean, incomeNoteInfo: IncomeNoteModel.IncomeNoteList?)
+    fun showInputDialog(editMode: Boolean, respIncomeNoteInfo: RespIncomeNoteInfo.IncomeNoteList?)
 
     fun hideAddButton()
 
@@ -29,4 +28,5 @@ interface IncomeNoteView {
 
     fun showToast(toast: Toast)
 
+    fun initFilterDateText(startDate: String, endDate: String)
 }

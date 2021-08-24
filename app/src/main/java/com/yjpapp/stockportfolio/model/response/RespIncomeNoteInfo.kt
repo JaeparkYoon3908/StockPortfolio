@@ -1,9 +1,9 @@
-package com.yjpapp.stockportfolio.model
+package com.yjpapp.stockportfolio.model.response
 
 import com.google.gson.annotations.SerializedName
 
 
-data class IncomeNoteModel(
+data class RespIncomeNoteInfo(
     @SerializedName("page_info")
     var page_info: PageInfo,
     @SerializedName("income_note")

@@ -1,8 +1,8 @@
-package com.yjpapp.stockportfolio.model
+package com.yjpapp.stockportfolio.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class LoginUserInfo(
+data class RespLoginUserInfo(
     @SerializedName("userIndex")
     var userIndex: Int,
     @SerializedName("email")
