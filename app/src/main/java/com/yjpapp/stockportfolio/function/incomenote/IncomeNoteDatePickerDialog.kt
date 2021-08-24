@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.DialogIncomeNoteDatePickerBinding
 import com.yjpapp.stockportfolio.util.Utils
+import es.dmoral.toasty.Toasty
 
 class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
     BottomSheetDialogFragment() {
@@ -60,6 +62,13 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
         viewBinding.run {
             when (view.id) {
                 btnConfirm.id -> {
+                    if (startPickerYear.value > endPickerYear.value) {
+                        Toasty.info(mContext, "시작연도가 종료연도 보다 큽니다.").show()
+                        return@OnClickListener
+                    } else if (startPickerYear.value == endPickerYear.value && startPickerMonth.value > endPickerMonth.value) {
+                        Toasty.info(mContext, "시작월이 종료월보다 큽니다.").show()
+                        return@OnClickListener
+                    }
                     val startYYYY = startPickerYear.value.toString()
                     val startMM =
                         if (startPickerMonth.value < 10) "0" + startPickerMonth.value.toString()
@@ -69,7 +78,6 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
                     val endMM =
                         if (endPickerMonth.value < 10) "0" + endPickerMonth.value.toString()
                         else endPickerMonth.value.toString()
-
                     val startYYYYMM = "$startYYYY-$startMM-01"
                     val endYYYYMM = "$endYYYY-$endMM-01"
                     incomeNotePresenter.datePickerDialogConfirmClick(startYYYYMM, endYYYYMM)
