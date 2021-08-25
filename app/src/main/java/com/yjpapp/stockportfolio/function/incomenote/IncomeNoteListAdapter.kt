@@ -112,7 +112,6 @@ class IncomeNoteListAdapter(
                 override fun onStartOpen(layout: SwipeLayout) {
                     swipeItemManger.closeAllExcept(layout)
                 }
-
                 override fun onOpen(layout: SwipeLayout) {}
                 override fun onStartClose(layout: SwipeLayout) {}
                 override fun onClose(layout: SwipeLayout) {}

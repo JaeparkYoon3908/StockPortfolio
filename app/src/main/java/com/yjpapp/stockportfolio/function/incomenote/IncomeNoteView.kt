@@ -12,8 +12,6 @@ import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 interface IncomeNoteView {
     fun bindTotalGainData()
 
-    fun changeFilterText(text: String)
-
     fun showAddButton()
 
     fun showFilterDialog()

@@ -103,7 +103,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         incomeNotePresenter = IncomeNotePresenter(mContext, this)
 
         viewBinding.apply {
-            linIncomeNoteFragmentFilter.setOnClickListener(onClickListener)
             btnDate.setOnClickListener(onClickListener)
             txtTotalRealizationGainsLosses.isSelected = true
             txtTotalRealizationGainsLossesData.isSelected = true
@@ -131,8 +130,8 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
     private fun initRecyclerView() {
         layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        layoutManager.reverseLayout = true
-        layoutManager.stackFromEnd = true
+//        layoutManager.reverseLayout = true
+//        layoutManager.stackFromEnd = true
 
         viewBinding.apply {
             recyclerviewIncomeNoteFragment.layoutManager = layoutManager
@@ -182,10 +181,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                     Utils.getRoundsPercentNumber(totalGainPercent)
         }
 
-    }
-
-    override fun changeFilterText(text: String) {
-        viewBinding.txtIncomeNoteFragmentFilter.text = text
     }
 
     override fun showAddButton() {

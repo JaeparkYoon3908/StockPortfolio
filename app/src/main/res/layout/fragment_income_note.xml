@@ -155,46 +155,6 @@
                             />
                     </LinearLayout>
 
-                    <SearchView
-                        android:id="@+id/sv_IncomeNoteFragment"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/common_30dp"
-                        android:layout_marginStart="@dimen/common_10dp"
-                        android:layout_marginEnd="@dimen/common_10dp"
-                        android:queryHint="@string/IncomeNoteFragment_SearchBar_Hint"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/lin_IncomeNoteFragment_Filter"
-                        app:layout_constraintStart_toEndOf="@+id/txt_subject_name"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <LinearLayout
-                        android:id="@+id/lin_IncomeNoteFragment_Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:id="@+id/txt_IncomeNoteFragment_Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/Common_All"
-                            android:textColor="@color/color_222222"
-                            android:textSize="16sp" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/common_5dp"
-                            android:src="@drawable/arrow_bottom" />
-                    </LinearLayout>
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -208,21 +168,13 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_IncomeNoteFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/color_ffffff"
-            android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintTop_toBottomOf="@+id/appbar_layout"
-            >
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_IncomeNoteFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                />
-        </androidx.core.widget.NestedScrollView>
+            app:layout_constraintTop_toBottomOf="@+id/appbar_layout" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
