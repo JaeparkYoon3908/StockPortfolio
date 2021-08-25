@@ -62,6 +62,7 @@ class IncomeNoteListAdapter(
             bindDataList(holder, position)
             bindSwipeLayout(holder, position)
         }
+
     }
 
     private fun bindDataList(holder: ViewHolder, position: Int) {

@@ -3,7 +3,6 @@ package com.yjpapp.stockportfolio.function.incomenote
 import android.app.Activity
 import android.content.Context
 import androidx.paging.cachedIn
-import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
@@ -86,8 +85,11 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         Utils.runBackPressAppCloseEvent(mContext, activity)
     }
 
-    fun getAllIncomeNoteList(): ArrayList<IncomeNoteInfo?> {
-        return incomeNoteInteractor.getAllIncomeNoteInfoList()
+    fun getAllIncomeNoteList(): MutableList<RespIncomeNoteInfo.IncomeNoteList?> {
+        incomeNoteListAdapter?.let {
+            return it.snapshot().toMutableList()
+        }
+        return mutableListOf()
     }
 
     fun closeSwipeLayout() {

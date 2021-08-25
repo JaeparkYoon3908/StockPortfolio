@@ -10,7 +10,7 @@ import android.os.Vibrator
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
-import com.yjpapp.stockportfolio.localdb.sqlte.data.IncomeNoteInfo
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import es.dmoral.toasty.Toasty
 import java.lang.StringBuilder
 import java.text.DecimalFormat
@@ -98,7 +98,7 @@ object Utils {
     }
 
     //전체 수익률 계산 함수 -> (수익률) = (매도총금액) / (매수총금액) * 100 - 100
-    fun calculateTotalGainPercent(incomeNoteInfoList: ArrayList<IncomeNoteInfo?>): Double{
+    fun calculateTotalGainPercent(incomeNoteInfoList: MutableList<RespIncomeNoteInfo.IncomeNoteList?>): Double{
         var allPurchasePrice = 0.0
         var allSellPrice = 0.0
         incomeNoteInfoList.forEach {
