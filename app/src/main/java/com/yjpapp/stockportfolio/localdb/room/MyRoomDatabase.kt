@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockDao
+import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 
 @Database(entities = [MyStockEntity::class], version = 1, exportSchema = false)
 abstract class MyRoomDatabase: RoomDatabase() {

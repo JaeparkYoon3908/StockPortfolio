@@ -7,11 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
-import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
+import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.RecyclerSwipeAdapter
-import com.yjpapp.swipelayout.implments.SwipeItemMangerImpl
 import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
 import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface
 

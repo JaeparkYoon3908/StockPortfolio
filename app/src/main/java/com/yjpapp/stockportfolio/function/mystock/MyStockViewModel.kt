@@ -2,14 +2,11 @@ package com.yjpapp.stockportfolio.function.mystock
 
 
 import android.app.Application
-import android.content.Context
 import android.text.TextUtils
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
-import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
+import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.Utils

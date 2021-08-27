@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ethanhua.skeleton.Skeleton
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
-import com.yjpapp.stockportfolio.localdb.room.MyStockEntity
+import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
 import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils

@@ -8,11 +8,11 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
+import org.koin.android.ext.android.inject
 
 class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
 
-    private val myViewModel by lazy { MyViewModel(this.mContext) }
-    private lateinit var rewardedAd: RewardedAd
+    private val myViewModel: MyViewModel by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)

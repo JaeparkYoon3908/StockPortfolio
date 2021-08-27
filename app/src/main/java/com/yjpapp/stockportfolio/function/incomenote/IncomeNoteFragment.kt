@@ -109,7 +109,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             txtTotalRealizationGainsLossesPercent.isSelected = true
         }
 
-        bindTotalGainData()
         initRecyclerView()
     }
 

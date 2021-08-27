@@ -36,4 +36,10 @@ data class RespIncomeNoteInfo(
         @SerializedName("sellCount")
         var sellCount: Int = 0 // 매도수량
         )
+
+    data class TotalProfitOrLossInfo(
+        @SerializedName("totalPrice")
+        var totalPrice: String = "",
+        @SerializedName("totalPercent")
+        var totalPercent: String ="")
 }

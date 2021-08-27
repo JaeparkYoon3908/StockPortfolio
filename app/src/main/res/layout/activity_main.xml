@@ -131,7 +131,7 @@
         tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
-        app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_Ad"
+        app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_My"
         android:onClick="clickBottomMenu"
         >
 
@@ -152,7 +152,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lin_MainActivity_BottomMenu_Ad"
+        android:id="@+id/lin_MainActivity_BottomMenu_My"
         android:layout_width="0dp"
         android:layout_height="@dimen/common_60dp"
         android:orientation="vertical"

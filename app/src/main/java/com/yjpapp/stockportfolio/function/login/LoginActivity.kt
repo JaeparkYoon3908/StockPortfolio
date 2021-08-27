@@ -55,7 +55,7 @@ class LoginActivity : BaseMVVMActivity() {
     private val facebookCallbackManager by lazy { CallbackManager.Factory.create() }
 
     private val loginViewModel: LoginViewModel by inject()
-    private val preferenceController by lazy { PreferenceController.getInstance(applicationContext) }
+    private val preferenceController: PreferenceController by inject()
 
     interface LoginCallBack {
         fun onClick(view: View)
@@ -67,6 +67,9 @@ class LoginActivity : BaseMVVMActivity() {
                 when (view.id) {
                     btnGoogleLogin.id -> {
 //                        googleSignIn()
+                        preferenceController.apply {
+                            setPreference(PrefKey.KEY_USER_NAME, "윤재박!!")
+                        }
                         startMainActivity()
                     }
 
@@ -118,15 +121,18 @@ class LoginActivity : BaseMVVMActivity() {
 
     private fun setObserver() {
         loginViewModel.apply {
-            loginResultData.observe(this@LoginActivity, {
-//                PreferenceController.getInstance(applicationContext).setPreference(PrefKey.KEY_USER_INDEX, it.userIndex)
-//                PreferenceController.getInstance(applicationContext).setPreference(PrefKey.KEY_USER_TOKEN, it.token)
-//                PreferenceController.getInstance(applicationContext).setPreference(PrefKey.KEY_AUTO_LOGIN, true)
-                StockLog.d(TAG, "email = ${it.email}")
-                StockLog.d(TAG, "name = ${it.name}")
-                StockLog.d(TAG, "userIndex = ${it.userIndex}")
-                StockLog.d(TAG, "login_type = ${it.login_type}")
-
+            loginResultData.observe(this@LoginActivity, { data ->
+                StockLog.d(TAG, "email = ${data.email}")
+                StockLog.d(TAG, "name = ${data.name}")
+                StockLog.d(TAG, "userIndex = ${data.userIndex}")
+                StockLog.d(TAG, "login_type = ${data.login_type}")
+                preferenceController.apply {
+                    setPreference(PrefKey.KEY_USER_INDEX, data.userIndex)
+                    setPreference(PrefKey.KEY_USER_NAME, data.name)
+                    setPreference(PrefKey.KEY_USER_EMAIL, data.email)
+                    setPreference(PrefKey.KEY_USER_LOGIN_TYPE, data.login_type)
+                    setPreference(PrefKey.KEY_USER_TOKEN, data.token)
+                }
             })
 
             autoLoginStatus.observe(this@LoginActivity, {
@@ -273,6 +279,6 @@ class LoginActivity : BaseMVVMActivity() {
     }
 
     private fun startAutoLogin() {
-        //TODO 재 로그인요청
+        //TODO 재 로그인 요청 후 토큰 발급.
     }
 }

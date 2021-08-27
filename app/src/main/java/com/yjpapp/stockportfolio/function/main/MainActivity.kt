@@ -25,13 +25,13 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
         const val FRAGMENT_TAG_MEMO_LIST = "memo_list"
-        const val FRAGMENT_TAG_AD = "ad"
+        const val FRAGMENT_TAG_MY = "my"
     }
 
     private val myStockFragment = MyStockFragment()
     private val incomeNoteFragment = IncomeNoteFragment()
     private val memoListFragment = MemoListFragment()
-    private val adFragment = MyFragment()
+    private val myFragment = MyFragment()
     private var currentFragment: Fragment = myStockFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,11 +46,18 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         binding.apply {
             setSupportActionBar(toolbarMainActivity)
         }
-
+        supportFragmentManager.beginTransaction()
+            .add(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
+            .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
+            .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
+            .add(R.id.cons_MainActivity_fragment, myFragment, FRAGMENT_TAG_MY)
+            .hide(myStockFragment)
+            .hide(incomeNoteFragment)
+            .hide(memoListFragment)
+            .hide(myFragment)
+            .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
-//        addFragment()
         startFirstFragment()
     }
 
@@ -87,33 +94,22 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
                     showMemoList()
                     switchingBottomIconMemo()
                 }
-                FRAGMENT_TAG_AD -> {
-                    showAdFragment()
-                    switchingBottomIconAd()
+                FRAGMENT_TAG_MY -> {
+                    showMyFragment()
+                    switchingBottomIconMy()
                 }
             }
         } else {
             showMyStock()
             switchingBottomIconMyStock()
-//            showIncomeNote()
-//            switchingBottomIconIncomeNote()
         }
     }
 
-//    override fun addFragment() {
-//        supportFragmentManager.beginTransaction()
-//            .add(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
-//            .add(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
-//            .add(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
-//            .hide(myStockFragment)
-//            .hide(incomeNoteFragment)
-//            .hide(memoListFragment)
-//            .commit()
-//    }
-
     override fun showMyStock() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
+//            .replace(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
+            .show(myStockFragment)
+            .hide(currentFragment)
             .commit()
         currentFragment = myStockFragment
         binding.apply {
@@ -125,15 +121,11 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         )
     }
 
-//    override fun hideMyStock() {
-//        supportFragmentManager.beginTransaction()
-//            .hide(myStockFragment)
-//            .commit()
-//    }
-
     override fun showIncomeNote() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
+//            .replace(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
+            .show(incomeNoteFragment)
+            .hide(currentFragment)
             .commit()
         currentFragment = incomeNoteFragment
         preferenceController.setPreference(
@@ -145,15 +137,11 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         }
     }
 
-//    override fun hideIncomeNote() {
-//        supportFragmentManager.beginTransaction()
-//            .hide(incomeNoteFragment)
-//            .commit()
-//    }
-
     override fun showMemoList() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
+//            .replace(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
+            .show(memoListFragment)
+            .hide(currentFragment)
             .commit()
         currentFragment = memoListFragment
         preferenceController.setPreference(
@@ -165,33 +153,25 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         }
     }
 
-//    override fun hideMemoList() {
-//        supportFragmentManager.beginTransaction()
-//            .hide(memoListFragment)
-//            .commit()
-//    }
-
-    override fun showAdFragment() {
+    override fun showMyFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(
-                R.id.cons_MainActivity_fragment,
-                adFragment,
-                FRAGMENT_TAG_AD
-            )
+//            .replace(R.id.cons_MainActivity_fragment, myFragment, FRAGMENT_TAG_MY)
+            .show(myFragment)
+            .hide(currentFragment)
             .commit()
-        currentFragment = adFragment
+        currentFragment = myFragment
         preferenceController.setPreference(
             PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
-            FRAGMENT_TAG_AD
+            FRAGMENT_TAG_MY
         )
         binding.apply {
             txtMainActivityTitle.text = getString(R.string.MyFragment_Title)
         }
     }
 
-    override fun hideAdFragment() {
+    override fun hideMyFragment() {
         supportFragmentManager.beginTransaction()
-            .hide(adFragment)
+            .hide(myFragment)
             .commit()
     }
 
@@ -204,16 +184,20 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
     override fun clickBottomMenu(view: View?) {
         when (currentFragment) {
             myStockFragment -> {
+                if (view?.id == R.id.lin_MainActivity_BottomMenu_MyStock) return
                 switchingBottomIconMyStock()
             }
             incomeNoteFragment -> {
+                if (view?.id == R.id.lin_MainActivity_BottomMenu_IncomeNote) return
                 switchingBottomIconIncomeNote()
             }
             memoListFragment -> {
+                if (view?.id == R.id.lin_MainActivity_BottomMenu_Memo) return
                 switchingBottomIconMemo()
             }
-            adFragment -> {
-                switchingBottomIconAd()
+            myFragment -> {
+                if (view?.id == R.id.lin_MainActivity_BottomMenu_My) return
+                switchingBottomIconMy()
             }
         }
         when (view?.id) {
@@ -229,9 +213,9 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
                 showMemoList()
                 switchingBottomIconMemo()
             }
-            R.id.lin_MainActivity_BottomMenu_Ad -> {
-                showAdFragment()
-                switchingBottomIconAd()
+            R.id.lin_MainActivity_BottomMenu_My -> {
+                showMyFragment()
+                switchingBottomIconMy()
             }
         }
     }
@@ -262,7 +246,7 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
             !binding.txtMainActivityBottomMenuMemo.isSelected
     }
 
-    private fun switchingBottomIconAd() {
+    private fun switchingBottomIconMy() {
         binding.imgMainActivityBottomMenuAd.isSelected =
             !binding.imgMainActivityBottomMenuAd.isSelected
         binding.txtMainActivityBottomMenuAd.isSelected =

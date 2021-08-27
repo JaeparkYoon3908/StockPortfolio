@@ -13,8 +13,16 @@ class StockPortfolioApp: Application() {
         startKoin {
             androidLogger()
             androidContext(this@StockPortfolioApp)
+            /**
+             * ViewModel
+             */
             modules(loginViewModel)
             modules(myStockViewModel)
+            modules(myViewModel)
+            /**
+             * Common
+             */
+            modules(preferenceController)
         }
     }
 }

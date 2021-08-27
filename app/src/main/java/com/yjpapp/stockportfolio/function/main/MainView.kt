@@ -24,9 +24,9 @@ interface MainView {
 
 //    fun hideMemoList()
 
-    fun showAdFragment()
+    fun showMyFragment()
 
-    fun hideAdFragment()
+    fun hideMyFragment()
 
     fun hideCurrentFragment()
 
