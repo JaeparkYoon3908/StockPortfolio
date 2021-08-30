@@ -2,7 +2,6 @@
 from decimal import Decimal
 
 from django.core.paginator import Paginator
-from django.db.models import Sum
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -58,7 +57,6 @@ class IncomeNoteAPI(APIView):
         paginator = Paginator(all_income_note, page_size)
         income_note_list = paginator.get_page(page).object_list
         income_note = [obj.get_resp_json() for obj in income_note_list]
-        total_gain = all_income_note.aggregate(Sum('realPainLossesAmount'))['realPainLossesAmount']
         if int(page) * int(page_size) > total_elements + int(page_size):
             data = dict(
                 page_info=dict(
