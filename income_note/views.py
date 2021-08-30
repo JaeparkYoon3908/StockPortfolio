@@ -1,6 +1,8 @@
 # income_note/views.py
+from decimal import Decimal
 
 from django.core.paginator import Paginator
+from django.db.models import Sum
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -13,12 +15,14 @@ class IncomeNoteAPI(APIView):
     def post(self, request):
         user_index = request.META.get('HTTP_USER_INDEX')
         subjectName = request.data.get("subjectName")
-        realPainLossesAmount = request.data.get("realPainLossesAmount")
         sellDate = request.data.get("sellDate")
-        gainPercent = request.data.get("gainPercent")
-        purchasePrice = request.data.get("purchasePrice")
-        sellPrice = request.data.get("sellPrice")
-        sellCount = request.data.get("sellCount")
+        purchasePrice = Decimal(request.data.get("purchasePrice"))
+        sellPrice = Decimal(request.data.get("sellPrice"))
+        sellCount = Decimal(request.data.get("sellCount"))
+
+        # 계산
+        realPainLossesAmount = (sellPrice - purchasePrice) * sellCount
+        gainPercent = ((sellPrice / purchasePrice) - 1) * 100
 
         if UserInfo.objects.filter(user_index=user_index).exists():
             IncomeNote.objects.create(user_index=user_index,
@@ -42,18 +46,19 @@ class IncomeNoteAPI(APIView):
         user_index = request.META.get('HTTP_USER_INDEX')
         page = request.GET.get('page')
         page_size = request.GET.get('size')
-        startDate = request.GET.get('startDate')
-        endDate = request.GET.get('endDate')
+        start_date = request.GET.get('startDate')
+        end_date = request.GET.get('endDate')
 
-        if not startDate or not endDate:
+        if not start_date or not end_date:
             all_income_note = IncomeNote.objects.filter(user_index=user_index)
         else:
-            all_income_note = IncomeNote.objects.filter(user_index=user_index).filter(sellDate__range=[startDate, endDate])
+            all_income_note = IncomeNote.objects.filter(user_index=user_index).filter(sellDate__range=[start_date, end_date])
 
         total_elements = len(all_income_note)
         paginator = Paginator(all_income_note, page_size)
         income_note_list = paginator.get_page(page).object_list
         income_note = [obj.get_resp_json() for obj in income_note_list]
+        total_gain = all_income_note.aggregate(Sum('realPainLossesAmount'))['realPainLossesAmount']
         if int(page) * int(page_size) > total_elements + int(page_size):
             data = dict(
                 page_info=dict(
@@ -79,12 +84,14 @@ class IncomeNoteAPI(APIView):
         user_index = request.META.get('HTTP_USER_INDEX')
         id = request.data.get("id")
         subjectName = request.data.get("subjectName")
-        realPainLossesAmount = request.data.get("realPainLossesAmount")
         sellDate = request.data.get("sellDate")
-        gainPercent = request.data.get("gainPercent")
-        purchasePrice = request.data.get("purchasePrice")
-        sellPrice = request.data.get("sellPrice")
-        sellCount = request.data.get("sellCount")
+        purchasePrice = Decimal(request.data.get("purchasePrice"))
+        sellPrice = Decimal(request.data.get("sellPrice"))
+        sellCount = Decimal(request.data.get("sellCount"))
+
+        #계산
+        realPainLossesAmount = (sellPrice - purchasePrice) * sellCount
+        gainPercent = ((sellPrice / purchasePrice) - 1) * 100
 
         income_note = IncomeNote.objects.get(pk=id)
         if UserInfo.objects.filter(user_index=user_index).exists():
