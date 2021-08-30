@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.function.incomenote
 import android.app.Activity
 import android.content.Context
 import androidx.paging.cachedIn
+import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
@@ -37,11 +38,11 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         incomeNoteView.showInputDialog(editMode, null)
     }
 
-    fun onInputDialogCompleteClicked(context: Context, respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?) { //id 설정
-        respIncomeNoteList?.id = incomeNoteId
+    fun onInputDialogCompleteClicked(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) { //id 설정
+        reqIncomeNoteInfo.id = incomeNoteId
         if (editMode) {
             CoroutineScope(Dispatchers.Main).launch {
-                val result = incomeNoteInteractor.requestPutIncomeNote(context, respIncomeNoteList)
+                val result = incomeNoteInteractor.requestPutIncomeNote(context, reqIncomeNoteInfo)
                 result?.let {
                     if (it.isSuccessful) {
                         incomeNoteView.showToast(Toasty.normal(context, "수정완료"))
@@ -52,7 +53,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
         } else {
             CoroutineScope(Dispatchers.Main).launch {
-                val result = incomeNoteInteractor.requestPostIncomeNote(context, respIncomeNoteList)
+                val result = incomeNoteInteractor.requestPostIncomeNote(context, reqIncomeNoteInfo)
                 result?.let {
                     if (it.isSuccessful) {
                         incomeNoteView.showToast(Toasty.info(context, "추가완료"))

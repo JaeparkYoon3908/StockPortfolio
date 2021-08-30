@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.network
 
+import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
 import com.yjpapp.stockportfolio.model.response.RespStatusInfo
@@ -25,13 +26,13 @@ interface RetrofitService {
      * 수익노트 API
      */
     @POST("/api/income_note/list")
-    suspend fun requestPostIncomeNote(@Body respIncomeNoteInfo: RespIncomeNoteInfo.IncomeNoteList?): Response<RespStatusInfo>
+    suspend fun requestPostIncomeNote(@Body reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespStatusInfo>
 
     @GET("/api/income_note/list")
     suspend fun requestGetIncomeNote(@QueryMap params: HashMap<String, String>): Response<RespIncomeNoteInfo>
 
     @PUT("/api/income_note/list")
-    suspend fun requestPutIncomeNote(@Body respIncomeNoteInfo: RespIncomeNoteInfo.IncomeNoteList?): Response<RespStatusInfo>
+    suspend fun requestPutIncomeNote(@Body reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespStatusInfo>
 
     @DELETE("/api/income_note/delete/{id}")
     suspend fun requestDeleteIncomeNote(@Path("id")id: Int): Response<RespStatusInfo>

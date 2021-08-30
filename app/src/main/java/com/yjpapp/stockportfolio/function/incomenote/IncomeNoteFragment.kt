@@ -156,15 +156,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         var totalGainPercent = 0.0
         val gainPercentList = ArrayList<Double>()
 
-        if(allIncomeNoteList.size!=0){
-            for (i in allIncomeNoteList.indices) {
-                totalGainNumber += Utils.getNumDeletedComma(allIncomeNoteList[i]!!.realPainLossesAmount!!).toDouble()
-                totalGainPercent += Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!).toDouble()
-                gainPercentList.add(Utils.getNumDeletedPercent(allIncomeNoteList[i]!!.gainPercent!!).toDouble())
-            }
-            totalGainPercent = Utils.calculateTotalGainPercent(allIncomeNoteList)
-        }
-
         viewBinding.apply {
 
             txtTotalRealizationGainsLossesData.text =
@@ -201,10 +192,9 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                 if (!isShowing) {
                     show()
                     etSubjectName.setText(respIncomeNoteInfo?.subjectName)
-//                        etSellDate.setText(incomeNoteInfo?.purchaseDate)
                     etSellDate.setText(respIncomeNoteInfo?.sellDate)
-                    etPurchasePrice.setText(respIncomeNoteInfo?.purchasePrice)
-                    etSellPrice.setText(respIncomeNoteInfo?.sellPrice)
+                    etPurchasePrice.setText(respIncomeNoteInfo?.purchasePrice.toString())
+                    etSellPrice.setText(respIncomeNoteInfo?.sellPrice.toString())
                     etSellCount.setText(respIncomeNoteInfo?.sellCount.toString())
                 }
             }else{

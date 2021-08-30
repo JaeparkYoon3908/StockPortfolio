@@ -28,18 +28,18 @@ data class RespIncomeNoteInfo(
         @SerializedName("sellDate")
         var sellDate: String = "", //매도일
         @SerializedName("gainPercent")
-        var gainPercent: String = "", // 수익률
+        var gainPercent: Double = 0.00, // 수익률
         @SerializedName("purchasePrice")
-        var purchasePrice: String = "", // 매수단가
+        var purchasePrice: Double = 0.00, // 매수단가
         @SerializedName("sellPrice")
-        var sellPrice: String = "", // 매도단가
+        var sellPrice: Double = 0.00, // 매도단가
         @SerializedName("sellCount")
         var sellCount: Int = 0 // 매도수량
         )
 
-    data class TotalProfitOrLossInfo(
-        @SerializedName("totalPrice")
-        var totalPrice: String = "",
-        @SerializedName("totalPercent")
-        var totalPercent: String ="")
+//    data class TotalProfitOrLossInfo(
+//        @SerializedName("totalPrice")
+//        var totalPrice: String = "",
+//        @SerializedName("totalPercent")
+//        var totalPercent: String ="")
 }

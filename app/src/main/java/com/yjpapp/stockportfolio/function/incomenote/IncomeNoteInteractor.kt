@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.function.incomenote
 import android.content.Context
 import androidx.paging.*
 import com.yjpapp.stockportfolio.base.BaseInteractor
+import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.network.RetrofitClient
 import com.yjpapp.stockportfolio.util.StockLog
@@ -16,15 +17,14 @@ import kotlinx.coroutines.flow.Flow
  */
 class IncomeNoteInteractor: BaseInteractor() {
 
-    suspend fun requestPostIncomeNote(context: Context, respIncomeNoteInfo: RespIncomeNoteInfo.IncomeNoteList?) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(respIncomeNoteInfo)
+    suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(reqIncomeNoteInfo)
 
     suspend fun requestDeleteIncomeNote(context: Context, id: Int) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteIncomeNote(id)
 
-
-    suspend fun requestPutIncomeNote(context: Context, respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(respIncomeNoteList)
+    suspend fun requestPutIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(reqIncomeNoteInfo)
 
     suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestGetIncomeNote(params)

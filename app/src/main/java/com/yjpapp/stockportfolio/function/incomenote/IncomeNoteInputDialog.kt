@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
+import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import java.text.DecimalFormat
@@ -93,22 +94,20 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                 val sellDate = etSellDate.text.toString()
                 //매수금액
                 val purchasePrice = etPurchasePrice.text.toString()
-                val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice)
+                val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice).toDouble()
                 //매도금액
                 val sellPrice = etSellPrice.text.toString()
-                val sellPriceNumber = Utils.getNumDeletedComma(sellPrice)
+                val sellPriceNumber = Utils.getNumDeletedComma(sellPrice).toDouble()
                 //매도수량
                 val sellCount = etSellCount.text.toString().toInt()
-                //수익
-                val realPainLossesAmountNumber =
-                        ((sellPriceNumber.toDouble() - purchasePriceNumber.toDouble()) * sellCount)
-                val realPainLossesAmount = DecimalFormat("###,###").format(realPainLossesAmountNumber)
-                //수익률
-                val gainPercentNumber = Utils.calculateGainPercent(purchasePrice, sellPrice)
-                val gainPercent = Utils.getRoundsPercentNumber(gainPercentNumber)
 
-                val dataInfo = RespIncomeNoteInfo.IncomeNoteList(0, subjectName, realPainLossesAmount, sellDate,
-                                                                   gainPercent, purchasePrice, sellPrice, sellCount)
+                val dataInfo = ReqIncomeNoteInfo(
+                    id = 0,
+                    subjectName = subjectName,
+                    sellDate = sellDate,
+                    purchasePrice = purchasePriceNumber,
+                    sellPrice = sellPriceNumber,
+                    sellCount = sellCount)
                 incomeNotePresenter.onInputDialogCompleteClicked(mContext, dataInfo)
                 dismiss()
             }

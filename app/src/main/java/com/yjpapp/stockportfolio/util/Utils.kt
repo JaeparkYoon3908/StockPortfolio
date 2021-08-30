@@ -97,34 +97,17 @@ object Utils {
         return (((sellPriceNum.toDouble() / purchasePriceNum.toDouble()) -1) * 100)
     }
 
-    //전체 수익률 계산 함수 -> (수익률) = (매도총금액) / (매수총금액) * 100 - 100
-    fun calculateTotalGainPercent(incomeNoteInfoList: MutableList<RespIncomeNoteInfo.IncomeNoteList?>): Double{
-        var allPurchasePrice = 0.0
-        var allSellPrice = 0.0
-        incomeNoteInfoList.forEach {
-            if(it?.purchasePrice != null && it.realPainLossesAmount != null){
-                allPurchasePrice += getNumDeletedComma(it.purchasePrice!!).toDouble() * it.sellCount
-                allSellPrice += getNumDeletedComma(it.sellPrice!!).toDouble() * it.sellCount
-            }
-        }
-        return ((allSellPrice / allPurchasePrice) * 100) - 100
-    }
-
-//    fun calculateTotalGainPercent(percentList: ArrayList<Double>): Double{
-//
-//
-//        return if(percentList.size>0){
-//            var result = percentList[0]
-////            percentList.forEach {
-////                result = (1+result)*(1+it)-1
-////            }
-//            for(i in 0 until percentList.size - 1){
-//                result = (1+result)*(1+percentList[i+1])-1
+//    //전체 수익률 계산 함수 -> (수익률) = (매도총금액) / (매수총금액) * 100 - 100
+//    fun calculateTotalGainPercent(incomeNoteInfoList: MutableList<RespIncomeNoteInfo.IncomeNoteList?>): Double{
+//        var allPurchasePrice = 0.0
+//        var allSellPrice = 0.0
+//        incomeNoteInfoList.forEach {
+//            if(it?.purchasePrice != null && it.realPainLossesAmount != null){
+//                allPurchasePrice += getNumDeletedComma(it.purchasePrice!!).toDouble() * it.sellCount
+//                allSellPrice += getNumDeletedComma(it.sellPrice!!).toDouble() * it.sellCount
 //            }
-//            result
-//        }else{
-//            0.00
 //        }
+//        return ((allSellPrice / allPurchasePrice) * 100) - 100
 //    }
 
     //퍼센티지 붙이기
