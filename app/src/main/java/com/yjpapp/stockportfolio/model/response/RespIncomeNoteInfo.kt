@@ -18,6 +18,12 @@ data class RespIncomeNoteInfo(
         var total_elements: Int = 0
         )
 
+    //    data class TotalProfitOrLossInfo(
+//        @SerializedName("totalPrice")
+//        var totalPrice: String = "",
+//        @SerializedName("totalPercent")
+//        var totalPercent: String ="")
+
     data class IncomeNoteList(
         @SerializedName("id")
         var id: Int = 0,
@@ -36,10 +42,4 @@ data class RespIncomeNoteInfo(
         @SerializedName("sellCount")
         var sellCount: Int = 0 // 매도수량
         )
-
-//    data class TotalProfitOrLossInfo(
-//        @SerializedName("totalPrice")
-//        var totalPrice: String = "",
-//        @SerializedName("totalPercent")
-//        var totalPercent: String ="")
 }

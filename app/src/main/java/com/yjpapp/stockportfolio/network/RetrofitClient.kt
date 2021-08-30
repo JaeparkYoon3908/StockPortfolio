@@ -5,12 +5,15 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import com.yjpapp.stockportfolio.BuildConfig
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.util.StockLog
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.android.inject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
@@ -102,9 +105,11 @@ object RetrofitClient {
     }
 
     private fun getClientBuilderWithToken(context: Context, chain: Interceptor.Chain): Request.Builder {
+        val preferenceController = PreferenceController.getInstance(context)
         return chain.request().newBuilder()
             .addHeader("Authorization", "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Inl1bmphZXBhcmsiLCJleHAiOjE2MzA0MTM0NjIsImVtYWlsIjoiZGJzd29xa3IxMjNAZ21haWwuY29tIiwib3JpZ19pYXQiOjE2Mjk4MDg2NjJ9.26VjUcDpjplQ2R1L_OhMsjfcym9llycH7eyen2w-jUI")
             .addHeader("Content-Type", "application/json")
+//            .addHeader("user-index", preferenceController.getPreference(PrefKey.KEY_USER_INDEX)?: "")
             .addHeader("user-index", "10005")
     }
 }
