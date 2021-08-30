@@ -2,6 +2,7 @@
 from decimal import Decimal
 
 from django.core.paginator import Paginator
+from django.db.models import Sum
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -54,6 +55,9 @@ class IncomeNoteAPI(APIView):
             all_income_note = IncomeNote.objects.filter(user_index=user_index).filter(sellDate__range=[start_date, end_date])
 
         total_elements = len(all_income_note)
+        total_price = all_income_note.aggregate(Sum('realPainLossesAmount'))
+        total_percent = "50%"
+
         paginator = Paginator(all_income_note, page_size)
         income_note_list = paginator.get_page(page).object_list
         income_note = [obj.get_resp_json() for obj in income_note_list]
@@ -64,6 +68,10 @@ class IncomeNoteAPI(APIView):
                     page_size=page_size,
                     total_elements=total_elements
                 ),
+                total_profit_or_loss_info=dict(
+                    total_price=total_price['realPainLossesAmount__sum'],
+                    total_percent=total_percent
+                ),
                 income_note=""
             )
         else:
@@ -72,6 +80,10 @@ class IncomeNoteAPI(APIView):
                     page=page,
                     page_size=page_size,
                     total_elements=total_elements
+                ),
+                total_profit_or_loss_info=dict(
+                    total_price=total_price['realPainLossesAmount__sum'],
+                    total_percent=total_percent
                 ),
                 income_note=income_note
             )
