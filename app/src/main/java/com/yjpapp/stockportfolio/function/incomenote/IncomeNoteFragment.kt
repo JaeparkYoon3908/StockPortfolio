@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,10 +18,12 @@ import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * 수익노트 화면
@@ -35,11 +38,10 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private lateinit var layoutManager: LinearLayoutManager
 
-    private var _viewBinding: FragmentIncomeNoteBinding? = null
-    private val viewBinding get() = _viewBinding!!
+    private var _binding: FragmentIncomeNoteBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
-
         super.onAttach(context)
         mContext = context
         //Fragment BackPress Event Call
@@ -56,9 +58,8 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             container: ViewGroup?,
             savedInstanceState: Bundle?,
     ): View {
-
-        _viewBinding = FragmentIncomeNoteBinding.inflate(inflater, container, false)
-        return viewBinding.root
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_income_note, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +80,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _viewBinding = null
+        _binding = null
     }
 
     private var menu: Menu? = null
@@ -102,11 +103,8 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         setHasOptionsMenu(true)
         incomeNotePresenter = IncomeNotePresenter(mContext, this)
 
-        viewBinding.apply {
+        binding.apply {
             btnDate.setOnClickListener(onClickListener)
-            txtTotalRealizationGainsLosses.isSelected = true
-            txtTotalRealizationGainsLossesData.isSelected = true
-            txtTotalRealizationGainsLossesPercent.isSelected = true
         }
 
         initRecyclerView()
@@ -132,7 +130,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 //        layoutManager.reverseLayout = true
 //        layoutManager.stackFromEnd = true
 
-        viewBinding.apply {
+        binding.apply {
             recyclerviewIncomeNoteFragment.layoutManager = layoutManager
             recyclerviewIncomeNoteFragment.itemAnimator = FadeInAnimator()
             recyclerviewIncomeNoteFragment.addOnItemTouchListener(object: RecyclerView.OnItemTouchListener{
@@ -151,12 +149,17 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
     }
 
     override fun bindTotalGainData() {
-        val allIncomeNoteList = incomeNotePresenter.getAllIncomeNoteList()
         var totalGainNumber = 0.0
-        var totalGainPercent = 0.0
-        val gainPercentList = ArrayList<Double>()
+        var totalGainPercent = ""
+        val allIncomeNoteInfoList = incomeNotePresenter.getAllIncomeNoteList()
+        if (allIncomeNoteInfoList.isNotEmpty()) {
+            allIncomeNoteInfoList[0]?.let {
+                totalGainNumber = it.totalPrice
+                totalGainPercent = it.totalPercent
+            }
+        }
 
-        viewBinding.apply {
+        binding.apply {
 
             txtTotalRealizationGainsLossesData.text =
                     NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
@@ -167,8 +170,10 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                 txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
                 txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
             }
-            txtTotalRealizationGainsLossesPercent.text =
-                    Utils.getRoundsPercentNumber(totalGainPercent)
+            //퍼센티지 붙이기
+//            txtTotalRealizationGainsLossesPercent.text =
+//                    Utils.getRoundsPercentNumber(totalGainPercent)
+            txtTotalRealizationGainsLossesPercent.text = totalGainPercent
         }
 
     }
@@ -229,12 +234,16 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         }
     }
 
-    override fun scrollTopPosition(topPosition: Int) {
-        viewBinding.recyclerviewIncomeNoteFragment.scrollToPosition(topPosition)
+    override fun scrollPosition(position: Int) {
+        binding.recyclerviewIncomeNoteFragment.scrollToPosition(position)
+    }
+
+    override fun scrollTopPosition() {
+        binding.recyclerviewIncomeNoteFragment.smoothScrollBy(0, 0)
     }
 
     override fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter?) {
-        viewBinding.recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
+        binding.recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
     }
 
     override fun showToast(toast: Toast) {
@@ -242,7 +251,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
     }
 
     override fun initFilterDateText(startDate: String, endDate: String) {
-        viewBinding.txtFilterDate.text = "$startDate ~ $endDate"
+        binding.txtFilterDate.text = "$startDate ~ $endDate"
     }
 
     private fun initData() {
@@ -250,8 +259,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         val startDate = "${toDayYYYYMM[0]}-01-01"
         val endDate = "${toDayYYYYMM[0]}-12-01"
         lifecycleScope.launch {
-            incomeNotePresenter.getIncomeNoteList(mContext, startDate, endDate)
+            incomeNotePresenter.requestIncomeNoteList(mContext, startDate, endDate)
         }
-        initFilterDateText(startDate, endDate)
     }
 }

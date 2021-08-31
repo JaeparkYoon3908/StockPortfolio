@@ -5,13 +5,10 @@ import android.content.Context
 import androidx.paging.cachedIn
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
-import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 /**
  * IncomeNoteFragment의 Presenter
@@ -26,6 +23,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     private var incomeNoteId = -1
     private val incomeNoteInteractor = IncomeNoteInteractor()
     private var incomeNoteListAdapter: IncomeNoteListAdapter? = null
+    var totalGainNumber = 0.0
+    var totalGainPercent = 0.0
 
     init {
         incomeNoteListAdapter = IncomeNoteListAdapter(this)
@@ -97,22 +96,16 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         incomeNoteListAdapter?.closeSwipeLayout()
     }
 
-    suspend fun getIncomeNoteList(context: Context, startDate: String, endDate: String) {
-        val incomeNoteList = incomeNoteInteractor.getIncomeNoteListByPaging(context, startDate, endDate).cachedIn(CoroutineScope(Dispatchers.Main))
-        incomeNoteList.collectLatest {
-            incomeNoteListAdapter?.submitData(it)
+    suspend fun requestIncomeNoteList(mContext: Context, startDate: String, endDate: String) {
+        val incomeNoteList = incomeNoteInteractor.getIncomeNoteListByPaging(mContext, startDate, endDate).cachedIn(CoroutineScope(Dispatchers.Main))
+        CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).async {
+                incomeNoteList.collectLatest {
+                    incomeNoteListAdapter?.submitData(it)
+                }
+            }.await()
+            incomeNoteView.bindTotalGainData()
+            incomeNoteView.initFilterDateText(startDate, endDate)
         }
-    }
-
-    /**
-     * DatePickerDialog 영역
-     */
-    fun datePickerDialogConfirmClick(startDate: String, endDate: String) {
-        StockLog.d(TAG, "startDate = $startDate")
-        StockLog.d(TAG, "endDate = $endDate")
-        CoroutineScope(Dispatchers.IO).launch {
-            getIncomeNoteList(mContext, startDate, endDate)
-        }
-        incomeNoteView.initFilterDateText(startDate, endDate)
     }
 }

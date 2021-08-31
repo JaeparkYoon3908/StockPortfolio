@@ -5,9 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class RespIncomeNoteInfo(
     @SerializedName("page_info")
-    var page_info: PageInfo,
+    var page_info: PageInfo = PageInfo(),
+    @SerializedName("total_profit_or_loss_info")
+    var total_profit_or_loss_info: TotalProfitOrLossInfo = TotalProfitOrLossInfo(),
     @SerializedName("income_note")
-    var income_note: ArrayList<IncomeNoteList>
+    var income_note: ArrayList<IncomeNoteList> = arrayListOf()
 ){
     data class PageInfo(
         @SerializedName("page")
@@ -18,11 +20,11 @@ data class RespIncomeNoteInfo(
         var total_elements: Int = 0
         )
 
-    //    data class TotalProfitOrLossInfo(
-//        @SerializedName("totalPrice")
-//        var totalPrice: String = "",
-//        @SerializedName("totalPercent")
-//        var totalPercent: String ="")
+    data class TotalProfitOrLossInfo(
+        @SerializedName("total_price")
+        var totalPrice: Double = 0.0,
+        @SerializedName("total_percent")
+        var totalPercent: String = "")
 
     data class IncomeNoteList(
         @SerializedName("id")
@@ -30,7 +32,7 @@ data class RespIncomeNoteInfo(
         @SerializedName("subjectName")
         var subjectName: String = "", // 종목명
         @SerializedName("realPainLossesAmount")
-        var realPainLossesAmount: String = "", //순손익금액
+        var realPainLossesAmount: Double = 0.00, //순손익금액
         @SerializedName("sellDate")
         var sellDate: String = "", //매도일
         @SerializedName("gainPercent")
@@ -40,6 +42,9 @@ data class RespIncomeNoteInfo(
         @SerializedName("sellPrice")
         var sellPrice: Double = 0.00, // 매도단가
         @SerializedName("sellCount")
-        var sellCount: Int = 0 // 매도수량
-        )
+        var sellCount: Int = 0) {
+
+        var totalPrice = 0.0
+        var totalPercent = ""
+    }
 }

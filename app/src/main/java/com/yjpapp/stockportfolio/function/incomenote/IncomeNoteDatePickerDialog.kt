@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -14,6 +13,9 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.DialogIncomeNoteDatePickerBinding
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
     BottomSheetDialogFragment() {
@@ -80,7 +82,10 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
                         else endPickerMonth.value.toString()
                     val startYYYYMM = "$startYYYY-$startMM-01"
                     val endYYYYMM = "$endYYYY-$endMM-01"
-                    incomeNotePresenter.datePickerDialogConfirmClick(startYYYYMM, endYYYYMM)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        incomeNotePresenter.requestIncomeNoteList(mContext, startYYYYMM, endYYYYMM)
+                    }
+
                     dismiss()
                 }
 

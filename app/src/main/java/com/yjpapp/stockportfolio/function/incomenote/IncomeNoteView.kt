@@ -20,7 +20,9 @@ interface IncomeNoteView {
 
     fun hideAddButton()
 
-    fun scrollTopPosition(topPosition: Int)
+    fun scrollPosition(position: Int)
+
+    fun scrollTopPosition()
 
     fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter?)
 

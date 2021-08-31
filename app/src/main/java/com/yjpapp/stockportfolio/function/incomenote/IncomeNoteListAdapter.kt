@@ -66,6 +66,9 @@ class IncomeNoteListAdapter(
     }
 
     private fun bindDataList(holder: ViewHolder, position: Int) {
+        if (getItem(position)==null) {
+            return
+        }
         holder.apply {
             txt_subject_name.isSelected = true
             txt_gain_data.isSelected = true
@@ -78,7 +81,6 @@ class IncomeNoteListAdapter(
             txt_gain_data.text = moneySymbol + getItem(position)?.realPainLossesAmount
 
             //왼쪽
-//            txt_purchase_date_data.text = dataInfoList[position]?.purchaseDate
             txt_sell_date_data.text = getItem(position)?.sellDate
             if (getItem(position)?.sellDate == "") {
                 txt_sell_date_data.text = "-"
@@ -89,13 +91,9 @@ class IncomeNoteListAdapter(
             txt_sell_price_data.text = moneySymbol + getItem(position)?.sellPrice
             txt_sell_count_data.text = getItem(position)?.sellCount.toString()
 
-            var realPainLossesAmountNumber = ""
-            val realPainLossesAmountSplit =
-                getItem(position)?.realPainLossesAmount!!.split(",")
-            for (i in realPainLossesAmountSplit.indices) {
-                realPainLossesAmountNumber += realPainLossesAmountSplit[i]
-            }
-            if (realPainLossesAmountNumber.toDouble() >= 0) {
+            var realPainLossesAmount = getItem(position)?.realPainLossesAmount?: 0.00
+
+            if (realPainLossesAmount >= 0) {
                 txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
                 txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
             } else {
