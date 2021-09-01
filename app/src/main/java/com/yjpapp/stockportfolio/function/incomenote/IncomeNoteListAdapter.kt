@@ -57,7 +57,6 @@ class IncomeNoteListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // 아이템을 길게 눌렀을 때 편집모드로 전환.
         holder.apply {
             bindDataList(holder, position)
             bindSwipeLayout(holder, position)

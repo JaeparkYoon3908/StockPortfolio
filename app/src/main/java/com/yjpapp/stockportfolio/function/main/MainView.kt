@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.function.main
 
 import android.view.View
+import androidx.fragment.app.Fragment
 
 /**
  * MainActivity의 View
@@ -10,23 +11,10 @@ import android.view.View
  */
 
 interface MainView {
-//    fun addFragment()
 
-    fun showMyStock()
+    fun showFragment(fragment: Fragment)
 
-//    fun hideMyStock()
-
-    fun showIncomeNote()
-
-//    fun hideIncomeNote()
-
-    fun showMemoList()
-
-//    fun hideMemoList()
-
-    fun showMyFragment()
-
-    fun hideMyFragment()
+    fun hideFragment(fragment: Fragment)
 
     fun hideCurrentFragment()
 

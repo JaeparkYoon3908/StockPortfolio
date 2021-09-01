@@ -107,7 +107,7 @@ object RetrofitClient {
     private fun getClientBuilderWithToken(context: Context, chain: Interceptor.Chain): Request.Builder {
         val preferenceController = PreferenceController.getInstance(context)
         return chain.request().newBuilder()
-            .addHeader("Authorization", "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Inl1bmphZXBhcmsiLCJleHAiOjE2MzA0MTM0NjIsImVtYWlsIjoiZGJzd29xa3IxMjNAZ21haWwuY29tIiwib3JpZ19pYXQiOjE2Mjk4MDg2NjJ9.26VjUcDpjplQ2R1L_OhMsjfcym9llycH7eyen2w-jUI")
+            .addHeader("Authorization", "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Inl1bmphZXBhcmsiLCJleHAiOjE2MzEwODk3MDIsImVtYWlsIjoiZGJzd29xa3IxMjNAZ21haWwuY29tIiwib3JpZ19pYXQiOjE2MzA0ODQ5MDJ9.3HVN-mTu_x2NfwjtoMOPZ3UXKTUD6xY1ia2QZqm-PU4")
             .addHeader("Content-Type", "application/json")
 //            .addHeader("user-index", preferenceController.getPreference(PrefKey.KEY_USER_INDEX)?: "")
             .addHeader("user-index", "10005")

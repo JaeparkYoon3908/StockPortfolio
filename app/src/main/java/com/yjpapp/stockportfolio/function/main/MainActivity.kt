@@ -83,95 +83,81 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         if (preferenceController.isExists(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)) {
             when (preferenceController.getPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)) {
                 FRAGMENT_TAG_MY_STOCK -> {
-                    showMyStock()
+                    showFragment(myStockFragment)
                     switchingBottomIconMyStock()
                 }
                 FRAGMENT_TAG_INCOME_NOTE -> {
-                    showIncomeNote()
+                    showFragment(incomeNoteFragment)
                     switchingBottomIconIncomeNote()
                 }
                 FRAGMENT_TAG_MEMO_LIST -> {
-                    showMemoList()
+                    showFragment(memoListFragment)
                     switchingBottomIconMemo()
                 }
                 FRAGMENT_TAG_MY -> {
-                    showMyFragment()
+                    showFragment(myFragment)
                     switchingBottomIconMy()
                 }
             }
         } else {
-            showMyStock()
+            showFragment(myStockFragment)
             switchingBottomIconMyStock()
         }
     }
 
-    override fun showMyStock() {
+    override fun showFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-//            .replace(R.id.cons_MainActivity_fragment, myStockFragment, FRAGMENT_TAG_MY_STOCK)
-            .show(myStockFragment)
             .hide(currentFragment)
+            .show(fragment)
             .commit()
-        currentFragment = myStockFragment
-        binding.apply {
-            txtMainActivityTitle.text = getString(R.string.MyStockFragment_Title)
+        currentFragment = fragment
+        when (fragment) {
+            myStockFragment -> {
+                binding.apply {
+                    txtMainActivityTitle.text = getString(R.string.MyStockFragment_Title)
+                }
+                preferenceController.setPreference(
+                    PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
+                    FRAGMENT_TAG_MY_STOCK
+                )
+            }
+
+            incomeNoteFragment -> {
+                preferenceController.setPreference(
+                    PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
+                    FRAGMENT_TAG_INCOME_NOTE
+                )
+                binding.apply {
+                    txtMainActivityTitle.text = getString(R.string.IncomeNoteFragment_Title)
+                }
+            }
+
+            memoListFragment -> {
+                preferenceController.setPreference(
+                    PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
+                    FRAGMENT_TAG_MEMO_LIST
+                )
+                binding.apply {
+                    txtMainActivityTitle.text = getString(R.string.MemoListFragment_Title)
+                }
+            }
+
+            myFragment -> {
+                preferenceController.setPreference(
+                    PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
+                    FRAGMENT_TAG_MY
+                )
+                binding.apply {
+                    txtMainActivityTitle.text = getString(R.string.MyFragment_Title)
+                }
+            }
         }
-        preferenceController.setPreference(
-            PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
-            FRAGMENT_TAG_MY_STOCK
-        )
+
     }
 
-    override fun showIncomeNote() {
+    override fun hideFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-//            .replace(R.id.cons_MainActivity_fragment, incomeNoteFragment, FRAGMENT_TAG_INCOME_NOTE)
-            .show(incomeNoteFragment)
-            .hide(currentFragment)
-            .commit()
-        currentFragment = incomeNoteFragment
-        preferenceController.setPreference(
-            PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
-            FRAGMENT_TAG_INCOME_NOTE
-        )
-        binding.apply {
-            txtMainActivityTitle.text = getString(R.string.IncomeNoteFragment_Title)
-        }
-    }
-
-    override fun showMemoList() {
-        supportFragmentManager.beginTransaction()
-//            .replace(R.id.cons_MainActivity_fragment, memoListFragment, FRAGMENT_TAG_MEMO_LIST)
-            .show(memoListFragment)
-            .hide(currentFragment)
-            .commit()
-        currentFragment = memoListFragment
-        preferenceController.setPreference(
-            PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
-            FRAGMENT_TAG_MEMO_LIST
-        )
-        binding.apply {
-            txtMainActivityTitle.text = getString(R.string.MemoListFragment_Title)
-        }
-    }
-
-    override fun showMyFragment() {
-        supportFragmentManager.beginTransaction()
-//            .replace(R.id.cons_MainActivity_fragment, myFragment, FRAGMENT_TAG_MY)
-            .show(myFragment)
-            .hide(currentFragment)
-            .commit()
-        currentFragment = myFragment
-        preferenceController.setPreference(
-            PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
-            FRAGMENT_TAG_MY
-        )
-        binding.apply {
-            txtMainActivityTitle.text = getString(R.string.MyFragment_Title)
-        }
-    }
-
-    override fun hideMyFragment() {
-        supportFragmentManager.beginTransaction()
-            .hide(myFragment)
+            .hide(fragment)
             .commit()
     }
 
@@ -202,19 +188,19 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         }
         when (view?.id) {
             R.id.lin_MainActivity_BottomMenu_MyStock -> {
-                showMyStock()
+                showFragment(myStockFragment)
                 switchingBottomIconMyStock()
             }
             R.id.lin_MainActivity_BottomMenu_IncomeNote -> {
-                showIncomeNote()
+                showFragment(incomeNoteFragment)
                 switchingBottomIconIncomeNote()
             }
             R.id.lin_MainActivity_BottomMenu_Memo -> {
-                showMemoList()
+                showFragment(memoListFragment)
                 switchingBottomIconMemo()
             }
             R.id.lin_MainActivity_BottomMenu_My -> {
-                showMyFragment()
+                showFragment(myFragment)
                 switchingBottomIconMy()
             }
         }
