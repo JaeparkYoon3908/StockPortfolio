@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(application: Application, private val userRepository: UserRepository): AndroidViewModel(application) {
     val loginResultData = MutableLiveData<RespLoginUserInfo>()
 
-    fun requestSNSLogin(context: Context, reqSnsLogin: ReqSNSLogin) {
+    fun requestSNSLogin(reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch(Dispatchers.IO) {
             val authorization = PreferenceController.getInstance(getApplication()).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
             val result = userRepository.postUserInfo(getApplication(), reqSnsLogin, authorization)

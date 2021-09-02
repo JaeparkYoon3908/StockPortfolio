@@ -103,17 +103,17 @@ class LoginActivity : BaseMVVMActivity() {
 
     private fun subscribeUI() {
         viewModel.apply {
-            loginResultData.observe(this@LoginActivity, { data ->
-                StockLog.d(TAG, "email = ${data.email}")
-                StockLog.d(TAG, "name = ${data.name}")
-                StockLog.d(TAG, "userIndex = ${data.userIndex}")
-                StockLog.d(TAG, "login_type = ${data.login_type}")
+            loginResultData.observe(this@LoginActivity, { response ->
+                StockLog.d(TAG, "email = ${response.data.email}")
+                StockLog.d(TAG, "name = ${response.data.name}")
+                StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
+                StockLog.d(TAG, "login_type = ${response.data.login_type}")
                 preferenceController.apply {
-                    setPreference(PrefKey.KEY_USER_INDEX, data.userIndex)
-                    setPreference(PrefKey.KEY_USER_NAME, data.name)
-                    setPreference(PrefKey.KEY_USER_EMAIL, data.email)
-                    setPreference(PrefKey.KEY_USER_LOGIN_TYPE, data.login_type)
-                    setPreference(PrefKey.KEY_USER_TOKEN, data.token)
+                    setPreference(PrefKey.KEY_USER_INDEX, response.data.userIndex)
+                    setPreference(PrefKey.KEY_USER_NAME, response.data.name)
+                    setPreference(PrefKey.KEY_USER_EMAIL, response.data.email)
+                    setPreference(PrefKey.KEY_USER_LOGIN_TYPE, response.data.login_type)
+                    setPreference(PrefKey.KEY_USER_TOKEN, response.data.token)
                     setPreference(PrefKey.KEY_AUTO_LOGIN, true)
                 }
                 startMainActivity()
@@ -196,9 +196,9 @@ class LoginActivity : BaseMVVMActivity() {
                 val callback = GraphJSONObjectCallback { `object`, response ->
                     val respFacebookUserInfo = Gson().fromJson(response.rawResponse, RespFacebookUserInfo::class.java)
                     snsLoginSuccess(ReqSNSLogin(
-                        email = respFacebookUserInfo.email,
-                        name = respFacebookUserInfo.name,
-                        loginType = StockPortfolioConfig.SIGN_TYPE_FACEBOOK)
+                        user_email = respFacebookUserInfo.email,
+                        user_name = respFacebookUserInfo.name,
+                        login_type = StockPortfolioConfig.SIGN_TYPE_FACEBOOK)
                     )
                 }
                 val request = GraphRequest.newMeRequest(accessToken, callback)
@@ -232,6 +232,6 @@ class LoginActivity : BaseMVVMActivity() {
     }
 
     private fun snsLoginSuccess(reqSnsLogin: ReqSNSLogin) {
-        viewModel.requestSNSLogin(applicationContext, reqSnsLogin)
+        viewModel.requestSNSLogin(reqSnsLogin)
     }
 }
