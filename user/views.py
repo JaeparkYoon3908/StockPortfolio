@@ -18,21 +18,38 @@ class RegistUser(APIView):
         user_name = request.data.get('user_name', "") # 클라이언트에서 올리는 user_pw
         login_type = request.data.get('login_type', "") # 클라이언트에서 올리는 login_type
 
+        response = requests.post(
+            "http://112.147.50.202/api/token/",
+            # "http://127.0.0.1:8000/api/token/",
+            json={"username": "yunjaepark", "password": "fnclrkakql3#"}
+        )
+        token = "jwt " + response.json().get("token")
 
         if UserInfo.objects.filter(user_email=user_email).exists() and UserInfo.objects.filter(login_type=login_type).exists():
-            data = dict(
-                status=600,
-                msg="이미 회원가입 되어있는 아이디입니다."
-            )
+            try:
+                cursor = connection.cursor()
+                query = "SELECT user_index FROM user_info WHERE user_email='" + user_email + "' && user_name='" + user_name + "' && login_type='" + login_type + "'"
+                cursor.execute(query)
+                user_info = cursor.fetchall()
+                connection.commit()
+                connection.close()
+                data = dict(
+                    status=200,
+                    data=dict(
+                        user_index=user_info[0][0],
+                        user_email=user_email,
+                        user_name=user_name,
+                        login_type=login_type,
+                        token=token
+                    )
+                )
+            except:
+                connection.rollback()
+                data = CustomResponse.no_index
+
             return Response(data)
 
         UserInfo.objects.create(user_email=user_email, user_name=user_name, login_type=login_type) # LoginUser 모델에 새로운 object 생성
-
-        response = requests.post(
-            "http://112.147.50.202/api/token/",
-            json={"username": "yunjaepark", "password": "fnclrkakql3#"}
-        )
-        token = response.json().get("token")
         try:
             cursor = connection.cursor()
 
@@ -46,7 +63,8 @@ class RegistUser(APIView):
                     user_index=user_info[0][0],
                     user_email=user_email,
                     user_name=user_name,
-                    login_type=login_type
+                    login_type=login_type,
+                    token=token
                 )
             )
             connection.commit()
@@ -91,11 +109,5 @@ class SelectUser(APIView):
         except:
             connection.rollback()
             data = CustomResponse.no_index
-
-        return Response(data=data)
-
-class TestTokenAuth(APIView):
-    def get(self, request):
-        data = CustomResponse.ok
 
         return Response(data=data)
