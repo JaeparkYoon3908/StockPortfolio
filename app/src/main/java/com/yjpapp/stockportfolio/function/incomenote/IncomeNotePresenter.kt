@@ -98,12 +98,15 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
     suspend fun requestIncomeNoteList(mContext: Context, startDate: String, endDate: String) {
         val incomeNoteList = incomeNoteInteractor.getIncomeNoteListByPaging(mContext, startDate, endDate).cachedIn(CoroutineScope(Dispatchers.Main))
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             incomeNoteList.collectLatest {
                 incomeNoteListAdapter?.submitData(it)
             }
         }
-        incomeNoteView.bindTotalGainData()
         incomeNoteView.initFilterDateText(startDate, endDate)
+    }
+
+    fun requestRefreshTotalGainData() {
+        incomeNoteView.bindTotalGainData()
     }
 }

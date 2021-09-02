@@ -60,8 +60,8 @@ class IncomeNoteListAdapter(
         holder.apply {
             bindDataList(holder, position)
             bindSwipeLayout(holder, position)
+            incomeNotePresenter.requestRefreshTotalGainData()
         }
-
     }
 
     private fun bindDataList(holder: ViewHolder, position: Int) {
