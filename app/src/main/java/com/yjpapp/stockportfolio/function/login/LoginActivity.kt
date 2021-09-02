@@ -3,12 +3,7 @@ package com.yjpapp.stockportfolio.function.login
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import com.facebook.*
@@ -21,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.gson.Gson
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.yjpapp.stockportfolio.R
@@ -31,11 +27,9 @@ import com.yjpapp.stockportfolio.function.main.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
-import com.yjpapp.stockportfolio.network.ServerRespCode
+import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
 import com.yjpapp.stockportfolio.util.StockLog
 import org.koin.android.ext.android.inject
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 
 
 /**
@@ -54,7 +48,7 @@ class LoginActivity : BaseMVVMActivity() {
     private val mGoogleSignInClient by lazy { GoogleSignIn.getClient(applicationContext, gso) }
     private val facebookCallbackManager by lazy { CallbackManager.Factory.create() }
 
-    private val loginViewModel: LoginViewModel by inject()
+    private val viewModel: LoginViewModel by inject()
     private val preferenceController: PreferenceController by inject()
 
     interface LoginCallBack {
@@ -66,11 +60,7 @@ class LoginActivity : BaseMVVMActivity() {
             binding.value.run {
                 when (view.id) {
                     btnGoogleLogin.id -> {
-//                        googleSignIn()
-                        preferenceController.apply {
-                            setPreference(PrefKey.KEY_USER_NAME, "윤재박!!")
-                        }
-                        startMainActivity()
+                        googleSignIn()
                     }
 
                     btnNaverLogin.id -> {
@@ -87,11 +77,7 @@ class LoginActivity : BaseMVVMActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        initView()
         initData()
-        val params = HashMap<String, String>()
-        params["user_index"] = "10003"
-        loginViewModel.getUserInfo(applicationContext, params)
     }
 
     override fun onStart() {
@@ -102,25 +88,21 @@ class LoginActivity : BaseMVVMActivity() {
         super.onResume()
     }
 
-    private fun initView() {
-
-    }
-
     private fun initData() {
         preferenceController.getPreference(PrefKey.KEY_AUTO_LOGIN)?.let {
             if (it == "true") {
-                startAutoLogin()
+                startMainActivity()
             }
         }
         binding.value.apply {
             lifecycleOwner = this@LoginActivity
             callback = loginCallBack
         }
-        setObserver()
+        subscribeUI()
     }
 
-    private fun setObserver() {
-        loginViewModel.apply {
+    private fun subscribeUI() {
+        viewModel.apply {
             loginResultData.observe(this@LoginActivity, { data ->
                 StockLog.d(TAG, "email = ${data.email}")
                 StockLog.d(TAG, "name = ${data.name}")
@@ -132,23 +114,12 @@ class LoginActivity : BaseMVVMActivity() {
                     setPreference(PrefKey.KEY_USER_EMAIL, data.email)
                     setPreference(PrefKey.KEY_USER_LOGIN_TYPE, data.login_type)
                     setPreference(PrefKey.KEY_USER_TOKEN, data.token)
+                    setPreference(PrefKey.KEY_AUTO_LOGIN, true)
                 }
-            })
-
-            autoLoginStatus.observe(this@LoginActivity, {
-                when (it) {
-                    ServerRespCode.OK -> {
-
-                    }
-
-                    ServerRespCode.BadRequest -> {
-
-                    }
-                }
+                startMainActivity()
             })
         }
     }
-
 
     private fun googleSignIn() {
         val signInIntent = mGoogleSignInClient.signInIntent
@@ -162,19 +133,19 @@ class LoginActivity : BaseMVVMActivity() {
             try {
                 val acct: GoogleSignInAccount? = task.getResult(ApiException::class.java)
                 acct?.let {
-                    val personName = it.displayName
-                    val personGivenName = it.givenName
-                    val personFamilyName = it.familyName
-                    val personEmail = it.email
-                    val personId = it.id
-                    val personPhoto: Uri? = it.photoUrl
-                    StockLog.d(TAG, "handleSignInResult:personName $personName")
-                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
-                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
-                    StockLog.d(TAG, "handleSignInResult:personId $personId")
-                    StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
-                    StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
-                    snsLoginSuccess(ReqSNSLogin(personEmail, personName, StockPortfolioConfig.SIGN_TYPE_GOOGLE))
+//                    val personName = it.displayName
+//                    val personGivenName = it.givenName
+//                    val personFamilyName = it.familyName
+//                    val personEmail = it.email
+//                    val personId = it.id
+//                    val personPhoto: Uri? = it.photoUrl
+//                    StockLog.d(TAG, "handleSignInResult:personName $personName")
+//                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
+//                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
+//                    StockLog.d(TAG, "handleSignInResult:personId $personId")
+//                    StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
+//                    StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
+                    snsLoginSuccess(ReqSNSLogin(it.email!!, it.displayName!!, StockPortfolioConfig.SIGN_TYPE_GOOGLE))
                 }
             } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -199,7 +170,9 @@ class LoginActivity : BaseMVVMActivity() {
                     StockLog.d(TAG, "refreshToken : $refreshToken")
                     StockLog.d(TAG, "expiresAt : $expiresAt")
                     StockLog.d(TAG, "tokenType : $tokenType")
-
+                    val params = hashMapOf<String, String>()
+                    params["Authorization"] = "$tokenType $accessToken"
+                    viewModel.requestNaverUserInfo(params)
                 } else {
                     val errorCode: String = mOAuthLoginModule.getLastErrorCode(applicationContext).code
                     val errorDesc: String = mOAuthLoginModule.getLastErrorDesc(applicationContext)
@@ -221,8 +194,12 @@ class LoginActivity : BaseMVVMActivity() {
                 StockLog.d(TAG, "onSuccess")
                 val accessToken = AccessToken.getCurrentAccessToken()
                 val callback = GraphJSONObjectCallback { `object`, response ->
-                    StockLog.d(TAG, "response.rawResponse : $response.rawResponse")
-                    StockLog.d(TAG, "accessToken : ${AccessToken.getCurrentAccessToken().token}")
+                    val respFacebookUserInfo = Gson().fromJson(response.rawResponse, RespFacebookUserInfo::class.java)
+                    snsLoginSuccess(ReqSNSLogin(
+                        email = respFacebookUserInfo.email,
+                        name = respFacebookUserInfo.name,
+                        loginType = StockPortfolioConfig.SIGN_TYPE_FACEBOOK)
+                    )
                 }
                 val request = GraphRequest.newMeRequest(accessToken, callback)
                 val originField = "name, email"
@@ -230,7 +207,6 @@ class LoginActivity : BaseMVVMActivity() {
                 parameters.putString("fields", originField)
                 request.parameters = parameters
                 request.executeAsync()
-
             }
 
             override fun onCancel() {
@@ -250,35 +226,12 @@ class LoginActivity : BaseMVVMActivity() {
         finish()
     }
 
-    private fun getHashKey() {
-        var packageInfo: PackageInfo? = null
-        try {
-            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        if (packageInfo == null) Log.e("KeyHash", "KeyHash:null")
-        for (signature in packageInfo!!.signatures) {
-            try {
-                val md: MessageDigest = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT))
-            } catch (e: NoSuchAlgorithmException) {
-                Log.e("KeyHash", "Unable to get MessageDigest. signature=$signature", e)
-            }
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private fun snsLoginSuccess(reqSnsLogin: ReqSNSLogin) {
-        loginViewModel.postUserInfo(applicationContext, reqSnsLogin)
-    }
-
-    private fun startAutoLogin() {
-        //TODO 재 로그인 요청 후 토큰 발급.
+        viewModel.requestSNSLogin(applicationContext, reqSnsLogin)
     }
 }

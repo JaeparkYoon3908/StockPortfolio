@@ -78,8 +78,6 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
             txtComplete.id -> {
                 //예외처리 (값을 모두 입력하지 않았을 때)
                 if (etSubjectName.text.isEmpty() ||
-//                    etPurchaseDate.text.isEmpty() ||
-//                    etSellDate.text.isEmpty() ||
                         etPurchasePrice.text.isEmpty() ||
                         etSellPrice.text.isEmpty() ||
                         etSellCount.text.isEmpty()
@@ -181,11 +179,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         } else {
             (month + 1).toString()
         }
-//        purchaseDay = if (dayOfMonth < 10) {
-//            "0$dayOfMonth"
-//        } else {
-//            dayOfMonth.toString()
-//        }
+
         uiHandler.sendEmptyMessage(MSG.PURCHASE_DATE_DATA_INPUT)
     }
 }

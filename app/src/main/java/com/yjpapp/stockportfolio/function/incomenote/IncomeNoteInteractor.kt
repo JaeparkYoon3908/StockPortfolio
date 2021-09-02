@@ -3,6 +3,8 @@ package com.yjpapp.stockportfolio.function.incomenote
 import android.content.Context
 import androidx.paging.*
 import com.yjpapp.stockportfolio.base.BaseInteractor
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.network.RetrofitClient
@@ -16,18 +18,17 @@ import kotlinx.coroutines.flow.Flow
  * @since 2020.12
  */
 class IncomeNoteInteractor: BaseInteractor() {
+    suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo, authorization: String) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY, authorization)?.requestPostIncomeNote(reqIncomeNoteInfo)
 
-    suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(reqIncomeNoteInfo)
+    suspend fun requestDeleteIncomeNote(context: Context, id: Int, authorization: String) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY, authorization)?.requestDeleteIncomeNote(id)
 
-    suspend fun requestDeleteIncomeNote(context: Context, id: Int) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteIncomeNote(id)
+    suspend fun requestPutIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo, authorization: String) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY, authorization)?.requestPutIncomeNote(reqIncomeNoteInfo)
 
-    suspend fun requestPutIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(reqIncomeNoteInfo)
-
-    suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestGetIncomeNote(params)
+    suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>, authorization: String) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY, authorization)?.requestGetIncomeNote(params)
 
     inner class IncomeNotePagingSource(val context: Context, var startDate: String, var endDate: String): PagingSource<Int, RespIncomeNoteInfo.IncomeNoteList>() {
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RespIncomeNoteInfo.IncomeNoteList> {
@@ -38,7 +39,8 @@ class IncomeNoteInteractor: BaseInteractor() {
                 hashMap["size"] = params.loadSize.toString()
                 hashMap["startDate"] = startDate
                 hashMap["endDate"] = endDate
-                val data = requestGetIncomeNote(context, hashMap)
+                val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
+                val data = requestGetIncomeNote(context, hashMap, authorization)
                 data?.body()?.income_note?.let {
                     if (it.size > 0) {
                         it[0].totalPrice = data.body()?.total_profit_or_loss_info?.totalPrice?: 0.0

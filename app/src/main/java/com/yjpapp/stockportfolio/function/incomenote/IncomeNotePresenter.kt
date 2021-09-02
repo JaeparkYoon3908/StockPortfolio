@@ -3,6 +3,8 @@ package com.yjpapp.stockportfolio.function.incomenote
 import android.app.Activity
 import android.content.Context
 import androidx.paging.cachedIn
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
@@ -41,7 +43,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         reqIncomeNoteInfo.id = incomeNoteId
         if (editMode) {
             CoroutineScope(Dispatchers.Main).launch {
-                val result = incomeNoteInteractor.requestPutIncomeNote(context, reqIncomeNoteInfo)
+                val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
+                val result = incomeNoteInteractor.requestPutIncomeNote(context, reqIncomeNoteInfo, authorization)
                 result?.let {
                     if (it.isSuccessful) {
                         incomeNoteView.showToast(Toasty.normal(context, "수정완료"))
@@ -52,7 +55,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
         } else {
             CoroutineScope(Dispatchers.Main).launch {
-                val result = incomeNoteInteractor.requestPostIncomeNote(context, reqIncomeNoteInfo)
+                val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
+                val result = incomeNoteInteractor.requestPostIncomeNote(context, reqIncomeNoteInfo, authorization)
                 result?.let {
                     if (it.isSuccessful) {
                         incomeNoteView.showToast(Toasty.info(context, "추가완료"))
@@ -74,7 +78,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
     suspend fun onDeleteButtonClick(context: Context, id: Int) { //        incomeNoteInteractor.deleteIncomeNoteInfo(id)
         CoroutineScope(Dispatchers.IO).launch {
-            val result = incomeNoteInteractor.requestDeleteIncomeNote(context, id)
+            val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
+            val result = incomeNoteInteractor.requestDeleteIncomeNote(context, id, authorization)
             if (result!!.isSuccessful) {
                 incomeNoteListAdapter?.refresh()
             }

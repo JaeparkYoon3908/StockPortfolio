@@ -28,12 +28,20 @@ object RetrofitClient {
     const val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
     const val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
-    fun getService(context: Context, baseServerURL: BaseServerURL): RetrofitService? {
+    fun getService(context: Context, baseServerURL: BaseServerURL, authorization: String): RetrofitService? {
         if (isInternetAvailable(context)) {
             val interceptor: Interceptor = object : Interceptor {
                 @Throws(IOException::class)
                 override fun intercept(chain: Interceptor.Chain): Response {
-                    val builder = getClientBuilderWithToken(context, chain)
+                    val builder =
+                        when (baseServerURL) {
+                            BaseServerURL.MY -> {
+                                getClientBuilderWithToken(context, chain, authorization)
+                            }
+                            BaseServerURL.NAVER -> {
+                                getNaverClientBuilderWithToken(chain, authorization)
+                            }
+                        }
                     val response: Response = chain.proceed(builder.build())
                     response.peekBody(Int.MAX_VALUE.toLong())
                     try {
@@ -104,12 +112,17 @@ object RetrofitClient {
         return result
     }
 
-    private fun getClientBuilderWithToken(context: Context, chain: Interceptor.Chain): Request.Builder {
+    private fun getClientBuilderWithToken(context: Context, chain: Interceptor.Chain, authorization: String): Request.Builder {
         val preferenceController = PreferenceController.getInstance(context)
         return chain.request().newBuilder()
-            .addHeader("Authorization", "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Inl1bmphZXBhcmsiLCJleHAiOjE2MzEwODk3MDIsImVtYWlsIjoiZGJzd29xa3IxMjNAZ21haWwuY29tIiwib3JpZ19pYXQiOjE2MzA0ODQ5MDJ9.3HVN-mTu_x2NfwjtoMOPZ3UXKTUD6xY1ia2QZqm-PU4")
+            .addHeader("Authorization", authorization)
             .addHeader("Content-Type", "application/json")
-//            .addHeader("user-index", preferenceController.getPreference(PrefKey.KEY_USER_INDEX)?: "")
-            .addHeader("user-index", "10005")
+            .addHeader("user-index", preferenceController.getPreference(PrefKey.KEY_USER_INDEX)?: "")
+//            .addHeader("user-index", "10005")
+    }
+
+    private fun getNaverClientBuilderWithToken(chain: Interceptor.Chain, authorization: String): Request.Builder {
+        return chain.request().newBuilder()
+            .addHeader("Authorization", authorization)
     }
 }

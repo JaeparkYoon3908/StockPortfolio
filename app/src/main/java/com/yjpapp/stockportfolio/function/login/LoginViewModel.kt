@@ -4,6 +4,10 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
 import com.yjpapp.stockportfolio.repository.UserRepository
@@ -18,29 +22,28 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(application: Application, private val userRepository: UserRepository): AndroidViewModel(application) {
     val loginResultData = MutableLiveData<RespLoginUserInfo>()
-    val autoLoginStatus = MutableLiveData<Int>()
-    val userInfo = MutableLiveData<RespLoginUserInfo>()
 
-    fun postUserInfo(context: Context, reqSnsLogin: ReqSNSLogin) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val result = userRepository.postUserInfo(context, reqSnsLogin)
+    fun requestSNSLogin(context: Context, reqSnsLogin: ReqSNSLogin) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val authorization = PreferenceController.getInstance(getApplication()).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
+            val result = userRepository.postUserInfo(getApplication(), reqSnsLogin, authorization)
             result?.let {
                 if (it.isSuccessful) {
-                    userInfo.value = it.body()
+                    loginResultData.postValue(it.body())
                 }
             }
         }
     }
 
-    fun getUserInfo(context: Context, params: HashMap<String, String>) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val result = userRepository.getUserInfo(context, params)
+    fun requestNaverUserInfo(params: HashMap<String, String>) {
+        viewModelScope.launch(Dispatchers.IO){
+            val authorization = PreferenceController.getInstance(getApplication()).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
+            val result = userRepository.getNaverUserInfo(getApplication(), params, authorization)
             result?.let {
                 if (it.isSuccessful) {
-                    userInfo.postValue(it.body())
+//                    loginResultData.postValue()
                 }
             }
         }
     }
-
 }

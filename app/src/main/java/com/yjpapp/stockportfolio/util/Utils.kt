@@ -1,18 +1,26 @@
 package com.yjpapp.stockportfolio.util
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Context.TELEPHONY_SERVICE
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.content.pm.VersionedPackage
 import android.content.res.Resources
-import android.os.Handler
-import android.os.Looper
-import android.os.VibrationEffect
-import android.os.Vibrator
+import android.os.*
+import android.telephony.TelephonyManager
+import android.util.Base64
+import android.util.Log
+import androidx.core.app.ActivityCompat
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import es.dmoral.toasty.Toasty
 import java.lang.StringBuilder
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -163,7 +171,7 @@ object Utils {
 //                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 //            return ""
 //        }
-//        phoneNum = telManager.line1Number
+//        phoneNum = telManager.line1Number?: ""
 //        if(phoneNum.isNotEmpty()){
 //            if(phoneNum.startsWith("+82")){
 //                phoneNum = phoneNum.replace("+82", "0")
@@ -175,4 +183,25 @@ object Utils {
 //        }
 //        return phoneNum
 //    }
+
+    private fun getHashKey(packageManager: PackageManager, packageName: VersionedPackage) {
+        var packageInfo: PackageInfo? = null
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        if (packageInfo == null) Log.e("KeyHash", "KeyHash:null")
+        for (signature in packageInfo!!.signatures) {
+            try {
+                val md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            } catch (e: NoSuchAlgorithmException) {
+                Log.e("KeyHash", "Unable to get MessageDigest. signature=$signature", e)
+            }
+        }
+    }
 }
