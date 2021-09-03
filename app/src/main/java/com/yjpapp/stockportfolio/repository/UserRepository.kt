@@ -16,8 +16,8 @@ class UserRepository {
     suspend fun getUserInfo(context: Context, params: HashMap<String, String>, authorization: String) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY, authorization)?.requestUserInfo(params)
 
-    suspend fun getNaverUserInfo(context: Context, params: HashMap<String, String>, authorization: String) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.NAVER, authorization)?.requestNaverUserInfo(params)
+    suspend fun getNaverUserInfo(context: Context, authorization: String) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.NAVER, authorization)?.requestNaverUserInfo()
 
 
     fun logout(context: Context) {

@@ -5,6 +5,7 @@ import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
 import com.yjpapp.stockportfolio.model.response.RespStatusInfo
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
+import com.yjpapp.stockportfolio.model.response.RespNaverUserInfo
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -20,7 +21,7 @@ interface RetrofitService {
     suspend fun requestUserInfo(@QueryMap params: HashMap<String, String>): Response<RespLoginUserInfo>
 
     @GET("/v1/nid/me")
-    suspend fun requestNaverUserInfo(@QueryMap params: HashMap<String, String>): Response<RespLoginUserInfo>
+    suspend fun requestNaverUserInfo(): Response<RespNaverUserInfo>
 
     /**
      * 수익노트 API

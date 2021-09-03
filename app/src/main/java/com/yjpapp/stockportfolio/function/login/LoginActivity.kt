@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.function.login
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -118,6 +119,19 @@ class LoginActivity : BaseMVVMActivity() {
                 }
                 startMainActivity()
             })
+
+            respNaverUserInfo.observe(this@LoginActivity, { data ->
+                if (data.message == "success") {
+                    viewModel.requestSNSLogin(
+                        ReqSNSLogin(
+                            user_email = data.response.email,
+                            user_name = data.response.name,
+                            login_type = StockPortfolioConfig.SIGN_TYPE_NAVER
+                    ))
+                } else {
+                    //TODO 예외처리
+                }
+            })
         }
     }
 
@@ -133,18 +147,18 @@ class LoginActivity : BaseMVVMActivity() {
             try {
                 val acct: GoogleSignInAccount? = task.getResult(ApiException::class.java)
                 acct?.let {
-//                    val personName = it.displayName
-//                    val personGivenName = it.givenName
-//                    val personFamilyName = it.familyName
-//                    val personEmail = it.email
-//                    val personId = it.id
-//                    val personPhoto: Uri? = it.photoUrl
-//                    StockLog.d(TAG, "handleSignInResult:personName $personName")
-//                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
-//                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
-//                    StockLog.d(TAG, "handleSignInResult:personId $personId")
-//                    StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
-//                    StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
+                    val personName = it.displayName
+                    val personGivenName = it.givenName
+                    val personFamilyName = it.familyName
+                    val personEmail = it.email
+                    val personId = it.id
+                    val personPhoto: Uri? = it.photoUrl
+                    StockLog.d(TAG, "handleSignInResult:personName $personName")
+                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
+                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
+                    StockLog.d(TAG, "handleSignInResult:personId $personId")
+                    StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
+                    StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
                     snsLoginSuccess(ReqSNSLogin(it.email!!, it.displayName!!, StockPortfolioConfig.SIGN_TYPE_GOOGLE))
                 }
             } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
@@ -170,9 +184,8 @@ class LoginActivity : BaseMVVMActivity() {
                     StockLog.d(TAG, "refreshToken : $refreshToken")
                     StockLog.d(TAG, "expiresAt : $expiresAt")
                     StockLog.d(TAG, "tokenType : $tokenType")
-                    val params = hashMapOf<String, String>()
-                    params["Authorization"] = "$tokenType $accessToken"
-                    viewModel.requestNaverUserInfo(params)
+                    val authorization = "$tokenType $accessToken"
+                    viewModel.requestNaverUserInfo(authorization)
                 } else {
                     val errorCode: String = mOAuthLoginModule.getLastErrorCode(applicationContext).code
                     val errorDesc: String = mOAuthLoginModule.getLastErrorDesc(applicationContext)
