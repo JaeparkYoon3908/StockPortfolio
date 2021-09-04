@@ -52,7 +52,7 @@ class IncomeNoteAPI(APIView):
         if not start_date or not end_date:
             all_income_note = IncomeNote.objects.filter(user_index=user_index)
         else:
-            all_income_note = IncomeNote.objects.filter(user_index=user_index).filter(sellDate__range=[start_date, end_date])
+            all_income_note = IncomeNote.objects.filter(user_index=user_index, sellDate__range=[start_date, end_date])
 
         total_elements = len(all_income_note)
         total_price = all_income_note.aggregate(Sum('realPainLossesAmount'))
@@ -61,7 +61,7 @@ class IncomeNoteAPI(APIView):
         paginator = Paginator(all_income_note, page_size)
         income_note_list = paginator.get_page(page).object_list
         income_note = [obj.get_resp_json() for obj in income_note_list]
-        if int(page) * int(page_size) > total_elements + int(page_size):
+        if int(page) * int(page_size) > total_elements:
             data = dict(
                 page_info=dict(
                     page=page,
