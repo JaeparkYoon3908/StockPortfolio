@@ -155,18 +155,6 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
 
     }
 
-    override fun hideFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .hide(fragment)
-            .commit()
-    }
-
-    override fun hideCurrentFragment() {
-        supportFragmentManager.beginTransaction()
-            .hide(currentFragment)
-            .commit()
-    }
-
     override fun clickBottomMenu(view: View?) {
         when (currentFragment) {
             myStockFragment -> {

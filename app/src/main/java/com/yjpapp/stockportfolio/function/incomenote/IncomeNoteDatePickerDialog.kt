@@ -24,9 +24,9 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
     private var _viewBinding: DialogIncomeNoteDatePickerBinding? = null
     private val viewBinding get() = _viewBinding!!
     private val MIN_YEAR = 2010
-    var initStartYear = Utils.getTodayYYMM()[0]
+    var initStartYear = Utils.getTodayYYMMDD()[0]
     var initStartMonth = "01"
-    var initEndYear = Utils.getTodayYYMM()[0]
+    var initEndYear = Utils.getTodayYYMMDD()[0]
     var initEndMonth = "12"
 
     override fun onAttach(context: Context) {
@@ -97,7 +97,7 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
     }
 
     private fun initLayout() {
-        val nowYYMM: List<String> = Utils.getTodayYYMM()
+        val nowYYMM: List<String> = Utils.getTodayYYMMDD()
         viewBinding.apply {
             btnConfirm.setOnClickListener(onClickListener)
             btnCancel.setOnClickListener(onClickListener)

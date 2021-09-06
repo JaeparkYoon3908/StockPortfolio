@@ -252,7 +252,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
     }
 
     private fun initData() {
-        val toDayYYYYMM = Utils.getTodayYYMM()
+        val toDayYYYYMM = Utils.getTodayYYMMDD()
         val startDate = "${toDayYYYYMM[0]}-01-01"
         val endDate = "${toDayYYYYMM[0]}-12-01"
         lifecycleScope.launch {

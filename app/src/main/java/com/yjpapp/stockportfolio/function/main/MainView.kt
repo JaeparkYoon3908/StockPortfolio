@@ -14,9 +14,5 @@ interface MainView {
 
     fun showFragment(fragment: Fragment)
 
-    fun hideFragment(fragment: Fragment)
-
-    fun hideCurrentFragment()
-
     fun clickBottomMenu(view: View?)
 }

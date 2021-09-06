@@ -53,10 +53,10 @@ object Utils {
     }
 
     //현재 yyyy.mm 반환
-    fun getTodayYYMM(): List<String> {
+    fun getTodayYYMMDD(): List<String> {
         val currentTime: Long = System.currentTimeMillis()
         val todayDate = Date(currentTime)
-        val sdformat = SimpleDateFormat("yyyy-MM")
+        val sdformat = SimpleDateFormat("yyyy-MM-DD")
         return sdformat.format(todayDate).split("-")
     }
 
