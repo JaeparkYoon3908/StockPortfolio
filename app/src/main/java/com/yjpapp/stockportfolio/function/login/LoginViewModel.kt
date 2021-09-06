@@ -27,7 +27,7 @@ class LoginViewModel(application: Application, private val userRepository: UserR
      * API
      */
     val loginResultData = MutableLiveData<RespLoginUserInfo>()
-    fun requestSNSLogin(reqSnsLogin: ReqSNSLogin) {
+    fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch(Dispatchers.IO) {
             val authorization = PreferenceController.getInstance(getApplication()).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
             val result = userRepository.postUserInfo(getApplication(), reqSnsLogin, authorization)

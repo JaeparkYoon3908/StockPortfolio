@@ -92,7 +92,10 @@ class LoginActivity : BaseMVVMActivity() {
     private fun initData() {
         preferenceController.getPreference(PrefKey.KEY_AUTO_LOGIN)?.let {
             if (it == "true") {
-                startMainActivity()
+                val user_email = preferenceController.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
+                val user_name = preferenceController.getPreference(PrefKey.KEY_USER_NAME)?: ""
+                val login_type = preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
+                snsLoginSuccess(ReqSNSLogin(user_email, user_name, login_type))
             }
         }
         binding.value.apply {
@@ -122,7 +125,7 @@ class LoginActivity : BaseMVVMActivity() {
 
             respNaverUserInfo.observe(this@LoginActivity, { data ->
                 if (data.message == "success") {
-                    viewModel.requestSNSLogin(
+                    viewModel.requestLogin(
                         ReqSNSLogin(
                             user_email = data.response.email,
                             user_name = data.response.name,
@@ -245,6 +248,6 @@ class LoginActivity : BaseMVVMActivity() {
     }
 
     private fun snsLoginSuccess(reqSnsLogin: ReqSNSLogin) {
-        viewModel.requestSNSLogin(reqSnsLogin)
+        viewModel.requestLogin(reqSnsLogin)
     }
 }
