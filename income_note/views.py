@@ -49,6 +49,7 @@ class IncomeNoteAPI(APIView):
         start_date = request.GET.get('startDate')
         end_date = request.GET.get('endDate')
 
+
         if not start_date or not end_date:
             all_income_note = IncomeNote.objects.filter(user_index=user_index)
         else:
@@ -60,33 +61,36 @@ class IncomeNoteAPI(APIView):
 
         paginator = Paginator(all_income_note, page_size)
         income_note_list = paginator.get_page(page).object_list
+        if int(page) > 0:
+            pre_income_note_list = paginator.get_page(int(page) - 1).object_list
+            if income_note_list == pre_income_note_list:
+                data = dict(
+                    page_info=dict(
+                        page=page,
+                        page_size=page_size,
+                        total_elements=total_elements
+                    ),
+                    total_profit_or_loss_info=dict(
+                        total_price=total_price['realPainLossesAmount__sum'],
+                        total_percent=total_percent
+                    ),
+                    income_note=""
+                )
+                return Response(data=data)
+
         income_note = [obj.get_resp_json() for obj in income_note_list]
-        if int(page) * int(page_size) > total_elements:
-            data = dict(
-                page_info=dict(
-                    page=page,
-                    page_size=page_size,
-                    total_elements=total_elements
-                ),
-                total_profit_or_loss_info=dict(
-                    total_price=total_price['realPainLossesAmount__sum'],
-                    total_percent=total_percent
-                ),
-                income_note=""
-            )
-        else:
-            data = dict(
-                page_info=dict(
-                    page=page,
-                    page_size=page_size,
-                    total_elements=total_elements
-                ),
-                total_profit_or_loss_info=dict(
-                    total_price=total_price['realPainLossesAmount__sum'],
-                    total_percent=total_percent
-                ),
-                income_note=income_note
-            )
+        data = dict(
+            page_info=dict(
+                page=page,
+                page_size=page_size,
+                total_elements=total_elements
+            ),
+            total_profit_or_loss_info=dict(
+                total_price=total_price['realPainLossesAmount__sum'],
+                total_percent=total_percent
+            ),
+            income_note=income_note
+        )
 
         return Response(data=data)
 
