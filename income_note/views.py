@@ -61,8 +61,24 @@ class IncomeNoteAPI(APIView):
 
         paginator = Paginator(all_income_note, page_size)
         income_note_list = paginator.get_page(page).object_list
+        income_note = [obj.get_resp_json() for obj in income_note_list]
         if int(page) > 0:
             pre_income_note_list = paginator.get_page(int(page) - 1).object_list
+            if int(page) == 1:
+                data = dict(
+                    page_info=dict(
+                        page=page,
+                        page_size=page_size,
+                        total_elements=total_elements
+                    ),
+                    total_profit_or_loss_info=dict(
+                        total_price=total_price['realPainLossesAmount__sum'],
+                        total_percent=total_percent
+                    ),
+                    income_note=income_note
+                )
+
+                return Response(data=data)
             if income_note_list == pre_income_note_list:
                 data = dict(
                     page_info=dict(
@@ -78,7 +94,6 @@ class IncomeNoteAPI(APIView):
                 )
                 return Response(data=data)
 
-        income_note = [obj.get_resp_json() for obj in income_note_list]
         data = dict(
             page_info=dict(
                 page=page,
@@ -89,9 +104,8 @@ class IncomeNoteAPI(APIView):
                 total_price=total_price['realPainLossesAmount__sum'],
                 total_percent=total_percent
             ),
-            income_note=income_note
+            income_note=""
         )
-
         return Response(data=data)
 
     def put(self, request):
