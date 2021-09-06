@@ -13,7 +13,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
-import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
+import com.yjpapp.stockportfolio.widget.CustomDatePickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
@@ -160,7 +160,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                         month = split[1]
                     }
                     //매수 날짜 선택 다이얼로그 show
-                    MonthYearPickerDialog(year, month).apply {
+                    CustomDatePickerDialog(year, month).apply {
                         setListener { view, year, month, dayOfMonth ->
 //                        Toast.makeText(
 //                            requireContext(),

@@ -89,7 +89,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                 //매매한 회사이름
                 val subjectName = etSubjectName.text.toString()
                 //매도일
-                val sellDate = etSellDate.text.toString()
+                val sellDate = etSellDate.text.toString() + "-01"
                 //매수금액
                 val purchasePrice = etPurchasePrice.text.toString()
                 val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice).toDouble()
@@ -162,10 +162,10 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what){
                 MSG.PURCHASE_DATE_DATA_INPUT -> {
-                    etSellDate.setText("$purchaseYear.$purchaseMonth")
+                    etSellDate.setText("$purchaseYear-$purchaseMonth")
                 }
                 MSG.SELL_DATE_DATA_INPUT -> {
-                    etSellDate.setText("$sellYear.$sellMonth.$sellDay")
+                    etSellDate.setText("$sellYear-$sellMonth-$sellDay")
                 }
             }
             return true

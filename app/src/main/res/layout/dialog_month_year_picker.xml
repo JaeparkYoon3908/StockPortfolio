@@ -10,13 +10,20 @@
         <NumberPicker
             android:id="@+id/pickerYear"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp" />
+            android:layout_height="wrap_content" />
 
         <NumberPicker
             android:id="@+id/pickerMonth"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_20dp"
+            />
 
+        <NumberPicker
+            android:id="@+id/pickerDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_20dp"
+            />
     </LinearLayout>
 </layout>

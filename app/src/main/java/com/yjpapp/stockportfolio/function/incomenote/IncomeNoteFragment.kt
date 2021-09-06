@@ -15,12 +15,9 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
-import com.yjpapp.stockportfolio.widget.MonthYearPickerDialog
+import com.yjpapp.stockportfolio.widget.CustomDatePickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
@@ -217,7 +214,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                     month = split[1]
                 }
 
-                MonthYearPickerDialog(year, month).apply {
+                CustomDatePickerDialog(year, month).apply {
                     setListener { view, year, month, dayOfMonth ->
                         Toast.makeText(requireContext(), "Set date: $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
                         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)

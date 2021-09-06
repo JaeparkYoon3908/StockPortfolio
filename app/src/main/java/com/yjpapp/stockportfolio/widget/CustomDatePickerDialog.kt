@@ -9,7 +9,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.DialogMonthYearPickerBinding
 import com.yjpapp.stockportfolio.util.Utils
 
-class MonthYearPickerDialog(var year: String, var month: String) : DialogFragment() {
+class CustomDatePickerDialog(var year: String, var month: String) : DialogFragment() {
 
     companion object {
         private const val MIN_YEAR = 2010
@@ -28,7 +28,7 @@ class MonthYearPickerDialog(var year: String, var month: String) : DialogFragmen
 //        val date = Date()
 //        val cal: Calendar = Calendar.getInstance().apply { time = date }
         val nowYYMM: List<String> = Utils.getTodayYYMM()
-
+        
         binding.pickerMonth.run {
             minValue = 1
             maxValue = 12
