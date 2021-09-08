@@ -2,18 +2,13 @@ package com.yjpapp.stockportfolio.widget
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.DialogMonthYearPickerBinding
 import com.yjpapp.stockportfolio.util.Utils
-import java.lang.IndexOutOfBoundsException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CustomDatePickerDialog(var year: String, var month: String, var day: String = "") : DialogFragment() {
@@ -38,14 +33,14 @@ class CustomDatePickerDialog(var year: String, var month: String, var day: Strin
         binding = DialogMonthYearPickerBinding.inflate(requireActivity().layoutInflater)
 //        val date = Date()
 //        val cal: Calendar = Calendar.getInstance().apply { time = date }
-        val nowYYMM: List<String> = Utils.getTodayYYMMDD()
+        val nowYYYYMMDD: List<String> = Utils.getTodayYYMMDD()
 
         binding.pickerYear.apply {
 //            val currentYear = cal.get(Calendar.YEAR)
             minValue = MIN_YEAR
-            maxValue = nowYYMM[0].toInt()
+            maxValue = nowYYYYMMDD[0].toInt()
             value = if(year.isEmpty() || year.isEmpty()){
-                nowYYMM[0].toInt()
+                nowYYYYMMDD[0].toInt()
             }else{
                 year.toInt()
             }
@@ -56,7 +51,7 @@ class CustomDatePickerDialog(var year: String, var month: String, var day: Strin
             minValue = 1
             maxValue = 12
             value = if(month.isEmpty() || month.isEmpty()){
-                nowYYMM[1].toInt()
+                nowYYYYMMDD[1].toInt()
             }else{
                 month.toInt()
             }
@@ -72,7 +67,7 @@ class CustomDatePickerDialog(var year: String, var month: String, var day: Strin
             minValue = 0
             maxValue = displayValues.size - 1
             value = if(day.isEmpty() || day.isEmpty()){
-                nowYYMM[2].toInt()
+                nowYYYYMMDD[2].toInt()
             }else{
                 day.toInt()
             }
@@ -96,25 +91,43 @@ class CustomDatePickerDialog(var year: String, var month: String, var day: Strin
         binding.pickerYear.setOnValueChangedListener { picker, oldVal, newVal ->
             selectedYear = newVal
             binding.pickerDay.apply {
-                if (value == maxValue) {
-                    //TODO maxValue 값이 줄어듬으로써 outOfIndex 수정하기
-                    Log.d(TAG, "이프문 진입")
-                }
                 val displayValues = getDisplayedMonthValues()
-                displayedValues = displayValues
-                maxValue = displayValues.size - 1
+                when {
+                    value > displayValues.size - 1 -> {
+                        value = displayValues.size - 1
+                        maxValue = displayValues.size - 1
+                        displayedValues = displayValues
+                    }
+                    value != displayValues.size - 1 -> {
+                        displayedValues = displayValues
+                        maxValue = displayValues.size - 1
+                    }
+                    value == displayValues.size - 1 -> {
+                        maxValue = displayValues.size - 1
+                        displayedValues = displayValues
+                    }
+                }
             }
         }
         binding.pickerMonth.setOnValueChangedListener { picker, oldVal, newVal ->
             selectedMonth = newVal
             binding.pickerDay.apply {
                 val displayValues = getDisplayedMonthValues()
-                if (value == maxValue) {
-                    //TODO maxValue 값이 줄어듬으로써 outOfIndex 수정하기
-                    Log.d(TAG, "이프문 진입")
+                when {
+                    value > displayValues.size - 1 -> {
+                        value = displayValues.size - 1
+                        maxValue = displayValues.size - 1
+                        displayedValues = displayValues
+                    }
+                    value != displayValues.size - 1 -> {
+                        displayedValues = displayValues
+                        maxValue = displayValues.size - 1
+                    }
+                    value == displayValues.size - 1  {
+                        maxValue = displayValues.size - 1
+                        displayedValues = displayValues
+                    }
                 }
-                maxValue = displayValues.size - 1
-                displayedValues = displayValues
             }
         }
     }
