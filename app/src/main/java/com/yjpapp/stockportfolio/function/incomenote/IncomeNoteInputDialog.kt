@@ -34,9 +34,10 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     }
     var purchaseYear: String? = null
     var purchaseMonth: String? = null
+    var purchaseDay = "01"
     var sellYear: String? = null
     var sellMonth: String? = null
-    var sellDay: String? = null
+    var sellDay: String = "01"
     val etSellDate: EditText by lazy { findViewById(R.id.et_sell_date) }
     val txtCancel: TextView by lazy { findViewById(R.id.txt_cancel) }
     val txtComplete: TextView by lazy { findViewById(R.id.txt_complete) }
@@ -162,7 +163,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what){
                 MSG.PURCHASE_DATE_DATA_INPUT -> {
-                    etSellDate.setText("$purchaseYear-$purchaseMonth")
+                    etSellDate.setText("$purchaseYear-$purchaseMonth-$purchaseDay")
                 }
                 MSG.SELL_DATE_DATA_INPUT -> {
                     etSellDate.setText("$sellYear-$sellMonth-$sellDay")

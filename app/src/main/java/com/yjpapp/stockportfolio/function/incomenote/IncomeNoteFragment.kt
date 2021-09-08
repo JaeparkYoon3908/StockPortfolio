@@ -208,13 +208,15 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             etSellDate.setOnClickListener{
                 var year = ""
                 var month = ""
+                var day = ""
                 if(etSellDate.text.toString() != ""){
-                    val split = etSellDate.text.toString().split(".")
+                    val split = etSellDate.text.toString().split("-")
                     year = split[0]
                     month = split[1]
+                    day = split[2]
                 }
 
-                CustomDatePickerDialog(year, month).apply {
+                CustomDatePickerDialog(year, month, day).apply {
                     setListener { view, year, month, dayOfMonth ->
                         Toast.makeText(requireContext(), "Set date: $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
                         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
@@ -224,6 +226,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                         }else{
                             month.toString()
                         }
+                        purchaseDay = dayOfMonth.toString()
                     }
                     show(this@IncomeNoteFragment.childFragmentManager, "MonthYearPickerDialog")
                 }
