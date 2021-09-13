@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.function.incomenote
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -15,6 +16,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
+import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.widget.CustomDatePickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
@@ -116,6 +118,8 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
             R.id.btn_date -> {
                 IncomeNoteDatePickerDialog(incomeNotePresenter).apply {
+                    StockLog.d(TAG, "initStartYear = $initStartYear")
+                    StockLog.d(TAG, "initEndMonth = $initEndMonth")
                     show(this@IncomeNoteFragment.childFragmentManager, TAG)
                 }
             }
@@ -205,11 +209,11 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                 }
             }
 
-            etSellDate.setOnClickListener{
+            etSellDate.setOnClickListener {
                 var year = ""
                 var month = ""
                 var day = ""
-                if(etSellDate.text.toString() != ""){
+                if(etSellDate.text.toString() != "") {
                     val split = etSellDate.text.toString().split("-")
                     year = split[0]
                     month = split[1]

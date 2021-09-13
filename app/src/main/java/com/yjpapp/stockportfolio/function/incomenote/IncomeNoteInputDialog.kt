@@ -79,11 +79,12 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
             txtComplete.id -> {
                 //예외처리 (값을 모두 입력하지 않았을 때)
                 if (etSubjectName.text.isEmpty() ||
-                        etPurchasePrice.text.isEmpty() ||
-                        etSellPrice.text.isEmpty() ||
-                        etSellCount.text.isEmpty()
+                    etSellDate.text.isEmpty() ||
+                    etPurchasePrice.text.isEmpty() ||
+                    etSellPrice.text.isEmpty() ||
+                    etSellCount.text.isEmpty()
                 ) {
-                    Toast.makeText(mContext, "필수 값을 모두 입력해야합니다.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(mContext, context.getString(R.string.EditIncomeNoteDialog_Error_Message), Toast.LENGTH_LONG).show()
                     return@OnClickListener
                 }
 

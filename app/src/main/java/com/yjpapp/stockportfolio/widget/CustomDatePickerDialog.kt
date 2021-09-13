@@ -64,15 +64,14 @@ class CustomDatePickerDialog(var year: String, var month: String, var day: Strin
         binding.pickerDay.apply {
             val displayValues = getDisplayedMonthValues()
             displayedValues = displayValues
-            minValue = 0
-            maxValue = displayValues.size - 1
+            minValue = 1
+            maxValue = displayValues.size
             value = if(day.isEmpty() || day.isEmpty()){
                 nowYYYYMMDD[2].toInt()
             }else{
                 day.toInt()
             }
         }
-        initListener()
 
         return AlertDialog.Builder(requireContext())
                 .setTitle("매도한 날짜를 선택해주세요.")
@@ -81,71 +80,26 @@ class CustomDatePickerDialog(var year: String, var month: String, var day: Strin
                     listener?.onDateSet(null,
                         binding.pickerYear.value,
                         binding.pickerMonth.value,
-                        binding.pickerDay.value + 1)
+                        binding.pickerDay.value)
                 }
                 .setNegativeButton(getString(R.string.Common_Cancel)) { _, _ -> dialog?.cancel() }
                 .create()
     }
 
-    private fun initListener() {
-        binding.pickerYear.setOnValueChangedListener { picker, oldVal, newVal ->
-            selectedYear = newVal
-            binding.pickerDay.apply {
-                val displayValues = getDisplayedMonthValues()
-                when {
-                    value > displayValues.size - 1 -> {
-                        value = displayValues.size - 1
-                        maxValue = displayValues.size - 1
-                        displayedValues = displayValues
-                    }
-                    value != displayValues.size - 1 -> {
-                        displayedValues = displayValues
-                        maxValue = displayValues.size - 1
-                    }
-                    value == displayValues.size - 1 -> {
-                        maxValue = displayValues.size - 1
-                        displayedValues = displayValues
-                    }
-                }
-            }
-        }
-        binding.pickerMonth.setOnValueChangedListener { picker, oldVal, newVal ->
-            selectedMonth = newVal
-            binding.pickerDay.apply {
-                val displayValues = getDisplayedMonthValues()
-                when {
-                    value > displayValues.size - 1 -> {
-                        value = displayValues.size - 1
-                        maxValue = displayValues.size - 1
-                        displayedValues = displayValues
-                    }
-                    value != displayValues.size - 1 -> {
-                        displayedValues = displayValues
-                        maxValue = displayValues.size - 1
-                    }
-                    value == displayValues.size - 1  {
-                        maxValue = displayValues.size - 1
-                        displayedValues = displayValues
-                    }
-                }
-            }
-        }
-    }
-
     private fun getDisplayedMonthValues(): Array<String> {
         val result = mutableListOf<String>()
-        val month = if (selectedMonth < 10) {
-            "0$selectedMonth"
-        } else {
-            "$selectedMonth"
-        }
-        val date = "$selectedYear/$month/01"
-        val dateFormat = SimpleDateFormat("yyyy/MM/dd")
-        val convertedDate: Date = dateFormat.parse(date)
-        val c = Calendar.getInstance()
-        c.time = convertedDate
-        val lastMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH)
-        for (i in 1..lastMonth) {
+//        val month = if (selectedMonth < 10) {
+//            "0$selectedMonth"
+//        } else {
+//            "$selectedMonth"
+//        }
+//        val date = "$selectedYear/$month/01"
+//        val dateFormat = SimpleDateFormat("yyyy/MM/dd")
+//        val convertedDate: Date = dateFormat.parse(date)
+//        val c = Calendar.getInstance()
+//        c.time = convertedDate
+//        val lastMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH)
+        for (i in 1..31) {
             if (i < 10) {
                 result.add("0$i")
             } else {
