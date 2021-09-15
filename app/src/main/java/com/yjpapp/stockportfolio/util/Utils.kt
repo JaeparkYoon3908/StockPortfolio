@@ -70,6 +70,7 @@ object Utils {
         return result.toString()
     }
 
+    //5000000 => 5,000,000 변환
     fun getNumInsertComma(num: String): String{
         var result: String = ""
         val decimalFormat = DecimalFormat("###,###")

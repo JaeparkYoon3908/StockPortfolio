@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
+import com.yjpapp.stockportfolio.util.Utils
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.PagingSwipeAdapter
 import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import java.sql.SQLException
 import java.util.*
 
@@ -65,39 +67,40 @@ class IncomeNoteListAdapter(
     }
 
     private fun bindDataList(holder: ViewHolder, position: Int) {
-        if (getItem(position)==null) {
-            return
-        }
-        holder.apply {
-            txt_subject_name.isSelected = true
-            txt_gain_data.isSelected = true
-            txt_purchase_price_data.isSelected = true
-            txt_sell_price_data.isSelected = true
-            txt_gain_percent_data.isSelected = true
+        getItem(position)?.let {
+            holder.apply {
+                txt_subject_name.isSelected = true
+                txt_gain_data.isSelected = true
+                txt_purchase_price_data.isSelected = true
+                txt_sell_price_data.isSelected = true
+                txt_gain_percent_data.isSelected = true
 
-            //상단 데이터
-            txt_subject_name.text = getItem(position)?.subjectName
-            txt_gain_data.text = moneySymbol + getItem(position)?.realPainLossesAmount
+                //회사 이름
+                txt_subject_name.text = it.subjectName
+                //수익
+                txt_gain_data.text = moneySymbol + Utils.getNumInsertComma(BigDecimal(it.realPainLossesAmount).toString())
+                //수익 퍼센트
+                txt_gain_percent_data.text = "(${it.gainPercent.toInt()}%)"
+                //매도일
+                txt_sell_date_data.text = getItem(position)?.sellDate
+                if (getItem(position)?.sellDate == "") {
+                    txt_sell_date_data.text = "-"
+                }
+                //매수금액
+                txt_purchase_price_data.text = moneySymbol + Utils.getNumInsertComma(BigDecimal(it.purchasePrice).toString())
+                //매도금액
+                txt_sell_price_data.text = moneySymbol + Utils.getNumInsertComma(BigDecimal(it.sellPrice).toString())
+                //매도수량
+                txt_sell_count_data.text = Utils.getNumInsertComma(it.sellCount.toString())
 
-            //왼쪽
-            txt_sell_date_data.text = getItem(position)?.sellDate
-            if (getItem(position)?.sellDate == "") {
-                txt_sell_date_data.text = "-"
-            }
-            txt_gain_percent_data.text = "(${getItem(position)?.gainPercent})"
-            //오른쪽
-            txt_purchase_price_data.text = moneySymbol + getItem(position)?.purchasePrice
-            txt_sell_price_data.text = moneySymbol + getItem(position)?.sellPrice
-            txt_sell_count_data.text = getItem(position)?.sellCount.toString()
-
-            var realPainLossesAmount = getItem(position)?.realPainLossesAmount?: 0.00
-
-            if (realPainLossesAmount >= 0) {
-                txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-            } else {
-                txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-                txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+                val realPainLossesAmount = it.realPainLossesAmount
+                if (realPainLossesAmount >= 0) {
+                    txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                    txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                } else {
+                    txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+                    txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
+                }
             }
         }
     }

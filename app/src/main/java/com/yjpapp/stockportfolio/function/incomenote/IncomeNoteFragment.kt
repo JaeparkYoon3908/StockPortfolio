@@ -122,7 +122,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                     incomeNotePresenter.initStartYYYYMMDD,
                     incomeNotePresenter.initEndYYYYMMDD
                 ).apply {
-                    
+
                     show(this@IncomeNoteFragment.childFragmentManager, TAG)
                 }
             }
