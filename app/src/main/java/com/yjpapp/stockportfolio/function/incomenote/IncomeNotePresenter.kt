@@ -27,6 +27,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     private var incomeNoteListAdapter: IncomeNoteListAdapter? = null
     var totalGainNumber = 0.0
     var totalGainPercent = 0.0
+    var initStartYYYYMMDD = listOf<String>()
+    var initEndYYYYMMDD = listOf<String>()
 
     init {
         incomeNoteListAdapter = IncomeNoteListAdapter(this)
@@ -108,6 +110,8 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                 incomeNoteListAdapter?.submitData(it)
             }
         }
+        initStartYYYYMMDD = startDate.split("-")
+        initEndYYYYMMDD = endDate.split("-")
         incomeNoteView.initFilterDateText(startDate, endDate)
     }
 

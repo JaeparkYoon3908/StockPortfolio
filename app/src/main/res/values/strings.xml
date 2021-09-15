@@ -44,12 +44,12 @@
     <string name="IncomeNoteFragment_SearchBar_Hint">종목명으로 검색하세요.</string>
     <string name="IncomeNoteFragment_Term">기간</string>
 
-    <string name="EditIncomeNoteDialog_SubjectName_Hint">매매한 회사 이름(필수)</string>
-    <string name="EditIncomeNoteDialog_Purchase_Date_Hint">매수한 날짜(선택)</string>
-    <string name="EditIncomeNoteDialog_Sell_Date_Hint">매도한 날짜(선택)</string>
-    <string name="EditIncomeNoteDialog_Purchase_Price_Hint">1주당 매수한 평단가(필수)</string>
-    <string name="EditIncomeNoteDialog_Sell_Price_Hint">1주당 매도한 평단가(필수)</string>
-    <string name="EditIncomeNoteDialog_Sell_Count_Hint">매도한 수량(필수)</string>
+    <string name="EditIncomeNoteDialog_SubjectName_Hint">매매한 회사 이름</string>
+    <string name="EditIncomeNoteDialog_Purchase_Date_Hint">매수한 날짜</string>
+    <string name="EditIncomeNoteDialog_Sell_Date_Hint">매도한 날짜</string>
+    <string name="EditIncomeNoteDialog_Purchase_Price_Hint">1주당 매수한 평단가</string>
+    <string name="EditIncomeNoteDialog_Sell_Price_Hint">1주당 매도한 평단가</string>
+    <string name="EditIncomeNoteDialog_Sell_Count_Hint">매도한 수량</string>
     <string name="EditIncomeNoteDialog_Error_Message">값을 모두 입력해야합니다.</string>
 
     <string name="IncomeNoteFilterDialog_Title">필터링 할 옵션을 선택하세요.</string>

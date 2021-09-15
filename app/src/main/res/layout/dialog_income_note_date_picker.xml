@@ -14,21 +14,20 @@
         android:id="@+id/txtStartMonth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="시작 연월"
+        android:text="시작 일자"
         android:textColor="@color/color_222222"
-        android:textSize="@dimen/common_14dp"
-        app:layout_constraintEnd_toStartOf="@+id/startPickerYear"
-        app:layout_constraintTop_toTopOf="@+id/startPickerYear"
-        app:layout_constraintBottom_toBottomOf="@+id/startPickerYear"
+        android:textSize="@dimen/common_16dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <NumberPicker
         android:id="@+id/startPickerYear"
         android:layout_width="@dimen/common_100dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtStartMonth"
+        app:layout_constraintTop_toBottomOf="@+id/txtStartMonth"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/startPickerMonth"
         />
     <NumberPicker
@@ -38,6 +37,16 @@
         app:layout_constraintTop_toTopOf="@+id/startPickerYear"
         app:layout_constraintBottom_toBottomOf="@+id/startPickerYear"
         app:layout_constraintStart_toEndOf="@+id/startPickerYear"
+        app:layout_constraintEnd_toStartOf="@+id/startPickerDay"
+        />
+
+    <NumberPicker
+        android:id="@+id/startPickerDay"
+        android:layout_width="@dimen/common_100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/startPickerMonth"
+        app:layout_constraintBottom_toBottomOf="@+id/startPickerMonth"
+        app:layout_constraintStart_toEndOf="@+id/startPickerMonth"
         app:layout_constraintEnd_toEndOf="parent"
         />
 
@@ -45,23 +54,21 @@
         android:id="@+id/txtEndMonth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="종료 연월"
+        android:text="종료 일자"
         android:textColor="@color/color_222222"
-        android:textSize="@dimen/common_14dp"
-        app:layout_constraintEnd_toStartOf="@+id/endPickerYear"
+        android:textSize="@dimen/common_16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/endPickerYear"
-        app:layout_constraintBottom_toBottomOf="@+id/endPickerYear"
+        app:layout_constraintTop_toBottomOf="@+id/startPickerDay"
         />
 
     <NumberPicker
         android:id="@+id/endPickerYear"
         android:layout_width="@dimen/common_100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_20dp"
-        app:layout_constraintTop_toBottomOf="@+id/startPickerYear"
+        app:layout_constraintTop_toBottomOf="@+id/txtEndMonth"
         app:layout_constraintBottom_toTopOf="@+id/btn_confirm"
-        app:layout_constraintStart_toEndOf="@+id/txtEndMonth"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/endPickerMonth"
         />
 
@@ -72,6 +79,16 @@
         app:layout_constraintTop_toTopOf="@+id/endPickerYear"
         app:layout_constraintBottom_toBottomOf="@+id/endPickerYear"
         app:layout_constraintStart_toEndOf="@+id/endPickerYear"
+        app:layout_constraintEnd_toStartOf="@+id/endPickerDay"
+        />
+
+    <NumberPicker
+        android:id="@+id/endPickerDay"
+        android:layout_width="@dimen/common_100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/endPickerMonth"
+        app:layout_constraintBottom_toBottomOf="@+id/endPickerMonth"
+        app:layout_constraintStart_toEndOf="@+id/endPickerMonth"
         app:layout_constraintEnd_toEndOf="parent"
         />
 

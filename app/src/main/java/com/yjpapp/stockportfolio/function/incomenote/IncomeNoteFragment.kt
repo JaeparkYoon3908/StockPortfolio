@@ -117,9 +117,12 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             }
 
             R.id.btn_date -> {
-                IncomeNoteDatePickerDialog(incomeNotePresenter).apply {
-                    StockLog.d(TAG, "initStartYear = $initStartYear")
-                    StockLog.d(TAG, "initEndMonth = $initEndMonth")
+                IncomeNoteDatePickerDialog(
+                    incomeNotePresenter,
+                    incomeNotePresenter.initStartYYYYMMDD,
+                    incomeNotePresenter.initEndYYYYMMDD
+                ).apply {
+                    
                     show(this@IncomeNoteFragment.childFragmentManager, TAG)
                 }
             }

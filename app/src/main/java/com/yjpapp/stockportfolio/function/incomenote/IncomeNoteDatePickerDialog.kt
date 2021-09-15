@@ -17,17 +17,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
-    BottomSheetDialogFragment() {
+class IncomeNoteDatePickerDialog(
+    private val incomeNotePresenter: IncomeNotePresenter,
+    private val startYYYYMMDD: List<String>,
+    private val endYYYYMMDD: List<String>
+) : BottomSheetDialogFragment() {
     private val TAG = IncomeNoteDatePickerDialog::class.java.simpleName
     private lateinit var mContext: Context
     private var _viewBinding: DialogIncomeNoteDatePickerBinding? = null
     private val viewBinding get() = _viewBinding!!
     private val MIN_YEAR = 2010
-    var initStartYear = Utils.getTodayYYMMDD()[0]
-    var initStartMonth = "01"
-    var initEndYear = Utils.getTodayYYMMDD()[0]
-    var initEndMonth = "12"
 
     override fun onAttach(context: Context) {
         mContext = context
@@ -75,7 +74,8 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
 
                     if (startPickerYear.value == endPickerYear.value &&
                         startPickerMonth.value == endPickerMonth.value &&
-                        startPickerDay.value > endPickerDay.value) {
+                        startPickerDay.value > endPickerDay.value
+                    ) {
                         Toasty.info(mContext, "시작일이 종료일보다 큽니다.").show()
                         return@OnClickListener
                     }
@@ -98,7 +98,11 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
                     val startYYYYMMDD = "$startYYYY-$startMM-$startDD"
                     val endYYYYMMDD = "$endYYYY-$endMM-$endDD"
                     CoroutineScope(Dispatchers.Main).launch {
-                        incomeNotePresenter.requestIncomeNoteList(mContext, startYYYYMMDD, endYYYYMMDD)
+                        incomeNotePresenter.requestIncomeNoteList(
+                            mContext,
+                            startYYYYMMDD,
+                            endYYYYMMDD
+                        )
                     }
                     dismiss()
                 }
@@ -111,7 +115,7 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
     }
 
     private fun initLayout() {
-        val nowYYMM: List<String> = Utils.getTodayYYMMDD()
+        val nowYYYYMMDD: List<String> = Utils.getTodayYYMMDD()
         viewBinding.apply {
             btnConfirm.setOnClickListener(onClickListener)
             btnCancel.setOnClickListener(onClickListener)
@@ -119,21 +123,21 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
         //시작 연도
         viewBinding.startPickerYear.apply {
             minValue = MIN_YEAR
-            maxValue = nowYYMM[0].toInt()
-            value = if (initStartYear.isEmpty() || initStartYear.isEmpty()) {
-                nowYYMM[0].toInt()
+            maxValue = nowYYYYMMDD[0].toInt()
+            value = if (startYYYYMMDD.size != 3) {
+                nowYYYYMMDD[0].toInt()
             } else {
-                initStartYear.toInt()
+                startYYYYMMDD[0].toInt()
             }
         }
         //시작 월
         viewBinding.startPickerMonth.apply {
             minValue = 1
             maxValue = 12
-            value = if (initStartMonth.isEmpty() || initStartMonth.isEmpty()) {
-                nowYYMM[1].toInt()
+            value = if (startYYYYMMDD.size != 3) {
+                nowYYYYMMDD[1].toInt()
             } else {
-                initStartMonth.toInt()
+                startYYYYMMDD[1].toInt()
             }
             displayedValues = arrayOf(
                 "01", "02", "03", "04", "05", "06", "07",
@@ -146,30 +150,30 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
             displayedValues = displayValues
             minValue = 1
             maxValue = displayValues.size
-//            value = if(day.isEmpty() || day.isEmpty()){
-//                nowYYYYMMDD[2].toInt()
-//            }else{
-//                day.toInt()
-//            }
+            value = if (startYYYYMMDD.size != 3) {
+                nowYYYYMMDD[2].toInt()
+            } else {
+                startYYYYMMDD[2].toInt()
+            }
         }
         //종료 연도
         viewBinding.endPickerYear.apply {
             minValue = MIN_YEAR
-            maxValue = nowYYMM[0].toInt()
-            value = if (initEndYear.isEmpty() || initEndYear.isEmpty()) {
-                nowYYMM[0].toInt()
+            maxValue = nowYYYYMMDD[0].toInt()
+            value = if (endYYYYMMDD.size != 3) {
+                nowYYYYMMDD[0].toInt()
             } else {
-                initEndYear.toInt()
+                endYYYYMMDD[0].toInt()
             }
         }
         //종료 월
         viewBinding.endPickerMonth.apply {
             minValue = 1
             maxValue = 12
-            value = if (initEndMonth.isEmpty() || initEndMonth.isEmpty()) {
-                nowYYMM[1].toInt()
+            value = if (endYYYYMMDD.size != 3) {
+                nowYYYYMMDD[1].toInt()
             } else {
-                initEndMonth.toInt()
+                endYYYYMMDD[1].toInt()
             }
             displayedValues = arrayOf(
                 "01", "02", "03", "04", "05", "06", "07",
@@ -182,11 +186,11 @@ class IncomeNoteDatePickerDialog(val incomeNotePresenter: IncomeNotePresenter) :
             displayedValues = displayValues
             minValue = 1
             maxValue = displayValues.size
-//            value = if(day.isEmpty() || day.isEmpty()){
-//                nowYYYYMMDD[2].toInt()
-//            }else{
-//                day.toInt()
-//            }
+            value = if (endYYYYMMDD.size != 3) {
+                nowYYYYMMDD[2].toInt()
+            } else {
+                endYYYYMMDD[2].toInt()
+            }
         }
     }
 
