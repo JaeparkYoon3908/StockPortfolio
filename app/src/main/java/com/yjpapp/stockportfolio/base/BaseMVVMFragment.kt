@@ -20,11 +20,6 @@ abstract class BaseMVVMFragment<T : ViewDataBinding>: Fragment() {
     @LayoutRes
     abstract fun getLayoutId(): Int
 
-    /**
-     * BaseMVVMFragment를 상속 받은 Class에서 viewModel을 선언
-     */
-    abstract fun setViewModel()
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -36,15 +31,6 @@ abstract class BaseMVVMFragment<T : ViewDataBinding>: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mDataBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
-        setViewModel()
         return mDataBinding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mDataBinding.apply {
-            lifecycleOwner = this@BaseMVVMFragment
-            executePendingBindings()
-        }
     }
 }

@@ -129,7 +129,7 @@ class LoginActivity : BaseMVVMActivity() {
                         ReqSNSLogin(
                             user_email = data.response.email,
                             user_name = data.response.name,
-                            login_type = StockPortfolioConfig.SIGN_TYPE_NAVER
+                            login_type = StockPortfolioConfig.LOGIN_TYPE_NAVER
                     ))
                 } else {
                     //TODO 예외처리
@@ -162,7 +162,7 @@ class LoginActivity : BaseMVVMActivity() {
                     StockLog.d(TAG, "handleSignInResult:personId $personId")
                     StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
                     StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
-                    snsLoginSuccess(ReqSNSLogin(it.email!!, it.displayName!!, StockPortfolioConfig.SIGN_TYPE_GOOGLE))
+                    snsLoginSuccess(ReqSNSLogin(it.email!!, it.displayName!!, StockPortfolioConfig.LOGIN_TYPE_GOOGLE))
                 }
             } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -214,7 +214,7 @@ class LoginActivity : BaseMVVMActivity() {
                     snsLoginSuccess(ReqSNSLogin(
                         user_email = respFacebookUserInfo.email,
                         user_name = respFacebookUserInfo.name,
-                        login_type = StockPortfolioConfig.SIGN_TYPE_FACEBOOK)
+                        login_type = StockPortfolioConfig.LOGIN_TYPE_FACEBOOK)
                     )
                 }
                 val request = GraphRequest.newMeRequest(accessToken, callback)

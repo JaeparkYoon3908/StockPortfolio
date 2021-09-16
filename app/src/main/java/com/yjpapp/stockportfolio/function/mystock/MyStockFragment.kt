@@ -36,15 +36,12 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
         return R.layout.fragment_my_stock
     }
 
-    override fun setViewModel() {
-        mDataBinding.viewModel = myStockViewModel
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         myStockViewModel.onViewCreated()
         setHasOptionsMenu(true)
         initLayout()
+        initData()
         setObserver()
 //        startSkeletonAnimation()
     }
@@ -103,6 +100,15 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
             })
 
         }
+    }
+
+    private fun initData() {
+        mDataBinding.apply {
+            viewModel = myStockViewModel
+            lifecycleOwner = this@MyStockFragment
+        }
+
+        setObserver()
     }
 
     private fun setObserver() {

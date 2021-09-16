@@ -20,13 +20,48 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initLayout()
+        initData()
     }
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_my
     }
 
-    override fun setViewModel() {
-        mDataBinding.viewModel = myViewModel
+    private fun initLayout() {
+
+    }
+
+    private fun initData() {
+        mDataBinding.apply {
+            viewModel = myViewModel
+            callBack = this@MyFragment.callBack
+            lifecycleOwner = this@MyFragment
+        }
+    }
+
+    interface CallBack {
+        fun onClick(view: View)
+        fun onSwitchClick(view: View)
+    }
+
+    private val callBack = object : CallBack {
+        override fun onClick(view: View) {
+            when (view.id) {
+                R.id.btn_logout -> {
+                    //TODO 로그아웃
+                }
+                R.id.btn_member_off -> {
+                    //TODO 회원 탈퇴
+                }
+            }
+        }
+
+        override fun onSwitchClick(view: View) {
+            when (view.id) {
+
+            }
+        }
+
     }
 }

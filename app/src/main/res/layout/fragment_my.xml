@@ -10,6 +10,9 @@
         <variable
             name="viewModel"
             type="com.yjpapp.stockportfolio.function.my.MyViewModel" />
+        <variable
+            name="callBack"
+            type="com.yjpapp.stockportfolio.function.my.MyFragment.CallBack" />
     </data>
 
     <LinearLayout
@@ -18,67 +21,155 @@
         android:orientation="vertical"
         android:padding="@dimen/common_20dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/txt_label_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/My_Account"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/common_14dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_20dp"
             android:orientation="horizontal">
 
+            <ImageView
+                setLoginTypeImage="@{viewModel.userLoginType}"
+                android:id="@+id/img_login_type_icon"
+                android:layout_width="@dimen/common_35dp"
+                android:layout_height="@dimen/common_35dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@drawable/naver_icon" />
+
+            <TextView
+                android:id="@+id/txt_user_account"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/common_20dp"
+                android:layout_marginEnd="@dimen/common_20dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{viewModel.userEmail}"
+                android:textSize="@dimen/common_16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_login_type_icon"
+                app:layout_constraintEnd_toStartOf="@+id/btn_logout"
+                app:layout_constraintStart_toEndOf="@+id/img_login_type_icon"
+                app:layout_constraintTop_toTopOf="@+id/img_login_type_icon" />
+
+            <TextView
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/My_Logout"
+                android:textColor="@color/color_222222"
+                android:onClick="@{callBack::onClick}"
+                android:textSize="@dimen/common_16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_login_type_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txt_user_account"
+                app:layout_constraintTop_toTopOf="@+id/img_login_type_icon" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/common_20dp"
+            android:background="@color/color_aaaaaa" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_20dp"
+            android:text="@string/MyStockFragment_Title"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/common_14dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:orientation="horizontal" >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="계정"
+                android:text="@string/My_MyStock_Auto_Refresh"
+                android:textColor="@color/color_222222"
+                android:textSize="@dimen/common_16dp"
+                />
+
+            <Switch
+                android:id="@+id/switch_auto_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/common_20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:onClick="@{callBack::onSwitchClick}"
+                android:thumb="@drawable/switch_thumb_20"
+                android:track="@drawable/switch_track_selector" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/My_MyStock_Auto_Add"
                 android:textColor="@color/color_222222"
                 android:textSize="@dimen/common_16dp" />
 
+            <Switch
+                android:id="@+id/switch_auto_add"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/common_20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:onClick="@{callBack::onSwitchClick}"
+                android:thumb="@drawable/switch_thumb_20"
+                android:track="@drawable/switch_track_selector" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:orientation="horizontal" >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/common_20dp"
-                android:text="@{viewModel.userName}"
-                android:textSize="@dimen/common_14dp" />
-        </LinearLayout>
+                android:text="@string/My_MyStock_Show_Delete_Dialog"
+                android:textColor="@color/color_222222"
+                android:textSize="@dimen/common_16dp" />
+
+            <Switch
+                android:id="@+id/switch_show_delete_check"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/common_20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:onClick="@{callBack::onSwitchClick}"
+                android:thumb="@drawable/switch_thumb_20"
+                android:track="@drawable/switch_track_selector" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/common_20dp"
+            android:layout_marginBottom="@dimen/common_20dp"
+            android:background="@color/color_aaaaaa" />
 
         <TextView
+            android:id="@+id/btn_member_off"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="나의 주식"
+            android:text="@string/My_Member_Off"
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="자동 새로고침"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="매도 후 손익노트 자동등록"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="삭제 시 확인 창 띄우기"
-            />
-
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="로그아웃"
-            android:textColor="@color/color_222222"
-            android:textSize="@dimen/common_16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="회원탈퇴"
-            android:textColor="@color/color_222222"
-            android:textSize="@dimen/common_16dp" />
-
 
     </LinearLayout>
 </layout>

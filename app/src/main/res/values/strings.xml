@@ -80,6 +80,13 @@
     <string name="Login_Naver_Id_Login">네이버 아이디 로그인</string>
     <string name="Login_Kakao_Id_Login">페이스북 아이디 로그인</string>
 
+    <string name="My_Account">계정</string>
+    <string name="My_Logout">로그아웃</string>
+    <string name="My_Member_Off">회원탈퇴</string>
+    <string name="My_MyStock_Auto_Refresh">자동 새로고침</string>
+    <string name="My_MyStock_Auto_Add">매도 후 손익노트 자동 등록</string>
+    <string name="My_MyStock_Show_Delete_Dialog">삭제 시 확인 창 띄우기</string>
+
     <string name="facebook_app_id">2928940814012749</string>
     <string name="fb_login_protocol_scheme">fb2928940814012749</string>
 </resources>
