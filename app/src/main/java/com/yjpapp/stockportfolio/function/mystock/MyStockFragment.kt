@@ -81,7 +81,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
         val layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
-        mDataBinding.apply {
+        binding.apply {
             recyclerviewMyStockFragment.layoutManager = layoutManager
             recyclerviewMyStockFragment.adapter = myStockAdapter
             recyclerviewMyStockFragment.itemAnimator = FadeInAnimator()
@@ -103,7 +103,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
     }
 
     private fun initData() {
-        mDataBinding.apply {
+        binding.apply {
             viewModel = myStockViewModel
             lifecycleOwner = this@MyStockFragment
         }
@@ -119,7 +119,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                     NOTIFY_HANDLER_INSERT -> {
                         myStockAdapter.notifyItemInserted(it.size - 1)
                         myStockAdapter.notifyItemRangeInserted(it.size - 1, it.size)
-                        mDataBinding.recyclerviewMyStockFragment.scrollToPosition(it.size - 1)
+                        binding.recyclerviewMyStockFragment.scrollToPosition(it.size - 1)
                     }
                     NOTIFY_HANDLER_UPDATE -> {
                         myStockAdapter.notifyDataSetChanged()
@@ -243,7 +243,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
     }
 
     private fun startSkeletonAnimation() {
-        val skeletonScreen = Skeleton.bind(mDataBinding.recyclerviewMyStockFragment)
+        val skeletonScreen = Skeleton.bind(binding.recyclerviewMyStockFragment)
             .adapter(myStockAdapter)
             .shimmer(true)
             .angle(20)

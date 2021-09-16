@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -10,6 +11,7 @@
         <variable
             name="viewModel"
             type="com.yjpapp.stockportfolio.function.my.MyViewModel" />
+
         <variable
             name="callBack"
             type="com.yjpapp.stockportfolio.function.my.MyFragment.CallBack" />
@@ -36,12 +38,12 @@
             android:orientation="horizontal">
 
             <ImageView
-                setLoginTypeImage="@{viewModel.userLoginType}"
                 android:id="@+id/img_login_type_icon"
                 android:layout_width="@dimen/common_35dp"
                 android:layout_height="@dimen/common_35dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                binding:setLoginTypeImage="@{viewModel.userLoginType}"
                 tools:background="@drawable/naver_icon" />
 
             <TextView
@@ -63,9 +65,9 @@
                 android:id="@+id/btn_logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{callBack::onClick}"
                 android:text="@string/My_Logout"
                 android:textColor="@color/color_222222"
-                android:onClick="@{callBack::onClick}"
                 android:textSize="@dimen/common_16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_login_type_icon"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,6 +80,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/common_20dp"
             android:background="@color/color_aaaaaa" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,14 +93,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_10dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/My_MyStock_Auto_Refresh"
                 android:textColor="@color/color_222222"
-                android:textSize="@dimen/common_16dp"
-                />
+                android:textSize="@dimen/common_16dp" />
 
             <Switch
                 android:id="@+id/switch_auto_refresh"
@@ -107,14 +110,16 @@
                 android:layout_gravity="end"
                 android:onClick="@{callBack::onSwitchClick}"
                 android:thumb="@drawable/switch_thumb_20"
-                android:track="@drawable/switch_track_selector" />
+                android:track="@drawable/switch_track_selector"
+                binding:switchChecked="@{viewModel.isAutoRefresh}" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_10dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -130,14 +135,16 @@
                 android:layout_gravity="end"
                 android:onClick="@{callBack::onSwitchClick}"
                 android:thumb="@drawable/switch_thumb_20"
-                android:track="@drawable/switch_track_selector" />
+                android:track="@drawable/switch_track_selector"
+                binding:switchChecked="@{viewModel.isAutoAdd}" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_10dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -153,7 +160,8 @@
                 android:layout_gravity="end"
                 android:onClick="@{callBack::onSwitchClick}"
                 android:thumb="@drawable/switch_thumb_20"
-                android:track="@drawable/switch_track_selector" />
+                android:track="@drawable/switch_track_selector"
+                binding:switchChecked="@{viewModel.isShowDeleteCheck}" />
         </RelativeLayout>
 
         <View

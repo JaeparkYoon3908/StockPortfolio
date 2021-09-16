@@ -6,12 +6,12 @@ import androidx.databinding.BindingAdapter
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.util.Utils
 
-@BindingAdapter("bind:isSelected")
+@BindingAdapter("binding:isSelected")
 fun setSelected(view: View, selected: Boolean) {
     view.isSelected = selected
 }
 
-@BindingAdapter("bind:setNumColor")
+@BindingAdapter("binding:setNumColor")
 fun setNumColor(textView: TextView, num: String) {
     val numToDouble = num.toDouble()
     if (numToDouble > 0) {
@@ -21,7 +21,7 @@ fun setNumColor(textView: TextView, num: String) {
     }
 }
 
-@BindingAdapter("bind:setPercentColor")
+@BindingAdapter("binding:setPercentColor")
 fun setPercentNumColor(textView: TextView, percentNum: String) {
     val percentNumToDouble = Utils.getNumDeletedPercent(percentNum).toDouble()
     if (percentNumToDouble > 0) {

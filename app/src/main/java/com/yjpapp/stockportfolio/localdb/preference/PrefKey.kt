@@ -10,4 +10,8 @@ object PrefKey {
     const val KEY_USER_NAME = "user_name"
     const val KEY_USER_EMAIL = "user_email"
     const val KEY_USER_TOKEN = "user_token"
+    //Setting
+    const val KEY_SETTING_AUTO_REFRESH = "auto_refresh"
+    const val KEY_SETTING_AUTO_ADD = "auto_add"
+    const val KEY_SETTING_SHOW_DELETE_CHECK = "show_delete_check"
 }

@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
 import com.yjpapp.stockportfolio.databinding.ActivitySplashBinding
 import com.yjpapp.stockportfolio.function.login.LoginActivity
-import com.yjpapp.stockportfolio.function.main.MainActivity
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import java.util.*
 
 
@@ -35,16 +35,20 @@ class SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        startSplash()
-//        if(checkPermission()){
-//            startMainActivity()
-//        }else{
-//            requestPermission()
-//        }
+        initData()
         startMainActivity()
     }
 
     override fun initData() {
+        if (!preferenceController.isExists(PrefKey.KEY_SETTING_AUTO_REFRESH)) {
+            preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_REFRESH, true)
+        }
+        if (!preferenceController.isExists(PrefKey.KEY_SETTING_AUTO_ADD)) {
+            preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_ADD, true)
+        }
+        if (!preferenceController.isExists(PrefKey.KEY_SETTING_SHOW_DELETE_CHECK)) {
+            preferenceController.setPreference(PrefKey.KEY_SETTING_SHOW_DELETE_CHECK, true)
+        }
     }
 
     override fun initLayout() {

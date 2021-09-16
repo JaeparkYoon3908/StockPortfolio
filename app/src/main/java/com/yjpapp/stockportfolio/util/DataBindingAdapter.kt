@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.util
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.Switch
 import androidx.databinding.BindingAdapter
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
@@ -11,7 +12,7 @@ fun isSelected(view: View, isSelected: Boolean) {
     view.isSelected = isSelected
 }
 
-@BindingAdapter("setLoginTypeImage")
+@BindingAdapter("binding:setLoginTypeImage")
 fun setLoginTypeImage(imageView: ImageView, loginType: String) {
     when (loginType) {
         StockPortfolioConfig.LOGIN_TYPE_FACEBOOK -> {
@@ -25,3 +26,15 @@ fun setLoginTypeImage(imageView: ImageView, loginType: String) {
         }
     }
 }
+@BindingAdapter("binding:switchChecked")
+fun switchChecked(switch: Switch, isChecked: String) {
+    when (isChecked) {
+        "true" -> {
+            switch.isChecked = true
+        }
+        "false" -> {
+            switch.isChecked = false
+        }
+    }
+}
+

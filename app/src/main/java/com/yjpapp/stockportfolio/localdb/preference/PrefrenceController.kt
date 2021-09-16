@@ -28,7 +28,7 @@ class PreferenceController {
             try{
                 val editor = pref.edit()
                 editor.putString(key, value).apply()
-                editor.commit()
+                editor.apply()
             }catch (e: Exception){
                 e.printStackTrace()
             }
@@ -40,7 +40,7 @@ class PreferenceController {
             try{
                 val editor = pref.edit()
                 editor.putString(key, value.toString()).apply()
-                editor.commit()
+                editor.apply()
             }catch (e: Exception){
                 e.printStackTrace()
             }
@@ -52,7 +52,7 @@ class PreferenceController {
             try{
                 val editor = pref.edit()
                 editor.putString(key, value.toString()).apply()
-                editor.commit()
+                editor.apply()
             }catch (e: Exception){
                 e.printStackTrace()
             }
@@ -64,7 +64,7 @@ class PreferenceController {
             try{
                 val editor = pref.edit()
                 editor.putString(key, value.toString()).apply()
-                editor.commit()
+                editor.apply()
             }catch (e: Exception){
                 e.printStackTrace()
             }
@@ -108,7 +108,7 @@ class PreferenceController {
                 val editor = pref.edit()
                 editor.clear()
                 editor.apply()
-                editor.commit()
+                editor.apply()
             }catch (e: Exception){
                 e.printStackTrace()
             }
