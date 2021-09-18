@@ -6,10 +6,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.databinding.DialogMonthYearPickerBinding
+import com.yjpapp.stockportfolio.databinding.CustomDialogMonthYearPickerBinding
 import com.yjpapp.stockportfolio.util.Utils
-import java.text.SimpleDateFormat
-import java.util.*
 
 class CustomDatePickerDialog(var year: String, var month: String, var day: String = "") : DialogFragment() {
     private val TAG = CustomDatePickerDialog::class.java.simpleName
@@ -21,7 +19,7 @@ class CustomDatePickerDialog(var year: String, var month: String, var day: Strin
         private const val MIN_YEAR = 2010
     }
 
-    private lateinit var binding: DialogMonthYearPickerBinding
+    private lateinit var binding: CustomDialogMonthYearPickerBinding
 
     private var listener: DatePickerDialog.OnDateSetListener? = null
 
@@ -30,7 +28,7 @@ class CustomDatePickerDialog(var year: String, var month: String, var day: Strin
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogMonthYearPickerBinding.inflate(requireActivity().layoutInflater)
+        binding = CustomDialogMonthYearPickerBinding.inflate(requireActivity().layoutInflater)
 //        val date = Date()
 //        val cal: Calendar = Calendar.getInstance().apply { time = date }
         val nowYYYYMMDD: List<String> = Utils.getTodayYYMMDD()

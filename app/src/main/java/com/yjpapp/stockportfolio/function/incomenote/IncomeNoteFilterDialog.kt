@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.databinding.DialogIncomeNoteFilterBinding
+import com.yjpapp.stockportfolio.databinding.CustomDialogIncomeNoteFilterBinding
 import com.yjpapp.stockportfolio.util.Utils
 
 class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSheetDialogFragment() {
 
 //    private lateinit var rootView: View
-    private var _viewBinding: DialogIncomeNoteFilterBinding? = null
+    private var _viewBinding: CustomDialogIncomeNoteFilterBinding? = null
     private val viewBinding get() = _viewBinding!!
 
     private lateinit var mContext: Context
@@ -31,7 +31,7 @@ class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSh
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 //        rootView = inflater.inflate(R.layout.dialog_income_note_filter, container, false)
-        _viewBinding = DialogIncomeNoteFilterBinding.inflate(inflater, container, false)
+        _viewBinding = CustomDialogIncomeNoteFilterBinding.inflate(inflater, container, false)
 
         return viewBinding.root
     }

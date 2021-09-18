@@ -12,7 +12,7 @@ import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.databinding.DialogInputMyStockBinding
+import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
 import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteInputDialog
 
 
@@ -31,9 +31,9 @@ class MyStockInputDialog(context: Context):
     object MSG{
         const val SELL_DATE_DATA_INPUT: Int = 0
     }
-    val binding: DialogInputMyStockBinding = DataBindingUtil.inflate(
+    val binding: CustomDialogInputMyStockBinding = DataBindingUtil.inflate(
         LayoutInflater.from(context),
-        R.layout.dialog_input_my_stock,
+        R.layout.custom_dialog_input_my_stock,
         null,
         false
     )

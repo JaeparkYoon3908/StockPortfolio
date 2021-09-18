@@ -10,7 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.databinding.DialogIncomeNoteDatePickerBinding
+import com.yjpapp.stockportfolio.databinding.CustomDialogIncomeNoteDatePickerBinding
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
@@ -24,7 +24,7 @@ class IncomeNoteDatePickerDialog(
 ) : BottomSheetDialogFragment() {
     private val TAG = IncomeNoteDatePickerDialog::class.java.simpleName
     private lateinit var mContext: Context
-    private var _viewBinding: DialogIncomeNoteDatePickerBinding? = null
+    private var _viewBinding: CustomDialogIncomeNoteDatePickerBinding? = null
     private val viewBinding get() = _viewBinding!!
     private val MIN_YEAR = 2010
 
@@ -50,7 +50,7 @@ class IncomeNoteDatePickerDialog(
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        _viewBinding = DialogIncomeNoteDatePickerBinding.inflate(inflater, container, false)
+        _viewBinding = CustomDialogIncomeNoteDatePickerBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 

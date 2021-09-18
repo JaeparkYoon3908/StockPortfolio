@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.function.my
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
+import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import org.koin.android.ext.android.inject
@@ -55,7 +57,9 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
         override fun onClick(view: View) {
             when (view.id) {
                 R.id.btn_logout -> {
-                    //TODO 로그아웃
+
+                    preferenceController.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
+                    startLoginActivity()
                 }
                 R.id.btn_member_off -> {
                     //TODO 회원 탈퇴
@@ -79,6 +83,10 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
                 }
             }
         }
-
+    }
+    private fun startLoginActivity() {
+        Intent(mContext, LoginActivity::class.java).apply {
+            mContext.startActivity(this)
+        }
     }
 }

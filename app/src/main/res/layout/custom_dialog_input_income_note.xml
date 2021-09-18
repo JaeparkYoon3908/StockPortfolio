@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/EditMainDialog_MainContainer"
     android:layout_width="match_parent"
-    android:layout_height="350dp"
+    android:layout_height="@dimen/common_250dp"
     android:layout_gravity="center"
+    android:layout_marginStart="@dimen/common_30dp"
+    android:layout_marginEnd="@dimen/common_30dp"
     android:background="@color/color_ffffff">
 
     <TextView
@@ -13,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_20dp"
-        android:layout_marginTop="@dimen/common_20dp"
         android:text="@string/IncomeNoteFragment_SubjectName"
         android:textColor="@color/color_666666"
         android:textSize="@dimen/common_16dp"
@@ -62,33 +63,33 @@
         app:layout_constraintStart_toEndOf="@+id/txt_sell_date"
         app:layout_constraintTop_toTopOf="@+id/txt_sell_date" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/txt_sell_date"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="@dimen/common_10dp"-->
-<!--        android:layout_marginEnd="@dimen/common_10dp"-->
-<!--        android:text="@string/IncomeNoteFragment_Sell_Date"-->
-<!--        android:textColor="@color/color_666666"-->
-<!--        android:textSize="18sp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_date"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/et_sell_date"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/txt_purchase_date" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/txt_sell_date"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="@dimen/common_10dp"-->
+    <!--        android:layout_marginEnd="@dimen/common_10dp"-->
+    <!--        android:text="@string/IncomeNoteFragment_Sell_Date"-->
+    <!--        android:textColor="@color/color_666666"-->
+    <!--        android:textSize="18sp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_date"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/et_sell_date"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/txt_purchase_date" />-->
 
-<!--    <EditText-->
-<!--        android:id="@+id/et_sell_date"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="@dimen/common_20dp"-->
-<!--        android:background="@drawable/border_line_bottom"-->
-<!--        android:cursorVisible="false"-->
-<!--        android:focusable="false"-->
-<!--        android:hint="@string/EditIncomeNoteDialog_Sell_Date_Hint"-->
-<!--        android:textColor="@color/color_222222"-->
-<!--        android:textSize="16sp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/txt_sell_date"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/txt_sell_date" />-->
+    <!--    <EditText-->
+    <!--        android:id="@+id/et_sell_date"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginEnd="@dimen/common_20dp"-->
+    <!--        android:background="@drawable/border_line_bottom"-->
+    <!--        android:cursorVisible="false"-->
+    <!--        android:focusable="false"-->
+    <!--        android:hint="@string/EditIncomeNoteDialog_Sell_Date_Hint"-->
+    <!--        android:textColor="@color/color_222222"-->
+    <!--        android:textSize="16sp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/txt_sell_date"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/txt_sell_date" />-->
 
     <TextView
         android:id="@+id/txt_purchase_price"
@@ -173,11 +174,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_20dp"
-        android:layout_marginBottom="@dimen/common_20dp"
         android:text="@string/IncomeNoteFragment_Sell_Count"
         android:textColor="@color/color_666666"
         android:textSize="@dimen/common_16dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_line"
+        app:layout_constraintBottom_toTopOf="@+id/txt_cancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_sell_price" />
 
@@ -197,46 +197,46 @@
         app:layout_constraintStart_toEndOf="@+id/txt_sell_count"
         app:layout_constraintTop_toTopOf="@+id/txt_sell_count" />
 
-    <View
-        android:id="@+id/bottom_line"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/common_1dp"
-        android:background="@color/color_line_1a000000"
-        app:layout_constraintBottom_toTopOf="@+id/txt_cancel" />
+    <!--    <View-->
+    <!--        android:id="@+id/bottom_line"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/common_1dp"-->
+    <!--        android:background="@color/color_line_1a000000"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/txt_cancel" />-->
 
     <TextView
         android:id="@+id/txt_cancel"
         android:layout_width="0dp"
         android:layout_height="@dimen/common_50dp"
+        android:background="@color/color_f1f1f1"
         android:gravity="center"
         android:text="@string/Common_Cancel"
+        android:textColor="@color/color_222222"
         android:textSize="@dimen/common_15dp"
-        android:textColor="@color/color_e52b4e"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/txt_complete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.5" />
 
-    <View
-        android:layout_width="@dimen/common_1dp"
-        android:layout_height="@dimen/common_50dp"
-        android:background="@color/color_line_1a000000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_cancel" />
+    <!--    <View-->
+    <!--        android:layout_width="@dimen/common_1dp"-->
+    <!--        android:layout_height="@dimen/common_50dp"-->
+    <!--        android:background="@color/color_line_1a000000"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/txt_cancel" />-->
 
     <TextView
         android:id="@+id/txt_complete"
         android:layout_width="0dp"
         android:layout_height="@dimen/common_50dp"
+        android:background="@color/color_e52b4e"
         android:gravity="center"
         android:text="@string/Common_Complete"
+        android:textColor="@color/color_ffffff"
         android:textSize="@dimen/common_15dp"
-        android:textColor="@color/color_222222"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt_cancel"
-        app:layout_constraintWidth_percent="0.5"
-
-        />
+        app:layout_constraintWidth_percent="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>
