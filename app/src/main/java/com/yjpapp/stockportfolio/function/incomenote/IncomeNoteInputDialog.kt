@@ -65,7 +65,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         txtPurchasePriceSymbol.text = StockPortfolioConfig.moneySymbol
         txtSellPriceSymbol.text = StockPortfolioConfig.moneySymbol
 
-        window?.setBackgroundDrawableResource(R.color.color_80000000)
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
     }
 

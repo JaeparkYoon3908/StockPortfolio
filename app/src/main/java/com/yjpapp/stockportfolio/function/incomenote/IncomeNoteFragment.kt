@@ -3,7 +3,6 @@ package com.yjpapp.stockportfolio.function.incomenote
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -16,8 +15,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
-import com.yjpapp.stockportfolio.util.StockLog
-import com.yjpapp.stockportfolio.widget.CustomDatePickerDialog
+import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.coroutines.launch
@@ -223,7 +221,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                     day = split[2]
                 }
 
-                CustomDatePickerDialog(year, month, day).apply {
+                CommonDatePickerDialog(year, month, day).apply {
                     setListener { view, year, month, dayOfMonth ->
                         Toast.makeText(requireContext(), "Set date: $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
                         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)

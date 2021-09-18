@@ -43,7 +43,7 @@ class MyStockInputDialog(context: Context):
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        window?.setBackgroundDrawableResource(R.color.color_80000000)
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
         //EditText focus 했을 때 키보드가 보이도록 설정
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         binding.executePendingBindings()

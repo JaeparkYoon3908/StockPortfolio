@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.widget
+package com.yjpapp.stockportfolio.dialog
 
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -9,8 +9,8 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogMonthYearPickerBinding
 import com.yjpapp.stockportfolio.util.Utils
 
-class CustomDatePickerDialog(var year: String, var month: String, var day: String = "") : DialogFragment() {
-    private val TAG = CustomDatePickerDialog::class.java.simpleName
+class CommonDatePickerDialog(var year: String, var month: String, var day: String = "") : DialogFragment() {
+    private val TAG = CommonDatePickerDialog::class.java.simpleName
     private var selectedYear = 0
     private var selectedMonth = 0
     private var currentMaxDay = 0
