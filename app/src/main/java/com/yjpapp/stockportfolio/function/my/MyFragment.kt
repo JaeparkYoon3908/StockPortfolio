@@ -65,12 +65,12 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
                         leftBtnText = mContext.getString(R.string.Common_Cancel),
                         rightBtnText = mContext.getString(R.string.Common_Ok),
                         leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonOneBtnDialog) {
+                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
                                 dialog.dismiss()
                             }
                         },
                         rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonOneBtnDialog) {
+                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
                                 Toasty.info(mContext, "오른쪽 버튼 클릭").show()
                             }
                         }

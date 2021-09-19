@@ -41,7 +41,6 @@ class CommonTwoBtnDialog(
     private fun initData() {
         binding.apply {
             data = commonTwoBtnData
-            //TODO data binding으로 바꿀 수 있는 방법은 없을까?
             btnLeft.setOnClickListener {
                 commonTwoBtnData.leftBtnListener.onClick(it, this@CommonTwoBtnDialog)
             }
