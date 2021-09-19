@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+        <variable
+            name="data"
+            type="com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog.CommonTwoBtnData" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/EditMainDialog_MainContainer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_250dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/common_30dp"
         android:layout_marginEnd="@dimen/common_30dp"
@@ -15,47 +21,51 @@
         <TextView
             android:id="@+id/txt_content"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/common_20dp"
-            android:layout_marginBottom="@dimen/common_20dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_20dp"
             android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/txt_cancel"
+            android:textColor="@color/color_222222"
+            android:textSize="@dimen/common_15dp"
+            android:text="@{data.noticeText}"
+            app:layout_constraintBottom_toTopOf="@+id/btn_right"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/txt_cancel"
+            android:id="@+id/btn_left"
             android:layout_width="0dp"
             android:layout_height="@dimen/common_50dp"
             android:background="@color/color_f1f1f1"
             android:gravity="center"
-            android:text="@string/Common_Cancel"
+            android:text="@{data.leftBtnText}"
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_15dp"
+            android:onClick="@{() -> data.leftBtnListener}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txt_complete"
+            app:layout_constraintEnd_toStartOf="@+id/btn_right"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent="0.5" />
 
-        <View
-            android:layout_width="@dimen/common_1dp"
-            android:layout_height="@dimen/common_50dp"
-            android:background="@color/color_line_1a000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txt_cancel" />
+<!--        <View-->
+<!--            android:layout_width="@dimen/common_1dp"-->
+<!--            android:layout_height="@dimen/common_50dp"-->
+<!--            android:background="@color/color_line_1a000000"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/btn_left" />-->
 
         <TextView
-            android:id="@+id/txt_complete"
+            android:id="@+id/btn_right"
             android:layout_width="0dp"
             android:layout_height="@dimen/common_50dp"
             android:background="@color/color_e52b4e"
             android:gravity="center"
-            android:text="@string/Common_Complete"
+            android:text="@{data.rightBtnText}"
             android:textColor="@color/color_ffffff"
+            android:onClick="@{data.rightBtnListener}"
             android:textSize="@dimen/common_15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txt_cancel"
+            app:layout_constraintStart_toEndOf="@+id/btn_left"
             app:layout_constraintWidth_percent="0.5"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>

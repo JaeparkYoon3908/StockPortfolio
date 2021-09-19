@@ -9,9 +9,12 @@ import android.view.ViewGroup
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
+import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
+import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
+import es.dmoral.toasty.Toasty
 import org.koin.android.ext.android.inject
 
 class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
@@ -57,9 +60,23 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
         override fun onClick(view: View) {
             when (view.id) {
                 R.id.btn_logout -> {
-
-                    preferenceController.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
-                    startLoginActivity()
+                    CommonTwoBtnDialog(mContext, CommonTwoBtnDialog.CommonTwoBtnData(
+                        noticeText = mContext.getString(R.string.My_Msg_Logout_Check),
+                        leftBtnText = mContext.getString(R.string.Common_Cancel),
+                        rightBtnText = mContext.getString(R.string.Common_Ok),
+                        leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                            override fun onClick(view: View, dialog: CommonOneBtnDialog) {
+                                dialog.dismiss()
+                            }
+                        },
+                        rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                            override fun onClick(view: View, dialog: CommonOneBtnDialog) {
+                                Toasty.info(mContext, "오른쪽 버튼 클릭").show()
+                            }
+                        }
+                    )).show()
+//                    preferenceController.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
+//                    startLoginActivity()
                 }
                 R.id.btn_member_off -> {
                     //TODO 회원 탈퇴
