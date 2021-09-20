@@ -28,7 +28,7 @@ object RetrofitClient {
     const val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
     const val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
-    fun getService(context: Context, baseServerURL: BaseServerURL, authorization: String): RetrofitService? {
+    fun getService(context: Context, baseServerURL: BaseServerURL): RetrofitService? {
         if (isInternetAvailable(context)) {
             val interceptor: Interceptor = object : Interceptor {
                 @Throws(IOException::class)
@@ -36,9 +36,11 @@ object RetrofitClient {
                     val builder =
                         when (baseServerURL) {
                             BaseServerURL.MY -> {
+                                val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
                                 getClientBuilderWithToken(context, chain, authorization)
                             }
                             BaseServerURL.NAVER -> {
+                                val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_NAVER_USER_TOKEN)?: ""
                                 getNaverClientBuilderWithToken(chain, authorization)
                             }
                         }

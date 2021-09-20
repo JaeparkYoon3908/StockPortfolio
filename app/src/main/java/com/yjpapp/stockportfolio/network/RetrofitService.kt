@@ -1,11 +1,11 @@
 package com.yjpapp.stockportfolio.network
 
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
+import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
-import com.yjpapp.stockportfolio.model.response.RespStatusInfo
-import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespNaverUserInfo
+import com.yjpapp.stockportfolio.model.response.RespStatusInfo
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -19,6 +19,9 @@ interface RetrofitService {
 //    @Headers("Content-Type:application/json;charset=UTF-8")
     @GET("/api/user/user_info")
     suspend fun requestUserInfo(@QueryMap params: HashMap<String, String>): Response<RespLoginUserInfo>
+
+    @DELETE("/api/user/user_info/{id}")
+    suspend fun requestDeleteUserInfo(@Path("id")id: Int): Response<RespStatusInfo>
 
     @GET("/v1/nid/me")
     suspend fun requestNaverUserInfo(): Response<RespNaverUserInfo>

@@ -42,7 +42,8 @@ class LoginActivity : BaseMVVMActivity() {
     private val TAG = LoginActivity::class.simpleName
     private val binding = binding<ActivityLoginBinding>(R.layout.activity_login)
     private val gso by lazy {
-        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(StockPortfolioConfig.GOOGLE_SIGN_CLIENT_ID)
+        GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(StockPortfolioConfig.GOOGLE_SIGN_CLIENT_ID)
             .requestEmail() // email addresses도 요청함
             .build()
     }
@@ -174,8 +175,7 @@ class LoginActivity : BaseMVVMActivity() {
     private fun naverSignIn() {
         val mOAuthLoginModule = OAuthLogin.getInstance()
         mOAuthLoginModule.init(
-            this, StockPortfolioConfig.NAVER_SIGN_CLIENT_ID, StockPortfolioConfig.NAVER_SIGN_CLIENT_SECRET, getString(R.string.app_name)
-                              )
+            this, StockPortfolioConfig.NAVER_SIGN_CLIENT_ID, StockPortfolioConfig.NAVER_SIGN_CLIENT_SECRET, getString(R.string.app_name))
         val mOAuthLoginHandler = @SuppressLint("HandlerLeak") object : OAuthLoginHandler() {
             override fun run(success: Boolean) {
                 if (success) {
@@ -188,7 +188,8 @@ class LoginActivity : BaseMVVMActivity() {
                     StockLog.d(TAG, "expiresAt : $expiresAt")
                     StockLog.d(TAG, "tokenType : $tokenType")
                     val authorization = "$tokenType $accessToken"
-                    viewModel.requestNaverUserInfo(authorization)
+                    preferenceController.setPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
+                    viewModel.requestNaverUserInfo()
                 } else {
                     val errorCode: String = mOAuthLoginModule.getLastErrorCode(applicationContext).code
                     val errorDesc: String = mOAuthLoginModule.getLastErrorDesc(applicationContext)
@@ -233,7 +234,6 @@ class LoginActivity : BaseMVVMActivity() {
                 StockLog.d(TAG, "onError : ${exception.stackTrace}")
             }
         })
-
     }
 
     private fun startMainActivity() {

@@ -19,16 +19,16 @@ import kotlinx.coroutines.flow.Flow
  */
 class IncomeNoteInteractor: BaseInteractor() {
     suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo, authorization: String) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY, authorization)?.requestPostIncomeNote(reqIncomeNoteInfo)
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(reqIncomeNoteInfo)
 
     suspend fun requestDeleteIncomeNote(context: Context, id: Int, authorization: String) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY, authorization)?.requestDeleteIncomeNote(id)
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteIncomeNote(id)
 
     suspend fun requestPutIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo, authorization: String) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY, authorization)?.requestPutIncomeNote(reqIncomeNoteInfo)
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(reqIncomeNoteInfo)
 
     suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>, authorization: String) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY, authorization)?.requestGetIncomeNote(params)
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestGetIncomeNote(params)
 
     inner class IncomeNotePagingSource(val context: Context, var startDate: String, var endDate: String): PagingSource<Int, RespIncomeNoteInfo.IncomeNoteList>() {
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RespIncomeNoteInfo.IncomeNoteList> {

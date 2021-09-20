@@ -29,8 +29,7 @@ class LoginViewModel(application: Application, private val userRepository: UserR
     val loginResultData = MutableLiveData<RespLoginUserInfo>()
     fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch(Dispatchers.IO) {
-            val authorization = PreferenceController.getInstance(getApplication()).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
-            val result = userRepository.postUserInfo(getApplication(), reqSnsLogin, authorization)
+            val result = userRepository.postUserInfo(getApplication(), reqSnsLogin)
             result?.let {
                 if (it.isSuccessful) {
                     loginResultData.postValue(it.body())
@@ -40,10 +39,10 @@ class LoginViewModel(application: Application, private val userRepository: UserR
     }
 
     val respNaverUserInfo = MutableLiveData<RespNaverUserInfo>()
-    fun requestNaverUserInfo(authorization: String) {
+    fun requestNaverUserInfo() {
         viewModelScope.launch(Dispatchers.IO){
-            val result = userRepository.getNaverUserInfo(getApplication(), authorization)
-            result?.let {
+            val result = userRepository.getNaverUserInfo(getApplication())
+                result?.let {
                 if (it.isSuccessful) {
                     respNaverUserInfo.postValue(it.body())
                 }

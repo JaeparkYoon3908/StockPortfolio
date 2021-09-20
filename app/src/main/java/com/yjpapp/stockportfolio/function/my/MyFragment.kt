@@ -23,8 +23,8 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -71,15 +71,13 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
                         },
                         rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
                             override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                Toasty.info(mContext, "오른쪽 버튼 클릭").show()
+                                myViewModel.requestLogout(mContext)
                             }
                         }
                     )).show()
-//                    preferenceController.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
-//                    startLoginActivity()
                 }
                 R.id.btn_member_off -> {
-                    //TODO 회원 탈퇴
+
                 }
             }
         }
