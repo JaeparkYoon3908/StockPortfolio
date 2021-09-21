@@ -31,16 +31,11 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initLayout()
         initData()
     }
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_my
-    }
-
-    private fun initLayout() {
-
     }
 
     private fun initData() {
@@ -77,7 +72,25 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
                     )).show()
                 }
                 R.id.btn_member_off -> {
-
+                    CommonTwoBtnDialog(mContext, CommonTwoBtnDialog.CommonTwoBtnData(
+                        noticeText = mContext.getString(R.string.My_Msg_Member_Off_Check),
+                        leftBtnText = mContext.getString(R.string.Common_Cancel),
+                        rightBtnText = mContext.getString(R.string.Common_Ok),
+                        leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                                dialog.dismiss()
+                            }
+                        },
+                        rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                                var userIdx = 0
+                                preferenceController.getPreference(PrefKey.KEY_USER_TOKEN)?.let {
+                                    userIdx = it.toInt()
+                                }
+                                myViewModel.requestMemberOff(mContext, userIdx)
+                            }
+                        }
+                    )).show()
                 }
             }
         }

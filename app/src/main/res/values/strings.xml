@@ -32,7 +32,6 @@
     <string name="Common_Loss">손해</string>
     <string name="Common_BackButton_AppClose_Message">종료하시려면 한번 더 눌러주세요.</string>
 
-
     <string name="IncomeNoteFragment_Title">손익 노트</string>
     <string name="IncomeNoteFragment_Gain">수익</string>
     <string name="IncomeNoteFragment_Purchase_Price">매수금액</string>
@@ -69,8 +68,8 @@
     <string name="MyStockFragment_Holding_Quantity">보유수량</string>
 
     <string name="MyStockInputDialog_Purchase_Count">보유수량</string>
-    <string name="MyStockInputDialog_Purchase_Count_Hint">보유한 주식 수(필수)</string>
-    <string name="MyStockInputDialog_Purchase_Price_Hint">1주당 매수한 평균 금액(필수)</string>
+    <string name="MyStockInputDialog_Purchase_Count_Hint">보유한 주식 수</string>
+    <string name="MyStockInputDialog_Purchase_Price_Hint">1주당 매수한 평균 금액</string>
     <string name="MyStockInputDialog_Error_Message">필수 값을 모두 입력해주세요.</string>
     <string name="MyStockInputDialog_DBSaveError_Message">데이터베이스 문제로 저장에 실패했습니다.</string>
 
@@ -87,6 +86,7 @@
     <string name="My_MyStock_Auto_Add">매도 후 손익노트 자동 등록</string>
     <string name="My_MyStock_Show_Delete_Dialog">삭제 시 확인 창 띄우기</string>
     <string name="My_Msg_Logout_Check">로그아웃 하시겠습니까?</string>
+    <string name="My_Msg_Member_Off_Check">회원 탈퇴 하시겠습니까?</string>
 
     <string name="facebook_app_id">2928940814012749</string>
     <string name="fb_login_protocol_scheme">fb2928940814012749</string>

@@ -119,8 +119,8 @@ object RetrofitClient {
         return chain.request().newBuilder()
             .addHeader("Authorization", authorization)
             .addHeader("Content-Type", "application/json")
-//            .addHeader("user-index", preferenceController.getPreference(PrefKey.KEY_USER_INDEX)?: "")
-            .addHeader("user-index", "10005")
+            .addHeader("user-index", preferenceController.getPreference(PrefKey.KEY_USER_INDEX)?: "")
+//            .addHeader("user-index", "10005")
     }
 
     private fun getNaverClientBuilderWithToken(chain: Interceptor.Chain, authorization: String): Request.Builder {

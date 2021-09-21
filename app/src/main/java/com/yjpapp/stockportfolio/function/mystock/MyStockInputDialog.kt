@@ -39,6 +39,7 @@ class MyStockInputDialog(context: Context):
     )
     var purchaseYear = ""
     var purchaseMonth = ""
+    var purchaseDay = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +55,7 @@ class MyStockInputDialog(context: Context):
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what){
                 MSG.SELL_DATE_DATA_INPUT -> {
-                    binding.etPurchaseDate.setText("$purchaseYear.$purchaseMonth")
+                    binding.etPurchaseDate.setText("$purchaseYear-$purchaseMonth-$purchaseDay")
                 }
             }
             return true
@@ -68,6 +69,11 @@ class MyStockInputDialog(context: Context):
         } else {
             (month + 1).toString()
         }
+        purchaseDay = if (dayOfMonth + 1 < 10) {
+            "0" + (dayOfMonth + 1).toString()
+        } else {
+            (dayOfMonth + 1).toString()
+        }
         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
     }
 
@@ -78,5 +84,4 @@ class MyStockInputDialog(context: Context):
     private fun onCancelButtonClick(){
         dismiss()
     }
-
 }

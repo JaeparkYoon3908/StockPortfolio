@@ -241,20 +241,4 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
             return super.onDoubleTap(e)
         }
     }
-
-    private fun startSkeletonAnimation() {
-        val skeletonScreen = Skeleton.bind(binding.recyclerviewMyStockFragment)
-            .adapter(myStockAdapter)
-            .shimmer(true)
-            .angle(20)
-            .color(R.color.color_dddddd)
-            .frozen(false)
-            .duration(1000)
-            .count(myStockAdapter.itemCount)
-            .load(R.layout.skeleton_row_layout)
-            .show() //default count is 10
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            skeletonScreen.hide()
-        }, 1200)
-    }
 }
