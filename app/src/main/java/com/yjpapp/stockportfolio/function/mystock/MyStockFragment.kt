@@ -168,11 +168,6 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                     //매수 날짜 선택 다이얼로그 show
                     CommonDatePickerDialog(year, month).apply {
                         setListener { view, year, month, dayOfMonth ->
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "Set date: $year/$month/$dayOfMonth",
-//                            Toast.LENGTH_LONG
-//                        ).show()
                             uiHandler.sendEmptyMessage(MyStockInputDialog.MSG.SELL_DATE_DATA_INPUT)
                             purchaseYear = year.toString()
                             purchaseMonth = if (month < 10) {
