@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
@@ -19,6 +20,7 @@ import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.util.Utils
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.*
 
@@ -120,7 +122,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
                     incomeNotePresenter.initStartYYYYMMDD,
                     incomeNotePresenter.initEndYYYYMMDD
                 ).apply {
-
                     show(this@IncomeNoteFragment.childFragmentManager, TAG)
                 }
             }
@@ -163,8 +164,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
         binding.apply {
 
-            txtTotalRealizationGainsLossesData.text =
-                    NumberFormat.getCurrencyInstance(Locale.KOREA).format(totalGainNumber)
+            txtTotalRealizationGainsLossesData.text = StockPortfolioConfig.moneySymbol + BigDecimal(totalGainNumber)
             if(totalGainNumber >= 0){
                 txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
                 txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
@@ -198,11 +198,13 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             if(editMode){
                 if (!isShowing) {
                     show()
-                    etSubjectName.setText(respIncomeNoteInfo?.subjectName)
-                    etSellDate.setText(respIncomeNoteInfo?.sellDate)
-                    etPurchasePrice.setText(respIncomeNoteInfo?.purchasePrice.toString())
-                    etSellPrice.setText(respIncomeNoteInfo?.sellPrice.toString())
-                    etSellCount.setText(respIncomeNoteInfo?.sellCount.toString())
+                    respIncomeNoteInfo?.let {
+                        etSubjectName.setText(it.subjectName)
+                        etSellDate.setText(it.sellDate)
+                        etPurchasePrice.setText(Utils.getNumInsertComma(BigDecimal(it.purchasePrice).toString()))
+                        etSellPrice.setText(Utils.getNumInsertComma(BigDecimal(it.sellPrice).toString()))
+                        etSellCount.setText(it.sellCount.toString())
+                    }
                 }
             }else{
                 if (!isShowing) {
