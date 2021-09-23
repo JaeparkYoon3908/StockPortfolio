@@ -89,7 +89,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                 //매매한 회사이름
                 val subjectName = etSubjectName.text.toString()
                 //매도일
-                val sellDate = etSellDate.text.toString() + "-01"
+                val sellDate = etSellDate.text.toString()
                 //매수금액
                 val purchasePrice = etPurchasePrice.text.toString()
                 val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice).toDouble()
