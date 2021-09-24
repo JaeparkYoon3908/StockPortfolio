@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import com.yjpapp.swipelayout.SwipeLayout
@@ -121,25 +123,34 @@ class IncomeNoteListAdapter(
                 incomeNotePresenter.onEditButtonClick(getItem(position))
             }
             txt_delete.setOnClickListener {
-                CommonTwoBtnDialog(
-                    mContext,
-                    CommonTwoBtnDialog.CommonTwoBtnData(
-                        noticeText = "삭제하시겠습니까?",
-                        leftBtnText = mContext.getString(R.string.Common_Cancel),
-                        rightBtnText = mContext.getString(R.string.Common_Ok),
-                        leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                dialog.dismiss()
+                val isShowDeleteCheck = PreferenceController.getInstance(mContext).getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)?:"true"
+                if (isShowDeleteCheck == "true") {
+                    CommonTwoBtnDialog(
+                        mContext,
+                        CommonTwoBtnDialog.CommonTwoBtnData(
+                            noticeText = "삭제하시겠습니까?",
+                            leftBtnText = mContext.getString(R.string.Common_Cancel),
+                            rightBtnText = mContext.getString(R.string.Common_Ok),
+                            leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                                    dialog.dismiss()
+                                }
+                            },
+                            rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+//                                    notifyItemRemoved(position)
+//                                    notifyItemRangeRemoved(position, itemCount)
+                                    incomeNotePresenter.onDeleteOkClick(mContext, getItem(position)?.id!!, position)
+                                    dialog.dismiss()
+                                }
                             }
-                        },
-                        rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                incomeNotePresenter.onDeleteOkClick(mContext, getItem(position)?.id!!)
-                                dialog.dismiss()
-                            }
-                        }
-                    )
-                ).show()
+                        )
+                    ).show()
+                } else {
+//                    notifyItemRemoved(position)
+//                    notifyItemRangeRemoved(position, itemCount)
+                    incomeNotePresenter.onDeleteOkClick(mContext, getItem(position)?.id!!, position)
+                }
             }
         }
     }

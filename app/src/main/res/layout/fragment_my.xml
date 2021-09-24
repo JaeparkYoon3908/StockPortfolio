@@ -103,7 +103,7 @@
                 android:textSize="@dimen/common_16dp" />
 
             <Switch
-                android:id="@+id/switch_auto_refresh"
+                android:id="@+id/switch_my_stock_auto_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/common_20dp"
                 android:layout_alignParentEnd="true"
@@ -111,7 +111,7 @@
                 android:onClick="@{callBack::onSwitchClick}"
                 android:thumb="@drawable/switch_thumb_20"
                 android:track="@drawable/switch_track_selector"
-                binding:switchChecked="@{viewModel.isAutoRefresh}" />
+                binding:switchChecked="@{viewModel.isMyStockAutoRefresh}" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -128,7 +128,7 @@
                 android:textSize="@dimen/common_16dp" />
 
             <Switch
-                android:id="@+id/switch_auto_add"
+                android:id="@+id/switch_my_stock_auto_add"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/common_20dp"
                 android:layout_alignParentEnd="true"
@@ -136,7 +136,7 @@
                 android:onClick="@{callBack::onSwitchClick}"
                 android:thumb="@drawable/switch_thumb_20"
                 android:track="@drawable/switch_track_selector"
-                binding:switchChecked="@{viewModel.isAutoAdd}" />
+                binding:switchChecked="@{viewModel.isMyStockAutoAdd}" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -153,7 +153,7 @@
                 android:textSize="@dimen/common_16dp" />
 
             <Switch
-                android:id="@+id/switch_show_delete_check"
+                android:id="@+id/switch_my_stock_show_delete_check"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/common_20dp"
                 android:layout_alignParentEnd="true"
@@ -161,7 +161,46 @@
                 android:onClick="@{callBack::onSwitchClick}"
                 android:thumb="@drawable/switch_thumb_20"
                 android:track="@drawable/switch_track_selector"
-                binding:switchChecked="@{viewModel.isShowDeleteCheck}" />
+                binding:switchChecked="@{viewModel.isMyStockShowDeleteCheck}" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/common_20dp"
+            android:layout_marginBottom="@dimen/common_20dp"
+            android:background="@color/color_aaaaaa" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/IncomeNoteFragment_Title"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/common_14dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/My_MyStock_Show_Delete_Dialog"
+                android:textColor="@color/color_222222"
+                android:textSize="@dimen/common_16dp" />
+
+            <Switch
+                android:id="@+id/switch_income_note_show_delete_check"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/common_20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:onClick="@{callBack::onSwitchClick}"
+                android:thumb="@drawable/switch_thumb_20"
+                android:track="@drawable/switch_track_selector"
+                binding:switchChecked="@{viewModel.isIncomeNoteShowDeleteCheck}" />
         </RelativeLayout>
 
         <View

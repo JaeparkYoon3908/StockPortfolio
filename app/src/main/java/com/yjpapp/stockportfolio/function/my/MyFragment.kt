@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
-import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
-import es.dmoral.toasty.Toasty
 import org.koin.android.ext.android.inject
 
 class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
@@ -97,17 +95,21 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
 
         override fun onSwitchClick(view: View) {
             when (view.id) {
-                R.id.switch_auto_refresh -> {
-                    val isChecked = binding.switchAutoRefresh.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_REFRESH, isChecked)
+                R.id.switch_my_stock_auto_refresh -> {
+                    val isChecked = binding.switchMyStockAutoRefresh.isChecked
+                    preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, isChecked)
                 }
-                R.id.switch_auto_add -> {
-                    val isChecked = binding.switchAutoAdd.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_ADD, isChecked)
+                R.id.switch_my_stock_auto_add -> {
+                    val isChecked = binding.switchMyStockAutoAdd.isChecked
+                    preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, isChecked)
                 }
-                R.id.switch_show_delete_check -> {
-                    val isChecked = binding.switchShowDeleteCheck.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_SHOW_DELETE_CHECK, isChecked)
+                R.id.switch_my_stock_show_delete_check -> {
+                    val isChecked = binding.switchMyStockShowDeleteCheck.isChecked
+                    preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, isChecked)
+                }
+                R.id.switch_income_note_show_delete_check -> {
+                    val isChecked = binding.switchIncomeNoteShowDeleteCheck.isChecked
+                    preferenceController.setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, isChecked)
                 }
             }
         }

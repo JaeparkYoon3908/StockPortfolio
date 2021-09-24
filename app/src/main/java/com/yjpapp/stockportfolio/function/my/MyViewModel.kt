@@ -15,9 +15,10 @@ class MyViewModel(
     val userName = preferenceController.getPreference(PrefKey.KEY_USER_NAME)
     val userEmail = preferenceController.getPreference(PrefKey.KEY_USER_EMAIL)
     val userLoginType = preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)
-    val isAutoRefresh = preferenceController.getPreference(PrefKey.KEY_SETTING_AUTO_REFRESH)
-    val isAutoAdd = preferenceController.getPreference(PrefKey.KEY_SETTING_AUTO_ADD)
-    val isShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_SHOW_DELETE_CHECK)
+    val isMyStockAutoRefresh = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)
+    val isMyStockAutoAdd = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
+    val isMyStockShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
+    val isIncomeNoteShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)
 
     fun requestLogout(context: Context) {
         userRepository.logout(context)

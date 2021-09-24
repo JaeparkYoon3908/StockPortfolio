@@ -50,6 +50,7 @@
     <string name="EditIncomeNoteDialog_Sell_Price_Hint">1주당 매도한 평단가</string>
     <string name="EditIncomeNoteDialog_Sell_Count_Hint">매도한 수량</string>
     <string name="EditIncomeNoteDialog_Error_Message">값을 모두 입력해야합니다.</string>
+    <string name="EditIncomeNoteDialog_Error_Message_Zero">매수, 매도 가격을 0으로 설정할 수 없습니다.</string>
 
     <string name="IncomeNoteFilterDialog_Title">필터링 할 옵션을 선택하세요.</string>
 

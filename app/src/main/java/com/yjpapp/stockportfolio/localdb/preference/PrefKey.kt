@@ -12,7 +12,8 @@ object PrefKey {
     const val KEY_USER_TOKEN = "user_token"
     const val KEY_NAVER_USER_TOKEN = "naver_user_token"
     //Setting
-    const val KEY_SETTING_AUTO_REFRESH = "auto_refresh"
-    const val KEY_SETTING_AUTO_ADD = "auto_add"
-    const val KEY_SETTING_SHOW_DELETE_CHECK = "show_delete_check"
+    const val KEY_SETTING_MY_STOCK_AUTO_REFRESH = "auto_refresh"
+    const val KEY_SETTING_MY_STOCK_AUTO_ADD = "auto_add"
+    const val KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK = "show_delete_check"
+    const val KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK = "income_note_show_delete_check"
 }

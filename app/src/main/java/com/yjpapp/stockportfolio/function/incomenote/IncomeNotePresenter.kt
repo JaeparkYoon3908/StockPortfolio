@@ -26,8 +26,6 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
     private var incomeNoteId = -1
     private val incomeNoteInteractor = IncomeNoteInteractor()
     private var incomeNoteListAdapter: IncomeNoteListAdapter? = null
-    var totalGainNumber = 0.0
-    var totalGainPercent = 0.0
     var initStartYYYYMMDD = listOf<String>()
     var initEndYYYYMMDD = listOf<String>()
 
@@ -61,8 +59,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                 result?.let {
                     if (it.isSuccessful) {
                         incomeNoteView.showToast(Toasty.info(context, "추가완료"))
-                        incomeNoteListAdapter?.refresh()
-                        requestTotalGain(context)
+                        refreshInComeNoteData()
                     }
                 }
             }
@@ -78,14 +75,13 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         }
     }
 
-    fun onDeleteOkClick(context: Context, id: Int) { //        incomeNoteInteractor.deleteIncomeNoteInfo(id)
+    fun onDeleteOkClick(context: Context, id: Int, position: Int) { //        incomeNoteInteractor.deleteIncomeNoteInfo(id)
         CoroutineScope(Dispatchers.Main).launch {
             val result = incomeNoteInteractor.requestDeleteIncomeNote(context, id)
             result?.let {
                 if (it.isSuccessful) {
                     incomeNoteView.showToast(Toasty.info(context, "삭제완료"))
-                    incomeNoteListAdapter?.refresh()
-                    requestTotalGain(context)
+                    refreshInComeNoteData()
                 }
             }
         }
@@ -95,12 +91,12 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         Utils.runBackPressAppCloseEvent(mContext, activity)
     }
 
-    fun getAllIncomeNoteList(): MutableList<RespIncomeNoteInfo.IncomeNoteList?> {
-        incomeNoteListAdapter?.let {
-            return it.snapshot().toMutableList()
-        }
-        return mutableListOf()
-    }
+//    fun getAllIncomeNoteList(): MutableList<RespIncomeNoteInfo.IncomeNoteList?> {
+//        incomeNoteListAdapter?.let {
+//            return it.snapshot().toMutableList()
+//        }
+//        return mutableListOf()
+//    }
 
     fun closeSwipeLayout() {
         incomeNoteListAdapter?.closeSwipeLayout()
@@ -117,6 +113,26 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         initEndYYYYMMDD = endDate.split("-")
         incomeNoteView.initFilterDateText(startDate, endDate)
         requestTotalGain(mContext)
+    }
+
+    fun refreshInComeNoteData() {
+        if (initStartYYYYMMDD.size == 3 && initEndYYYYMMDD.size == 3) {
+            val startDate = StringBuilder()
+            val endDate = StringBuilder()
+            initStartYYYYMMDD.forEachIndexed { index, s ->
+                startDate.append(s)
+                if (index != 2) {
+                    startDate.append("-")
+                }
+            }
+            initEndYYYYMMDD.forEachIndexed { index, s ->
+                endDate.append(s)
+                if (index != 2) {
+                    endDate.append("-")
+                }
+            }
+            requestIncomeNoteList(mContext, startDate.toString(), endDate.toString())
+        }
     }
 
     fun requestTotalGain(context: Context) {

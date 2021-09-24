@@ -40,14 +40,17 @@ class SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
     }
 
     override fun initData() {
-        if (!preferenceController.isExists(PrefKey.KEY_SETTING_AUTO_REFRESH)) {
-            preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_REFRESH, true)
+        if (!preferenceController.isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
+            preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
         }
-        if (!preferenceController.isExists(PrefKey.KEY_SETTING_AUTO_ADD)) {
-            preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_ADD, true)
+        if (!preferenceController.isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)) {
+            preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, true)
         }
-        if (!preferenceController.isExists(PrefKey.KEY_SETTING_SHOW_DELETE_CHECK)) {
-            preferenceController.setPreference(PrefKey.KEY_SETTING_SHOW_DELETE_CHECK, true)
+        if (!preferenceController.isExists(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)) {
+            preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, true)
+        }
+        if (!preferenceController.isExists(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)) {
+            preferenceController.setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, true)
         }
     }
 

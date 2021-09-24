@@ -92,6 +92,14 @@ class IncomeNoteInputDialog(
                     ).show()
                     return@OnClickListener
                 }
+                if (etPurchasePrice.text.toString() == "0" || etSellPrice.text.toString() == "0") {
+                    Toast.makeText(
+                        mContext,
+                        context.getString(R.string.EditIncomeNoteDialog_Error_Message_Zero),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@OnClickListener
+                }
 
                 //매매한 회사이름
                 val subjectName = etSubjectName.text.toString()
