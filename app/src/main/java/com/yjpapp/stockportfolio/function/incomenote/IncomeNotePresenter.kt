@@ -46,23 +46,23 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         reqIncomeNoteInfo.id = incomeNoteId
         if (editMode) {
             CoroutineScope(Dispatchers.Main).launch {
-                val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
-                val result = incomeNoteInteractor.requestPutIncomeNote(context, reqIncomeNoteInfo, authorization)
+                val result = incomeNoteInteractor.requestPutIncomeNote(context, reqIncomeNoteInfo)
                 result?.let {
                     if (it.isSuccessful) {
                         incomeNoteView.showToast(Toasty.normal(context, "수정완료"))
                         incomeNoteListAdapter?.refresh()
+                        requestTotalGain(context)
                     }
                 }
             }
         } else {
             CoroutineScope(Dispatchers.Main).launch {
-                val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
-                val result = incomeNoteInteractor.requestPostIncomeNote(context, reqIncomeNoteInfo, authorization)
+                val result = incomeNoteInteractor.requestPostIncomeNote(context, reqIncomeNoteInfo)
                 result?.let {
                     if (it.isSuccessful) {
                         incomeNoteView.showToast(Toasty.info(context, "추가완료"))
                         incomeNoteListAdapter?.refresh()
+                        requestTotalGain(context)
                     }
                 }
             }
@@ -80,12 +80,12 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
     fun onDeleteOkClick(context: Context, id: Int) { //        incomeNoteInteractor.deleteIncomeNoteInfo(id)
         CoroutineScope(Dispatchers.Main).launch {
-            val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
-            val result = incomeNoteInteractor.requestDeleteIncomeNote(context, id, authorization)
+            val result = incomeNoteInteractor.requestDeleteIncomeNote(context, id)
             result?.let {
                 if (it.isSuccessful) {
                     incomeNoteView.showToast(Toasty.info(context, "삭제완료"))
                     incomeNoteListAdapter?.refresh()
+                    requestTotalGain(context)
                 }
             }
         }
@@ -116,13 +116,10 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         initStartYYYYMMDD = startDate.split("-")
         initEndYYYYMMDD = endDate.split("-")
         incomeNoteView.initFilterDateText(startDate, endDate)
+        requestTotalGain(mContext)
     }
 
-    fun requestRefreshTotalGainData() {
-        incomeNoteView.bindTotalGainData()
-    }
-
-    private suspend fun refreshIncomeNote() {
+    fun requestTotalGain(context: Context) {
         if (initStartYYYYMMDD.size == 3 && initEndYYYYMMDD.size == 3) {
             val startDate = StringBuilder()
             val endDate = StringBuilder()
@@ -138,7 +135,20 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                     endDate.append("-")
                 }
             }
-            requestIncomeNoteList(mContext, startDate.toString(), endDate.toString())
+
+            val params = hashMapOf<String, String>()
+            params["startDate"] = startDate.toString()
+            params["endDate"] = endDate.toString()
+            CoroutineScope(Dispatchers.Main).launch {
+                val result = incomeNoteInteractor.requestTotalGain(context, params)
+                result?.let {
+                    if (it.isSuccessful) {
+                        it.body()?.let { data ->
+                            incomeNoteView.bindTotalGainData(data.total_price, data.total_percent)
+                        }
+                    }
+                }
+            }
         }
     }
 }

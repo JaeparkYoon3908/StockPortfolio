@@ -14,15 +14,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="@dimen/common_30dp"
-        android:layout_marginEnd="@dimen/common_30dp"
+        android:layout_marginStart="@dimen/common_50dp"
+        android:layout_marginEnd="@dimen/common_50dp"
         android:background="@color/color_ffffff">
 
         <TextView
             android:id="@+id/txt_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/common_20dp"
+            android:layout_marginLeft="@dimen/common_20dp"
+            android:layout_marginRight="@dimen/common_20dp"
+            android:layout_marginTop="@dimen/common_30dp"
+            android:layout_marginBottom="@dimen/common_30dp"
             android:gravity="center"
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_15dp"

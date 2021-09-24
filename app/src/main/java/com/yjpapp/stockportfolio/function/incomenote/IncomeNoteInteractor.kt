@@ -18,17 +18,20 @@ import kotlinx.coroutines.flow.Flow
  * @since 2020.12
  */
 class IncomeNoteInteractor: BaseInteractor() {
-    suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo, authorization: String) =
+    suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(reqIncomeNoteInfo)
 
-    suspend fun requestDeleteIncomeNote(context: Context, id: Int, authorization: String) =
+    suspend fun requestDeleteIncomeNote(context: Context, id: Int) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteIncomeNote(id)
 
-    suspend fun requestPutIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo, authorization: String) =
+    suspend fun requestPutIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(reqIncomeNoteInfo)
 
-    suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>, authorization: String) =
+    suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestGetIncomeNote(params)
+
+    suspend fun requestTotalGain(context: Context, params: HashMap<String, String>) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestTotalGainIncomeNote(params)
 
     inner class IncomeNotePagingSource(val context: Context, var startDate: String, var endDate: String): PagingSource<Int, RespIncomeNoteInfo.IncomeNoteList>() {
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RespIncomeNoteInfo.IncomeNoteList> {
@@ -39,8 +42,7 @@ class IncomeNoteInteractor: BaseInteractor() {
                 hashMap["size"] = params.loadSize.toString()
                 hashMap["startDate"] = startDate
                 hashMap["endDate"] = endDate
-                val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
-                val data = requestGetIncomeNote(context, hashMap, authorization)
+                val data = requestGetIncomeNote(context, hashMap)
                 data?.body()?.income_note?.let {
                     if (it.size > 0) {
                         it[0].totalPrice = data.body()?.total_profit_or_loss_info?.totalPrice?: 0.0

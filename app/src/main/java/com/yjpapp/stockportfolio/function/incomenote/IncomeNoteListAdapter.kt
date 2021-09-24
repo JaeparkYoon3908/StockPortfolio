@@ -61,7 +61,6 @@ class IncomeNoteListAdapter(
         holder.apply {
             bindDataList(holder, position)
             bindSwipeLayout(holder, position)
-            incomeNotePresenter.requestRefreshTotalGainData()
         }
     }
 
@@ -79,7 +78,7 @@ class IncomeNoteListAdapter(
                 //수익
                 txt_gain_data.text = moneySymbol + Utils.getNumInsertComma(BigDecimal(it.realPainLossesAmount).toString())
                 //수익 퍼센트
-                txt_gain_percent_data.text = "(${it.gainPercent.toInt()}%)"
+                txt_gain_percent_data.text = "(${it.gainPercent}%)"
                 //매도일
                 txt_sell_date_data.text = getItem(position)?.sellDate
                 if (getItem(position)?.sellDate == "") {

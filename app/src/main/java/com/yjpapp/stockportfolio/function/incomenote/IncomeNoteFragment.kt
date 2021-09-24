@@ -151,22 +151,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         }
     }
 
-    override fun bindTotalGainData() {
-        var totalGainNumber = 0.0
-        var totalGainPercent = "50%"
-        val allIncomeNoteInfoList = incomeNotePresenter.getAllIncomeNoteList()
-//        if (allIncomeNoteInfoList.isNotEmpty()) {
-//            allIncomeNoteInfoList[0]?.let {
-//                totalGainNumber = it.totalPrice
-//                totalGainPercent = it.totalPercent
-//            }
-//        }
-        allIncomeNoteInfoList.forEach { incomeNoteData ->
-            incomeNoteData?.let {
-                totalGainNumber += it.realPainLossesAmount
-            }
-        }
-
+    override fun bindTotalGainData(totalGainNumber: Double, totalGainPercent: Double) {
         binding.apply {
             val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
             txtTotalRealizationGainsLossesData.text = "${StockPortfolioConfig.moneySymbol}$totalRealizationGainsLossesNumber"
@@ -180,7 +165,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
             //퍼센티지 붙이기
 //            txtTotalRealizationGainsLossesPercent.text =
 //                    Utils.getRoundsPercentNumber(totalGainPercent)
-            txtTotalRealizationGainsLossesPercent.text = totalGainPercent
+            txtTotalRealizationGainsLossesPercent.text = "$totalGainPercent%"
         }
     }
 
@@ -270,5 +255,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         val startDate = "${toDayYYYYMM[0]}-01-01"
         val endDate = "${toDayYYYYMM[0]}-12-01"
         incomeNotePresenter.requestIncomeNoteList(mContext, startDate, endDate)
+        incomeNotePresenter.requestTotalGain(mContext)
     }
 }

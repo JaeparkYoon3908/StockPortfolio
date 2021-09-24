@@ -10,7 +10,7 @@ import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
  * @since 2020.12
  */
 interface IncomeNoteView {
-    fun bindTotalGainData()
+    fun bindTotalGainData(totalGainNumber: Double, totalGainPercent: Double)
 
     fun showAddButton()
 
