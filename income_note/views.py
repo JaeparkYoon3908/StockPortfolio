@@ -49,15 +49,12 @@ class IncomeNoteAPI(APIView):
         start_date = request.GET.get('startDate')
         end_date = request.GET.get('endDate')
 
-
         if not start_date or not end_date:
             all_income_note = IncomeNote.objects.filter(user_index=user_index)
         else:
             all_income_note = IncomeNote.objects.filter(user_index=user_index, sellDate__range=[start_date, end_date])
 
         total_elements = len(all_income_note)
-        total_price = all_income_note.aggregate(Sum('realPainLossesAmount'))
-        total_percent = "50%"
 
         paginator = Paginator(all_income_note, page_size)
         income_note_list = paginator.get_page(page).object_list
@@ -71,10 +68,6 @@ class IncomeNoteAPI(APIView):
                         page_size=page_size,
                         total_elements=total_elements
                     ),
-                    total_profit_or_loss_info=dict(
-                        total_price=total_price['realPainLossesAmount__sum'],
-                        total_percent=total_percent
-                    ),
                     income_note=income_note
                 )
 
@@ -86,10 +79,6 @@ class IncomeNoteAPI(APIView):
                         page_size=page_size,
                         total_elements=total_elements
                     ),
-                    total_profit_or_loss_info=dict(
-                        total_price=total_price['realPainLossesAmount__sum'],
-                        total_percent=total_percent
-                    ),
                     income_note=""
                 )
                 return Response(data=data)
@@ -99,10 +88,6 @@ class IncomeNoteAPI(APIView):
                 page=page,
                 page_size=page_size,
                 total_elements=total_elements
-            ),
-            total_profit_or_loss_info=dict(
-                total_price=total_price['realPainLossesAmount__sum'],
-                total_percent=total_percent
             ),
             income_note=""
         )
@@ -137,6 +122,7 @@ class IncomeNoteAPI(APIView):
 
         return Response(data=data)
 
+
 class DeleteIncomeNote(APIView):
     def delete(self, request, income_note_id):
         user_index = request.META.get('HTTP_USER_INDEX')
@@ -155,3 +141,22 @@ class DeleteIncomeNote(APIView):
                 msg="id 값이 존재하지 않습니다."
             )
             return Response(data=data)
+
+
+class TotalGainAPI(APIView):
+    def get(self, request):
+        user_index = request.META.get('HTTP_USER_INDEX')
+        start_date = request.GET.get('startDate')
+        end_date = request.GET.get('endDate')
+        if not start_date or not end_date:
+            all_income_note = IncomeNote.objects.filter(user_index=user_index)
+        else:
+            all_income_note = IncomeNote.objects.filter(user_index=user_index, sellDate__range=[start_date, end_date])
+        total_price = all_income_note.aggregate(Sum('realPainLossesAmount'))
+        total_percent = "50%"
+        data = dict(
+            total_price=total_price['realPainLossesAmount__sum'],
+            total_percent=total_percent
+        )
+
+        return Response(data=data)
