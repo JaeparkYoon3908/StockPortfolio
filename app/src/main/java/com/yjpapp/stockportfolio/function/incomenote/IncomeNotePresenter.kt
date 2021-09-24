@@ -11,6 +11,7 @@ import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
+import java.lang.StringBuilder
 
 /**
  * IncomeNoteFragment의 Presenter
@@ -54,7 +55,6 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
                     }
                 }
             }
-
         } else {
             CoroutineScope(Dispatchers.Main).launch {
                 val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
@@ -78,12 +78,15 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         }
     }
 
-    suspend fun onDeleteButtonClick(context: Context, id: Int) { //        incomeNoteInteractor.deleteIncomeNoteInfo(id)
-        CoroutineScope(Dispatchers.IO).launch {
+    fun onDeleteOkClick(context: Context, id: Int) { //        incomeNoteInteractor.deleteIncomeNoteInfo(id)
+        CoroutineScope(Dispatchers.Main).launch {
             val authorization = PreferenceController.getInstance(context).getPreference(PrefKey.KEY_USER_TOKEN)?: ""
             val result = incomeNoteInteractor.requestDeleteIncomeNote(context, id, authorization)
-            if (result!!.isSuccessful) {
-                incomeNoteListAdapter?.refresh()
+            result?.let {
+                if (it.isSuccessful) {
+                    incomeNoteView.showToast(Toasty.info(context, "삭제완료"))
+                    incomeNoteListAdapter?.refresh()
+                }
             }
         }
     }
@@ -103,7 +106,7 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
         incomeNoteListAdapter?.closeSwipeLayout()
     }
 
-    suspend fun requestIncomeNoteList(mContext: Context, startDate: String, endDate: String) {
+    fun requestIncomeNoteList(mContext: Context, startDate: String, endDate: String) {
         val incomeNoteList = incomeNoteInteractor.getIncomeNoteListByPaging(mContext, startDate, endDate).cachedIn(CoroutineScope(Dispatchers.Main))
         CoroutineScope(Dispatchers.Main).launch {
             incomeNoteList.collectLatest {
@@ -117,5 +120,25 @@ class IncomeNotePresenter(val mContext: Context, private val incomeNoteView: Inc
 
     fun requestRefreshTotalGainData() {
         incomeNoteView.bindTotalGainData()
+    }
+
+    private suspend fun refreshIncomeNote() {
+        if (initStartYYYYMMDD.size == 3 && initEndYYYYMMDD.size == 3) {
+            val startDate = StringBuilder()
+            val endDate = StringBuilder()
+            initStartYYYYMMDD.forEachIndexed { index, s ->
+                startDate.append(s)
+                if (index != 2) {
+                    startDate.append("-")
+                }
+            }
+            initEndYYYYMMDD.forEachIndexed { index, s ->
+                endDate.append(s)
+                if (index != 2) {
+                    endDate.append("-")
+                }
+            }
+            requestIncomeNoteList(mContext, startDate.toString(), endDate.toString())
+        }
     }
 }

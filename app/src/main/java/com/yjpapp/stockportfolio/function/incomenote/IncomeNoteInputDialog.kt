@@ -24,12 +24,15 @@ import com.yjpapp.stockportfolio.util.Utils
 import java.util.*
 
 
-class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePresenter) : AlertDialog(mContext)
-        , SupportedDatePickerDialog.OnDateSetListener{
-    object MSG{
+class IncomeNoteInputDialog(
+    private val mContext: Context,
+    private val incomeNotePresenter: IncomeNotePresenter
+) : AlertDialog(mContext), SupportedDatePickerDialog.OnDateSetListener {
+    object MSG {
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
         const val SELL_DATE_DATA_INPUT: Int = 1
     }
+
     var purchaseYear: String? = null
     var purchaseMonth: String? = null
     var purchaseDay = "01"
@@ -39,8 +42,8 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     val etSellDate: EditText by lazy { findViewById(R.id.et_sell_date) }
     val txtCancel: TextView by lazy { findViewById(R.id.txt_cancel) }
     val txtComplete: TextView by lazy { findViewById(R.id.txt_complete) }
-    val etPurchasePrice:EditText by lazy { findViewById(R.id.et_purchase_price) }
-    private val EditMainDialogMainContainer:ConstraintLayout by lazy { findViewById(R.id.EditMainDialog_MainContainer) }
+    val etPurchasePrice: EditText by lazy { findViewById(R.id.et_purchase_price) }
+    private val EditMainDialogMainContainer: ConstraintLayout by lazy { findViewById(R.id.EditMainDialog_MainContainer) }
     val etSellPrice: EditText by lazy { findViewById(R.id.et_sell_price) }
     val txtPurchasePriceSymbol: TextView by lazy { findViewById(R.id.txt_purchase_price_symbol) }
     val txtSellPriceSymbol: TextView by lazy { findViewById(R.id.txt_sell_price_symbol) }
@@ -53,7 +56,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         initLayout()
     }
 
-    private fun initLayout(){
+    private fun initLayout() {
         etSellDate.setOnClickListener(onClickListener)
         txtCancel.setOnClickListener(onClickListener)
         txtComplete.setOnClickListener(onClickListener)
@@ -70,7 +73,7 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
     }
 
     private val onClickListener = View.OnClickListener { view: View? ->
-        when (view?.id){
+        when (view?.id) {
             txtCancel.id -> {
                 dismiss()
             }
@@ -82,7 +85,11 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                     etSellPrice.text.isEmpty() ||
                     etSellCount.text.isEmpty()
                 ) {
-                    Toast.makeText(mContext, context.getString(R.string.EditIncomeNoteDialog_Error_Message), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        mContext,
+                        context.getString(R.string.EditIncomeNoteDialog_Error_Message),
+                        Toast.LENGTH_LONG
+                    ).show()
                     return@OnClickListener
                 }
 
@@ -105,7 +112,8 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
                     sellDate = sellDate,
                     purchasePrice = purchasePriceNumber,
                     sellPrice = sellPriceNumber,
-                    sellCount = sellCount)
+                    sellCount = sellCount
+                )
                 incomeNotePresenter.onInputDialogCompleteClicked(mContext, dataInfo)
                 dismiss()
             }
@@ -117,38 +125,43 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
 
     //3자리마다 콤마 찍어주는 코드
     private var convertText = ""
-    private val textWatcher = object: TextWatcher{
-        override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
-            if(!TextUtils.isEmpty(charSequence.toString()) && charSequence.toString() != convertText){
+    private val textWatcher = object : TextWatcher {
+        override fun onTextChanged(
+            charSequence: CharSequence?,
+            start: Int,
+            before: Int,
+            count: Int
+        ) {
+            if (!TextUtils.isEmpty(charSequence.toString()) && charSequence.toString() != convertText) {
                 convertText = Utils.getNumInsertComma(charSequence.toString())
-                if(etPurchasePrice.hasFocus()){
+                if (etPurchasePrice.hasFocus()) {
                     etPurchasePrice.setText(convertText)
                     etPurchasePrice.setSelection(convertText.length) //커서를 오른쪽 끝으로 보낸다.
-                }else if(etSellPrice.hasFocus()){
+                } else if (etSellPrice.hasFocus()) {
                     etSellPrice.setText(convertText)
                     etSellPrice.setSelection(convertText.length)
                 }
             }
-            if(charSequence?.length!! == 0 ){
-                if(etPurchasePrice.hasFocus()){
+            if (charSequence?.length!! == 0) {
+                if (etPurchasePrice.hasFocus()) {
                     txtPurchasePriceSymbol.setTextColor(context.getColor(R.color.color_666666))
-                }else if(etSellPrice.hasFocus()){
+                } else if (etSellPrice.hasFocus()) {
                     txtSellPriceSymbol.setTextColor(context.getColor(R.color.color_666666))
                 }
-            }else{
-                if(etPurchasePrice.hasFocus()){
+            } else {
+                if (etPurchasePrice.hasFocus()) {
                     txtPurchasePriceSymbol.setTextColor(context.getColor(R.color.color_222222))
-                }else if(etSellPrice.hasFocus()){
+                } else if (etSellPrice.hasFocus()) {
                     txtSellPriceSymbol.setTextColor(context.getColor(R.color.color_222222))
                 }
             }
         }
 
         override fun beforeTextChanged(
-                charSequence: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
+            charSequence: CharSequence?,
+            start: Int,
+            count: Int,
+            after: Int
         ) {
 
         }
@@ -158,9 +171,10 @@ class IncomeNoteInputDialog(mContext: Context, incomeNotePresenter: IncomeNotePr
         }
     }
     val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
-    private inner class UIHandler: Handler.Callback {
+
+    private inner class UIHandler : Handler.Callback {
         override fun handleMessage(msg: Message): Boolean {
-            when (msg.what){
+            when (msg.what) {
                 MSG.PURCHASE_DATE_DATA_INPUT -> {
                     etSellDate.setText("$purchaseYear-$purchaseMonth-$purchaseDay")
                 }

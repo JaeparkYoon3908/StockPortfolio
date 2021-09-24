@@ -97,13 +97,11 @@ class IncomeNoteDatePickerDialog(
 
                     val startYYYYMMDD = "$startYYYY-$startMM-$startDD"
                     val endYYYYMMDD = "$endYYYY-$endMM-$endDD"
-                    CoroutineScope(Dispatchers.Main).launch {
-                        incomeNotePresenter.requestIncomeNoteList(
-                            mContext,
-                            startYYYYMMDD,
-                            endYYYYMMDD
-                        )
-                    }
+                    incomeNotePresenter.requestIncomeNoteList(
+                        mContext,
+                        startYYYYMMDD,
+                        endYYYYMMDD
+                    )
                     dismiss()
                 }
 

@@ -8,13 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.PagingSwipeAdapter
 import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.sql.SQLException
@@ -121,18 +120,27 @@ class IncomeNoteListAdapter(
             })
             txt_edit.setOnClickListener {
                 incomeNotePresenter.onEditButtonClick(getItem(position))
-                notifyDataSetChanged()
             }
             txt_delete.setOnClickListener {
-                try {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        incomeNotePresenter.onDeleteButtonClick(mContext, getItem(position)?.id!!)
-                    }
-                    notifyItemRemoved(position)
-                    notifyItemRangeRemoved(position, itemCount)
-                } catch (e: SQLException) {
-                    e.printStackTrace()
-                }
+                CommonTwoBtnDialog(
+                    mContext,
+                    CommonTwoBtnDialog.CommonTwoBtnData(
+                        noticeText = "삭제하시겠습니까?",
+                        leftBtnText = mContext.getString(R.string.Common_Cancel),
+                        rightBtnText = mContext.getString(R.string.Common_Ok),
+                        leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                                dialog.dismiss()
+                            }
+                        },
+                        rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                                incomeNotePresenter.onDeleteOkClick(mContext, getItem(position)?.id!!)
+                                dialog.dismiss()
+                            }
+                        }
+                    )
+                ).show()
             }
         }
     }

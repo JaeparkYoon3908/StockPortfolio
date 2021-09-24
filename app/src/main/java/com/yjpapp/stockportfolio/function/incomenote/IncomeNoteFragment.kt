@@ -153,22 +153,27 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
     override fun bindTotalGainData() {
         var totalGainNumber = 0.0
-        var totalGainPercent = ""
+        var totalGainPercent = "50%"
         val allIncomeNoteInfoList = incomeNotePresenter.getAllIncomeNoteList()
-        if (allIncomeNoteInfoList.isNotEmpty()) {
-            allIncomeNoteInfoList[0]?.let {
-                totalGainNumber = it.totalPrice
-                totalGainPercent = it.totalPercent
+//        if (allIncomeNoteInfoList.isNotEmpty()) {
+//            allIncomeNoteInfoList[0]?.let {
+//                totalGainNumber = it.totalPrice
+//                totalGainPercent = it.totalPercent
+//            }
+//        }
+        allIncomeNoteInfoList.forEach { incomeNoteData ->
+            incomeNoteData?.let {
+                totalGainNumber += it.realPainLossesAmount
             }
         }
 
         binding.apply {
-
-            txtTotalRealizationGainsLossesData.text = StockPortfolioConfig.moneySymbol + BigDecimal(totalGainNumber)
-            if(totalGainNumber >= 0){
+            val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
+            txtTotalRealizationGainsLossesData.text = "${StockPortfolioConfig.moneySymbol}$totalRealizationGainsLossesNumber"
+            if (totalGainNumber >= 0) {
                 txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
                 txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
-            }else{
+            } else {
                 txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
                 txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
             }
@@ -177,7 +182,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 //                    Utils.getRoundsPercentNumber(totalGainPercent)
             txtTotalRealizationGainsLossesPercent.text = totalGainPercent
         }
-
     }
 
     override fun showAddButton() {
@@ -225,7 +229,7 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
                 CommonDatePickerDialog(year, month, day).apply {
                     setListener { view, year, month, dayOfMonth ->
-                        Toast.makeText(requireContext(), "Set date: $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
+//                        Toast.makeText(requireContext(), "날짜 : $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
                         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
                         purchaseYear = year.toString()
                         purchaseMonth = if(month<10){
@@ -265,8 +269,6 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         val toDayYYYYMM = Utils.getTodayYYMMDD()
         val startDate = "${toDayYYYYMM[0]}-01-01"
         val endDate = "${toDayYYYYMM[0]}-12-01"
-        lifecycleScope.launch {
-            incomeNotePresenter.requestIncomeNoteList(mContext, startDate, endDate)
-        }
+        incomeNotePresenter.requestIncomeNoteList(mContext, startDate, endDate)
     }
 }
