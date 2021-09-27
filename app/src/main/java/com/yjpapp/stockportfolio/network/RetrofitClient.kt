@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
     enum class BaseServerURL(val url: String) {
-        MY("http://112.147.50.202"),
+        MY("http://112.147.50.241"),
         NAVER("https://openapi.naver.com")
     }
     private val TAG = RetrofitClient::class.java.simpleName
