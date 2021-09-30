@@ -7,6 +7,7 @@ import android.os.Build
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
+import com.yjpapp.stockportfolio.util.NetworkUtils
 import com.yjpapp.stockportfolio.util.StockLog
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -29,7 +30,7 @@ object RetrofitClient {
     const val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
     fun getService(context: Context, baseServerURL: BaseServerURL): RetrofitService? {
-        if (isInternetAvailable(context)) {
+        if (NetworkUtils.isInternetAvailable(context)) {
             val interceptor: Interceptor = object : Interceptor {
                 @Throws(IOException::class)
                 override fun intercept(chain: Interceptor.Chain): Response {
@@ -82,36 +83,6 @@ object RetrofitClient {
         } else {
             return null
         }
-    }
-
-    //인터넷 사용 가능한지 여부
-    private fun isInternetAvailable(context: Context): Boolean {
-        var result = false
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val networkCapabilities = connectivityManager.activeNetwork ?: return false
-            val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-            result = when {
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
-        } else {
-            connectivityManager.run {
-                connectivityManager.activeNetworkInfo?.run {
-                    result = when (type) {
-                        ConnectivityManager.TYPE_WIFI -> true
-                        ConnectivityManager.TYPE_MOBILE -> true
-                        ConnectivityManager.TYPE_ETHERNET -> true
-                        else -> false
-                    }
-
-                }
-            }
-        }
-
-        return result
     }
 
     private fun getClientBuilderWithToken(context: Context, chain: Interceptor.Chain, authorization: String): Request.Builder {
