@@ -80,10 +80,10 @@ WSGI_APPLICATION = 'server_dev.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '3.35.51.238',
+        'HOST': '112.147.50.241',
         'NAME': 'server_dev',
-        'USER': 'yoonjaepark',
-        'PASSWORD': 'fnclrkakql3#',
+        'USER': 'pi',
+        'PASSWORD': 'admin123!',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
     }
