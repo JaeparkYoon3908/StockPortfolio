@@ -19,7 +19,7 @@ class RegistUser(APIView):
         login_type = request.data.get('login_type', "") # 클라이언트에서 올리는 login_type
 
         response = requests.post(
-            "http://112.147.50.202/api/token/",
+            "http://112.147.50.241/api/token/",
             # "http://127.0.0.1:8000/api/token/",
             json={"username": "yunjaepark", "password": "fnclrkakql3#"}
         )
@@ -81,7 +81,7 @@ class SelectUser(APIView):
     def get(self, request):
         user_index = request.GET.get('user_index', "")
         response = requests.post(
-            "http://112.147.50.202/api/token/",
+            "http://112.147.50.241/api/token/",
             json={"username": "yunjaepark", "password": "fnclrkakql3#"}
         )
         token = "jwt " + response.json().get("token")
