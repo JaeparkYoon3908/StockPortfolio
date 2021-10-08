@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
  * @author Yoon Jae-park
  * @since 2020.12
  */
-class IncomeNoteInteractor: BaseInteractor() {
+class IncomeNoteRepository  {
     suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(reqIncomeNoteInfo)
 
@@ -65,10 +65,13 @@ class IncomeNoteInteractor: BaseInteractor() {
             }
         }
     }
-
+    var currentPagingSource: IncomeNotePagingSource? = null
     fun getIncomeNoteListByPaging(context: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteInfo.IncomeNoteList>> {
         return Pager(
             config = PagingConfig(pageSize = 10, enablePlaceholders = true),
-            pagingSourceFactory = { IncomeNotePagingSource(context, startDate, endDate) }).flow
+            pagingSourceFactory = { IncomeNotePagingSource(context, startDate, endDate).also {
+                currentPagingSource = it
+            } }).flow
     }
+
 }

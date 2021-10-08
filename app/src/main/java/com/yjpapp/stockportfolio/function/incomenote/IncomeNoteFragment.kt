@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,11 +17,14 @@ import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
+import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import java.math.BigDecimal
-import java.text.NumberFormat
 import java.util.*
 
 /**
@@ -30,15 +33,17 @@ import java.util.*
  * @author Yoon Jae-park
  * @since 2020.08
  */
-class IncomeNoteFragment : Fragment(), IncomeNoteView {
+class IncomeNoteFragment : Fragment() {
     private val TAG = IncomeNoteFragment::class.java.simpleName
-    private lateinit var incomeNotePresenter: IncomeNotePresenter
+//    private lateinit var incomeNotePresenter: IncomeNotePresenter
     private lateinit var mContext: Context
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private lateinit var layoutManager: LinearLayoutManager
+    private var incomeNoteListAdapter = IncomeNoteListAdapter(null)
 
     private var _binding: FragmentIncomeNoteBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: IncomeNoteViewModel by inject()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,7 +51,9 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         //Fragment BackPress Event Call
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                incomeNotePresenter.onBackPressedClick(activity!!)
+                activity?.let {
+                    Utils.runBackPressAppCloseEvent(mContext, it)
+                }
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
@@ -92,7 +99,9 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_IncomeNoteFragment_Add -> {
-                incomeNotePresenter.onAddButtonClicked()
+                viewModel.editMode = false
+                viewModel.incomeNoteId = -1
+                showInputDialog(viewModel.editMode, null)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -100,8 +109,8 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
     private fun initLayout() {
         setHasOptionsMenu(true)
-        incomeNotePresenter = IncomeNotePresenter(mContext, this)
-
+//        incomeNotePresenter = IncomeNotePresenter(mContext, this)
+        incomeNoteListAdapter.callBack = adapterCallBack
         binding.apply {
             btnDate.setOnClickListener(onClickListener)
         }
@@ -118,9 +127,9 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
             R.id.btn_date -> {
                 IncomeNoteDatePickerDialog(
-                    incomeNotePresenter,
-                    incomeNotePresenter.initStartYYYYMMDD,
-                    incomeNotePresenter.initEndYYYYMMDD
+                    datePickerDialogCallBack,
+                    viewModel.initStartYYYYMMDD,
+                    viewModel.initEndYYYYMMDD
                 ).apply {
                     show(this@IncomeNoteFragment.childFragmentManager, TAG)
                 }
@@ -135,12 +144,12 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
 
         binding.apply {
             recyclerviewIncomeNoteFragment.layoutManager = layoutManager
-            recyclerviewIncomeNoteFragment.itemAnimator = FadeInAnimator()
+            recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
             recyclerviewIncomeNoteFragment.addOnItemTouchListener(object: RecyclerView.OnItemTouchListener{
                 override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                     when(e.actionMasked){
                         MotionEvent.ACTION_UP, MotionEvent.ACTION_DOWN -> {
-                            incomeNotePresenter.closeSwipeLayout()
+                            incomeNoteListAdapter.closeSwipeLayout()
                         }
                     }
                     return false
@@ -151,39 +160,16 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         }
     }
 
-    override fun bindTotalGainData(totalGainNumber: Double, totalGainPercent: Double) {
-        binding.apply {
-            val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
-            txtTotalRealizationGainsLossesData.text = "${StockPortfolioConfig.moneySymbol}$totalRealizationGainsLossesNumber"
-            if (totalGainNumber >= 0) {
-                txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
-                txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
-            } else {
-                txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
-                txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
-            }
-            //퍼센티지 붙이기
-//            txtTotalRealizationGainsLossesPercent.text =
-//                    Utils.getRoundsPercentNumber(totalGainPercent)
-            txtTotalRealizationGainsLossesPercent.text = "$totalGainPercent%"
-        }
-    }
-
-    override fun showAddButton() {
+    fun showAddButton() {
         menu?.getItem(0)?.isVisible = true
     }
 
-    override fun hideAddButton() {
+    fun hideAddButton() {
         menu?.getItem(0)?.isVisible = false
     }
 
-    override fun showFilterDialog() {
-        val mainFilterDialog = IncomeNoteFilterDialog(incomeNotePresenter)
-        mainFilterDialog.show(childFragmentManager, tag)
-    }
-
-    override fun showInputDialog(editMode: Boolean, respIncomeNoteInfo: RespIncomeNoteInfo.IncomeNoteList?) {
-        IncomeNoteInputDialog(mContext, incomeNotePresenter).apply {
+    fun showInputDialog(editMode: Boolean, respIncomeNoteInfo: RespIncomeNoteInfo.IncomeNoteList?) {
+        IncomeNoteInputDialog(inputDialogCallBack, mContext).apply {
             if(editMode){
                 if (!isShowing) {
                     show()
@@ -230,31 +216,96 @@ class IncomeNoteFragment : Fragment(), IncomeNoteView {
         }
     }
 
-    override fun scrollPosition(position: Int) {
+    fun scrollPosition(position: Int) {
         binding.recyclerviewIncomeNoteFragment.scrollToPosition(position)
     }
 
-    override fun scrollTopPosition() {
+    fun scrollTopPosition() {
         binding.recyclerviewIncomeNoteFragment.smoothScrollBy(0, 0)
-    }
-
-    override fun setAdapter(incomeNoteListAdapter: IncomeNoteListAdapter?) {
-        binding.recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
-    }
-
-    override fun showToast(toast: Toast) {
-        toast.show()
-    }
-
-    override fun initFilterDateText(startDate: String, endDate: String) {
-        binding.txtFilterDate.text = "$startDate ~ $endDate"
     }
 
     private fun initData() {
         val toDayYYYYMM = Utils.getTodayYYMMDD()
         val startDate = "${toDayYYYYMM[0]}-01-01"
         val endDate = "${toDayYYYYMM[0]}-12-01"
-        incomeNotePresenter.requestIncomeNoteList(mContext, startDate, endDate)
-        incomeNotePresenter.requestTotalGain(mContext)
+        requestIncomeNoteList(startDate, endDate)
+        viewModel.requestTotalGain(mContext)
+        subScribeUI(this@IncomeNoteFragment)
+    }
+    private fun subScribeUI(owner: LifecycleOwner) {
+        viewModel.apply {
+            totalGainIncomeNoteData.observe(owner, { data ->
+                val totalGainNumber = data.total_price
+                val totalGainPercent = data.total_percent
+                binding.apply {
+                    val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
+                    txtTotalRealizationGainsLossesData.text = "${StockPortfolioConfig.moneySymbol}$totalRealizationGainsLossesNumber"
+                    if (totalGainNumber >= 0) {
+                        txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                        txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                    } else {
+                        txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
+                        txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
+                    }
+                    txtTotalRealizationGainsLossesPercent.text = "$totalGainPercent%"
+                }
+            })
+            incomeNoteModifySuccess.observe(owner, { data ->
+                Toasty.normal(mContext, "수정완료").show()
+                incomeNoteListAdapter.refresh()
+                viewModel.requestTotalGain(mContext)
+            })
+            incomeNoteDeletedPosition.observe(owner, { data ->
+                Toasty.normal(mContext, "삭제완료").show()
+//                incomeNoteListAdapter.notifyItemRemoved(data)
+//                incomeNoteListAdapter.notifyItemRangeRemoved(data, incomeNoteListAdapter.itemCount)
+                incomeNoteListAdapter.notifyItemChanged(data)
+            })
+            incomeNoteAddSuccess.observe(owner, { data ->
+                Toasty.info(mContext, "추가완료").show()
+                incomeNoteListAdapter?.refresh()
+            })
+        }
+    }
+    private fun requestIncomeNoteList(startDate: String, endDate: String) {
+        lifecycleScope.launch {
+            viewModel.getIncomeNoteListPagingData(mContext, startDate, endDate).collectLatest {
+                incomeNoteListAdapter.submitData(it)
+            }
+        }
+        binding.txtFilterDate.text = "$startDate ~ $endDate"
+    }
+    private val adapterCallBack = object : IncomeNoteListAdapter.CallBack {
+        override fun onEditButtonClick(respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?) {
+            respIncomeNoteList?.let {
+                viewModel.editMode = true
+                showAddButton()
+                viewModel.incomeNoteId = it.id //        val incomeNoteInfo = incomeNoteInteractor.getIncomeNoteInfo(position)
+                showInputDialog(viewModel.editMode, respIncomeNoteList)
+            }
+        }
+
+        override fun onDeleteOkClick(id: Int, position: Int) {
+            viewModel.requestDeleteIncomeNote(mContext, id, position)
+        }
+    }
+
+    private val datePickerDialogCallBack = object : IncomeNoteDatePickerDialog.CallBack {
+        override fun requestIncomeNoteList(startDate: String, endDate: String) {
+            lifecycleScope.launch {
+                viewModel.getIncomeNoteListPagingData(mContext, startDate, endDate)
+                viewModel.requestTotalGain(mContext)
+            }
+        }
+    }
+    private val inputDialogCallBack = object : IncomeNoteInputDialog.CallBack {
+        override fun onInputDialogCompleteClicked(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
+            reqIncomeNoteInfo.id = viewModel.incomeNoteId
+            if (viewModel.editMode) {
+                viewModel.requestModifyIncomeNote(mContext, reqIncomeNoteInfo)
+            } else {
+                viewModel.requestAddIncomeNote(mContext, reqIncomeNoteInfo)
+            }
+        }
     }
 }

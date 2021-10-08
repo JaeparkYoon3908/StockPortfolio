@@ -19,6 +19,7 @@ class StockPortfolioApp: Application() {
             modules(loginViewModel)
             modules(myStockViewModel)
             modules(myViewModel)
+            modules(incomeNoteViewModel)
             /**
              * Common
              */

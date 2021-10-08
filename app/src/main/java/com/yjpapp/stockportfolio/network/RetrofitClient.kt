@@ -87,7 +87,8 @@ object RetrofitClient {
 
     private fun getClientBuilderWithToken(context: Context, chain: Interceptor.Chain, authorization: String): Request.Builder {
         val preferenceController = PreferenceController.getInstance(context)
-        return chain.request().newBuilder()
+        val builder = chain.request().newBuilder().addHeader("Content-Type", "application/json")
+        return builder
             .addHeader("Authorization", authorization)
             .addHeader("Content-Type", "application/json")
             .addHeader("user-index", preferenceController.getPreference(PrefKey.KEY_USER_INDEX)?: "")

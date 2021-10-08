@@ -18,7 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class IncomeNoteDatePickerDialog(
-    private val incomeNotePresenter: IncomeNotePresenter,
+    private val callBack: CallBack,
+//    private val incomeNotePresenter: IncomeNotePresenter,
     private val startYYYYMMDD: List<String>,
     private val endYYYYMMDD: List<String>
 ) : BottomSheetDialogFragment() {
@@ -97,8 +98,12 @@ class IncomeNoteDatePickerDialog(
 
                     val startYYYYMMDD = "$startYYYY-$startMM-$startDD"
                     val endYYYYMMDD = "$endYYYY-$endMM-$endDD"
-                    incomeNotePresenter.requestIncomeNoteList(
-                        mContext,
+//                    incomeNotePresenter.requestIncomeNoteList(
+//                        mContext,
+//                        startYYYYMMDD,
+//                        endYYYYMMDD
+//                    )
+                    callBack.requestIncomeNoteList(
                         startYYYYMMDD,
                         endYYYYMMDD
                     )
@@ -202,5 +207,9 @@ class IncomeNoteDatePickerDialog(
             }
         }
         return result.toTypedArray()
+    }
+
+    interface CallBack {
+        fun requestIncomeNoteList(startDate: String, endDate: String)
     }
 }

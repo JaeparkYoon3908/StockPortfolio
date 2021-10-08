@@ -11,7 +11,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogIncomeNoteFilterBinding
 import com.yjpapp.stockportfolio.util.Utils
 
-class IncomeNoteFilterDialog(incomeNotePresenter: IncomeNotePresenter): BottomSheetDialogFragment() {
+class IncomeNoteFilterDialog(): BottomSheetDialogFragment() {
 
 //    private lateinit var rootView: View
     private var _viewBinding: CustomDialogIncomeNoteFilterBinding? = null

@@ -23,7 +23,7 @@ import java.util.*
  * @since 2020.10
  */
 
-class SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
+class  SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
     private val permissionList = arrayOf<String>(
         Manifest.permission.READ_PHONE_STATE
 //            Manifest.permission.READ_SMS,

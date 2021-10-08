@@ -25,8 +25,9 @@ import java.util.*
 
 
 class IncomeNoteInputDialog(
+    private val callBack: CallBack,
     private val mContext: Context,
-    private val incomeNotePresenter: IncomeNotePresenter
+//    private val incomeNotePresenter: IncomeNotePresenter
 ) : AlertDialog(mContext), SupportedDatePickerDialog.OnDateSetListener {
     object MSG {
         const val PURCHASE_DATE_DATA_INPUT: Int = 0
@@ -122,7 +123,8 @@ class IncomeNoteInputDialog(
                     sellPrice = sellPriceNumber,
                     sellCount = sellCount
                 )
-                incomeNotePresenter.onInputDialogCompleteClicked(mContext, dataInfo)
+//                incomeNotePresenter.onInputDialogCompleteClicked(mContext, dataInfo)
+                callBack.onInputDialogCompleteClicked(dataInfo)
                 dismiss()
             }
             etSellDate.id -> {
@@ -203,5 +205,9 @@ class IncomeNoteInputDialog(
         }
 
         uiHandler.sendEmptyMessage(MSG.PURCHASE_DATE_DATA_INPUT)
+    }
+
+    interface CallBack {
+        fun onInputDialogCompleteClicked(reqIncomeNoteInfo: ReqIncomeNoteInfo)
     }
 }

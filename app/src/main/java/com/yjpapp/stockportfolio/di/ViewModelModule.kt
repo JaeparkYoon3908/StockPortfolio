@@ -1,5 +1,7 @@
 package com.yjpapp.stockportfolio.di
 
+import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteRepository
+import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
 import com.yjpapp.stockportfolio.function.login.LoginViewModel
 import com.yjpapp.stockportfolio.function.my.MyViewModel
 import com.yjpapp.stockportfolio.function.mystock.MyStockViewModel
@@ -30,7 +32,10 @@ val myViewModel = module {
     single { MyRepository() }
     viewModel { MyViewModel(PreferenceController.getInstance(androidContext()), get()) }
 }
-
+val incomeNoteViewModel = module {
+    single { IncomeNoteRepository() }
+    viewModel { IncomeNoteViewModel(get()) }
+}
 /**
  * Common
  */
