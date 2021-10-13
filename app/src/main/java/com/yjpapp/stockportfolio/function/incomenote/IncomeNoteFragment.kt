@@ -3,12 +3,14 @@ package com.yjpapp.stockportfolio.function.incomenote
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
@@ -39,7 +41,7 @@ class IncomeNoteFragment : Fragment() {
     private lateinit var mContext: Context
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private lateinit var layoutManager: LinearLayoutManager
-    private var incomeNoteListAdapter = IncomeNoteListAdapter(null)
+    private var incomeNoteListAdapter = IncomeNoteListAdapter(arrayListOf(), null)
 
     private var _binding: FragmentIncomeNoteBinding? = null
     private val binding get() = _binding!!
@@ -109,7 +111,6 @@ class IncomeNoteFragment : Fragment() {
 
     private fun initLayout() {
         setHasOptionsMenu(true)
-//        incomeNotePresenter = IncomeNotePresenter(mContext, this)
         incomeNoteListAdapter.callBack = adapterCallBack
         binding.apply {
             btnDate.setOnClickListener(onClickListener)
@@ -139,13 +140,12 @@ class IncomeNoteFragment : Fragment() {
 
     private fun initRecyclerView() {
         layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-//        layoutManager.reverseLayout = true
-//        layoutManager.stackFromEnd = true
 
-        binding.apply {
-            recyclerviewIncomeNoteFragment.layoutManager = layoutManager
-            recyclerviewIncomeNoteFragment.adapter = incomeNoteListAdapter
-            recyclerviewIncomeNoteFragment.addOnItemTouchListener(object: RecyclerView.OnItemTouchListener{
+        binding.recyclerviewIncomeNoteFragment.apply {
+            layoutManager = layoutManager
+            adapter = incomeNoteListAdapter
+            addOnScrollListener(onScrollListener)
+            addOnItemTouchListener(object: RecyclerView.OnItemTouchListener{
                 override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                     when(e.actionMasked){
                         MotionEvent.ACTION_UP, MotionEvent.ACTION_DOWN -> {
@@ -226,10 +226,13 @@ class IncomeNoteFragment : Fragment() {
 
     private fun initData() {
         val toDayYYYYMM = Utils.getTodayYYMMDD()
-        val startDate = "${toDayYYYYMM[0]}-01-01"
-        val endDate = "${toDayYYYYMM[0]}-12-01"
-        requestIncomeNoteList(startDate, endDate)
-        viewModel.requestTotalGain(mContext)
+        viewModel.apply {
+            initStartYYYYMMDD = listOf(toDayYYYYMM[0], "01", "01")
+            initEndYYYYMMDD = listOf(toDayYYYYMM[0], "12", "01")
+
+            requestGetIncomeNote(mContext, 1)
+            requestTotalGain(mContext)
+        }
         subScribeUI(this@IncomeNoteFragment)
     }
     private fun subScribeUI(owner: LifecycleOwner) {
@@ -250,31 +253,31 @@ class IncomeNoteFragment : Fragment() {
                     txtTotalRealizationGainsLossesPercent.text = "$totalGainPercent%"
                 }
             })
+            incomeNoteListLiveData.observe(owner, { data ->
+                incomeNoteListAdapter.incomeNoteList = data
+                incomeNoteListAdapter.notifyDataSetChanged()
+                viewModel.run {
+                    val startDate = makeDateString(initStartYYYYMMDD)
+                    val endDate = makeDateString(initEndYYYYMMDD)
+                    binding.txtFilterDate.text = "$startDate ~ $endDate"
+                }
+            })
             incomeNoteModifySuccess.observe(owner, { data ->
                 Toasty.normal(mContext, "수정완료").show()
-                incomeNoteListAdapter.refresh()
                 viewModel.requestTotalGain(mContext)
             })
             incomeNoteDeletedPosition.observe(owner, { data ->
                 Toasty.normal(mContext, "삭제완료").show()
-//                incomeNoteListAdapter.notifyItemRemoved(data)
-//                incomeNoteListAdapter.notifyItemRangeRemoved(data, incomeNoteListAdapter.itemCount)
-                incomeNoteListAdapter.notifyItemChanged(data)
+                incomeNoteListAdapter.incomeNoteList.removeAt(data)
+                incomeNoteListAdapter.notifyItemRemoved(data)
+                incomeNoteListAdapter.notifyItemRangeRemoved(data, incomeNoteListAdapter.itemCount)
             })
             incomeNoteAddSuccess.observe(owner, { data ->
                 Toasty.info(mContext, "추가완료").show()
-                incomeNoteListAdapter?.refresh()
             })
         }
     }
-    private fun requestIncomeNoteList(startDate: String, endDate: String) {
-        lifecycleScope.launch {
-            viewModel.getIncomeNoteListPagingData(mContext, startDate, endDate).collectLatest {
-                incomeNoteListAdapter.submitData(it)
-            }
-        }
-        binding.txtFilterDate.text = "$startDate ~ $endDate"
-    }
+
     private val adapterCallBack = object : IncomeNoteListAdapter.CallBack {
         override fun onEditButtonClick(respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?) {
             respIncomeNoteList?.let {
@@ -291,9 +294,12 @@ class IncomeNoteFragment : Fragment() {
     }
 
     private val datePickerDialogCallBack = object : IncomeNoteDatePickerDialog.CallBack {
-        override fun requestIncomeNoteList(startDate: String, endDate: String) {
+        override fun requestIncomeNoteList(startDateList: List<String>, endDateList: List<String>) {
             lifecycleScope.launch {
-                viewModel.getIncomeNoteListPagingData(mContext, startDate, endDate)
+                viewModel.initStartYYYYMMDD = startDateList
+                viewModel.initEndYYYYMMDD = endDateList
+                //TODO 리스트 클리어
+                viewModel.requestGetIncomeNote(mContext, 1)
                 viewModel.requestTotalGain(mContext)
             }
         }
@@ -305,6 +311,17 @@ class IncomeNoteFragment : Fragment() {
                 viewModel.requestModifyIncomeNote(mContext, reqIncomeNoteInfo)
             } else {
                 viewModel.requestAddIncomeNote(mContext, reqIncomeNoteInfo)
+            }
+        }
+    }
+    private val onScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val totalItemCount = layoutManager.itemCount
+            val lastVisible = layoutManager.findLastCompletelyVisibleItemPosition()
+            if (lastVisible >= totalItemCount - 1) {
+                viewModel.requestGetIncomeNote(mContext, viewModel.page++)
             }
         }
     }

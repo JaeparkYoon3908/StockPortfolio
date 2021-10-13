@@ -1,14 +1,10 @@
-package com.yjpapp.stockportfolio.function.incomenote
+package com.yjpapp.stockportfolio.repository
 
 import android.content.Context
 import androidx.paging.*
-import com.yjpapp.stockportfolio.base.BaseInteractor
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.network.RetrofitClient
-import com.yjpapp.stockportfolio.util.StockLog
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -68,7 +64,7 @@ class IncomeNoteRepository  {
     var currentPagingSource: IncomeNotePagingSource? = null
     fun getIncomeNoteListByPaging(context: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteInfo.IncomeNoteList>> {
         return Pager(
-            config = PagingConfig(pageSize = 10, enablePlaceholders = true),
+            config = PagingConfig(pageSize = 10, enablePlaceholders = false),
             pagingSourceFactory = { IncomeNotePagingSource(context, startDate, endDate).also {
                 currentPagingSource = it
             } }).flow

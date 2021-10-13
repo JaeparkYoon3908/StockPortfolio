@@ -16,6 +16,7 @@ import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.PagingSwipeAdapter
+import com.yjpapp.swipelayout.adapters.RecyclerSwipeAdapter
 import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
 import java.math.BigDecimal
 import java.util.*
@@ -27,8 +28,9 @@ import java.util.*
  * @since 2020.08
  */
 class IncomeNoteListAdapter(
+    var incomeNoteList: ArrayList<RespIncomeNoteInfo.IncomeNoteList>,
     var callBack: CallBack?
-) : PagingSwipeAdapter<RespIncomeNoteInfo.IncomeNoteList, IncomeNoteListAdapter.IncomeNoteListViewHolder>(DIFF_CALLBACK)
+) : RecyclerSwipeAdapter<IncomeNoteListAdapter.IncomeNoteListViewHolder>()
 {
     private lateinit var mContext: Context
 
@@ -65,7 +67,7 @@ class IncomeNoteListAdapter(
     }
 
     private fun bindDataList(viewHolder: IncomeNoteListViewHolder, position: Int) {
-        getItem(position)?.let {
+        incomeNoteList[position].run {
             viewHolder.apply {
                 txt_subject_name.isSelected = true
                 txt_gain_data.isSelected = true
@@ -74,27 +76,27 @@ class IncomeNoteListAdapter(
                 txt_gain_percent_data.isSelected = true
 
                 //회사 이름
-                txt_subject_name.text = it.subjectName
+                txt_subject_name.text = subjectName
                 //수익
                 txt_gain_data.text =
-                    moneySymbol + Utils.getNumInsertComma(BigDecimal(it.realPainLossesAmount).toString())
+                    moneySymbol + Utils.getNumInsertComma(BigDecimal(realPainLossesAmount).toString())
                 //수익 퍼센트
-                txt_gain_percent_data.text = "(${it.gainPercent}%)"
+                txt_gain_percent_data.text = "(${gainPercent}%)"
                 //매도일
-                txt_sell_date_data.text = it.sellDate
-                if (it.sellDate == "") {
+                txt_sell_date_data.text = sellDate
+                if (sellDate == "") {
                     txt_sell_date_data.text = "-"
                 }
                 //매수금액
                 txt_purchase_price_data.text =
-                    moneySymbol + Utils.getNumInsertComma(BigDecimal(it.purchasePrice).toString())
+                    moneySymbol + Utils.getNumInsertComma(BigDecimal(purchasePrice).toString())
                 //매도금액
                 txt_sell_price_data.text =
-                    moneySymbol + Utils.getNumInsertComma(BigDecimal(it.sellPrice).toString())
+                    moneySymbol + Utils.getNumInsertComma(BigDecimal(sellPrice).toString())
                 //매도수량
-                txt_sell_count_data.text = Utils.getNumInsertComma(it.sellCount.toString())
+                txt_sell_count_data.text = Utils.getNumInsertComma(sellCount.toString())
 
-                val realPainLossesAmount = it.realPainLossesAmount
+                val realPainLossesAmount = realPainLossesAmount
                 if (realPainLossesAmount >= 0) {
                     txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
                     txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
@@ -123,7 +125,7 @@ class IncomeNoteListAdapter(
             })
             txt_edit.setOnClickListener {
 //                incomeNotePresenter.onEditButtonClick(getItem(position))
-                callBack?.onEditButtonClick(getItem(position))
+                callBack?.onEditButtonClick(incomeNoteList[position])
             }
             txt_delete.setOnClickListener {
                 val isShowDeleteCheck = PreferenceController.getInstance(mContext)
@@ -149,7 +151,7 @@ class IncomeNoteListAdapter(
 //                                            position
 //                                        )
                                         callBack?.onDeleteOkClick(
-                                            getItem(position)?.id!!,
+                                            incomeNoteList[position].id,
                                             position
                                         )
                                         dialog.dismiss()
@@ -167,7 +169,7 @@ class IncomeNoteListAdapter(
                 } else {
 //                    incomeNotePresenter.onDeleteOkClick(mContext, getItem(position)?.id!!, position)
                     callBack?.onDeleteOkClick(
-                        getItem(position)?.id!!,
+                        incomeNoteList[position].id,
                         position
                     )
                 }
@@ -205,5 +207,9 @@ class IncomeNoteListAdapter(
     interface CallBack {
         fun onEditButtonClick(respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?)
         fun onDeleteOkClick(id: Int, position: Int)
+    }
+
+    override fun getItemCount(): Int {
+        return incomeNoteList.size
     }
 }

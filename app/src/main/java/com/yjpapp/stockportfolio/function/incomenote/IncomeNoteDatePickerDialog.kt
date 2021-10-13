@@ -96,8 +96,8 @@ class IncomeNoteDatePickerDialog(
                         if (endPickerDay.value < 10) "0" + endPickerDay.value.toString()
                         else endPickerDay.value.toString()
 
-                    val startYYYYMMDD = "$startYYYY-$startMM-$startDD"
-                    val endYYYYMMDD = "$endYYYY-$endMM-$endDD"
+                    val startYYYYMMDD = listOf(startYYYY, startMM, startDD)
+                    val endYYYYMMDD = listOf(endYYYY, endMM, endDD)
 //                    incomeNotePresenter.requestIncomeNoteList(
 //                        mContext,
 //                        startYYYYMMDD,
@@ -210,6 +210,6 @@ class IncomeNoteDatePickerDialog(
     }
 
     interface CallBack {
-        fun requestIncomeNoteList(startDate: String, endDate: String)
+        fun requestIncomeNoteList(startDateList: List<String>, endDateList: List<String>)
     }
 }
