@@ -37,10 +37,8 @@ import java.util.*
  */
 class IncomeNoteFragment : Fragment() {
     private val TAG = IncomeNoteFragment::class.java.simpleName
-//    private lateinit var incomeNotePresenter: IncomeNotePresenter
     private lateinit var mContext: Context
     private lateinit var onBackPressedCallback: OnBackPressedCallback
-    private lateinit var layoutManager: LinearLayoutManager
     private var incomeNoteListAdapter = IncomeNoteListAdapter(arrayListOf(), null)
 
     private var _binding: FragmentIncomeNoteBinding? = null
@@ -139,10 +137,8 @@ class IncomeNoteFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-
         binding.recyclerviewIncomeNoteFragment.apply {
-            layoutManager = layoutManager
+            layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
             adapter = incomeNoteListAdapter
             addOnScrollListener(onScrollListener)
             addOnItemTouchListener(object: RecyclerView.OnItemTouchListener{
