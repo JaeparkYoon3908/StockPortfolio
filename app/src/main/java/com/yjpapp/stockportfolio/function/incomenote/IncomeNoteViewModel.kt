@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class IncomeNoteViewModel(
     private val incomeNoteRepository: IncomeNoteRepository
@@ -37,14 +38,17 @@ class IncomeNoteViewModel(
         params["startDate"] = makeDateString(initStartYYYYMMDD)
         params["endDate"] = makeDateString(initEndYYYYMMDD)
         viewModelScope.launch {
-            val result = incomeNoteRepository.requestGetIncomeNote(context, params)
-            result?.let {
-                if (it.isSuccessful) {
-                    it.body()?.income_note?.forEach {
-                        totalIncomeNoteList.add(it)
+            try {
+                val result = incomeNoteRepository.requestGetIncomeNote(context, params)
+                result?.let {
+                    if (it.isSuccessful) {
+                        it.body()?.income_note?.let {
+                            incomeNoteListLiveData.value = it
+                        }
                     }
-                    incomeNoteListLiveData.value = totalIncomeNoteList
                 }
+            } catch (e: Exception) {
+                e.stackTrace
             }
         }
     }

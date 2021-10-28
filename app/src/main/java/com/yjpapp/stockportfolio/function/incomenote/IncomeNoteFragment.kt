@@ -250,7 +250,9 @@ class IncomeNoteFragment : Fragment() {
                 }
             })
             incomeNoteListLiveData.observe(owner, { data ->
-                incomeNoteListAdapter.incomeNoteList = data
+                data.forEach {
+                    incomeNoteListAdapter.incomeNoteList.add(it)
+                }
                 incomeNoteListAdapter.notifyDataSetChanged()
                 viewModel.run {
                     val startDate = makeDateString(initStartYYYYMMDD)
@@ -317,7 +319,8 @@ class IncomeNoteFragment : Fragment() {
             val totalItemCount = layoutManager.itemCount
             val lastVisible = layoutManager.findLastCompletelyVisibleItemPosition()
             if (lastVisible >= totalItemCount - 1) {
-                viewModel.requestGetIncomeNote(mContext, viewModel.page++)
+                viewModel.page++
+                viewModel.requestGetIncomeNote(mContext, viewModel.page)
             }
         }
     }
