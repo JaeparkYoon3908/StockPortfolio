@@ -61,7 +61,7 @@ class IncomeNoteAPI(APIView):
         income_note = [obj.get_resp_json() for obj in income_note_list]
         if int(page) > 0:
             pre_income_note_list = paginator.get_page(int(page) - 1).object_list
-            if int(page) == 1:
+            if income_note_list != pre_income_note_list:
                 data = dict(
                     page_info=dict(
                         page=page,
@@ -70,9 +70,8 @@ class IncomeNoteAPI(APIView):
                     ),
                     income_note=income_note
                 )
-
                 return Response(data=data)
-            if income_note_list == pre_income_note_list:
+            else:
                 data = dict(
                     page_info=dict(
                         page=page,
