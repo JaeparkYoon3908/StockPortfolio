@@ -3,14 +3,12 @@ package com.yjpapp.stockportfolio.function.incomenote
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
@@ -19,11 +17,11 @@ import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePickerDialog
+import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
-import jp.wasabeef.recyclerview.animators.FadeInAnimator
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import java.math.BigDecimal
@@ -86,7 +84,7 @@ class IncomeNoteFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding.unbind()
     }
 
     private var menu: Menu? = null
@@ -264,11 +262,12 @@ class IncomeNoteFragment : Fragment() {
                 Toasty.normal(mContext, "수정완료").show()
                 viewModel.requestTotalGain(mContext)
             })
-            incomeNoteDeletedPosition.observe(owner, { data ->
+            incomeNoteDeletedPosition.observe(owner, { position ->
                 Toasty.normal(mContext, "삭제완료").show()
-                incomeNoteListAdapter.incomeNoteList.removeAt(data)
-                incomeNoteListAdapter.notifyItemRemoved(data)
-                incomeNoteListAdapter.notifyItemRangeRemoved(data, incomeNoteListAdapter.itemCount)
+                incomeNoteListAdapter.incomeNoteList.removeAt(position)
+                incomeNoteListAdapter.notifyItemRemoved(position)
+//                incomeNoteListAdapter.notifyItemRangeRemoved(data, incomeNoteListAdapter.itemCount)
+//                incomeNoteListAdapter.notifyDataSetChanged()
             })
             incomeNoteAddSuccess.observe(owner, { data ->
                 Toasty.info(mContext, "추가완료").show()
@@ -294,11 +293,15 @@ class IncomeNoteFragment : Fragment() {
     private val datePickerDialogCallBack = object : IncomeNoteDatePickerDialog.CallBack {
         override fun requestIncomeNoteList(startDateList: List<String>, endDateList: List<String>) {
             lifecycleScope.launch {
-                viewModel.initStartYYYYMMDD = startDateList
-                viewModel.initEndYYYYMMDD = endDateList
-                //TODO 리스트 클리어
-                viewModel.requestGetIncomeNote(mContext, 1)
-                viewModel.requestTotalGain(mContext)
+                incomeNoteListAdapter.incomeNoteList = arrayListOf()
+                incomeNoteListAdapter.notifyDataSetChanged()
+                viewModel.apply {
+                    initStartYYYYMMDD = startDateList
+                    initEndYYYYMMDD = endDateList
+                    page = 1
+                    requestGetIncomeNote(mContext, 1)
+                    requestTotalGain(mContext)
+                }
             }
         }
     }

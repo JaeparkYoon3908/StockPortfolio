@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.incomenote
+package com.yjpapp.stockportfolio.function.incomenote.dialog
 
 import android.app.AlertDialog
 import android.content.Context

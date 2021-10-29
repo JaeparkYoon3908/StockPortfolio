@@ -13,7 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
-import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteInputDialog
+import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 
 
 class MyStockInputDialog(context: Context):

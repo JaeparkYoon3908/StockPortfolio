@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.incomenote
+package com.yjpapp.stockportfolio.function.incomenote.dialog
 
 import android.content.Context
 import android.os.Bundle

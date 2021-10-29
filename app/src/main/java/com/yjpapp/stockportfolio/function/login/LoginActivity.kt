@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.databinding.DataBindingUtil
 import com.facebook.*
 import com.facebook.GraphRequest.GraphJSONObjectCallback
 import com.facebook.appevents.AppEventsLogger
@@ -21,15 +22,15 @@ import com.google.gson.Gson
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseMVVMActivity
+import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
 import com.yjpapp.stockportfolio.function.main.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
 import com.yjpapp.stockportfolio.util.StockLog
+import org.koin.android.ext.android.bind
 import org.koin.android.ext.android.inject
 
 
@@ -38,9 +39,10 @@ import org.koin.android.ext.android.inject
  * @author 윤재박
  * @since 2021.07
  */
-class LoginActivity : BaseMVVMActivity() {
+class LoginActivity : BaseActivity() {
     private val TAG = LoginActivity::class.simpleName
-    private val binding = binding<ActivityLoginBinding>(R.layout.activity_login)
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
     private val gso by lazy {
         GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(StockPortfolioConfig.GOOGLE_SIGN_CLIENT_ID)
@@ -51,7 +53,6 @@ class LoginActivity : BaseMVVMActivity() {
     private val facebookCallbackManager by lazy { CallbackManager.Factory.create() }
 
     private val viewModel: LoginViewModel by inject()
-    private val preferenceController: PreferenceController by inject()
 
     interface LoginCallBack {
         fun onClick(view: View)
@@ -59,7 +60,7 @@ class LoginActivity : BaseMVVMActivity() {
 
     private val loginCallBack = object : LoginCallBack {
         override fun onClick(view: View) { //            startMainActivity()
-            binding.value.run {
+            binding.run {
                 when (view.id) {
                     btnGoogleLogin.id -> {
                         googleSignIn()
@@ -79,6 +80,8 @@ class LoginActivity : BaseMVVMActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+
         initData()
     }
 
@@ -90,16 +93,21 @@ class LoginActivity : BaseMVVMActivity() {
         super.onResume()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.unbind()
+    }
+
     private fun initData() {
         preferenceController.getPreference(PrefKey.KEY_AUTO_LOGIN)?.let {
             if (it == "true") {
                 val user_email = preferenceController.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
                 val user_name = preferenceController.getPreference(PrefKey.KEY_USER_NAME)?: ""
                 val login_type = preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
-                snsLoginSuccess(ReqSNSLogin(user_email, user_name, login_type))
+                requestLogin(ReqSNSLogin(user_email, user_name, login_type))
             }
         }
-        binding.value.apply {
+        binding.apply {
             lifecycleOwner = this@LoginActivity
             callback = loginCallBack
         }
@@ -163,7 +171,7 @@ class LoginActivity : BaseMVVMActivity() {
                     StockLog.d(TAG, "handleSignInResult:personId $personId")
                     StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
                     StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
-                    snsLoginSuccess(ReqSNSLogin(it.email!!, it.displayName!!, StockPortfolioConfig.LOGIN_TYPE_GOOGLE))
+                    requestLogin(ReqSNSLogin(it.email!!, it.displayName!!, StockPortfolioConfig.LOGIN_TYPE_GOOGLE))
                 }
             } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -212,7 +220,7 @@ class LoginActivity : BaseMVVMActivity() {
                 val accessToken = AccessToken.getCurrentAccessToken()
                 val callback = GraphJSONObjectCallback { `object`, response ->
                     val respFacebookUserInfo = Gson().fromJson(response.rawResponse, RespFacebookUserInfo::class.java)
-                    snsLoginSuccess(ReqSNSLogin(
+                    requestLogin(ReqSNSLogin(
                         user_email = respFacebookUserInfo.email,
                         user_name = respFacebookUserInfo.name,
                         login_type = StockPortfolioConfig.LOGIN_TYPE_FACEBOOK)
@@ -237,6 +245,7 @@ class LoginActivity : BaseMVVMActivity() {
     }
 
     private fun startMainActivity() {
+        stopLoadingAnimation()
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
         finish()
@@ -247,7 +256,20 @@ class LoginActivity : BaseMVVMActivity() {
         facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private fun snsLoginSuccess(reqSnsLogin: ReqSNSLogin) {
+    private fun requestLogin(reqSnsLogin: ReqSNSLogin) {
+        startLoadingAnimation()
         viewModel.requestLogin(reqSnsLogin)
+    }
+
+    private fun startLoadingAnimation() {
+        binding.viewMasking.visibility = View.VISIBLE
+        binding.ivLoading.visibility = View.VISIBLE
+        binding.ivLoading.startAnimation()
+    }
+
+    private fun stopLoadingAnimation() {
+        binding.viewMasking.visibility = View.GONE
+        binding.ivLoading.visibility = View.GONE
+        binding.ivLoading.stopAnimation()
     }
 }

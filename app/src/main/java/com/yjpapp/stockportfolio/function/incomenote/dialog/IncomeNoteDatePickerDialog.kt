@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.incomenote
+package com.yjpapp.stockportfolio.function.incomenote.dialog
 
 import android.app.Dialog
 import android.content.Context
@@ -13,9 +13,6 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogIncomeNoteDatePickerBinding
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class IncomeNoteDatePickerDialog(
     private val callBack: CallBack,

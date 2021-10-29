@@ -1,7 +1,7 @@
 package com.yjpapp.stockportfolio.function.mystock
 
-import com.yjpapp.stockportfolio.base.BaseMVVMActivity
+import com.yjpapp.stockportfolio.base.BaseActivity
 
-class StockSearchActivity: BaseMVVMActivity() {
+class StockSearchActivity: BaseActivity() {
 
 }
