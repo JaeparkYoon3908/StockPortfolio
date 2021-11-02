@@ -1,14 +1,11 @@
 package com.yjpapp.stockportfolio.function.mystock
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.*
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ethanhua.skeleton.Skeleton
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
@@ -42,7 +39,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
         setHasOptionsMenu(true)
         initLayout()
         initData()
-        setObserver()
+        subScribeUI()
     }
 
     private var menu: Menu? = null
@@ -102,10 +99,10 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
             viewModel = myStockViewModel
             lifecycleOwner = this@MyStockFragment
         }
-        setObserver()
+        subScribeUI()
     }
 
-    private fun setObserver() {
+    private fun subScribeUI() {
         myStockViewModel.apply {
             myStockInfoList.observe(viewLifecycleOwner, {
                 myStockAdapter.setMyStockList(it)

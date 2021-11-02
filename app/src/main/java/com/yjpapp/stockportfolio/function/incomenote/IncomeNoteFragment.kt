@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.function.incomenote
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -229,6 +230,7 @@ class IncomeNoteFragment : Fragment() {
         }
         subScribeUI(this@IncomeNoteFragment)
     }
+    @SuppressLint("NotifyDataSetChanged")
     private fun subScribeUI(owner: LifecycleOwner) {
         viewModel.apply {
             totalGainIncomeNoteData.observe(owner, { data ->
@@ -247,6 +249,7 @@ class IncomeNoteFragment : Fragment() {
                     txtTotalRealizationGainsLossesPercent.text = "$totalGainPercent%"
                 }
             })
+            //페이징 처리 live data
             incomeNoteListLiveData.observe(owner, { data ->
                 data.forEach {
                     incomeNoteListAdapter.incomeNoteList.add(it)
@@ -258,10 +261,16 @@ class IncomeNoteFragment : Fragment() {
                     binding.txtFilterDate.text = "$startDate ~ $endDate"
                 }
             })
+            //수정완료
             incomeNoteModifyResult.observe(owner, { data ->
                 Toasty.normal(mContext, "수정완료").show()
                 viewModel.requestTotalGain(mContext)
+                val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteList.find { it.id == data.id }
+                val index = incomeNoteListAdapter.incomeNoteList.indexOf(beforeModifyIncomeNote)
+                incomeNoteListAdapter.incomeNoteList[index] = data
+                incomeNoteListAdapter.notifyDataSetChanged()
             })
+            //삭제완료
             incomeNoteDeletedPosition.observe(owner, { position ->
                 Toasty.normal(mContext, "삭제완료").show()
                 incomeNoteListAdapter.incomeNoteList.removeAt(position)
@@ -269,9 +278,11 @@ class IncomeNoteFragment : Fragment() {
 //                incomeNoteListAdapter.notifyItemRangeRemoved(data, incomeNoteListAdapter.itemCount)
 //                incomeNoteListAdapter.notifyDataSetChanged()
             })
+            //추가완료
             incomeNoteAddResult.observe(owner, { data ->
                 Toasty.info(mContext, "추가완료").show()
                 incomeNoteListAdapter.incomeNoteList.add(data)
+                incomeNoteListAdapter.notifyDataSetChanged()
             })
         }
     }
@@ -281,7 +292,7 @@ class IncomeNoteFragment : Fragment() {
             respIncomeNoteList?.let {
                 viewModel.editMode = true
                 showAddButton()
-                viewModel.incomeNoteId = it.id //        val incomeNoteInfo = incomeNoteInteractor.getIncomeNoteInfo(position)
+                viewModel.incomeNoteId = it.id
                 showInputDialog(viewModel.editMode, respIncomeNoteList)
             }
         }
