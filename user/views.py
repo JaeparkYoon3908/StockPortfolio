@@ -45,7 +45,7 @@ class RegistUser(APIView):
                 )
             except:
                 connection.rollback()
-                data = CustomResponse.no_index
+                data = CustomResponse.exception
 
             return Response(data)
 
@@ -72,7 +72,7 @@ class RegistUser(APIView):
 
         except:
             connection.rollback()
-            data = CustomResponse.no_index
+            data = CustomResponse.exception
 
         return Response(data=data)
 class SelectUser(APIView):
@@ -108,6 +108,6 @@ class SelectUser(APIView):
 
         except:
             connection.rollback()
-            data = CustomResponse.no_index
+            data = CustomResponse.exception
 
         return Response(data=data)
