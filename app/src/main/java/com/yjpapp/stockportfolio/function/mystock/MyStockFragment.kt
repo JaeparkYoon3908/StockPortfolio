@@ -43,7 +43,6 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
         initLayout()
         initData()
         setObserver()
-//        startSkeletonAnimation()
     }
 
     private var menu: Menu? = null
@@ -64,9 +63,6 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                 }
                 showInputDialog(true, 0)
             }
-//            R.id.menu_MyStockFragment_Edit -> {
-//
-//            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -78,14 +74,14 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
             myStockAdapter = MyStockAdapter(it)
         }
         myStockAdapter.setCallBack(this)
-        val layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        layoutManager.reverseLayout = true
-        layoutManager.stackFromEnd = true
-        binding.apply {
-            recyclerviewMyStockFragment.layoutManager = layoutManager
-            recyclerviewMyStockFragment.adapter = myStockAdapter
-            recyclerviewMyStockFragment.itemAnimator = FadeInAnimator()
-            recyclerviewMyStockFragment.addOnItemTouchListener(object :
+        binding.recyclerviewMyStockFragment.apply {
+            layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false).apply {
+                reverseLayout = true
+                stackFromEnd = true
+            }
+            adapter = myStockAdapter
+            itemAnimator = FadeInAnimator()
+            addOnItemTouchListener(object :
                 RecyclerView.OnItemTouchListener {
                 override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                     when (e.actionMasked) {
@@ -98,7 +94,6 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                 override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
                 override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
             })
-
         }
     }
 
@@ -107,7 +102,6 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
             viewModel = myStockViewModel
             lifecycleOwner = this@MyStockFragment
         }
-
         setObserver()
     }
 
@@ -222,18 +216,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
         deletePosition = position
         myStockEntity?.let {
             myStockViewModel.deleteMyStock(it)
-//            myStockAdapter.setMyStockList(myStockViewModel.deleteMyStock(it))
-//            startSkeletonAnimation()
         }
     }
 
-    fun onRecyclerViewClicked() {
-
-    }
-
-    inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
-        override fun onDoubleTap(e: MotionEvent?): Boolean {
-            return super.onDoubleTap(e)
-        }
-    }
 }

@@ -26,8 +26,8 @@ class IncomeNoteViewModel(
     var initEndYYYYMMDD = listOf<String>()
     val totalGainIncomeNoteData = MutableLiveData<RespTotalGainIncomeNoteData>()
     val incomeNoteDeletedPosition = MutableLiveData<Int>()
-    val incomeNoteModifySuccess = MutableLiveData<Boolean>()
-    val incomeNoteAddSuccess = MutableLiveData<Boolean>()
+    val incomeNoteModifyResult = MutableLiveData<RespIncomeNoteInfo.IncomeNoteList>()
+    val incomeNoteAddResult = MutableLiveData<RespIncomeNoteInfo.IncomeNoteList>()
     val totalIncomeNoteList = arrayListOf<RespIncomeNoteInfo.IncomeNoteList>()
     val incomeNoteListLiveData = MutableLiveData<ArrayList<RespIncomeNoteInfo.IncomeNoteList>>()
 
@@ -90,7 +90,9 @@ class IncomeNoteViewModel(
             val result = incomeNoteRepository.requestPutIncomeNote(context, reqIncomeNoteInfo)
             result?.let {
                 if (it.isSuccessful) {
-                    incomeNoteModifySuccess.value = true
+                    incomeNoteModifyResult.value = RespIncomeNoteInfo.IncomeNoteList(
+                        //TODO 서버에서 수정 된 값 내려줌.
+                    )
                 }
             }
         }
@@ -101,7 +103,9 @@ class IncomeNoteViewModel(
             val result = incomeNoteRepository.requestPostIncomeNote(context, reqIncomeNoteInfo)
             result?.let {
                 if (it.isSuccessful) {
-                    incomeNoteAddSuccess.value = true
+                    incomeNoteAddResult.value = RespIncomeNoteInfo.IncomeNoteList(
+                        //TODO 서버에서 추가 된 값 내려줌.
+                    )
                 }
             }
         }

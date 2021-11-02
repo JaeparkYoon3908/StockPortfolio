@@ -258,7 +258,7 @@ class IncomeNoteFragment : Fragment() {
                     binding.txtFilterDate.text = "$startDate ~ $endDate"
                 }
             })
-            incomeNoteModifySuccess.observe(owner, { data ->
+            incomeNoteModifyResult.observe(owner, { data ->
                 Toasty.normal(mContext, "수정완료").show()
                 viewModel.requestTotalGain(mContext)
             })
@@ -269,8 +269,9 @@ class IncomeNoteFragment : Fragment() {
 //                incomeNoteListAdapter.notifyItemRangeRemoved(data, incomeNoteListAdapter.itemCount)
 //                incomeNoteListAdapter.notifyDataSetChanged()
             })
-            incomeNoteAddSuccess.observe(owner, { data ->
+            incomeNoteAddResult.observe(owner, { data ->
                 Toasty.info(mContext, "추가완료").show()
+                incomeNoteListAdapter.incomeNoteList.add(data)
             })
         }
     }

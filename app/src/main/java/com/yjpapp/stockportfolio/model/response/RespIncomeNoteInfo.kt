@@ -43,8 +43,5 @@ data class RespIncomeNoteInfo(
         var sellPrice: Double = 0.00, // 매도단가
         @SerializedName("sellCount")
         var sellCount: Int = 0) {
-
-        var totalPrice = 0.0
-        var totalPercent = ""
     }
 }

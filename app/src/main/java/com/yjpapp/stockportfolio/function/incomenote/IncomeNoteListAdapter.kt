@@ -4,21 +4,19 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.databinding.ItemIncomeNoteListBinding
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
-import com.yjpapp.stockportfolio.util.Utils
 import com.yjpapp.swipelayout.SwipeLayout
-import com.yjpapp.swipelayout.adapters.PagingSwipeAdapter
 import com.yjpapp.swipelayout.adapters.RecyclerSwipeAdapter
 import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
-import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -34,85 +32,38 @@ class IncomeNoteListAdapter(
 {
     private lateinit var mContext: Context
 
-    private val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
     private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
 
-    inner class IncomeNoteListViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
-        val txt_edit = view.findViewById<TextView>(R.id.txt_edit)
-        val txt_delete = view.findViewById<TextView>(R.id.txt_delete)
-        val txt_gain_data = view.findViewById<TextView>(R.id.txt_gain_data)
-        val txt_subject_name = view.findViewById<TextView>(R.id.txt_subject_name)
-        val txt_purchase_date_data = view.findViewById<TextView>(R.id.txt_purchase_date_data)
-        val txt_sell_date_data = view.findViewById<TextView>(R.id.txt_sell_date_data)
-        val txt_gain_percent_data = view.findViewById<TextView>(R.id.txt_gain_percent_data)
-        val txt_purchase_price_data = view.findViewById<TextView>(R.id.txt_purchase_price_data)
-        val txt_sell_price_data = view.findViewById<TextView>(R.id.txt_sell_price_data)
-        val txt_sell_count_data = view.findViewById<TextView>(R.id.txt_sell_count_data)
-
-        val swipeLayout_incomeNote = view.findViewById<SwipeLayout>(R.id.swipeLayout_incomeNote)
-    }
+    inner class IncomeNoteListViewHolder(var binding: ItemIncomeNoteListBinding) : RecyclerView.ViewHolder(binding.root) {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IncomeNoteListViewHolder {
         mContext = parent.context
-        val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view: View = inflater.inflate(R.layout.item_income_note_list, parent, false)
-        return IncomeNoteListViewHolder(view)
+        val binding: ItemIncomeNoteListBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.item_income_note_list,
+            parent,
+            false
+        )
+        return IncomeNoteListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(viewHolder: IncomeNoteListViewHolder, position: Int) {
-        viewHolder.apply {
-            bindDataList(viewHolder, position)
-            bindSwipeLayout(viewHolder, position)
+    override fun onBindViewHolder(holder: IncomeNoteListViewHolder, position: Int) {
+        holder.apply {
+            bindDataList(holder, position)
+            bindSwipeLayout(holder, position)
         }
     }
 
-    private fun bindDataList(viewHolder: IncomeNoteListViewHolder, position: Int) {
-        incomeNoteList[position].run {
-            viewHolder.apply {
-                txt_subject_name.isSelected = true
-                txt_gain_data.isSelected = true
-                txt_purchase_price_data.isSelected = true
-                txt_sell_price_data.isSelected = true
-                txt_gain_percent_data.isSelected = true
-
-                //회사 이름
-                txt_subject_name.text = subjectName
-                //수익
-                txt_gain_data.text =
-                    moneySymbol + Utils.getNumInsertComma(BigDecimal(realPainLossesAmount).toString())
-                //수익 퍼센트
-                txt_gain_percent_data.text = "(${gainPercent}%)"
-                //매도일
-                txt_sell_date_data.text = sellDate
-                if (sellDate == "") {
-                    txt_sell_date_data.text = "-"
-                }
-                //매수금액
-                txt_purchase_price_data.text =
-                    moneySymbol + Utils.getNumInsertComma(BigDecimal(purchasePrice).toString())
-                //매도금액
-                txt_sell_price_data.text =
-                    moneySymbol + Utils.getNumInsertComma(BigDecimal(sellPrice).toString())
-                //매도수량
-                txt_sell_count_data.text = Utils.getNumInsertComma(sellCount.toString())
-
-                val realPainLossesAmount = realPainLossesAmount
-                if (realPainLossesAmount >= 0) {
-                    txt_gain_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-                    txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_e52b4e))
-                } else {
-                    txt_gain_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-                    txt_gain_percent_data.setTextColor(mContext.getColor(R.color.color_4876c7))
-                }
-            }
+    private fun bindDataList(holder: IncomeNoteListViewHolder, position: Int) {
+        holder.binding.apply {
+            incomeNote = incomeNoteList[position]
         }
     }
 
-    private fun bindSwipeLayout(holderIncomeNoteList: IncomeNoteListViewHolder, position: Int) {
-        swipeItemManger.bindView(holderIncomeNoteList.itemView, position)
-
-        holderIncomeNoteList.apply {
-            swipeLayout_incomeNote.addSwipeListener(object : SwipeLayout.SwipeListener {
+    private fun bindSwipeLayout(holder: IncomeNoteListViewHolder, position: Int) {
+        swipeItemManger.bindView(holder.itemView, position)
+        holder.binding.apply {
+            swipeLayoutIncomeNote.addSwipeListener(object : SwipeLayout.SwipeListener {
                 override fun onStartOpen(layout: SwipeLayout) {
                     swipeItemManger.closeAllExcept(layout)
                 }
@@ -123,11 +74,11 @@ class IncomeNoteListAdapter(
                 override fun onUpdate(layout: SwipeLayout, leftOffset: Int, topOffset: Int) {}
                 override fun onHandRelease(layout: SwipeLayout, xvel: Float, yvel: Float) {}
             })
-            txt_edit.setOnClickListener {
+            txtEdit.setOnClickListener {
 //                incomeNotePresenter.onEditButtonClick(getItem(position))
                 callBack?.onEditButtonClick(incomeNoteList[position])
             }
-            txt_delete.setOnClickListener {
+            txtDelete.setOnClickListener {
                 val isShowDeleteCheck = PreferenceController.getInstance(mContext)
                     .getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK) ?: "true"
                 if (isShowDeleteCheck == "true") {
@@ -145,11 +96,6 @@ class IncomeNoteListAdapter(
                             rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
                                 override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
                                     if (itemCount > position) {
-//                                        incomeNotePresenter.onDeleteOkClick(
-//                                            mContext,
-//                                            getItem(position)?.id!!,
-//                                            position
-//                                        )
                                         callBack?.onDeleteOkClick(
                                             incomeNoteList[position].id,
                                             position
@@ -167,7 +113,6 @@ class IncomeNoteListAdapter(
                         )
                     ).show()
                 } else {
-//                    incomeNotePresenter.onDeleteOkClick(mContext, getItem(position)?.id!!, position)
                     callBack?.onDeleteOkClick(
                         incomeNoteList[position].id,
                         position

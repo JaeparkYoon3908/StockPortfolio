@@ -39,16 +39,17 @@ class IncomeNoteRepository  {
                 hashMap["startDate"] = startDate
                 hashMap["endDate"] = endDate
                 val data = requestGetIncomeNote(context, hashMap)
-                data?.body()?.income_note?.let {
-                    if (it.size > 0) {
-                        it[0].totalPrice = data.body()?.total_profit_or_loss_info?.totalPrice?: 0.0
-                        it[0].totalPercent = data.body()?.total_profit_or_loss_info?.totalPercent?: ""
-                    }
-                }
+//                data?.body()?.income_note?.let {
+//                    if (it.size > 0) {
+//                        it[0].totalPrice = data.body()?.total_profit_or_loss_info?.totalPrice?: 0.0
+//                        it[0].totalPercent = data.body()?.total_profit_or_loss_info?.totalPercent?: ""
+//                    }
+//                }
                 LoadResult.Page(
                     data = data?.body()?.income_note!!,
                     prevKey = if (page == 1) null else page - 1,
-                    nextKey = if (data.body()?.income_note?.isEmpty()!!) null else page + 1)
+                    nextKey = if (data.body()?.income_note?.isEmpty()!!) null else page + 1
+                )
             } catch (e: Exception) {
                 return LoadResult.Error(e)
             }
