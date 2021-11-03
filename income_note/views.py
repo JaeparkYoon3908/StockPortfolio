@@ -123,7 +123,16 @@ class IncomeNoteAPI(APIView):
                 income_note.sellPrice = sellPrice
                 income_note.sellCount = sellCount
                 income_note.save()
-                data = CustomResponse.ok
+                data = dict(
+                    id=id,
+                    subjectName=subjectName,
+                    realPainLossesAmount=realPainLossesAmount,
+                    sellDate=sellDate,
+                    gainPercent=gainPercent,
+                    purchasePrice=purchasePrice,
+                    sellPrice=sellPrice,
+                    sellCount=sellCount
+                )
             else:
                 data = CustomResponse.no_index
 
