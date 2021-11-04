@@ -90,9 +90,9 @@ class IncomeNoteViewModel(
             val result = incomeNoteRepository.requestPutIncomeNote(context, reqIncomeNoteInfo)
             result?.let {
                 if (it.isSuccessful) {
-                    incomeNoteModifyResult.value = RespIncomeNoteInfo.IncomeNoteList(
-                        //TODO 서버에서 수정 된 값 내려줌.
-                    )
+                    it.body()?.let { incomeNoteList ->
+                        incomeNoteModifyResult.value = incomeNoteList
+                    }
                 }
             }
         }

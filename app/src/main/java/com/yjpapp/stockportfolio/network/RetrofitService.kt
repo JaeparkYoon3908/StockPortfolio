@@ -33,7 +33,7 @@ interface RetrofitService {
     suspend fun requestGetIncomeNote(@QueryMap params: HashMap<String, String>): Response<RespIncomeNoteInfo>
 
     @PUT("/api/income_note/list")
-    suspend fun requestPutIncomeNote(@Body reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespStatusInfo>
+    suspend fun requestPutIncomeNote(@Body reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteInfo.IncomeNoteList>
 
     @DELETE("/api/income_note/delete/{id}")
     suspend fun requestDeleteIncomeNote(@Path("id")id: Int): Response<RespStatusInfo>
