@@ -13,7 +13,7 @@ import com.yjpapp.stockportfolio.databinding.ItemIncomeNoteListBinding
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.RecyclerSwipeAdapter
 import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
@@ -26,7 +26,7 @@ import java.util.*
  * @since 2020.08
  */
 class IncomeNoteListAdapter(
-    var incomeNoteList: ArrayList<RespIncomeNoteInfo.IncomeNoteList>,
+    var incomeNoteListInfo: ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>,
     var callBack: CallBack?
 ) : RecyclerSwipeAdapter<IncomeNoteListAdapter.IncomeNoteListViewHolder>()
 {
@@ -56,7 +56,7 @@ class IncomeNoteListAdapter(
 
     private fun bindDataList(holder: IncomeNoteListViewHolder, position: Int) {
         holder.binding.apply {
-            incomeNote = incomeNoteList[position]
+            incomeNote = incomeNoteListInfo[position]
         }
     }
 
@@ -76,7 +76,7 @@ class IncomeNoteListAdapter(
             })
             txtEdit.setOnClickListener {
 //                incomeNotePresenter.onEditButtonClick(getItem(position))
-                callBack?.onEditButtonClick(incomeNoteList[position])
+                callBack?.onEditButtonClick(incomeNoteListInfo[position])
             }
             txtDelete.setOnClickListener {
                 val isShowDeleteCheck = PreferenceController.getInstance(mContext)
@@ -97,7 +97,7 @@ class IncomeNoteListAdapter(
                                 override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
                                     if (itemCount > position) {
                                         callBack?.onDeleteOkClick(
-                                            incomeNoteList[position].id,
+                                            incomeNoteListInfo[position].id,
                                             position
                                         )
                                         dialog.dismiss()
@@ -114,7 +114,7 @@ class IncomeNoteListAdapter(
                     ).show()
                 } else {
                     callBack?.onDeleteOkClick(
-                        incomeNoteList[position].id,
+                        incomeNoteListInfo[position].id,
                         position
                     )
                 }
@@ -132,17 +132,17 @@ class IncomeNoteListAdapter(
 
     companion object {
         private val DIFF_CALLBACK =
-            object : DiffUtil.ItemCallback<RespIncomeNoteInfo.IncomeNoteList>() {
+            object : DiffUtil.ItemCallback<RespIncomeNoteListInfo.IncomeNoteInfo>() {
                 override fun areItemsTheSame(
-                    oldItem: RespIncomeNoteInfo.IncomeNoteList,
-                    newItem: RespIncomeNoteInfo.IncomeNoteList
+                    oldItem: RespIncomeNoteListInfo.IncomeNoteInfo,
+                    newItem: RespIncomeNoteListInfo.IncomeNoteInfo
                 ): Boolean {
                     return oldItem.id == newItem.id
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: RespIncomeNoteInfo.IncomeNoteList,
-                    newItem: RespIncomeNoteInfo.IncomeNoteList
+                    oldItem: RespIncomeNoteListInfo.IncomeNoteInfo,
+                    newItem: RespIncomeNoteListInfo.IncomeNoteInfo
                 ): Boolean {
                     return oldItem == newItem
                 }
@@ -150,11 +150,11 @@ class IncomeNoteListAdapter(
     }
 
     interface CallBack {
-        fun onEditButtonClick(respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?)
+        fun onEditButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?)
         fun onDeleteOkClick(id: Int, position: Int)
     }
 
     override fun getItemCount(): Int {
-        return incomeNoteList.size
+        return incomeNoteListInfo.size
     }
 }

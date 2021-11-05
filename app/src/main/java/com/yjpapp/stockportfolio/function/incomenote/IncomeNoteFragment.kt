@@ -16,7 +16,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePickerDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
@@ -163,12 +163,12 @@ class IncomeNoteFragment : Fragment() {
         menu?.getItem(0)?.isVisible = false
     }
 
-    fun showInputDialog(editMode: Boolean, respIncomeNoteInfo: RespIncomeNoteInfo.IncomeNoteList?) {
+    fun showInputDialog(editMode: Boolean, respIncomeNoteInfoInfo: RespIncomeNoteListInfo.IncomeNoteInfo?) {
         IncomeNoteInputDialog(inputDialogCallBack, mContext).apply {
             if(editMode){
                 if (!isShowing) {
                     show()
-                    respIncomeNoteInfo?.let {
+                    respIncomeNoteInfoInfo?.let {
                         etSubjectName.setText(it.subjectName)
                         etSellDate.setText(it.sellDate)
                         etPurchasePrice.setText(Utils.getNumInsertComma(BigDecimal(it.purchasePrice).toString()))
@@ -252,7 +252,7 @@ class IncomeNoteFragment : Fragment() {
             //페이징 처리 live data
             incomeNoteListLiveData.observe(owner, { data ->
                 data.forEach {
-                    incomeNoteListAdapter.incomeNoteList.add(it)
+                    incomeNoteListAdapter.incomeNoteListInfo.add(it)
                 }
                 incomeNoteListAdapter.notifyDataSetChanged()
                 viewModel.run {
@@ -265,15 +265,17 @@ class IncomeNoteFragment : Fragment() {
             incomeNoteModifyResult.observe(owner, { data ->
                 Toasty.normal(mContext, "수정완료").show()
                 viewModel.requestTotalGain(mContext)
-                val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteList.find { it.id == data.id }
-                val index = incomeNoteListAdapter.incomeNoteList.indexOf(beforeModifyIncomeNote)
-                incomeNoteListAdapter.incomeNoteList[index] = data
-                incomeNoteListAdapter.notifyDataSetChanged()
+                if (data.id != -1) {
+                    val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteListInfo.find { it.id == data.id }
+                    val index = incomeNoteListAdapter.incomeNoteListInfo.indexOf(beforeModifyIncomeNote)
+                    incomeNoteListAdapter.incomeNoteListInfo[index] = data
+                    incomeNoteListAdapter.notifyDataSetChanged()
+                }
             })
             //삭제완료
             incomeNoteDeletedPosition.observe(owner, { position ->
                 Toasty.normal(mContext, "삭제완료").show()
-                incomeNoteListAdapter.incomeNoteList.removeAt(position)
+                incomeNoteListAdapter.incomeNoteListInfo.removeAt(position)
                 incomeNoteListAdapter.notifyItemRemoved(position)
 //                incomeNoteListAdapter.notifyItemRangeRemoved(data, incomeNoteListAdapter.itemCount)
 //                incomeNoteListAdapter.notifyDataSetChanged()
@@ -281,19 +283,19 @@ class IncomeNoteFragment : Fragment() {
             //추가완료
             incomeNoteAddResult.observe(owner, { data ->
                 Toasty.info(mContext, "추가완료").show()
-                incomeNoteListAdapter.incomeNoteList.add(data)
+                incomeNoteListAdapter.incomeNoteListInfo.add(data)
                 incomeNoteListAdapter.notifyDataSetChanged()
             })
         }
     }
 
     private val adapterCallBack = object : IncomeNoteListAdapter.CallBack {
-        override fun onEditButtonClick(respIncomeNoteList: RespIncomeNoteInfo.IncomeNoteList?) {
-            respIncomeNoteList?.let {
+        override fun onEditButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?) {
+            respIncomeNoteListInfo?.let {
                 viewModel.editMode = true
                 showAddButton()
                 viewModel.incomeNoteId = it.id
-                showInputDialog(viewModel.editMode, respIncomeNoteList)
+                showInputDialog(viewModel.editMode, respIncomeNoteListInfo)
             }
         }
 
@@ -305,7 +307,7 @@ class IncomeNoteFragment : Fragment() {
     private val datePickerDialogCallBack = object : IncomeNoteDatePickerDialog.CallBack {
         override fun requestIncomeNoteList(startDateList: List<String>, endDateList: List<String>) {
             lifecycleScope.launch {
-                incomeNoteListAdapter.incomeNoteList = arrayListOf()
+                incomeNoteListAdapter.incomeNoteListInfo = arrayListOf()
                 incomeNoteListAdapter.notifyDataSetChanged()
                 viewModel.apply {
                     initStartYYYYMMDD = startDateList

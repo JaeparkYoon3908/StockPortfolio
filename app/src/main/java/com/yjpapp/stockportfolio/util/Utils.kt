@@ -1,22 +1,17 @@
 package com.yjpapp.stockportfolio.util
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Context.TELEPHONY_SERVICE
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.VersionedPackage
 import android.content.res.Resources
 import android.os.*
-import android.telephony.TelephonyManager
 import android.util.Base64
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import es.dmoral.toasty.Toasty
 import java.lang.StringBuilder
 import java.security.MessageDigest

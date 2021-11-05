@@ -9,7 +9,7 @@
 
         <variable
             name="incomeNote"
-            type="com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo.IncomeNoteList" />
+            type="com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo.IncomeNoteInfo" />
 
     </data>
 

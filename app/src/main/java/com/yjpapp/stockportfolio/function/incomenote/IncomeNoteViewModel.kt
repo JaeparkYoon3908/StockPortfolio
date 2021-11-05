@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import kotlinx.coroutines.CoroutineScope
@@ -26,10 +27,10 @@ class IncomeNoteViewModel(
     var initEndYYYYMMDD = listOf<String>()
     val totalGainIncomeNoteData = MutableLiveData<RespTotalGainIncomeNoteData>()
     val incomeNoteDeletedPosition = MutableLiveData<Int>()
-    val incomeNoteModifyResult = MutableLiveData<RespIncomeNoteInfo.IncomeNoteList>()
-    val incomeNoteAddResult = MutableLiveData<RespIncomeNoteInfo.IncomeNoteList>()
-    val totalIncomeNoteList = arrayListOf<RespIncomeNoteInfo.IncomeNoteList>()
-    val incomeNoteListLiveData = MutableLiveData<ArrayList<RespIncomeNoteInfo.IncomeNoteList>>()
+    val incomeNoteModifyResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
+    val incomeNoteAddResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
+    val totalIncomeNoteList = arrayListOf<RespIncomeNoteListInfo.IncomeNoteInfo>()
+    val incomeNoteListLiveData = MutableLiveData<ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>>()
 
     fun requestGetIncomeNote(context: Context, page: Int) {
         val params = HashMap<String, String>()
@@ -52,7 +53,7 @@ class IncomeNoteViewModel(
             }
         }
     }
-    fun getIncomeNoteListPagingData(mContext: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteInfo.IncomeNoteList>> {
+    fun getIncomeNoteListPagingData(mContext: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteListInfo.IncomeNoteInfo>> {
         return incomeNoteRepository.getIncomeNoteListByPaging(mContext, startDate, endDate).cachedIn(viewModelScope)
     }
 
@@ -103,7 +104,7 @@ class IncomeNoteViewModel(
             val result = incomeNoteRepository.requestPostIncomeNote(context, reqIncomeNoteInfo)
             result?.let {
                 if (it.isSuccessful) {
-                    incomeNoteAddResult.value = RespIncomeNoteInfo.IncomeNoteList(
+                    incomeNoteAddResult.value = RespIncomeNoteListInfo.IncomeNoteInfo(
                         //TODO 서버에서 추가 된 값 내려줌.
                     )
                 }
