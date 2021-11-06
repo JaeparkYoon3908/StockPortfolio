@@ -35,8 +35,8 @@ class IncomeNoteAPI(APIView):
                                           sellPrice=sellPrice,
                                           sellCount=sellCount)  # LoginUser 모델에 새로운 object 생성
                 data = dict(
-                    status=200,
-                    msg="성공"
+                    subjectName=subjectName,
+                    sellDate=sellDate
                 )
             else:
                 data = CustomResponse.no_index
