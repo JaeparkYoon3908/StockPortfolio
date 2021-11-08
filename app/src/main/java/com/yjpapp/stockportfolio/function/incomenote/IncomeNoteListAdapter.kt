@@ -67,7 +67,6 @@ class IncomeNoteListAdapter(
                 override fun onStartOpen(layout: SwipeLayout) {
                     swipeItemManger.closeAllExcept(layout)
                 }
-
                 override fun onOpen(layout: SwipeLayout) {}
                 override fun onStartClose(layout: SwipeLayout) {}
                 override fun onClose(layout: SwipeLayout) {}
@@ -75,49 +74,10 @@ class IncomeNoteListAdapter(
                 override fun onHandRelease(layout: SwipeLayout, xvel: Float, yvel: Float) {}
             })
             txtEdit.setOnClickListener {
-//                incomeNotePresenter.onEditButtonClick(getItem(position))
                 callBack?.onEditButtonClick(incomeNoteListInfo[position])
             }
             txtDelete.setOnClickListener {
-                val isShowDeleteCheck = PreferenceController.getInstance(mContext)
-                    .getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK) ?: "true"
-                if (isShowDeleteCheck == "true") {
-                    CommonTwoBtnDialog(
-                        mContext,
-                        CommonTwoBtnDialog.CommonTwoBtnData(
-                            noticeText = "삭제하시겠습니까?",
-                            leftBtnText = mContext.getString(R.string.Common_Cancel),
-                            rightBtnText = mContext.getString(R.string.Common_Ok),
-                            leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                    dialog.dismiss()
-                                }
-                            },
-                            rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                    if (itemCount > position) {
-                                        callBack?.onDeleteOkClick(
-                                            incomeNoteListInfo[position].id,
-                                            position
-                                        )
-                                        dialog.dismiss()
-                                    } else {
-                                        Toast.makeText(
-                                            mContext,
-                                            "position = $position ItemCount = $itemCount",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-                            }
-                        )
-                    ).show()
-                } else {
-                    callBack?.onDeleteOkClick(
-                        incomeNoteListInfo[position].id,
-                        position
-                    )
-                }
+                callBack?.onDeleteButtonClick(incomeNoteListInfo[position], position)
             }
         }
     }
@@ -130,28 +90,9 @@ class IncomeNoteListAdapter(
         swipeItemManger.closeAllItems()
     }
 
-    companion object {
-        private val DIFF_CALLBACK =
-            object : DiffUtil.ItemCallback<RespIncomeNoteListInfo.IncomeNoteInfo>() {
-                override fun areItemsTheSame(
-                    oldItem: RespIncomeNoteListInfo.IncomeNoteInfo,
-                    newItem: RespIncomeNoteListInfo.IncomeNoteInfo
-                ): Boolean {
-                    return oldItem.id == newItem.id
-                }
-
-                override fun areContentsTheSame(
-                    oldItem: RespIncomeNoteListInfo.IncomeNoteInfo,
-                    newItem: RespIncomeNoteListInfo.IncomeNoteInfo
-                ): Boolean {
-                    return oldItem == newItem
-                }
-            }
-    }
-
     interface CallBack {
         fun onEditButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?)
-        fun onDeleteOkClick(id: Int, position: Int)
+        fun onDeleteButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?, position: Int)
     }
 
     override fun getItemCount(): Int {

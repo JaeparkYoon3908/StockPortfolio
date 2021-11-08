@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -18,8 +19,11 @@ import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePickerDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
@@ -211,11 +215,11 @@ class IncomeNoteFragment : Fragment() {
         }
     }
 
-    fun scrollPosition(position: Int) {
+    private fun scrollPosition(position: Int) {
         binding.recyclerviewIncomeNoteFragment.scrollToPosition(position)
     }
 
-    fun scrollTopPosition() {
+    private fun scrollTopPosition() {
         binding.recyclerviewIncomeNoteFragment.smoothScrollBy(0, 0)
     }
 
@@ -230,6 +234,7 @@ class IncomeNoteFragment : Fragment() {
         }
         subScribeUI(this@IncomeNoteFragment)
     }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun subScribeUI(owner: LifecycleOwner) {
         viewModel.apply {
@@ -277,8 +282,6 @@ class IncomeNoteFragment : Fragment() {
                 Toasty.normal(mContext, "삭제완료").show()
                 incomeNoteListAdapter.incomeNoteListInfo.removeAt(position)
                 incomeNoteListAdapter.notifyItemRemoved(position)
-//                incomeNoteListAdapter.notifyItemRangeRemoved(data, incomeNoteListAdapter.itemCount)
-//                incomeNoteListAdapter.notifyDataSetChanged()
             })
             //추가완료
             incomeNoteAddResult.observe(owner, { data ->
@@ -293,14 +296,41 @@ class IncomeNoteFragment : Fragment() {
         override fun onEditButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?) {
             respIncomeNoteListInfo?.let {
                 viewModel.editMode = true
-                showAddButton()
                 viewModel.incomeNoteId = it.id
                 showInputDialog(viewModel.editMode, respIncomeNoteListInfo)
             }
         }
 
-        override fun onDeleteOkClick(id: Int, position: Int) {
-            viewModel.requestDeleteIncomeNote(mContext, id, position)
+        override fun onDeleteButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?, position: Int) {
+            if (respIncomeNoteListInfo != null) {
+                val isShowDeleteCheck = PreferenceController.getInstance(mContext)
+                    .getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK) ?: "true"
+                if (isShowDeleteCheck == "true") {
+                    CommonTwoBtnDialog(
+                        mContext,
+                        CommonTwoBtnDialog.CommonTwoBtnData(
+                            noticeText = "삭제하시겠습니까?",
+                            leftBtnText = mContext.getString(R.string.Common_Cancel),
+                            rightBtnText = mContext.getString(R.string.Common_Ok),
+                            leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                                    dialog.dismiss()
+                                }
+                            },
+                            rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                                    if (incomeNoteListAdapter.itemCount > position) {
+                                        viewModel.requestDeleteIncomeNote(mContext, respIncomeNoteListInfo.id, position)
+                                        dialog.dismiss()
+                                    }
+                                }
+                            }
+                        )
+                    ).show()
+                } else {
+                    viewModel.requestDeleteIncomeNote(mContext, respIncomeNoteListInfo.id, position)
+                }
+            }
         }
     }
 
@@ -319,6 +349,7 @@ class IncomeNoteFragment : Fragment() {
             }
         }
     }
+
     private val inputDialogCallBack = object : IncomeNoteInputDialog.CallBack {
         override fun onInputDialogCompleteClicked(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
             reqIncomeNoteInfo.id = viewModel.incomeNoteId
@@ -329,6 +360,7 @@ class IncomeNoteFragment : Fragment() {
             }
         }
     }
+
     private val onScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)

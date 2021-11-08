@@ -165,13 +165,17 @@ class LoginActivity : BaseActivity() {
                     val personEmail = it.email
                     val personId = it.id
                     val personPhoto: Uri? = it.photoUrl
-                    StockLog.d(TAG, "handleSignInResult:personName $personName")
-                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
-                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
-                    StockLog.d(TAG, "handleSignInResult:personId $personId")
-                    StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
-                    StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
-                    requestLogin(ReqSNSLogin(it.email!!, it.displayName!!, StockPortfolioConfig.LOGIN_TYPE_GOOGLE))
+//                    StockLog.d(TAG, "handleSignInResult:personName $personName")
+//                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
+//                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
+//                    StockLog.d(TAG, "handleSignInResult:personId $personId")
+//                    StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
+//                    StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
+                    requestLogin(ReqSNSLogin(
+                        it.email?: "",
+                        it.displayName?: "",
+                        StockPortfolioConfig.LOGIN_TYPE_GOOGLE
+                    ))
                 }
             } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.
