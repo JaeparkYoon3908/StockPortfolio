@@ -16,7 +16,7 @@
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/common_50dp"
         android:layout_marginEnd="@dimen/common_50dp"
-        android:background="@color/color_ffffff">
+        android:background="@drawable/bg_ffffff_r12">
 
         <TextView
             android:id="@+id/txt_content"
@@ -37,7 +37,7 @@
             android:id="@+id/btn_left"
             android:layout_width="0dp"
             android:layout_height="@dimen/common_50dp"
-            android:background="@color/color_f1f1f1"
+            android:background="@drawable/bg_f1f1f1_r12_bottom_left"
             android:gravity="center"
             android:text="@{data.leftBtnText}"
             android:textColor="@color/color_222222"
@@ -52,7 +52,7 @@
             android:id="@+id/btn_right"
             android:layout_width="0dp"
             android:layout_height="@dimen/common_50dp"
-            android:background="@color/color_e52b4e"
+            android:background="@drawable/bg_e52b4e_r12_bottom_right"
             android:gravity="center"
             android:text="@{data.rightBtnText}"
             android:textColor="@color/color_ffffff"
