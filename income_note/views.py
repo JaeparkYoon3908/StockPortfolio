@@ -26,17 +26,24 @@ class IncomeNoteAPI(APIView):
             gainPercent = ((sellPrice / purchasePrice) - 1) * 100
 
             if UserInfo.objects.filter(user_index=user_index).exists():
-                IncomeNote.objects.create(user_index=user_index,
+                incomeNote = IncomeNote.objects.create(user_index=user_index,
                                           subjectName=subjectName,
                                           realPainLossesAmount=realPainLossesAmount,
                                           sellDate=sellDate,
                                           gainPercent=gainPercent,
                                           purchasePrice=purchasePrice,
                                           sellPrice=sellPrice,
-                                          sellCount=sellCount)  # LoginUser 모델에 새로운 object 생성
+                                          sellCount=sellCount)# LoginUser 모델에 새로운 object 생성
+                incomeNote.save()
                 data = dict(
+                    id=incomeNote.id,
                     subjectName=subjectName,
-                    sellDate=sellDate
+                    realPainLossesAmount=realPainLossesAmount,
+                    sellDate=sellDate,
+                    gainPercent=gainPercent,
+                    purchasePrice=purchasePrice,
+                    sellPrice=sellPrice,
+                    sellCount=sellCount
                 )
             else:
                 data = CustomResponse.no_index
