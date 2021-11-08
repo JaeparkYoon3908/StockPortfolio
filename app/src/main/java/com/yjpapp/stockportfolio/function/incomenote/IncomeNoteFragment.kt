@@ -259,7 +259,6 @@ class IncomeNoteFragment : Fragment() {
                 data.forEach {
                     incomeNoteListAdapter.incomeNoteListInfo.add(it)
                 }
-                incomeNoteListAdapter.notifyDataSetChanged()
                 viewModel.run {
                     val startDate = makeDateString(initStartYYYYMMDD)
                     val endDate = makeDateString(initEndYYYYMMDD)
