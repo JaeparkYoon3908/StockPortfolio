@@ -157,7 +157,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                         month = split[1]
                     }
                     //매수 날짜 선택 다이얼로그 show
-                    CommonDatePickerDialog(year, month).apply {
+                    CommonDatePickerDialog(mContext, year, month).apply {
                         setListener { view, year, month, dayOfMonth ->
                             uiHandler.sendEmptyMessage(MyStockInputDialog.MSG.SELL_DATE_DATA_INPUT)
                             purchaseYear = year.toString()
@@ -169,7 +169,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                             myStockViewModel.inputDialogPurchaseDate =
                                 "$purchaseYear.$purchaseMonth"
                         }
-                        show(this@MyStockFragment.childFragmentManager, "MonthYearPickerDialog")
+                        show()
                     }
                 }
                 txtCancel.setOnClickListener { dismiss() }

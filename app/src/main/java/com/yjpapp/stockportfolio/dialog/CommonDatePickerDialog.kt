@@ -2,14 +2,24 @@ package com.yjpapp.stockportfolio.dialog
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogMonthYearPickerBinding
 import com.yjpapp.stockportfolio.util.Utils
 
-class CommonDatePickerDialog(var year: String, var month: String, var day: String = "") : DialogFragment() {
+class CommonDatePickerDialog(
+    val mContext: Context,
+    var year: String,
+    var month: String,
+    var day: String = ""
+) : AlertDialog(mContext) {
+
     private val TAG = CommonDatePickerDialog::class.java.simpleName
     private var selectedYear = 0
     private var selectedMonth = 0
@@ -27,14 +37,22 @@ class CommonDatePickerDialog(var year: String, var month: String, var day: Strin
         this.listener = listener
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = CustomDialogMonthYearPickerBinding.inflate(requireActivity().layoutInflater)
-//        val date = Date()
-//        val cal: Calendar = Calendar.getInstance().apply { time = date }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.inflate(
+            LayoutInflater.from(mContext),
+            R.layout.custom_dialog_month_year_picker,
+            null,
+            false
+        )
+        setContentView(binding.root)
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+        initView()
+    }
+    private fun initView() {
         val nowYYYYMMDD: List<String> = Utils.getTodayYYMMDD()
 
         binding.pickerYear.apply {
-//            val currentYear = cal.get(Calendar.YEAR)
             minValue = MIN_YEAR
             maxValue = nowYYYYMMDD[0].toInt()
             value = if(year.isEmpty() || year.isEmpty()){
@@ -55,7 +73,7 @@ class CommonDatePickerDialog(var year: String, var month: String, var day: Strin
             }
 
             displayedValues = arrayOf("01", "02", "03", "04", "05", "06", "07",
-                    "08", "09", "10", "11", "12")
+                "08", "09", "10", "11", "12")
             selectedMonth = value
         }
 
@@ -71,17 +89,18 @@ class CommonDatePickerDialog(var year: String, var month: String, var day: Strin
             }
         }
 
-        return AlertDialog.Builder(requireContext())
-                .setTitle("매도한 날짜를 선택해주세요.")
-                .setView(binding.root)
-                .setPositiveButton(getString(R.string.Common_Ok)) { _, _ ->
-                    listener?.onDateSet(null,
-                        binding.pickerYear.value,
-                        binding.pickerMonth.value,
-                        binding.pickerDay.value)
-                }
-                .setNegativeButton(getString(R.string.Common_Cancel)) { _, _ -> dialog?.cancel() }
-                .create()
+        binding.btnLeft.setOnClickListener {
+            dismiss()
+        }
+
+        binding.btnRight.setOnClickListener {
+            listener?.onDateSet(null,
+                binding.pickerYear.value,
+                binding.pickerMonth.value,
+                binding.pickerDay.value
+            )
+            dismiss()
+        }
     }
 
     private fun getDisplayedMonthValues(): Array<String> {
@@ -105,5 +124,9 @@ class CommonDatePickerDialog(var year: String, var month: String, var day: Strin
             }
         }
         return result.toTypedArray()
+    }
+
+    interface OnClickListener {
+        fun onClick(view: View, dialog: CommonTwoBtnDialog)
     }
 }

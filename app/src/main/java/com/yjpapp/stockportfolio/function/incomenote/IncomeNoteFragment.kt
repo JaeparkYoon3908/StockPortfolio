@@ -197,7 +197,7 @@ class IncomeNoteFragment : Fragment() {
                     day = split[2]
                 }
 
-                CommonDatePickerDialog(year, month, day).apply {
+                CommonDatePickerDialog(mContext, year, month, day).apply {
                     setListener { view, year, month, dayOfMonth ->
 //                        Toast.makeText(requireContext(), "날짜 : $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
                         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
@@ -209,7 +209,7 @@ class IncomeNoteFragment : Fragment() {
                         }
                         purchaseDay = dayOfMonth.toString()
                     }
-                    show(this@IncomeNoteFragment.childFragmentManager, "MonthYearPickerDialog")
+                    show()
                 }
             }
         }
