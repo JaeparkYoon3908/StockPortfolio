@@ -95,11 +95,7 @@ class IncomeNoteDatePickerDialog(
 
                     val startYYYYMMDD = listOf(startYYYY, startMM, startDD)
                     val endYYYYMMDD = listOf(endYYYY, endMM, endDD)
-//                    incomeNotePresenter.requestIncomeNoteList(
-//                        mContext,
-//                        startYYYYMMDD,
-//                        endYYYYMMDD
-//                    )
+
                     callBack.requestIncomeNoteList(
                         startYYYYMMDD,
                         endYYYYMMDD

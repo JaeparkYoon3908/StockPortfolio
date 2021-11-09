@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
+import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
@@ -243,7 +242,7 @@ class IncomeNoteFragment : Fragment() {
                 val totalGainPercent = data.total_percent
                 binding.apply {
                     val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
-                    txtTotalRealizationGainsLossesData.text = "${StockPortfolioConfig.moneySymbol}$totalRealizationGainsLossesNumber"
+                    txtTotalRealizationGainsLossesData.text = "${StockConfig.moneySymbol}$totalRealizationGainsLossesNumber"
                     if (totalGainNumber >= 0) {
                         txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
                         txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
@@ -303,8 +302,8 @@ class IncomeNoteFragment : Fragment() {
         override fun onDeleteButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?, position: Int) {
             if (respIncomeNoteListInfo != null) {
                 val isShowDeleteCheck = PreferenceController.getInstance(mContext)
-                    .getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK) ?: "true"
-                if (isShowDeleteCheck == "true") {
+                    .getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK) ?: StockConfig.TRUE
+                if (isShowDeleteCheck == StockConfig.TRUE) {
                     CommonTwoBtnDialog(
                         mContext,
                         CommonTwoBtnDialog.CommonTwoBtnData(

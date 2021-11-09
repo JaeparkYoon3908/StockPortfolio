@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
+import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.ItemMyStockListBinding
 import com.yjpapp.swipelayout.SwipeLayout
@@ -42,7 +42,7 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
             myStockEntity = myStockList[position]
             callBack = adapterCallBack
             pos = position
-            moneySymbol = StockPortfolioConfig.moneySymbol
+            moneySymbol = StockConfig.moneySymbol
             //init
             swipeLayoutMyStock.addSwipeListener(object : SwipeLayout.SwipeListener {
                 override fun onStartOpen(layout: SwipeLayout) {

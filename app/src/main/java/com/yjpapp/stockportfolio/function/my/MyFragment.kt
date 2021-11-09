@@ -95,18 +95,27 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
 
         override fun onSwitchClick(view: View) {
             when (view.id) {
+                //자동 로그인
+                R.id.switch_auto_login -> {
+                    val isChecked = binding.switchAutoLogin.isChecked
+                    preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, isChecked)
+                }
+                //수익노트 자동 새로 고침
                 R.id.switch_my_stock_auto_refresh -> {
                     val isChecked = binding.switchMyStockAutoRefresh.isChecked
                     preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, isChecked)
                 }
+                //나의 주식에서 수익노트로 자동추가
                 R.id.switch_my_stock_auto_add -> {
                     val isChecked = binding.switchMyStockAutoAdd.isChecked
                     preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, isChecked)
                 }
+                //나의 주식 삭제 시 삭제 확인 띄우기
                 R.id.switch_my_stock_show_delete_check -> {
                     val isChecked = binding.switchMyStockShowDeleteCheck.isChecked
                     preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, isChecked)
                 }
+                //수익 노트 삭제 시 삭제 확인 띄우기
                 R.id.switch_income_note_show_delete_check -> {
                     val isChecked = binding.switchIncomeNoteShowDeleteCheck.isChecked
                     preferenceController.setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, isChecked)

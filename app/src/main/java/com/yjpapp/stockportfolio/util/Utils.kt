@@ -10,6 +10,7 @@ import android.os.*
 import android.util.Base64
 import android.util.Log
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import es.dmoral.toasty.Toasty
@@ -146,15 +147,15 @@ object Utils {
 
     fun runBackPressAppCloseEvent(mContext: Context, activity:Activity){
         val isAllowAppClose = PreferenceController.getInstance(mContext).getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)
-        if(isAllowAppClose == "true"){
+        if(isAllowAppClose == StockConfig.TRUE){
             activity.finishAffinity()
             System.runFinalization()
             exitProcess(0)
         }else{
             Toasty.normal(mContext,mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
-            PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "true")
+            PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
+                PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
             },3000)
         }
     }

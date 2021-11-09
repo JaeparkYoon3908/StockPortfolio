@@ -23,14 +23,13 @@ import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
-import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
+import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
 import com.yjpapp.stockportfolio.function.main.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
 import com.yjpapp.stockportfolio.util.StockLog
-import org.koin.android.ext.android.bind
 import org.koin.android.ext.android.inject
 
 
@@ -45,7 +44,7 @@ class LoginActivity : BaseActivity() {
     private val binding get() = _binding!!
     private val gso by lazy {
         GoogleSignInOptions
-            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(StockPortfolioConfig.GOOGLE_SIGN_CLIENT_ID)
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(StockConfig.GOOGLE_SIGN_CLIENT_ID)
             .requestEmail() // email addresses도 요청함
             .build()
     }
@@ -99,12 +98,14 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun initData() {
-        preferenceController.getPreference(PrefKey.KEY_AUTO_LOGIN)?.let {
-            if (it == "true") {
-                val user_email = preferenceController.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
-                val user_name = preferenceController.getPreference(PrefKey.KEY_USER_NAME)?: ""
-                val login_type = preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
-                requestLogin(ReqSNSLogin(user_email, user_name, login_type))
+        preferenceController.getPreference(PrefKey.KEY_AUTO_LOGIN)?.let { isAutoLoginAble ->
+            preferenceController.getPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)?.let { isAutoLoginSetting ->
+                if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
+                    val userEmail = preferenceController.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
+                    val userName = preferenceController.getPreference(PrefKey.KEY_USER_NAME)?: ""
+                    val loginType = preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
+                    requestLogin(ReqSNSLogin(userEmail, userName, loginType))
+                }
             }
         }
         binding.apply {
@@ -138,7 +139,7 @@ class LoginActivity : BaseActivity() {
                         ReqSNSLogin(
                             user_email = data.response.email,
                             user_name = data.response.name,
-                            login_type = StockPortfolioConfig.LOGIN_TYPE_NAVER
+                            login_type = StockConfig.LOGIN_TYPE_NAVER
                     ))
                 } else {
                     //TODO 예외처리
@@ -174,7 +175,7 @@ class LoginActivity : BaseActivity() {
                     requestLogin(ReqSNSLogin(
                         it.email?: "",
                         it.displayName?: "",
-                        StockPortfolioConfig.LOGIN_TYPE_GOOGLE
+                        StockConfig.LOGIN_TYPE_GOOGLE
                     ))
                 }
             } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
@@ -187,7 +188,7 @@ class LoginActivity : BaseActivity() {
     private fun naverSignIn() {
         val mOAuthLoginModule = OAuthLogin.getInstance()
         mOAuthLoginModule.init(
-            this, StockPortfolioConfig.NAVER_SIGN_CLIENT_ID, StockPortfolioConfig.NAVER_SIGN_CLIENT_SECRET, getString(R.string.app_name))
+            this, StockConfig.NAVER_SIGN_CLIENT_ID, StockConfig.NAVER_SIGN_CLIENT_SECRET, getString(R.string.app_name))
         val mOAuthLoginHandler = @SuppressLint("HandlerLeak") object : OAuthLoginHandler() {
             override fun run(success: Boolean) {
                 if (success) {
@@ -227,7 +228,7 @@ class LoginActivity : BaseActivity() {
                     requestLogin(ReqSNSLogin(
                         user_email = respFacebookUserInfo.email,
                         user_name = respFacebookUserInfo.name,
-                        login_type = StockPortfolioConfig.LOGIN_TYPE_FACEBOOK)
+                        login_type = StockConfig.LOGIN_TYPE_FACEBOOK)
                     )
                 }
                 val request = GraphRequest.newMeRequest(accessToken, callback)

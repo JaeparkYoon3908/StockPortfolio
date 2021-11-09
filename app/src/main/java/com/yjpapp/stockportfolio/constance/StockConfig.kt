@@ -2,7 +2,7 @@ package com.yjpapp.stockportfolio.constance
 
 import java.util.*
 
-object StockPortfolioConfig {
+object StockConfig {
     /**
      * Common
      */
@@ -29,4 +29,6 @@ object StockPortfolioConfig {
     val FACEBOOK_SIGN_APP_ID = "2928940814012749"
     val FACEBOOK_SIGN_PROTOCOL_SCHEME = "fb2928940814012749"
 
+    val TRUE = "true"
+    val FALSE = "false"
 }
