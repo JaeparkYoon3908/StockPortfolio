@@ -23,28 +23,32 @@
         android:orientation="vertical"
         android:padding="@dimen/common_20dp">
 
-        <TextView
-            android:id="@+id/txt_label_account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/My_Account"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/common_14dp" />
-
+        <!-- 로그인 영역 -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_20dp"
             android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_label_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/My_Account"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/common_14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
             <ImageView
                 android:id="@+id/img_login_type_icon"
                 android:layout_width="@dimen/common_35dp"
                 android:layout_height="@dimen/common_35dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/common_20dp"
                 binding:setLoginTypeImage="@{viewModel.userLoginType}"
-                tools:background="@drawable/naver_icon" />
+                tools:background="@drawable/naver_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_label_account"
+                />
 
             <TextView
                 android:id="@+id/txt_user_account"
@@ -74,95 +78,102 @@
                 app:layout_constraintStart_toEndOf="@+id/txt_user_account"
                 app:layout_constraintTop_toTopOf="@+id/img_login_type_icon" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <!-- 로그인 영역 끝-->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/common_20dp"
             android:background="@color/color_aaaaaa" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- 나의 주식 영역 -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_20dp"
-            android:text="@string/MyStockFragment_Title"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/common_14dp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_10dp"
-            android:orientation="horizontal">
-
+            android:orientation="vertical" >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/My_MyStock_Auto_Refresh"
-                android:textColor="@color/color_222222"
-                android:textSize="@dimen/common_16dp" />
+                android:text="@string/MyStockFragment_Title"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/common_14dp" />
 
-            <Switch
-                android:id="@+id/switch_my_stock_auto_refresh"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/common_20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="end"
-                android:onClick="@{callBack::onSwitchClick}"
-                android:thumb="@drawable/switch_thumb_20"
-                android:track="@drawable/switch_track_selector"
-                binding:switchChecked="@{viewModel.isMyStockAutoRefresh}" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/My_MyStock_Auto_Add"
-                android:textColor="@color/color_222222"
-                android:textSize="@dimen/common_16dp" />
+                android:layout_marginTop="@dimen/common_10dp"
+                android:orientation="horizontal">
 
-            <Switch
-                android:id="@+id/switch_my_stock_auto_add"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/common_20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="end"
-                android:onClick="@{callBack::onSwitchClick}"
-                android:thumb="@drawable/switch_thumb_20"
-                android:track="@drawable/switch_track_selector"
-                binding:switchChecked="@{viewModel.isMyStockAutoAdd}" />
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/My_MyStock_Auto_Refresh"
+                    android:textColor="@color/color_222222"
+                    android:textSize="@dimen/common_16dp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_10dp"
-            android:orientation="horizontal">
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_my_stock_auto_refresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/common_20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    android:onClick="@{callBack::onSwitchClick}"
+                    android:thumb="@drawable/switch_thumb_20"
+                    android:theme="@style/StockPortfolioSwitch"
+                    binding:switchChecked="@{viewModel.isMyStockAutoRefresh}" />
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/My_MyStock_Show_Delete_Dialog"
-                android:textColor="@color/color_222222"
-                android:textSize="@dimen/common_16dp" />
+                android:layout_marginTop="@dimen/common_10dp"
+                android:orientation="horizontal">
 
-            <Switch
-                android:id="@+id/switch_my_stock_show_delete_check"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/common_20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="end"
-                android:onClick="@{callBack::onSwitchClick}"
-                android:thumb="@drawable/switch_thumb_20"
-                android:track="@drawable/switch_track_selector"
-                binding:switchChecked="@{viewModel.isMyStockShowDeleteCheck}" />
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/My_MyStock_Auto_Add"
+                    android:textColor="@color/color_222222"
+                    android:textSize="@dimen/common_16dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_my_stock_auto_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/common_20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    android:onClick="@{callBack::onSwitchClick}"
+                    android:thumb="@drawable/switch_thumb_20"
+                    android:theme="@style/StockPortfolioSwitch"
+                    binding:switchChecked="@{viewModel.isMyStockAutoAdd}" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/My_MyStock_Show_Delete_Dialog"
+                    android:textColor="@color/color_222222"
+                    android:textSize="@dimen/common_16dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_my_stock_show_delete_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/common_20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    android:onClick="@{callBack::onSwitchClick}"
+                    android:thumb="@drawable/switch_thumb_20"
+                    android:theme="@style/StockPortfolioSwitch"
+                    binding:switchChecked="@{viewModel.isMyStockShowDeleteCheck}" />
+            </RelativeLayout>
+        </LinearLayout>
+
 
         <View
             android:layout_width="match_parent"
@@ -171,37 +182,43 @@
             android:layout_marginBottom="@dimen/common_20dp"
             android:background="@color/color_aaaaaa" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/IncomeNoteFragment_Title"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/common_14dp" />
-
-        <RelativeLayout
+        <!-- 손익 노트 영역 -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_10dp"
-            android:orientation="horizontal">
-
+            android:orientation="vertical" >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/My_MyStock_Show_Delete_Dialog"
-                android:textColor="@color/color_222222"
-                android:textSize="@dimen/common_16dp" />
+                android:text="@string/IncomeNoteFragment_Title"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/common_14dp" />
 
-            <Switch
-                android:id="@+id/switch_income_note_show_delete_check"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/common_20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="end"
-                android:onClick="@{callBack::onSwitchClick}"
-                android:thumb="@drawable/switch_thumb_20"
-                android:track="@drawable/switch_track_selector"
-                binding:switchChecked="@{viewModel.isIncomeNoteShowDeleteCheck}" />
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/My_MyStock_Show_Delete_Dialog"
+                    android:textColor="@color/color_222222"
+                    android:textSize="@dimen/common_16dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_income_note_show_delete_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/common_20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    android:onClick="@{callBack::onSwitchClick}"
+                    android:thumb="@drawable/switch_thumb_20"
+                    android:theme="@style/StockPortfolioSwitch"
+                    binding:switchChecked="@{viewModel.isIncomeNoteShowDeleteCheck}" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

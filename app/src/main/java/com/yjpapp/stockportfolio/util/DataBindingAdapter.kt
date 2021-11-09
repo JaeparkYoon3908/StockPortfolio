@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.util
 import android.view.View
 import android.widget.ImageView
 import android.widget.Switch
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.BindingAdapter
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockPortfolioConfig
@@ -27,7 +28,7 @@ fun setLoginTypeImage(imageView: ImageView, loginType: String) {
     }
 }
 @BindingAdapter("binding:switchChecked")
-fun switchChecked(switch: Switch, isChecked: String) {
+fun switchChecked(switch: SwitchCompat, isChecked: String) {
     when (isChecked) {
         "true" -> {
             switch.isChecked = true

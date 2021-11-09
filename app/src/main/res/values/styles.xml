@@ -52,4 +52,9 @@
         <item name="android:datePickerMode">spinner</item>
     </style>
 
+    <style name="StockPortfolioSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="colorControlActivated">@color/red</item>
+        <item name="colorControlHighlight">@color/red</item>
+    </style>
+
 </resources>

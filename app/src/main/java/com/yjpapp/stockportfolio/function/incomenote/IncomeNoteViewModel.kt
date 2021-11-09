@@ -106,7 +106,6 @@ class IncomeNoteViewModel(
             result?.let {
                 if (it.isSuccessful) {
                     incomeNoteAddResult.value = RespIncomeNoteListInfo.IncomeNoteInfo(
-                        //TODO 서버에서 추가 된 값 내려줌.
                     )
                 }
             }

@@ -27,7 +27,7 @@ interface RetrofitService {
      * 수익노트 API
      */
     @POST("/api/income_note/list")
-    suspend fun requestPostIncomeNote(@Body reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespStatusInfo>
+    suspend fun requestPostIncomeNote(@Body reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>
 
     @GET("/api/income_note/list")
     suspend fun requestGetIncomeNote(@QueryMap params: HashMap<String, String>): Response<RespIncomeNoteListInfo>
