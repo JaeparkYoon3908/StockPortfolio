@@ -193,7 +193,7 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
     override fun onEditClick(myStockEntity: MyStockEntity?) {
         myStockViewModel.apply {
             if (myStockEntity == null) {
-                Toasty.error(mContext, "값을 불러올 수 없습니다.")
+                Toasty.error(mContext, getString(R.string.Error_Msg_Not_Found_Data))
             } else {
                 inputDialogSubjectName = myStockEntity.subjectName
                 inputDialogPurchaseDate = myStockEntity.purchaseDate

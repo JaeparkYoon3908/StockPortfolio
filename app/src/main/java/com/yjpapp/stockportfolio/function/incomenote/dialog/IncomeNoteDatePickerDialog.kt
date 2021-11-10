@@ -46,7 +46,7 @@ class IncomeNoteDatePickerDialog(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _viewBinding = CustomDialogIncomeNoteDatePickerBinding.inflate(inflater, container, false)
         return viewBinding.root

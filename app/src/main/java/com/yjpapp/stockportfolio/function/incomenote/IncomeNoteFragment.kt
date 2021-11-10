@@ -230,6 +230,7 @@ class IncomeNoteFragment : Fragment() {
 
             requestGetIncomeNote(mContext, 1)
             requestTotalGain(mContext)
+            setDateText()
         }
         subScribeUI(this@IncomeNoteFragment)
     }
@@ -257,11 +258,6 @@ class IncomeNoteFragment : Fragment() {
             incomeNoteListLiveData.observe(owner, { data ->
                 data.forEach {
                     incomeNoteListAdapter.incomeNoteListInfo.add(it)
-                }
-                viewModel.run {
-                    val startDate = makeDateString(initStartYYYYMMDD)
-                    val endDate = makeDateString(initEndYYYYMMDD)
-                    binding.txtFilterDate.text = "$startDate ~ $endDate"
                 }
             })
             //수정완료
@@ -346,6 +342,7 @@ class IncomeNoteFragment : Fragment() {
                     page = 1
                     requestGetIncomeNote(mContext, 1)
                     requestTotalGain(mContext)
+                    setDateText()
                 }
             }
         }
@@ -372,6 +369,14 @@ class IncomeNoteFragment : Fragment() {
                 viewModel.page++
                 viewModel.requestGetIncomeNote(mContext, viewModel.page)
             }
+        }
+    }
+
+    private fun setDateText() {
+        viewModel.run {
+            val startDate = makeDateString(initStartYYYYMMDD)
+            val endDate = makeDateString(initEndYYYYMMDD)
+            binding.txtFilterDate.text = "$startDate ~ $endDate"
         }
     }
 }
