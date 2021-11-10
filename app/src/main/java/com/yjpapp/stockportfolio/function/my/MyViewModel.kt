@@ -19,6 +19,8 @@ class MyViewModel(
     val isMyStockAutoAdd = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
     val isMyStockShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
     val isIncomeNoteShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)
+    val isAutoLoginCheck = preferenceController.getPreference(PrefKey.KEY_AUTO_LOGIN)
+    val isAutoMemoShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)
 
     fun requestLogout(context: Context) {
         userRepository.logout(context)

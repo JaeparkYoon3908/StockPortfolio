@@ -101,7 +101,7 @@
                     android:onClick="@{callBack::onSwitchClick}"
                     android:thumb="@drawable/switch_thumb_20"
                     android:theme="@style/StockPortfolioSwitch"
-                    binding:switchChecked="@{viewModel.isIncomeNoteShowDeleteCheck}" />
+                    binding:switchChecked="@{viewModel.isAutoLoginCheck}" />
             </RelativeLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
         <!-- 로그인 영역 끝-->
@@ -243,8 +243,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
                     android:onClick="@{callBack::onSwitchClick}"
-                    android:thumb="@drawable/switch_thumb_20"
                     android:theme="@style/StockPortfolioSwitch"
+                    android:thumb="@drawable/switch_thumb_20"
                     binding:switchChecked="@{viewModel.isIncomeNoteShowDeleteCheck}" />
             </RelativeLayout>
             <View
@@ -288,9 +288,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
                     android:onClick="@{callBack::onSwitchClick}"
-                    android:thumb="@drawable/switch_thumb_20"
                     android:theme="@style/StockPortfolioSwitch"
-                    binding:switchChecked="@{viewModel.isIncomeNoteShowDeleteCheck}" />
+                    android:thumb="@drawable/switch_thumb_20"
+                    binding:switchChecked="@{viewModel.isAutoMemoShowDeleteCheck}" />
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"

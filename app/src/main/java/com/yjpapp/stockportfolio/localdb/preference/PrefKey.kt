@@ -17,4 +17,5 @@ object PrefKey {
     const val KEY_SETTING_MY_STOCK_AUTO_ADD = "setting_auto_add"
     const val KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK = "setting_show_delete_check"
     const val KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK = "setting_income_note_show_delete_check"
+    const val KEY_SETTING_MEMO_SHOW_DELETE_CHECK = "setting_memo_show_delete_check"
 }

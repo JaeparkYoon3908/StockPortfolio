@@ -40,20 +40,25 @@ class  SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
     }
 
     override fun initData() {
-        if (!preferenceController.isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
-            preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
-        }
-        if (!preferenceController.isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
-            preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
-        }
-        if (!preferenceController.isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)) {
-            preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, true)
-        }
-        if (!preferenceController.isExists(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)) {
-            preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, true)
-        }
-        if (!preferenceController.isExists(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)) {
-            preferenceController.setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, true)
+        preferenceController.apply {
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
+                setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
+                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)) {
+                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, true)
+            }
         }
     }
 

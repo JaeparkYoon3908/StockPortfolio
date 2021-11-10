@@ -8,9 +8,12 @@ import android.view.MenuItem
 import android.view.View
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
+import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.localdb.sqlte.Databases
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
 
 /**
@@ -119,20 +122,27 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
     }
 
     override fun onDeleteButtonClick() {
-        AlertDialog.Builder(this)
-            .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
-            .setPositiveButton(R.string.Common_Ok) {_,_ ->
-                databaseController.deleteData(id, Databases.TABLE_MEMO)
-                val intent = Intent(mContext, MemoListFragment::class.java)
-                intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, memoListPosition)
-                setResult(MemoListFragment.RESULT_DELETE, intent)
-                finish()
+        if (preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK) == StockConfig.TRUE) {
+            AlertDialog.Builder(this)
+                .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
+                .setPositiveButton(R.string.Common_Ok) {_,_ ->
+                    deleteMemo()
+                }
+                .setNegativeButton(R.string.Common_Cancel) {dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        } else {
+            deleteMemo()
+        }
+    }
 
-            }
-            .setNegativeButton(R.string.Common_Cancel) {dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
+    private fun deleteMemo() {
+        databaseController.deleteData(id, Databases.TABLE_MEMO)
+        val intent = Intent(mContext, MemoListFragment::class.java)
+        intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, memoListPosition)
+        setResult(MemoListFragment.RESULT_DELETE, intent)
+        finish()
     }
 
     override fun onCompleteButtonClick() {
