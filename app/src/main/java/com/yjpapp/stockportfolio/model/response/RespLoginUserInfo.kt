@@ -19,5 +19,5 @@ data class RespLoginUserInfo(
         var login_type: String = "",
         @SerializedName("token")
         var token: String = ""
-        )
+    )
 }

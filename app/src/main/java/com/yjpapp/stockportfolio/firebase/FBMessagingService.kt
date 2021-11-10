@@ -68,7 +68,7 @@ class FBMessagingService: FirebaseMessagingService() {
 
         // 알림에 대한 UI 정보와 작업을 지정한다.
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.app_icon_ver2) // 아이콘 설정
+            .setSmallIcon(R.mipmap.app_icon_ver3) // 아이콘 설정
             .setContentTitle(remoteMessage.data["body"].toString()) // 제목
             .setContentText(remoteMessage.data["title"].toString()) // 메시지 내용
             .setAutoCancel(true)
