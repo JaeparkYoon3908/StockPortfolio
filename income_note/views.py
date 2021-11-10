@@ -72,8 +72,7 @@ class IncomeNoteAPI(APIView):
             income_note_list = paginator.get_page(page).object_list
             income_note = [obj.get_resp_json() for obj in income_note_list]
             if int(page) > 0:
-                pre_income_note_list = paginator.get_page(int(page) - 1).object_list
-                if income_note_list != pre_income_note_list:
+                if int(page) == 1:
                     data = dict(
                         page_info=dict(
                             page=page,
@@ -84,16 +83,27 @@ class IncomeNoteAPI(APIView):
                     )
                     return Response(data=data)
                 else:
-                    data = dict(
-                        page_info=dict(
-                            page=page,
-                            page_size=page_size,
-                            total_elements=total_elements
-                        ),
-                        income_note=""
-                    )
-                    return Response(data=data)
-
+                    pre_income_note_list = paginator.get_page(int(page) - 1).object_list
+                    if income_note_list != pre_income_note_list:
+                        data = dict(
+                            page_info=dict(
+                                page=page,
+                                page_size=page_size,
+                                total_elements=total_elements
+                            ),
+                            income_note=income_note
+                        )
+                        return Response(data=data)
+                    else:
+                        data = dict(
+                            page_info=dict(
+                                page=page,
+                                page_size=page_size,
+                                total_elements=total_elements
+                            ),
+                            income_note=""
+                        )
+                        return Response(data=data)
             data = dict(
                 page_info=dict(
                     page=page,
