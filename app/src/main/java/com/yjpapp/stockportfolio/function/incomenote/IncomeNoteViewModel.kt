@@ -103,10 +103,11 @@ class IncomeNoteViewModel(
     fun requestAddIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPostIncomeNote(context, reqIncomeNoteInfo)
-            result?.let {
-                if (it.isSuccessful) {
-                    incomeNoteAddResult.value = RespIncomeNoteListInfo.IncomeNoteInfo(
-                    )
+            result?.let { result ->
+                if (result.isSuccessful) {
+                    result.body()?.let { incomeNoteInfo ->
+                        incomeNoteAddResult.value = incomeNoteInfo
+                    }
                 }
             }
         }

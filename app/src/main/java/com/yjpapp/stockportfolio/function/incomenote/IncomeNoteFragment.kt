@@ -280,11 +280,13 @@ class IncomeNoteFragment : Fragment() {
                 Toasty.normal(mContext, "삭제완료").show()
                 incomeNoteListAdapter.incomeNoteListInfo.removeAt(position)
                 incomeNoteListAdapter.notifyItemRemoved(position)
+                incomeNoteListAdapter.notifyDataSetChanged()
             })
             //추가완료
             incomeNoteAddResult.observe(owner, { data ->
                 Toasty.info(mContext, "추가완료").show()
-                incomeNoteListAdapter.incomeNoteListInfo.add(data)
+                incomeNoteListAdapter.incomeNoteListInfo.add(0, data)
+//                incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
                 incomeNoteListAdapter.notifyDataSetChanged()
             })
         }
@@ -334,6 +336,7 @@ class IncomeNoteFragment : Fragment() {
 
     private val datePickerDialogCallBack = object : IncomeNoteDatePickerDialog.CallBack {
         override fun requestIncomeNoteList(startDateList: List<String>, endDateList: List<String>) {
+            binding.btnDate
             lifecycleScope.launch {
                 incomeNoteListAdapter.incomeNoteListInfo = arrayListOf()
                 incomeNoteListAdapter.notifyDataSetChanged()
