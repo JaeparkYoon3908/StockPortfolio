@@ -35,7 +35,6 @@ class  SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initData()
         startMainActivity()
     }
 

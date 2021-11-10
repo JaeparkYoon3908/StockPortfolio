@@ -120,6 +120,11 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
                     val isChecked = binding.switchIncomeNoteShowDeleteCheck.isChecked
                     preferenceController.setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, isChecked)
                 }
+                //메모 삭제 시 확인 띄우기
+                R.id.switch_memo_show_delete_check -> {
+                    val isChecked = binding.switchMemoShowDeleteCheck.isChecked
+                    preferenceController.setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, isChecked)
+                }
             }
         }
     }
