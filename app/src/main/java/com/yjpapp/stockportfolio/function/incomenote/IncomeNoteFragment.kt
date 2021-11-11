@@ -271,6 +271,7 @@ class IncomeNoteFragment : Fragment() {
                     val index = incomeNoteListAdapter.incomeNoteListInfo.indexOf(beforeModifyIncomeNote)
                     incomeNoteListAdapter.incomeNoteListInfo[index] = data
                     incomeNoteListAdapter.notifyDataSetChanged()
+                    viewModel.requestTotalGain(mContext)
                 }
             })
             //삭제완료
@@ -279,6 +280,7 @@ class IncomeNoteFragment : Fragment() {
                 incomeNoteListAdapter.incomeNoteListInfo.removeAt(position)
                 incomeNoteListAdapter.notifyItemRemoved(position)
                 incomeNoteListAdapter.notifyDataSetChanged()
+                viewModel.requestTotalGain(mContext)
             })
             //추가완료
             incomeNoteAddResult.observe(owner, { data ->
@@ -286,6 +288,7 @@ class IncomeNoteFragment : Fragment() {
                 incomeNoteListAdapter.incomeNoteListInfo.add(0, data)
 //                incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
                 incomeNoteListAdapter.notifyDataSetChanged()
+                viewModel.requestTotalGain(mContext)
             })
         }
     }
