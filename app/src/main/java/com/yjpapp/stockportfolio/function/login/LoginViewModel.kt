@@ -23,6 +23,7 @@ class LoginViewModel(application: Application, private val userRepository: UserR
      * Common
      */
     private val TAG = LoginViewModel::class.java.simpleName
+    val isNetworkConnectException = MutableLiveData<Boolean>()
     /**
      * API
      */
@@ -30,10 +31,12 @@ class LoginViewModel(application: Application, private val userRepository: UserR
     fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = userRepository.postUserInfo(getApplication(), reqSnsLogin)
-            result?.let {
-                if (it.isSuccessful) {
-                    loginResultData.postValue(it.body())
-                }
+            if (result == null) {
+                isNetworkConnectException.postValue(true)
+                return@launch
+            }
+            if (result.isSuccessful) {
+                loginResultData.postValue(result.body())
             }
         }
     }
@@ -42,10 +45,12 @@ class LoginViewModel(application: Application, private val userRepository: UserR
     fun requestNaverUserInfo() {
         viewModelScope.launch(Dispatchers.IO){
             val result = userRepository.getNaverUserInfo(getApplication())
-                result?.let {
-                if (it.isSuccessful) {
-                    respNaverUserInfo.postValue(it.body())
-                }
+            if (result == null) {
+                isNetworkConnectException.value = true
+                return@launch
+            }
+            if (result.isSuccessful) {
+                respNaverUserInfo.postValue(result.body())
             }
         }
     }

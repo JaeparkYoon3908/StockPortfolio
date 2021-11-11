@@ -31,6 +31,7 @@ class IncomeNoteViewModel(
     val incomeNoteModifyResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
     val incomeNoteAddResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
     val incomeNoteListLiveData = MutableLiveData<ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>>()
+    val isNetworkConnectException = MutableLiveData<Boolean>()
     var hasNext = true
 
     fun requestGetIncomeNote(context: Context, page: Int) {
@@ -42,13 +43,16 @@ class IncomeNoteViewModel(
         viewModelScope.launch {
             try {
                 val result = incomeNoteRepository.requestGetIncomeNote(context, params)
-                result?.let {
-                    if (it.isSuccessful) {
-                        it.body()?.let {
-                            incomeNoteListLiveData.value = it.income_note
-                            if (page * pageSize >= it.page_info.total_elements) {
-                                hasNext = false
-                            }
+                if (result == null) {
+                    isNetworkConnectException.value = true
+                    return@launch
+                }
+
+                if (result.isSuccessful) {
+                    result.body()?.let {
+                        incomeNoteListLiveData.value = it.income_note
+                        if (page * pageSize >= it.page_info.total_elements) {
+                            hasNext = false
                         }
                     }
                 }
@@ -69,13 +73,16 @@ class IncomeNoteViewModel(
             params["endDate"] = makeDateString(initEndYYYYMMDD)
             CoroutineScope(Dispatchers.Main).launch {
                 val result = incomeNoteRepository.requestTotalGain(context, params)
-                result?.let {
-                    if (it.isSuccessful) {
-                        it.body()?.let {
-                            totalGainIncomeNoteData.value = it
-                        }
+                if (result == null) {
+                    isNetworkConnectException.value = true
+                    return@launch
+                }
+                if (result.isSuccessful) {
+                    result.body()?.let {
+                        totalGainIncomeNoteData.value = it
                     }
                 }
+
             }
         }
     }
@@ -83,10 +90,12 @@ class IncomeNoteViewModel(
     fun requestDeleteIncomeNote(context: Context, id: Int, position: Int) {
         viewModelScope.launch {
             val result = incomeNoteRepository.requestDeleteIncomeNote(context, id)
-            result?.let {
-                if (it.isSuccessful) {
-                    incomeNoteDeletedPosition.value = position
-                }
+            if (result == null) {
+                isNetworkConnectException.value = true
+                return@launch
+            }
+            if (result.isSuccessful) {
+                incomeNoteDeletedPosition.value = position
             }
         }
     }
@@ -94,11 +103,14 @@ class IncomeNoteViewModel(
     fun requestModifyIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPutIncomeNote(context, reqIncomeNoteInfo)
-            result?.let {
-                if (it.isSuccessful) {
-                    it.body()?.let { incomeNoteList ->
-                        incomeNoteModifyResult.value = incomeNoteList
-                    }
+            if (result == null) {
+                isNetworkConnectException.value = true
+                return@launch
+            }
+
+            if (result.isSuccessful) {
+                result.body()?.let { incomeNoteList ->
+                    incomeNoteModifyResult.value = incomeNoteList
                 }
             }
         }
@@ -107,11 +119,13 @@ class IncomeNoteViewModel(
     fun requestAddIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPostIncomeNote(context, reqIncomeNoteInfo)
-            result?.let { result ->
-                if (result.isSuccessful) {
-                    result.body()?.let { incomeNoteInfo ->
-                        incomeNoteAddResult.value = incomeNoteInfo
-                    }
+            if (result == null) {
+                isNetworkConnectException.value = true
+                return@launch
+            }
+            if (result.isSuccessful) {
+                result.body()?.let { incomeNoteInfo ->
+                    incomeNoteAddResult.value = incomeNoteInfo
                 }
             }
         }

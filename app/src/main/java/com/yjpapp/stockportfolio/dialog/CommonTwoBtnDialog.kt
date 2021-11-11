@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
@@ -59,6 +60,7 @@ class CommonTwoBtnDialog(
         val params: ViewGroup.LayoutParams? = window?.attributes
         val deviceWidth = size.x
         params?.width = (deviceWidth * 0.8).toInt()
+        params?.height = WRAP_CONTENT
         window?.attributes = params as WindowManager.LayoutParams
     }
 

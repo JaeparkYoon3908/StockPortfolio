@@ -29,6 +29,7 @@ import com.yjpapp.stockportfolio.function.main.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
+import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.util.StockLog
 import org.koin.android.ext.android.inject
 
@@ -143,6 +144,12 @@ class LoginActivity : BaseActivity() {
                     ))
                 } else {
                     //TODO 예외처리
+                }
+            })
+            isNetworkConnectException.observe(this@LoginActivity, { isNetworkConnectError ->
+                if (isNetworkConnectError) {
+                    ResponseAlertManger.showErrorAlert(mContext, mContext.getString(R.string.Error_Msg_Network_Connect_Exception))
+                    stopLoadingAnimation()
                 }
             })
         }

@@ -24,6 +24,7 @@ import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialo
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
+import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch
@@ -289,6 +290,12 @@ class IncomeNoteFragment : Fragment() {
 //                incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
                 incomeNoteListAdapter.notifyDataSetChanged()
                 viewModel.requestTotalGain(mContext)
+            })
+            //네트워크 연결 오류
+            isNetworkConnectException.observe(owner, { isNetworkConnectError ->
+                if (isNetworkConnectError) {
+                    ResponseAlertManger.showErrorAlert(mContext, mContext.getString(R.string.Error_Msg_Network_Connect_Exception))
+                }
             })
         }
     }
