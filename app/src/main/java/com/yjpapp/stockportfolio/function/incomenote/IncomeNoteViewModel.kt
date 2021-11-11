@@ -23,19 +23,20 @@ class IncomeNoteViewModel(
     var editMode = false
     var incomeNoteId = -1
     var page = 1
+    private val pageSize = 20
     var initStartYYYYMMDD = listOf<String>()
     var initEndYYYYMMDD = listOf<String>()
     val totalGainIncomeNoteData = MutableLiveData<RespTotalGainIncomeNoteData>()
     val incomeNoteDeletedPosition = MutableLiveData<Int>()
     val incomeNoteModifyResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
     val incomeNoteAddResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
-    val totalIncomeNoteList = arrayListOf<RespIncomeNoteListInfo.IncomeNoteInfo>()
     val incomeNoteListLiveData = MutableLiveData<ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>>()
+    var hasNext = true
 
     fun requestGetIncomeNote(context: Context, page: Int) {
         val params = HashMap<String, String>()
         params["page"] = page.toString()
-        params["size"] = "20"
+        params["size"] = pageSize.toString()
         params["startDate"] = makeDateString(initStartYYYYMMDD)
         params["endDate"] = makeDateString(initEndYYYYMMDD)
         viewModelScope.launch {
@@ -43,8 +44,11 @@ class IncomeNoteViewModel(
                 val result = incomeNoteRepository.requestGetIncomeNote(context, params)
                 result?.let {
                     if (it.isSuccessful) {
-                        it.body()?.income_note?.let {
-                            incomeNoteListLiveData.value = it
+                        it.body()?.let {
+                            incomeNoteListLiveData.value = it.income_note
+                            if (page * pageSize >= it.page_info.total_elements) {
+                                hasNext = false
+                            }
                         }
                     }
                 }
@@ -54,9 +58,9 @@ class IncomeNoteViewModel(
         }
     }
 
-    fun getIncomeNoteListPagingData(mContext: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteListInfo.IncomeNoteInfo>> {
-        return incomeNoteRepository.getIncomeNoteListByPaging(mContext, startDate, endDate).cachedIn(viewModelScope)
-    }
+//    fun getIncomeNoteListPagingData(mContext: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteListInfo.IncomeNoteInfo>> {
+//        return incomeNoteRepository.getIncomeNoteListByPaging(mContext, startDate, endDate).cachedIn(viewModelScope)
+//    }
 
     fun requestTotalGain(context: Context) {
         if (initStartYYYYMMDD.size == 3 && initEndYYYYMMDD.size == 3) {

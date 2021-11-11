@@ -259,6 +259,8 @@ class IncomeNoteFragment : Fragment() {
                 data.forEach {
                     incomeNoteListAdapter.incomeNoteListInfo.add(it)
                 }
+                incomeNoteListAdapter.notifyDataSetChanged()
+
             })
             //수정완료
             incomeNoteModifyResult.observe(owner, { data ->
@@ -362,12 +364,14 @@ class IncomeNoteFragment : Fragment() {
     private val onScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-            val totalItemCount = layoutManager.itemCount
-            val lastVisible = layoutManager.findLastCompletelyVisibleItemPosition()
-            if (lastVisible >= totalItemCount - 1) {
-                viewModel.page++
-                viewModel.requestGetIncomeNote(mContext, viewModel.page)
+            if (viewModel.hasNext) {
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val lastVisible = layoutManager.findLastCompletelyVisibleItemPosition()
+                if (lastVisible >= totalItemCount - 1) {
+                    viewModel.page++
+                    viewModel.requestGetIncomeNote(mContext, viewModel.page)
+                }
             }
         }
     }
