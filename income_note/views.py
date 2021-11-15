@@ -180,14 +180,23 @@ class TotalGainAPI(APIView):
             else:
                 all_income_note = IncomeNote.objects.filter(user_index=user_index,
                                                             sellDate__range=[start_date, end_date])
+
+            all_income_note_list = list(all_income_note)
+            total_purchase_price = Decimal(0.00)
+            total_sell_price = Decimal(0.00)
+            for income_note in all_income_note_list:
+                total_purchase_price += income_note.purchasePrice * income_note.sellCount
+                total_sell_price += income_note.sellPrice * income_note.sellCount
+
             total_price = all_income_note.aggregate(Sum('realPainLossesAmount'))
-            total_purchase_price = all_income_note.aggregate(Sum('purchasePrice'))
-            total_sell_price = all_income_note.aggregate(Sum('sellPrice'))
-            total_percent = ((total_sell_price['sellPrice__sum'] / total_purchase_price[
-                'purchasePrice__sum']) - 1) * 100
+            # total_purchase_price = all_income_note.aggregate(Sum('purchasePrice'))
+            # total_sell_price = all_income_note.aggregate(Sum('sellPrice'))
+            # total_percent = ((total_sell_price['sellPrice__sum'] / total_purchase_price[
+            #     'purchasePrice__sum']) - 1) * 100
+            total_percent = ((total_sell_price / total_purchase_price)-1) * 100
             data = dict(
                 total_price=total_price['realPainLossesAmount__sum'],
-                total_percent=round(total_percent, 2)
+                total_percent=round(total_percent, 3)
             )
 
             return Response(data=data)
