@@ -24,7 +24,7 @@ interface RetrofitService {
     suspend fun requestNaverUserInfo(): Response<RespNaverUserInfo>
 
     /**
-     * 수익노트 API
+     * 수익 노트 API
      */
     @POST("/api/income_note/list")
     suspend fun requestPostIncomeNote(@Body reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>

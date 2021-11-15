@@ -20,4 +20,8 @@ class MyStockRepository(private val myStockDao: MyStockDao) {
     fun getAllMyStock(): MutableList<MyStockEntity> {
         return myStockDao.getAll()
     }
+
+    fun getSearchCompany() {
+
+    }
 }

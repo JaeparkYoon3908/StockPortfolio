@@ -20,8 +20,6 @@ import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.pow
-import kotlin.math.round
 import kotlin.system.exitProcess
 
 /**
@@ -160,12 +158,6 @@ object Utils {
                 PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
             },3000)
         }
-    }
-
-    //소수점 n자리 반올림
-    fun getRoundNum(num: Double, point: Int): Double {
-        val decimalPoint = 10.toDouble().pow(point)
-        return round(num * decimalPoint) / decimalPoint
     }
 
 //    fun getMyPhoneNum(mContext: Context): String{

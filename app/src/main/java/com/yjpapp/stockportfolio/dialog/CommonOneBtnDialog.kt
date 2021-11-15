@@ -56,6 +56,7 @@ class CommonOneBtnDialog(
         }
         val params: ViewGroup.LayoutParams? = window?.attributes
         val deviceWidth = size.x
+        //사이즈 설정
         params?.width = (deviceWidth * 0.8).toInt()
         params?.height = Utils.dpToPx(200)
         window?.attributes = params as WindowManager.LayoutParams

@@ -11,6 +11,7 @@ import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
@@ -120,12 +121,23 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                         myStockAdapter.notifyItemRangeRemoved(deletePosition, it.size)
                     }
                 }
+                // 총 매수 금액 설정
                 var mTotalPurchasePrice = 0.0
                 it.forEach { myStockEntity ->
                     mTotalPurchasePrice += Utils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
                 }
                 totalPurchasePrice.value = NumberFormat.getCurrencyInstance(Locale.KOREA).format(mTotalPurchasePrice)
+
+                //색상 설정
+//                if (mTotalPurchasePrice >= 0) {
+//                    binding.txtGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
+//                    binding.txtGainPercentData.setTextColor(mContext.getColor(R.color.color_e52b4e))
+//                } else {
+//                    binding.txtGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
+//                    binding.txtGainPercentData.setTextColor(mContext.getColor(R.color.color_4876c7))
+//                }
             })
+            //토스트 팝업
             showErrorToast.observe(viewLifecycleOwner, Observer {
                 it.getContentIfNotHandled()?.let {
                     Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()

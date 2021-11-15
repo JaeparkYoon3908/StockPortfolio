@@ -18,7 +18,7 @@
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cons_MyStockFragment_TotalGainLosses"
+            android:id="@+id/cons_my_stock_fragment_total_gain_losses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/common_15dp"
@@ -37,12 +37,12 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/txt_Purchase_Price_Data"
+                app:layout_constraintEnd_toStartOf="@+id/txt_purchase_price_data"
                 app:layout_constraintWidth_percent="0.25"
                 />
 
             <TextView
-                android:id="@+id/txt_Purchase_Price_Data"
+                android:id="@+id/txt_purchase_price_data"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/common_10dp"
@@ -95,7 +95,7 @@
                 tools:text="500,000" />
 
             <TextView
-                android:id="@+id/txt_TotalRealizationGainsLosses"
+                android:id="@+id/txt_total_realization_gains_losses"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/common_10dp"
@@ -104,13 +104,13 @@
                 android:textColor="@color/color_222222"
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
-                app:layout_constraintEnd_toStartOf="@+id/txt_GainsLosses_Data"
+                app:layout_constraintEnd_toStartOf="@+id/txt_gains_losses_data"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintWidth_percent="0.25"
                 />
 
             <TextView
-                android:id="@+id/txt_GainsLosses_Data"
+                android:id="@+id/txt_gains_losses_data"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -125,12 +125,12 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/txt_Evaluation_Amount"
-                app:layout_constraintStart_toEndOf="@+id/txt_TotalRealizationGainsLosses"
+                app:layout_constraintStart_toEndOf="@+id/txt_total_realization_gains_losses"
                 app:layout_constraintWidth_percent="0.75"
                 tools:text="650,000,000,000,000" />
 
             <TextView
-                android:id="@+id/txt_GainPercent"
+                android:id="@+id/txt_gain_percent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/common_10dp"
@@ -138,15 +138,15 @@
                 android:text="@string/Common_GainPercent"
                 android:textColor="@color/color_222222"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
+                app:layout_constraintTop_toBottomOf="@+id/txt_total_realization_gains_losses"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/txt_GainPercent_Data"
+                app:layout_constraintEnd_toStartOf="@+id/txt_gain_percent_data"
                 app:layout_constraintWidth_percent="0.25"
 
                 />
 
             <TextView
-                android:id="@+id/txt_GainPercent_Data"
+                android:id="@+id/txt_gain_percent_data"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/common_10dp"
@@ -159,8 +159,8 @@
                 android:textColor="@color/color_e52b4e"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/txt_TotalRealizationGainsLosses"
-                app:layout_constraintStart_toEndOf="@+id/txt_GainPercent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_total_realization_gains_losses"
+                app:layout_constraintStart_toEndOf="@+id/txt_gain_percent"
                 app:layout_constraintWidth_percent="0.75"
                 tools:text="15%" />
 
@@ -170,7 +170,7 @@
                 android:layout_height="@dimen/common_1dp"
                 android:layout_marginTop="@dimen/common_10dp"
                 android:background="@color/color_line_1a000000"
-                app:layout_constraintTop_toBottomOf="@+id/txt_GainPercent_Data"
+                app:layout_constraintTop_toBottomOf="@+id/txt_gain_percent_data"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -179,7 +179,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/cons_MyStockFragment_TotalGainLosses"
+            app:layout_constraintTop_toBottomOf="@+id/cons_my_stock_fragment_total_gain_losses"
             app:layout_constraintBottom_toBottomOf="parent"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>

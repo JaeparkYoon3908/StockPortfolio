@@ -32,7 +32,7 @@
     <string name="Common_Loss">손해</string>
     <string name="Common_BackButton_AppClose_Message">종료하시려면 한번 더 눌러주세요.</string>
 
-    <string name="IncomeNoteFragment_Title">손익 노트</string>
+    <string name="IncomeNoteFragment_Title">수익 노트</string>
     <string name="IncomeNoteFragment_Gain">수익</string>
     <string name="IncomeNoteFragment_Purchase_Price">매수금액</string>
     <string name="IncomeNoteFragment_Sell_Price">매도금액</string>

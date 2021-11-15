@@ -16,7 +16,7 @@ import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface
 
 
 /**
- * @link MyStockFragment에 붙어있는 RecyclerView Adapter
+ * @link MyStockFragment 붙어있는 RecyclerView Adapter
  *
  * @author Yoon Jae-park
  * @since 2021.04

@@ -241,7 +241,7 @@ class IncomeNoteFragment : Fragment() {
         viewModel.apply {
             totalGainIncomeNoteData.observe(owner, { data ->
                 val totalGainNumber = data.total_price
-                val totalGainPercent = Utils.getRoundNum(data.total_percent, 2)
+                val totalGainPercent = data.total_percent
                 binding.apply {
                     val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
                     txtTotalRealizationGainsLossesData.text = "${StockConfig.moneySymbol}$totalRealizationGainsLossesNumber"

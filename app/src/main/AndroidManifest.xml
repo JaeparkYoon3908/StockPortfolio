@@ -35,10 +35,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".function.mystock.StockSearchActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".function.login.LoginActivity"
             android:screenOrientation="portrait" />
 

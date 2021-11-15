@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.mystock
+package com.yjpapp.stockportfolio.function.mystock.dialog
 
 import android.app.AlertDialog
 import android.content.Context
@@ -17,7 +17,8 @@ import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialo
 
 
 class MyStockInputDialog(context: Context):
-        AlertDialog(context), SupportedDatePickerDialog.OnDateSetListener, MyStockInputDialogController {
+        AlertDialog(context), SupportedDatePickerDialog.OnDateSetListener,
+    MyStockInputDialogController {
     companion object{
         @Volatile private var instance: MyStockInputDialog? = null
         @JvmStatic
