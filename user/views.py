@@ -108,6 +108,19 @@ class SelectUser(APIView):
 
         except:
             connection.rollback()
-            data = CustomResponse.exception
+            data = CustomResponse.no_index
 
         return Response(data=data)
+
+class DeleteUser(APIView):
+    def delete(self, request):
+        user_index = request.META.get('HTTP_USER_INDEX')
+        try:
+            if UserInfo.objects.filter(user_index=user_index).exists() is True:
+                user = UserInfo.objects.get(user_index=user_index)
+                user.delete()
+                return Response(CustomResponse.ok)
+            else:
+                return Response(CustomResponse.no_index)
+        except:
+            return Response(CustomResponse.exception)
