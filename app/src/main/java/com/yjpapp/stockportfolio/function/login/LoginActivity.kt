@@ -99,13 +99,35 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun initData() {
-        preferenceController.getPreference(PrefKey.KEY_AUTO_LOGIN)?.let { isAutoLoginAble ->
-            preferenceController.getPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)?.let { isAutoLoginSetting ->
-                if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
-                    val userEmail = preferenceController.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
-                    val userName = preferenceController.getPreference(PrefKey.KEY_USER_NAME)?: ""
-                    val loginType = preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
-                    requestLogin(ReqSNSLogin(userEmail, userName, loginType))
+        preferenceController.apply {
+            //마이 설정값이 없을 때 초기화
+            if (!isExists(PrefKey.KEY_SETTING_AUTO_LOGIN)) {
+                setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
+                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)) {
+                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, true)
+            }
+            //자동 로그인이 설정 돼 있으면
+            getPreference(PrefKey.KEY_AUTO_LOGIN)?.let { isAutoLoginAble ->
+                getPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)?.let { isAutoLoginSetting ->
+                    if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
+                        val userEmail = getPreference(PrefKey.KEY_USER_EMAIL)?: ""
+                        val userName = getPreference(PrefKey.KEY_USER_NAME)?: ""
+                        val loginType = getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
+                        requestLogin(ReqSNSLogin(userEmail, userName, loginType))
+                    }
                 }
             }
         }

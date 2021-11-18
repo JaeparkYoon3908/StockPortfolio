@@ -41,9 +41,6 @@ class  SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
     override fun initData() {
         preferenceController.apply {
             if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
-                setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
-            }
-            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
                 setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
             }
             if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)) {

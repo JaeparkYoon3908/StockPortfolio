@@ -11,7 +11,7 @@ object PrefKey {
     const val KEY_USER_EMAIL = "user_email"
     const val KEY_USER_TOKEN = "user_token"
     const val KEY_NAVER_USER_TOKEN = "naver_user_token"
-    //Setting
+    //My Setting
     const val KEY_SETTING_AUTO_LOGIN = "setting_auto_login"
     const val KEY_SETTING_MY_STOCK_AUTO_REFRESH = "setting_auto_refresh"
     const val KEY_SETTING_MY_STOCK_AUTO_ADD = "setting_auto_add"

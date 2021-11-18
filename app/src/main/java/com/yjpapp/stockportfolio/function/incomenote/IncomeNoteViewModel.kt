@@ -82,7 +82,6 @@ class IncomeNoteViewModel(
                         totalGainIncomeNoteData.value = it
                     }
                 }
-
             }
         }
     }

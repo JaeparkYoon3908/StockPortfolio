@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
@@ -42,6 +43,19 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
             callBack = this@MyFragment.callBack
             lifecycleOwner = this@MyFragment
         }
+        subscribeUI(this)
+    }
+
+    private fun subscribeUI(owner: LifecycleOwner) {
+        myViewModel.apply {
+            isMemberOffSuccess.observe(owner, {isSuccess ->
+                if (isSuccess) {
+                    deleteUserPreference()
+                    startLoginActivity()
+                    requireActivity().finish()
+                }
+            })
+        }
     }
 
     interface CallBack {
@@ -65,6 +79,7 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
                         rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
                             override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
                                 myViewModel.requestLogout(mContext)
+                                dialog.dismiss()
                             }
                         }
                     )).show()
@@ -81,11 +96,8 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
                         },
                         rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
                             override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                var userIdx = 0
-                                preferenceController.getPreference(PrefKey.KEY_USER_TOKEN)?.let {
-                                    userIdx = it.toInt()
-                                }
-                                myViewModel.requestMemberOff(mContext, userIdx)
+                                myViewModel.requestMemberOff(dialog.context)
+                                dialog.dismiss()
                             }
                         }
                     )).show()
@@ -132,5 +144,23 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
         Intent(mContext, LoginActivity::class.java).apply {
             mContext.startActivity(this)
         }
+    }
+
+    private fun deleteUserPreference() {
+        preferenceController.removePreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)
+        preferenceController.removePreference(PrefKey.KEY_AUTO_LOGIN)
+
+        preferenceController.removePreference(PrefKey.KEY_USER_INDEX)
+        preferenceController.removePreference(PrefKey.KEY_USER_LOGIN_TYPE)
+        preferenceController.removePreference(PrefKey.KEY_USER_NAME)
+        preferenceController.removePreference(PrefKey.KEY_USER_EMAIL)
+        preferenceController.removePreference(PrefKey.KEY_USER_TOKEN)
+
+        preferenceController.removePreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
+        preferenceController.removePreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)
+        preferenceController.removePreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
+        preferenceController.removePreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
+        preferenceController.removePreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)
+        preferenceController.removePreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)
     }
 }

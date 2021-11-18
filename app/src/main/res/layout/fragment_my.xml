@@ -307,7 +307,8 @@
             android:layout_height="wrap_content"
             android:text="@string/My_Member_Off"
             android:textColor="@color/color_222222"
-            android:textSize="@dimen/common_16dp" />
+            android:textSize="@dimen/common_16dp"
+            android:onClick="@{callBack::onClick}" />
 
     </LinearLayout>
 </layout>

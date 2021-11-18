@@ -30,6 +30,6 @@ class UserRepository {
         context.startActivity(intent)
     }
 
-    suspend fun deleteUserInfo(context: Context, userId: Int) =
-        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteUserInfo(userId)
+    suspend fun deleteUserInfo(context: Context) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteUserInfo()
 }

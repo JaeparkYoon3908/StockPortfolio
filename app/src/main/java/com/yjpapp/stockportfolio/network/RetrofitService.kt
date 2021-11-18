@@ -17,8 +17,8 @@ interface RetrofitService {
     @GET("/api/user/user_info")
     suspend fun requestUserInfo(@QueryMap params: HashMap<String, String>): Response<RespLoginUserInfo>
 
-    @DELETE("/api/user/user_info/{id}")
-    suspend fun requestDeleteUserInfo(@Path("id")id: Int): Response<RespStatusInfo>
+    @DELETE("/api/user/delete_user")
+    suspend fun requestDeleteUserInfo(): Response<RespStatusInfo>
 
     @GET("/v1/nid/me")
     suspend fun requestNaverUserInfo(): Response<RespNaverUserInfo>
