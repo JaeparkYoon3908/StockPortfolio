@@ -100,8 +100,11 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
                 }
             }
         } else {
-            showFragment(myStockFragment)
-            switchingBottomIconMyStock()
+            //TODO 나의 주식 릴리즈 이후 오픈
+//            showFragment(myStockFragment)
+//            switchingBottomIconMyStock()
+            showFragment(incomeNoteFragment)
+            switchingBottomIconIncomeNote()
         }
     }
 

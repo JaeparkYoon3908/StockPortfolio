@@ -35,7 +35,6 @@ object Utils {
         val todayDate = Date(currentTime)
         val sdformat = SimpleDateFormat("yyyyMMdd")
         return sdformat.format(todayDate)
-
     }
 
     //yyyy.mm.dd로 변환
