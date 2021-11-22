@@ -239,6 +239,7 @@ class LoginActivity : BaseActivity() {
                     val authorization = "$tokenType $accessToken"
                     preferenceController.setPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
                     viewModel.requestNaverUserInfo()
+                    startLoadingAnimation()
                 } else {
                     val errorCode: String = mOAuthLoginModule.getLastErrorCode(applicationContext).code
                     val errorDesc: String = mOAuthLoginModule.getLastErrorDesc(applicationContext)
