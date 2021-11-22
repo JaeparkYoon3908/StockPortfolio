@@ -165,7 +165,10 @@ class LoginActivity : BaseActivity() {
                             login_type = StockConfig.LOGIN_TYPE_NAVER
                     ))
                 } else {
-                    //TODO 예외처리
+                    ResponseAlertManger.showErrorAlert(
+                        this@LoginActivity,
+                        getString(R.string.Error_Msg_Normal)
+                    )
                 }
             })
             isNetworkConnectException.observe(this@LoginActivity, { isNetworkConnectError ->
@@ -183,7 +186,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private val googleLoginResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_CANCELED) {
+        if (result.resultCode == Activity.RESULT_OK) {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(result.data)
 
             try {
@@ -209,6 +212,10 @@ class LoginActivity : BaseActivity() {
                 }
             } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.
+                e.message?.let {
+                    val msg = "${getString(R.string.Error_Msg_Normal)} code : ${e.statusCode}"
+                    ResponseAlertManger.showErrorAlert(this, it)
+                }
                 StockLog.e(TAG, "signInResult:failed code=" + e.statusCode)
             }
         }
