@@ -117,13 +117,13 @@
                         android:layout_gravity="bottom"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/common_15dp"
-                        android:paddingEnd="@dimen/common_20dp"
+                        android:paddingEnd="@dimen/common_15dp"
                         android:visibility="visible"
                         app:layout_collapseMode="parallax">
 
                         <TextView
                             android:id="@+id/txt_subject_name"
-                            android:layout_width="@dimen/common_60_3dp"
+                            android:layout_width="@dimen/common_60dp"
                             android:layout_height="wrap_content"
                             android:text="@string/IncomeNoteFragment_Term"
                             android:textColor="@color/color_222222"
@@ -137,12 +137,11 @@
                             android:layout_width="0dp"
                             android:layout_height="@dimen/common_35dp"
                             android:layout_marginStart="@dimen/common_10dp"
-                            android:layout_marginEnd="70dp"
                             android:background="@drawable/selector_income_note_btn"
                             android:gravity="center"
                             android:orientation="horizontal"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/btn_search_all"
                             app:layout_constraintStart_toEndOf="@+id/txt_subject_name"
                             app:layout_constraintTop_toTopOf="parent">
 
@@ -152,10 +151,28 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/Common_All"
                                 android:textColor="@color/color_222222"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/common_14dp" />
                         </LinearLayout>
 
-
+                        <LinearLayout
+                            android:id="@+id/btn_search_all"
+                            android:layout_width="@dimen/common_60dp"
+                            android:layout_height="@dimen/common_35dp"
+                            android:background="@drawable/selector_income_note_btn"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginStart="@dimen/common_10dp"
+                            app:layout_constraintStart_toEndOf="@+id/btn_date"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/IncomeNoteFragment_All_Search"
+                                android:textColor="@color/color_222222"
+                                android:textSize="@dimen/common_10dp" />
+                        </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View

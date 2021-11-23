@@ -115,6 +115,7 @@ class IncomeNoteFragment : Fragment() {
         incomeNoteListAdapter.callBack = adapterCallBack
         binding.apply {
             btnDate.setOnClickListener(onClickListener)
+            btnSearchAll.setOnClickListener(onClickListener)
         }
 
         initRecyclerView()
@@ -134,6 +135,18 @@ class IncomeNoteFragment : Fragment() {
                     viewModel.initEndYYYYMMDD
                 ).apply {
                     show(this@IncomeNoteFragment.childFragmentManager, TAG)
+                }
+            }
+
+            R.id.btn_search_all -> {
+                incomeNoteListAdapter.incomeNoteListInfo = arrayListOf()
+                viewModel.apply {
+                    initStartYYYYMMDD = listOf()
+                    initEndYYYYMMDD = listOf()
+                    page = 1
+                    requestGetIncomeNote(requireContext())
+                    requestTotalGain(requireContext())
+                    setDateText()
                 }
             }
         }
@@ -228,12 +241,12 @@ class IncomeNoteFragment : Fragment() {
     }
 
     private fun initData() {
-        val toDayYYYYMM = Utils.getTodayYYMMDD()
+//        val toDayYYYYMM = Utils.getTodayYYMMDD()
         viewModel.apply {
-            initStartYYYYMMDD = listOf(toDayYYYYMM[0], "01", "01")
-            initEndYYYYMMDD = listOf(toDayYYYYMM[0], "12", "01")
-
-            requestGetIncomeNote(mContext, 1)
+//            initStartYYYYMMDD = listOf(toDayYYYYMM[0], "01", "01")
+//            initEndYYYYMMDD = listOf(toDayYYYYMM[0], "12", "01")
+            page = 1
+            requestGetIncomeNote(mContext)
             requestTotalGain(mContext)
             setDateText()
         }
@@ -356,7 +369,7 @@ class IncomeNoteFragment : Fragment() {
                     initStartYYYYMMDD = startDateList
                     initEndYYYYMMDD = endDateList
                     page = 1
-                    requestGetIncomeNote(mContext, 1)
+                    requestGetIncomeNote(mContext)
                     requestTotalGain(mContext)
                     setDateText()
                 }
@@ -384,7 +397,7 @@ class IncomeNoteFragment : Fragment() {
                 val lastVisible = layoutManager.findLastCompletelyVisibleItemPosition()
                 if (lastVisible >= totalItemCount - 1) {
                     viewModel.page++
-                    viewModel.requestGetIncomeNote(mContext, viewModel.page)
+                    viewModel.requestGetIncomeNote(mContext)
                 }
             }
         }
@@ -392,9 +405,13 @@ class IncomeNoteFragment : Fragment() {
 
     private fun setDateText() {
         viewModel.run {
-            val startDate = makeDateString(initStartYYYYMMDD)
-            val endDate = makeDateString(initEndYYYYMMDD)
-            binding.txtFilterDate.text = "$startDate ~ $endDate"
+            if (initEndYYYYMMDD.isNotEmpty() && initEndYYYYMMDD.isNotEmpty()) {
+                val startDate = makeDateString(initStartYYYYMMDD)
+                val endDate = makeDateString(initEndYYYYMMDD)
+                binding.txtFilterDate.text = "$startDate ~ $endDate"
+            } else {
+                binding.txtFilterDate.text = getString(R.string.Common_All)
+            }
         }
     }
 }

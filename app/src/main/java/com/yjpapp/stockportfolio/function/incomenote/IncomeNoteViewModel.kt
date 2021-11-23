@@ -34,12 +34,14 @@ class IncomeNoteViewModel(
     val isNetworkConnectException = MutableLiveData<Boolean>()
     var hasNext = true
 
-    fun requestGetIncomeNote(context: Context, page: Int) {
+    fun requestGetIncomeNote(context: Context) {
         val params = HashMap<String, String>()
         params["page"] = page.toString()
         params["size"] = pageSize.toString()
-        params["startDate"] = makeDateString(initStartYYYYMMDD)
-        params["endDate"] = makeDateString(initEndYYYYMMDD)
+        if (initStartYYYYMMDD.isNotEmpty() && initEndYYYYMMDD.isNotEmpty()) {
+            params["startDate"] = makeDateString(initStartYYYYMMDD)
+            params["endDate"] = makeDateString(initEndYYYYMMDD)
+        }
         viewModelScope.launch {
             try {
                 val result = incomeNoteRepository.requestGetIncomeNote(context, params)
@@ -67,20 +69,21 @@ class IncomeNoteViewModel(
 //    }
 
     fun requestTotalGain(context: Context) {
+        val params = hashMapOf<String, String>()
         if (initStartYYYYMMDD.size == 3 && initEndYYYYMMDD.size == 3) {
-            val params = hashMapOf<String, String>()
             params["startDate"] = makeDateString(initStartYYYYMMDD)
             params["endDate"] = makeDateString(initEndYYYYMMDD)
-            CoroutineScope(Dispatchers.Main).launch {
-                val result = incomeNoteRepository.requestTotalGain(context, params)
-                if (result == null) {
-                    isNetworkConnectException.value = true
-                    return@launch
-                }
-                if (result.isSuccessful) {
-                    result.body()?.let {
-                        totalGainIncomeNoteData.value = it
-                    }
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = incomeNoteRepository.requestTotalGain(context, params)
+            if (result == null) {
+                isNetworkConnectException.value = true
+                return@launch
+            }
+            if (result.isSuccessful) {
+                result.body()?.let {
+                    totalGainIncomeNoteData.value = it
                 }
             }
         }
