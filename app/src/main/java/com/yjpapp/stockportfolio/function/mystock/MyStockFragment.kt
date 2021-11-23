@@ -178,6 +178,11 @@ class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapt
                             } else {
                                 month.toString()
                             }
+                            purchaseDay = if (dayOfMonth < 10) {
+                                "0$dayOfMonth"
+                            } else {
+                                dayOfMonth.toString()
+                            }
                             myStockViewModel.inputDialogPurchaseDate =
                                 "$purchaseYear.$purchaseMonth"
                         }

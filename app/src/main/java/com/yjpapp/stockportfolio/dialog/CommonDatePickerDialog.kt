@@ -1,14 +1,12 @@
 package com.yjpapp.stockportfolio.dialog
 
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogMonthYearPickerBinding
 import com.yjpapp.stockportfolio.util.Utils
@@ -78,7 +76,7 @@ class CommonDatePickerDialog(
         }
 
         binding.pickerDay.apply {
-            val displayValues = getDisplayedMonthValues()
+            val displayValues = getDisplayedDayValues()
             displayedValues = displayValues
             minValue = 1
             maxValue = displayValues.size
@@ -103,7 +101,7 @@ class CommonDatePickerDialog(
         }
     }
 
-    private fun getDisplayedMonthValues(): Array<String> {
+    private fun getDisplayedDayValues(): Array<String> {
         val result = mutableListOf<String>()
 //        val month = if (selectedMonth < 10) {
 //            "0$selectedMonth"

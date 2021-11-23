@@ -202,12 +202,16 @@ class IncomeNoteFragment : Fragment() {
 //                        Toast.makeText(requireContext(), "날짜 : $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
                         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
                         purchaseYear = year.toString()
-                        purchaseMonth = if(month<10){
+                        purchaseMonth = if (month < 10) {
                             "0$month"
-                        }else{
+                        } else {
                             month.toString()
                         }
-                        purchaseDay = dayOfMonth.toString()
+                        purchaseDay = if (dayOfMonth < 10) {
+                            "0$dayOfMonth"
+                        } else {
+                            dayOfMonth.toString()
+                        }
                     }
                     show()
                 }
