@@ -60,19 +60,21 @@
                 android:maxLines="1"
                 android:text="@{viewModel.userEmail}"
                 android:textSize="@dimen/common_16dp"
+                android:textColor="@color/color_666666"
                 app:layout_constraintBottom_toBottomOf="@+id/img_login_type_icon"
                 app:layout_constraintEnd_toStartOf="@+id/btn_logout"
                 app:layout_constraintStart_toEndOf="@+id/img_login_type_icon"
                 app:layout_constraintTop_toTopOf="@+id/img_login_type_icon" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_logout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/common_25dp"
                 android:onClick="@{callBack::onClick}"
                 android:text="@string/My_Logout"
-                android:textColor="@color/color_222222"
-                android:textSize="@dimen/common_16dp"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/common_14dp"
+                android:background="@drawable/ripple_acaac4_r22_5"
                 app:layout_constraintBottom_toBottomOf="@+id/img_login_type_icon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txt_user_account"

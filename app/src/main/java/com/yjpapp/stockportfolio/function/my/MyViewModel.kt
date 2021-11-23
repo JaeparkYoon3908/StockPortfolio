@@ -9,6 +9,7 @@ import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.UserRepository
+import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.coroutines.launch
 
 class MyViewModel(
@@ -16,7 +17,7 @@ class MyViewModel(
     private val userRepository: UserRepository
 ): ViewModel() {
     val userName = preferenceController.getPreference(PrefKey.KEY_USER_NAME)
-    val userEmail = preferenceController.getPreference(PrefKey.KEY_USER_EMAIL)
+    val userEmail = Utils.getEmailMasking(preferenceController.getPreference(PrefKey.KEY_USER_EMAIL))
     val userLoginType = preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)
     val isMyStockAutoRefresh = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)
     val isMyStockAutoAdd = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)

@@ -65,5 +65,5 @@ fun setText(textView: TextView, text: Int) {
  */
 @BindingAdapter("binding:addPercentText")
 fun addPercentText(textView: TextView, number: Double) {
-    textView.text = "($number%)"
+    textView.text = Utils.getRoundsPercentNumber(number)
 }

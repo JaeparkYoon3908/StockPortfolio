@@ -200,4 +200,25 @@ object Utils {
             }
         }
     }
+
+    //이메일 마스킹킹
+    fun getEmailMasking(email: String?): String {
+        if (email == null) {
+            return ""
+        }
+        val result = StringBuffer()
+        val nickNameSplit = email.split("@")
+        if (nickNameSplit.size == 2) {
+            if (nickNameSplit[0].length > 3) {
+                result.append(nickNameSplit[0].substring(0, 3))
+            } else {
+                result.append(nickNameSplit[0])
+            }
+            result.append("***")
+                .append("@")
+                .append(nickNameSplit[1])
+        }
+
+        return result.toString()
+    }
 }

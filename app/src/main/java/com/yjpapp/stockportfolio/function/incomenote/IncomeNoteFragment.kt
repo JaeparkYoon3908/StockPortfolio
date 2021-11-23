@@ -252,7 +252,7 @@ class IncomeNoteFragment : Fragment() {
                         txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
                         txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
                     }
-                    txtTotalRealizationGainsLossesPercent.text = "$totalGainPercent%"
+                    txtTotalRealizationGainsLossesPercent.text = Utils.getRoundsPercentNumber(totalGainPercent)
                 }
             })
             //페이징 처리 live data

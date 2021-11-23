@@ -73,7 +73,7 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.35"
+                app:layout_constraintWidth_percent="0.5"
                 binding:isSelected="@{true}"
                 tools:text="한국전력" />
 
@@ -86,7 +86,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/txt_subject_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/txt_subject_name"
-                app:layout_constraintWidth_percent="0.65">
+                app:layout_constraintWidth_percent="0.5">
 
                 <TextView
                     android:layout_width="wrap_content"
