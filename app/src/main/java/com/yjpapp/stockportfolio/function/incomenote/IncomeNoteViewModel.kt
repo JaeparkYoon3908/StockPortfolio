@@ -10,6 +10,7 @@ import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
+import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +32,6 @@ class IncomeNoteViewModel(
     val incomeNoteModifyResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
     val incomeNoteAddResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
     val incomeNoteListLiveData = MutableLiveData<ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>>()
-    val isNetworkConnectException = MutableLiveData<Boolean>()
     var hasNext = true
 
     fun requestGetIncomeNote(context: Context) {
@@ -46,7 +46,7 @@ class IncomeNoteViewModel(
             try {
                 val result = incomeNoteRepository.requestGetIncomeNote(context, params)
                 if (result == null) {
-                    isNetworkConnectException.value = true
+                    ResponseAlertManger.showNetworkConnectErrorAlert(context)
                     return@launch
                 }
 
@@ -78,7 +78,7 @@ class IncomeNoteViewModel(
         CoroutineScope(Dispatchers.Main).launch {
             val result = incomeNoteRepository.requestTotalGain(context, params)
             if (result == null) {
-                isNetworkConnectException.value = true
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
             if (result.isSuccessful) {
@@ -93,7 +93,7 @@ class IncomeNoteViewModel(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestDeleteIncomeNote(context, id)
             if (result == null) {
-                isNetworkConnectException.value = true
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
             if (result.isSuccessful) {
@@ -106,7 +106,7 @@ class IncomeNoteViewModel(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPutIncomeNote(context, reqIncomeNoteInfo)
             if (result == null) {
-                isNetworkConnectException.value = true
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
 
@@ -122,7 +122,7 @@ class IncomeNoteViewModel(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPostIncomeNote(context, reqIncomeNoteInfo)
             if (result == null) {
-                isNetworkConnectException.value = true
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
             if (result.isSuccessful) {

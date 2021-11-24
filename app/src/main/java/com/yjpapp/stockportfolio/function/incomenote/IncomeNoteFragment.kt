@@ -309,12 +309,6 @@ class IncomeNoteFragment : Fragment() {
                 incomeNoteListAdapter.notifyDataSetChanged()
                 viewModel.requestTotalGain(mContext)
             })
-            //네트워크 연결 오류
-            isNetworkConnectException.observe(owner, { isNetworkConnectError ->
-                if (isNetworkConnectError) {
-                    ResponseAlertManger.showErrorAlert(mContext, mContext.getString(R.string.Error_Msg_Network_Connect_Exception))
-                }
-            })
         }
     }
 

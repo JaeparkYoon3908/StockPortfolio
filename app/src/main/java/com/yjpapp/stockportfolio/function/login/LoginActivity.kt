@@ -171,12 +171,6 @@ class LoginActivity : BaseActivity() {
                     )
                 }
             })
-            isNetworkConnectException.observe(this@LoginActivity, { isNetworkConnectError ->
-                if (isNetworkConnectError) {
-                    ResponseAlertManger.showErrorAlert(mContext, mContext.getString(R.string.Error_Msg_Network_Connect_Exception))
-                    stopLoadingAnimation()
-                }
-            })
         }
     }
 

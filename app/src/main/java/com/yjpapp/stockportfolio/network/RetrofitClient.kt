@@ -97,13 +97,13 @@ object RetrofitClient {
 
     private fun getNaverClientBuilderWithToken(chain: Interceptor.Chain, authorization: String): Request.Builder {
         return chain.request().newBuilder()
-            .removeHeader("user-index")
+//            .removeHeader("user-index")
             .addHeader("Authorization", authorization)
     }
 
     private fun getNaverClientBuilderNID(chain: Interceptor.Chain): Request.Builder {
         return chain.request().newBuilder()
-            .removeHeader("Authorization")
-            .removeHeader("user-index")
+//            .removeHeader("Authorization")
+//            .removeHeader("user-index")
     }
 }

@@ -50,11 +50,6 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
 
     private fun subscribeUI(owner: LifecycleOwner) {
         myViewModel.apply {
-            isNetworkConnectException.observe(owner, { isConnectException ->
-                if (isConnectException) {
-                    ResponseAlertManger.showNetworkConnectErrorAlert(requireContext())
-                }
-            })
             isMemberOffSuccess.observe(owner, { isSuccess ->
                 if (isSuccess) {
                     deleteUserPreference()

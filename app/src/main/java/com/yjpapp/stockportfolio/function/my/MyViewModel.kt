@@ -63,11 +63,11 @@ class MyViewModel(
 
             val result = userRepository.deleteNaverUserInfo(getApplication(), params)
             if (result == null) {
-                isNetworkConnectException.value = true
+                ResponseAlertManger.showNetworkConnectErrorAlert(getApplication())
                 return@launch
             }
             if (result.isSuccessful) {
-                respDeleteNaverUserInfo.value = result.body()
+                respDeleteNaverUserInfo.postValue(result.body())
             }
         }
     }

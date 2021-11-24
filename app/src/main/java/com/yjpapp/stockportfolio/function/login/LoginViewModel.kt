@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.function.login
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
 import com.yjpapp.stockportfolio.model.response.RespGetNaverUserInfo
 import com.yjpapp.stockportfolio.model.response.RespNaverDeleteUserInfo
+import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +31,6 @@ class LoginViewModel(
      * Common
      */
     private val TAG = LoginViewModel::class.java.simpleName
-    val isNetworkConnectException = MutableLiveData<Boolean>()
 
     /**
      * API
@@ -39,7 +40,7 @@ class LoginViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val result = userRepository.postUserInfo(getApplication(), reqSnsLogin)
             if (result == null) {
-                isNetworkConnectException.postValue(true)
+                ResponseAlertManger.showNetworkConnectErrorAlert(getApplication())
                 return@launch
             }
             if (result.isSuccessful) {
@@ -53,11 +54,13 @@ class LoginViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val result = userRepository.getNaverUserInfo(getApplication())
             if (result == null) {
-                isNetworkConnectException.value = true
+                ResponseAlertManger.showNetworkConnectErrorAlert(getApplication())
                 return@launch
             }
             if (result.isSuccessful) {
                 respGetNaverUserInfo.postValue(result.body())
+            } else {
+                
             }
         }
     }
