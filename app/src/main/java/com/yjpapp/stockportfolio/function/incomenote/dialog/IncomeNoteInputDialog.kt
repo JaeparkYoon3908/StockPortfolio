@@ -20,6 +20,7 @@ import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
+import com.yjpapp.stockportfolio.util.OnSingleClickListener
 import com.yjpapp.stockportfolio.util.Utils
 import java.util.*
 
@@ -73,7 +74,7 @@ class IncomeNoteInputDialog(
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
     }
 
-    private val onClickListener = View.OnClickListener { view: View? ->
+    private val onClickListener = OnSingleClickListener { view: View? ->
         when (view?.id) {
             txtCancel.id -> {
                 dismiss()
@@ -91,7 +92,7 @@ class IncomeNoteInputDialog(
                         context.getString(R.string.EditIncomeNoteDialog_Error_Message),
                         Toast.LENGTH_LONG
                     ).show()
-                    return@OnClickListener
+                    return@OnSingleClickListener
                 }
                 if (etPurchasePrice.text.toString() == "0" || etSellPrice.text.toString() == "0") {
                     Toast.makeText(
@@ -99,7 +100,7 @@ class IncomeNoteInputDialog(
                         context.getString(R.string.EditIncomeNoteDialog_Error_Message_Zero),
                         Toast.LENGTH_LONG
                     ).show()
-                    return@OnClickListener
+                    return@OnSingleClickListener
                 }
 
                 //매매한 회사이름

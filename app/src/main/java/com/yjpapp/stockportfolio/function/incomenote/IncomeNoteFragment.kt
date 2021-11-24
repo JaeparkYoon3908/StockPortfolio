@@ -15,16 +15,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
-import com.yjpapp.stockportfolio.function.memo.MemoListFragment
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePickerDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
+import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.util.OnSingleClickListener
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch
@@ -116,12 +117,13 @@ class IncomeNoteFragment : Fragment() {
         binding.apply {
             btnDate.setOnClickListener(onClickListener)
             btnSearchAll.setOnClickListener(onClickListener)
+
         }
 
         initRecyclerView()
     }
 
-    private val onClickListener = View.OnClickListener { view: View? ->
+    private val onClickListener = OnSingleClickListener { view: View? ->
         when (view?.id) {
             R.id.lin_MainActivity_BottomMenu_Memo -> {
                 val intent = Intent(mContext, MemoListFragment::class.java)
@@ -278,7 +280,6 @@ class IncomeNoteFragment : Fragment() {
                     incomeNoteListAdapter.incomeNoteListInfo.add(it)
                 }
                 incomeNoteListAdapter.notifyDataSetChanged()
-
             })
             //수정완료
             incomeNoteModifyResult.observe(owner, { data ->

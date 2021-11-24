@@ -20,20 +20,41 @@ import org.koin.dsl.module
  */
 val loginViewModel = module {
     single { UserRepository() }
-    viewModel { LoginViewModel(androidApplication(), get()) }
+    viewModel {
+        LoginViewModel(
+            androidApplication(),
+            PreferenceController.getInstance(androidContext()),
+            get()
+        )
+    }
 }
 val myStockViewModel = module {
     single { MyRoomDatabase.getInstance(androidContext()).myStockDao() }
     single { MyStockRepository(get()) }
-    viewModel { MyStockViewModel(androidApplication(), get()) }
+    viewModel {
+        MyStockViewModel(
+            androidApplication(),
+            get()
+        )
+    }
 }
 val myViewModel = module {
     single { MyRepository() }
-    viewModel { MyViewModel(PreferenceController.getInstance(androidContext()), get()) }
+    viewModel {
+        MyViewModel(
+            androidApplication(),
+            PreferenceController.getInstance(androidContext()),
+            get()
+        )
+    }
 }
 val incomeNoteViewModel = module {
     single { IncomeNoteRepository() }
-    viewModel { IncomeNoteViewModel(get()) }
+    viewModel {
+        IncomeNoteViewModel(
+            get()
+        )
+    }
 }
 /**
  * Common

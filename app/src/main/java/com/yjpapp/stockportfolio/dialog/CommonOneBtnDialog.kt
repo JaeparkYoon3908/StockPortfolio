@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CommonDialogOneBtnBinding
 import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.setOnSingleClickListener
 
 class CommonOneBtnDialog(
     val mContext: Context,
@@ -65,7 +66,7 @@ class CommonOneBtnDialog(
     private fun initData() {
         binding.apply {
             data = commonOneBtnData
-            btnConfirm.setOnClickListener {
+            btnConfirm.setOnSingleClickListener {
                 commonOneBtnData.btnListener.onClick(it, this@CommonOneBtnDialog)
             }
         }

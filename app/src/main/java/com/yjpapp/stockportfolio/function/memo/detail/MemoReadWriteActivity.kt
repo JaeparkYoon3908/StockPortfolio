@@ -148,7 +148,7 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
     override fun onCompleteButtonClick() {
         binding.apply {
             if (mode == MemoListFragment.MEMO_ADD_MODE) {
-                if (etMemoReadWriteActivityTitle.text.toString() == ("") && etMemoReadWriteActivityContent.text.toString() == "") {
+                if (etMemoReadWriteActivityTitle.text.toString() == "" && etMemoReadWriteActivityContent.text.toString() == "") {
                     setResult(MemoListFragment.RESULT_EMPTY)
                 } else {
                     val date = Utils.getTodayYYYY_MM_DD()
@@ -159,7 +159,7 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
                 }
                 finish()
             } else if (mode == MemoListFragment.MEMO_UPDATE_MODE) {
-                if (etMemoReadWriteActivityTitle.text.toString() == ("") && etMemoReadWriteActivityContent.text.toString() == "") {
+                if (etMemoReadWriteActivityTitle.text.toString() == "" && etMemoReadWriteActivityContent.text.toString() == "") {
                     setResult(MemoListFragment.RESULT_EMPTY)
                 } else {
                     val date = Utils.getTodayYYYY_MM_DD()

@@ -156,7 +156,7 @@ class LoginActivity : BaseActivity() {
                 startMainActivity()
             })
 
-            respNaverUserInfo.observe(this@LoginActivity, { data ->
+            respGetNaverUserInfo.observe(this@LoginActivity, { data ->
                 if (data.message == "success") {
                     viewModel.requestLogin(
                         ReqSNSLogin(
@@ -237,8 +237,9 @@ class LoginActivity : BaseActivity() {
                     StockLog.d(TAG, "expiresAt : $expiresAt")
                     StockLog.d(TAG, "tokenType : $tokenType")
                     val authorization = "$tokenType $accessToken"
+                    preferenceController.setPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
                     preferenceController.setPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
-                    viewModel.requestNaverUserInfo()
+                    viewModel.requestGetNaverUserInfo()
                     startLoadingAnimation()
                 } else {
                     val errorCode: String = mOAuthLoginModule.getLastErrorCode(applicationContext).code

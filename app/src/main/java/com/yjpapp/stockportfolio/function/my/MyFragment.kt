@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseMVVMFragment
+import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
+import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import org.koin.android.ext.android.inject
 
 class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
@@ -48,11 +50,28 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
 
     private fun subscribeUI(owner: LifecycleOwner) {
         myViewModel.apply {
-            isMemberOffSuccess.observe(owner, {isSuccess ->
+            isNetworkConnectException.observe(owner, { isConnectException ->
+                if (isConnectException) {
+                    ResponseAlertManger.showNetworkConnectErrorAlert(requireContext())
+                }
+            })
+            isMemberOffSuccess.observe(owner, { isSuccess ->
                 if (isSuccess) {
                     deleteUserPreference()
                     startLoginActivity()
                     requireActivity().finish()
+                }
+            })
+
+            respDeleteNaverUserInfo.observe(owner, { data ->
+                if (data.result == "success") {
+                    myViewModel.requestLogout(mContext)
+                } else {
+                    var msg = requireContext().getString(R.string.Error_Msg_Normal)
+                    if (data.error_description.isNotEmpty()) {
+                        msg = data.error_description
+                    }
+                    ResponseAlertManger.showErrorAlert(requireContext(), msg)
                 }
             })
         }
@@ -78,7 +97,14 @@ class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
                         },
                         rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
                             override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                myViewModel.requestLogout(mContext)
+                                when (preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)) {
+                                    StockConfig.LOGIN_TYPE_NAVER -> {
+                                        myViewModel.requestDeleteNaverUserInfo()
+                                    }
+                                    else -> {
+                                        myViewModel.requestLogout(mContext)
+                                    }
+                                }
                                 dialog.dismiss()
                             }
                         }

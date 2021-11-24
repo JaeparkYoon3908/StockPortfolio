@@ -2,7 +2,7 @@ package com.yjpapp.stockportfolio.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class RespNaverUserInfo (
+data class RespGetNaverUserInfo (
     @SerializedName("resultcode")
     var resultcode: String = "",
     @SerializedName("message")
