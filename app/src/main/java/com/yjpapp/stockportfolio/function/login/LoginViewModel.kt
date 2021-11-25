@@ -60,7 +60,30 @@ class LoginViewModel(
             if (result.isSuccessful) {
                 respGetNaverUserInfo.postValue(result.body())
             } else {
-                
+
+            }
+        }
+    }
+
+    fun requestRetryNaverUserLogin() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val naverAccessToken = preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
+            val params = HashMap<String, String>()
+            params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
+            params["response_type"] = "code"
+            params["redirect_uri"] = ""
+            params["state"] = ""
+            params["auth_type"] = "reprompt"
+
+            val result = userRepository.retryNaverUserLogin(getApplication(), params)
+            if (result == null) {
+                ResponseAlertManger.showNetworkConnectErrorAlert(getApplication())
+                return@launch
+            }
+            if (result.isSuccessful) {
+
+            } else {
+
             }
         }
     }

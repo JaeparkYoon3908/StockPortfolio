@@ -22,6 +22,9 @@ class UserRepository {
     suspend fun deleteNaverUserInfo(context: Context, params: HashMap<String, String>) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.NAVER_NID)?.requestDeleteNaverUserInfo(params)
 
+    suspend fun retryNaverUserLogin(context: Context, params: HashMap<String, String>) =
+        RetrofitClient.getService(context, RetrofitClient.BaseServerURL.NAVER_NID)?.requestRetryNaverUserLogin(params)
+
     fun logout(context: Context) {
         //프리퍼런스 reset
         PreferenceController.getInstance(context).setPreference(PrefKey.KEY_AUTO_LOGIN, false)

@@ -60,6 +60,15 @@ fun setText(textView: TextView, text: Double) {
 fun setText(textView: TextView, text: Int) {
     textView.text = text.toString()
 }
+
+@BindingAdapter("binding:visibility")
+fun visibility(view: View, visibility: Boolean) {
+    if (visibility) {
+        view.visibility = View.VISIBLE
+    } else {
+        view.visibility = View.GONE
+    }
+}
 /**
  * IncomeNote
  */

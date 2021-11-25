@@ -158,6 +158,12 @@ class LoginActivity : BaseActivity() {
 
             respGetNaverUserInfo.observe(this@LoginActivity, { data ->
                 if (data.message == "success") {
+                    if (data.response.email.isEmpty() || data.response.name.isEmpty()) {
+                        val msg = mContext.getString(R.string.Error_Msg_Naver_Info_Not_Agree)
+                        ResponseAlertManger.showErrorAlert(mContext, msg)
+                        viewModel.loginResultData
+                        return@observe
+                    }
                     viewModel.requestLogin(
                         ReqSNSLogin(
                             user_email = data.response.email,

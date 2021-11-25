@@ -26,6 +26,9 @@ interface RetrofitService {
     @GET("/oauth2.0/token")
     suspend fun requestDeleteNaverUserInfo(@QueryMap params: HashMap<String, String>): Response<RespNaverDeleteUserInfo>
 
+    @GET("/oauth2.0/authorize")
+    suspend fun requestRetryNaverUserLogin(@QueryMap params: HashMap<String, String>): Response<RespNaverDeleteUserInfo>
+
     /**
      * 수익 노트 API
      */
