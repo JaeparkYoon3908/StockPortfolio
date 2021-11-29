@@ -221,4 +221,27 @@ object Utils {
 
         return result.toString()
     }
+
+    fun isEmailForm(email: String?, loginType: String): Boolean {
+        if (email == null) return false
+        val pattern = android.util.Patterns.EMAIL_ADDRESS
+        return when (loginType) {
+            StockConfig.LOGIN_TYPE_NAVER -> {
+                email.contains("@naver.com") && pattern.matcher(email).matches()
+            }
+            StockConfig.LOGIN_TYPE_GOOGLE -> {
+                email.contains("@gmail.com") && pattern.matcher(email).matches()
+            }
+            StockConfig.LOGIN_TYPE_FACEBOOK -> {
+                pattern.matcher(email).matches()
+            }
+            else -> false
+        }
+    }
+
+    fun isNaverEmailForm(email: String?): Boolean {
+        if (email == null) return false
+        val pattern = android.util.Patterns.EMAIL_ADDRESS
+        return email.contains("@naver.com") && pattern.matcher(email).matches()
+    }
 }

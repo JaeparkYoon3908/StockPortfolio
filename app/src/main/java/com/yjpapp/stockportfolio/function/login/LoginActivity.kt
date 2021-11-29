@@ -31,6 +31,7 @@ import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.util.StockLog
+import es.dmoral.toasty.Toasty
 import org.koin.android.ext.android.inject
 
 
@@ -159,9 +160,29 @@ class LoginActivity : BaseActivity() {
             respGetNaverUserInfo.observe(this@LoginActivity, { data ->
                 if (data.message == "success") {
                     if (data.response.email.isEmpty() || data.response.name.isEmpty()) {
-                        val msg = mContext.getString(R.string.Error_Msg_Naver_Info_Not_Agree)
-                        ResponseAlertManger.showErrorAlert(mContext, msg)
-                        viewModel.loginResultData
+                        UserInfoInputDialog(
+                            mContext,
+                            UserInfoInputDialog.Data (
+                                data.response.name.isNotEmpty(),
+                                data.response.email.isNotEmpty())
+                            { view: View, dialog: UserInfoInputDialog, sendData: UserInfoInputDialog.SendData ->
+                                var user_email = data.response.email
+                                var user_name = data.response.name
+                                if (sendData.email.isNotEmpty()) {
+                                    user_email = sendData.email
+                                }
+                                if (sendData.name.isNotEmpty()) {
+                                    user_name = sendData.name
+                                }
+                                viewModel.requestLogin(
+                                    ReqSNSLogin(
+                                        user_email = user_email,
+                                        user_name = user_name,
+                                        login_type = StockConfig.LOGIN_TYPE_NAVER
+                                    )
+                                )
+                            }
+                        ).show()
                         return@observe
                     }
                     viewModel.requestLogin(
