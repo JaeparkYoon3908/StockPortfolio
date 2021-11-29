@@ -44,7 +44,7 @@ class UserInfoInputDialog(
         setContentView(binding.root)
 
         window?.setBackgroundDrawableResource(android.R.color.transparent)
-        //window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
 
         setCancelable(false)
         //setWidthHeight()

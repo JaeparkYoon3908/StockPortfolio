@@ -100,13 +100,15 @@
 
         <TextView
             android:id="@+id/btn_confirm"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="@dimen/common_50dp"
             android:background="@drawable/bg_e52b4e_r12_bottom_left_right"
             android:gravity="center"
             android:text="@string/Common_Ok"
             android:textColor="@color/color_ffffff"
             android:textSize="@dimen/common_15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cons_input"
             app:layout_constraintBottom_toBottomOf="parent"
             />
