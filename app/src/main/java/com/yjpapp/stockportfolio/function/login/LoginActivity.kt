@@ -31,6 +31,7 @@ import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import es.dmoral.toasty.Toasty
 import org.koin.android.ext.android.inject
@@ -168,39 +169,17 @@ class LoginActivity : BaseActivity() {
                                 "확인",
                                 object : CommonOneBtnDialog.OnClickListener {
                                     override fun onClick(view: View, dialog: CommonOneBtnDialog) {
-                                        viewModel.requestDeleteNaverUserInfo(mContext)
+                                        viewModel.requestDeleteNaverUserInfo()
+                                        dialog.dismiss()
                                     }
                                 }
                             )
                         ).apply {
                             setCancelable(false)
                         }.show()
-//                        UserInfoInputDialog(
-//                            mContext,
-//                            UserInfoInputDialog.Data (
-//                                data.response.name.isNotEmpty(),
-//                                data.response.email.isNotEmpty())
-//                        ) { _: View, dialog: UserInfoInputDialog, sendData: UserInfoInputDialog.SendData ->
-//                            var user_email = data.response.email
-//                            var user_name = data.response.name
-//                            if (sendData.email.isNotEmpty()) {
-//                                user_email = sendData.email
-//                            }
-//                            if (sendData.name.isNotEmpty()) {
-//                                user_name = sendData.name
-//                            }
-//                            viewModel.requestLogin(
-//                                ReqSNSLogin(
-//                                    user_email = user_email,
-//                                    user_name = user_name,
-//                                    login_type = StockConfig.LOGIN_TYPE_NAVER
-//                                )
-//                            )
-//                            dialog.dismiss()
-//                        }.show()
                         return@observe
                     }
-                    viewModel.requestLogin(mContext,
+                    viewModel.requestLogin(
                         ReqSNSLogin(
                             user_email = data.response.email,
                             user_name = data.response.name,
@@ -212,6 +191,18 @@ class LoginActivity : BaseActivity() {
                         getString(R.string.Error_Msg_Normal)
                     )
                 }
+            })
+            serverError.observe(this@LoginActivity, { errorCode->
+                when (errorCode) {
+                    ServerRespCode.NetworkNotConnected -> {
+                        ResponseAlertManger.showNetworkConnectErrorAlert(mContext)
+                        stopLoadingAnimation()
+                    }
+                }
+            })
+
+            respDeleteNaverUserInfo.observe(this@LoginActivity, { data ->
+                stopLoadingAnimation()
             })
         }
     }
@@ -275,7 +266,7 @@ class LoginActivity : BaseActivity() {
                     val authorization = "$tokenType $accessToken"
                     preferenceController.setPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
                     preferenceController.setPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
-                    viewModel.requestGetNaverUserInfo(mContext)
+                    viewModel.requestGetNaverUserInfo()
                     startLoadingAnimation()
                 } else {
                     val errorCode: String = mOAuthLoginModule.getLastErrorCode(applicationContext).code
@@ -337,7 +328,7 @@ class LoginActivity : BaseActivity() {
 
     private fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         startLoadingAnimation()
-        viewModel.requestLogin(mContext, reqSnsLogin)
+        viewModel.requestLogin(reqSnsLogin)
     }
 
     private fun startLoadingAnimation() {

@@ -2,10 +2,13 @@ package com.yjpapp.stockportfolio.function.login
 
 import android.app.Application
 import android.content.Context
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
@@ -13,6 +16,7 @@ import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
 import com.yjpapp.stockportfolio.model.response.RespGetNaverUserInfo
 import com.yjpapp.stockportfolio.model.response.RespNaverDeleteUserInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,16 +35,16 @@ class LoginViewModel(
      * Common
      */
     private val TAG = LoginViewModel::class.java.simpleName
-
+    val serverError = MutableLiveData<Int>()
     /**
      * API
      */
     val loginResultData = MutableLiveData<RespLoginUserInfo>()
-    fun requestLogin(context: Context, reqSnsLogin: ReqSNSLogin) {
+    fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = userRepository.postUserInfo(context, reqSnsLogin)
+            val result = userRepository.postUserInfo(getApplication(), reqSnsLogin)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
             }
             if (result.isSuccessful && result.body() != null) {
@@ -53,11 +57,11 @@ class LoginViewModel(
     }
 
     val respGetNaverUserInfo = MutableLiveData<RespGetNaverUserInfo>()
-    fun requestGetNaverUserInfo(context: Context) {
+    fun requestGetNaverUserInfo() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = userRepository.getNaverUserInfo(context)
+            val result = userRepository.getNaverUserInfo(getApplication())
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
             }
             if (result.isSuccessful) {
@@ -68,7 +72,7 @@ class LoginViewModel(
         }
     }
 
-    fun requestRetryNaverUserLogin(context: Context) {
+    fun requestRetryNaverUserLogin() {
         viewModelScope.launch(Dispatchers.IO) {
             val naverAccessToken = preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
             val params = HashMap<String, String>()
@@ -78,9 +82,9 @@ class LoginViewModel(
             params["state"] = ""
             params["auth_type"] = "reprompt"
 
-            val result = userRepository.retryNaverUserLogin(context, params)
+            val result = userRepository.retryNaverUserLogin(getApplication(), params)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
             }
             if (result.isSuccessful) {
@@ -92,7 +96,7 @@ class LoginViewModel(
     }
 
     val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
-    fun requestDeleteNaverUserInfo(context: Context) {
+    fun requestDeleteNaverUserInfo() {
         viewModelScope.launch(Dispatchers.IO) {
             val naverAccessToken = preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
             val params = HashMap<String, String>()
@@ -102,9 +106,9 @@ class LoginViewModel(
             params["grant_type"] = "delete"
             params["service_provider"] = "NAVER"
 
-            val result = userRepository.deleteNaverUserInfo(context, params)
+            val result = userRepository.deleteNaverUserInfo(getApplication(), params)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
             }
             if (result.isSuccessful) {

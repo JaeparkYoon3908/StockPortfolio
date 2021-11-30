@@ -27,6 +27,9 @@ class ServerRespCode {
         const val PreconditionFailed = 412 // 조건부 연산 지원 불가
         const val UnsupportedMediaType = 415 // 요청의 Payload에 있는 미디어 타입 처리 불가
         const val InternalServerError = 500 // 내부 서버 오류
+
+        //네트워크 오류
+        const val NetworkNotConnected = 700
     }
 
 }
