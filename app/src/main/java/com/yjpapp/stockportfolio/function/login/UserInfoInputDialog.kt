@@ -17,13 +17,13 @@ import es.dmoral.toasty.Toasty
 
 class UserInfoInputDialog(
     val mContext: Context,
-    val data: Data
+    val data: Data,
+    val confirmBtnListener: (view: View, dialog: UserInfoInputDialog, sendData: SendData) -> Unit
 ) : AlertDialog(mContext) {
     data class Data(
         var isNameExist: Boolean = false,
         var isEmailExist: Boolean = false,
-        var loginType: String = "",
-        var confirmBtnListener: (view: View, dialog: UserInfoInputDialog, sendData: SendData) -> Unit
+        var loginType: String = ""
     )
     data class SendData (
         var name: String = "",
@@ -64,7 +64,7 @@ class UserInfoInputDialog(
                         Toasty.error(mContext, "이메일을 형식에 맞게 입력해주세요.").show()
                     }
                     else {
-                        data.confirmBtnListener(
+                        confirmBtnListener(
                             view,
                             this@UserInfoInputDialog,
                             SendData (
@@ -75,10 +75,10 @@ class UserInfoInputDialog(
                 }
             }
             //이름만 없는경우
-            else if (data.isNameExist && !data.isEmailExist) {
+            else if (!data.isNameExist && data.isEmailExist) {
                 binding.etName.text?.let { etNameText ->
                     if (etNameText.isNotEmpty()) {
-                        data.confirmBtnListener(
+                        confirmBtnListener(
                             view,
                             this@UserInfoInputDialog,
                             SendData (
@@ -107,7 +107,7 @@ class UserInfoInputDialog(
                         else if (!Utils.isEmailForm(etEmailText.toString(), data.loginType)) {
                             Toasty.error(mContext, "이메일을 형식에 맞게 입력해주세요.").show()
                         } else {
-                            data.confirmBtnListener(
+                            confirmBtnListener(
                                 view,
                                 this@UserInfoInputDialog,
                                 SendData (

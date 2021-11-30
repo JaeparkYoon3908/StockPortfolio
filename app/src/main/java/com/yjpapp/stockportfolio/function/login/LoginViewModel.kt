@@ -36,25 +36,28 @@ class LoginViewModel(
      * API
      */
     val loginResultData = MutableLiveData<RespLoginUserInfo>()
-    fun requestLogin(reqSnsLogin: ReqSNSLogin) {
+    fun requestLogin(context: Context, reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = userRepository.postUserInfo(getApplication(), reqSnsLogin)
+            val result = userRepository.postUserInfo(context, reqSnsLogin)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(getApplication())
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
-            if (result.isSuccessful) {
+            if (result.isSuccessful && result.body() != null) {
+                when (result.body()!!.status) {
+
+                }
                 loginResultData.postValue(result.body())
             }
         }
     }
 
     val respGetNaverUserInfo = MutableLiveData<RespGetNaverUserInfo>()
-    fun requestGetNaverUserInfo() {
+    fun requestGetNaverUserInfo(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = userRepository.getNaverUserInfo(getApplication())
+            val result = userRepository.getNaverUserInfo(context)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(getApplication())
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
             if (result.isSuccessful) {
@@ -65,7 +68,7 @@ class LoginViewModel(
         }
     }
 
-    fun requestRetryNaverUserLogin() {
+    fun requestRetryNaverUserLogin(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val naverAccessToken = preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
             val params = HashMap<String, String>()
@@ -75,15 +78,37 @@ class LoginViewModel(
             params["state"] = ""
             params["auth_type"] = "reprompt"
 
-            val result = userRepository.retryNaverUserLogin(getApplication(), params)
+            val result = userRepository.retryNaverUserLogin(context, params)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(getApplication())
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
             if (result.isSuccessful) {
 
             } else {
 
+            }
+        }
+    }
+
+    val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
+    fun requestDeleteNaverUserInfo(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val naverAccessToken = preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
+            val params = HashMap<String, String>()
+            params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
+            params["client_secret"] = StockConfig.NAVER_SIGN_CLIENT_SECRET
+            params["access_token"] = naverAccessToken
+            params["grant_type"] = "delete"
+            params["service_provider"] = "NAVER"
+
+            val result = userRepository.deleteNaverUserInfo(context, params)
+            if (result == null) {
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                return@launch
+            }
+            if (result.isSuccessful) {
+                respDeleteNaverUserInfo.postValue(result.body())
             }
         }
     }

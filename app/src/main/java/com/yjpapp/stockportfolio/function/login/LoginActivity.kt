@@ -25,6 +25,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
+import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.function.main.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
@@ -160,32 +161,46 @@ class LoginActivity : BaseActivity() {
             respGetNaverUserInfo.observe(this@LoginActivity, { data ->
                 if (data.message == "success") {
                     if (data.response.email.isEmpty() || data.response.name.isEmpty()) {
-                        UserInfoInputDialog(
+                        CommonOneBtnDialog(
                             mContext,
-                            UserInfoInputDialog.Data (
-                                data.response.name.isNotEmpty(),
-                                data.response.email.isNotEmpty())
-                            { view: View, dialog: UserInfoInputDialog, sendData: UserInfoInputDialog.SendData ->
-                                var user_email = data.response.email
-                                var user_name = data.response.name
-                                if (sendData.email.isNotEmpty()) {
-                                    user_email = sendData.email
+                            CommonOneBtnDialog.CommonOneBtnData(
+                                "필수 정보 제공 항목에 동의해주세요.",
+                                "확인",
+                                object : CommonOneBtnDialog.OnClickListener {
+                                    override fun onClick(view: View, dialog: CommonOneBtnDialog) {
+                                        viewModel.requestDeleteNaverUserInfo(mContext)
+                                    }
                                 }
-                                if (sendData.name.isNotEmpty()) {
-                                    user_name = sendData.name
-                                }
-                                viewModel.requestLogin(
-                                    ReqSNSLogin(
-                                        user_email = user_email,
-                                        user_name = user_name,
-                                        login_type = StockConfig.LOGIN_TYPE_NAVER
-                                    )
-                                )
-                            }
-                        ).show()
+                            )
+                        ).apply {
+                            setCancelable(false)
+                        }.show()
+//                        UserInfoInputDialog(
+//                            mContext,
+//                            UserInfoInputDialog.Data (
+//                                data.response.name.isNotEmpty(),
+//                                data.response.email.isNotEmpty())
+//                        ) { _: View, dialog: UserInfoInputDialog, sendData: UserInfoInputDialog.SendData ->
+//                            var user_email = data.response.email
+//                            var user_name = data.response.name
+//                            if (sendData.email.isNotEmpty()) {
+//                                user_email = sendData.email
+//                            }
+//                            if (sendData.name.isNotEmpty()) {
+//                                user_name = sendData.name
+//                            }
+//                            viewModel.requestLogin(
+//                                ReqSNSLogin(
+//                                    user_email = user_email,
+//                                    user_name = user_name,
+//                                    login_type = StockConfig.LOGIN_TYPE_NAVER
+//                                )
+//                            )
+//                            dialog.dismiss()
+//                        }.show()
                         return@observe
                     }
-                    viewModel.requestLogin(
+                    viewModel.requestLogin(mContext,
                         ReqSNSLogin(
                             user_email = data.response.email,
                             user_name = data.response.name,
@@ -260,7 +275,7 @@ class LoginActivity : BaseActivity() {
                     val authorization = "$tokenType $accessToken"
                     preferenceController.setPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
                     preferenceController.setPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
-                    viewModel.requestGetNaverUserInfo()
+                    viewModel.requestGetNaverUserInfo(mContext)
                     startLoadingAnimation()
                 } else {
                     val errorCode: String = mOAuthLoginModule.getLastErrorCode(applicationContext).code
@@ -322,7 +337,7 @@ class LoginActivity : BaseActivity() {
 
     private fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         startLoadingAnimation()
-        viewModel.requestLogin(reqSnsLogin)
+        viewModel.requestLogin(mContext, reqSnsLogin)
     }
 
     private fun startLoadingAnimation() {
