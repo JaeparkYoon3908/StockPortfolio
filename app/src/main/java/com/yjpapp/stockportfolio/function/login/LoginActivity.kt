@@ -144,10 +144,10 @@ class LoginActivity : BaseActivity() {
     private fun subscribeUI() {
         viewModel.apply {
             loginResultData.observe(this@LoginActivity, { response ->
-                StockLog.d(TAG, "email = ${response.data.email}")
-                StockLog.d(TAG, "name = ${response.data.name}")
-                StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
-                StockLog.d(TAG, "login_type = ${response.data.login_type}")
+//                StockLog.d(TAG, "email = ${response.data.email}")
+//                StockLog.d(TAG, "name = ${response.data.name}")
+//                StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
+//                StockLog.d(TAG, "login_type = ${response.data.login_type}")
                 preferenceController.apply {
                     setPreference(PrefKey.KEY_USER_INDEX, response.data.userIndex)
                     setPreference(PrefKey.KEY_USER_NAME, response.data.name)
@@ -219,12 +219,13 @@ class LoginActivity : BaseActivity() {
             try {
                 val acct: GoogleSignInAccount? = task.getResult(ApiException::class.java)
                 acct?.let {
-                    val personName = it.displayName
-                    val personGivenName = it.givenName
-                    val personFamilyName = it.familyName
-                    val personEmail = it.email
-                    val personId = it.id
-                    val personPhoto: Uri? = it.photoUrl
+//                    val personName = it.displayName
+//                    val personGivenName = it.givenName
+//                    val personFamilyName = it.familyName
+//                    val personEmail = it.email
+//                    val personId = it.id
+//                    val personPhoto: Uri? = it.photoUrl
+
 //                    StockLog.d(TAG, "handleSignInResult:personName $personName")
 //                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
 //                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
