@@ -21,7 +21,7 @@ class ServerRespCode {
         //인증 실패
         const val Forbidden = 403 // 인증 상태에 관계없이 엑세스 금지
         const val NotFound = 404 // 요청 URI에 해당하는 리소스 없음
-        const val MethodNotAllowd = 405 // 지원되지 않는 HTTP 메서드
+        const val MethodNotAllowed = 405 // 지원되지 않는 HTTP 메서드
         const val NotAcceptable = 406 // 요청한 리소스 미디어 타입 제공 불가
         const val Conflict = 409 // 리소스 상태 위반
         const val PreconditionFailed = 412 // 조건부 연산 지원 불가

@@ -281,9 +281,10 @@ class LoginActivity : BaseActivity() {
 
     private fun facebookSignIn() {
         AppEventsLogger.activateApp(application)
-        val config = ArrayList<String>()
-        config.add("email")
-        config.add("public_profile")
+        val config = ArrayList<String>().apply {
+            add("email")
+            add("public_profile")
+        }
         LoginManager.getInstance().logInWithReadPermissions(this, config)
         LoginManager.getInstance().registerCallback(facebookCallbackManager, object : FacebookCallback<LoginResult?> {
             override fun onSuccess(loginResult: LoginResult?) {
