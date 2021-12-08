@@ -169,7 +169,7 @@
             android:id="@+id/img_MainActivity_BottomMenu_Ad"
             android:layout_width="@dimen/common_25dp"
             android:layout_height="@dimen/common_25dp"
-            android:src="@drawable/selector_icon_advertise"
+            android:src="@drawable/selector_icon_my"
             />
         <TextView
             android:id="@+id/txt_MainActivity_BottomMenu_Ad"
