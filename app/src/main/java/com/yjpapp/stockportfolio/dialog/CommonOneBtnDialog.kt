@@ -7,12 +7,10 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CommonDialogOneBtnBinding
-import com.yjpapp.stockportfolio.util.Utils
 import com.yjpapp.stockportfolio.util.setOnSingleClickListener
 
 class CommonOneBtnDialog(
@@ -37,30 +35,9 @@ class CommonOneBtnDialog(
             false
         )
         setContentView(binding.root)
+        dialogResize(mContext, this@CommonOneBtnDialog, 0.8f, 0.25f)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
-        setWidthHeight()
         initData()
-
-    }
-    private fun setWidthHeight() {
-        val windowManager = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            mContext.display
-        } else {
-            windowManager.defaultDisplay
-        }
-        val size = Point()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            windowManager.currentWindowMetrics
-        } else {
-            display?.getSize(size)
-        }
-        val params: ViewGroup.LayoutParams? = window?.attributes
-        val deviceWidth = size.x
-        //사이즈 설정
-        params?.width = (deviceWidth * 0.8).toInt()
-        params?.height = Utils.dpToPx(200)
-        window?.attributes = params as WindowManager.LayoutParams
     }
 
     private fun initData() {
@@ -74,5 +51,33 @@ class CommonOneBtnDialog(
 
     interface OnClickListener {
         fun onClick(view: View, dialog: CommonOneBtnDialog)
+    }
+
+    private fun dialogResize(context: Context, dialog: AlertDialog, width: Float, height: Float){
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        if (Build.VERSION.SDK_INT < 30){
+            val display = windowManager.defaultDisplay
+            val size = Point()
+
+            display.getSize(size)
+
+            val window = dialog.window
+
+            val x = (size.x * width).toInt()
+            val y = (size.y * height).toInt()
+
+            window?.setLayout(x, y)
+
+        }else{
+            val rect = windowManager.currentWindowMetrics.bounds
+
+            val window = dialog.window
+            val x = (rect.width() * width).toInt()
+            val y = (rect.height() * height).toInt()
+
+            window?.setLayout(x, y)
+        }
+
     }
 }
