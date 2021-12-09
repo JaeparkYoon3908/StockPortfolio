@@ -40,7 +40,7 @@ class CommonTwoBtnDialog(
         setContentView(binding.root)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        setWidth()
+//        setWidth()
         initData()
     }
 
