@@ -1,3 +1,4 @@
+### 주식 수익 낸 사항들을 기입하여 기간별로 확인 할 수 있는 앱입니다. 
 
 ### Google Play Store : https://play.google.com/store/apps/details?id=com.yjpapp.stockportfolio
 
