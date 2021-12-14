@@ -1,6 +1,7 @@
 
 ### Google Play Store : https://play.google.com/store/apps/details?id=com.yjpapp.stockportfolio
 
+
 ### 1. 어플리케이션 화면
 ![device-2021-11-23-111819](https://user-images.githubusercontent.com/54883589/143977444-fb021a1d-6df0-4886-9970-b2585c0e2a00.png)
 ![device-2021-11-22-134256](https://user-images.githubusercontent.com/54883589/143977458-de1e439f-d6c5-4a38-81b5-5510e10b8bbf.png)
