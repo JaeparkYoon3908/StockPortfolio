@@ -1,4 +1,4 @@
-나만의 주식 성적을 기록할 수 있는 앱을 만드는 중 입니다.
+Google Play Store : https://play.google.com/store/apps/details?id=com.yjpapp.stockportfolio
 
 ### 1. 어플리케이션 화면
 ![device-2021-11-23-111819](https://user-images.githubusercontent.com/54883589/143977444-fb021a1d-6df0-4886-9970-b2585c0e2a00.png)
