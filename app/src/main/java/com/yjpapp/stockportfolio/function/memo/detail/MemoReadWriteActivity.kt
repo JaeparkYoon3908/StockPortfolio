@@ -61,10 +61,9 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
     }
 
     private var menu: Menu? = null
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         this.menu = menu
         menuInflater.inflate(R.menu.menu_memo_read_write, menu)
-
         return true
     }
 

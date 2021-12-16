@@ -19,6 +19,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".function.SplashActivity"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,20 +29,36 @@
 
         <activity
             android:name=".function.main.MainActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".function.memo.detail.MemoReadWriteActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".function.login.LoginActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".firebase.FBMessagingService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -61,20 +78,9 @@
 
         <activity
             android:name="com.facebook.FacebookActivity"
+            android:exported="true"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-        <activity
-            android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="@string/fb_login_protocol_scheme" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
