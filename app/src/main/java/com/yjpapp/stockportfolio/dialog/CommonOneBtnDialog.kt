@@ -69,7 +69,7 @@ class CommonOneBtnDialog(
 
             window?.setLayout(x, y)
 
-        }else{
+        } else {
             val rect = windowManager.currentWindowMetrics.bounds
 
             val window = dialog.window
@@ -78,6 +78,5 @@ class CommonOneBtnDialog(
 
             window?.setLayout(x, y)
         }
-
     }
 }
