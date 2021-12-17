@@ -90,6 +90,10 @@ class IncomeNoteListAdapter(
         swipeItemManger.closeAllItems()
     }
 
+    override fun getItemId(position: Int): Long {
+        return incomeNoteListInfo[position].hashCode().toLong()
+    }
+
     interface CallBack {
         fun onEditButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?)
         fun onDeleteButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?, position: Int)

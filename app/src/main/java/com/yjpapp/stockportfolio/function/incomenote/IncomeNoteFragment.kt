@@ -43,7 +43,7 @@ class IncomeNoteFragment : Fragment() {
     private val TAG = IncomeNoteFragment::class.java.simpleName
     private lateinit var mContext: Context
     private lateinit var onBackPressedCallback: OnBackPressedCallback
-    private var incomeNoteListAdapter = IncomeNoteListAdapter(arrayListOf(), null)
+    private var incomeNoteListAdapter = IncomeNoteListAdapter(arrayListOf(), null).apply { setHasStableIds(true) }
 
     private var _binding: FragmentIncomeNoteBinding? = null
     private val binding get() = _binding!!
