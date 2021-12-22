@@ -100,6 +100,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:text="@string/My_Auto_Login"
                     android:textColor="@color/color_222222"
                     android:textSize="@dimen/common_16dp" />
@@ -107,12 +108,12 @@
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_auto_login"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/common_20dp"
+                    android:layout_height="@dimen/common_30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
                     android:onClick="@{callBack::onSwitchClick}"
-                    android:thumb="@drawable/switch_thumb_20"
                     android:theme="@style/StockPortfolioSwitch"
+                    android:thumb="@drawable/switch_thumb_20"
                     binding:switchChecked="@{viewModel.isAutoLoginCheck}" />
             </RelativeLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -244,6 +245,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:text="@string/My_MyStock_Show_Delete_Dialog"
                     android:textColor="@color/color_222222"
                     android:textSize="@dimen/common_16dp" />
@@ -251,7 +253,7 @@
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_income_note_show_delete_check"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/common_20dp"
+                    android:layout_height="@dimen/common_30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
                     android:onClick="@{callBack::onSwitchClick}"
@@ -290,13 +292,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/My_MyStock_Show_Delete_Dialog"
+                    android:layout_centerVertical="true"
                     android:textColor="@color/color_222222"
                     android:textSize="@dimen/common_16dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_memo_show_delete_check"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/common_20dp"
+                    android:layout_height="@dimen/common_30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
                     android:onClick="@{callBack::onSwitchClick}"
