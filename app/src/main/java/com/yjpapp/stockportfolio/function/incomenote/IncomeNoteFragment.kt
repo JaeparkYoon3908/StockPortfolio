@@ -17,6 +17,8 @@ import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.extension.OnSingleClickListener
+import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePickerDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
@@ -24,10 +26,9 @@ import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
-import com.yjpapp.stockportfolio.network.ResponseAlertManger
-import com.yjpapp.stockportfolio.util.OnSingleClickListener
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import java.math.BigDecimal
@@ -117,7 +118,6 @@ class IncomeNoteFragment : Fragment() {
         binding.apply {
             btnDate.setOnClickListener(onClickListener)
             btnSearchAll.setOnClickListener(onClickListener)
-
         }
 
         initRecyclerView()
@@ -252,63 +252,11 @@ class IncomeNoteFragment : Fragment() {
             requestTotalGain(mContext)
             setDateText()
         }
-        subScribeUI(this@IncomeNoteFragment)
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun subScribeUI(owner: LifecycleOwner) {
-        viewModel.apply {
-            totalGainIncomeNoteData.observe(owner, { data ->
-                val totalGainNumber = data.total_price
-                val totalGainPercent = data.total_percent
-                binding.apply {
-                    val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
-                    txtTotalRealizationGainsLossesData.text = "${StockConfig.moneySymbol}$totalRealizationGainsLossesNumber"
-                    if (totalGainNumber >= 0) {
-                        txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
-                        txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
-                    } else {
-                        txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
-                        txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
-                    }
-                    txtTotalRealizationGainsLossesPercent.text = Utils.getRoundsPercentNumber(totalGainPercent)
-                }
-            })
-            //페이징 처리 live data
-            incomeNoteListLiveData.observe(owner, { data ->
-                data.forEach {
-                    incomeNoteListAdapter.incomeNoteListInfo.add(it)
-                }
-                incomeNoteListAdapter.notifyDataSetChanged()
-            })
-            //수정완료
-            incomeNoteModifyResult.observe(owner, { data ->
-                Toasty.normal(mContext, "수정완료").show()
-                viewModel.requestTotalGain(mContext)
-                if (data.id != -1) {
-                    val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteListInfo.find { it.id == data.id }
-                    val index = incomeNoteListAdapter.incomeNoteListInfo.indexOf(beforeModifyIncomeNote)
-                    incomeNoteListAdapter.incomeNoteListInfo[index] = data
-                    incomeNoteListAdapter.notifyDataSetChanged()
-                    viewModel.requestTotalGain(mContext)
-                }
-            })
-            //삭제완료
-            incomeNoteDeletedPosition.observe(owner, { position ->
-                Toasty.normal(mContext, "삭제완료").show()
-                incomeNoteListAdapter.incomeNoteListInfo.removeAt(position)
-                incomeNoteListAdapter.notifyItemRemoved(position)
-                incomeNoteListAdapter.notifyDataSetChanged()
-                viewModel.requestTotalGain(mContext)
-            })
-            //추가완료
-            incomeNoteAddResult.observe(owner, { data ->
-                Toasty.info(mContext, "추가완료").show()
-                incomeNoteListAdapter.incomeNoteListInfo.add(0, data)
-//                incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
-                incomeNoteListAdapter.notifyDataSetChanged()
-                viewModel.requestTotalGain(mContext)
-            })
+        //event handler
+        lifecycleScope.launch {
+            repeatOnStarted {
+                viewModel.eventFlow.collect { event -> handleEvent(event) }
+            }
         }
     }
 
@@ -407,6 +355,58 @@ class IncomeNoteFragment : Fragment() {
             } else {
                 binding.txtFilterDate.text = getString(R.string.Common_All)
             }
+        }
+    }
+
+    private fun handleEvent(event: IncomeNoteViewModel.Event) = when (event) {
+        is IncomeNoteViewModel.Event.SendTotalGainData -> {
+            val totalGainNumber = event.data.total_price
+            val totalGainPercent = event.data.total_percent
+            binding.let {
+                val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
+                it.txtTotalRealizationGainsLossesData.text = "${StockConfig.moneySymbol}$totalRealizationGainsLossesNumber"
+                if (totalGainNumber >= 0) {
+                    it.txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                    it.txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                } else {
+                    it.txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
+                    it.txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
+                }
+                it.txtTotalRealizationGainsLossesPercent.text = Utils.getRoundsPercentNumber(totalGainPercent)
+            }
+        }
+        is IncomeNoteViewModel.Event.IncomeNoteDeleteSuccess -> {
+            Toasty.normal(mContext, "삭제완료").show()
+            incomeNoteListAdapter.incomeNoteListInfo.removeAt(event.position)
+            incomeNoteListAdapter.notifyItemRemoved(event.position)
+            incomeNoteListAdapter.notifyDataSetChanged()
+            viewModel.requestTotalGain(mContext)
+        }
+        is IncomeNoteViewModel.Event.IncomeNoteAddSuccess -> {
+            Toasty.info(mContext, "추가완료").show()
+            incomeNoteListAdapter.incomeNoteListInfo.add(0, event.data)
+//                incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
+            incomeNoteListAdapter.notifyDataSetChanged()
+            viewModel.requestTotalGain(mContext)
+        }
+        is IncomeNoteViewModel.Event.IncomeNoteModifySuccess -> {
+            Toasty.normal(mContext, "수정완료").show()
+            viewModel.requestTotalGain(mContext)
+            if (event.data.id != -1) {
+                val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }
+                val index = incomeNoteListAdapter.incomeNoteListInfo.indexOf(beforeModifyIncomeNote)
+                incomeNoteListAdapter.incomeNoteListInfo[index] = event.data
+                incomeNoteListAdapter.notifyDataSetChanged()
+                viewModel.requestTotalGain(mContext)
+            } else {
+                //TODO 예외처리
+            }
+        }
+        is IncomeNoteViewModel.Event.FetchUIncomeNotes -> {
+            event.data.forEach {
+                incomeNoteListAdapter.incomeNoteListInfo.add(it)
+            }
+            incomeNoteListAdapter.notifyDataSetChanged()
         }
     }
 }

@@ -1,37 +1,30 @@
 package com.yjpapp.stockportfolio.function.incomenote
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
+import com.yjpapp.stockportfolio.extension.MutableEventFlow
+import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class IncomeNoteViewModel(
     private val incomeNoteRepository: IncomeNoteRepository
 ) : ViewModel() {
+    private val _eventFlow = MutableEventFlow<Event>()
+    val eventFlow = _eventFlow.asEventFlow()
     var editMode = false
     var incomeNoteId = -1
     var page = 1
     private val pageSize = 20
     var initStartYYYYMMDD = listOf<String>()
     var initEndYYYYMMDD = listOf<String>()
-    val totalGainIncomeNoteData = MutableLiveData<RespTotalGainIncomeNoteData>()
-    val incomeNoteDeletedPosition = MutableLiveData<Int>()
-    val incomeNoteModifyResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
-    val incomeNoteAddResult = MutableLiveData<RespIncomeNoteListInfo.IncomeNoteInfo>()
-    val incomeNoteListLiveData = MutableLiveData<ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>>()
     var hasNext = true
 
     fun requestGetIncomeNote(context: Context) {
@@ -52,7 +45,7 @@ class IncomeNoteViewModel(
 
                 if (result.isSuccessful) {
                     result.body()?.let {
-                        incomeNoteListLiveData.value = it.income_note
+                        event(Event.FetchUIncomeNotes(it.income_note))
                         if (page * pageSize >= it.page_info.total_elements) {
                             hasNext = false
                         }
@@ -64,17 +57,12 @@ class IncomeNoteViewModel(
         }
     }
 
-//    fun getIncomeNoteListPagingData(mContext: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteListInfo.IncomeNoteInfo>> {
-//        return incomeNoteRepository.getIncomeNoteListByPaging(mContext, startDate, endDate).cachedIn(viewModelScope)
-//    }
-
     fun requestTotalGain(context: Context) {
         val params = hashMapOf<String, String>()
         if (initStartYYYYMMDD.size == 3 && initEndYYYYMMDD.size == 3) {
             params["startDate"] = makeDateString(initStartYYYYMMDD)
             params["endDate"] = makeDateString(initEndYYYYMMDD)
         }
-
         CoroutineScope(Dispatchers.Main).launch {
             val result = incomeNoteRepository.requestTotalGain(context, params)
             if (result == null) {
@@ -83,7 +71,7 @@ class IncomeNoteViewModel(
             }
             if (result.isSuccessful) {
                 result.body()?.let {
-                    totalGainIncomeNoteData.value = it
+                    event(Event.SendTotalGainData(it))
                 }
             }
         }
@@ -97,7 +85,7 @@ class IncomeNoteViewModel(
                 return@launch
             }
             if (result.isSuccessful) {
-                incomeNoteDeletedPosition.value = position
+                event(Event.IncomeNoteDeleteSuccess(position))
             }
         }
     }
@@ -109,10 +97,9 @@ class IncomeNoteViewModel(
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
-
             if (result.isSuccessful) {
                 result.body()?.let { incomeNoteList ->
-                    incomeNoteModifyResult.value = incomeNoteList
+                    event(Event.IncomeNoteModifySuccess(incomeNoteList))
                 }
             }
         }
@@ -127,7 +114,7 @@ class IncomeNoteViewModel(
             }
             if (result.isSuccessful) {
                 result.body()?.let { incomeNoteInfo ->
-                    incomeNoteAddResult.value = incomeNoteInfo
+                    event(Event.IncomeNoteAddSuccess(incomeNoteInfo))
                 }
             }
         }
@@ -144,5 +131,19 @@ class IncomeNoteViewModel(
             }
         }
         return result.toString()
+    }
+
+    private fun event(event: Event) {
+        viewModelScope.launch {
+            _eventFlow.emit(event)
+        }
+    }
+
+    sealed class Event {
+        data class SendTotalGainData(val data: RespTotalGainIncomeNoteData): Event()
+        data class IncomeNoteDeleteSuccess(val position: Int): Event()
+        data class IncomeNoteModifySuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()
+        data class IncomeNoteAddSuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()
+        data class FetchUIncomeNotes(val data: ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>): Event()
     }
 }
