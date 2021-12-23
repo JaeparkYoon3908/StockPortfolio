@@ -19,8 +19,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.extension.OnSingleClickListener
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
-import com.yjpapp.stockportfolio.util.OnSingleClickListener
 import com.yjpapp.stockportfolio.util.Utils
 import java.util.*
 

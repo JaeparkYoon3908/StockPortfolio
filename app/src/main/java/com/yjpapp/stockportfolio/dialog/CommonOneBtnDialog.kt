@@ -11,7 +11,7 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CommonDialogOneBtnBinding
-import com.yjpapp.stockportfolio.util.setOnSingleClickListener
+import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 
 class CommonOneBtnDialog(
     val mContext: Context,

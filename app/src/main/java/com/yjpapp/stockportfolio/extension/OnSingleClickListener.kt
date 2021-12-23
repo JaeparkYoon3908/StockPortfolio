@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.util
+package com.yjpapp.stockportfolio.extension
 
 import android.view.View
 
