@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +14,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,8 +37,10 @@ class MyStockComposeFragment : Fragment() {
             myStockViewModel.onViewCreated()
             setHasOptionsMenu(true)
             setContent {
-                TotalPriceComposable()
-//                SimpleComposable()
+                Column {
+                    TotalPriceComposable()
+                    SimpleComposable()
+                }
             }
         }
     }
@@ -124,6 +128,8 @@ class MyStockComposeFragment : Fragment() {
                 )
                 Text(
                     text = "5000000000",
+                    color = colorResource(id = R.color.color_222222),
+                    fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     maxLines = 1,
                     modifier = Modifier
@@ -135,7 +141,7 @@ class MyStockComposeFragment : Fragment() {
                 modifier = Modifier
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
 
-            ){
+            ) {
                 Text(
                     text = stringResource(id = R.string.MyStockFragment_Total_Evaluation_Amount),
                     color = colorResource(id = R.color.color_222222),
@@ -146,6 +152,8 @@ class MyStockComposeFragment : Fragment() {
                 )
                 Text(
                     text = "5000000000",
+                    color = colorResource(id = R.color.color_222222),
+                    fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     maxLines = 1,
                     modifier = Modifier
@@ -156,7 +164,7 @@ class MyStockComposeFragment : Fragment() {
             Row (
                 modifier = Modifier
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
-            ){
+            ) {
                 Text(
                     text = stringResource(id = R.string.Common_gains_losses),
                     color = colorResource(id = R.color.color_222222),
@@ -168,6 +176,7 @@ class MyStockComposeFragment : Fragment() {
                 Text(
                     text = "5000000000",
                     fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     modifier = Modifier
                         .weight(0.70f)
@@ -177,7 +186,7 @@ class MyStockComposeFragment : Fragment() {
             Row (
                 modifier = Modifier
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
-            ){
+            ) {
                 Text(
                     text = stringResource(id = R.string.Common_GainPercent),
                     color = colorResource(id = R.color.color_222222),
@@ -189,11 +198,18 @@ class MyStockComposeFragment : Fragment() {
                 Text(
                     text = "5000000000",
                     fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     modifier = Modifier
                         .weight(0.70f)
                 )
             }
+            Divider(
+                color = colorResource(id = R.color.color_line_1a000000),
+                thickness = 1.dp,
+                modifier = Modifier
+                    .padding(top = dimensionResource(id = R.dimen.common_10dp))
+            )
         }
     }
 
@@ -214,7 +230,7 @@ class MyStockComposeFragment : Fragment() {
                         year = split[0]
                         month = split[1]
                     }
-                    //¸Å¼ö ³¯Â¥ ¼±ÅÃ ´ÙÀÌ¾ó·Î±× show
+                    //ë§¤ìˆ˜ ë‚ ì§œ ì„ íƒ ë‹¤ì´ì–¼ë¡œê·¸ show
                     CommonDatePickerDialog(requireContext(), year, month).apply {
                         setListener { view, year, month, dayOfMonth ->
                             uiHandler.sendEmptyMessage(MyStockInputDialog.MSG.SELL_DATE_DATA_INPUT)
