@@ -243,10 +243,7 @@ class IncomeNoteFragment : Fragment() {
     }
 
     private fun initData() {
-//        val toDayYYYYMM = Utils.getTodayYYMMDD()
         viewModel.apply {
-//            initStartYYYYMMDD = listOf(toDayYYYYMM[0], "01", "01")
-//            initEndYYYYMMDD = listOf(toDayYYYYMM[0], "12", "01")
             page = 1
             requestGetIncomeNote(mContext)
             requestTotalGain(mContext)
