@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_IncomeNoteFragment_container"
@@ -28,7 +30,7 @@
                 android:layout_gravity="center_vertical"
                 android:ellipsize="marquee"
                 android:gravity="start"
-                android:isSelected="@{true}"
+                binding:isSelected="@{true}"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
                 android:text="@string/Common_realization_gains_losses"
@@ -48,7 +50,7 @@
                 android:layout_marginEnd="@dimen/common_10dp"
                 android:ellipsize="marquee"
                 android:gravity="center"
-                android:isSelected="@{true}"
+                binding:isSelected="@{true}"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
                 android:text="@string/Common_Dummy_Data"
@@ -68,7 +70,7 @@
                 android:layout_gravity="end"
                 android:ellipsize="marquee"
                 android:gravity="end"
-                android:isSelected="@{true}"
+                binding:isSelected="@{true}"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
                 android:text="@string/Common_Dummy_Data"

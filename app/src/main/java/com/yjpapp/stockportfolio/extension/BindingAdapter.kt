@@ -1,9 +1,12 @@
 package com.yjpapp.stockportfolio.extension
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.BindingAdapter
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.util.Utils
 import java.math.BigDecimal
 import java.util.*
@@ -75,4 +78,37 @@ fun visibility(view: View, visibility: Boolean) {
 @BindingAdapter("binding:addPercentText")
 fun addPercentText(textView: TextView, number: Double) {
     textView.text = Utils.getRoundsPercentNumber(number)
+}
+
+/**
+ * LoginActivity
+ */
+@BindingAdapter("binding:setLoginTypeImage")
+fun setLoginTypeImage(imageView: ImageView, loginType: String) {
+    when (loginType) {
+        StockConfig.LOGIN_TYPE_FACEBOOK -> {
+            imageView.setBackgroundResource(R.drawable.ic_facebook)
+        }
+        StockConfig.LOGIN_TYPE_GOOGLE -> {
+            imageView.setBackgroundResource(R.drawable.ic_google)
+        }
+        StockConfig.LOGIN_TYPE_NAVER -> {
+            imageView.setBackgroundResource(R.drawable.naver_icon)
+        }
+    }
+}
+
+/**
+ * MyFragment
+ */
+@BindingAdapter("binding:switchChecked")
+fun switchChecked(switch: SwitchCompat, isChecked: String) {
+    when (isChecked) {
+        "true" -> {
+            switch.isChecked = true
+        }
+        "false" -> {
+            switch.isChecked = false
+        }
+    }
 }
