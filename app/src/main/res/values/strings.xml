@@ -58,11 +58,12 @@
     <string name="IncomeNoteFilterDialog_Title">필터링 할 옵션을 선택하세요.</string>
 
     <string name="MemoReadWriteActivity_Title_Hint">제목을 입력하세요.</string>
-    <string name="MemoReadWriteActivity_Content_Hint">메모를 입력하세요.</string>
+    <string name="MemoReadWriteActivity_Content_Hint">내용을 입력하세요.</string>
     <string name="MemoListFragment_Title">메모장</string>
     <string name="MemoListFragment_GuideMessage">첫 메모를 등록해주세요.</string>
     <string name="MemoListFragment_Delete_Check_Message">정말 삭제하시겠습니까?</string>
     <string name="MemoListFragment_Empty_Data_Message">내용이 없어 메모를 저장하지 않습니다.</string>
+    <string name="MemoListFragment_Write_Memo">메모를 입력해주세요.</string>
     
     <string name="MyStockFragment_Title">나의 주식</string>
     <string name="MyStockFragment_Total_Evaluation_Amount">총 평가금액</string>
