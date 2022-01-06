@@ -11,10 +11,12 @@ import com.yjpapp.stockportfolio.base.BaseMVPActivity
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.localdb.sqlte.Databases
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
+import com.yjpapp.stockportfolio.di.memoReadWriteViewModel
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
+import org.koin.android.ext.android.inject
 
 /**
  * 메모 읽기 및 추가 화면
@@ -22,14 +24,13 @@ import com.yjpapp.stockportfolio.util.Utils
  * @author Yoon Jae-park
  * @since 2020.12.27
  */
-class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), MemoReadWriteView {
-    private lateinit var memoReadWritePresenter: MemoReadWritePresenter
+class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>() {
     private var mode: String? = null
     private var memoListPosition = 0
     private var id = 0
     private var title: String? = null
     private var content: String? = null
-
+    private val viewModel: MemoReadWriteViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +38,6 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
         //initLayout()
     }
     override fun initData() {
-        memoReadWritePresenter = MemoReadWritePresenter(mContext, this)
         mode = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_MODE)
         if(mode == MemoListFragment.MEMO_READ_MODE){ // 읽기 모드
             memoListPosition = intent.getIntExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, 0)
@@ -104,23 +104,23 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
         }
     }
 
-    override fun showCompleteButton() {
+    private fun showCompleteButton() {
         menu?.findItem(R.id.menu_MemoReadWriteFragment_Complete)?.isVisible = true
     }
 
-    override fun hideCompleteButton() {
+    private fun hideCompleteButton() {
         menu?.findItem(R.id.menu_MemoReadWriteFragment_Complete)?.isVisible = false
     }
 
-    override fun showDeleteButton() {
+    private fun showDeleteButton() {
         menu?.findItem(R.id.menu_MemoReadWriteFragment_Delete)?.isVisible = true
     }
 
-    override fun hideDeleteButton() {
+    private fun hideDeleteButton() {
         menu?.findItem(R.id.menu_MemoReadWriteFragment_Delete)?.isVisible = false
     }
 
-    override fun onDeleteButtonClick() {
+    private fun onDeleteButtonClick() {
         if (preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK) == StockConfig.TRUE) {
             AlertDialog.Builder(this)
                 .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
@@ -144,7 +144,7 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
         finish()
     }
 
-    override fun onCompleteButtonClick() {
+    private fun onCompleteButtonClick() {
         binding.apply {
             if (mode == MemoListFragment.MEMO_ADD_MODE) {
                 if (etMemoReadWriteActivityTitle.text.toString() == "" && etMemoReadWriteActivityContent.text.toString() == "") {
@@ -153,7 +153,7 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
                     val date = Utils.getTodayYYYY_MM_DD()
                     val title = etMemoReadWriteActivityTitle.text.toString()
                     val content = etMemoReadWriteActivityContent.text.toString()
-                    memoReadWritePresenter.requestAddMemoData(date, title, content)
+                    viewModel.requestAddMemoData(date, title, content)
                     setResult(RESULT_OK)
                 }
                 finish()
@@ -164,7 +164,7 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>(), Me
                     val date = Utils.getTodayYYYY_MM_DD()
                     val title = etMemoReadWriteActivityTitle.text.toString()
                     val content = etMemoReadWriteActivityContent.text.toString()
-                    memoReadWritePresenter.requestUpdateMemoData(id, date, title, content)
+                    viewModel.requestUpdateMemoData(id, date, title, content)
                     setResult(MemoListFragment.RESULT_UPDATE)
                 }
                 finish()

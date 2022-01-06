@@ -22,6 +22,7 @@ class StockPortfolioApp: Application() {
             modules(myStockViewModel)
             modules(myViewModel)
             modules(incomeNoteViewModel)
+            modules(memoReadWriteViewModel)
             //Common
             modules(preferenceController)
         }

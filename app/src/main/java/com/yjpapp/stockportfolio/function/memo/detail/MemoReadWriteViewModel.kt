@@ -1,25 +1,22 @@
 package com.yjpapp.stockportfolio.function.memo.detail
 
-import android.content.Context
+import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 
 /**
- * MemoReadWriteActivity의 Presenter
- *
- * @author Yoon Jae-park
- * @since 2020.12
+ * since 2022.01.05
+ * Presenter -> ViewModel 형식으로 변경
  */
-
-class MemoReadWritePresenter(val mContext: Context, private val memoReadWriteView: MemoReadWriteView) {
-    private val memoReadWriteInteractor = MemoReadWriteInteractor()
-
+class MemoReadWriteViewModel(
+    private val memoReadWriteRepository: MemoReadWriteRepository
+) : ViewModel() {
     fun requestAddMemoData(date: String, title: String, content: String){
         val memoInfo = MemoInfo(0, date, title, content, "false")
-        memoReadWriteInteractor.insertMemoData(memoInfo)
+        memoReadWriteRepository.insertMemoData(memoInfo)
     }
 
     fun requestUpdateMemoData(id: Int, date: String, title: String, content: String){
         val memoInfo = MemoInfo(id, date, title, content, "false")
-        memoReadWriteInteractor.updateMemoData(memoInfo)
+        memoReadWriteRepository.updateMemoData(memoInfo)
     }
 }

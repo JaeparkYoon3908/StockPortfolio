@@ -3,6 +3,8 @@ package com.yjpapp.stockportfolio.di
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
 import com.yjpapp.stockportfolio.function.login.LoginViewModel
+import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteRepository
+import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteViewModel
 import com.yjpapp.stockportfolio.function.my.MyViewModel
 import com.yjpapp.stockportfolio.function.mystock.MyStockViewModel
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
@@ -54,6 +56,12 @@ val incomeNoteViewModel = module {
         IncomeNoteViewModel(
             get()
         )
+    }
+}
+val memoReadWriteViewModel = module {
+    single { MemoReadWriteRepository(androidContext()) }
+    viewModel {
+        MemoReadWriteViewModel(get())
     }
 }
 /**

@@ -1,9 +1,11 @@
 package com.yjpapp.stockportfolio.function.memo.detail
 
 import android.content.ContentValues
+import android.content.Context
 import com.yjpapp.stockportfolio.localdb.sqlte.Databases
 import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 import com.yjpapp.stockportfolio.base.BaseInteractor
+import com.yjpapp.stockportfolio.localdb.sqlte.DatabaseOpenHelper
 
 /**
  * MemoReadWriteActivity의 Model 역할하는 class
@@ -11,27 +13,10 @@ import com.yjpapp.stockportfolio.base.BaseInteractor
  * @author Yoon Jae-park
  * @since 2020.12
  */
-class MemoReadWriteInteractor: BaseInteractor() {
+class MemoReadWriteRepository(context: Context) {
+    private val dbHelper = DatabaseOpenHelper(context)
+    private val database = dbHelper.writableDatabase
 
-//    companion object {
-//        @Volatile private var instance: MemoReadWriteInteractor? = null
-////        private lateinit var mContext: Context
-////        private lateinit var databaseController: DatabaseController
-////        private lateinit var dbHelper: DatabaseOpenHelper
-//        private lateinit var database: SQLiteDatabase
-//        @JvmStatic
-//        fun getInstance(context: Context): MemoReadWriteInteractor =
-//                instance ?: synchronized(this) {
-//                    instance ?: MemoReadWriteInteractor().also {
-//                        instance = it
-//                        mContext = context
-////                        databaseController = DatabaseController.getInstance(mContext)
-//                        dbHelper = DatabaseOpenHelper(mContext)
-//                        database = MemoListInteractor.dbHelper.writableDatabase
-//                    }
-//                }
-//
-//    }
     fun insertMemoData(memoData: MemoInfo): Boolean{
         val insertCheck: Long
         val contentValues = ContentValues()
