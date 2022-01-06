@@ -5,12 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
+import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockDao
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 
-@Database(entities = [MyStockEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [MyStockEntity::class, MemoListEntity::class],
+    version = 2,
+    exportSchema = false
+)
 abstract class MyRoomDatabase: RoomDatabase() {
     abstract fun myStockDao(): MyStockDao
+    abstract fun memoListDao(): MemoListDao
 
     companion object {
         private val DB_NAME = "room-db"
@@ -29,6 +36,7 @@ abstract class MyRoomDatabase: RoomDatabase() {
                         super.onCreate(db)
                     }})
                     .allowMainThreadQueries() //추천하진 않지만 MainThread(UI Thread)에서 접근 가능할 수 있게 설정
+                    .fallbackToDestructiveMigration() //room table 업데이트 시 마이그레이션
                     .build()
         }
     }

@@ -5,7 +5,10 @@ import android.content.Context
 import android.content.Intent
 import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteActivity
+import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
+import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.util.Utils
+import org.koin.android.ext.koin.androidContext
 
 /**
  * MemoListFragmentt의 Presenter
@@ -16,8 +19,7 @@ import com.yjpapp.stockportfolio.util.Utils
 
 class MemoListPresenter(val mContext: Context, private val memoListView: MemoListView) {
 
-
-    private val memoListInteractor = MemoListInteractor()
+    private val memoListInteractor = MemoListRepository(MyRoomDatabase.getInstance(mContext).memoListDao())
     private val memoDataList by lazy { getAllMemoInfoList() }
     private var memoListAdapter = MemoListAdapter(memoDataList, this)
 
@@ -47,8 +49,7 @@ class MemoListPresenter(val mContext: Context, private val memoListView: MemoLis
         val memoList = memoListInteractor.getAllMemoInfoList()
         for (position in memoList.indices) {
             if (memoList[position]?.deleteChecked!! == "true") {
-                val id = memoList[position]!!.id
-                memoListInteractor.deleteMemoInfoList(id)
+                memoListInteractor.deleteMemoInfoList(memoList[position])
                 val updateMemoList = memoListInteractor.getAllMemoInfoList()
 //                memoListView.deleteMemoListView(updateMemoList, position)
                 memoListAdapter.setMemoListData(updateMemoList)
@@ -80,7 +81,7 @@ class MemoListPresenter(val mContext: Context, private val memoListView: MemoLis
         memoListInteractor.updateDeleteCheck(id, deleteCheck.toString())
     }
 
-    fun getAllMemoInfoList(): ArrayList<MemoInfo?>{
+    fun getAllMemoInfoList(): MutableList<MemoListEntity>{
        return memoListInteractor.getAllMemoInfoList()
     }
 

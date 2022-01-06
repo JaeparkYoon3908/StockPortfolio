@@ -59,7 +59,7 @@ val incomeNoteViewModel = module {
     }
 }
 val memoReadWriteViewModel = module {
-    single { MemoReadWriteRepository(androidContext()) }
+    single { MemoReadWriteRepository(MyRoomDatabase.getInstance(androidContext()).memoListDao()) }
     viewModel {
         MemoReadWriteViewModel(get())
     }

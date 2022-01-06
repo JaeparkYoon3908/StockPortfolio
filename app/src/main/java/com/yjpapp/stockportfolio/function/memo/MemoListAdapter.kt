@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 
 /**
@@ -17,7 +18,7 @@ import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
  * @since 2020.08
  */
 class MemoListAdapter(
-    private var memoListData: ArrayList<MemoInfo?>,
+    private var memoListData: MutableList<MemoListEntity>,
     private val memoListPresenter: MemoListPresenter
 ) :
     RecyclerView.Adapter<MemoListAdapter.ViewHolder>() {
@@ -74,11 +75,11 @@ class MemoListAdapter(
         return memoListData.size
     }
 
-    fun setMemoListData(memoListData: ArrayList<MemoInfo?>) {
+    fun setMemoListData(memoListData: MutableList<MemoListEntity>) {
         this.memoListData = memoListData
     }
 
-    fun getMemoListData(): ArrayList<MemoInfo?> {
+    fun getMemoListData(): MutableList<MemoListEntity> {
         return memoListData
     }
 

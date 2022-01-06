@@ -5,6 +5,8 @@ import android.content.Context
 import com.yjpapp.stockportfolio.localdb.sqlte.Databases
 import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 import com.yjpapp.stockportfolio.base.BaseInteractor
+import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
+import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.localdb.sqlte.DatabaseOpenHelper
 
 /**
@@ -13,32 +15,22 @@ import com.yjpapp.stockportfolio.localdb.sqlte.DatabaseOpenHelper
  * @author Yoon Jae-park
  * @since 2020.12
  */
-class MemoReadWriteRepository(context: Context) {
-    private val dbHelper = DatabaseOpenHelper(context)
-    private val database = dbHelper.writableDatabase
+class MemoReadWriteRepository(
+    private val memoListDao: MemoListDao
+) {
 
-    fun insertMemoData(memoData: MemoInfo): Boolean{
-        val insertCheck: Long
-        val contentValues = ContentValues()
-        contentValues.put(Databases.COL_MEMO_DATE, memoData.date)
-        contentValues.put(Databases.COL_MEMO_TITLE, memoData.title)
-        contentValues.put(Databases.COL_MEMO_CONTENT, memoData.content)
-
-        insertCheck = database.insert(Databases.TABLE_MEMO, null, contentValues)
-
-        return insertCheck != -1L
+    fun insertMemoData(memoData: MemoListEntity) {
+        try {
+            memoListDao.insert(memoData)
+        } catch (e: Exception) {
+            e.stackTrace
+        }
     }
-    fun updateMemoData(memoData: MemoInfo): Boolean{
-        val updateCheck: Int
-        val contentValues = ContentValues()
-        contentValues.put(Databases.COL_MEMO_DATE, memoData.date)
-        contentValues.put(Databases.COL_MEMO_TITLE, memoData.title)
-        contentValues.put(Databases.COL_MEMO_CONTENT, memoData.content)
-
-        updateCheck = database.update(
-            Databases.TABLE_MEMO, contentValues,
-                Databases.COL_MEMO_ID + " = ? ", arrayOf(memoData.id.toString()))
-
-        return updateCheck != -1
+    fun updateMemoData(memoData: MemoListEntity) {
+        try {
+            memoListDao.update(memoData)
+        } catch (e: Exception) {
+            e.stackTrace
+        }
     }
 }
