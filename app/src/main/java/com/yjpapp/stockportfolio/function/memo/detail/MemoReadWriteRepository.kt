@@ -1,13 +1,7 @@
 package com.yjpapp.stockportfolio.function.memo.detail
 
-import android.content.ContentValues
-import android.content.Context
-import com.yjpapp.stockportfolio.localdb.sqlte.Databases
-import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
-import com.yjpapp.stockportfolio.base.BaseInteractor
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
-import com.yjpapp.stockportfolio.localdb.sqlte.DatabaseOpenHelper
 
 /**
  * MemoReadWriteActivity의 Model 역할하는 class

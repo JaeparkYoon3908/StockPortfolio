@@ -6,15 +6,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseMVPActivity
+import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.localdb.sqlte.Databases
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
-import com.yjpapp.stockportfolio.di.memoReadWriteViewModel
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.stockportfolio.util.Utils
 import org.koin.android.ext.android.inject
 
@@ -24,30 +23,24 @@ import org.koin.android.ext.android.inject
  * @author Yoon Jae-park
  * @since 2020.12.27
  */
-class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>() {
+class MemoReadWriteActivity: BaseActivity() {
     private var mode: String? = null
     private var memoListPosition = 0
     private var id = 0
     private var title: String? = null
     private var content: String? = null
     private val viewModel: MemoReadWriteViewModel by inject()
+    private var _binding: ActivityMemoReadWriteBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //initData()
-        //initLayout()
-    }
-    override fun initData() {
-        mode = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_MODE)
-        if(mode == MemoListFragment.MEMO_READ_MODE){ // 읽기 모드
-            memoListPosition = intent.getIntExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, 0)
-            id = intent.getIntExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_ID, 0)
-            title = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_TITLE)
-            content = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_CONTENT)
-        }
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_memo_read_write)
+        initView()
+        initData()
     }
 
-    override fun initLayout() {
+    private fun initView() {
         //Toolbar
         binding.apply {
             setSupportActionBar(toolbarMemoReadWriteActivity)
@@ -58,6 +51,16 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>() {
             etMemoReadWriteActivityContent.onFocusChangeListener = onFocusChangeListener
         }
 
+    }
+
+    private fun initData() {
+        mode = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_MODE)
+        if(mode == MemoListFragment.MEMO_READ_MODE){ // 읽기 모드
+            memoListPosition = intent.getIntExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, 0)
+            id = intent.getIntExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_ID, 0)
+            title = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_TITLE)
+            content = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_CONTENT)
+        }
     }
 
     private var menu: Menu? = null
@@ -170,9 +173,5 @@ class MemoReadWriteActivity: BaseMVPActivity<ActivityMemoReadWriteBinding>() {
                 finish()
             }
         }
-    }
-
-    override fun getViewBinding(): ActivityMemoReadWriteBinding {
-        return ActivityMemoReadWriteBinding.inflate(layoutInflater)
     }
 }
