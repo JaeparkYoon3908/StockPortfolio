@@ -26,7 +26,10 @@ interface MemoListDao {
     @Throws(Exception::class)
     fun delete(memoListEntity: MemoListEntity)
 
-    //Query
+    @Query("DELETE FROM memo_list WHERE id = :id")
+    @Throws(Exception::class)
+    fun deleteMemoInfo(id: Int)
+
     @Query("SELECT * FROM memo_list")
     @Throws(Exception::class)
     fun getAll(): MutableList<MemoListEntity>

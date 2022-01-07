@@ -3,12 +3,10 @@ package com.yjpapp.stockportfolio.function.memo
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteActivity
 import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.util.Utils
-import org.koin.android.ext.koin.androidContext
 
 /**
  * MemoListFragmentt의 Presenter

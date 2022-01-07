@@ -2,7 +2,6 @@ package com.yjpapp.stockportfolio.function.memo.detail
 
 import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
-import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 
 /**
  * since 2022.01.05
@@ -19,5 +18,8 @@ class MemoReadWriteViewModel(
     fun requestUpdateMemoData(id: Int, date: String, title: String, content: String){
         val memoInfo = MemoListEntity(id, date, title, content, "false")
         memoReadWriteRepository.updateMemoData(memoInfo)
+    }
+    fun requestDeleteMemoData(id: Int) {
+        memoReadWriteRepository.deleteMomoData(id)
     }
 }

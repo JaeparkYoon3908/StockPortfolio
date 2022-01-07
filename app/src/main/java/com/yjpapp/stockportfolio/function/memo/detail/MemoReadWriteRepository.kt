@@ -27,4 +27,11 @@ class MemoReadWriteRepository(
             e.stackTrace
         }
     }
+    fun deleteMomoData(id: Int) {
+        try {
+            memoListDao.deleteMemoInfo(id)
+        } catch (e: Exception) {
+            e.stackTrace
+        }
+    }
 }

@@ -1,9 +1,5 @@
 package com.yjpapp.stockportfolio.function.memo
 
-import android.content.ContentValues
-import android.database.Cursor
-import com.yjpapp.stockportfolio.localdb.sqlte.Databases
-import com.yjpapp.stockportfolio.localdb.sqlte.data.MemoInfo
 import com.yjpapp.stockportfolio.base.BaseInteractor
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity

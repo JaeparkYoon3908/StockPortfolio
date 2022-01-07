@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.constance.StockConfig
-import com.yjpapp.stockportfolio.localdb.sqlte.Databases
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
@@ -50,7 +49,6 @@ class MemoReadWriteActivity: BaseActivity() {
             etMemoReadWriteActivityTitle.onFocusChangeListener = onFocusChangeListener
             etMemoReadWriteActivityContent.onFocusChangeListener = onFocusChangeListener
         }
-
     }
 
     private fun initData() {
@@ -140,7 +138,7 @@ class MemoReadWriteActivity: BaseActivity() {
     }
 
     private fun deleteMemo() {
-        databaseController.deleteData(id, Databases.TABLE_MEMO)
+        viewModel.requestDeleteMemoData(id)
         val intent = Intent(mContext, MemoListFragment::class.java)
         intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, memoListPosition)
         setResult(MemoListFragment.RESULT_DELETE, intent)
