@@ -1,6 +1,5 @@
 package com.yjpapp.stockportfolio.function.memo
 
-import com.yjpapp.stockportfolio.base.BaseInteractor
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 
@@ -12,8 +11,7 @@ import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
  */
 class MemoListRepository(
     private val memoListDao: MemoListDao
-)
-    : BaseInteractor() {
+) {
 
     fun getMemoInfo(id: Int): MemoListEntity{
        return memoListDao.getMemoInfo(id)
