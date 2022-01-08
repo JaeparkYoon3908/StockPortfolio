@@ -9,7 +9,11 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.base.BaseMVPActivity
+import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
 import com.yjpapp.stockportfolio.databinding.ActivitySplashBinding
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
@@ -23,7 +27,9 @@ import java.util.*
  * @since 2020.10
  */
 
-class  SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
+class SplashActivity: BaseActivity() {
+    private var _binding: ActivitySplashBinding? = null
+    private val binding get() = _binding!!
     private val permissionList = arrayOf<String>(
         Manifest.permission.READ_PHONE_STATE
 //            Manifest.permission.READ_SMS,
@@ -35,10 +41,11 @@ class  SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
         startMainActivity()
     }
 
-    override fun initData() {
+    private fun initData() {
         preferenceController.apply {
             if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
                 setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
@@ -58,7 +65,7 @@ class  SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
         }
     }
 
-    override fun initLayout() {
+    private fun initLayout() {
     }
 
     private fun startMainActivity(){
@@ -68,10 +75,6 @@ class  SplashActivity: BaseMVPActivity<ActivitySplashBinding>() {
             startActivity(intent)
 
         }, 1500)
-    }
-
-    override fun getViewBinding(): ActivitySplashBinding {
-        return ActivitySplashBinding.inflate(layoutInflater)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

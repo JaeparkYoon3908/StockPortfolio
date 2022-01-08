@@ -8,11 +8,9 @@ import androidx.viewbinding.ViewBinding
  * @since 2020.12
  */
 abstract class BaseMVPActivity<VB: ViewBinding>: BaseActivity() {
-    private lateinit var baseInteractor: BaseInteractor
     lateinit var binding: VB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        baseInteractor = BaseInteractor.getInstance(mContext)
         binding = getViewBinding()
         setContentView(binding.root)
         initData()
