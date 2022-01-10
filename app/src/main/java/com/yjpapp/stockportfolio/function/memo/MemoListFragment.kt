@@ -8,12 +8,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
+import com.yjpapp.stockportfolio.extension.repeatOnStarted
+import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteActivity
+import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 /**
  * 메모리스트 화면
@@ -42,15 +50,24 @@ class MemoListFragment : Fragment(), MemoListView {
     }
 
     private lateinit var mContext: Context
-    private lateinit var memoListPresenter: MemoListPresenter
+//    private lateinit var memoListPresenter: MemoListPresenter
     private lateinit var layoutManager: LinearLayoutManager
+    private val memoListAdapter = MemoListAdapter(mutableListOf(), null).apply { setHasStableIds(true) }
+    private val viewModel: MemoListViewModel by inject()
 
-    private var _viewBinding: FragmentMemoListBinding? = null
-    private val viewBinding get() = _viewBinding!!
+    private var _binding: FragmentMemoListBinding? = null
+    private val binding get() = _binding!!
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            memoListPresenter.onBackPressedClick(activity as Activity)
+            if (memoListAdapter.deleteModeOn) {
+                memoListAdapter.deleteModeOn = false
+                memoListAdapter.notifyDataSetChanged()
+                showAddButton()
+                hideDeleteButton()
+            } else {
+                Utils.runBackPressAppCloseEvent(mContext, activity as Activity)
+            }
         }
     }
 
@@ -66,9 +83,8 @@ class MemoListFragment : Fragment(), MemoListView {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-//        mRootView = inflater.inflate(R.layout.fragment_memo_list, container, false)
-        _viewBinding = FragmentMemoListBinding.inflate(inflater, container, false)
-        return viewBinding.root
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_memo_list, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,19 +93,20 @@ class MemoListFragment : Fragment(), MemoListView {
         initLayout()
     }
 
-    override fun onResume() {
-        super.onResume()
-        memoListPresenter.onResume()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        _viewBinding = null
-
+        binding.unbind()
     }
 
     private fun initData() {
-        memoListPresenter = MemoListPresenter(mContext, this)
+//        memoListPresenter = MemoListPresenter(mContext, this)
+        viewModel.getAllMemoInfoList()
+        //event handler
+        lifecycleScope.launch {
+            repeatOnStarted {
+                viewModel.eventFlow.collect { event -> handleEvent(event) }
+            }
+        }
     }
 
     private fun initLayout() {
@@ -97,14 +114,38 @@ class MemoListFragment : Fragment(), MemoListView {
         initRecyclerView()
     }
 
+    private fun handleEvent(event: MemoListViewModel.Event) = when (event) {
+        is MemoListViewModel.Event.SendToAllMemoListData -> {
+            val memoList = event.data
+            memoListAdapter.memoListData = memoList
+            memoListAdapter.notifyDataSetChanged()
+            if (memoList.size == 0) {
+                showGuideMessage()
+            } else {
+                hideGuideMessage()
+            }
+        }
+        is MemoListViewModel.Event.MemoListDataDeleteSuccess -> {
+            val memoList = event.data
+            memoListAdapter.deleteModeOn = false
+            memoListAdapter.notifyDataSetChanged()
+            showAddButton()
+            hideDeleteButton()
+            if (memoList.size == 0) {
+                showGuideMessage()
+            } else {
+                hideGuideMessage()
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         when (resultCode) {
             RESULT_OK -> {
                 when (requestCode) {
                     REQUEST_ADD -> {
-                        memoListPresenter.addMemoInfo()
+                        viewModel.getAllMemoInfoList()
                     }
                 }
             }
@@ -115,32 +156,29 @@ class MemoListFragment : Fragment(), MemoListView {
             }
             RESULT_DELETE, RESULT_UPDATE -> {
                 val position = data?.getIntExtra(INTENT_KEY_LIST_POSITION, 0)!!
-                memoListPresenter.updateMemoInfo()
+                viewModel.getAllMemoInfoList()
             }
-
         }
     }
 
     private fun initRecyclerView() {
-        val memoDataList = memoListPresenter.getAllMemoInfoList()
+        memoListAdapter.callBack = memoListAdapterCallBack
+        val memoDataList = viewModel.allMemoListData
         layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
         //Scroll item 2 to 20 pixels from the top
-        viewBinding.apply {
+        binding.apply {
             if (memoDataList.size != 0) {
                 layoutManager.scrollToPosition(memoDataList.size - 1)
                 txtMemoListFragmentGuideMessage.visibility = View.GONE
             } else {
                 txtMemoListFragmentGuideMessage.visibility = View.VISIBLE
             }
+            recyclerviewMemoListFragment.adapter = memoListAdapter
             recyclerviewMemoListFragment.layoutManager = layoutManager
-
-//        memoListAdapter = MemoListAdapter(memoDataList, memoListPresenter)
-//        recyclerview_MemoListActivity.adapter = memoListAdapter
             recyclerviewMemoListFragment.itemAnimator = SlideInLeftAnimator()
         }
-
     }
 
     private var menu: Menu? = null
@@ -155,7 +193,9 @@ class MemoListFragment : Fragment(), MemoListView {
 //                finish()
             }
             R.id.menu_MemoListFragment_Add -> {
-                memoListPresenter.onAddButtonClicked()
+                val intent = Intent(mContext, MemoReadWriteActivity::class.java)
+                intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_ADD_MODE)
+                startReadWriteActivityForResult(intent, REQUEST_ADD)
             }
 
             R.id.menu_MemoListFragment_Delete -> {
@@ -169,19 +209,6 @@ class MemoListFragment : Fragment(), MemoListView {
     override fun startReadWriteActivityForResult(intent: Intent, requestCode: Int) {
         activity?.startActivityForResult(intent, requestCode)
     }
-
-//    override fun onBackPressed() {
-//        if(memoListAdapter?.getDeleteModeOn()!!){
-//            setDeleteModeOff()
-//        }else{
-//            finish()
-//        }
-//    }
-
-//    override fun setDeleteModeOff() {
-//        showAddButton()
-//        hideDeleteButton()
-//    }
 
     override fun showAddButton() {
         menu?.findItem(R.id.menu_MemoListFragment_Add)?.isVisible = true
@@ -200,15 +227,14 @@ class MemoListFragment : Fragment(), MemoListView {
     }
 
     override fun showGuideMessage() {
-        viewBinding.apply {
+        binding.apply {
             txtMemoListFragmentGuideMessage.visibility = View.VISIBLE
         }
-
     }
 
     override fun hideGuideMessage() {
-        val memoDataList = memoListPresenter.getAllMemoInfoList()
-        viewBinding.apply {
+        val memoDataList = viewModel.allMemoListData
+        binding.apply {
             txtMemoListFragmentGuideMessage.visibility = View.GONE
         }
         layoutManager.scrollToPosition(memoDataList.size - 1)
@@ -218,7 +244,7 @@ class MemoListFragment : Fragment(), MemoListView {
         AlertDialog.Builder(mContext)
                 .setMessage(mContext.getString(R.string.MemoListFragment_Delete_Check_Message))
                 .setPositiveButton(R.string.Common_Ok) { _, _ ->
-                    memoListPresenter.deleteMemoInfo()
+                    viewModel.requestDeleteMemoInfo()
                 }
                 .setNegativeButton(R.string.Common_Cancel) { dialog, _ ->
                     dialog.dismiss()
@@ -227,8 +253,45 @@ class MemoListFragment : Fragment(), MemoListView {
     }
 
     override fun setAdapter(memoListAdapter: MemoListAdapter) {
-        viewBinding.apply {
+        binding.apply {
             recyclerviewMemoListFragment.adapter = memoListAdapter
+        }
+    }
+
+    private val memoListAdapterCallBack = object : MemoListAdapter.CallBack {
+        override fun onMemoListClicked(position: Int, imgMemoListCheck: Boolean) {
+            if (memoListAdapter.deleteModeOn) {
+                viewModel.requestUpdateDeleteCheck(position = position, deleteCheck = imgMemoListCheck)
+            } else {
+                val memoDataList = viewModel.allMemoListData
+                val intent = Intent(mContext, MemoReadWriteActivity::class.java)
+                intent.putExtra(INTENT_KEY_LIST_POSITION, position)
+                intent.putExtra(INTENT_KEY_MEMO_INFO_ID, memoDataList[position].id)
+                intent.putExtra(INTENT_KEY_MEMO_INFO_TITLE, memoDataList[position].title)
+                intent.putExtra(
+                    INTENT_KEY_MEMO_INFO_CONTENT,
+                    memoDataList[position].content)
+                intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_READ_MODE)
+                startReadWriteActivityForResult(intent, REQUEST_READ)
+            }
+        }
+
+        override fun onMemoListLongClicked(position: Int) {
+            if (!memoListAdapter.deleteModeOn) {
+                hideAddButton()
+                showDeleteButton()
+                viewModel.requestUpdateDeleteCheck(position, true)
+            } else {
+                showAddButton()
+                hideDeleteButton()
+            }
+            Utils.runVibration(mContext, 100)
+            memoListAdapter.deleteModeOn = !memoListAdapter.deleteModeOn
+            viewModel.getAllMemoInfoList()
+        }
+
+        override fun onMemoDeleteCheckClicked(position: Int, deleteCheck: Boolean) {
+            viewModel.requestUpdateDeleteCheck(position = position, deleteCheck = deleteCheck)
         }
     }
 }

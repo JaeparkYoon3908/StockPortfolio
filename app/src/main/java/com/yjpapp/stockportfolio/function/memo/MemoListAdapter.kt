@@ -1,13 +1,11 @@
 package com.yjpapp.stockportfolio.function.memo
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.databinding.ItemMemoListBinding
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 
 /**
@@ -17,77 +15,50 @@ import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
  * @since 2020.08
  */
 class MemoListAdapter(
-    private var memoListData: MutableList<MemoListEntity>,
-    private val memoListPresenter: MemoListPresenter
+    var memoListData: MutableList<MemoListEntity>,
+    var callBack: CallBack?
 ) :
     RecyclerView.Adapter<MemoListAdapter.ViewHolder>() {
-    private var deleteModeOn = false
+    var deleteModeOn = false
 
-    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
-        val txt_MemoList_Date: TextView = view.findViewById(R.id.txt_MemoList_Date)
-        val txt_MemoList_Title: TextView = view.findViewById(R.id.txt_MemoList_Title)
-        val txt_MemoList_NoteCount: TextView = view.findViewById(R.id.txt_MemoList_NoteCount)
-        val img_MemoList_Check: ImageView = view.findViewById(R.id.img_MemoList_Check)
-
-    }
+    inner class ViewHolder(val binding: ItemMemoListBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view: View = inflater.inflate(R.layout.item_memo_list, parent, false)
-        return ViewHolder(view)
+        val binding: ItemMemoListBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.item_memo_list,
+            parent,
+            false
+        )
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.apply {
-            txt_MemoList_Date.text = memoListData[position]?.date
-            txt_MemoList_Title.text = memoListData[position]?.title
-            txt_MemoList_NoteCount.text = memoListData[position]?.content
-            img_MemoList_Check.isSelected = memoListData[position]?.deleteChecked!! == "true"
-
-            itemView.setOnLongClickListener {
-                memoListPresenter.onMemoListLongClicked(position)
-                return@setOnLongClickListener true
-            }
-
-            if (deleteModeOn) {
-                img_MemoList_Check.visibility = View.VISIBLE
-                itemView.setOnClickListener {
-                    img_MemoList_Check.isSelected = !img_MemoList_Check.isSelected
-                    if (img_MemoList_Check.isSelected) {
-                        memoListPresenter.clickMemoDeleteCheck(position, true)
-
-                    } else {
-                        memoListPresenter.clickMemoDeleteCheck(position, false)
-                    }
-                }
-            } else {
-                img_MemoList_Check.visibility = View.GONE
-                itemView.setOnClickListener {
-                    memoListPresenter.onMemoListClicked(position)
-                }
-            }
+        holder.binding.apply {
+            memoData = memoListData[position]
+            deleteModeOn = this@MemoListAdapter.deleteModeOn
         }
-
+        holder.itemView.setOnLongClickListener {
+            callBack?.onMemoListLongClicked(position = position)
+            return@setOnLongClickListener true
+        }
+        holder.itemView.setOnClickListener {
+            val imgMemoListCheck = !holder.binding.imgMemoListCheck.isSelected
+            callBack?.onMemoListClicked(position = position, imgMemoListCheck)
+        }
     }
 
     override fun getItemCount(): Int {
         return memoListData.size
     }
 
-    fun setMemoListData(memoListData: MutableList<MemoListEntity>) {
-        this.memoListData = memoListData
+    override fun getItemId(position: Int): Long {
+        return memoListData[position].hashCode().toLong()
     }
 
-    fun getMemoListData(): MutableList<MemoListEntity> {
-        return memoListData
+    interface CallBack {
+        fun onMemoListClicked(position: Int, imgMemoListCheck: Boolean)
+        fun onMemoListLongClicked(position: Int)
+        fun onMemoDeleteCheckClicked(position: Int, deleteCheck: Boolean)
     }
-
-    fun isDeleteModeOn(): Boolean {
-        return deleteModeOn
-    }
-
-    fun setDeleteModeOn(deleteModeOn: Boolean) {
-        this.deleteModeOn = deleteModeOn
-    }
-
 }
