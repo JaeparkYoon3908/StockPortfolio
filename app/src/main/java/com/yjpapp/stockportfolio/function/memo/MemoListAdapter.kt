@@ -19,7 +19,7 @@ class MemoListAdapter(
     var callBack: CallBack?
 ) :
     RecyclerView.Adapter<MemoListAdapter.ViewHolder>() {
-    var deleteModeOn = false
+    var isDeleteModeOn = false
 
     inner class ViewHolder(val binding: ItemMemoListBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -36,15 +36,20 @@ class MemoListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.apply {
             memoData = memoListData[position]
-            deleteModeOn = this@MemoListAdapter.deleteModeOn
+            deleteModeOn = this@MemoListAdapter.isDeleteModeOn
         }
         holder.itemView.setOnLongClickListener {
             callBack?.onMemoListLongClicked(position = position)
             return@setOnLongClickListener true
         }
         holder.itemView.setOnClickListener {
-            val imgMemoListCheck = !holder.binding.imgMemoListCheck.isSelected
-            callBack?.onMemoListClicked(position = position, imgMemoListCheck)
+            if (isDeleteModeOn) {
+                holder.binding.imgMemoListCheck.isSelected = !holder.binding.imgMemoListCheck.isSelected
+                val imgMemoListCheck = holder.binding.imgMemoListCheck.isSelected
+                callBack?.onMemoListClicked(position = position, imgMemoListCheck)
+            } else {
+                callBack?.onMemoListClicked(position = position)
+            }
         }
     }
 
@@ -52,12 +57,9 @@ class MemoListAdapter(
         return memoListData.size
     }
 
-    override fun getItemId(position: Int): Long {
-        return memoListData[position].hashCode().toLong()
-    }
-
     interface CallBack {
         fun onMemoListClicked(position: Int, imgMemoListCheck: Boolean)
+        fun onMemoListClicked(position: Int)
         fun onMemoListLongClicked(position: Int)
         fun onMemoDeleteCheckClicked(position: Int, deleteCheck: Boolean)
     }

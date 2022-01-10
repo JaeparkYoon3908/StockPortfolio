@@ -43,8 +43,6 @@ class MemoListViewModel(
     fun requestUpdateDeleteCheck(position: Int, deleteCheck: Boolean) {
         val id = repository.getAllMemoInfoList()[position].id
         repository.updateDeleteCheck(id, deleteCheck.toString())
-        val allMemoList = repository.getAllMemoInfoList()
-        event(Event.SendToAllMemoListData(allMemoList))
     }
 
     private fun event(event: Event) {

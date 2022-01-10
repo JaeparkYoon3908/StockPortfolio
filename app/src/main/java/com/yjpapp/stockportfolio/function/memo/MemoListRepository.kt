@@ -22,7 +22,11 @@ class MemoListRepository(
     }
 
     fun updateDeleteCheck(id: Int, deleteCheck: String){
-        memoListDao.updateDeleteChecked(id, deleteCheck)
+        try {
+            memoListDao.updateDeleteChecked(id, deleteCheck)
+        } catch (e: Exception) {
+            e.stackTrace
+        }
     }
 
     fun deleteMemoInfoList(memoListEntity: MemoListEntity){
