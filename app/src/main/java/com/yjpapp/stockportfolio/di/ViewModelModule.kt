@@ -23,7 +23,7 @@ import org.koin.dsl.module
  * ViewModel
  */
 val loginViewModel = module {
-    single { UserRepository() }
+    single { UserRepository(PreferenceController.getInstance(androidContext())) }
     viewModel {
         LoginViewModel(
             androidApplication(),
@@ -46,7 +46,7 @@ val myViewModel = module {
     viewModel {
         MyViewModel(
             PreferenceController.getInstance(androidContext()),
-            UserRepository(),
+            UserRepository(PreferenceController.getInstance(androidContext())),
             MyRepository(PreferenceController.getInstance(androidContext()))
         )
     }

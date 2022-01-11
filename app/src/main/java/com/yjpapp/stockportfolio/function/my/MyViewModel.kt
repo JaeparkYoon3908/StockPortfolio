@@ -77,4 +77,25 @@ class MyViewModel(
     fun requestMyStockSetAutoRefresh(isAutoRefresh: Boolean) {
         myRepository.setMyStockSetAutoRefresh(isAutoRefresh)
     }
+    fun requestMyStockAutoAdd(isAutoAdd: Boolean) {
+        myRepository.setMyStockAutoAdd(isAutoAdd)
+    }
+    fun requestMyStockShowDeleteCheck(isDeleteCheckShow: Boolean) {
+        myRepository.setMyStockShowDeleteCheck(isDeleteCheckShow)
+    }
+    fun requestIncomeNoteShowDeleteCheck(isDeleteCheckShow: Boolean) {
+        myRepository.setIncomeNoteShowDeleteCheck(isDeleteCheckShow)
+    }
+    fun requestMemoShowDeleteCheck(isDeleteCheckShow: Boolean) {
+        myRepository.setShowDeleteCheck(isDeleteCheckShow)
+    }
+    fun requestMemoVibrateOff(isVibrateOff: Boolean) {
+        myRepository.setMemoVibrateOff(isVibrateOff)
+    }
+    fun requestDeleteUserInfo() {
+        myRepository.deleteUserPreference()
+    }
+    fun getLoginType(): String {
+        return userRepository.getLoginType()
+    }
 }

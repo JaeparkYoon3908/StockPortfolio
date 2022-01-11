@@ -21,7 +21,12 @@ class MemoListRepository(
     }
 
     fun getAllMemoInfoList(): MutableList<MemoListEntity>{
-        return memoListDao.getAll()
+        return try {
+            memoListDao.getAll()
+        } catch (e: Exception) {
+            e.stackTrace
+            mutableListOf()
+        }
     }
 
     fun updateDeleteCheck(id: Int, deleteCheck: String){
@@ -33,7 +38,11 @@ class MemoListRepository(
     }
 
     fun deleteMemoInfoList(memoListEntity: MemoListEntity){
-        memoListDao.delete(memoListEntity)
+        try {
+            memoListDao.delete(memoListEntity)
+        } catch (e: Exception) {
+            e.stackTrace
+        }
     }
 
     fun getIsMemoVibration(): Boolean {

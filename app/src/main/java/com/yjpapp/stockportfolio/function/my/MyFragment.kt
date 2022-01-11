@@ -20,7 +20,6 @@ import org.koin.android.ext.android.inject
 
 class MyFragment : BaseFragment<FragmentMyBinding>() {
     private val myViewModel: MyViewModel by inject()
-    private val preferenceController by lazy { PreferenceController.getInstance(mContext) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,7 +51,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>() {
         myViewModel.apply {
             isMemberOffSuccess.observe(owner, { isSuccess ->
                 if (isSuccess) {
-                    deleteUserPreference()
+                    myViewModel.requestDeleteUserInfo()
                     startLoginActivity()
                     requireActivity().finish()
                 }
@@ -92,7 +91,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>() {
                         },
                         rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
                             override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                when (preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)) {
+                                when (myViewModel.getLoginType()) {
                                     StockConfig.LOGIN_TYPE_NAVER -> {
                                         myViewModel.requestDeleteNaverUserInfo(mContext)
                                     }
@@ -141,27 +140,27 @@ class MyFragment : BaseFragment<FragmentMyBinding>() {
                 //나의 주식에서 수익노트로 자동추가
                 R.id.switch_my_stock_auto_add -> {
                     val isChecked = binding.switchMyStockAutoAdd.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, isChecked)
+                    myViewModel.requestMyStockAutoAdd(isChecked)
                 }
                 //나의 주식 삭제 시 삭제 확인 띄우기
                 R.id.switch_my_stock_show_delete_check -> {
                     val isChecked = binding.switchMyStockShowDeleteCheck.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, isChecked)
+                    myViewModel.requestMyStockShowDeleteCheck(isChecked)
                 }
                 //수익 노트 삭제 시 삭제 확인 띄우기
                 R.id.switch_income_note_show_delete_check -> {
                     val isChecked = binding.switchIncomeNoteShowDeleteCheck.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, isChecked)
+                    myViewModel.requestIncomeNoteShowDeleteCheck(isChecked)
                 }
                 //메모 삭제 시 확인 띄우기
                 R.id.switch_memo_show_delete_check -> {
                     val isChecked = binding.switchMemoShowDeleteCheck.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, isChecked)
+                    myViewModel.requestMemoShowDeleteCheck(isChecked)
                 }
                 //메모 삭제 모드 진입 시 진동 켜기
                 R.id.switch_memo_vibrate_off -> {
                     val isChecked = binding.switchMemoVibrateOff.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK, isChecked)
+                    myViewModel.requestMemoVibrateOff(isChecked)
                 }
             }
         }
@@ -170,23 +169,5 @@ class MyFragment : BaseFragment<FragmentMyBinding>() {
         Intent(mContext, LoginActivity::class.java).apply {
             mContext.startActivity(this)
         }
-    }
-
-    private fun deleteUserPreference() {
-        preferenceController.removePreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)
-        preferenceController.removePreference(PrefKey.KEY_AUTO_LOGIN)
-
-        preferenceController.removePreference(PrefKey.KEY_USER_INDEX)
-        preferenceController.removePreference(PrefKey.KEY_USER_LOGIN_TYPE)
-        preferenceController.removePreference(PrefKey.KEY_USER_NAME)
-        preferenceController.removePreference(PrefKey.KEY_USER_EMAIL)
-        preferenceController.removePreference(PrefKey.KEY_USER_TOKEN)
-
-        preferenceController.removePreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
-        preferenceController.removePreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)
-        preferenceController.removePreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
-        preferenceController.removePreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
-        preferenceController.removePreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)
-        preferenceController.removePreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)
     }
 }

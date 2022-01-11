@@ -8,7 +8,9 @@ import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.network.RetrofitClient
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 
-class UserRepository {
+class UserRepository(
+    private val preferenceController: PreferenceController
+) {
 
     suspend fun postUserInfo(context: Context, reqSnsLogin: ReqSNSLogin) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestRegUser(reqSnsLogin)
@@ -27,9 +29,9 @@ class UserRepository {
 
     fun logout(context: Context) {
         //프리퍼런스 reset
-        PreferenceController.getInstance(context).setPreference(PrefKey.KEY_AUTO_LOGIN, false)
-        PreferenceController.getInstance(context).setPreference(PrefKey.KEY_USER_INDEX, "")
-        PreferenceController.getInstance(context).setPreference(PrefKey.KEY_USER_TOKEN, "")
+        preferenceController.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
+        preferenceController.setPreference(PrefKey.KEY_USER_INDEX, "")
+        preferenceController.setPreference(PrefKey.KEY_USER_TOKEN, "")
 
         val intent = Intent(context, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -38,4 +40,8 @@ class UserRepository {
 
     suspend fun deleteUserInfo(context: Context) =
         RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteUserInfo()
+
+    fun getLoginType(): String {
+        return preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
+    }
 }
