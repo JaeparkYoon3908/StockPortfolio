@@ -1,7 +1,7 @@
 package com.yjpapp.stockportfolio.function.mystock.search
 
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseMVVMFragment
+import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.databinding.FragmentStockSearchBinding
 
 /**
@@ -10,7 +10,7 @@ import com.yjpapp.stockportfolio.databinding.FragmentStockSearchBinding
  * @author Yoon Jae-park
  * @since 2021.11
  */
-class StockSearchFragment : BaseMVVMFragment<FragmentStockSearchBinding>() {
+class StockSearchFragment : BaseFragment<FragmentStockSearchBinding>() {
     /**
      * @return layout resource id
      */

@@ -22,19 +22,16 @@ import org.koin.android.ext.android.inject
  * @author Yoon Jae-park
  * @since 2020.12.27
  */
-class MemoReadWriteActivity: BaseActivity() {
+class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout.activity_memo_read_write) {
     private var mode: String? = null
     private var memoListPosition = 0
     private var id = 0
     private var title: String? = null
     private var content: String? = null
     private val viewModel: MemoReadWriteViewModel by inject()
-    private var _binding: ActivityMemoReadWriteBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = DataBindingUtil.setContentView(this, R.layout.activity_memo_read_write)
         initView()
         initData()
     }
@@ -139,7 +136,7 @@ class MemoReadWriteActivity: BaseActivity() {
 
     private fun deleteMemo() {
         viewModel.requestDeleteMemoData(id)
-        val intent = Intent(mContext, MemoListFragment::class.java)
+        val intent = Intent(applicationContext, MemoListFragment::class.java)
         intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, memoListPosition)
         setResult(MemoListFragment.RESULT_DELETE, intent)
         finish()

@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseMVVMFragment
+import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
@@ -26,7 +26,7 @@ import java.util.*
  * @author Yoon Jae-park
  * @since 2021.04
  */
-class MyStockFragment : BaseMVVMFragment<FragmentMyStockBinding>(), MyStockAdapter.AdapterCallBack {
+class MyStockFragment : BaseFragment<FragmentMyStockBinding>(), MyStockAdapter.AdapterCallBack {
 
     private val myStockViewModel: MyStockViewModel by inject()
     private lateinit var myStockAdapter: MyStockAdapter

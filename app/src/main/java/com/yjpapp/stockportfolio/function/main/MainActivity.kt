@@ -3,7 +3,6 @@ package com.yjpapp.stockportfolio.function.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
@@ -21,7 +20,7 @@ import com.yjpapp.stockportfolio.util.Utils
  * @author Yoon Jae-park
  * @since 2020.12
  */
-class MainActivity : BaseActivity(), MainView {
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main), MainView {
     companion object {
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
@@ -35,12 +34,9 @@ class MainActivity : BaseActivity(), MainView {
     private val memoListFragment = MemoListFragment()
     private val myFragment = MyFragment()
     private var currentFragment: Fragment = myStockFragment
-    private var _binding: ActivityMainBinding? = null
-    private val binding: ActivityMainBinding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         initData()
         initLayout()
     }
@@ -83,7 +79,7 @@ class MainActivity : BaseActivity(), MainView {
             super.onBackPressed()
             return
         }
-        Utils.runBackPressAppCloseEvent(mContext, this)
+        Utils.runBackPressAppCloseEvent(applicationContext, this)
     }
 
     private fun startFirstFragment() {

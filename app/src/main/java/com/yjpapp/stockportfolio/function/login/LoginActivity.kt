@@ -3,11 +3,9 @@ package com.yjpapp.stockportfolio.function.login
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.databinding.DataBindingUtil
 import com.facebook.*
 import com.facebook.GraphRequest.GraphJSONObjectCallback
 import com.facebook.appevents.AppEventsLogger
@@ -33,7 +31,6 @@ import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
-import es.dmoral.toasty.Toasty
 import org.koin.android.ext.android.inject
 
 
@@ -42,10 +39,8 @@ import org.koin.android.ext.android.inject
  * @author 윤재박
  * @since 2021.07
  */
-class LoginActivity : BaseActivity() {
+class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private val TAG = LoginActivity::class.simpleName
-    private var _binding: ActivityLoginBinding? = null
-    private val binding get() = _binding!!
     private val gso by lazy {
         GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(StockConfig.GOOGLE_SIGN_CLIENT_ID)
@@ -83,8 +78,6 @@ class LoginActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-
         initData()
     }
 
@@ -103,25 +96,6 @@ class LoginActivity : BaseActivity() {
 
     private fun initData() {
         preferenceController.apply {
-            //마이 설정값이 없을 때 초기화
-            if (!isExists(PrefKey.KEY_SETTING_AUTO_LOGIN)) {
-                setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
-            }
-            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
-                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
-            }
-            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)) {
-                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, true)
-            }
-            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)) {
-                setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, true)
-            }
-            if (!isExists(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)) {
-                setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, true)
-            }
-            if (!isExists(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)) {
-                setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, true)
-            }
             //자동 로그인이 설정 돼 있으면
             getPreference(PrefKey.KEY_AUTO_LOGIN)?.let { isAutoLoginAble ->
                 getPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)?.let { isAutoLoginSetting ->
@@ -163,7 +137,7 @@ class LoginActivity : BaseActivity() {
                 if (data.message == "success") {
                     if (data.response.email.isEmpty() || data.response.name.isEmpty()) {
                         CommonOneBtnDialog(
-                            mContext,
+                            applicationContext,
                             CommonOneBtnDialog.CommonOneBtnData(
                                 "필수 정보 제공 항목에 동의해주세요.",
                                 "확인",
@@ -195,7 +169,7 @@ class LoginActivity : BaseActivity() {
             serverError.observe(this@LoginActivity, { errorCode->
                 when (errorCode) {
                     ServerRespCode.NetworkNotConnected -> {
-                        ResponseAlertManger.showNetworkConnectErrorAlert(mContext)
+                        ResponseAlertManger.showNetworkConnectErrorAlert(applicationContext)
                         stopLoadingAnimation()
                     }
                 }

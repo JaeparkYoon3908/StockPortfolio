@@ -25,9 +25,7 @@ import java.util.*
  * @since 2020.10
  */
 
-class SplashActivity: BaseActivity() {
-    private var _binding: ActivitySplashBinding? = null
-    private val binding get() = _binding!!
+class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_splash) {
     private val permissionList = arrayOf<String>(
         Manifest.permission.READ_PHONE_STATE
 //            Manifest.permission.READ_SMS,
@@ -39,12 +37,16 @@ class SplashActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
+        initData()
         startMainActivity()
     }
 
     private fun initData() {
         preferenceController.apply {
+            //마이 설정값이 없을 때 초기화
+            if (!isExists(PrefKey.KEY_SETTING_AUTO_LOGIN)) {
+                setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
+            }
             if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
                 setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
             }
@@ -63,12 +65,11 @@ class SplashActivity: BaseActivity() {
         }
     }
 
-    private fun initLayout() {
-    }
+    private fun initLayout() {}
 
     private fun startMainActivity(){
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(mContext, LoginActivity::class.java)
+            val intent = Intent(applicationContext, LoginActivity::class.java)
             finish()
             startActivity(intent)
 
@@ -95,10 +96,10 @@ class SplashActivity: BaseActivity() {
     private fun checkPermissions(vararg permissions: String): Boolean {
         var result: Int
         val permissionsNeeded: MutableList<String> = ArrayList()
-        for (p in permissions) {
-            result = ContextCompat.checkSelfPermission(this, p)
+        permissions.forEach {
+            result = ContextCompat.checkSelfPermission(this, it)
             if (result != PackageManager.PERMISSION_GRANTED) {
-                permissionsNeeded.add(p)
+                permissionsNeeded.add(it)
             }
         }
         if (permissionsNeeded.isNotEmpty()) {

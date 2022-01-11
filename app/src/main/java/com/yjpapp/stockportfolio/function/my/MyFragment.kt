@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseMVVMFragment
+import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
@@ -18,7 +18,7 @@ import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import org.koin.android.ext.android.inject
 
-class MyFragment : BaseMVVMFragment<FragmentMyBinding>() {
+class MyFragment : BaseFragment<FragmentMyBinding>() {
     private val myViewModel: MyViewModel by inject()
     private val preferenceController by lazy { PreferenceController.getInstance(mContext) }
 
