@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.function.memo.detail
 
 import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
+import com.yjpapp.stockportfolio.repository.MemoReadWriteRepository
 
 /**
  * since 2022.01.05

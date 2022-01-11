@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.memo.detail
+package com.yjpapp.stockportfolio.repository
 
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity

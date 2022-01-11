@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.memo
+package com.yjpapp.stockportfolio.repository
 
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController

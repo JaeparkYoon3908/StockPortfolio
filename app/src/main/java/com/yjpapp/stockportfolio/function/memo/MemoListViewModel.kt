@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
+import com.yjpapp.stockportfolio.repository.MemoListRepository
 import kotlinx.coroutines.launch
 
 /**

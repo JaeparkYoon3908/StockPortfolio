@@ -1,17 +1,17 @@
 package com.yjpapp.stockportfolio.di
 
-import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
 import com.yjpapp.stockportfolio.function.login.LoginViewModel
-import com.yjpapp.stockportfolio.function.memo.MemoListRepository
+import com.yjpapp.stockportfolio.repository.MemoListRepository
 import com.yjpapp.stockportfolio.function.memo.MemoListViewModel
-import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteRepository
+import com.yjpapp.stockportfolio.repository.MemoReadWriteRepository
 import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteViewModel
+import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.function.my.MyViewModel
 import com.yjpapp.stockportfolio.function.mystock.MyStockViewModel
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
-import com.yjpapp.stockportfolio.repository.MyRepository
+import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
 import org.koin.android.ext.koin.androidApplication
@@ -43,11 +43,11 @@ val myStockViewModel = module {
     }
 }
 val myViewModel = module {
-    single { MyRepository() }
     viewModel {
         MyViewModel(
             PreferenceController.getInstance(androidContext()),
-            get()
+            UserRepository(),
+            MyRepository(PreferenceController.getInstance(androidContext()))
         )
     }
 }
@@ -70,7 +70,8 @@ val memoListViewModel = module {
     single { MemoListRepository(
         MyRoomDatabase.getInstance(androidContext()).memoListDao(),
         PreferenceController.getInstance(androidContext())
-    )}
+    )
+    }
     viewModel {
         MemoListViewModel(get())
     }
