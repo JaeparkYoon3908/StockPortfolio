@@ -18,10 +18,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyViewModel(
-    application: Application,
     private val preferenceController: PreferenceController,
-    private val userRepository: UserRepository
-): AndroidViewModel(application) {
+    private val userRepository: UserRepository,
+    private val myRepository: MyRepository
+): ViewModel() {
     val userName = preferenceController.getPreference(PrefKey.KEY_USER_NAME)
     val userEmail = Utils.getEmailMasking(preferenceController.getPreference(PrefKey.KEY_USER_EMAIL))
     val userLoginType = preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)
@@ -31,6 +31,8 @@ class MyViewModel(
     val isIncomeNoteShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)
     val isAutoLoginCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
     val isAutoMemoShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)
+    val isMemoLongClickVibrateCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)
+
     val isMemberOffSuccess = MutableLiveData<Boolean>()
     val isNetworkConnectException = MutableLiveData<Boolean>()
 
@@ -51,8 +53,8 @@ class MyViewModel(
     }
 
     val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
-    fun requestDeleteNaverUserInfo() {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun requestDeleteNaverUserInfo(context: Context) {
+        viewModelScope.launch {
             val naverAccessToken = preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
             val params = HashMap<String, String>()
             params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
@@ -61,14 +63,21 @@ class MyViewModel(
             params["grant_type"] = "delete"
             params["service_provider"] = "NAVER"
 
-            val result = userRepository.deleteNaverUserInfo(getApplication(), params)
+            val result = userRepository.deleteNaverUserInfo(context, params)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(getApplication())
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
             if (result.isSuccessful) {
                 respDeleteNaverUserInfo.postValue(result.body())
             }
         }
+    }
+
+    fun requestSetAutoLogin(isAutoLogin: Boolean) {
+        myRepository.setAutoLogin(isAutoLogin)
+    }
+    fun requestMyStockSetAutoRefresh(isAutoRefresh: Boolean) {
+        myRepository.setMyStockSetAutoRefresh(isAutoRefresh)
     }
 }

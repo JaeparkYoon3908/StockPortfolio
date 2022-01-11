@@ -20,4 +20,6 @@ object PrefKey {
     const val KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK = "setting_show_delete_check"
     const val KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK = "setting_income_note_show_delete_check"
     const val KEY_SETTING_MEMO_SHOW_DELETE_CHECK = "setting_memo_show_delete_check"
+    const val KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK = "setting_memo_long_click_vibrate_check"
+
 }

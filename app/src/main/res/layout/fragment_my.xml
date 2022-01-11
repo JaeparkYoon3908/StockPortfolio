@@ -307,6 +307,33 @@
                     android:thumb="@drawable/switch_thumb_20"
                     binding:switchChecked="@{viewModel.isAutoMemoShowDeleteCheck}" />
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/My_Memo_Long_Click_Vibrate"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/color_222222"
+                    android:textSize="@dimen/common_16dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_memo_vibrate_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/common_30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    android:onClick="@{callBack::onSwitchClick}"
+                    android:theme="@style/StockPortfolioSwitch"
+                    android:thumb="@drawable/switch_thumb_20"
+                    binding:switchChecked="@{viewModel.isMemoLongClickVibrateCheck}" />
+            </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

@@ -46,7 +46,6 @@ val myViewModel = module {
     single { MyRepository() }
     viewModel {
         MyViewModel(
-            androidApplication(),
             PreferenceController.getInstance(androidContext()),
             get()
         )
@@ -56,6 +55,7 @@ val incomeNoteViewModel = module {
     single { IncomeNoteRepository() }
     viewModel {
         IncomeNoteViewModel(
+            androidContext(),
             get()
         )
     }
@@ -67,7 +67,10 @@ val memoReadWriteViewModel = module {
     }
 }
 val memoListViewModel = module {
-    single { MemoListRepository(MyRoomDatabase.getInstance(androidContext()).memoListDao()) }
+    single { MemoListRepository(
+        MyRoomDatabase.getInstance(androidContext()).memoListDao(),
+        PreferenceController.getInstance(androidContext())
+    )}
     viewModel {
         MemoListViewModel(get())
     }

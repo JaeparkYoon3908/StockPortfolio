@@ -279,7 +279,9 @@ class MemoListFragment : Fragment() {
                 showAddButton()
                 hideDeleteButton()
             }
-            Utils.runVibration(mContext, 100)
+            if (viewModel.isMemoVibration()) {
+                Utils.runVibration(mContext, 100)
+            }
             memoListAdapter.isDeleteModeOn = !memoListAdapter.isDeleteModeOn
             viewModel.getAllMemoInfoList()
         }

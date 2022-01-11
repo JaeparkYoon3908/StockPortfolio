@@ -94,7 +94,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>() {
                             override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
                                 when (preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)) {
                                     StockConfig.LOGIN_TYPE_NAVER -> {
-                                        myViewModel.requestDeleteNaverUserInfo()
+                                        myViewModel.requestDeleteNaverUserInfo(mContext)
                                     }
                                     else -> {
                                         myViewModel.requestLogout(mContext)
@@ -131,12 +131,12 @@ class MyFragment : BaseFragment<FragmentMyBinding>() {
                 //자동 로그인
                 R.id.switch_auto_login -> {
                     val isChecked = binding.switchAutoLogin.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, isChecked)
+                    myViewModel.requestSetAutoLogin(isChecked)
                 }
                 //수익노트 자동 새로 고침
                 R.id.switch_my_stock_auto_refresh -> {
                     val isChecked = binding.switchMyStockAutoRefresh.isChecked
-                    preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, isChecked)
+                    myViewModel.requestMyStockSetAutoRefresh(isChecked)
                 }
                 //나의 주식에서 수익노트로 자동추가
                 R.id.switch_my_stock_auto_add -> {
@@ -157,6 +157,11 @@ class MyFragment : BaseFragment<FragmentMyBinding>() {
                 R.id.switch_memo_show_delete_check -> {
                     val isChecked = binding.switchMemoShowDeleteCheck.isChecked
                     preferenceController.setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, isChecked)
+                }
+                //메모 삭제 모드 진입 시 진동 켜기
+                R.id.switch_memo_vibrate_off -> {
+                    val isChecked = binding.switchMemoVibrateOff.isChecked
+                    preferenceController.setPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK, isChecked)
                 }
             }
         }

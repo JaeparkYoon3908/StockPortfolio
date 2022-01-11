@@ -15,7 +15,7 @@ import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 
 class CommonOneBtnDialog(
     val mContext: Context,
-    val commonOneBtnData: CommonOneBtnData
+    private val commonOneBtnData: CommonOneBtnData
 ) : AlertDialog(mContext) {
     data class CommonOneBtnData(
         var noticeText: String = "",

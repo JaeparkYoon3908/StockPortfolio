@@ -47,7 +47,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             .requestEmail() // email addresses도 요청함
             .build()
     }
-    private val mGoogleSignInClient by lazy { GoogleSignIn.getClient(applicationContext, gso) }
+    private val mGoogleSignInClient by lazy { GoogleSignIn.getClient(this@LoginActivity, gso) }
     private val facebookCallbackManager by lazy { CallbackManager.Factory.create() }
 
     private val viewModel: LoginViewModel by inject()
@@ -137,7 +137,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 if (data.message == "success") {
                     if (data.response.email.isEmpty() || data.response.name.isEmpty()) {
                         CommonOneBtnDialog(
-                            applicationContext,
+                            this@LoginActivity,
                             CommonOneBtnDialog.CommonOneBtnData(
                                 "필수 정보 제공 항목에 동의해주세요.",
                                 "확인",
@@ -169,7 +169,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             serverError.observe(this@LoginActivity, { errorCode->
                 when (errorCode) {
                     ServerRespCode.NetworkNotConnected -> {
-                        ResponseAlertManger.showNetworkConnectErrorAlert(applicationContext)
+                        ResponseAlertManger.showNetworkConnectErrorAlert(this@LoginActivity)
                         stopLoadingAnimation()
                     }
                 }
@@ -230,10 +230,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         val mOAuthLoginHandler = @SuppressLint("HandlerLeak") object : OAuthLoginHandler() {
             override fun run(success: Boolean) {
                 if (success) {
-                    val accessToken: String = mOAuthLoginModule.getAccessToken(applicationContext)
-                    val refreshToken: String = mOAuthLoginModule.getRefreshToken(applicationContext)
-                    val expiresAt: Long = mOAuthLoginModule.getExpiresAt(applicationContext)
-                    val tokenType: String = mOAuthLoginModule.getTokenType(applicationContext)
+                    val accessToken: String = mOAuthLoginModule.getAccessToken(this@LoginActivity)
+                    val refreshToken: String = mOAuthLoginModule.getRefreshToken(this@LoginActivity)
+                    val expiresAt: Long = mOAuthLoginModule.getExpiresAt(this@LoginActivity)
+                    val tokenType: String = mOAuthLoginModule.getTokenType(this@LoginActivity)
                     StockLog.d(TAG, "accessToken : $accessToken")
                     StockLog.d(TAG, "refreshToken : $refreshToken")
                     StockLog.d(TAG, "expiresAt : $expiresAt")
@@ -244,8 +244,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     viewModel.requestGetNaverUserInfo()
                     startLoadingAnimation()
                 } else {
-                    val errorCode: String = mOAuthLoginModule.getLastErrorCode(applicationContext).code
-                    val errorDesc: String = mOAuthLoginModule.getLastErrorDesc(applicationContext)
+                    val errorCode: String = mOAuthLoginModule.getLastErrorCode(this@LoginActivity).code
+                    val errorDesc: String = mOAuthLoginModule.getLastErrorDesc(this@LoginActivity)
                     StockLog.d(TAG, "errorCode:$errorCode, errorDesc:$errorDesc")
                 }
             }
@@ -292,7 +292,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun startMainActivity() {
         stopLoadingAnimation()
-        val intent = Intent(applicationContext, MainActivity::class.java)
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
         startActivity(intent)
         finish()
     }

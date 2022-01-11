@@ -1,5 +1,7 @@
 package com.yjpapp.stockportfolio.function.memo
 
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 
@@ -10,7 +12,8 @@ import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
  * @since 2020.12
  */
 class MemoListRepository(
-    private val memoListDao: MemoListDao
+    private val memoListDao: MemoListDao,
+    private val preferenceController: PreferenceController
 ) {
 
     fun getMemoInfo(id: Int): MemoListEntity{
@@ -31,5 +34,10 @@ class MemoListRepository(
 
     fun deleteMemoInfoList(memoListEntity: MemoListEntity){
         memoListDao.delete(memoListEntity)
+    }
+
+    fun getIsMemoVibration(): Boolean {
+        val isMemoVibration = preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)?: ""
+        return isMemoVibration == "true"
     }
 }

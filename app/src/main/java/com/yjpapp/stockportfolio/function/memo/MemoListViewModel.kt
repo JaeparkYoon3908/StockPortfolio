@@ -51,6 +51,10 @@ class MemoListViewModel(
         }
     }
 
+    fun isMemoVibration(): Boolean {
+        return repository.getIsMemoVibration()
+    }
+
     sealed class Event {
         data class SendToAllMemoListData(val data: MutableList<MemoListEntity>): Event()
         data class MemoListDataDeleteSuccess(val data: MutableList<MemoListEntity>): Event()

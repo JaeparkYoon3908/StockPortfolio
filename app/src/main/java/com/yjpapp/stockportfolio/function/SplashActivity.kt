@@ -47,6 +47,7 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_spla
             if (!isExists(PrefKey.KEY_SETTING_AUTO_LOGIN)) {
                 setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
             }
+            //나의 주식
             if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
                 setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
             }
@@ -56,11 +57,16 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_spla
             if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)) {
                 setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, true)
             }
+            //수익 노트
             if (!isExists(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)) {
                 setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, true)
             }
+            //메모
             if (!isExists(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)) {
                 setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK, true)
             }
         }
     }
