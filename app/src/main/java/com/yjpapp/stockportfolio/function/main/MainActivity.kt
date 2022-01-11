@@ -3,16 +3,16 @@ package com.yjpapp.stockportfolio.function.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseMVPActivity
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
-import com.yjpapp.stockportfolio.function.my.MyFragment
 import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteFragment
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
+import com.yjpapp.stockportfolio.function.my.MyFragment
 import com.yjpapp.stockportfolio.function.mystock.MyStockComposeFragment
-import com.yjpapp.stockportfolio.function.mystock.MyStockFragment
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.Utils
 
 /**
@@ -21,7 +21,7 @@ import com.yjpapp.stockportfolio.util.Utils
  * @author Yoon Jae-park
  * @since 2020.12
  */
-class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
+class MainActivity : BaseActivity(), MainView {
     companion object {
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
@@ -29,21 +29,27 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
         const val FRAGMENT_TAG_MY = "my"
     }
 
-    private val myStockFragment = MyStockFragment()
+//    private val myStockFragment = MyStockFragment()
+    private val myStockFragment = MyStockComposeFragment()
     private val incomeNoteFragment = IncomeNoteFragment()
     private val memoListFragment = MemoListFragment()
     private val myFragment = MyFragment()
     private var currentFragment: Fragment = myStockFragment
+    private var _binding: ActivityMainBinding? = null
+    private val binding: ActivityMainBinding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        initData()
+        initLayout()
     }
 
-    override fun initData() {
+    private fun initData() {
         preferenceController.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
     }
 
-    override fun initLayout() {
+    private fun initLayout() {
         binding.apply {
             setSupportActionBar(toolbarMainActivity)
         }
@@ -196,10 +202,6 @@ class MainActivity : BaseMVPActivity<ActivityMainBinding>(), MainView {
                 switchingBottomIconMy()
             }
         }
-    }
-
-    override fun getViewBinding(): ActivityMainBinding {
-        return ActivityMainBinding.inflate(layoutInflater)
     }
 
     //나의 주식 바텀 아이콘 on off 스위칭

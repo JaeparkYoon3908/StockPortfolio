@@ -12,8 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
-import com.yjpapp.stockportfolio.base.BaseMVPActivity
-import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
 import com.yjpapp.stockportfolio.databinding.ActivitySplashBinding
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
