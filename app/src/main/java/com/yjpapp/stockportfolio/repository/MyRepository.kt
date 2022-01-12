@@ -9,25 +9,45 @@ class MyRepository(
     fun setAutoLogin(isAutoLogin: Boolean) {
         preferenceController.setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, isAutoLogin)
     }
-    fun setMyStockSetAutoRefresh(isAutoRefresh: Boolean) {
+    fun getAutoLogin(): String {
+        return preferenceController.getPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)?: ""
+    }
+    fun setMyStockAutoRefresh(isAutoRefresh: Boolean) {
         preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, isAutoRefresh)
+    }
+    fun getMyStockAutoRefresh(): String {
+        return preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)?: ""
     }
     fun setMyStockAutoAdd(isAutoAdd: Boolean) {
         preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, isAutoAdd)
     }
+    fun getMyStockAutoAdd(): String {
+        return preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)?: ""
+    }
     fun setMyStockShowDeleteCheck(isDeleteCheckShow: Boolean) {
         preferenceController.setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, isDeleteCheckShow)
+    }
+    fun getMyStockShowDeleteCheck(): String {
+        return preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)?: ""
     }
     fun setIncomeNoteShowDeleteCheck(isDeleteCheckShow: Boolean) {
         preferenceController.setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, isDeleteCheckShow)
     }
-    fun setShowDeleteCheck(isDeleteCheckShow: Boolean) {
+    fun getIncomeNoteShowDeleteCheck(): String {
+        return preferenceController.getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)?: ""
+    }
+    fun setShowMemoDeleteCheck(isDeleteCheckShow: Boolean) {
         preferenceController.setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, isDeleteCheckShow)
+    }
+    fun getShowMemoDeleteCheck(): String {
+        return preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)?: ""
     }
     fun setMemoVibrateOff(isVibrateOff: Boolean) {
         preferenceController.setPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK, isVibrateOff)
     }
-
+    fun getMemoVibrateOff(): String {
+        return preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)?: ""
+    }
     fun deleteUserPreference() {
         preferenceController.removePreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)
         preferenceController.removePreference(PrefKey.KEY_AUTO_LOGIN)
@@ -44,5 +64,33 @@ class MyRepository(
         preferenceController.removePreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
         preferenceController.removePreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)
         preferenceController.removePreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)
+    }
+    fun initMySetting() {
+        preferenceController.apply {
+            if (!isExists(PrefKey.KEY_SETTING_AUTO_LOGIN)) {
+                setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
+            }
+            //나의 주식
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
+                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)) {
+                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, true)
+            }
+            //수익 노트
+            if (!isExists(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, true)
+            }
+            //메모
+            if (!isExists(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, true)
+            }
+            if (!isExists(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)) {
+                setPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK, true)
+            }
+        }
     }
 }

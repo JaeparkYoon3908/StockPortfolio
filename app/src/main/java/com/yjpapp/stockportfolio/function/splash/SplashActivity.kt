@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function
+package com.yjpapp.stockportfolio.function.splash
 
 import android.Manifest
 import android.content.Intent
@@ -9,12 +9,11 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.databinding.ActivitySplashBinding
 import com.yjpapp.stockportfolio.function.login.LoginActivity
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import org.koin.android.ext.android.inject
 import java.util.*
 
 
@@ -26,6 +25,7 @@ import java.util.*
  */
 
 class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_splash) {
+    private val viewModel: SplashViewModel by inject()
     private val permissionList = arrayOf<String>(
         Manifest.permission.READ_PHONE_STATE
 //            Manifest.permission.READ_SMS,
@@ -42,33 +42,7 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_spla
     }
 
     private fun initData() {
-        preferenceController.apply {
-            //마이 설정값이 없을 때 초기화
-            if (!isExists(PrefKey.KEY_SETTING_AUTO_LOGIN)) {
-                setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
-            }
-            //나의 주식
-            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
-                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)
-            }
-            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)) {
-                setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, true)
-            }
-            if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)) {
-                setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, true)
-            }
-            //수익 노트
-            if (!isExists(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)) {
-                setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, true)
-            }
-            //메모
-            if (!isExists(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)) {
-                setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, true)
-            }
-            if (!isExists(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)) {
-                setPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK, true)
-            }
-        }
+        viewModel.requestInitMySetting()
     }
 
     private fun initLayout() {}

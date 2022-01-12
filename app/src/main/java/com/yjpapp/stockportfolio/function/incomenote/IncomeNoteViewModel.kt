@@ -15,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class IncomeNoteViewModel(
-    private val mContext: Context,
     private val incomeNoteRepository: IncomeNoteRepository
 ) : ViewModel() {
     private val _eventFlow = MutableEventFlow<Event>()
@@ -38,9 +37,9 @@ class IncomeNoteViewModel(
         }
         viewModelScope.launch {
             try {
-                val result = incomeNoteRepository.requestGetIncomeNote(mContext, params)
+                val result = incomeNoteRepository.requestGetIncomeNote(context, params)
                 if (result == null) {
-                    ResponseAlertManger.showNetworkConnectErrorAlert(mContext)
+                    ResponseAlertManger.showNetworkConnectErrorAlert(context)
                     return@launch
                 }
 

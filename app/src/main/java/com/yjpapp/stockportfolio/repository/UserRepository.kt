@@ -44,4 +44,16 @@ class UserRepository(
     fun getLoginType(): String {
         return preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
     }
+
+    fun getNaverAccessToken(): String {
+        return preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
+    }
+
+    fun getUserName(): String {
+        return preferenceController.getPreference(PrefKey.KEY_USER_NAME)?: ""
+    }
+
+    fun getUserEmail(): String {
+        return preferenceController.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
+    }
 }

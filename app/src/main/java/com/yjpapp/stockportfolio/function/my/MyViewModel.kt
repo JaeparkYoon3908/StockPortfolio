@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.response.RespNaverDeleteUserInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.MyRepository
@@ -15,20 +14,19 @@ import com.yjpapp.stockportfolio.util.Utils
 import kotlinx.coroutines.launch
 
 class MyViewModel(
-    private val preferenceController: PreferenceController,
     private val userRepository: UserRepository,
     private val myRepository: MyRepository
 ): ViewModel() {
-    val userName = preferenceController.getPreference(PrefKey.KEY_USER_NAME)
-    val userEmail = Utils.getEmailMasking(preferenceController.getPreference(PrefKey.KEY_USER_EMAIL))
-    val userLoginType = preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)
-    val isMyStockAutoRefresh = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)
-    val isMyStockAutoAdd = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
-    val isMyStockShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
-    val isIncomeNoteShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)
-    val isAutoLoginCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
-    val isAutoMemoShowDeleteCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)
-    val isMemoLongClickVibrateCheck = preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)
+    val userName = userRepository.getUserName()
+    val userEmail = Utils.getEmailMasking(userRepository.getUserEmail())
+    val userLoginType = userRepository.getLoginType()
+    val isMyStockAutoRefresh = myRepository.getMyStockAutoRefresh()
+    val isMyStockAutoAdd = myRepository.getMyStockAutoAdd()
+    val isMyStockShowDeleteCheck = myRepository.getMyStockShowDeleteCheck()
+    val isIncomeNoteShowDeleteCheck = myRepository.getIncomeNoteShowDeleteCheck()
+    val isAutoLoginCheck = myRepository.getAutoLogin()
+    val isShowMemoDeleteCheck = myRepository.getShowMemoDeleteCheck()
+    val isMemoLongClickVibrateCheck = myRepository.getMemoVibrateOff()
 
     val isMemberOffSuccess = MutableLiveData<Boolean>()
     val isNetworkConnectException = MutableLiveData<Boolean>()
@@ -52,7 +50,7 @@ class MyViewModel(
     val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
     fun requestDeleteNaverUserInfo(context: Context) {
         viewModelScope.launch {
-            val naverAccessToken = preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
+            val naverAccessToken = userRepository.getNaverAccessToken()
             val params = HashMap<String, String>()
             params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
             params["client_secret"] = StockConfig.NAVER_SIGN_CLIENT_SECRET
@@ -75,7 +73,7 @@ class MyViewModel(
         myRepository.setAutoLogin(isAutoLogin)
     }
     fun requestMyStockSetAutoRefresh(isAutoRefresh: Boolean) {
-        myRepository.setMyStockSetAutoRefresh(isAutoRefresh)
+        myRepository.setMyStockAutoRefresh(isAutoRefresh)
     }
     fun requestMyStockAutoAdd(isAutoAdd: Boolean) {
         myRepository.setMyStockAutoAdd(isAutoAdd)
@@ -87,7 +85,7 @@ class MyViewModel(
         myRepository.setIncomeNoteShowDeleteCheck(isDeleteCheckShow)
     }
     fun requestMemoShowDeleteCheck(isDeleteCheckShow: Boolean) {
-        myRepository.setShowDeleteCheck(isDeleteCheckShow)
+        myRepository.setShowMemoDeleteCheck(isDeleteCheckShow)
     }
     fun requestMemoVibrateOff(isVibrateOff: Boolean) {
         myRepository.setMemoVibrateOff(isVibrateOff)

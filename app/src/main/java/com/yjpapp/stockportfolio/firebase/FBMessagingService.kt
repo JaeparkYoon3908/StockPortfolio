@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.function.main.MainActivity
+import com.yjpapp.stockportfolio.function.MainActivity
 
 class FBMessagingService: FirebaseMessagingService() {
 

@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".function.SplashActivity"
+            android:name=".function.splash.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -28,7 +28,7 @@
         </activity>
 
         <activity
-            android:name=".function.main.MainActivity"
+            android:name=".function.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 

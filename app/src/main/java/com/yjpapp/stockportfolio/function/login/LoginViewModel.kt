@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     application: Application,
-    private val preferenceController: PreferenceController,
     private val userRepository: UserRepository
 ) : AndroidViewModel(application) {
     /**
@@ -74,7 +73,7 @@ class LoginViewModel(
 
     fun requestRetryNaverUserLogin() {
         viewModelScope.launch(Dispatchers.IO) {
-            val naverAccessToken = preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
+            val naverAccessToken = userRepository.getNaverAccessToken()
             val params = HashMap<String, String>()
             params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
             params["response_type"] = "code"
@@ -98,7 +97,7 @@ class LoginViewModel(
     val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
     fun requestDeleteNaverUserInfo() {
         viewModelScope.launch(Dispatchers.IO) {
-            val naverAccessToken = preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
+            val naverAccessToken = userRepository.getNaverAccessToken()
             val params = HashMap<String, String>()
             params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
             params["client_secret"] = StockConfig.NAVER_SIGN_CLIENT_SECRET

@@ -24,7 +24,7 @@ import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
 import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
-import com.yjpapp.stockportfolio.function.main.MainActivity
+import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo

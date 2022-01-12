@@ -305,7 +305,7 @@
                     android:onClick="@{callBack::onSwitchClick}"
                     android:theme="@style/StockPortfolioSwitch"
                     android:thumb="@drawable/switch_thumb_20"
-                    binding:switchChecked="@{viewModel.isAutoMemoShowDeleteCheck}" />
+                    binding:switchChecked="@{viewModel.isShowMemoDeleteCheck}" />
             </RelativeLayout>
 
             <RelativeLayout

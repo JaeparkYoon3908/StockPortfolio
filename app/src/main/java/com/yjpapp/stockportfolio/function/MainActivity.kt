@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.main
+package com.yjpapp.stockportfolio.function
 
 import android.content.Intent
 import android.os.Bundle
@@ -20,7 +20,7 @@ import com.yjpapp.stockportfolio.util.Utils
  * @author Yoon Jae-park
  * @since 2020.12
  */
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main), MainView {
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     companion object {
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
         const val FRAGMENT_TAG_INCOME_NOTE = "income_note"
@@ -111,7 +111,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main), 
         }
     }
 
-    override fun showFragment(fragment: Fragment) {
+    private fun showFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .hide(currentFragment)
             .show(fragment)
@@ -161,7 +161,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main), 
 
     }
 
-    override fun clickBottomMenu(view: View?) {
+    fun clickBottomMenu(view: View?) {
         when (currentFragment) {
             myStockFragment -> {
                 if (view?.id == R.id.lin_MainActivity_BottomMenu_MyStock) return

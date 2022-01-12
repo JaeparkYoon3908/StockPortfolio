@@ -9,6 +9,7 @@ import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteViewModel
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.function.my.MyViewModel
 import com.yjpapp.stockportfolio.function.mystock.MyStockViewModel
+import com.yjpapp.stockportfolio.function.splash.SplashViewModel
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
@@ -27,7 +28,6 @@ val loginViewModel = module {
     viewModel {
         LoginViewModel(
             androidApplication(),
-            PreferenceController.getInstance(androidContext()),
             get()
         )
     }
@@ -45,7 +45,6 @@ val myStockViewModel = module {
 val myViewModel = module {
     viewModel {
         MyViewModel(
-            PreferenceController.getInstance(androidContext()),
             UserRepository(PreferenceController.getInstance(androidContext())),
             MyRepository(PreferenceController.getInstance(androidContext()))
         )
@@ -55,7 +54,6 @@ val incomeNoteViewModel = module {
     single { IncomeNoteRepository() }
     viewModel {
         IncomeNoteViewModel(
-            androidContext(),
             get()
         )
     }
@@ -70,10 +68,16 @@ val memoListViewModel = module {
     single { MemoListRepository(
         MyRoomDatabase.getInstance(androidContext()).memoListDao(),
         PreferenceController.getInstance(androidContext())
-    )
-    }
+    )}
     viewModel {
         MemoListViewModel(get())
+    }
+}
+val splashViewModel = module {
+    viewModel {
+        SplashViewModel(
+            MyRepository(PreferenceController.getInstance(androidContext()))
+        )
     }
 }
 /**
