@@ -7,9 +7,11 @@ import androidx.databinding.ViewDataBinding
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import org.koin.android.ext.android.inject
 
-abstract class BaseActivity<T : ViewDataBinding?>(private val layoutId: Int) : AppCompatActivity() {
+abstract class BaseActivity<T : ViewDataBinding>(
+    private val layoutId: Int
+) : AppCompatActivity() {
     private var _binding: T? = null
-    val binding:T get() = _binding!!
+    val binding: T get() = _binding!!
     val preferenceController: PreferenceController by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +21,6 @@ abstract class BaseActivity<T : ViewDataBinding?>(private val layoutId: Int) : A
 
     override fun onDestroy() {
         super.onDestroy()
-        binding?.unbind()
+        binding.unbind()
     }
 }

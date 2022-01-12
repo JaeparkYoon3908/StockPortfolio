@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
@@ -40,19 +41,15 @@ import java.util.*
  * @author Yoon Jae-park
  * @since 2020.08
  */
-class IncomeNoteFragment : Fragment() {
+class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.fragment_income_note) {
     private val TAG = IncomeNoteFragment::class.java.simpleName
-    private lateinit var mContext: Context
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private var incomeNoteListAdapter = IncomeNoteListAdapter(arrayListOf(), null).apply { setHasStableIds(true) }
 
-    private var _binding: FragmentIncomeNoteBinding? = null
-    private val binding get() = _binding!!
     private val viewModel: IncomeNoteViewModel by inject()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mContext = context
         //Fragment BackPress Event Call
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -62,15 +59,6 @@ class IncomeNoteFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?,
-    ): View {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_income_note, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

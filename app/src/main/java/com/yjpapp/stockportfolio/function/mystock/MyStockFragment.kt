@@ -26,13 +26,10 @@ import java.util.*
  * @author Yoon Jae-park
  * @since 2021.04
  */
-class MyStockFragment : BaseFragment<FragmentMyStockBinding>(), MyStockAdapter.AdapterCallBack {
+class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_my_stock), MyStockAdapter.AdapterCallBack {
 
     private val myStockViewModel: MyStockViewModel by inject()
     private lateinit var myStockAdapter: MyStockAdapter
-    override fun getLayoutId(): Int {
-        return R.layout.fragment_my_stock
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -10,11 +10,8 @@ import com.yjpapp.stockportfolio.databinding.FragmentStockSearchBinding
  * @author Yoon Jae-park
  * @since 2021.11
  */
-class StockSearchFragment : BaseFragment<FragmentStockSearchBinding>() {
+class StockSearchFragment : BaseFragment<FragmentStockSearchBinding>(R.layout.fragment_stock_search) {
     /**
      * @return layout resource id
      */
-    override fun getLayoutId(): Int {
-        return R.layout.fragment_stock_search
-    }
 }

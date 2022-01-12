@@ -18,7 +18,7 @@ import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import org.koin.android.ext.android.inject
 
-class MyFragment : BaseFragment<FragmentMyBinding>() {
+class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
     private val myViewModel: MyViewModel by inject()
 
     override fun onAttach(context: Context) {
@@ -32,10 +32,6 @@ class MyFragment : BaseFragment<FragmentMyBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
-    }
-
-    override fun getLayoutId(): Int {
-        return R.layout.fragment_my
     }
 
     private fun initData() {
