@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteActivity
@@ -29,7 +30,7 @@ import org.koin.android.ext.android.inject
  * @author Yoon Jae-park
  * @since 2020.11
  */
-class MemoListFragment : Fragment() {
+class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment_memo_list) {
     companion object {
         const val INTENT_KEY_MEMO_MODE = "INTENT_KEY_MEMO_MODE"
         const val INTENT_KEY_MEMO_INFO_ID = "INTENT_KEY_MEMO_INFO_ID"
@@ -49,14 +50,10 @@ class MemoListFragment : Fragment() {
         const val RESULT_UPDATE = RESULT_EMPTY + 2
     }
 
-    private lateinit var mContext: Context
 //    private lateinit var memoListPresenter: MemoListPresenter
     private lateinit var layoutManager: LinearLayoutManager
     private val memoListAdapter = MemoListAdapter(mutableListOf(), null)
     private val viewModel: MemoListViewModel by inject()
-
-    private var _binding: FragmentMemoListBinding? = null
-    private val binding get() = _binding!!
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -76,15 +73,6 @@ class MemoListFragment : Fragment() {
         mContext = context
 
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_memo_list, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

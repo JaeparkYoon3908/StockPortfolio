@@ -6,9 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +24,7 @@ import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
+import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.flow.collect
@@ -222,14 +220,6 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
         }
     }
 
-    private fun scrollPosition(position: Int) {
-        binding.recyclerviewIncomeNoteFragment.scrollToPosition(position)
-    }
-
-    private fun scrollTopPosition() {
-        binding.recyclerviewIncomeNoteFragment.smoothScrollBy(0, 0)
-    }
-
     private fun initData() {
         viewModel.apply {
             page = 1
@@ -288,6 +278,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
     }
 
     private val datePickerDialogCallBack = object : IncomeNoteDatePickerDialog.CallBack {
+        @SuppressLint("NotifyDataSetChanged")
         override fun requestIncomeNoteList(startDateList: List<String>, endDateList: List<String>) {
             binding.btnDate
             lifecycleScope.launch {
@@ -343,6 +334,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun handleEvent(event: IncomeNoteViewModel.Event) = when (event) {
         is IncomeNoteViewModel.Event.SendTotalGainData -> {
             val totalGainNumber = event.data.total_price
@@ -350,7 +342,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             binding.let {
                 val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
                 it.txtTotalRealizationGainsLossesData.text = "${StockConfig.moneySymbol}$totalRealizationGainsLossesNumber"
-                if (totalGainNumber >= 0) {
+                if (totalGainPercent >= 0) {
                     it.txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
                     it.txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
                 } else {
@@ -384,7 +376,10 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                 incomeNoteListAdapter.notifyDataSetChanged()
                 viewModel.requestTotalGain(mContext)
             } else {
-                //TODO 예외처리
+                ResponseAlertManger.showErrorAlert(
+                    mContext,
+                    getString(R.string.Error_Msg_Normal)
+                )
             }
         }
         is IncomeNoteViewModel.Event.FetchUIncomeNotes -> {

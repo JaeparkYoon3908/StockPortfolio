@@ -8,7 +8,7 @@ import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
 object ResponseAlertManger {
 
     fun showErrorAlert(context: Context, msg: String) {
-        CommonOneBtnDialog(
+        val dialog = CommonOneBtnDialog(
             context,
             CommonOneBtnDialog.CommonOneBtnData(
                 noticeText = msg,
@@ -19,11 +19,14 @@ object ResponseAlertManger {
                     }
                 }
             )
-        ).show()
+        )
+        if (!dialog.isShowing) {
+            dialog.show()
+        }
     }
 
     fun showNetworkConnectErrorAlert(context: Context) {
-        CommonOneBtnDialog(
+        val dialog = CommonOneBtnDialog(
             context,
             CommonOneBtnDialog.CommonOneBtnData(
                 noticeText = context.getString(R.string.Error_Msg_Network_Connect_Exception),
@@ -34,6 +37,9 @@ object ResponseAlertManger {
                     }
                 }
             )
-        ).show()
+        )
+        if (!dialog.isShowing) {
+            dialog.show()
+        }
     }
 }
