@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.firebase
+package com.yjpapp.stockportfolio.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
