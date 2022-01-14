@@ -13,7 +13,7 @@ import javax.inject.Singleton
  * @author Yoon Jae-park
  * @since 2020.12
  */
-@Singleton
+
 class MemoListRepository @Inject constructor(
     private val memoListDao: MemoListDao,
     private val preferenceController: PreferenceController

@@ -19,7 +19,6 @@ import javax.inject.Singleton
  * @since 2020.12
  */
 
-@Singleton
 class IncomeNoteRepository
 {
     suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
