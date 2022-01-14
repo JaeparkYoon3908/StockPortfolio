@@ -10,11 +10,14 @@ import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class IncomeNoteViewModel(
+@HiltViewModel
+class IncomeNoteViewModel @Inject constructor(
     private val incomeNoteRepository: IncomeNoteRepository
 ) : ViewModel() {
     private val _eventFlow = MutableEventFlow<Event>()

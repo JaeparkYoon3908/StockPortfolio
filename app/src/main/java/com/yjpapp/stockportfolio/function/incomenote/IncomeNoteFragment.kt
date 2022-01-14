@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.DatePicker
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +28,7 @@ import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.util.Utils
+import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -39,12 +42,13 @@ import java.util.*
  * @author Yoon Jae-park
  * @since 2020.08
  */
+@AndroidEntryPoint
 class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.fragment_income_note) {
     private val TAG = IncomeNoteFragment::class.java.simpleName
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private var incomeNoteListAdapter = IncomeNoteListAdapter(arrayListOf(), null).apply { setHasStableIds(true) }
 
-    private val viewModel: IncomeNoteViewModel by inject()
+    private val viewModel: IncomeNoteViewModel by viewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
