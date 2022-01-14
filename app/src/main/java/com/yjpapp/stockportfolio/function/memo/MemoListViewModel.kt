@@ -6,13 +6,16 @@ import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.repository.MemoListRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * @author 윤재박
  * @since 2022.01.06
  */
-class MemoListViewModel(
+@HiltViewModel
+class MemoListViewModel @Inject constructor(
     val repository: MemoListRepository
 ) : ViewModel() {
     private val _eventFlow = MutableEventFlow<Event>()

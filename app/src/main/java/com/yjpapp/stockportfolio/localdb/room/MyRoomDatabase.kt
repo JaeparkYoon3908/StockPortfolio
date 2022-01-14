@@ -9,18 +9,20 @@ import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockDao
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
+import javax.inject.Singleton
 
 @Database(
     entities = [MyStockEntity::class, MemoListEntity::class],
     version = 2,
     exportSchema = false
 )
+
 abstract class MyRoomDatabase: RoomDatabase() {
     abstract fun myStockDao(): MyStockDao
     abstract fun memoListDao(): MemoListDao
 
     companion object {
-        private val DB_NAME = "room-db"
+        val DB_NAME = "room-db"
         private var instance: MyRoomDatabase? = null
 
         fun getInstance(context: Context): MyRoomDatabase {

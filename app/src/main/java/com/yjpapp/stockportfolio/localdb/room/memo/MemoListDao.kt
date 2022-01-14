@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.localdb.room.memo
 
 import androidx.room.*
+import javax.inject.Singleton
 import kotlin.Exception
 import kotlin.jvm.Throws
 
@@ -8,6 +9,7 @@ import kotlin.jvm.Throws
  * @author 윤재박
  * @since 2022.01.06
  */
+
 @Dao
 interface MemoListDao {
     @Insert

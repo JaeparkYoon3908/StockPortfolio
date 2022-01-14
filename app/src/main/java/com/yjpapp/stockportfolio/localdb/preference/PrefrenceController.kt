@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.localdb.preference
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import javax.inject.Singleton
 
 private const val FILENAME = "prefs"
 

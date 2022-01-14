@@ -4,6 +4,8 @@ import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * MemoListFragment의 Model 역할하는 class
@@ -11,7 +13,8 @@ import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
  * @author Yoon Jae-park
  * @since 2020.12
  */
-class MemoListRepository(
+@Singleton
+class MemoListRepository @Inject constructor(
     private val memoListDao: MemoListDao,
     private val preferenceController: PreferenceController
 ) {

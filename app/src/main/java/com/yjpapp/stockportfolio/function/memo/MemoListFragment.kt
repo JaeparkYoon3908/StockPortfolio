@@ -10,6 +10,7 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
@@ -18,6 +19,7 @@ import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteActivity
 import com.yjpapp.stockportfolio.util.Utils
+import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlinx.coroutines.flow.collect
@@ -30,6 +32,7 @@ import org.koin.android.ext.android.inject
  * @author Yoon Jae-park
  * @since 2020.11
  */
+@AndroidEntryPoint
 class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment_memo_list) {
     companion object {
         const val INTENT_KEY_MEMO_MODE = "INTENT_KEY_MEMO_MODE"
@@ -53,7 +56,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
 //    private lateinit var memoListPresenter: MemoListPresenter
     private lateinit var layoutManager: LinearLayoutManager
     private val memoListAdapter = MemoListAdapter(mutableListOf(), null)
-    private val viewModel: MemoListViewModel by inject()
+    private val viewModel: MemoListViewModel by viewModels()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
