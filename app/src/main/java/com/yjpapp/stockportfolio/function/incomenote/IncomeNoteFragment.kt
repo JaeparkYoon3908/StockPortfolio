@@ -199,7 +199,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                 }
 
                 CommonDatePickerDialog(mContext, year, month, day).apply {
-                    setListener { _: View, year, month, dayOfMonth ->
+                    setListener { _: DatePicker?, year, month, dayOfMonth ->
 //                        Toast.makeText(requireContext(), "날짜 : $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
                         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
                         purchaseYear = year.toString()

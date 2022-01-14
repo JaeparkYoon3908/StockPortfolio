@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.function.mystock
 
 import android.os.Bundle
 import android.view.*
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -167,7 +168,7 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
                     }
                     //매수 날짜 선택 다이얼로그 show
                     CommonDatePickerDialog(mContext, year, month).apply {
-                        setListener { view, year, month, dayOfMonth ->
+                        setListener { _: DatePicker?, year, month, dayOfMonth ->
                             uiHandler.sendEmptyMessage(MyStockInputDialog.MSG.SELL_DATE_DATA_INPUT)
                             purchaseYear = year.toString()
                             purchaseMonth = if (month < 10) {
