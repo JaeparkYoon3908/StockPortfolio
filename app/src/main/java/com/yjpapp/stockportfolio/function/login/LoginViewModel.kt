@@ -1,35 +1,29 @@
 package com.yjpapp.stockportfolio.function.login
 
-import android.app.Application
 import android.content.Context
-import android.view.View
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockConfig
-import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
-import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
 import com.yjpapp.stockportfolio.model.response.RespGetNaverUserInfo
+import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
 import com.yjpapp.stockportfolio.model.response.RespNaverDeleteUserInfo
-import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * @author 윤재박
  * @since 2021.07
  */
 
-class LoginViewModel(
-    application: Application,
+class LoginViewModel (
     private val userRepository: UserRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
     /**
      * Common
      */
@@ -39,9 +33,9 @@ class LoginViewModel(
      * API
      */
     val loginResultData = MutableLiveData<RespLoginUserInfo>()
-    fun requestLogin(reqSnsLogin: ReqSNSLogin) {
+    fun requestLogin(context: Context, reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = userRepository.postUserInfo(getApplication(), reqSnsLogin)
+            val result = userRepository.postUserInfo(context, reqSnsLogin)
             if (result == null) {
                 serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
@@ -56,9 +50,9 @@ class LoginViewModel(
     }
 
     val respGetNaverUserInfo = MutableLiveData<RespGetNaverUserInfo>()
-    fun requestGetNaverUserInfo() {
+    fun requestGetNaverUserInfo(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = userRepository.getNaverUserInfo(getApplication())
+            val result = userRepository.getNaverUserInfo(context)
             if (result == null) {
                 serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
@@ -71,7 +65,7 @@ class LoginViewModel(
         }
     }
 
-    fun requestRetryNaverUserLogin() {
+    fun requestRetryNaverUserLogin(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val naverAccessToken = userRepository.getNaverAccessToken()
             val params = HashMap<String, String>()
@@ -81,7 +75,7 @@ class LoginViewModel(
             params["state"] = ""
             params["auth_type"] = "reprompt"
 
-            val result = userRepository.retryNaverUserLogin(getApplication(), params)
+            val result = userRepository.retryNaverUserLogin(context, params)
             if (result == null) {
                 serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
@@ -95,7 +89,7 @@ class LoginViewModel(
     }
 
     val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
-    fun requestDeleteNaverUserInfo() {
+    fun requestDeleteNaverUserInfo(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val naverAccessToken = userRepository.getNaverAccessToken()
             val params = HashMap<String, String>()
@@ -105,7 +99,7 @@ class LoginViewModel(
             params["grant_type"] = "delete"
             params["service_provider"] = "NAVER"
 
-            val result = userRepository.deleteNaverUserInfo(getApplication(), params)
+            val result = userRepository.deleteNaverUserInfo(context, params)
             if (result == null) {
                 serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import com.facebook.*
 import com.facebook.GraphRequest.GraphJSONObjectCallback
 import com.facebook.appevents.AppEventsLogger
@@ -31,6 +32,7 @@ import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
+import dagger.hilt.android.AndroidEntryPoint
 import org.koin.android.ext.android.inject
 
 
@@ -143,7 +145,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                 "확인",
                                 object : CommonOneBtnDialog.OnClickListener {
                                     override fun onClick(view: View, dialog: CommonOneBtnDialog) {
-                                        viewModel.requestDeleteNaverUserInfo()
+                                        viewModel.requestDeleteNaverUserInfo(this@LoginActivity)
                                         dialog.dismiss()
                                     }
                                 }
@@ -154,6 +156,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                         return@observe
                     }
                     viewModel.requestLogin(
+                        this@LoginActivity,
                         ReqSNSLogin(
                             user_email = data.response.email,
                             user_name = data.response.name,
@@ -241,7 +244,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     val authorization = "$tokenType $accessToken"
                     preferenceController.setPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
                     preferenceController.setPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
-                    viewModel.requestGetNaverUserInfo()
+                    viewModel.requestGetNaverUserInfo(this@LoginActivity)
                     startLoadingAnimation()
                 } else {
                     val errorCode: String = mOAuthLoginModule.getLastErrorCode(this@LoginActivity).code
@@ -304,7 +307,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         startLoadingAnimation()
-        viewModel.requestLogin(reqSnsLogin)
+        viewModel.requestLogin(this@LoginActivity, reqSnsLogin)
     }
 
     private fun startLoadingAnimation() {

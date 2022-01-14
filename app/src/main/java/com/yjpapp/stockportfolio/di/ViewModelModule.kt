@@ -27,7 +27,6 @@ val loginViewModel = module {
     single { UserRepository(PreferenceController.getInstance(androidContext())) }
     viewModel {
         LoginViewModel(
-            androidApplication(),
             get()
         )
     }
@@ -37,7 +36,6 @@ val myStockViewModel = module {
     single { MyStockRepository(get()) }
     viewModel {
         MyStockViewModel(
-            androidApplication(),
             get()
         )
     }

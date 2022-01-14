@@ -5,6 +5,7 @@ import android.app.Application
 import android.text.TextUtils
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialogController
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
@@ -13,9 +14,8 @@ import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.Utils
 
 class MyStockViewModel(
-    application: Application,
     private val myStockRepository: MyStockRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
     val NOTIFY_HANDLER_INSERT = "NOTIFY_INSERT"
     val NOTIFY_HANDLER_DELETE = "NOTIFY_DELETE"
     val NOTIFY_HANDLER_UPDATE = "NOTIFY_UPDATE"

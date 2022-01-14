@@ -13,6 +13,7 @@ import com.yjpapp.stockportfolio.function.my.MyFragment
 import com.yjpapp.stockportfolio.function.mystock.MyStockComposeFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.Utils
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Main
@@ -20,6 +21,7 @@ import com.yjpapp.stockportfolio.util.Utils
  * @author Yoon Jae-park
  * @since 2020.12
  */
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     companion object {
         const val FRAGMENT_TAG_MY_STOCK = "my_stock"
