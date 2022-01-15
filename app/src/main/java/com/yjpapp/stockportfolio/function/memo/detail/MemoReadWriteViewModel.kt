@@ -2,25 +2,28 @@ package com.yjpapp.stockportfolio.function.memo.detail
 
 import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
-import com.yjpapp.stockportfolio.repository.MemoReadWriteRepository
+import com.yjpapp.stockportfolio.repository.MemoRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * since 2022.01.05
  * Presenter -> ViewModel 형식으로 변경
  */
-class MemoReadWriteViewModel(
-    private val memoReadWriteRepository: MemoReadWriteRepository
+@HiltViewModel
+class MemoReadWriteViewModel @Inject constructor(
+    private val memoRepository: MemoRepository
 ) : ViewModel() {
     fun requestAddMemoData(date: String, title: String, content: String){
         val memoInfo = MemoListEntity(0, date, title, content, "false")
-        memoReadWriteRepository.insertMemoData(memoInfo)
+        memoRepository.insertMemoData(memoInfo)
     }
 
     fun requestUpdateMemoData(id: Int, date: String, title: String, content: String){
         val memoInfo = MemoListEntity(id, date, title, content, "false")
-        memoReadWriteRepository.updateMemoData(memoInfo)
+        memoRepository.updateMemoData(memoInfo)
     }
     fun requestDeleteMemoData(id: Int) {
-        memoReadWriteRepository.deleteMomoData(id)
+        memoRepository.deleteMomoData(id)
     }
 }

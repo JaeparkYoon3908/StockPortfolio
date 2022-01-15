@@ -1,9 +1,8 @@
 package com.yjpapp.stockportfolio.di
 
 import com.yjpapp.stockportfolio.function.login.LoginViewModel
-import com.yjpapp.stockportfolio.repository.MemoListRepository
+import com.yjpapp.stockportfolio.repository.MemoRepository
 import com.yjpapp.stockportfolio.function.memo.MemoListViewModel
-import com.yjpapp.stockportfolio.repository.MemoReadWriteRepository
 import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteViewModel
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.function.my.MyViewModel
@@ -46,14 +45,8 @@ val myViewModel = module {
     }
 }
 
-val memoReadWriteViewModel = module {
-    single { MemoReadWriteRepository(MyRoomDatabase.getInstance(androidContext()).memoListDao()) }
-    viewModel {
-        MemoReadWriteViewModel(get())
-    }
-}
 val memoListViewModel = module {
-    single { MemoListRepository(
+    single { MemoRepository(
         MyRoomDatabase.getInstance(androidContext()).memoListDao(),
         PreferenceController.getInstance(androidContext())
     )}

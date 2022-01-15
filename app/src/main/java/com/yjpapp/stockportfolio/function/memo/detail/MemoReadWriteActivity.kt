@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.databinding.DataBindingUtil
+import androidx.activity.viewModels
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.constance.StockConfig
@@ -14,7 +14,7 @@ import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.Utils
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 메모 읽기 및 추가 화면
@@ -22,13 +22,14 @@ import org.koin.android.ext.android.inject
  * @author Yoon Jae-park
  * @since 2020.12.27
  */
+@AndroidEntryPoint
 class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout.activity_memo_read_write) {
     private var mode: String? = null
     private var memoListPosition = 0
     private var id = 0
     private var title: String? = null
     private var content: String? = null
-    private val viewModel: MemoReadWriteViewModel by inject()
+    private val viewModel: MemoReadWriteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

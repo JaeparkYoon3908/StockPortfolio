@@ -23,7 +23,6 @@ class StockPortfolioApp: Application() {
             modules(loginViewModel)
             modules(myStockViewModel)
             modules(myViewModel)
-            modules(memoReadWriteViewModel)
             modules(memoListViewModel)
             modules(splashViewModel)
             //Common

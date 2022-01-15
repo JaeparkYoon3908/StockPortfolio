@@ -6,9 +6,8 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
-import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
-import com.yjpapp.stockportfolio.repository.MemoListRepository
+import com.yjpapp.stockportfolio.repository.MemoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,7 +49,8 @@ class HiltModule {
     }
 
     @Provides
-    fun provideMemoListRepository(myRoomDatabase: MyRoomDatabase, preferenceController: PreferenceController): MemoListRepository {
-        return MemoListRepository(myRoomDatabase.memoListDao(), preferenceController)
+    fun provideMemoRepository(myRoomDatabase: MyRoomDatabase, preferenceController: PreferenceController): MemoRepository {
+        return MemoRepository(myRoomDatabase.memoListDao(), preferenceController)
     }
+
 }
