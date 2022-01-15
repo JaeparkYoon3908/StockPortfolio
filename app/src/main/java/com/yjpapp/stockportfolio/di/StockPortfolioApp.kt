@@ -22,7 +22,6 @@ class StockPortfolioApp: Application() {
             //ViewModel
             modules(loginViewModel)
             modules(myStockViewModel)
-            modules(memoListViewModel)
             modules(splashViewModel)
             //Common
             modules(preferenceController)

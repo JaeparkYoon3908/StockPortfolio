@@ -33,7 +33,6 @@ import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
-import org.koin.android.ext.android.inject
 
 
 /**
@@ -41,6 +40,7 @@ import org.koin.android.ext.android.inject
  * @author 윤재박
  * @since 2021.07
  */
+@AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private val TAG = LoginActivity::class.simpleName
     private val gso by lazy {
@@ -52,7 +52,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private val mGoogleSignInClient by lazy { GoogleSignIn.getClient(this@LoginActivity, gso) }
     private val facebookCallbackManager by lazy { CallbackManager.Factory.create() }
 
-    private val viewModel: LoginViewModel by inject()
+    private val viewModel: LoginViewModel by viewModels()
 
     interface LoginCallBack {
         fun onClick(view: View)

@@ -21,7 +21,8 @@ import javax.inject.Inject
  * @since 2021.07
  */
 
-class LoginViewModel (
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
     /**
