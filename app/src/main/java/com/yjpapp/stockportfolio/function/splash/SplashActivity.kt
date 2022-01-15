@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.databinding.ActivitySplashBinding
 import com.yjpapp.stockportfolio.function.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 import org.koin.android.ext.android.inject
 import java.util.*
 
@@ -24,8 +26,9 @@ import java.util.*
  * @since 2020.10
  */
 
+@AndroidEntryPoint
 class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_splash) {
-    private val viewModel: SplashViewModel by inject()
+    private val viewModel: SplashViewModel by viewModels()
     private val permissionList = arrayOf<String>(
         Manifest.permission.READ_PHONE_STATE
 //            Manifest.permission.READ_SMS,
