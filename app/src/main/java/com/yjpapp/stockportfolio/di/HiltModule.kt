@@ -8,6 +8,8 @@ import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.repository.MemoRepository
+import com.yjpapp.stockportfolio.repository.MyRepository
+import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,4 +55,13 @@ class HiltModule {
         return MemoRepository(myRoomDatabase.memoListDao(), preferenceController)
     }
 
+    @Provides
+    fun provideMyRepository(preferenceController: PreferenceController): MyRepository {
+        return MyRepository(preferenceController)
+    }
+
+    @Provides
+    fun provideUserRepository(preferenceController: PreferenceController): UserRepository {
+        return UserRepository(preferenceController)
+    }
 }

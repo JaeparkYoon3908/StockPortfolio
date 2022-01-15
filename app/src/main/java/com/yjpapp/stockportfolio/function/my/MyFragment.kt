@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
@@ -13,13 +14,12 @@ import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.function.login.LoginActivity
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
-    private val myViewModel: MyViewModel by inject()
+    private val myViewModel: MyViewModel by viewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

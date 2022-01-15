@@ -11,9 +11,12 @@ import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
 import com.yjpapp.stockportfolio.util.Utils
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyViewModel(
+@HiltViewModel
+class MyViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val myRepository: MyRepository
 ): ViewModel() {
