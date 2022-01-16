@@ -6,10 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
-import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
-import com.yjpapp.stockportfolio.repository.MemoRepository
-import com.yjpapp.stockportfolio.repository.MyRepository
-import com.yjpapp.stockportfolio.repository.UserRepository
+import com.yjpapp.stockportfolio.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,30 +35,29 @@ class HiltModule {
             .fallbackToDestructiveMigration() //room table 업데이트 시 마이그레이션
             .build()
     }
-
     @Provides
     @Singleton
     fun providePreferenceController(@ApplicationContext context: Context): PreferenceController {
         return PreferenceController.getInstance(context)
     }
-
     @Provides
     fun provideIncomeNoteRepository(): IncomeNoteRepository {
         return IncomeNoteRepository()
     }
-
     @Provides
     fun provideMemoRepository(myRoomDatabase: MyRoomDatabase, preferenceController: PreferenceController): MemoRepository {
         return MemoRepository(myRoomDatabase.memoListDao(), preferenceController)
     }
-
     @Provides
     fun provideMyRepository(preferenceController: PreferenceController): MyRepository {
         return MyRepository(preferenceController)
     }
-
     @Provides
     fun provideUserRepository(preferenceController: PreferenceController): UserRepository {
         return UserRepository(preferenceController)
+    }
+    @Provides
+    fun provideMyStockRepository(myRoomDatabase: MyRoomDatabase): MyStockRepository {
+        return MyStockRepository(myRoomDatabase.myStockDao())
     }
 }

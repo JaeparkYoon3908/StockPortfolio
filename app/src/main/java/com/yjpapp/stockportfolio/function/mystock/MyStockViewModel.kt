@@ -1,9 +1,7 @@
 package com.yjpapp.stockportfolio.function.mystock
 
 
-import android.app.Application
 import android.text.TextUtils
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.R
@@ -12,8 +10,11 @@ import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.Utils
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MyStockViewModel(
+@HiltViewModel
+class MyStockViewModel @Inject constructor(
     private val myStockRepository: MyStockRepository
 ) : ViewModel() {
     val NOTIFY_HANDLER_INSERT = "NOTIFY_INSERT"
