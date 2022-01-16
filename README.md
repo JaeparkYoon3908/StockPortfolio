@@ -29,3 +29,4 @@
 ### 4. 기술 스택 변경 사항
  - SQLite -> Room
  - MVP -> MVVM
+ - Koin -> Hilt
