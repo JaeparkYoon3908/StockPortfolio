@@ -2,6 +2,9 @@ package com.yjpapp.stockportfolio.repository
 
 import android.content.Context
 import androidx.paging.*
+import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
+import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.model.response.RespStatusInfo
@@ -9,8 +12,6 @@ import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.stockportfolio.network.RetrofitClient
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * IncomeNoteFragment의 Model 역할하는 class
@@ -19,26 +20,28 @@ import javax.inject.Singleton
  * @since 2020.12
  */
 
-class IncomeNoteRepository
-{
+class IncomeNoteRepository(
+    val preferenceController: PreferenceController,
+    val retrofitClient: RetrofitClient
+) {
     suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
-        return RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(reqIncomeNoteInfo)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(reqIncomeNoteInfo)
     }
 
     suspend fun requestDeleteIncomeNote(context: Context, id: Int): Response<RespStatusInfo>? {
-        return RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteIncomeNote(id)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteIncomeNote(id)
     }
 
     suspend fun requestPutIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
-        return RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(reqIncomeNoteInfo)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(reqIncomeNoteInfo)
     }
 
     suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>) : Response<RespIncomeNoteListInfo>? {
-        return RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestGetIncomeNote(params)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestGetIncomeNote(params)
     }
 
     suspend fun requestTotalGain(context: Context, params: HashMap<String, String>): Response<RespTotalGainIncomeNoteData>? {
-        return RetrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestTotalGainIncomeNote(params)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestTotalGainIncomeNote(params)
     }
 
     inner class IncomeNotePagingSource(val context: Context, var startDate: String, var endDate: String): PagingSource<Int, RespIncomeNoteListInfo.IncomeNoteInfo>() {
@@ -76,5 +79,9 @@ class IncomeNoteRepository
                 currentPagingSource = it
             } }).flow
     }
-
+    fun isShowDeleteCheck(): String {
+        return preferenceController.getPreference(
+            PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK
+        )?: StockConfig.TRUE
+    }
 }

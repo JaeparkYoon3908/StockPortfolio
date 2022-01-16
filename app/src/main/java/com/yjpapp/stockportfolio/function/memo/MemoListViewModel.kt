@@ -1,14 +1,23 @@
 package com.yjpapp.stockportfolio.function.memo
 
+import android.app.Activity
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.repository.MemoRepository
+import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 /**
  * @author 윤재박
@@ -16,7 +25,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MemoListViewModel @Inject constructor(
-    val repository: MemoRepository
+    private val repository: MemoRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
     private val _eventFlow = MutableEventFlow<Event>()
     val eventFlow = _eventFlow.asEventFlow()
@@ -47,6 +57,21 @@ class MemoListViewModel @Inject constructor(
     fun requestUpdateDeleteCheck(position: Int, deleteCheck: Boolean) {
         val id = repository.getAllMemoInfoList()[position].id
         repository.updateDeleteCheck(id, deleteCheck.toString())
+    }
+
+    fun runBackPressAppCloseEvent(mContext: Context, activity: Activity) {
+        val isAllowAppClose = userRepository.isAllowAppClose()
+        if (isAllowAppClose == StockConfig.TRUE) {
+            activity.finishAffinity()
+            System.runFinalization()
+            exitProcess(0)
+        } else {
+            Toasty.normal(mContext, mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
+            userRepository.setAllowAppClose(StockConfig.TRUE)
+            Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                userRepository.setAllowAppClose(StockConfig.FALSE)
+            },3000)
+        }
     }
 
     private fun event(event: Event) {

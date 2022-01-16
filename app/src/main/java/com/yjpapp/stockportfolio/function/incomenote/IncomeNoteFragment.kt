@@ -22,8 +22,6 @@ import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePickerDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
@@ -32,7 +30,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import java.math.BigDecimal
 import java.util.*
 
@@ -56,7 +53,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 activity?.let {
-                    Utils.runBackPressAppCloseEvent(mContext, it)
+                    viewModel.runBackPressAppCloseEvent(mContext, it)
                 }
             }
         }
@@ -250,8 +247,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
 
         override fun onDeleteButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?, position: Int) {
             if (respIncomeNoteListInfo != null) {
-                val isShowDeleteCheck = PreferenceController.getInstance(mContext)
-                    .getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK) ?: StockConfig.TRUE
+                val isShowDeleteCheck = viewModel.isShowDeleteCheck()
                 if (isShowDeleteCheck == StockConfig.TRUE) {
                     CommonTwoBtnDialog(
                         mContext,

@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.function
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
@@ -36,6 +37,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val memoListFragment = MemoListFragment()
     private val myFragment = MyFragment()
     private var currentFragment: Fragment = myStockFragment
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +83,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             super.onBackPressed()
             return
         }
-        Utils.runBackPressAppCloseEvent(applicationContext, this)
+        viewModel.runBackPressAppCloseEvent(applicationContext, this)
     }
 
     private fun startFirstFragment() {

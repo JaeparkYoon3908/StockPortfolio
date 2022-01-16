@@ -6,10 +6,11 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +25,6 @@ import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 
 /**
  * 메모리스트 화면
@@ -66,7 +66,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
                 showAddButton()
                 hideDeleteButton()
             } else {
-                Utils.runBackPressAppCloseEvent(mContext, activity as Activity)
+                viewModel.runBackPressAppCloseEvent(mContext, activity as Activity)
             }
         }
     }

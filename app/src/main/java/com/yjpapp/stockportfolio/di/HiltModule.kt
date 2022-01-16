@@ -1,11 +1,13 @@
 package com.yjpapp.stockportfolio.di
 
+import android.app.Activity
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
+import com.yjpapp.stockportfolio.network.RetrofitClient
 import com.yjpapp.stockportfolio.repository.*
 import dagger.Module
 import dagger.Provides
@@ -23,41 +25,76 @@ import javax.inject.Singleton
 class HiltModule {
     @Provides
     @Singleton
-    fun provideRoomDatabase(@ApplicationContext context: Context): MyRoomDatabase {
-        return Room.databaseBuilder(context.applicationContext, MyRoomDatabase::class.java,
+    fun provideRoomDatabase(
+        @ApplicationContext context: Context
+    ): MyRoomDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext, MyRoomDatabase::class.java,
             MyRoomDatabase.DB_NAME
         )
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                }})
+                }
+            })
             .allowMainThreadQueries() //추천하진 않지만 MainThread(UI Thread)에서 접근 가능할 수 있게 설정
             .fallbackToDestructiveMigration() //room table 업데이트 시 마이그레이션
             .build()
     }
+
     @Provides
     @Singleton
-    fun providePreferenceController(@ApplicationContext context: Context): PreferenceController {
-        return PreferenceController.getInstance(context)
+    fun providePreferenceController(
+        @ApplicationContext context: Context
+    ): PreferenceController {
+        val fileName = PreferenceController.FILENAME
+        val pref = context.getSharedPreferences(fileName, Activity.MODE_PRIVATE)
+        return PreferenceController(pref)
     }
+
     @Provides
-    fun provideIncomeNoteRepository(): IncomeNoteRepository {
-        return IncomeNoteRepository()
+    @Singleton
+    fun provideRetrofitClient(
+        preferenceController: PreferenceController
+    ): RetrofitClient {
+        return RetrofitClient(preferenceController)
     }
+
     @Provides
-    fun provideMemoRepository(myRoomDatabase: MyRoomDatabase, preferenceController: PreferenceController): MemoRepository {
+    fun provideIncomeNoteRepository(
+        preferenceController: PreferenceController,
+        retrofitClient: RetrofitClient
+    ): IncomeNoteRepository {
+        return IncomeNoteRepository(preferenceController, retrofitClient)
+    }
+
+    @Provides
+    fun provideMemoRepository(
+        myRoomDatabase: MyRoomDatabase,
+        preferenceController: PreferenceController
+    ): MemoRepository {
         return MemoRepository(myRoomDatabase.memoListDao(), preferenceController)
     }
+
     @Provides
-    fun provideMyRepository(preferenceController: PreferenceController): MyRepository {
+    fun provideMyRepository(
+        preferenceController: PreferenceController
+    ): MyRepository {
         return MyRepository(preferenceController)
     }
+
     @Provides
-    fun provideUserRepository(preferenceController: PreferenceController): UserRepository {
-        return UserRepository(preferenceController)
+    fun provideUserRepository(
+        preferenceController: PreferenceController,
+        retrofitClient: RetrofitClient
+    ): UserRepository {
+        return UserRepository(preferenceController, retrofitClient)
     }
+
     @Provides
-    fun provideMyStockRepository(myRoomDatabase: MyRoomDatabase): MyStockRepository {
+    fun provideMyStockRepository(
+        myRoomDatabase: MyRoomDatabase
+    ): MyStockRepository {
         return MyStockRepository(myRoomDatabase.myStockDao())
     }
 }

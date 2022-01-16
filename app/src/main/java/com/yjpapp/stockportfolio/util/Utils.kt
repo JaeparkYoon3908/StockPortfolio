@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
@@ -20,6 +21,7 @@ import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.system.exitProcess
 
 /**
@@ -126,9 +128,10 @@ object Utils {
         return result
     }
 
+    @SuppressLint("MissingPermission")
     fun runVibration(mContext: Context, milliseconds: Long){
         val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator!!.vibrate(VibrationEffect.createOneShot(milliseconds,
                 VibrationEffect.DEFAULT_AMPLITUDE))
         }else{
@@ -144,20 +147,24 @@ object Utils {
         return (px / Resources.getSystem().displayMetrics.density).toInt()
     }
 
-    fun runBackPressAppCloseEvent(mContext: Context, activity:Activity){
-        val isAllowAppClose = PreferenceController.getInstance(mContext).getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)
-        if(isAllowAppClose == StockConfig.TRUE){
-            activity.finishAffinity()
-            System.runFinalization()
-            exitProcess(0)
-        }else{
-            Toasty.normal(mContext,mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
-            PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
-            Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
-            },3000)
-        }
-    }
+    //Hilt 적용 후 PreferenceController SIngleTon 삭제 후 오류로 인한 수정
+//    fun runBackPressAppCloseEvent(
+//        mContext: Context,
+//        activity: Activity,
+//    ){
+//        val isAllowAppClose = PreferenceController.getInstance(mContext).getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)
+//        if(isAllowAppClose == StockConfig.TRUE){
+//            activity.finishAffinity()
+//            System.runFinalization()
+//            exitProcess(0)
+//        }else{
+//            Toasty.normal(mContext,mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
+//            PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
+//            Handler(Looper.getMainLooper()).postDelayed(Runnable {
+//                PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
+//            },3000)
+//        }
+//    }
 
 //    fun getMyPhoneNum(mContext: Context): String{
 //        var phoneNum = ""

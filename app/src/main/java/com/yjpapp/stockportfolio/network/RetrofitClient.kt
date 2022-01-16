@@ -16,20 +16,22 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 
-object RetrofitClient {
+class RetrofitClient(
+    private val preferenceController: PreferenceController
+) {
     enum class BaseServerURL(val url: String) {
         MY("http://112.147.50.241"),
         NAVER_OPEN_API("https://openapi.naver.com"),
-        NAVER_NID("https://nid.naver.com")
+        NAVER_NID("https:Z//nid.naver.com")
     }
 
     private val TAG = RetrofitClient::class.java.simpleName
-    const val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
-    const val READ_TIMEOUT_OUT_MINUTE: Long = 3
+    private val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
+    private val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
     fun getService(context: Context, baseServerURL: BaseServerURL): RetrofitService? {
         if (NetworkUtils.isInternetAvailable(context)) {
-            val interceptor: Interceptor = CustomInterceptor(context, baseServerURL)
+            val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceController)
 
             val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -61,17 +63,19 @@ object RetrofitClient {
     class CustomInterceptor(
         private val context: Context,
         private val baseServerURL: BaseServerURL,
+        private val preferenceController: PreferenceController
     ) : Interceptor {
+        private val TAG = CustomInterceptor::class.java.simpleName
         override fun intercept(chain: Interceptor.Chain): Response {
             val builder =
                 when (baseServerURL) {
                     BaseServerURL.MY -> {
-                        val authorization = PreferenceController.getInstance(context)
+                        val authorization = preferenceController
                             .getPreference(PrefKey.KEY_USER_TOKEN) ?: ""
                         getClientBuilderWithToken(context, chain, authorization)
                     }
                     BaseServerURL.NAVER_OPEN_API -> {
-                        val authorization = PreferenceController.getInstance(context)
+                        val authorization = preferenceController
                             .getPreference(PrefKey.KEY_NAVER_USER_TOKEN) ?: ""
                         getNaverClientBuilderWithToken(chain, authorization)
                     }
@@ -128,7 +132,6 @@ object RetrofitClient {
             chain: Interceptor.Chain,
             authorization: String
         ): Request.Builder {
-            val preferenceController = PreferenceController.getInstance(context)
             val builder = chain.request().newBuilder().addHeader("Content-Type", "application/json")
             return builder
                 .addHeader("Authorization", authorization)

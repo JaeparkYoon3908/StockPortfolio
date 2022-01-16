@@ -5,95 +5,85 @@ import android.content.Context
 import android.content.SharedPreferences
 import javax.inject.Singleton
 
-private const val FILENAME = "prefs"
 
-class PreferenceController {
+class PreferenceController(
+    private val pref: SharedPreferences
+) {
     companion object {
-        @Volatile private var instance: PreferenceController? = null
-        private lateinit var pref: SharedPreferences
-
-        @JvmStatic
-        fun getInstance(context: Context): PreferenceController =
-            instance ?: synchronized(this) {
-                instance ?: PreferenceController().also {
-                    instance = it
-                    pref = context.getSharedPreferences(FILENAME, Activity.MODE_PRIVATE)
-                }
-            }
+        const val FILENAME = "prefs"
     }
-
-    fun setPreference(key: String, value: String?){
-        synchronized(this){
-            try{
+    fun setPreference(key: String, value: String?) {
+        synchronized(this) {
+            try {
                 val editor = pref.edit()
                 editor.putString(key, value).apply()
                 editor.apply()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    fun setPreference(key: String, value: Boolean){
-        synchronized(this){
-            try{
+    fun setPreference(key: String, value: Boolean) {
+        synchronized(this) {
+            try {
                 val editor = pref.edit()
                 editor.putString(key, value.toString()).apply()
                 editor.apply()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    fun setPreference(key: String, value: Int){
-        synchronized(this){
-            try{
+    fun setPreference(key: String, value: Int) {
+        synchronized(this) {
+            try {
                 val editor = pref.edit()
                 editor.putString(key, value.toString()).apply()
                 editor.apply()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    fun setPreference(key: String, value: Long){
-        synchronized(this){
-            try{
+    fun setPreference(key: String, value: Long) {
+        synchronized(this) {
+            try {
                 val editor = pref.edit()
                 editor.putString(key, value.toString()).apply()
                 editor.apply()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    fun getPreference(key: String): String?{
-        synchronized(this){
+    fun getPreference(key: String): String? {
+        synchronized(this) {
             return try {
                 pref.getString(key, "").toString()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 null
             }
         }
     }
 
-    fun getPreference(key: String, defValue: String): String{
-        synchronized(this){
+    fun getPreference(key: String, defValue: String): String {
+        synchronized(this) {
             return try {
                 pref.getString(key, defValue).toString()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 ""
             }
         }
     }
 
-    fun removePreference(key: String){
-        synchronized(this){
+    fun removePreference(key: String) {
+        synchronized(this) {
             val editor = pref.edit()
             editor.remove(key)
             editor.apply()
@@ -101,26 +91,26 @@ class PreferenceController {
         }
     }
 
-    fun clearPreference(){
-        synchronized(this){
+    fun clearPreference() {
+        synchronized(this) {
             try {
                 val editor = pref.edit()
                 editor.clear()
                 editor.apply()
                 editor.apply()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    fun isExists(key: String): Boolean{
+    fun isExists(key: String): Boolean {
         var isExists = false
-        try{
+        try {
             isExists = pref.contains(key)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
-        }finally {
+        } finally {
             return isExists
         }
     }
