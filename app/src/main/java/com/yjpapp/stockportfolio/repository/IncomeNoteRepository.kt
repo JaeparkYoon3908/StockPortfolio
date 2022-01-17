@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.paging.*
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.model.response.RespStatusInfo
@@ -21,8 +20,8 @@ import retrofit2.Response
  */
 
 class IncomeNoteRepository(
-    val preferenceController: PreferenceController,
-    val retrofitClient: RetrofitClient
+    private val preferenceRepository: PreferenceRepository,
+    private val retrofitClient: RetrofitClient
 ) {
     suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
         return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(reqIncomeNoteInfo)
@@ -80,7 +79,7 @@ class IncomeNoteRepository(
             } }).flow
     }
     fun isShowDeleteCheck(): String {
-        return preferenceController.getPreference(
+        return preferenceRepository.getPreference(
             PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK
         )?: StockConfig.TRUE
     }

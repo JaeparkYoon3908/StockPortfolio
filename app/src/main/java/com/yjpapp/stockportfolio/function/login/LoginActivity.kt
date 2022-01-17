@@ -97,14 +97,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     }
 
     private fun initData() {
-        preferenceController.apply {
-            //자동 로그인이 설정 돼 있으면
-            getPreference(PrefKey.KEY_AUTO_LOGIN)?.let { isAutoLoginAble ->
-                getPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)?.let { isAutoLoginSetting ->
+        viewModel.apply {
+            requestGetPreference(PrefKey.KEY_AUTO_LOGIN)?.let { isAutoLoginAble ->
+                requestGetPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)?.let { isAutoLoginSetting ->
                     if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
-                        val userEmail = getPreference(PrefKey.KEY_USER_EMAIL)?: ""
-                        val userName = getPreference(PrefKey.KEY_USER_NAME)?: ""
-                        val loginType = getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
+                        val userEmail = requestGetPreference(PrefKey.KEY_USER_EMAIL)?: ""
+                        val userName = requestGetPreference(PrefKey.KEY_USER_NAME)?: ""
+                        val loginType = requestGetPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
                         requestLogin(ReqSNSLogin(userEmail, userName, loginType))
                     }
                 }
@@ -124,14 +123,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 //                StockLog.d(TAG, "name = ${response.data.name}")
 //                StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
 //                StockLog.d(TAG, "login_type = ${response.data.login_type}")
-                preferenceController.apply {
-                    setPreference(PrefKey.KEY_USER_INDEX, response.data.userIndex)
-                    setPreference(PrefKey.KEY_USER_NAME, response.data.name)
-                    setPreference(PrefKey.KEY_USER_EMAIL, response.data.email)
-                    setPreference(PrefKey.KEY_USER_LOGIN_TYPE, response.data.login_type)
-                    setPreference(PrefKey.KEY_USER_TOKEN, response.data.token)
-                    setPreference(PrefKey.KEY_AUTO_LOGIN, true)
-                }
+                requestSetPreference(PrefKey.KEY_USER_INDEX, response.data.userIndex.toString())
+                requestSetPreference(PrefKey.KEY_USER_NAME, response.data.name)
+                requestSetPreference(PrefKey.KEY_USER_EMAIL, response.data.email)
+                requestSetPreference(PrefKey.KEY_USER_LOGIN_TYPE, response.data.login_type)
+                requestSetPreference(PrefKey.KEY_USER_TOKEN, response.data.token)
+                requestSetPreference(PrefKey.KEY_AUTO_LOGIN, true.toString())
+
                 startMainActivity()
             })
 
@@ -242,8 +240,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     StockLog.d(TAG, "expiresAt : $expiresAt")
                     StockLog.d(TAG, "tokenType : $tokenType")
                     val authorization = "$tokenType $accessToken"
-                    preferenceController.setPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
-                    preferenceController.setPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
+                    viewModel.requestSetPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
+                    viewModel.requestSetPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
                     viewModel.requestGetNaverUserInfo(this@LoginActivity)
                     startLoadingAnimation()
                 } else {

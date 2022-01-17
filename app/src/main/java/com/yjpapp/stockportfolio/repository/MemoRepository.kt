@@ -1,7 +1,6 @@
 package com.yjpapp.stockportfolio.repository
 
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListDao
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import javax.inject.Inject
@@ -15,7 +14,7 @@ import javax.inject.Inject
 
 class MemoRepository @Inject constructor(
     private val memoListDao: MemoListDao,
-    private val preferenceController: PreferenceController
+    private val preferenceRepository: PreferenceRepository
 ) {
     fun insertMemoData(memoData: MemoListEntity) {
         try {
@@ -69,7 +68,7 @@ class MemoRepository @Inject constructor(
     }
 
     fun getIsMemoVibration(): Boolean {
-        val isMemoVibration = preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)?: ""
+        val isMemoVibration = preferenceRepository.getPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)?: ""
         return isMemoVibration == "true"
     }
 }

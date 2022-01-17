@@ -120,7 +120,7 @@ class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout
     }
 
     private fun onDeleteButtonClick() {
-        if (preferenceController.getPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK) == StockConfig.TRUE) {
+        if (viewModel.requestGetPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK) == StockConfig.TRUE) {
             AlertDialog.Builder(this)
                 .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
                 .setPositiveButton(R.string.Common_Ok) {_,_ ->

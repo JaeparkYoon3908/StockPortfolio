@@ -1,14 +1,11 @@
-package com.yjpapp.stockportfolio.localdb.preference
+package com.yjpapp.stockportfolio.repository
 
-import android.app.Activity
-import android.content.Context
 import android.content.SharedPreferences
-import javax.inject.Singleton
 
-
-class PreferenceController(
+class PreferenceRepository(
     private val pref: SharedPreferences
 ) {
+
     companion object {
         const val FILENAME = "prefs"
     }

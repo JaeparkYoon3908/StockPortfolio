@@ -13,7 +13,6 @@ import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.function.my.MyFragment
 import com.yjpapp.stockportfolio.function.mystock.MyStockComposeFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -46,7 +45,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun initData() {
-        preferenceController.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
+        viewModel.requestSetPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
     }
 
     private fun initLayout() {
@@ -87,8 +86,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun startFirstFragment() {
-        if (preferenceController.isExists(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)) {
-            when (preferenceController.getPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)) {
+        if (viewModel.requestIsExistPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)) {
+            when (viewModel.requestGetPreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)) {
                 FRAGMENT_TAG_MY_STOCK -> {
                     showFragment(myStockFragment)
                     switchingBottomIconMyStock()
@@ -126,14 +125,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 binding.apply {
                     txtMainActivityTitle.text = getString(R.string.MyStockFragment_Title)
                 }
-                preferenceController.setPreference(
+                viewModel.requestSetPreference(
                     PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
                     FRAGMENT_TAG_MY_STOCK
                 )
             }
 
             incomeNoteFragment -> {
-                preferenceController.setPreference(
+                viewModel.requestSetPreference(
                     PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
                     FRAGMENT_TAG_INCOME_NOTE
                 )
@@ -143,7 +142,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             }
 
             memoListFragment -> {
-                preferenceController.setPreference(
+                viewModel.requestSetPreference(
                     PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
                     FRAGMENT_TAG_MEMO_LIST
                 )
@@ -153,7 +152,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             }
 
             myFragment -> {
-                preferenceController.setPreference(
+                viewModel.requestSetPreference(
                     PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION,
                     FRAGMENT_TAG_MY
                 )

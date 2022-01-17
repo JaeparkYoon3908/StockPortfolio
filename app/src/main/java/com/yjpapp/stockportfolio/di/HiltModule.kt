@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.localdb.room.MyRoomDatabase
 import com.yjpapp.stockportfolio.network.RetrofitClient
 import com.yjpapp.stockportfolio.repository.*
@@ -44,51 +43,51 @@ class HiltModule {
 
     @Provides
     @Singleton
-    fun providePreferenceController(
+    fun providePreferenceRepository(
         @ApplicationContext context: Context
-    ): PreferenceController {
-        val fileName = PreferenceController.FILENAME
+    ): PreferenceRepository {
+        val fileName = PreferenceRepository.FILENAME
         val pref = context.getSharedPreferences(fileName, Activity.MODE_PRIVATE)
-        return PreferenceController(pref)
+        return PreferenceRepository(pref)
     }
 
     @Provides
     @Singleton
     fun provideRetrofitClient(
-        preferenceController: PreferenceController
+        preferenceRepository: PreferenceRepository
     ): RetrofitClient {
-        return RetrofitClient(preferenceController)
+        return RetrofitClient(preferenceRepository)
     }
 
     @Provides
     fun provideIncomeNoteRepository(
-        preferenceController: PreferenceController,
+        preferenceRepository: PreferenceRepository,
         retrofitClient: RetrofitClient
     ): IncomeNoteRepository {
-        return IncomeNoteRepository(preferenceController, retrofitClient)
+        return IncomeNoteRepository(preferenceRepository, retrofitClient)
     }
 
     @Provides
     fun provideMemoRepository(
         myRoomDatabase: MyRoomDatabase,
-        preferenceController: PreferenceController
+        preferenceRepository: PreferenceRepository
     ): MemoRepository {
-        return MemoRepository(myRoomDatabase.memoListDao(), preferenceController)
+        return MemoRepository(myRoomDatabase.memoListDao(), preferenceRepository)
     }
 
     @Provides
     fun provideMyRepository(
-        preferenceController: PreferenceController
+        preferenceRepository: PreferenceRepository
     ): MyRepository {
-        return MyRepository(preferenceController)
+        return MyRepository(preferenceRepository)
     }
 
     @Provides
     fun provideUserRepository(
-        preferenceController: PreferenceController,
+        preferenceRepository: PreferenceRepository,
         retrofitClient: RetrofitClient
     ): UserRepository {
-        return UserRepository(preferenceController, retrofitClient)
+        return UserRepository(preferenceRepository, retrofitClient)
     }
 
     @Provides

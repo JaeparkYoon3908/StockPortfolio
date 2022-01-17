@@ -7,16 +7,15 @@ import android.os.Handler
 import android.os.Looper
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.network.RetrofitClient
-import com.yjpapp.stockportfolio.function.login.LoginActivity
 import es.dmoral.toasty.Toasty
 import kotlin.system.exitProcess
 
 class UserRepository(
-    private val preferenceController: PreferenceController,
+    private val preferenceRepository: PreferenceRepository,
     private val retrofitClient: RetrofitClient
 ) {
 
@@ -37,9 +36,9 @@ class UserRepository(
 
     fun logout(context: Context) {
         //프리퍼런스 reset
-        preferenceController.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
-        preferenceController.setPreference(PrefKey.KEY_USER_INDEX, "")
-        preferenceController.setPreference(PrefKey.KEY_USER_TOKEN, "")
+        preferenceRepository.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
+        preferenceRepository.setPreference(PrefKey.KEY_USER_INDEX, "")
+        preferenceRepository.setPreference(PrefKey.KEY_USER_TOKEN, "")
 
         val intent = Intent(context, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -50,44 +49,56 @@ class UserRepository(
         retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteUserInfo()
 
     fun getLoginType(): String {
-        return preferenceController.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
+        return preferenceRepository.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
     }
 
     fun getNaverAccessToken(): String {
-        return preferenceController.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
+        return preferenceRepository.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
     }
 
     fun getUserName(): String {
-        return preferenceController.getPreference(PrefKey.KEY_USER_NAME)?: ""
+        return preferenceRepository.getPreference(PrefKey.KEY_USER_NAME)?: ""
     }
 
     fun getUserEmail(): String {
-        return preferenceController.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
+        return preferenceRepository.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
     }
 
     fun runBackPressAppCloseEvent(
         mContext: Context,
         activity: Activity,
     ){
-        val isAllowAppClose = preferenceController.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)
+        val isAllowAppClose = preferenceRepository.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)
         if(isAllowAppClose == StockConfig.TRUE){
             activity.finishAffinity()
             System.runFinalization()
             exitProcess(0)
         }else{
             Toasty.normal(mContext, mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
-            preferenceController.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
+            preferenceRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                preferenceController.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
+                preferenceRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
             },3000)
         }
     }
 
     fun isAllowAppClose(): String {
-        return preferenceController.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)?: StockConfig.FALSE
+        return preferenceRepository.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)?: StockConfig.FALSE
     }
 
-    fun setAllowAppClose(isAllowClose: String) {
-        preferenceController.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, isAllowClose)
+    fun setPreference(prefKey: String, value: String) {
+        preferenceRepository.setPreference(prefKey, value)
+    }
+
+    fun setPreference(prefKey: String, value: Int) {
+        preferenceRepository.setPreference(prefKey, value)
+    }
+
+    fun getPreference(prefKey: String): String {
+        return preferenceRepository.getPreference(prefKey)?: ""
+    }
+
+    fun isExistPreference(prefKey: String): Boolean {
+        return preferenceRepository.isExists(prefKey)
     }
 }

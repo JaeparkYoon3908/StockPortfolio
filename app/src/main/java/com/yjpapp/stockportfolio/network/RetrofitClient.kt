@@ -3,7 +3,7 @@ package com.yjpapp.stockportfolio.network
 import android.content.Context
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
+import com.yjpapp.stockportfolio.repository.PreferenceRepository
 import com.yjpapp.stockportfolio.util.NetworkUtils
 import com.yjpapp.stockportfolio.util.StockLog
 import okhttp3.*
@@ -17,7 +17,7 @@ import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 
 class RetrofitClient(
-    private val preferenceController: PreferenceController
+    private val preferenceRepository: PreferenceRepository
 ) {
     enum class BaseServerURL(val url: String) {
         MY("http://112.147.50.241"),
@@ -31,7 +31,7 @@ class RetrofitClient(
 
     fun getService(context: Context, baseServerURL: BaseServerURL): RetrofitService? {
         if (NetworkUtils.isInternetAvailable(context)) {
-            val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceController)
+            val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceRepository)
 
             val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -63,19 +63,19 @@ class RetrofitClient(
     class CustomInterceptor(
         private val context: Context,
         private val baseServerURL: BaseServerURL,
-        private val preferenceController: PreferenceController
+        private val preferenceRepository: PreferenceRepository
     ) : Interceptor {
         private val TAG = CustomInterceptor::class.java.simpleName
         override fun intercept(chain: Interceptor.Chain): Response {
             val builder =
                 when (baseServerURL) {
                     BaseServerURL.MY -> {
-                        val authorization = preferenceController
+                        val authorization = preferenceRepository
                             .getPreference(PrefKey.KEY_USER_TOKEN) ?: ""
                         getClientBuilderWithToken(context, chain, authorization)
                     }
                     BaseServerURL.NAVER_OPEN_API -> {
-                        val authorization = preferenceController
+                        val authorization = preferenceRepository
                             .getPreference(PrefKey.KEY_NAVER_USER_TOKEN) ?: ""
                         getNaverClientBuilderWithToken(chain, authorization)
                     }
@@ -138,7 +138,7 @@ class RetrofitClient(
 //            .addHeader("Content-Type", "application/json")
                 .addHeader(
                     "user-index",
-                    preferenceController.getPreference(PrefKey.KEY_USER_INDEX) ?: ""
+                    preferenceRepository.getPreference(PrefKey.KEY_USER_INDEX) ?: ""
                 )
 //            .addHeader("user-index", "10005")
         }

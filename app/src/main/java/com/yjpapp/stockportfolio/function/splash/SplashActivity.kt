@@ -15,7 +15,6 @@ import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.databinding.ActivitySplashBinding
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
-import org.koin.android.ext.android.inject
 import java.util.*
 
 

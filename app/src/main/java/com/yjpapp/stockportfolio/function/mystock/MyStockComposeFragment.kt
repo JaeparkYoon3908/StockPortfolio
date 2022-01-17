@@ -20,14 +20,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import es.dmoral.toasty.Toasty
+import androidx.fragment.app.viewModels
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
+import es.dmoral.toasty.Toasty
 
+@AndroidEntryPoint
 class MyStockComposeFragment : Fragment() {
-    private val myStockViewModel: MyStockViewModel by inject()
+    private val myStockViewModel: MyStockViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

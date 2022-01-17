@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import es.dmoral.toasty.Toasty
@@ -28,10 +29,22 @@ class MainViewModel @Inject constructor(
             exitProcess(0)
         } else {
             Toasty.normal(mContext, mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
-            userRepository.setAllowAppClose(StockConfig.TRUE)
+            requestSetPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                userRepository.setAllowAppClose(StockConfig.FALSE)
+                requestSetPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
             },3000)
         }
+    }
+
+    fun requestSetPreference(prefKey: String, value: String) {
+        userRepository.setPreference(prefKey, value)
+    }
+
+    fun requestGetPreference(prefKey: String): String {
+        return userRepository.getPreference(prefKey)
+    }
+
+    fun requestIsExistPreference(prefKey: String): Boolean {
+        return userRepository.isExistPreference(prefKey)
     }
 }

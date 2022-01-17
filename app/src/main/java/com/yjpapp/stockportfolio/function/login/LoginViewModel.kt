@@ -110,4 +110,17 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun requestSetPreference(prefKey: String, value: String) {
+        userRepository.setPreference(prefKey, value)
+    }
+
+    fun requestGetPreference(prefKey: String): String {
+        return userRepository.getPreference(prefKey)
+    }
+
+    fun requestIsExistPreference(prefKey: String): Boolean {
+        return userRepository.isExistPreference(prefKey)
+    }
+
 }

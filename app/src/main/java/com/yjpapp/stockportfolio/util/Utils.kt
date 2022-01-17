@@ -1,7 +1,6 @@
 package com.yjpapp.stockportfolio.util
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -10,19 +9,13 @@ import android.content.res.Resources
 import android.os.*
 import android.util.Base64
 import android.util.Log
-import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.constance.StockConfig
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
-import es.dmoral.toasty.Toasty
 import java.lang.StringBuilder
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
-import kotlin.system.exitProcess
 
 /**
  * 개발에 필요한 함수들
@@ -119,10 +112,10 @@ object Utils {
     //퍼센티지 붙이기
     fun getRoundsPercentNumber(number: Double): String{
         var result = ""
-        try{
-            result = String.format("%.2f", number)
+        result = try{
+            String.format("%.2f", number)
         }catch (e: Exception){
-            result = "0"
+            "0"
         }
         result += "%"
         return result

@@ -11,7 +11,6 @@ import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.preference.PreferenceController
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
@@ -159,9 +158,9 @@ class IncomeNoteViewModel @Inject constructor(
             exitProcess(0)
         } else {
             Toasty.normal(mContext, mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
-            userRepository.setAllowAppClose(StockConfig.TRUE)
+            userRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                userRepository.setAllowAppClose(StockConfig.FALSE)
+                userRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
             },3000)
         }
     }
