@@ -67,13 +67,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         startFirstFragment()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (currentFragment == memoListFragment) {
-            val memoListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_MEMO_LIST)
-            memoListFragment?.onActivityResult(requestCode, resultCode, data)
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (currentFragment == memoListFragment) {
+//            val memoListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_MEMO_LIST)
+//            memoListFragment?.onActivityResult(requestCode, resultCode, data)
+//        }
+//    }
 
     override fun onBackPressed() {
         if (currentFragment == incomeNoteFragment ||

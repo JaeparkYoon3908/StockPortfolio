@@ -14,7 +14,6 @@ import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.repository.MemoRepository
 import com.yjpapp.stockportfolio.repository.PreferenceRepository
-import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch

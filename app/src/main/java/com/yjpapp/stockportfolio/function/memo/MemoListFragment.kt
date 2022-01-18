@@ -3,7 +3,6 @@ package com.yjpapp.stockportfolio.function.memo
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +11,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,12 +55,12 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
         const val RESULT_UPDATE = RESULT_EMPTY + 2
     }
 
-//    private lateinit var memoListPresenter: MemoListPresenter
     private lateinit var layoutManager: LinearLayoutManager
     private val memoListAdapter = MemoListAdapter(mutableListOf(), null)
     private val viewModel: MemoListViewModel by viewModels()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        @SuppressLint("NotifyDataSetChanged")
         override fun handleOnBackPressed() {
             if (memoListAdapter.isDeleteModeOn) {
                 memoListAdapter.isDeleteModeOn = false
@@ -92,7 +92,6 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
     }
 
     private fun initData() {
-//        memoListPresenter = MemoListPresenter(mContext, this)
         viewModel.getAllMemoInfoList()
         //event handler
         lifecycleScope.launch {
@@ -133,26 +132,52 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (resultCode) {
+    private val memoResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        when (it.resultCode) {
             RESULT_OK -> {
-                when (requestCode) {
-                    REQUEST_ADD -> {
-                        viewModel.getAllMemoInfoList()
+                viewModel.getAllMemoInfoList()
             }
-        }
-    }
-    RESULT_EMPTY -> {
-        val mode = data?.getStringExtra(INTENT_KEY_MEMO_MODE)
-                Toasty.normal(mContext, getString(R.string.MemoListFragment_Empty_Data_Message), Toasty.LENGTH_LONG).show()
+            RESULT_EMPTY -> {
+//                val mode = it?.data?.getStringExtra(INTENT_KEY_MEMO_MODE)
+                Toasty.normal(
+                    mContext,
+                    getString(R.string.MemoListFragment_Empty_Data_Message),
+                    Toasty.LENGTH_LONG
+                ).show()
             }
             RESULT_DELETE, RESULT_UPDATE -> {
-                val position = data?.getIntExtra(INTENT_KEY_LIST_POSITION, 0)!!
+//                val position = it?.data?.getIntExtra(INTENT_KEY_LIST_POSITION, 0)!!
                 viewModel.getAllMemoInfoList()
             }
         }
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        when (resultCode) {
+//            RESULT_OK -> {
+//                when (requestCode) {
+//                    REQUEST_ADD -> {
+//                        viewModel.getAllMemoInfoList()
+//                    }
+//                }
+//            }
+//            RESULT_EMPTY -> {
+////                val mode = data?.getStringExtra(INTENT_KEY_MEMO_MODE)
+//                Toasty.normal(
+//                    mContext,
+//                    getString(R.string.MemoListFragment_Empty_Data_Message),
+//                    Toasty.LENGTH_LONG
+//                ).show()
+//            }
+//            RESULT_DELETE, RESULT_UPDATE -> {
+////                val position = data?.getIntExtra(INTENT_KEY_LIST_POSITION, 0)!!
+//                viewModel.getAllMemoInfoList()
+//            }
+//        }
+//    }
 
     private fun initRecyclerView() {
         memoListAdapter.callBack = memoListAdapterCallBack
@@ -188,7 +213,8 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
             R.id.menu_MemoListFragment_Add -> {
                 val intent = Intent(mContext, MemoReadWriteActivity::class.java)
                 intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_ADD_MODE)
-                startReadWriteActivityForResult(intent, REQUEST_ADD)
+                memoResultLauncher.launch(intent)
+//                startReadWriteActivityForResult(intent, REQUEST_ADD)
             }
 
             R.id.menu_MemoListFragment_Delete -> {
@@ -199,9 +225,9 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
     }
 
     //View Interface CallBack
-    private fun startReadWriteActivityForResult(intent: Intent, requestCode: Int) {
-        activity?.startActivityForResult(intent, requestCode)
-    }
+//    private fun startReadWriteActivityForResult(intent: Intent, requestCode: Int) {
+//        activity?.startActivityForResult(intent, requestCode)
+//    }
 
     private fun showAddButton() {
         menu?.findItem(R.id.menu_MemoListFragment_Add)?.isVisible = true
@@ -234,7 +260,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
     }
 
     private fun showDeleteCheckDialog() {
-        CommonTwoBtnDialog(mContext,CommonTwoBtnDialog.CommonTwoBtnData(
+        CommonTwoBtnDialog(mContext, CommonTwoBtnDialog.CommonTwoBtnData(
             noticeText = mContext.getString(R.string.MemoListFragment_Delete_Check_Message),
             leftBtnText = mContext.getString(R.string.Common_Cancel),
             rightBtnText = mContext.getString(R.string.Common_Ok),
@@ -268,7 +294,8 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
                 memoDataList[position].content
             )
             intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_READ_MODE)
-            startReadWriteActivityForResult(intent, REQUEST_READ)
+            memoResultLauncher.launch(intent)
+//            startReadWriteActivityForResult(intent, REQUEST_READ)
         }
 
         override fun onMemoListLongClicked(position: Int) {

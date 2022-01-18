@@ -34,6 +34,7 @@
             android:layout_marginStart="@dimen/common_20dp"
             android:layout_marginTop="@dimen/common_10dp"
             android:layout_marginEnd="@dimen/common_20dp"
+            android:maxLines="3"
             android:theme="@style/EditTextStyle"
             android:backgroundTint="@drawable/selector_edit_text_bg"
             android:hint="@string/MemoReadWriteActivity_Title_Hint"

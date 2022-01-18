@@ -68,6 +68,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_MemoList_Title"
             app:layout_constraintBottom_toTopOf="@+id/line_1"
             app:layout_constraintStart_toEndOf="@+id/img_MemoList_Check"
+            app:layout_constraintEnd_toEndOf="parent"
             />
 
         <View
