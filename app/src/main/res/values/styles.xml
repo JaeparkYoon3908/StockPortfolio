@@ -57,4 +57,9 @@
         <item name="colorControlHighlight">@color/red</item>
     </style>
 
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">@color/color_666666</item>
+        <item name="colorControlHighlight">@color/color_666666</item>
+    </style>
+
 </resources>

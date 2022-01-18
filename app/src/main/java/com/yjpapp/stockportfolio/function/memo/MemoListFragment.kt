@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.function.memo
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
@@ -105,6 +106,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
         initRecyclerView()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun handleEvent(event: MemoListViewModel.Event) = when (event) {
         is MemoListViewModel.Event.SendToAllMemoListData -> {
             val memoList = event.data

@@ -35,6 +35,7 @@
             android:layout_marginStart="@dimen/common_20dp"
             android:layout_marginEnd="@dimen/common_20dp"
             android:hint="@string/MemoReadWriteActivity_Title_Hint"
+            android:theme="@style/EditTextStyle"
             android:textColor="@color/color_222222"
             />
 
@@ -48,6 +49,7 @@
             android:layout_marginStart="@dimen/common_20dp"
             android:layout_marginEnd="@dimen/common_20dp"
             android:hint="@string/MemoReadWriteActivity_Content_Hint"
+            android:theme="@style/EditTextStyle"
             android:textColor="@color/color_222222"
             />
 
