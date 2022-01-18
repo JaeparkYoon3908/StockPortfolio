@@ -14,17 +14,17 @@
             android:theme="@style/AppTheme"
             android:background="@color/color_f1f1f1">
 
-            <TextView
-                android:id="@+id/txt_MainActivity_Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingTop="@dimen/common_10dp"
-                android:paddingBottom="@dimen/common_10dp"
-                android:text="@string/MemoListFragment_Write_Memo"
-                android:textColor="@color/color_222222"
-                android:textSize="18sp"
-                />
+<!--            <TextView-->
+<!--                android:id="@+id/txt_MainActivity_Title"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:paddingTop="@dimen/common_10dp"-->
+<!--                android:paddingBottom="@dimen/common_10dp"-->
+<!--                android:text="@string/MemoListFragment_Write_Memo"-->
+<!--                android:textColor="@color/color_222222"-->
+<!--                android:textSize="18sp"-->
+<!--                />-->
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.appcompat.widget.AppCompatEditText
