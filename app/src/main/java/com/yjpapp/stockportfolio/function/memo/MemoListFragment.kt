@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
+import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteActivity
 import com.yjpapp.stockportfolio.util.Utils
@@ -233,15 +234,22 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
     }
 
     private fun showDeleteCheckDialog() {
-        AlertDialog.Builder(mContext)
-                .setMessage(mContext.getString(R.string.MemoListFragment_Delete_Check_Message))
-                .setPositiveButton(R.string.Common_Ok) { _, _ ->
-                    viewModel.requestDeleteMemoInfo()
-                }
-                .setNegativeButton(R.string.Common_Cancel) { dialog, _ ->
+        CommonTwoBtnDialog(mContext,CommonTwoBtnDialog.CommonTwoBtnData(
+            noticeText = mContext.getString(R.string.MemoListFragment_Delete_Check_Message),
+            leftBtnText = mContext.getString(R.string.Common_Cancel),
+            rightBtnText = mContext.getString(R.string.Common_Ok),
+            leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
                     dialog.dismiss()
                 }
-                .show()
+            },
+            rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                    viewModel.requestDeleteMemoInfo()
+                    dialog.dismiss()
+                }
+            }
+        )).show()
     }
 
     private val memoListAdapterCallBack = object : MemoListAdapter.CallBack {
