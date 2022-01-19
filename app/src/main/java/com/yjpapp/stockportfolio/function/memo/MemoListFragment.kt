@@ -56,7 +56,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
     }
 
     private lateinit var layoutManager: LinearLayoutManager
-    private val memoListAdapter = MemoListAdapter(mutableListOf(), null)
+    private val memoListAdapter = MemoListAdapter(mutableListOf(), null).apply { setHasStableIds(true) }
     private val viewModel: MemoListViewModel by viewModels()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {

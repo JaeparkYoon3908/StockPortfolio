@@ -57,6 +57,10 @@ class MemoListAdapter(
         return memoListData.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     interface CallBack {
         fun onMemoListClicked(position: Int, imgMemoListCheck: Boolean)
         fun onMemoListClicked(position: Int)

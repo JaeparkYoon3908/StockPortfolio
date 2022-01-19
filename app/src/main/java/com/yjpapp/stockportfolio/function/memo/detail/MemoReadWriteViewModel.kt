@@ -16,6 +16,7 @@ class MemoReadWriteViewModel @Inject constructor(
     private val memoRepository: MemoRepository,
     private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
+
     fun requestAddMemoData(date: String, title: String, content: String){
         val memoInfo = MemoListEntity(0, date, title, content, "false")
         memoRepository.insertMemoData(memoInfo)
@@ -25,9 +26,11 @@ class MemoReadWriteViewModel @Inject constructor(
         val memoInfo = MemoListEntity(id, date, title, content, "false")
         memoRepository.updateMemoData(memoInfo)
     }
+
     fun requestDeleteMemoData(id: Int) {
         memoRepository.deleteMomoData(id)
     }
+
     fun requestSetPreference(prefKey: String, value: String) {
         preferenceRepository.setPreference(prefKey, value)
     }

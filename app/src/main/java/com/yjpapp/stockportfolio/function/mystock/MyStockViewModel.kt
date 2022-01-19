@@ -86,12 +86,12 @@ class MyStockViewModel @Inject constructor(
                     inputDialogPurchasePrice.value!!,
                     inputDialogPurchaseCount
                 )
-                if (isInsertMode) {
+                notifyHandler = if (isInsertMode) {
                     myStockRepository.insertMyStock(myStockEntity)
-                    notifyHandler = NOTIFY_HANDLER_INSERT
+                    NOTIFY_HANDLER_INSERT
                 } else {
                     myStockRepository.updateMyStock(myStockEntity)
-                    notifyHandler = NOTIFY_HANDLER_UPDATE
+                    NOTIFY_HANDLER_UPDATE
                 }
                 myStockInfoList.value = myStockRepository.getAllMyStock()
                 return true
