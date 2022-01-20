@@ -40,6 +40,7 @@ class MemoListAdapter(
         }
         holder.itemView.setOnLongClickListener {
             callBack?.onMemoListLongClicked(position = position)
+
             return@setOnLongClickListener true
         }
         holder.itemView.setOnClickListener {

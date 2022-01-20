@@ -146,9 +146,9 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
             adapter = incomeNoteListAdapter
             addOnScrollListener(onScrollListener)
-            addOnItemTouchListener(object: RecyclerView.OnItemTouchListener{
+            addOnItemTouchListener(object: RecyclerView.OnItemTouchListener {
                 override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                    when(e.actionMasked){
+                    when (e.actionMasked) {
                         MotionEvent.ACTION_UP, MotionEvent.ACTION_DOWN -> {
                             incomeNoteListAdapter.closeSwipeLayout()
                         }

@@ -23,6 +23,7 @@ class MemoRepository @Inject constructor(
             e.stackTrace
         }
     }
+
     fun updateMemoData(memoData: MemoListEntity) {
         try {
             memoListDao.update(memoData)
@@ -30,6 +31,7 @@ class MemoRepository @Inject constructor(
             e.stackTrace
         }
     }
+
     fun deleteMomoData(id: Int) {
         try {
             memoListDao.deleteMemoInfo(id)
@@ -38,7 +40,7 @@ class MemoRepository @Inject constructor(
         }
     }
 
-    fun getMemoInfo(id: Int): MemoListEntity{
+    fun getMemoInfo(id: Int): MemoListEntity {
        return memoListDao.getMemoInfo(id)
     }
 
