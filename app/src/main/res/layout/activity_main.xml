@@ -36,14 +36,14 @@
                 />
         </androidx.appcompat.widget.Toolbar>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/cons_MainActivity_fragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_MainActivity"
             app:layout_constraintBottom_toTopOf="@+id/view_bottom_line"
             >
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.fragment.app.FragmentContainerView>
 
         <View
             android:id="@+id/view_bottom_line"
