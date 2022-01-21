@@ -55,6 +55,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".test.TestActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".service.FBMessagingService"
             android:enabled="true"

@@ -20,10 +20,11 @@ android {
         debug {
             buildConfigField 'boolean', 'LOG_CAT', 'true'
         }
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'boolean', 'LOG_CAT', 'false'
+        }
     }
 
     buildFeatures {

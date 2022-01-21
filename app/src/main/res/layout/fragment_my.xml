@@ -56,6 +56,7 @@
                 android:layout_marginTop="@dimen/common_20dp"
                 binding:setLoginTypeImage="@{viewModel.userLoginType}"
                 tools:background="@drawable/naver_icon"
+                android:onClick="@{callBack::onClick}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_label_account"
                 />

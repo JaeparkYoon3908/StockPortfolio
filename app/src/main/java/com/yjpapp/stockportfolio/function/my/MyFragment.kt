@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.constance.StockConfig
@@ -15,6 +16,7 @@ import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.test.TestActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -118,6 +120,12 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                         }
                     )).show()
                 }
+                R.id.img_login_type_icon -> {
+                    if (BuildConfig.DEBUG) {
+                        val intent = Intent(mContext, TestActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
             }
         }
 
@@ -166,4 +174,5 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
             mContext.startActivity(this)
         }
     }
+
 }
