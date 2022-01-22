@@ -11,8 +11,8 @@ android {
         applicationId "com.yjpapp.stockportfolio"
         minSdkVersion 23
         targetSdkVersion 32
-        versionCode 13
-        versionName "1.4.6"
+        versionCode 14
+        versionName "1.4.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -61,8 +61,8 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.4.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
 
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -73,7 +73,7 @@ dependencies {
     implementation 'jp.wasabeef:recyclerview-animators:4.0.0'
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
-    implementation "com.google.android.material:material:1.4.0"
+    implementation "com.google.android.material:material:1.5.0"
 
     implementation 'com.squareup.okhttp3:okhttp:4.4.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -84,9 +84,9 @@ dependencies {
     implementation project(':swipeLayout')
 
     //Room
-    implementation "androidx.room:room-runtime:2.4.0"
-    annotationProcessor "androidx.room:room-compiler:2.4.0"
-    kapt "androidx.room:room-compiler:2.4.0"
+    implementation "androidx.room:room-runtime:2.4.1"
+    annotationProcessor "androidx.room:room-compiler:2.4.1"
+    kapt "androidx.room:room-compiler:2.4.1"
 
     //FireBase
     implementation platform('com.google.firebase:firebase-bom:27.1.0')
@@ -99,7 +99,7 @@ dependencies {
 
     //Google Service
     implementation 'com.google.android.gms:play-services-ads:20.5.0'
-    implementation 'com.google.android.gms:play-services-auth:20.0.0'
+    implementation 'com.google.android.gms:play-services-auth:20.0.1'
 
     implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
     implementation 'com.facebook.android:facebook-login:5.15.3'
