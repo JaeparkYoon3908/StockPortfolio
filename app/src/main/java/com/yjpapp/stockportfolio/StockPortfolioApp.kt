@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.di
+package com.yjpapp.stockportfolio
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
