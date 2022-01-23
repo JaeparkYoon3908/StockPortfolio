@@ -6,11 +6,12 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.VersionedPackage
 import android.content.res.Resources
-import android.os.*
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Base64
 import android.util.Log
 import com.yjpapp.stockportfolio.constance.StockConfig
-import java.lang.StringBuilder
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat

@@ -12,6 +12,10 @@ object StockLog {
         if (BuildConfig.LOG_CAT) Log.e(tag, msg)
     }
 
+    fun e(tag: String?, msg: String, tr: Throwable) {
+        if (BuildConfig.LOG_CAT) Log.e(tag, msg, tr)
+    }
+
     fun i(tag: String?, msg: String) {
         if (BuildConfig.LOG_CAT) Log.i(tag, msg)
     }
