@@ -13,6 +13,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.function.MainActivity
+import com.yjpapp.stockportfolio.util.StockLog
 
 class FBMessagingService: FirebaseMessagingService() {
 
@@ -20,7 +21,7 @@ class FBMessagingService: FirebaseMessagingService() {
     // FirebaseInstanceIdService는 이제 사라짐. 이제 이걸 사용함
 
     override fun onNewToken(token: String) {
-        Log.d(TAG, "new Token: $token")
+        StockLog.d(TAG, "new Token: $token")
 
         // 토큰 값을 따로 저장해둔다.
         val pref = this.getSharedPreferences("token", Context.MODE_PRIVATE)
@@ -28,25 +29,25 @@ class FBMessagingService: FirebaseMessagingService() {
         editor.putString("token", token).apply()
         editor.commit()
 
-        Log.i("로그: ", "성공적으로 토큰을 저장함")
+        StockLog.i("로그: ", "성공적으로 토큰을 저장함")
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d(TAG, "From: " + remoteMessage!!.from)
+        StockLog.d(TAG, "From: " + remoteMessage!!.from)
 
         // Notification 메시지를 수신할 경우는
         // remoteMessage.notification?.body!! 여기에 내용이 저장되어있다.
-        // Log.d(TAG, "Notification Message Body: " + remoteMessage.notification?.body!!)
+        StockLog.d(TAG, "Notification Message Body: " + remoteMessage.notification?.body!!)
 
         if(remoteMessage.data.isNotEmpty()){
-            Log.i("바디: ", remoteMessage.data["body"].toString())
-            Log.i("타이틀: ", remoteMessage.data["title"].toString())
+            StockLog.i("바디: ", remoteMessage.data["body"].toString())
+            StockLog.i("타이틀: ", remoteMessage.data["title"].toString())
             sendNotification(remoteMessage)
         }
 
         else {
-            Log.i("수신에러: ", "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
-            Log.i("data값: ", remoteMessage.data.toString())
+            StockLog.i("수신에러: ", "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
+            StockLog.i("data값: ", remoteMessage.data.toString())
         }
     }
 
