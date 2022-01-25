@@ -77,7 +77,7 @@ fun visibility(view: View, visibility: Boolean) {
  */
 @BindingAdapter("binding:addPercentText")
 fun addPercentText(textView: TextView, number: Double) {
-    textView.text = Utils.getRoundsPercentNumber(number)
+    textView.text = "(${Utils.getRoundsPercentNumber(number)})"
 }
 
 /**
