@@ -13,7 +13,6 @@ import com.yjpapp.stockportfolio.util.Utils
 
 class IncomeNoteFilterDialog(): BottomSheetDialogFragment() {
 
-//    private lateinit var rootView: View
     private var _viewBinding: CustomDialogIncomeNoteFilterBinding? = null
     private val viewBinding get() = _viewBinding!!
 
@@ -30,15 +29,14 @@ class IncomeNoteFilterDialog(): BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-//        rootView = inflater.inflate(R.layout.dialog_income_note_filter, container, false)
         _viewBinding = CustomDialogIncomeNoteFilterBinding.inflate(inflater, container, false)
 
         return viewBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initLayout()
-        super.onActivityCreated(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onStart() {

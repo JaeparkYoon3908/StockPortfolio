@@ -93,7 +93,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             R.id.menu_IncomeNoteFragment_Add -> {
                 viewModel.editMode = false
                 viewModel.incomeNoteId = -1
-                showInputDialog(viewModel.editMode, null)
+                showInputDialog(null)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -169,54 +169,20 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
         menu?.getItem(0)?.isVisible = false
     }
 
-    fun showInputDialog(editMode: Boolean, respIncomeNoteInfoInfo: RespIncomeNoteListInfo.IncomeNoteInfo?) {
-        IncomeNoteInputDialog(inputDialogCallBack, mContext).apply {
-            if(editMode){
-                if (!isShowing) {
-                    show()
-                    respIncomeNoteInfoInfo?.let {
-                        etSubjectName.setText(it.subjectName)
-                        etSellDate.setText(it.sellDate)
-                        etPurchasePrice.setText(Utils.getNumInsertComma(BigDecimal(it.purchasePrice).toString()))
-                        etSellPrice.setText(Utils.getNumInsertComma(BigDecimal(it.sellPrice).toString()))
-                        etSellCount.setText(it.sellCount.toString())
-                    }
-                }
-            }else{
-                if (!isShowing) {
-                    show()
-                }
-            }
-
-            etSellDate.setOnClickListener {
-                var year = ""
-                var month = ""
-                var day = ""
-                if(etSellDate.text.toString() != "") {
-                    val split = etSellDate.text.toString().split("-")
-                    year = split[0]
-                    month = split[1]
-                    day = split[2]
-                }
-
-                CommonDatePickerDialog(mContext, year, month, day).apply {
-                    setListener { _: DatePicker?, year, month, dayOfMonth ->
-//                        Toast.makeText(requireContext(), "날짜 : $year/$month/$dayOfMonth", Toast.LENGTH_LONG).show()
-                        uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
-                        purchaseYear = year.toString()
-                        purchaseMonth = if (month < 10) {
-                            "0$month"
-                        } else {
-                            month.toString()
-                        }
-                        purchaseDay = if (dayOfMonth < 10) {
-                            "0$dayOfMonth"
-                        } else {
-                            dayOfMonth.toString()
-                        }
-                    }
-                    show()
-                }
+    fun showInputDialog(respIncomeNoteInfoInfo: RespIncomeNoteListInfo.IncomeNoteInfo?) {
+        var data = IncomeNoteInputDialog.IncomeNoteInputDialogData()
+        respIncomeNoteInfoInfo?.let {
+            data = IncomeNoteInputDialog.IncomeNoteInputDialogData(
+                subjectName = it.subjectName,
+                sellDate = it.sellDate,
+                purchasePrice = Utils.getNumInsertComma(BigDecimal(it.purchasePrice).toString()),
+                sellPrice = Utils.getNumInsertComma(BigDecimal(it.sellPrice).toString()),
+                sellCount = it.sellCount.toString(),
+            )
+        }
+        IncomeNoteInputDialog(mContext, inputDialogCallBack, data).run {
+            if (!isShowing) {
+                show()
             }
         }
     }
@@ -241,7 +207,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             respIncomeNoteListInfo?.let {
                 viewModel.editMode = true
                 viewModel.incomeNoteId = it.id
-                showInputDialog(viewModel.editMode, respIncomeNoteListInfo)
+                showInputDialog(it)
             }
         }
 
