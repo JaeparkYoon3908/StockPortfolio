@@ -69,7 +69,7 @@
             android:onClick="clickBottomMenu"
             >
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/img_MainActivity_BottomMenu_MyStock"
                 android:layout_width="@dimen/common_25dp"
                 android:layout_height="@dimen/common_25dp"
@@ -98,7 +98,7 @@
             app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_Memo"
             android:onClick="clickBottomMenu"
             >
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/img_MainActivity_BottomMenu_IncomeNote"
                 android:layout_width="@dimen/common_25dp"
                 android:layout_height="@dimen/common_25dp"
@@ -136,7 +136,7 @@
             android:onClick="clickBottomMenu"
             >
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/img_MainActivity_BottomMenu_Memo"
                 android:layout_width="@dimen/common_25dp"
                 android:layout_height="@dimen/common_25dp"
@@ -166,7 +166,7 @@
             android:onClick="clickBottomMenu"
             >
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/img_MainActivity_BottomMenu_Ad"
                 android:layout_width="@dimen/common_25dp"
                 android:layout_height="@dimen/common_25dp"
