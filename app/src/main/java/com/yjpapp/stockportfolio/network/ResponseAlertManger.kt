@@ -18,11 +18,14 @@ object ResponseAlertManger {
                     btnListener = object : CommonOneBtnDialog.OnClickListener {
                         override fun onClick(view: View, dialog: CommonOneBtnDialog) {
                             dialog.dismiss()
-                            isShowDialog = false
                         }
                     }
                 )
-            ).show()
+            ).apply {
+                setOnDismissListener {
+                    isShowDialog = false
+                }
+            }.show()
             isShowDialog = true
         }
 
@@ -41,7 +44,11 @@ object ResponseAlertManger {
                         }
                     }
                 )
-            ).show()
+            ).apply {
+              setOnDismissListener {
+                  isShowDialog = false
+              }
+            }.show()
             isShowDialog = true
         }
     }
