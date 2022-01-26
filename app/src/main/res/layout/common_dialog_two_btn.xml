@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="@dimen/common_50dp"
-        android:layout_marginEnd="@dimen/common_50dp"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:layout_marginEnd="@dimen/common_10dp"
         android:background="@drawable/bg_ffffff_r12">
 
         <TextView

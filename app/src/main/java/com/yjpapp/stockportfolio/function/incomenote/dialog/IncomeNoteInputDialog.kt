@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.function.incomenote.dialog
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -79,7 +79,7 @@ class IncomeNoteInputDialog(
 
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-//        Utils.setDialogWidth(mContext, this, 0.85)
+        Utils.setDialogWidth(mContext, this, 0.85)
     }
 
     private val onClickListener = OnSingleClickListener { view: View? ->

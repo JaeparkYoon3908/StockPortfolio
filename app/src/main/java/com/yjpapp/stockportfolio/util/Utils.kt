@@ -1,16 +1,20 @@
 package com.yjpapp.stockportfolio.util
 
 import android.annotation.SuppressLint
+import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.VersionedPackage
 import android.content.res.Resources
+import android.graphics.Point
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Base64
 import android.util.Log
+import android.view.ViewGroup
+import android.view.WindowManager
 import com.yjpapp.stockportfolio.constance.StockConfig
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -244,5 +248,52 @@ object Utils {
         if (email == null) return false
         val pattern = android.util.Patterns.EMAIL_ADDRESS
         return email.contains("@naver.com") && pattern.matcher(email).matches()
+    }
+
+    fun setDialogResize(context: Context, dialog: AlertDialog, width: Float, height: Float) {
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        if (Build.VERSION.SDK_INT < 30){
+            val display = windowManager.defaultDisplay
+            val size = Point()
+
+            display.getSize(size)
+
+            val window = dialog.window
+
+            val x = (size.x * width).toInt()
+            val y = (size.y * height).toInt()
+
+            window?.setLayout(x, y)
+        } else {
+            val rect = windowManager.currentWindowMetrics.bounds
+
+            val window = dialog.window
+
+            val x = (rect.width() * width).toInt()
+            val y = (rect.height() * height).toInt()
+
+            window?.setLayout(x, y)
+        }
+    }
+
+    fun setDialogWidth(mContext: Context, dialog: AlertDialog, widthRate: Double) {
+        val windowManager = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            mContext.display
+        } else {
+            windowManager.defaultDisplay
+        }
+        val size = Point()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            windowManager.currentWindowMetrics
+        } else {
+            display?.getSize(size)
+        }
+        val params: ViewGroup.LayoutParams? = dialog.window?.attributes
+        val deviceWidth = size.x
+        params?.width = (deviceWidth * widthRate).toInt()
+        params?.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        dialog.window?.attributes = params as WindowManager.LayoutParams
     }
 }

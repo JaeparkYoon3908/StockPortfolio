@@ -6,8 +6,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/bg_ffffff_r12"
-        android:layout_marginStart="@dimen/common_30dp"
-        android:layout_marginEnd="@dimen/common_30dp"
+        android:layout_marginStart="@dimen/common_10dp"
+        android:layout_marginEnd="@dimen/common_10dp"
         >
         <LinearLayout
             android:layout_width="match_parent"

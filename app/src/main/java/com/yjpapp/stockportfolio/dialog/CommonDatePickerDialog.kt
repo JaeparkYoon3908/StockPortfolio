@@ -17,8 +17,9 @@ class CommonDatePickerDialog(
     var month: String,
     var day: String = ""
 ) : AlertDialog(mContext) {
-
     private val TAG = CommonDatePickerDialog::class.java.simpleName
+    private var _binding: CustomDialogMonthYearPickerBinding? = null
+    private val binding get() = _binding!!
     private var selectedYear = 0
     private var selectedMonth = 0
     private var currentMaxDay = 0
@@ -26,8 +27,6 @@ class CommonDatePickerDialog(
     companion object {
         private const val MIN_YEAR = 2010
     }
-
-    private lateinit var binding: CustomDialogMonthYearPickerBinding
 
     private var listener: DatePickerDialog.OnDateSetListener? = null
 
@@ -37,16 +36,18 @@ class CommonDatePickerDialog(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.inflate(
+        _binding = DataBindingUtil.inflate(
             LayoutInflater.from(mContext),
             R.layout.custom_dialog_month_year_picker,
             null,
             false
         )
         setContentView(binding.root)
+        Utils.setDialogWidth(mContext, this, 0.85)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         initView()
     }
+
     private fun initView() {
         val nowYYYYMMDD: List<String> = Utils.getTodayYYMMDD()
 
