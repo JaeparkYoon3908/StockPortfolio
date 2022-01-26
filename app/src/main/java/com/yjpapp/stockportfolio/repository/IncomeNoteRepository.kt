@@ -70,6 +70,7 @@ class IncomeNoteRepository(
             }
         }
     }
+
     var currentPagingSource: IncomeNotePagingSource? = null
     fun getIncomeNoteListByPaging(context: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteListInfo.IncomeNoteInfo>> {
         return Pager(

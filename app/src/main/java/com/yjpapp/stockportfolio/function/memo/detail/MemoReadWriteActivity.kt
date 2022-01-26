@@ -11,6 +11,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
+import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.Utils
@@ -23,7 +24,8 @@ import dagger.hilt.android.AndroidEntryPoint
  * @since 2020.12.27
  */
 @AndroidEntryPoint
-class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout.activity_memo_read_write) {
+class MemoReadWriteActivity :
+    BaseActivity<ActivityMemoReadWriteBinding>(R.layout.activity_memo_read_write) {
     private var mode: String? = null
     private var memoListPosition = 0
     private var id = 0
@@ -35,6 +37,10 @@ class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout
         super.onCreate(savedInstanceState)
         initView()
         initData()
+    }
+
+    override fun onBackPressed() {
+        checkMemoWriteCancel()
     }
 
     private fun initView() {
@@ -51,7 +57,7 @@ class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout
 
     private fun initData() {
         mode = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_MODE)
-        if(mode == MemoListFragment.MEMO_READ_MODE){ // 읽기 모드
+        if (mode == MemoListFragment.MEMO_READ_MODE) { // 읽기 모드
             memoListPosition = intent.getIntExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, 0)
             id = intent.getIntExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_ID, 0)
             title = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_TITLE)
@@ -68,11 +74,11 @@ class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         binding.apply {
-            if(mode == MemoListFragment.MEMO_READ_MODE){
+            if (mode == MemoListFragment.MEMO_READ_MODE) {
                 etMemoReadWriteActivityTitle.setText(title)
                 etMemoReadWriteActivityContent.setText(content)
                 hideCompleteButton()
-            }else{
+            } else {
                 hideDeleteButton()
             }
         }
@@ -81,9 +87,9 @@ class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             android.R.id.home -> {
-                finish()
+                checkMemoWriteCancel()
             }
             R.id.menu_MemoReadWriteFragment_Complete -> {
                 onCompleteButtonClick()
@@ -95,8 +101,8 @@ class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout
         return super.onOptionsItemSelected(item)
     }
 
-    private val onFocusChangeListener = View.OnFocusChangeListener { _:View, _:Boolean ->
-        if(mode == MemoListFragment.MEMO_READ_MODE){
+    private val onFocusChangeListener = View.OnFocusChangeListener { _: View, _: Boolean ->
+        if (mode == MemoListFragment.MEMO_READ_MODE) {
             mode = MemoListFragment.MEMO_UPDATE_MODE
             showCompleteButton()
             hideDeleteButton()
@@ -123,10 +129,10 @@ class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout
         if (viewModel.requestGetPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK) == StockConfig.TRUE) {
             AlertDialog.Builder(this)
                 .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
-                .setPositiveButton(R.string.Common_Ok) {_,_ ->
+                .setPositiveButton(R.string.Common_Ok) { _, _ ->
                     deleteMemo()
                 }
-                .setNegativeButton(R.string.Common_Cancel) {dialog, _ ->
+                .setNegativeButton(R.string.Common_Cancel) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .show()
@@ -168,6 +174,40 @@ class MemoReadWriteActivity: BaseActivity<ActivityMemoReadWriteBinding>(R.layout
                 }
                 finish()
             }
+        }
+    }
+
+    private fun checkMemoWriteCancel() {
+        if (binding.etMemoReadWriteActivityTitle.text == null) {
+            finish()
+            return
+        }
+
+        if (binding.etMemoReadWriteActivityContent.text == null) {
+            finish()
+            return
+        }
+
+        if (binding.etMemoReadWriteActivityTitle.text!!.isNotEmpty() ||
+            binding.etMemoReadWriteActivityContent.text!!.isNotEmpty()) {
+            CommonTwoBtnDialog(this, CommonTwoBtnDialog.CommonTwoBtnData(
+                noticeText = getString(R.string.MemoListFragment_Msg_Check_Cancel_Memo),
+                leftBtnText = getString(R.string.Common_Cancel),
+                leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                    override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                        dialog.dismiss()
+                    }
+                },
+                rightBtnText = getString(R.string.Common_Ok),
+                rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                    override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                        dialog.dismiss()
+                        finish()
+                    }
+                }
+            )).show()
+        } else {
+            finish()
         }
     }
 }

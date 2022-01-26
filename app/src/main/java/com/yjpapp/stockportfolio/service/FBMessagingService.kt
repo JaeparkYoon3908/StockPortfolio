@@ -39,7 +39,7 @@ class FBMessagingService: FirebaseMessagingService() {
         // remoteMessage.notification?.body!! 여기에 내용이 저장되어있다.
         StockLog.d(TAG, "Notification Message Body: " + remoteMessage.notification?.body!!)
 
-        if(remoteMessage.data.isNotEmpty()){
+        if(remoteMessage.data.isNotEmpty()) {
             StockLog.i("바디: ", remoteMessage.data["body"].toString())
             StockLog.i("타이틀: ", remoteMessage.data["title"].toString())
             sendNotification(remoteMessage)
