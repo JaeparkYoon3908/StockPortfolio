@@ -26,12 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MemoReadWriteActivity :
     BaseActivity<ActivityMemoReadWriteBinding>(R.layout.activity_memo_read_write) {
-    private var mode: String? = null
-    private var memoListPosition = 0
-    private var id = 0
-    private var title: String? = null
-    private var content: String? = null
-    private val viewModel: MemoReadWriteViewModel by viewModels()
+    private val activityViewModel: MemoReadWriteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +51,15 @@ class MemoReadWriteActivity :
     }
 
     private fun initData() {
-        mode = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_MODE)
-        if (mode == MemoListFragment.MEMO_READ_MODE) { // 읽기 모드
-            memoListPosition = intent.getIntExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, 0)
-            id = intent.getIntExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_ID, 0)
-            title = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_TITLE)
-            content = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_CONTENT)
+        binding.viewModel = activityViewModel
+        activityViewModel.apply {
+            mode = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_MODE)
+            if (mode == MemoListFragment.MEMO_READ_MODE) { // 읽기 모드
+                memoListPosition = intent.getIntExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, 0)
+                id = intent.getIntExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_ID, 0)
+                savedTitle = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_TITLE)?: ""
+                savedContent = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_CONTENT)?: ""
+            }
         }
     }
 
@@ -74,9 +72,9 @@ class MemoReadWriteActivity :
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         binding.apply {
-            if (mode == MemoListFragment.MEMO_READ_MODE) {
-                etMemoReadWriteActivityTitle.setText(title)
-                etMemoReadWriteActivityContent.setText(content)
+            if (activityViewModel.mode == MemoListFragment.MEMO_READ_MODE) {
+                etMemoReadWriteActivityTitle.setText(activityViewModel.savedTitle)
+                etMemoReadWriteActivityContent.setText(activityViewModel.savedContent)
                 hideCompleteButton()
             } else {
                 hideDeleteButton()
@@ -102,8 +100,8 @@ class MemoReadWriteActivity :
     }
 
     private val onFocusChangeListener = View.OnFocusChangeListener { _: View, _: Boolean ->
-        if (mode == MemoListFragment.MEMO_READ_MODE) {
-            mode = MemoListFragment.MEMO_UPDATE_MODE
+        if (activityViewModel.mode == MemoListFragment.MEMO_READ_MODE) {
+            activityViewModel.mode = MemoListFragment.MEMO_UPDATE_MODE
             showCompleteButton()
             hideDeleteButton()
         }
@@ -126,7 +124,7 @@ class MemoReadWriteActivity :
     }
 
     private fun onDeleteButtonClick() {
-        if (viewModel.requestGetPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK) == StockConfig.TRUE) {
+        if (activityViewModel.requestGetPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK) == StockConfig.TRUE) {
             AlertDialog.Builder(this)
                 .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
                 .setPositiveButton(R.string.Common_Ok) { _, _ ->
@@ -142,34 +140,34 @@ class MemoReadWriteActivity :
     }
 
     private fun deleteMemo() {
-        viewModel.requestDeleteMemoData(id)
+        activityViewModel.requestDeleteMemoData()
         val intent = Intent(applicationContext, MemoListFragment::class.java)
-        intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, memoListPosition)
+        intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, activityViewModel.memoListPosition)
         setResult(MemoListFragment.RESULT_DELETE, intent)
         finish()
     }
 
     private fun onCompleteButtonClick() {
         binding.apply {
-            if (mode == MemoListFragment.MEMO_ADD_MODE) {
+            if (activityViewModel.mode == MemoListFragment.MEMO_ADD_MODE) {
                 if (etMemoReadWriteActivityTitle.text.toString() == "" && etMemoReadWriteActivityContent.text.toString() == "") {
                     setResult(MemoListFragment.RESULT_EMPTY)
                 } else {
                     val date = Utils.getTodayYYYY_MM_DD()
                     val title = etMemoReadWriteActivityTitle.text.toString()
                     val content = etMemoReadWriteActivityContent.text.toString()
-                    viewModel.requestAddMemoData(date, title, content)
+                    activityViewModel.requestAddMemoData(date, title, content)
                     setResult(RESULT_OK)
                 }
                 finish()
-            } else if (mode == MemoListFragment.MEMO_UPDATE_MODE) {
+            } else if (activityViewModel.mode == MemoListFragment.MEMO_UPDATE_MODE) {
                 if (etMemoReadWriteActivityTitle.text.toString() == "" && etMemoReadWriteActivityContent.text.toString() == "") {
                     setResult(MemoListFragment.RESULT_EMPTY)
                 } else {
                     val date = Utils.getTodayYYYY_MM_DD()
                     val title = etMemoReadWriteActivityTitle.text.toString()
                     val content = etMemoReadWriteActivityContent.text.toString()
-                    viewModel.requestUpdateMemoData(id, date, title, content)
+                    activityViewModel.requestUpdateMemoData(date, title, content)
                     setResult(MemoListFragment.RESULT_UPDATE)
                 }
                 finish()
@@ -178,36 +176,44 @@ class MemoReadWriteActivity :
     }
 
     private fun checkMemoWriteCancel() {
-        if (binding.etMemoReadWriteActivityTitle.text == null) {
-            finish()
-            return
-        }
-
-        if (binding.etMemoReadWriteActivityContent.text == null) {
-            finish()
-            return
-        }
-
-        if (binding.etMemoReadWriteActivityTitle.text!!.isNotEmpty() ||
-            binding.etMemoReadWriteActivityContent.text!!.isNotEmpty()) {
-            CommonTwoBtnDialog(this, CommonTwoBtnDialog.CommonTwoBtnData(
-                noticeText = getString(R.string.MemoListFragment_Msg_Check_Cancel_Memo),
-                leftBtnText = getString(R.string.Common_Cancel),
-                leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                    override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                        dialog.dismiss()
-                    }
-                },
-                rightBtnText = getString(R.string.Common_Ok),
-                rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                    override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                        dialog.dismiss()
-                        finish()
-                    }
+        when (activityViewModel.mode) {
+            MemoListFragment.MEMO_ADD_MODE -> {
+                if (binding.etMemoReadWriteActivityTitle.text.toString().isNotEmpty() ||
+                    binding.etMemoReadWriteActivityContent.text.toString().isNotEmpty()) {
+                    showCheckActivityFinishDialog(getString(R.string.MemoListFragment_Msg_Check_Add_Mode_Cancel_Memo))
+                } else {
+                    finish()
                 }
-            )).show()
-        } else {
-            finish()
+            }
+            MemoListFragment.MEMO_READ_MODE -> {
+                finish()
+            }
+            MemoListFragment.MEMO_UPDATE_MODE -> {
+                if (activityViewModel.savedTitle != binding.etMemoReadWriteActivityTitle.text.toString() ||
+                    activityViewModel.savedContent != binding.etMemoReadWriteActivityContent.text.toString()) {
+                    showCheckActivityFinishDialog(getString(R.string.MemoListFragment_Msg_Check_Update_Mode_Cancel_Memo))
+                } else {
+                    finish()
+                }
+            }
         }
+    }
+    private fun showCheckActivityFinishDialog(noticeText: String) {
+        CommonTwoBtnDialog(this, CommonTwoBtnDialog.CommonTwoBtnData(
+            noticeText = noticeText,
+            leftBtnText = getString(R.string.Common_Cancel),
+            leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                    dialog.dismiss()
+                }
+            },
+            rightBtnText = getString(R.string.Common_Ok),
+            rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                    dialog.dismiss()
+                    finish()
+                }
+            }
+        )).show()
     }
 }

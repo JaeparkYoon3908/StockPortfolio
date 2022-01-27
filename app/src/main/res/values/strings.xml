@@ -64,7 +64,8 @@
     <string name="MemoListFragment_Delete_Check_Message">정말 삭제하시겠습니까?</string>
     <string name="MemoListFragment_Empty_Data_Message">내용이 없어 메모를 저장하지 않습니다.</string>
     <string name="MemoListFragment_Write_Memo">메모를 입력해주세요.</string>
-    <string name="MemoListFragment_Msg_Check_Cancel_Memo">입력중인 메모가 있습니다. 취소 하시겠습니까?</string>
+    <string name="MemoListFragment_Msg_Check_Add_Mode_Cancel_Memo">입력중인 메모가 있습니다. 취소 하시겠습니까?</string>
+    <string name="MemoListFragment_Msg_Check_Update_Mode_Cancel_Memo">변경 내용이 저장되지 않았습니다. 변경 내용을 삭제하시겠습니까?</string>
 
     <string name="MyStockFragment_Title">나의 주식</string>
     <string name="MyStockFragment_Total_Evaluation_Amount">총 평가금액</string>

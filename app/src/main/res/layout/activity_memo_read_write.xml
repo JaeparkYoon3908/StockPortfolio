@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    <data>
+        <variable
+            name="viewModel"
+            type="com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteViewModel" />
+    </data>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,6 +42,7 @@
             android:theme="@style/EditTextStyle"
             android:backgroundTint="@drawable/selector_edit_text_bg"
             android:hint="@string/MemoReadWriteActivity_Title_Hint"
+            android:text="@{viewModel.savedTitle}"
             android:textColor="@color/color_222222" />
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -52,6 +57,7 @@
             android:backgroundTint="@drawable/selector_edit_text_bg"
             android:gravity="top"
             android:hint="@string/MemoReadWriteActivity_Content_Hint"
+            android:text="@{viewModel.savedContent}"
             android:textColor="@color/color_222222" />
 
     </LinearLayout>
