@@ -25,11 +25,14 @@ object ResponseAlertManger {
                 setOnDismissListener {
                     isShowDialog = false
                 }
+                setOnShowListener {
+                    isShowDialog = true
+                }
             }.show()
-            isShowDialog = true
         }
 
     }
+
     fun showNetworkConnectErrorAlert(context: Context) {
         if (!isShowDialog) {
             CommonOneBtnDialog(
@@ -40,16 +43,17 @@ object ResponseAlertManger {
                     btnListener = object : CommonOneBtnDialog.OnClickListener {
                         override fun onClick(view: View, dialog: CommonOneBtnDialog) {
                             dialog.dismiss()
-                            isShowDialog = false
                         }
                     }
                 )
             ).apply {
-              setOnDismissListener {
-                  isShowDialog = false
-              }
+                setOnDismissListener {
+                    isShowDialog = false
+                }
+                setOnShowListener {
+                    isShowDialog = true
+                }
             }.show()
-            isShowDialog = true
         }
     }
 }
