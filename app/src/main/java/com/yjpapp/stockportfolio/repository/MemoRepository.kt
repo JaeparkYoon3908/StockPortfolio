@@ -44,7 +44,7 @@ class MemoRepository @Inject constructor(
        return memoListDao.getMemoInfo(id)
     }
 
-    fun getAllMemoInfoList(): MutableList<MemoListEntity>{
+    fun getAllMemoInfoList(): MutableList<MemoListEntity> {
         return try {
             memoListDao.getAll()
         } catch (e: Exception) {
@@ -53,7 +53,7 @@ class MemoRepository @Inject constructor(
         }
     }
 
-    fun updateDeleteCheck(id: Int, deleteCheck: String){
+    fun updateDeleteCheck(id: Int, deleteCheck: String) {
         try {
             memoListDao.updateDeleteChecked(id, deleteCheck)
         } catch (e: Exception) {

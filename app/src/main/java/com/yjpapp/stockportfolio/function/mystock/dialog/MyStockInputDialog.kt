@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.function.mystock.dialog
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -14,12 +14,15 @@ import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
+import com.yjpapp.stockportfolio.util.Utils
 
 
-class MyStockInputDialog(context: Context):
-        AlertDialog(context), SupportedDatePickerDialog.OnDateSetListener,
+class MyStockInputDialog(
+    val mContext: Context
+):
+        AlertDialog(mContext), SupportedDatePickerDialog.OnDateSetListener,
     MyStockInputDialogController {
-    companion object{
+    companion object {
         @Volatile private var instance: MyStockInputDialog? = null
         @JvmStatic
         fun getInstance(context: Context): MyStockInputDialog =
@@ -48,6 +51,7 @@ class MyStockInputDialog(context: Context):
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         //EditText focus 했을 때 키보드가 보이도록 설정
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        Utils.setDialogWidth(mContext, this, 0.85)
         binding.executePendingBindings()
     }
 
