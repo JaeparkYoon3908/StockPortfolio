@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.function.login
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -98,15 +99,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun initData() {
         viewModel.apply {
-            requestGetPreference(PrefKey.KEY_AUTO_LOGIN)?.let { isAutoLoginAble ->
-                requestGetPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)?.let { isAutoLoginSetting ->
-                    if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
-                        val userEmail = requestGetPreference(PrefKey.KEY_USER_EMAIL)?: ""
-                        val userName = requestGetPreference(PrefKey.KEY_USER_NAME)?: ""
-                        val loginType = requestGetPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
-                        requestLogin(ReqSNSLogin(userEmail, userName, loginType))
-                    }
-                }
+            val isAutoLoginAble = requestGetPreference(PrefKey.KEY_AUTO_LOGIN)
+            val isAutoLoginSetting = requestGetPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
+            if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
+                val userEmail = requestGetPreference(PrefKey.KEY_USER_EMAIL)?: ""
+                val userName = requestGetPreference(PrefKey.KEY_USER_NAME)?: ""
+                val loginType = requestGetPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
+                requestLogin(ReqSNSLogin(userEmail, userName, loginType))
             }
         }
         binding.apply {
@@ -119,10 +118,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private fun subscribeUI() {
         viewModel.apply {
             loginResultData.observe(this@LoginActivity, { response ->
-//                StockLog.d(TAG, "email = ${response.data.email}")
-//                StockLog.d(TAG, "name = ${response.data.name}")
-//                StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
-//                StockLog.d(TAG, "login_type = ${response.data.login_type}")
+                StockLog.d(TAG, "email = ${response.data.email}")
+                StockLog.d(TAG, "name = ${response.data.name}")
+                StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
+                StockLog.d(TAG, "login_type = ${response.data.login_type}")
+
                 requestSetPreference(PrefKey.KEY_USER_INDEX, response.data.userIndex.toString())
                 requestSetPreference(PrefKey.KEY_USER_NAME, response.data.name)
                 requestSetPreference(PrefKey.KEY_USER_EMAIL, response.data.email)
@@ -139,8 +139,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                         CommonOneBtnDialog(
                             this@LoginActivity,
                             CommonOneBtnDialog.CommonOneBtnData(
-                                "필수 정보 제공 항목에 동의해주세요.",
-                                "확인",
+                                getString(R.string.Login_Naver_Necessary_Info_Check),
+                                getString(R.string.Common_Ok),
                                 object : CommonOneBtnDialog.OnClickListener {
                                     override fun onClick(view: View, dialog: CommonOneBtnDialog) {
                                         viewModel.requestDeleteNaverUserInfo(this@LoginActivity)
@@ -194,19 +194,19 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             try {
                 val acct: GoogleSignInAccount? = task.getResult(ApiException::class.java)
                 acct?.let {
-//                    val personName = it.displayName
-//                    val personGivenName = it.givenName
-//                    val personFamilyName = it.familyName
-//                    val personEmail = it.email
-//                    val personId = it.id
-//                    val personPhoto: Uri? = it.photoUrl
+                    val personName = it.displayName
+                    val personGivenName = it.givenName
+                    val personFamilyName = it.familyName
+                    val personEmail = it.email
+                    val personId = it.id
+                    val personPhoto: Uri? = it.photoUrl
+                    StockLog.d(TAG, "handleSignInResult:personName $personName")
+                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
+                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
+                    StockLog.d(TAG, "handleSignInResult:personId $personId")
+                    StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
+                    StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
 
-//                    StockLog.d(TAG, "handleSignInResult:personName $personName")
-//                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
-//                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
-//                    StockLog.d(TAG, "handleSignInResult:personId $personId")
-//                    StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
-//                    StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
                     requestLogin(ReqSNSLogin(
                         it.email?: "",
                         it.displayName?: "",
