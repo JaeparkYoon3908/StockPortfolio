@@ -1,10 +1,17 @@
 package com.yjpapp.stockportfolio.function.memo.detail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.yjpapp.stockportfolio.extension.MutableEventFlow
+import com.yjpapp.stockportfolio.extension.asEventFlow
+import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
+import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.stockportfolio.repository.MemoRepository
 import com.yjpapp.stockportfolio.repository.PreferenceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -16,6 +23,8 @@ class MemoReadWriteViewModel @Inject constructor(
     private val memoRepository: MemoRepository,
     private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
+    private val _eventFlow = MutableEventFlow<Event>()
+    val eventFlow = _eventFlow.asEventFlow()
     var mode: String? = null
     var memoListPosition = 0
     var id = 0
@@ -33,7 +42,7 @@ class MemoReadWriteViewModel @Inject constructor(
     }
 
     fun requestDeleteMemoData() {
-        memoRepository.deleteMomoData(id)
+        event(Event.SendDeleteResult(memoRepository.deleteMomoData(id)))
     }
 
     fun requestSetPreference(prefKey: String, value: String) {
@@ -46,5 +55,15 @@ class MemoReadWriteViewModel @Inject constructor(
 
     fun requestIsExistPreference(prefKey: String): Boolean {
         return preferenceRepository.isExists(prefKey)
+    }
+
+    private fun event(event: Event) {
+        viewModelScope.launch {
+            _eventFlow.emit(event)
+        }
+    }
+
+    sealed class Event {
+        data class SendDeleteResult(val isSuccess: Boolean): Event()
     }
 }

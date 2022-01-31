@@ -32,11 +32,13 @@ class MemoRepository @Inject constructor(
         }
     }
 
-    fun deleteMomoData(id: Int) {
-        try {
+    fun deleteMomoData(id: Int): Boolean {
+        return try {
             memoListDao.deleteMemoInfo(id)
+            true
         } catch (e: Exception) {
             e.stackTrace
+            false
         }
     }
 

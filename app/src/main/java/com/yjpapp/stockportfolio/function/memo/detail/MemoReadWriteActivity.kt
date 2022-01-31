@@ -7,15 +7,20 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.constance.StockConfig
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
+import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * 메모 읽기 및 추가 화면
@@ -61,9 +66,35 @@ class MemoReadWriteActivity :
                 savedContent = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_CONTENT)?: ""
             }
         }
+        lifecycleScope.launch {
+            repeatOnStarted {
+                activityViewModel.eventFlow.collect { event -> handleEvent(event) }
+            }
+        }
     }
 
-    private var menu: Menu? = null
+    private fun handleEvent(event: MemoReadWriteViewModel.Event) = when (event) {
+        is MemoReadWriteViewModel.Event.SendDeleteResult -> {
+            if (event.isSuccess) {
+                val intent = Intent(applicationContext, MemoListFragment::class.java)
+                intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, activityViewModel.memoListPosition)
+                setResult(MemoListFragment.RESULT_DELETE, intent)
+                finish()
+            } else {
+                CommonOneBtnDialog(this@MemoReadWriteActivity, CommonOneBtnDialog.CommonOneBtnData(
+                    noticeText = getString(R.string.Error_Msg_Normal),
+                    btnText = getString(R.string.Common_Ok),
+                    btnListener = object : CommonOneBtnDialog.OnClickListener {
+                        override fun onClick(view: View, dialog: CommonOneBtnDialog) {
+                            dialog.dismiss()
+                        }
+                    }
+                )).show()
+            }
+        }
+    }
+
+    var menu: Menu? = null
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         this.menu = menu
         menuInflater.inflate(R.menu.menu_memo_read_write, menu)
@@ -128,14 +159,14 @@ class MemoReadWriteActivity :
             AlertDialog.Builder(this)
                 .setMessage(getString(R.string.MemoListFragment_Delete_Check_Message))
                 .setPositiveButton(R.string.Common_Ok) { _, _ ->
-                    deleteMemo()
+                    activityViewModel.requestDeleteMemoData()
                 }
                 .setNegativeButton(R.string.Common_Cancel) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .show()
         } else {
-            deleteMemo()
+            activityViewModel.requestDeleteMemoData()
         }
     }
 
