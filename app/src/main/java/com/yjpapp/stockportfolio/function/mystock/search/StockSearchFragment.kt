@@ -1,5 +1,7 @@
 package com.yjpapp.stockportfolio.function.mystock.search
 
+import android.os.Bundle
+import android.view.View
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.databinding.FragmentStockSearchBinding
@@ -13,7 +15,8 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class StockSearchFragment : BaseFragment<FragmentStockSearchBinding>(R.layout.fragment_stock_search) {
-    /**
-     * @return layout resource id
-     */
+    private val TAG = StockSearchFragment::class.java.simpleName
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
 }

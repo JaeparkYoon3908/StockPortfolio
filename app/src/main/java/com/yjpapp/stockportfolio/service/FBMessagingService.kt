@@ -17,7 +17,7 @@ import com.yjpapp.stockportfolio.util.StockLog
 
 class FBMessagingService: FirebaseMessagingService() {
 
-    private val TAG = "FirebaseService"
+    private val TAG = FBMessagingService::class.java.simpleName
     // FirebaseInstanceIdService는 이제 사라짐. 이제 이걸 사용함
 
     override fun onNewToken(token: String) {
@@ -29,7 +29,7 @@ class FBMessagingService: FirebaseMessagingService() {
         editor.putString("token", token).apply()
         editor.commit()
 
-        StockLog.i("로그: ", "성공적으로 토큰을 저장함")
+        StockLog.i(TAG, "성공적으로 토큰을 저장함")
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -40,14 +40,14 @@ class FBMessagingService: FirebaseMessagingService() {
         StockLog.d(TAG, "Notification Message Body: " + remoteMessage.notification?.body!!)
 
         if(remoteMessage.data.isNotEmpty()) {
-            StockLog.i("바디: ", remoteMessage.data["body"].toString())
-            StockLog.i("타이틀: ", remoteMessage.data["title"].toString())
+            StockLog.i(TAG, "바디: ${remoteMessage.data["body"].toString()}")
+            StockLog.i(TAG, "타이틀: ${remoteMessage.data["title"].toString()}")
             sendNotification(remoteMessage)
         }
 
         else {
-            StockLog.i("수신에러: ", "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
-            StockLog.i("data값: ", remoteMessage.data.toString())
+            StockLog.i(TAG, "수신에러 : data가 비어있습니다. 메시지를 수신하지 못했습니다.")
+            StockLog.i(TAG, "data값: ${remoteMessage.data.toString()}")
         }
     }
 

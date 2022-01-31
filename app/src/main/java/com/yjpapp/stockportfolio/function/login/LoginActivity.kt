@@ -102,9 +102,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             val isAutoLoginAble = requestGetPreference(PrefKey.KEY_AUTO_LOGIN)
             val isAutoLoginSetting = requestGetPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
             if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
-                val userEmail = requestGetPreference(PrefKey.KEY_USER_EMAIL)?: ""
-                val userName = requestGetPreference(PrefKey.KEY_USER_NAME)?: ""
-                val loginType = requestGetPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
+                val userEmail = requestGetPreference(PrefKey.KEY_USER_EMAIL)
+                val userName = requestGetPreference(PrefKey.KEY_USER_NAME)
+                val loginType = requestGetPreference(PrefKey.KEY_USER_LOGIN_TYPE)
                 requestLogin(ReqSNSLogin(userEmail, userName, loginType))
             }
         }
