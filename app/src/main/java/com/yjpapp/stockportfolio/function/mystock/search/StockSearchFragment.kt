@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.function.mystock.search
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.databinding.FragmentStockSearchBinding
@@ -18,5 +19,13 @@ class StockSearchFragment : BaseFragment<FragmentStockSearchBinding>(R.layout.fr
     private val TAG = StockSearchFragment::class.java.simpleName
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
+    private fun initView() {
+        binding.rvSearch.apply {
+            layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+            adapter = StockSearchAdapter()
+        }
     }
 }
