@@ -19,6 +19,12 @@ import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.test.TestActivity
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 마이 화면
+ * 디자인 패턴 : MVVM
+ * @author Yoon Jae-park
+ * @since 2021.09
+ */
 @AndroidEntryPoint
 class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
     private val myViewModel: MyViewModel by viewModels()
