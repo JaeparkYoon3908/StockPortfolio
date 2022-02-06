@@ -9,11 +9,14 @@ import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.ActivityTestBinding
 import com.yjpapp.stockportfolio.function.MainActivity
+import com.yjpapp.stockportfolio.function.mystock.search.StockSearchFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * 테스트 전용 Activity
  */
+@AndroidEntryPoint
 class TestActivity : AppCompatActivity() {
     private val TAG = TestActivity::class.java.simpleName
     private var _binding: ActivityTestBinding? = null
@@ -41,14 +44,15 @@ class TestActivity : AppCompatActivity() {
                     testViewModel.activityDataSendText = "Change text from activity"
 
                     //Fragment 띄우기기
-                   supportFragmentManager
+                    supportFragmentManager
                         .beginTransaction()
                         .add(
                             R.id.fragmentContainerView,
-                            TestFragment(),
-                            TestFragment::class.java.simpleName
+                            StockSearchFragment(),
+                            StockSearchFragment::class.java.simpleName
                         )
                         .commit()
+                    binding.button.visibility = View.GONE
                 }
             }
         }
