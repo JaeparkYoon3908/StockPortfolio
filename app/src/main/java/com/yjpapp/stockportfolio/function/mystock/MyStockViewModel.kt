@@ -4,19 +4,29 @@ package com.yjpapp.stockportfolio.function.mystock
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.extension.MutableEventFlow
+import com.yjpapp.stockportfolio.extension.asEventFlow
+import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialogController
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
+import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyStockViewModel @Inject constructor(
     private val myStockRepository: MyStockRepository
 ) : ViewModel() {
+    private val _eventFlow = MutableEventFlow<Event>()
+    val eventFlow = _eventFlow.asEventFlow()
+
     val NOTIFY_HANDLER_INSERT = "NOTIFY_INSERT"
     val NOTIFY_HANDLER_DELETE = "NOTIFY_DELETE"
     val NOTIFY_HANDLER_UPDATE = "NOTIFY_UPDATE"
@@ -33,8 +43,8 @@ class MyStockViewModel @Inject constructor(
     val inputDialogPurchasePrice = MutableLiveData<String>() //InputDialog 평균단가
     var inputDialogPurchaseCount = "" //보유수량
 
-    val showErrorToast = MutableLiveData<Event<Boolean>>() //필수 값을 모두 입력해주세요 Toast
-    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
+//    val showErrorToast = MutableLiveData<Event<Boolean>>() //필수 값을 모두 입력해주세요 Toast
+//    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
     var notifyHandler = NOTIFY_HANDLER_INSERT //RecyclerView adapter notify handler
 
     lateinit var inputDialogController: MyStockInputDialogController //InputDialog와 연결 된 interface
@@ -97,11 +107,11 @@ class MyStockViewModel @Inject constructor(
                 return true
             } catch (e: Exception) {
                 e.stackTrace
-                showDBSaveErrorToast.value = Event(true)
+//                showDBSaveErrorToast.value = Event(true)
                 return false
             }
         } else {
-            showErrorToast.value = Event(true)
+//            showErrorToast.value = Event(true)
             return false
         }
     }
@@ -112,8 +122,17 @@ class MyStockViewModel @Inject constructor(
         myStockInfoList.value = myStockRepository.getAllMyStock()
     }
 
-    /**
-     * viewModel 자체 함수 영역
-     */
+    private fun event(event: Event) {
+        viewModelScope.launch {
+            _eventFlow.emit(event)
+        }
+    }
 
+    sealed class Event {
+        data class SendTotalGainData(val data: RespTotalGainIncomeNoteData): Event()
+        data class IncomeNoteDeleteSuccess(val position: Int): Event()
+        data class IncomeNoteModifySuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()
+        data class IncomeNoteAddSuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()
+        data class FetchUIncomeNotes(val data: ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>): Event()
+    }
 }
