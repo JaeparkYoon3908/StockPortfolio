@@ -21,7 +21,9 @@ import com.yjpapp.swipelayout.interfaces.SwipeAdapterInterface
  * @author Yoon Jae-park
  * @since 2021.04
  */
-class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): RecyclerSwipeAdapter<MyStockAdapter.ViewHolder>(), SwipeAdapterInterface {
+class MyStockAdapter(
+    private var myStockList: MutableList<MyStockEntity>
+) : RecyclerSwipeAdapter<MyStockAdapter.ViewHolder>(), SwipeAdapterInterface {
     private lateinit var adapterCallBack: AdapterCallBack
     private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
 
@@ -48,6 +50,7 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
                 override fun onStartOpen(layout: SwipeLayout) {
                     swipeItemManger.closeAllExcept(layout)
                 }
+
                 override fun onOpen(layout: SwipeLayout) {}
                 override fun onStartClose(layout: SwipeLayout) {}
                 override fun onClose(layout: SwipeLayout) {}
@@ -62,24 +65,24 @@ class MyStockAdapter(private var myStockList: MutableList<MyStockEntity>): Recyc
     }
 
     inner class ViewHolder(binding: ItemMyStockListBinding) :
-            RecyclerView.ViewHolder(binding.root) {
-                val mBinding = binding
+        RecyclerView.ViewHolder(binding.root) {
+        val mBinding = binding
     }
 
-    fun setMyStockList(myStockList: MutableList<MyStockEntity>){
+    fun setMyStockList(myStockList: MutableList<MyStockEntity>) {
         this.myStockList = myStockList
 //        notifyDataSetChanged()
     }
 
-    fun closeSwipeLayout(){
+    fun closeSwipeLayout() {
         swipeItemManger.closeAllItems()
     }
 
-    fun setCallBack(callBack: AdapterCallBack){
+    fun setCallBack(callBack: AdapterCallBack) {
         this.adapterCallBack = callBack
     }
 
-    interface AdapterCallBack{
+    interface AdapterCallBack {
         fun onEditClick(myStockEntity: MyStockEntity?)
         fun onSellClick(myStockEntity: MyStockEntity?)
         fun onDeleteClick(myStockEntity: MyStockEntity?, position: Int)

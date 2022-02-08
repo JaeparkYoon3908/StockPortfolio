@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.function.mystock
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
@@ -102,7 +103,12 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
         }
         subScribeUI()
     }
-
+    @SuppressLint("NotifyDataSetChanged")
+    private fun handleEvent(event: MyStockViewModel.Event) = when (event) {
+        is MyStockViewModel.Event.ShowErrorToastMessage -> {
+            Toasty.error(mContext, event.msg, Toast.LENGTH_SHORT).show()
+        }
+    }
     private fun subScribeUI() {
         myStockViewModel.apply {
             myStockInfoList.observe(viewLifecycleOwner, {
@@ -136,17 +142,6 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
 //                    binding.txtGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
 //                    binding.txtGainPercentData.setTextColor(mContext.getColor(R.color.color_4876c7))
 //                }
-            })
-            //토스트 팝업
-            showErrorToast.observe(viewLifecycleOwner, Observer {
-                it.getContentIfNotHandled()?.let {
-                    Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()
-                }
-            })
-            showDBSaveErrorToast.observe(viewLifecycleOwner, Observer {
-                it.getContentIfNotHandled()?.let {
-                    Toasty.error(mContext, R.string.MyStockInputDialog_Error_Message, Toast.LENGTH_SHORT).show()
-                }
             })
         }
     }
@@ -191,7 +186,7 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
                 }
                 txtCancel.setOnClickListener { dismiss() }
                 txtComplete.setOnClickListener {
-                    if (myStockViewModel.saveMyStock(isInsertMode, id)) {
+                    if (myStockViewModel.saveMyStock(mContext, isInsertMode, id)) {
                         dismiss()
                     }
                 }

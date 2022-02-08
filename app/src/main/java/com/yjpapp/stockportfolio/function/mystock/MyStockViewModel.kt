@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.function.mystock
 
 
+import android.content.Context
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -86,7 +87,7 @@ class MyStockViewModel @Inject constructor(
     }
 
     //확인버튼 클릭 후 Save
-    fun saveMyStock(isInsertMode: Boolean, id: Int): Boolean {
+    fun saveMyStock(context: Context, isInsertMode: Boolean, id: Int): Boolean {
         if (inputDialogSubjectName.isNotEmpty() && inputDialogPurchasePrice.value?.length != 0 && inputDialogPurchaseCount.isNotEmpty()) {
             try {
                 val myStockEntity = MyStockEntity(
@@ -107,13 +108,12 @@ class MyStockViewModel @Inject constructor(
                 return true
             } catch (e: Exception) {
                 e.stackTrace
-//                showDBSaveErrorToast.value = Event(true)
+                event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
                 return false
             }
-        } else {
-//            showErrorToast.value = Event(true)
-            return false
         }
+        event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
+        return false
     }
 
     fun deleteMyStock(myStockEntity: MyStockEntity) {
@@ -129,10 +129,6 @@ class MyStockViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class SendTotalGainData(val data: RespTotalGainIncomeNoteData): Event()
-        data class IncomeNoteDeleteSuccess(val position: Int): Event()
-        data class IncomeNoteModifySuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()
-        data class IncomeNoteAddSuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()
-        data class FetchUIncomeNotes(val data: ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>): Event()
+        data class ShowErrorToastMessage(val msg: String): Event()
     }
 }

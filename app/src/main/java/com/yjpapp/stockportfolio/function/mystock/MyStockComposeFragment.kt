@@ -5,6 +5,7 @@ import android.view.*
 import android.widget.DatePicker
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -256,7 +257,7 @@ class MyStockComposeFragment : Fragment() {
                 }
                 txtCancel.setOnClickListener { dismiss() }
                 txtComplete.setOnClickListener {
-                    if (myStockViewModel.saveMyStock(isInsertMode, id)) {
+                    if (myStockViewModel.saveMyStock(mContext, isInsertMode, id)) {
                         dismiss()
                     }
                 }
@@ -271,4 +272,13 @@ class MyStockComposeFragment : Fragment() {
             show()
         }
     }
+
+    @Preview
+    @Composable
+    private fun StockListComposable() {
+        LazyColumn {
+
+        }
+    }
+
 }
