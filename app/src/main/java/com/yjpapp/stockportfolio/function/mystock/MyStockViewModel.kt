@@ -54,7 +54,9 @@ class MyStockViewModel @Inject constructor(
      * MyStockFragment 영역
      */
     fun onViewCreated() {
-        myStockInfoList.value = myStockRepository.getAllMyStock()
+        val myStockInfoList = myStockRepository.getAllMyStock()
+        event(Event.SendMyStockInfoList(myStockInfoList))
+//        myStockInfoList.value = myStockRepository.getAllMyStock()
     }
 
     /**
@@ -119,7 +121,8 @@ class MyStockViewModel @Inject constructor(
     fun deleteMyStock(myStockEntity: MyStockEntity) {
         myStockRepository.deleteMyStock((myStockEntity))
         notifyHandler = NOTIFY_HANDLER_DELETE
-        myStockInfoList.value = myStockRepository.getAllMyStock()
+        val myStockInfoList = myStockRepository.getAllMyStock()
+        event(Event.SendMyStockInfoList(myStockInfoList))
     }
 
     private fun event(event: Event) {
@@ -130,5 +133,6 @@ class MyStockViewModel @Inject constructor(
 
     sealed class Event {
         data class ShowErrorToastMessage(val msg: String): Event()
+        data class SendMyStockInfoList(val myStockInfoList: MutableList<MyStockEntity>): Event()
     }
 }

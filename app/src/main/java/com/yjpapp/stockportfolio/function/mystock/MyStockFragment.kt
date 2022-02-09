@@ -7,18 +7,22 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
 import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
 
@@ -41,7 +45,6 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
         setHasOptionsMenu(true)
         initLayout()
         initData()
-        subScribeUI()
     }
 
     private var menu: Menu? = null
@@ -101,40 +104,44 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
             viewModel = myStockViewModel
             lifecycleOwner = this@MyStockFragment
         }
-        subScribeUI()
+        //event handler
+        lifecycleScope.launch {
+            repeatOnStarted {
+                myStockViewModel.eventFlow.collect { event -> handleEvent(event) }
+            }
+        }
     }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun handleEvent(event: MyStockViewModel.Event) = when (event) {
         is MyStockViewModel.Event.ShowErrorToastMessage -> {
             Toasty.error(mContext, event.msg, Toast.LENGTH_SHORT).show()
         }
-    }
-    private fun subScribeUI() {
-        myStockViewModel.apply {
-            myStockInfoList.observe(viewLifecycleOwner, {
-                myStockAdapter.setMyStockList(it)
-                when (notifyHandler) {
-                    NOTIFY_HANDLER_INSERT -> {
-                        myStockAdapter.notifyItemInserted(it.size - 1)
-                        myStockAdapter.notifyItemRangeInserted(it.size - 1, it.size)
-                        binding.recyclerviewMyStockFragment.scrollToPosition(it.size - 1)
-                    }
-                    NOTIFY_HANDLER_UPDATE -> {
-                        myStockAdapter.notifyDataSetChanged()
-                    }
-                    NOTIFY_HANDLER_DELETE -> {
-                        myStockAdapter.notifyItemRemoved(deletePosition)
-                        myStockAdapter.notifyItemRangeRemoved(deletePosition, it.size)
-                    }
+        is MyStockViewModel.Event.SendMyStockInfoList -> {
+            val myStockInfoList = event.myStockInfoList
+            myStockAdapter.setMyStockList(event.myStockInfoList)
+            when (myStockViewModel.notifyHandler) {
+                myStockViewModel.NOTIFY_HANDLER_INSERT -> {
+                    myStockAdapter.notifyItemInserted(myStockInfoList.size - 1)
+                    myStockAdapter.notifyItemRangeInserted(myStockInfoList.size - 1, myStockInfoList.size)
+                    binding.recyclerviewMyStockFragment.scrollToPosition(myStockInfoList.size - 1)
                 }
-                // 총 매수 금액 설정
-                var mTotalPurchasePrice = 0.0
-                it.forEach { myStockEntity ->
-                    mTotalPurchasePrice += Utils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
+                myStockViewModel.NOTIFY_HANDLER_UPDATE -> {
+                    myStockAdapter.notifyDataSetChanged()
                 }
-                totalPurchasePrice.value = NumberFormat.getCurrencyInstance(Locale.KOREA).format(mTotalPurchasePrice)
+                myStockViewModel.NOTIFY_HANDLER_DELETE -> {
+                    myStockAdapter.notifyItemRemoved(deletePosition)
+                    myStockAdapter.notifyItemRangeRemoved(deletePosition, myStockInfoList.size)
+                }
+            }
+            // 총 매수 금액 설정
+            var mTotalPurchasePrice = 0.0
+            event.myStockInfoList.forEach { myStockEntity ->
+                mTotalPurchasePrice += Utils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
+            }
+            myStockViewModel.totalPurchasePrice.value = NumberFormat.getCurrencyInstance(Locale.KOREA).format(mTotalPurchasePrice)
 
-                //색상 설정
+            //색상 설정
 //                if (mTotalPurchasePrice >= 0) {
 //                    binding.txtGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
 //                    binding.txtGainPercentData.setTextColor(mContext.getColor(R.color.color_e52b4e))
@@ -142,7 +149,6 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
 //                    binding.txtGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
 //                    binding.txtGainPercentData.setTextColor(mContext.getColor(R.color.color_4876c7))
 //                }
-            })
         }
     }
 
@@ -205,14 +211,14 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
     override fun onEditClick(myStockEntity: MyStockEntity?) {
         myStockViewModel.apply {
             if (myStockEntity == null) {
-                Toasty.error(mContext, getString(R.string.Error_Msg_Not_Found_Data))
-            } else {
-                inputDialogSubjectName = myStockEntity.subjectName
-                inputDialogPurchaseDate = myStockEntity.purchaseDate
-                inputDialogPurchasePrice.value = myStockEntity.purchasePrice
-                inputDialogPurchaseCount = myStockEntity.purchaseCount
-                showInputDialog(false, myStockEntity.id)
+                Toasty.error(mContext, getString(R.string.Error_Msg_Not_Found_Data)).show()
+                return
             }
+            inputDialogSubjectName = myStockEntity.subjectName
+            inputDialogPurchaseDate = myStockEntity.purchaseDate
+            inputDialogPurchasePrice.value = myStockEntity.purchasePrice
+            inputDialogPurchaseCount = myStockEntity.purchaseCount
+            showInputDialog(false, myStockEntity.id)
         }
     }
 
