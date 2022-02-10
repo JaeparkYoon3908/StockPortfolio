@@ -9,13 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
-import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialogController
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
-import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.stockportfolio.repository.MyStockRepository
-import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
