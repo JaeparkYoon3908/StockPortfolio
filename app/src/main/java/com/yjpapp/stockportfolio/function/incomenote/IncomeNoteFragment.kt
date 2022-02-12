@@ -218,7 +218,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                     CommonTwoBtnDialog(
                         mContext,
                         CommonTwoBtnDialog.CommonTwoBtnData(
-                            noticeText = "삭제하시겠습니까?",
+                            noticeText = mContext.getString(R.string.Common_Notice_Delete_Check),
                             leftBtnText = mContext.getString(R.string.Common_Cancel),
                             rightBtnText = mContext.getString(R.string.Common_Ok),
                             leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
@@ -319,21 +319,24 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             }
         }
         is IncomeNoteViewModel.Event.IncomeNoteDeleteSuccess -> {
-            Toasty.normal(mContext, "삭제완료").show()
+            val toastMsg = mContext.getString(R.string.Common_Notice_Delete_Ok)
+            Toasty.normal(mContext, toastMsg).show()
             incomeNoteListAdapter.incomeNoteListInfo.removeAt(event.position)
             incomeNoteListAdapter.notifyItemRemoved(event.position)
             incomeNoteListAdapter.notifyDataSetChanged()
             viewModel.requestTotalGain(mContext)
         }
         is IncomeNoteViewModel.Event.IncomeNoteAddSuccess -> {
-            Toasty.info(mContext, "추가완료").show()
+            val toastMsg = mContext.getString(R.string.Common_Notice_Add_Ok)
+            Toasty.info(mContext, toastMsg).show()
             incomeNoteListAdapter.incomeNoteListInfo.add(0, event.data)
 //                incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
             incomeNoteListAdapter.notifyDataSetChanged()
             viewModel.requestTotalGain(mContext)
         }
         is IncomeNoteViewModel.Event.IncomeNoteModifySuccess -> {
-            Toasty.normal(mContext, "수정완료").show()
+            val toastMsg = mContext.getString(R.string.Common_Notice_Modify_Ok)
+            Toasty.normal(mContext, toastMsg).show()
             viewModel.requestTotalGain(mContext)
             if (event.data.id != -1) {
                 val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }

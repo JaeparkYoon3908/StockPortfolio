@@ -33,6 +33,10 @@
     <string name="Common_Name">이름</string>
     <string name="Common_Email">이메일</string>
     <string name="Common_BackButton_AppClose_Message">종료하시려면 한번 더 눌러주세요.</string>
+    <string name="Common_Notice_Delete_Check">삭제하시겠습니까?</string>
+    <string name="Common_Notice_Delete_Ok">삭제완료</string>
+    <string name="Common_Notice_Add_Ok">추가완료</string>
+    <string name="Common_Notice_Modify_Ok">수정완료</string>
 
     <string name="IncomeNoteFragment_Title">수익 노트</string>
     <string name="IncomeNoteFragment_Gain">수익</string>
