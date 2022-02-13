@@ -30,34 +30,33 @@ class RetrofitClient(
     private val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
     fun getService(context: Context, baseServerURL: BaseServerURL): RetrofitService? {
-        if (NetworkUtils.isInternetAvailable(context)) {
-            val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceRepository)
-
-            val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-
-            val okHttpBuilder = OkHttpClient.Builder().apply {
-                addInterceptor(interceptor)
-                if (BuildConfig.DEBUG) {
-                    addInterceptor(httpLoggingInterceptor)
-                }
-                retryOnConnectionFailure(true)
-                connectTimeout(CONNECT_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
-                readTimeout(READ_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
-            }
-            val client = okHttpBuilder.build()
-
-            val retrofit = Retrofit.Builder().apply {
-                baseUrl(baseServerURL.url)
-                client(client)
-                addConverterFactory(GsonConverterFactory.create()) // 파싱등록
-            }.build()
-
-            return retrofit.create(RetrofitService::class.java)
-        } else {
+        if (!NetworkUtils.isInternetAvailable(context)) {
             return null
         }
+        val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceRepository)
+
+        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        val okHttpBuilder = OkHttpClient.Builder().apply {
+            addInterceptor(interceptor)
+            if (BuildConfig.DEBUG) {
+                addInterceptor(httpLoggingInterceptor)
+            }
+            retryOnConnectionFailure(true)
+            connectTimeout(CONNECT_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
+            readTimeout(READ_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
+        }
+        val client = okHttpBuilder.build()
+
+        val retrofit = Retrofit.Builder().apply {
+            baseUrl(baseServerURL.url)
+            client(client)
+            addConverterFactory(GsonConverterFactory.create()) // 파싱등록
+        }.build()
+
+        return retrofit.create(RetrofitService::class.java)
     }
 
     class CustomInterceptor(
