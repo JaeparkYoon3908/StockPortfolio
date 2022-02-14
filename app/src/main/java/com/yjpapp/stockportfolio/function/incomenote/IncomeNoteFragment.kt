@@ -213,32 +213,31 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
 
         override fun onDeleteButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?, position: Int) {
             if (respIncomeNoteListInfo != null) {
-                val isShowDeleteCheck = viewModel.isShowDeleteCheck()
-                if (isShowDeleteCheck == StockConfig.TRUE) {
-                    CommonTwoBtnDialog(
-                        mContext,
-                        CommonTwoBtnDialog.CommonTwoBtnData(
-                            noticeText = mContext.getString(R.string.Common_Notice_Delete_Check),
-                            leftBtnText = mContext.getString(R.string.Common_Cancel),
-                            rightBtnText = mContext.getString(R.string.Common_Ok),
-                            leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                if (viewModel.isShowDeleteCheck() == StockConfig.FALSE) {
+                    viewModel.requestDeleteIncomeNote(mContext, respIncomeNoteListInfo.id, position)
+                    return
+                }
+                CommonTwoBtnDialog(
+                    mContext,
+                    CommonTwoBtnDialog.CommonTwoBtnData(
+                        noticeText = "삭제하시겠습니까?",
+                        leftBtnText = mContext.getString(R.string.Common_Cancel),
+                        rightBtnText = mContext.getString(R.string.Common_Ok),
+                        leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                                dialog.dismiss()
+                            }
+                        },
+                        rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
+                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
+                                if (incomeNoteListAdapter.itemCount > position) {
+                                    viewModel.requestDeleteIncomeNote(mContext, respIncomeNoteListInfo.id, position)
                                     dialog.dismiss()
                                 }
-                            },
-                            rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                    if (incomeNoteListAdapter.itemCount > position) {
-                                        viewModel.requestDeleteIncomeNote(mContext, respIncomeNoteListInfo.id, position)
-                                        dialog.dismiss()
-                                    }
-                                }
                             }
-                        )
-                    ).show()
-                } else {
-                    viewModel.requestDeleteIncomeNote(mContext, respIncomeNoteListInfo.id, position)
-                }
+                        }
+                    )
+                ).show()
             }
         }
     }

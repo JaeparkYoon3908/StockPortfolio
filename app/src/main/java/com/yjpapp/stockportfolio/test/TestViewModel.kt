@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.test.model.LatestNewsUiState
 import com.yjpapp.stockportfolio.test.model.UserMessage
+import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.NetworkUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,10 +17,13 @@ import java.util.*
 
 class TestViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(LatestNewsUiState(isLoading = true))
-    val uiState: StateFlow<LatestNewsUiState> = _uiState
+    val uiState: StateFlow<LatestNewsUiState> get() = _uiState
 
     private val _liveData = MutableLiveData<String>()
-    val liveData: LiveData<String> = _liveData
+    val liveData: LiveData<String> get() = _liveData
+
+    private val _eventLiveData = MutableLiveData<Event<String>>()
+    val eventLiveData: LiveData<Event<String>> get() = _eventLiveData
 
     var activityDataSendText: String = ""
 
@@ -36,7 +40,7 @@ class TestViewModel: ViewModel() {
                 }
                 return@launch
             }
-
+            // Do something else.
             _uiState.update { currentUiState ->
                 val messages = currentUiState.userMessages + UserMessage(
                     id = UUID.randomUUID().mostSignificantBits,
@@ -44,7 +48,6 @@ class TestViewModel: ViewModel() {
                 )
                 currentUiState.copy(userMessages = messages)
             }
-            // Do something else.
         }
     }
 
@@ -61,5 +64,10 @@ class TestViewModel: ViewModel() {
 
     fun userMessageShownByLiveData() {
 
+    }
+
+    fun refreshNewSingleLiveData(message: String) {
+
+        _eventLiveData.value = Event(message)
     }
 }
