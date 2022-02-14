@@ -6,59 +6,152 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
+import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.util.Utils
+import es.dmoral.toasty.Toasty
 
 
 class MyStockInputDialog(
-    val mContext: Context
-):
-        AlertDialog(mContext), SupportedDatePickerDialog.OnDateSetListener,
-    MyStockInputDialogController {
-    companion object {
-        @Volatile private var instance: MyStockInputDialog? = null
-        @JvmStatic
-        fun getInstance(context: Context): MyStockInputDialog =
-                instance ?: synchronized(this) {
-                    instance ?: MyStockInputDialog(context).also {
-                        instance = it
-                    }
-                }
-    }
-    object MSG{
+    private val mContext: Context,
+    private val callBack: CallBack
+) : AlertDialog(mContext),
+    SupportedDatePickerDialog.OnDateSetListener
+{
+
+    object MSG {
         const val SELL_DATE_DATA_INPUT: Int = 0
     }
-    val binding: CustomDialogInputMyStockBinding = DataBindingUtil.inflate(
-        LayoutInflater.from(context),
-        R.layout.custom_dialog_input_my_stock,
-        null,
-        false
-    )
+
+    private var _binding: CustomDialogInputMyStockBinding? = null
+    private val binding get() = _binding!!
+
     var purchaseYear = ""
     var purchaseMonth = ""
     var purchaseDay = ""
+    var convertText = ""
+    data class MyStockInputDialogData(
+        var subjectName: String = "",
+        var purchaseDate: String = "",
+        var purchasePrice: String = "",
+        var purchaseCount: String = "",
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.custom_dialog_input_my_stock,
+            null,
+            false
+        )
         setContentView(binding.root)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         //EditText focus 했을 때 키보드가 보이도록 설정
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         Utils.setDialogWidth(mContext, this, 0.85)
-        binding.executePendingBindings()
+        initView()
     }
 
-    val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
-    private inner class UIHandler: Handler.Callback {
+    private fun initView() {
+        binding.apply {
+            etSubjectName.setOnClickListener {
+//                    val intent = Intent(mContext, StockSearchActivity::class.java)
+//                    startActivityForResult(intent, 10000)
+            }
+            etPurchaseDate.setOnClickListener {
+                var year = ""
+                var month = ""
+                if (binding.etPurchaseDate.text.toString() != "") {
+                    val split = binding.etPurchaseDate.text.toString().split(".")
+                    year = split[0]
+                    month = split[1]
+                }
+                //매수 날짜 선택 다이얼로그 show
+                CommonDatePickerDialog(mContext, year, month).apply {
+                    setListener { _: DatePicker?, year, month, dayOfMonth ->
+                        uiHandler.sendEmptyMessage(MSG.SELL_DATE_DATA_INPUT)
+                        purchaseYear = year.toString()
+                        purchaseMonth = if (month < 10) {
+                            "0$month"
+                        } else {
+                            month.toString()
+                        }
+                        purchaseDay = if (dayOfMonth < 10) {
+                            "0$dayOfMonth"
+                        } else {
+                            dayOfMonth.toString()
+                        }
+//                        myStockViewModel.inputDialogPurchaseDate =
+//                            "$purchaseYear.$purchaseMonth"
+                    }
+                    show()
+                }
+            }
+            txtCancel.setOnClickListener { dismiss() }
+            txtComplete.setOnClickListener {
+                val subjectName: String = binding.etSubjectName.text.toString()
+                val purchaseDate: String = binding.etPurchaseDate.text.toString()
+                val purchasePrice: String = binding.etPurchasePrice.text.toString()
+                val purchaseCount: String = binding.etPurchaseCount.text.toString()
+
+                if (purchaseCount.isEmpty() ||
+                    purchaseDate.isEmpty() ||
+                    purchasePrice.isEmpty() ||
+                    subjectName.isEmpty()
+                ){
+                    Toasty.error(mContext, mContext.getString(R.string.MyStockInputDialog_Error_Message), Toasty.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                callBack.onInputDialogCompleteClicked(
+                    this@MyStockInputDialog,
+                    MyStockInputDialogData(
+                    subjectName = subjectName,
+                    purchaseDate = purchaseDate,
+                    purchasePrice = purchasePrice,
+                    purchaseCount = purchaseCount
+                ))
+            }
+            etPurchasePrice.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    if (!TextUtils.isEmpty(s.toString()) && s.toString() != this@MyStockInputDialog.convertText) {
+                        this@MyStockInputDialog.convertText = Utils.getNumInsertComma(s.toString())
+                        binding.etPurchasePrice.setText(this@MyStockInputDialog.convertText)
+                        binding.etPurchasePrice.setSelection(this@MyStockInputDialog.convertText.length) //커서를 오른쪽 끝으로 보낸다.
+                    }
+                    if (s.isEmpty()) {
+                        binding.txtPurchasePriceSymbol.setTextColor(mContext.getColor(R.color.color_666666))
+                    } else {
+                        binding.txtPurchasePriceSymbol.setTextColor(mContext.getColor(R.color.color_222222))
+                    }
+                }
+                override fun afterTextChanged(p0: Editable?) {}
+            })
+            etPurchaseCount.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+                }
+                override fun afterTextChanged(p0: Editable?) {}
+            })
+        }
+    }
+    private val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
+    private inner class UIHandler : Handler.Callback {
         override fun handleMessage(msg: Message): Boolean {
-            when (msg.what){
+            when (msg.what) {
                 MSG.SELL_DATE_DATA_INPUT -> {
                     binding.etPurchaseDate.setText("$purchaseYear-$purchaseMonth-$purchaseDay")
                 }
@@ -82,11 +175,11 @@ class MyStockInputDialog(
         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
     }
 
-    override fun changeMoneySymbolTextColor(color: Int) {
-        binding.txtPurchasePriceSymbol.setTextColor(context.getColor(color))
+    private fun onCancelButtonClick() {
+        dismiss()
     }
 
-    private fun onCancelButtonClick(){
-        dismiss()
+    interface CallBack {
+        fun onInputDialogCompleteClicked(dialog: MyStockInputDialog, myStockInputDialogData: MyStockInputDialogData)
     }
 }

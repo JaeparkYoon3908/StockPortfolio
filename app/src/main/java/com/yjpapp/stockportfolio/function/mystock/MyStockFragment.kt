@@ -34,7 +34,8 @@ import java.util.*
  * @since 2021.04
  */
 @AndroidEntryPoint
-class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_my_stock), MyStockAdapter.AdapterCallBack {
+class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_my_stock),
+    MyStockAdapter.AdapterCallBack {
 
     private val myStockViewModel: MyStockViewModel by viewModels()
     private lateinit var myStockAdapter: MyStockAdapter
@@ -70,17 +71,14 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
     }
 
     private fun initLayout() {
-        val tempMyStockList = mutableListOf<MyStockEntity>()
-        myStockAdapter = MyStockAdapter(tempMyStockList)
-        myStockViewModel.myStockInfoList.value?.let {
-            myStockAdapter = MyStockAdapter(it)
-        }
+        myStockAdapter = MyStockAdapter(mutableListOf())
         myStockAdapter.setCallBack(this)
         binding.recyclerviewMyStockFragment.apply {
-            layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false).apply {
-                reverseLayout = true
-                stackFromEnd = true
-            }
+            layoutManager =
+                LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false).apply {
+                    reverseLayout = true
+                    stackFromEnd = true
+                }
             adapter = myStockAdapter
             itemAnimator = FadeInAnimator()
             addOnItemTouchListener(object :
@@ -123,7 +121,10 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
             when (myStockViewModel.notifyHandler) {
                 myStockViewModel.NOTIFY_HANDLER_INSERT -> {
                     myStockAdapter.notifyItemInserted(myStockInfoList.size - 1)
-                    myStockAdapter.notifyItemRangeInserted(myStockInfoList.size - 1, myStockInfoList.size)
+                    myStockAdapter.notifyItemRangeInserted(
+                        myStockInfoList.size - 1,
+                        myStockInfoList.size
+                    )
                     binding.recyclerviewMyStockFragment.scrollToPosition(myStockInfoList.size - 1)
                 }
                 myStockViewModel.NOTIFY_HANDLER_UPDATE -> {
@@ -139,73 +140,35 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
             event.myStockInfoList.forEach { myStockEntity ->
                 mTotalPurchasePrice += Utils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
             }
-            myStockViewModel.totalPurchasePrice.value = NumberFormat.getCurrencyInstance(Locale.KOREA).format(mTotalPurchasePrice)
+            myStockViewModel.totalPurchasePrice.value =
+                NumberFormat.getCurrencyInstance(Locale.KOREA).format(mTotalPurchasePrice)
 
-            //색상 설정
-//                if (mTotalPurchasePrice >= 0) {
-//                    binding.txtGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
-//                    binding.txtGainPercentData.setTextColor(mContext.getColor(R.color.color_e52b4e))
-//                } else {
-//                    binding.txtGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
-//                    binding.txtGainPercentData.setTextColor(mContext.getColor(R.color.color_4876c7))
-//                }
+            //총 평가금액
+
+            //손익, 수익률 색상 설정
+            if (mTotalPurchasePrice >= 0) {
+                binding.txtGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                binding.txtGainPercentData.setTextColor(mContext.getColor(R.color.color_e52b4e))
+            } else {
+                binding.txtGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
+                binding.txtGainPercentData.setTextColor(mContext.getColor(R.color.color_4876c7))
+            }
         }
     }
 
     private fun showInputDialog(isInsertMode: Boolean, id: Int) {
-        MyStockInputDialog.getInstance(mContext).apply {
-            myStockViewModel.inputDialogController = this
-            binding.apply {
-                viewModel = myStockViewModel
-                etSubjectName.setOnClickListener {
-//                    val intent = Intent(mContext, StockSearchActivity::class.java)
-//                    startActivityForResult(intent, 10000)
+        MyStockInputDialog(mContext, object : MyStockInputDialog.CallBack {
+            override fun onInputDialogCompleteClicked(
+                dialog: MyStockInputDialog,
+                myStockInputDialogData: MyStockInputDialog.MyStockInputDialogData
+            ) {
+                if (!myStockViewModel.saveMyStock(mContext, isInsertMode, id, myStockInputDialogData)) {
+                    Toasty.error(mContext, mContext.getString(R.string.Error_Msg_Normal), Toasty.LENGTH_SHORT).show()
+                    return
                 }
-                etPurchaseDate.setOnClickListener {
-                    var year = ""
-                    var month = ""
-                    if (binding.etPurchaseDate.text.toString() != "") {
-                        val split = binding.etPurchaseDate.text.toString().split(".")
-                        year = split[0]
-                        month = split[1]
-                    }
-                    //매수 날짜 선택 다이얼로그 show
-                    CommonDatePickerDialog(mContext, year, month).apply {
-                        setListener { _: DatePicker?, year, month, dayOfMonth ->
-                            uiHandler.sendEmptyMessage(MyStockInputDialog.MSG.SELL_DATE_DATA_INPUT)
-                            purchaseYear = year.toString()
-                            purchaseMonth = if (month < 10) {
-                                "0$month"
-                            } else {
-                                month.toString()
-                            }
-                            purchaseDay = if (dayOfMonth < 10) {
-                                "0$dayOfMonth"
-                            } else {
-                                dayOfMonth.toString()
-                            }
-                            myStockViewModel.inputDialogPurchaseDate =
-                                "$purchaseYear.$purchaseMonth"
-                        }
-                        show()
-                    }
-                }
-                txtCancel.setOnClickListener { dismiss() }
-                txtComplete.setOnClickListener {
-                    if (myStockViewModel.saveMyStock(mContext, isInsertMode, id)) {
-                        dismiss()
-                    }
-                }
-
-                //observer
-                myStockViewModel.inputDialogPurchasePrice.observe(this@MyStockFragment, Observer {
-                    etPurchasePrice.setText(it)
-                    etPurchasePrice.setSelection(it.length)
-                })
-
+                dialog.dismiss()
             }
-            show()
-        }
+        }).show()
     }
 
     override fun onEditClick(myStockEntity: MyStockEntity?) {

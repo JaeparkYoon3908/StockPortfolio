@@ -157,7 +157,7 @@
                 android:gravity="center"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
-                android:text="12312321214214214124124421"
+                android:text="@{myStockEntity.subjectName}"
                 android:textColor="@color/color_222222"
                 android:textSize="@dimen/common_13dp"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_change_price_percent"

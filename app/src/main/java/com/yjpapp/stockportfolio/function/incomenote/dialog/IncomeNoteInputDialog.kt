@@ -56,7 +56,12 @@ class IncomeNoteInputDialog(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.custom_dialog_input_income_note, null, false)
+        _binding = DataBindingUtil.inflate(
+            LayoutInflater.from(mContext),
+            R.layout.custom_dialog_input_income_note,
+            null,
+            false
+        )
         setContentView(binding.root)
         initLayout()
     }
@@ -140,7 +145,7 @@ class IncomeNoteInputDialog(
                 var year = ""
                 var month = ""
                 var day = ""
-                if(binding.etSellDate.text.toString() != "") {
+                if (binding.etSellDate.text.toString() != "") {
                     val split = binding.etSellDate.text.toString().split("-")
                     year = split[0]
                     month = split[1]
@@ -218,7 +223,7 @@ class IncomeNoteInputDialog(
     }
     private val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
 
-    private inner class UIHandler: Handler.Callback {
+    private inner class UIHandler : Handler.Callback {
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what) {
                 MSG.PURCHASE_DATE_DATA_INPUT -> {

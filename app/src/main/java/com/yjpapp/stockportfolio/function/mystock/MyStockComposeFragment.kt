@@ -1,17 +1,22 @@
 package com.yjpapp.stockportfolio.function.mystock
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -31,6 +36,12 @@ import es.dmoral.toasty.Toasty
 @AndroidEntryPoint
 class MyStockComposeFragment : Fragment() {
     private val myStockViewModel: MyStockViewModel by viewModels()
+    private lateinit var mContext: Context
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +54,7 @@ class MyStockComposeFragment : Fragment() {
             setContent {
                 Column {
                     TotalPriceComposable()
-                    SimpleComposable()
+                    StockListComposable()
                 }
             }
         }
@@ -65,7 +76,7 @@ class MyStockComposeFragment : Fragment() {
                     inputDialogPurchasePrice.value = ""
                     inputDialogPurchaseCount = ""
                 }
-                showInputDialog(true, 0)
+//                showInputDialog(true, 0)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -218,67 +229,45 @@ class MyStockComposeFragment : Fragment() {
     }
 
     private fun showInputDialog(isInsertMode: Boolean, id: Int) {
-        MyStockInputDialog.getInstance(requireContext()).apply {
-            myStockViewModel.inputDialogController = this
-            binding.apply {
-                viewModel = myStockViewModel
-                etSubjectName.setOnClickListener {
-//                    val intent = Intent(mContext, StockSearchActivity::class.java)
-//                    startActivityForResult(intent, 10000)
+        MyStockInputDialog(mContext, object : MyStockInputDialog.CallBack {
+            override fun onInputDialogCompleteClicked(
+                dialog: MyStockInputDialog,
+                myStockInputDialogData: MyStockInputDialog.MyStockInputDialogData
+            ) {
+                if (!myStockViewModel.saveMyStock(mContext, isInsertMode, id, myStockInputDialogData)) {
+                    Toasty.error(mContext, mContext.getString(R.string.Error_Msg_Normal), Toasty.LENGTH_SHORT).show()
+                    return
                 }
-                etPurchaseDate.setOnClickListener {
-                    var year = ""
-                    var month = ""
-                    if (binding.etPurchaseDate.text.toString() != "") {
-                        val split = binding.etPurchaseDate.text.toString().split(".")
-                        year = split[0]
-                        month = split[1]
-                    }
-                    //매수 날짜 선택 다이얼로그 show
-                    CommonDatePickerDialog(requireContext(), year, month).apply {
-                        setListener { _: DatePicker?, year, month, dayOfMonth ->
-                            uiHandler.sendEmptyMessage(MyStockInputDialog.MSG.SELL_DATE_DATA_INPUT)
-                            purchaseYear = year.toString()
-                            purchaseMonth = if (month < 10) {
-                                "0$month"
-                            } else {
-                                month.toString()
-                            }
-                            purchaseDay = if (dayOfMonth < 10) {
-                                "0$dayOfMonth"
-                            } else {
-                                dayOfMonth.toString()
-                            }
-                            myStockViewModel.inputDialogPurchaseDate =
-                                "$purchaseYear.$purchaseMonth"
-                        }
-                        show()
-                    }
-                }
-                txtCancel.setOnClickListener { dismiss() }
-                txtComplete.setOnClickListener {
-                    if (myStockViewModel.saveMyStock(mContext, isInsertMode, id)) {
-                        dismiss()
-                    }
-                }
-
-                //observer
-                myStockViewModel.inputDialogPurchasePrice.observe(this@MyStockComposeFragment, {
-                    etPurchasePrice.setText(it)
-                    etPurchasePrice.setSelection(it.length)
-                })
-
+                dialog.dismiss()
             }
-            show()
-        }
+        }).show()
     }
 
     @Preview
     @Composable
     private fun StockListComposable() {
         LazyColumn {
-
+            items(5000) {
+                KotlinWorldCard(order = it)
+            }
         }
     }
+    @Composable
+    private fun StockListItem() {
 
+    }
+    @Composable
+    private fun KotlinWorldCard(order: Int) {
+        Card(
+            Modifier
+                .padding(12.dp)
+                .border(width = 4.dp, color = Color.Black)
+                .fillMaxWidth()
+                .height(100.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Text("Kotlin World $order")
+            }
+        }
+    }
 }

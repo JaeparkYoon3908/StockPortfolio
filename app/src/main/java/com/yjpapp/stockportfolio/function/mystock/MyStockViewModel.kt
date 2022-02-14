@@ -2,17 +2,15 @@ package com.yjpapp.stockportfolio.function.mystock
 
 
 import android.content.Context
-import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
-import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialogController
+import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.repository.MyStockRepository
-import com.yjpapp.stockportfolio.util.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,8 +42,6 @@ class MyStockViewModel @Inject constructor(
 //    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
     var notifyHandler = NOTIFY_HANDLER_INSERT //RecyclerView adapter notify handler
 
-    lateinit var inputDialogController: MyStockInputDialogController //InputDialog와 연결 된 interface
-
     /**
      * MyStockFragment 영역
      */
@@ -55,63 +51,36 @@ class MyStockViewModel @Inject constructor(
 //        myStockInfoList.value = myStockRepository.getAllMyStock()
     }
 
-    /**
-     * MyStockInputDialog 영역
-     */ //3자리마다 콤마 찍어주는 변수
-    private var convertText = ""
-
-    //종목명
-    fun onSubjectNameChange(s: CharSequence, start: Int, before: Int, count: Int) {
-        inputDialogSubjectName = s.toString()
-    }
-
-    //평균단가
-    fun onPurchasePriceChange(s: CharSequence, start: Int, before: Int, count: Int) {
-        if (!TextUtils.isEmpty(s.toString()) && s.toString() != convertText) {
-            convertText = Utils.getNumInsertComma(s.toString())
-            inputDialogPurchasePrice.value = convertText
-        }
-
-        if (s.isEmpty()) {
-            inputDialogController.changeMoneySymbolTextColor(R.color.color_666666)
-        } else {
-            inputDialogController.changeMoneySymbolTextColor(R.color.color_222222)
-        }
-    }
-
-    //보유수량
-    fun onPurchaseCountChange(s: CharSequence, start: Int, before: Int, count: Int) {
-        inputDialogPurchaseCount = s.toString()
-    }
-
     //확인버튼 클릭 후 Save
-    fun saveMyStock(context: Context, isInsertMode: Boolean, id: Int): Boolean {
-        if (inputDialogSubjectName.isNotEmpty() && inputDialogPurchasePrice.value?.length != 0 && inputDialogPurchaseCount.isNotEmpty()) {
-            try {
-                val myStockEntity = MyStockEntity(
-                    id,
-                    inputDialogSubjectName,
-                    inputDialogPurchaseDate,
-                    inputDialogPurchasePrice.value!!,
-                    inputDialogPurchaseCount
-                )
-                notifyHandler = if (isInsertMode) {
-                    myStockRepository.insertMyStock(myStockEntity)
-                    NOTIFY_HANDLER_INSERT
-                } else {
-                    myStockRepository.updateMyStock(myStockEntity)
-                    NOTIFY_HANDLER_UPDATE
-                }
-                myStockInfoList.value = myStockRepository.getAllMyStock()
-                return true
-            } catch (e: Exception) {
-                e.stackTrace
-                event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
-                return false
+    fun saveMyStock(
+        context: Context,
+        isInsertMode: Boolean,
+        id: Int,
+        myStockInputDialogData: MyStockInputDialog.MyStockInputDialogData
+    ): Boolean {
+        try {
+            val myStockEntity = MyStockEntity(
+                id,
+                myStockInputDialogData.subjectName,
+                myStockInputDialogData.purchaseDate,
+                myStockInputDialogData.purchasePrice,
+                myStockInputDialogData.purchaseCount
+            )
+            notifyHandler = if (isInsertMode) {
+                myStockRepository.insertMyStock(myStockEntity)
+                NOTIFY_HANDLER_INSERT
+            } else {
+                myStockRepository.updateMyStock(myStockEntity)
+                NOTIFY_HANDLER_UPDATE
             }
+//            myStockInfoList.value = myStockRepository.getAllMyStock()
+            event(Event.SendMyStockInfoList(myStockRepository.getAllMyStock()))
+            return true
+        } catch (e: Exception) {
+            e.stackTrace
+            event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
+            return false
         }
-        event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
-        return false
     }
 
     fun deleteMyStock(myStockEntity: MyStockEntity) {
