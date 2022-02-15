@@ -27,12 +27,16 @@ import kotlinx.coroutines.launch
  * 테스트 전용 Activity
  */
 @AndroidEntryPoint
-class TestActivity : BaseActivity<ActivityTestBinding>(R.layout.activity_test) {
+class TestActivity : AppCompatActivity() {
     private val TAG = TestActivity::class.java.simpleName
     private val testViewModel: TestViewModel by viewModels()
+    private var _binding: ActivityTestBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_test)
+
         initData()
     }
 

@@ -42,7 +42,7 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myStockViewModel.onViewCreated()
+//        myStockViewModel.onViewCreated()
         setHasOptionsMenu(true)
         initLayout()
         initData()
@@ -61,7 +61,7 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
                 myStockViewModel.apply {
                     inputDialogSubjectName = ""
                     inputDialogPurchaseDate = ""
-                    inputDialogPurchasePrice.value = ""
+                    inputDialogPurchasePrice = ""
                     inputDialogPurchaseCount = ""
                 }
                 showInputDialog(true, 0)
@@ -179,7 +179,7 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
             }
             inputDialogSubjectName = myStockEntity.subjectName
             inputDialogPurchaseDate = myStockEntity.purchaseDate
-            inputDialogPurchasePrice.value = myStockEntity.purchasePrice
+            inputDialogPurchasePrice = myStockEntity.purchasePrice
             inputDialogPurchaseCount = myStockEntity.purchaseCount
             showInputDialog(false, myStockEntity.id)
         }

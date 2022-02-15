@@ -3,35 +3,42 @@ package com.yjpapp.stockportfolio.function.mystock
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.DatePicker
-import androidx.compose.foundation.border
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.FrameMetricsAggregator.ANIMATION_DURATION
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class MyStockComposeFragment : Fragment() {
@@ -49,7 +56,7 @@ class MyStockComposeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
-            myStockViewModel.onViewCreated()
+//            myStockViewModel.onViewCreated()
             setHasOptionsMenu(true)
             setContent {
                 Column {
@@ -73,7 +80,7 @@ class MyStockComposeFragment : Fragment() {
                 myStockViewModel.apply {
                     inputDialogSubjectName = ""
                     inputDialogPurchaseDate = ""
-                    inputDialogPurchasePrice.value = ""
+                    inputDialogPurchasePrice = ""
                     inputDialogPurchaseCount = ""
                 }
 //                showInputDialog(true, 0)
@@ -82,6 +89,24 @@ class MyStockComposeFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun showInputDialog(isInsertMode: Boolean, id: Int) {
+        MyStockInputDialog(mContext, object : MyStockInputDialog.CallBack {
+            override fun onInputDialogCompleteClicked(
+                dialog: MyStockInputDialog,
+                myStockInputDialogData: MyStockInputDialog.MyStockInputDialogData
+            ) {
+                if (!myStockViewModel.saveMyStock(mContext, isInsertMode, id, myStockInputDialogData)) {
+                    Toasty.error(mContext, mContext.getString(R.string.Error_Msg_Normal), Toasty.LENGTH_SHORT).show()
+                    return
+                }
+                dialog.dismiss()
+            }
+        }).show()
+    }
+
+    /**
+     * Compose 영역
+     */
     @Preview
     @Composable
     private fun SimpleComposable() {
@@ -228,46 +253,208 @@ class MyStockComposeFragment : Fragment() {
         }
     }
 
-    private fun showInputDialog(isInsertMode: Boolean, id: Int) {
-        MyStockInputDialog(mContext, object : MyStockInputDialog.CallBack {
-            override fun onInputDialogCompleteClicked(
-                dialog: MyStockInputDialog,
-                myStockInputDialogData: MyStockInputDialog.MyStockInputDialogData
-            ) {
-                if (!myStockViewModel.saveMyStock(mContext, isInsertMode, id, myStockInputDialogData)) {
-                    Toasty.error(mContext, mContext.getString(R.string.Error_Msg_Normal), Toasty.LENGTH_SHORT).show()
-                    return
-                }
-                dialog.dismiss()
-            }
-        }).show()
-    }
-
     @Preview
     @Composable
     private fun StockListComposable() {
         LazyColumn {
-            items(5000) {
-                KotlinWorldCard(order = it)
+            items(10) {
+                StockListItem(order = it)
             }
         }
     }
-    @Composable
-    private fun StockListItem() {
 
-    }
+    @Preview
     @Composable
-    private fun KotlinWorldCard(order: Int) {
-        Card(
+    private fun StockListItem(order: Int) {
+        Column(
             Modifier
-                .padding(12.dp)
-                .border(width = 4.dp, color = Color.Black)
+                .padding(bottom = 10.dp)
+                .wrapContentHeight()
                 .fillMaxWidth()
-                .height(100.dp)
+                .background(color = colorResource(id = R.color.color_background_fbfbfb))
         ) {
-            Box(contentAlignment = Alignment.Center) {
-                Text("Kotlin World $order")
+
+            Row(Modifier
+                .padding(start = 15.dp, end = 15.dp)
+            ) {
+               Text(
+                   text = "회사 이름",
+                   fontSize = 16.sp,
+                   maxLines = 1,
+                   color = colorResource(id = R.color.color_222222),
+                   modifier = Modifier
+                       .weight(0.55f)
+                       .padding(top = 10.dp)
+               )
+                Row(
+                    modifier = Modifier
+                        .weight(0.45f)
+                        .padding(top = 10.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.MyStockFragment_Gain),
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_222222),
+                    )
+                    //수익
+                    Text(
+                        text = "700",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_666666),
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                    )
+                    //수익 퍼센트
+                    Text(
+                        text = "(0.93)",
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_222222),
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                    )
+                }
+            }
+
+            Divider(
+                Modifier
+                    .padding(10.dp)
+            )
+            Row(
+                Modifier
+                    .padding(start = 15.dp, end = 15.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .weight(0.5f)
+                ) {
+                    Text(
+                        text = "매수일",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_666666)
+                    )
+
+                    Text(
+                        text = "2021-03-29",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_222222),
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .weight(0.5f),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        text = "평단가",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_666666),
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                    )
+
+                    Text(
+                        text = "2,500",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_222222),
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                    )
+                }
+            }
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp, top = 10.dp)
+            ) {
+                Row(
+                    modifier = Modifier.weight(0.5f)
+                ) {
+                    Text(
+                        text = "매수수량",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_666666)
+                    )
+
+                    Text(
+                        text = "270",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_222222),
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(bottom = 10.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        text = "현재가",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_666666),
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                    )
+
+                    Text(
+                        text = "2,600",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = colorResource(id = R.color.color_222222),
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                    )
+                }
             }
         }
+    }
+
+    @Composable
+    fun DraggableCard(
+        card: CardModel,
+        isRevealed: Boolean,
+        cardOffset: Float,
+        onExpand: () -> Unit,
+        onCollapse: () -> Unit,
+    ) {
+        val offsetX = remember { mutableStateOf(0f) }
+        val transitionState = remember {
+            MutableTransitionState(isRevealed).apply {
+                targetState = !isRevealed
+            }
+        }
+        val transition = updateTransition(transitionState)
+        val offsetTransition by transition.animateFloat(
+            label = "cardOffsetTransition",
+            transitionSpec = { tween(durationMillis = ANIMATION_DURATION) },
+            targetValueByState = { if (isRevealed) cardOffset - offsetX.value else -offsetX.value },
+        )
+
+        Card(
+            modifier = Modifier
+                .offset { IntOffset((offsetX.value + offsetTransition).roundToInt(), 0) }
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures { change, dragAmount ->
+
+                    }
+                },
+            content = { CardTitle(cardTitle = card.title) }
+        )
     }
 }

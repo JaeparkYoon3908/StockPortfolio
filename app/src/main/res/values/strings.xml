@@ -77,6 +77,8 @@
     <string name="MyStockFragment_Purchase_Average">평균단가</string>
     <string name="MyStockFragment_Current_Price">현재가</string>
     <string name="MyStockFragment_Holding_Quantity">보유수량</string>
+    <string name="MyStockFragment_Gain">수익</string>
+
 
     <string name="MyStockInputDialog_Purchase_Count">보유수량</string>
     <string name="MyStockInputDialog_Purchase_Count_Hint">보유한 주식 수</string>
