@@ -424,37 +424,4 @@ class MyStockComposeFragment : Fragment() {
             }
         }
     }
-
-    @Composable
-    fun DraggableCard(
-        card: CardModel,
-        isRevealed: Boolean,
-        cardOffset: Float,
-        onExpand: () -> Unit,
-        onCollapse: () -> Unit,
-    ) {
-        val offsetX = remember { mutableStateOf(0f) }
-        val transitionState = remember {
-            MutableTransitionState(isRevealed).apply {
-                targetState = !isRevealed
-            }
-        }
-        val transition = updateTransition(transitionState)
-        val offsetTransition by transition.animateFloat(
-            label = "cardOffsetTransition",
-            transitionSpec = { tween(durationMillis = ANIMATION_DURATION) },
-            targetValueByState = { if (isRevealed) cardOffset - offsetX.value else -offsetX.value },
-        )
-
-        Card(
-            modifier = Modifier
-                .offset { IntOffset((offsetX.value + offsetTransition).roundToInt(), 0) }
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures { change, dragAmount ->
-
-                    }
-                },
-            content = { CardTitle(cardTitle = card.title) }
-        )
-    }
 }
