@@ -35,7 +35,7 @@ class CommonTwoBtnDialog(
         )
         setContentView(binding.root)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
-        Utils.setDialogWidth(mContext, this, 0.8)
+        Utils.setDialogWidthResize(mContext, this, 0.8f)
 
         initData()
     }

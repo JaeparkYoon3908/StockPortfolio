@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
@@ -60,7 +59,7 @@ class MyStockInputDialog(
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         //EditText focus 했을 때 키보드가 보이도록 설정
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-        Utils.setDialogWidth(mContext, this, 0.85)
+        Utils.setDialogWidthResize(mContext, this, 0.85f)
         initView()
     }
 

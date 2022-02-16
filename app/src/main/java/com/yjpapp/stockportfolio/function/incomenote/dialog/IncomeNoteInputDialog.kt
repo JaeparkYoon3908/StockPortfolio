@@ -84,7 +84,7 @@ class IncomeNoteInputDialog(
 
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-        Utils.setDialogWidth(mContext, this, 0.85)
+        Utils.setDialogWidthResize(mContext, this, 0.85f)
     }
 
     private val onClickListener = OnSingleClickListener { view: View? ->

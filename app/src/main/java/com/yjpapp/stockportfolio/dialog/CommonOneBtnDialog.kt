@@ -8,7 +8,6 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CommonDialogOneBtnBinding
-import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.util.Utils
 
 class CommonOneBtnDialog(
@@ -33,7 +32,7 @@ class CommonOneBtnDialog(
             false
         )
         setContentView(binding.root)
-        Utils.setDialogWidth(mContext, this, 0.8)
+        Utils.setDialogWidthResize(mContext, this, 0.8f)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         initData()
     }

@@ -43,7 +43,7 @@ class CommonDatePickerDialog(
             false
         )
         setContentView(binding.root)
-        Utils.setDialogWidth(mContext, this, 0.85)
+        Utils.setDialogWidthResize(mContext, this, 0.85f)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         initView()
     }

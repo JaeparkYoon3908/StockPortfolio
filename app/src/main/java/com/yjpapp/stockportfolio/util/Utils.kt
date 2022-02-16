@@ -250,7 +250,7 @@ object Utils {
         return email.contains("@naver.com") && pattern.matcher(email).matches()
     }
 
-    fun setDialogResize(context: Context, dialog: AlertDialog, width: Float, height: Float) {
+    fun setDialogWidthResize(context: Context, dialog: AlertDialog, width: Float) {
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
         if (Build.VERSION.SDK_INT < 30){
@@ -262,8 +262,8 @@ object Utils {
             val window = dialog.window
 
             val x = (size.x * width).toInt()
-            val y = (size.y * height).toInt()
-
+//            val y = (size.y * height).toInt()
+            val y = ViewGroup.LayoutParams.WRAP_CONTENT
             window?.setLayout(x, y)
         } else {
             val rect = windowManager.currentWindowMetrics.bounds
@@ -271,29 +271,10 @@ object Utils {
             val window = dialog.window
 
             val x = (rect.width() * width).toInt()
-            val y = (rect.height() * height).toInt()
+//            val y = (rect.height() * height).toInt()
+            val y = ViewGroup.LayoutParams.WRAP_CONTENT
 
             window?.setLayout(x, y)
         }
-    }
-
-    fun setDialogWidth(mContext: Context, dialog: AlertDialog, widthRate: Double) {
-        val windowManager = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            mContext.display
-        } else {
-            windowManager.defaultDisplay
-        }
-        val size = Point()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            windowManager.currentWindowMetrics
-        } else {
-            display?.getSize(size)
-        }
-        val params: ViewGroup.LayoutParams? = dialog.window?.attributes
-        val deviceWidth = size.x
-        params?.width = (deviceWidth * widthRate).toInt()
-        params?.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        dialog.window?.attributes = params as WindowManager.LayoutParams
     }
 }
