@@ -49,4 +49,6 @@
     <color name="color_5737d6">#5737d6</color>
     <color name="color_c8c8ca">#c8c8ca</color>
     <color name="color_acaac4">#acaac4</color>
+
+    <color name="color_transparent">#00000000</color>
 </resources>

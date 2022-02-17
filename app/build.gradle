@@ -133,4 +133,5 @@ dependencies {
 
     implementation 'org.jsoup:jsoup:1.13.1'
 
+    implementation 'de.charlex.compose:revealswipe:1.0.0'
 }

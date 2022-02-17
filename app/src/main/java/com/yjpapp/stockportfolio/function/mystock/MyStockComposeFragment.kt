@@ -12,15 +12,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
@@ -37,6 +39,8 @@ import androidx.fragment.app.viewModels
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import dagger.hilt.android.AndroidEntryPoint
+import de.charlex.compose.RevealDirection
+import de.charlex.compose.RevealSwipe
 import es.dmoral.toasty.Toasty
 import kotlin.math.roundToInt
 
@@ -111,19 +115,22 @@ class MyStockComposeFragment : Fragment() {
     @Composable
     private fun SimpleComposable() {
         Column {
-            Text(text = "Hello world.",
+            Text(
+                text = "Hello world.",
                 modifier = Modifier.clickable {
                     Toasty.normal(requireContext(), "Test!!").show()
                 }
             )
 
-            Text(text = "Alan walker",
+            Text(
+                text = "Alan walker",
                 modifier = Modifier.clickable {
                     Toasty.normal(requireContext(), "Test!!").show()
                 }
             )
 
-            Text(text = "All for down.",
+            Text(
+                text = "All for down.",
                 modifier = Modifier.clickable {
                     Toasty.normal(requireContext(), "Test!!").show()
                 }
@@ -263,163 +270,232 @@ class MyStockComposeFragment : Fragment() {
         }
     }
 
-    @Preview
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun StockListItem(order: Int) {
-        Column(
-            Modifier
+        var isOpenRevealSwipe = false
+        val maxRevealDp = 120.dp
+        RevealSwipe(
+            modifier = Modifier
                 .padding(bottom = 10.dp)
                 .wrapContentHeight()
-                .fillMaxWidth()
-                .background(color = colorResource(id = R.color.color_background_fbfbfb))
+                .fillMaxWidth(),
+            maxRevealDp = maxRevealDp,
+            backgroundCardEndColor = colorResource(id = R.color.color_background_fbfbfb),
+            animateBackgroundCardColor = false,
+            directions = setOf(
+//        RevealDirection.StartToEnd,
+                RevealDirection.EndToStart
+            ),
+//            hiddenContentStart = {
+//                Icon(
+//                    modifier = Modifier.padding(horizontal = 25.dp),
+//                    imageVector = Icons.Outlined.Star,
+//                    contentDescription = null,
+//                    tint = Color.White
+//                )
+//            },
+            hiddenContentEnd = {
+                Column(
+                    modifier = Modifier
+                        .width(maxRevealDp)
+                        .fillMaxHeight()
+                ) {
+                    Text(
+                        text = "편집",
+                        fontSize = 16.sp,
+                        color = colorResource(id = R.color.color_ffffff),
+                        modifier = Modifier
+                            .clickable {  }
+                            .fillMaxWidth()
+                            .background(color = colorResource(id = R.color.color_80000000))
+                    )
+
+                    Text(
+                        text = "매도",
+                        fontSize = 16.sp,
+                        color = colorResource(id = R.color.color_ffffff),
+                        modifier = Modifier
+                            .clickable {  }
+                            .fillMaxWidth()
+                            .background(color = colorResource(id = R.color.color_4876c7))
+
+                    )
+
+                    Text(
+                        text = "삭제",
+                        fontSize = 16.sp,
+                        color = colorResource(id = R.color.color_ffffff),
+                        modifier = Modifier
+                            .clickable {  }
+                            .fillMaxWidth()
+                            .background(color = colorResource(id = R.color.color_cd4632))
+                    )
+                }
+            }
         ) {
-
-            Row(Modifier
-                .padding(start = 15.dp, end = 15.dp)
-            ) {
-               Text(
-                   text = "회사 이름",
-                   fontSize = 16.sp,
-                   maxLines = 1,
-                   color = colorResource(id = R.color.color_222222),
-                   modifier = Modifier
-                       .weight(0.55f)
-                       .padding(top = 10.dp)
-               )
-                Row(
+            Card( modifier = Modifier
+                .fillMaxSize()
+                .wrapContentHeight(),
+                elevation = 0.dp,
+                backgroundColor = colorResource(id = R.color.color_background_fbfbfb)
+            ){
+                Column(
                     modifier = Modifier
-                        .weight(0.45f)
-                        .padding(top = 10.dp),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
+//                    .padding(bottom = 10.dp)
+                        .wrapContentHeight()
+//                    .fillMaxWidth()
+//                    .background(color = colorResource(id = R.color.color_background_fbfbfb))
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.MyStockFragment_Gain),
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_222222),
-                    )
-                    //수익
-                    Text(
-                        text = "700",
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_666666),
-                        modifier = Modifier
-                            .padding(start = 5.dp)
-                    )
-                    //수익 퍼센트
-                    Text(
-                        text = "(0.93)",
-                        fontSize = 12.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_222222),
-                        modifier = Modifier
-                            .padding(start = 5.dp)
-                    )
-                }
-            }
 
-            Divider(
-                Modifier
-                    .padding(10.dp)
-            )
-            Row(
-                Modifier
-                    .padding(start = 15.dp, end = 15.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .weight(0.5f)
-                ) {
-                    Text(
-                        text = "매수일",
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_666666)
-                    )
+                    Row(Modifier
+                        .padding(start = 15.dp, end = 15.dp)
+                    ) {
+                        Text(
+                            text = "회사 이름",
+                            fontSize = 16.sp,
+                            maxLines = 1,
+                            color = colorResource(id = R.color.color_222222),
+                            modifier = Modifier
+                                .weight(0.55f)
+                                .padding(top = 10.dp)
+                        )
+                        Row(
+                            modifier = Modifier
+                                .weight(0.45f)
+                                .padding(top = 10.dp),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.MyStockFragment_Gain),
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_222222),
+                            )
+                            //수익
+                            Text(
+                                text = "700",
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_666666),
+                                modifier = Modifier
+                                    .padding(start = 5.dp)
+                            )
+                            //수익 퍼센트
+                            Text(
+                                text = "(0.93)",
+                                fontSize = 12.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_222222),
+                                modifier = Modifier
+                                    .padding(start = 5.dp)
+                            )
+                        }
+                    }
 
-                    Text(
-                        text = "2021-03-29",
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_222222),
-                        modifier = Modifier
-                            .padding(start = 10.dp)
+                    Divider(
+                        Modifier
+                            .padding(10.dp)
                     )
-                }
-                Row(
-                    modifier = Modifier
-                        .weight(0.5f),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Text(
-                        text = "평단가",
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_666666),
-                        modifier = Modifier
-                            .padding(start = 10.dp)
-                    )
+                    Row(
+                        Modifier
+                            .padding(start = 15.dp, end = 15.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .weight(0.5f)
+                        ) {
+                            Text(
+                                text = "매수일",
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_666666)
+                            )
 
-                    Text(
-                        text = "2,500",
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_222222),
-                        modifier = Modifier
-                            .padding(start = 10.dp)
-                    )
-                }
-            }
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 15.dp, end = 15.dp, top = 10.dp)
-            ) {
-                Row(
-                    modifier = Modifier.weight(0.5f)
-                ) {
-                    Text(
-                        text = "매수수량",
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_666666)
-                    )
+                            Text(
+                                text = "2021-03-29",
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_222222),
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .weight(0.5f),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            Text(
+                                text = "평단가",
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_666666),
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
+                            )
 
-                    Text(
-                        text = "270",
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_222222),
-                        modifier = Modifier
-                            .padding(start = 10.dp)
-                    )
-                }
+                            Text(
+                                text = "2,500",
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_222222),
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
+                            )
+                        }
+                    }
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 15.dp, end = 15.dp, top = 10.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.weight(0.5f)
+                        ) {
+                            Text(
+                                text = "매수수량",
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_666666)
+                            )
 
-                Row(
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .padding(bottom = 10.dp),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Text(
-                        text = "현재가",
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_666666),
-                        modifier = Modifier
-                            .padding(start = 10.dp)
-                    )
+                            Text(
+                                text = "270",
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_222222),
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
+                            )
+                        }
 
-                    Text(
-                        text = "2,600",
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = colorResource(id = R.color.color_222222),
-                        modifier = Modifier
-                            .padding(start = 10.dp)
-                    )
+                        Row(
+                            modifier = Modifier
+                                .weight(0.5f)
+                                .padding(bottom = 10.dp),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            Text(
+                                text = "현재가",
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_666666),
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
+                            )
+
+                            Text(
+                                text = "2,600",
+                                fontSize = 14.sp,
+                                maxLines = 1,
+                                color = colorResource(id = R.color.color_222222),
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
+                            )
+                        }
+                    }
                 }
             }
         }
