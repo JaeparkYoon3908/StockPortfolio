@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -274,7 +275,7 @@ class MyStockComposeFragment : Fragment() {
     @Composable
     private fun StockListItem(order: Int) {
         var isOpenRevealSwipe = false
-        val maxRevealDp = 120.dp
+        val maxRevealDp = 110.dp
         RevealSwipe(
             modifier = Modifier
                 .padding(bottom = 10.dp)
@@ -299,38 +300,59 @@ class MyStockComposeFragment : Fragment() {
                 Column(
                     modifier = Modifier
                         .width(maxRevealDp)
-                        .fillMaxHeight()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "편집",
-                        fontSize = 16.sp,
-                        color = colorResource(id = R.color.color_ffffff),
+                    Box(
+                        contentAlignment = Center,
                         modifier = Modifier
-                            .clickable {  }
+                            .clickable {
+
+                            }
                             .fillMaxWidth()
+                            .weight(0.333f)
                             .background(color = colorResource(id = R.color.color_80000000))
-                    )
+                    ) {
 
-                    Text(
-                        text = "매도",
-                        fontSize = 16.sp,
-                        color = colorResource(id = R.color.color_ffffff),
+                        Text(
+                            text = "편집",
+                            fontSize = 16.sp,
+                            color = colorResource(id = R.color.color_ffffff),
+                        )
+                    }
+                    Box(
+                        contentAlignment = Center,
                         modifier = Modifier
-                            .clickable {  }
+                            .clickable {
+
+                            }
                             .fillMaxWidth()
+                            .weight(0.333f)
                             .background(color = colorResource(id = R.color.color_4876c7))
-
-                    )
-
-                    Text(
-                        text = "삭제",
-                        fontSize = 16.sp,
-                        color = colorResource(id = R.color.color_ffffff),
+                    ) {
+                        Text(
+                            text = "매도",
+                            fontSize = 16.sp,
+                            color = colorResource(id = R.color.color_ffffff)
+                        )
+                    }
+                    Box(
+                        contentAlignment = Center,
                         modifier = Modifier
-                            .clickable {  }
+                            .clickable {
+                                
+                            }
                             .fillMaxWidth()
+                            .weight(0.333f)
                             .background(color = colorResource(id = R.color.color_cd4632))
-                    )
+                    ) {
+                        Text(
+                            text = "삭제",
+                            fontSize = 16.sp,
+                            color = colorResource(id = R.color.color_ffffff)
+                        )
+                    }
                 }
             }
         ) {
