@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.dialog
+package com.yjpapp.stockportfolio.common.dialog
 
 import android.app.DatePickerDialog
 import android.content.Context

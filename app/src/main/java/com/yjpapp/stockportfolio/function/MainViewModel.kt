@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.ViewModel
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

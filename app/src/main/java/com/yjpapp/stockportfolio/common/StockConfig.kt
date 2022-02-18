@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.constance
+package com.yjpapp.stockportfolio.common
 
 import java.util.*
 

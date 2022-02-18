@@ -3,17 +3,14 @@ package com.yjpapp.stockportfolio.function.mystock
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.databinding.FragmentMyStockBinding
-import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity

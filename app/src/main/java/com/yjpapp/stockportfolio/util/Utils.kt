@@ -12,10 +12,9 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Base64
-import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
-import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.common.StockConfig
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat

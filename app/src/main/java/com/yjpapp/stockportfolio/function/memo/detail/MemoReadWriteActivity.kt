@@ -10,10 +10,10 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
-import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
-import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
-import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
+import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey

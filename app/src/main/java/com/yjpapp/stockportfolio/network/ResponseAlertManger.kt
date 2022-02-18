@@ -3,7 +3,7 @@ package com.yjpapp.stockportfolio.network
 import android.content.Context
 import android.view.View
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.dialog.CommonOneBtnDialog
+import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 
 object ResponseAlertManger {
     private var isShowDialog = false

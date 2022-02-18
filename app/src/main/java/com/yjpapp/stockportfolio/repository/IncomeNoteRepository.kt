@@ -2,7 +2,7 @@ package com.yjpapp.stockportfolio.repository
 
 import android.content.Context
 import androidx.paging.*
-import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo

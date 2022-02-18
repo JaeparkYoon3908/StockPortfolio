@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.DatePicker
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,10 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
-import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
-import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
-import com.yjpapp.stockportfolio.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.extension.OnSingleClickListener
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePickerDialog
@@ -31,7 +29,6 @@ import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * 수익노트 화면

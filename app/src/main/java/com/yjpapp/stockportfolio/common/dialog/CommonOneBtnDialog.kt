@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.dialog
+package com.yjpapp.stockportfolio.common.dialog
 
 import androidx.appcompat.app.AlertDialog
 import android.content.Context

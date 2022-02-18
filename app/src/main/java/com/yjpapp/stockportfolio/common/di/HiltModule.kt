@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.di
+package com.yjpapp.stockportfolio.common.di
 
 import android.app.Activity
 import android.content.Context

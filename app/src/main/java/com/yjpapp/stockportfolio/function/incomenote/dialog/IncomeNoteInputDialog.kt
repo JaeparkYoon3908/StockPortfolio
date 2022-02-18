@@ -17,13 +17,12 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputIncomeNoteBinding
-import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.extension.OnSingleClickListener
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.Utils
-import java.util.*
 
 
 class IncomeNoteInputDialog(

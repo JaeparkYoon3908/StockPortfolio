@@ -16,7 +16,7 @@ import androidx.databinding.DataBindingUtil
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
-import com.yjpapp.stockportfolio.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
@@ -36,10 +36,10 @@ class MyStockInputDialog(
     private var _binding: CustomDialogInputMyStockBinding? = null
     private val binding get() = _binding!!
 
-    var purchaseYear = ""
-    var purchaseMonth = ""
-    var purchaseDay = ""
-    var convertText = ""
+    private var purchaseYear = ""
+    private var purchaseMonth = ""
+    private var purchaseDay = ""
+    private var convertText = ""
     data class MyStockInputDialogData(
         var subjectName: String = "",
         var purchaseDate: String = "",

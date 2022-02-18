@@ -131,7 +131,7 @@
             android:visibility="gone"
             />
 
-        <com.yjpapp.stockportfolio.widget.CommonLoadingView
+        <com.yjpapp.stockportfolio.common.widget.CommonLoadingView
             android:id="@+id/iv_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

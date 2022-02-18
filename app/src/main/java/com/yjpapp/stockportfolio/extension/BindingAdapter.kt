@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.BindingAdapter
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.constance.StockConfig
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.util.Utils
 import java.math.BigDecimal
 import java.util.*

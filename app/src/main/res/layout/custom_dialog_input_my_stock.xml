@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="com.yjpapp.stockportfolio.constance.StockConfig"/>
+        <import type="com.yjpapp.stockportfolio.common.StockConfig"/>
         <variable
             name="convertText"
             type="String" />
