@@ -56,7 +56,8 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
     }
 
     private lateinit var layoutManager: LinearLayoutManager
-    private val memoListAdapter = MemoListAdapter(mutableListOf(), null).apply { setHasStableIds(true) }
+    private val memoListAdapter =
+        MemoListAdapter(mutableListOf(), null).apply { setHasStableIds(true) }
     private val viewModel: MemoListViewModel by viewModels()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -264,16 +265,12 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
             noticeText = mContext.getString(R.string.MemoListFragment_Delete_Check_Message),
             leftBtnText = mContext.getString(R.string.Common_Cancel),
             rightBtnText = mContext.getString(R.string.Common_Ok),
-            leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                    dialog.dismiss()
-                }
+            leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+                dialog.dismiss()
             },
-            rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                    viewModel.requestDeleteMemoInfo()
-                    dialog.dismiss()
-                }
+            rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+                viewModel.requestDeleteMemoInfo()
+                dialog.dismiss()
             }
         )).show()
     }

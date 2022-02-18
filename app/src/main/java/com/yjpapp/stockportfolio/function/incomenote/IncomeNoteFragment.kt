@@ -40,7 +40,8 @@ import java.math.BigDecimal
 class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.fragment_income_note) {
     private val TAG = IncomeNoteFragment::class.java.simpleName
     private lateinit var onBackPressedCallback: OnBackPressedCallback
-    private var incomeNoteListAdapter = IncomeNoteListAdapter(arrayListOf(), null).apply { setHasStableIds(true) }
+    private var incomeNoteListAdapter =
+        IncomeNoteListAdapter(arrayListOf(), null).apply { setHasStableIds(true) }
 
     private val viewModel: IncomeNoteViewModel by viewModels()
 
@@ -143,7 +144,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
             adapter = incomeNoteListAdapter
             addOnScrollListener(onScrollListener)
-            addOnItemTouchListener(object: RecyclerView.OnItemTouchListener {
+            addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
                 override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                     when (e.actionMasked) {
                         MotionEvent.ACTION_UP, MotionEvent.ACTION_DOWN -> {
@@ -152,6 +153,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                     }
                     return false
                 }
+
                 override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
                 override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
             })
@@ -208,7 +210,10 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             }
         }
 
-        override fun onDeleteButtonClick(respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?, position: Int) {
+        override fun onDeleteButtonClick(
+            respIncomeNoteListInfo: RespIncomeNoteListInfo.IncomeNoteInfo?,
+            position: Int
+        ) {
             if (respIncomeNoteListInfo != null) {
                 if (viewModel.isShowDeleteCheck() == StockConfig.FALSE) {
                     viewModel.requestDeleteIncomeNote(mContext, respIncomeNoteListInfo.id, position)
@@ -220,17 +225,17 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                         noticeText = "삭제하시겠습니까?",
                         leftBtnText = mContext.getString(R.string.Common_Cancel),
                         rightBtnText = mContext.getString(R.string.Common_Ok),
-                        leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                dialog.dismiss()
-                            }
+                        leftBtnListener = { view: View, dialog: CommonTwoBtnDialog ->
+                            dialog.dismiss()
                         },
-                        rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                if (incomeNoteListAdapter.itemCount > position) {
-                                    viewModel.requestDeleteIncomeNote(mContext, respIncomeNoteListInfo.id, position)
-                                    dialog.dismiss()
-                                }
+                        rightBtnListener = { view: View, dialog: CommonTwoBtnDialog ->
+                            if (incomeNoteListAdapter.itemCount > position) {
+                                viewModel.requestDeleteIncomeNote(
+                                    mContext,
+                                    respIncomeNoteListInfo.id,
+                                    position
+                                )
+                                dialog.dismiss()
                             }
                         }
                     )
@@ -302,8 +307,10 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             val totalGainNumber = event.data.total_price
             val totalGainPercent = event.data.total_percent
             binding.let {
-                val totalRealizationGainsLossesNumber = Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
-                it.txtTotalRealizationGainsLossesData.text = "${StockConfig.moneySymbol}$totalRealizationGainsLossesNumber"
+                val totalRealizationGainsLossesNumber =
+                    Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
+                it.txtTotalRealizationGainsLossesData.text =
+                    "${StockConfig.moneySymbol}$totalRealizationGainsLossesNumber"
                 if (totalGainPercent >= 0) {
                     it.txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
                     it.txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
@@ -311,7 +318,8 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                     it.txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
                     it.txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
                 }
-                it.txtTotalRealizationGainsLossesPercent.text = Utils.getRoundsPercentNumber(totalGainPercent)
+                it.txtTotalRealizationGainsLossesPercent.text =
+                    Utils.getRoundsPercentNumber(totalGainPercent)
             }
         }
         is IncomeNoteViewModel.Event.IncomeNoteDeleteSuccess -> {
@@ -335,7 +343,8 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             Toasty.normal(mContext, toastMsg).show()
             viewModel.requestTotalGain(mContext)
             if (event.data.id != -1) {
-                val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }
+                val beforeModifyIncomeNote =
+                    incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }
                 val index = incomeNoteListAdapter.incomeNoteListInfo.indexOf(beforeModifyIncomeNote)
                 incomeNoteListAdapter.incomeNoteListInfo[index] = event.data
                 incomeNoteListAdapter.notifyDataSetChanged()

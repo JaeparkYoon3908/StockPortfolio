@@ -62,8 +62,10 @@ class MemoReadWriteActivity :
             if (mode == MemoListFragment.MEMO_READ_MODE) { // 읽기 모드
                 memoListPosition = intent.getIntExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, 0)
                 id = intent.getIntExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_ID, 0)
-                savedTitle = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_TITLE)?: ""
-                savedContent = intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_CONTENT)?: ""
+                savedTitle =
+                    intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_TITLE) ?: ""
+                savedContent =
+                    intent.getStringExtra(MemoListFragment.INTENT_KEY_MEMO_INFO_CONTENT) ?: ""
             }
         }
         lifecycleScope.launch {
@@ -77,7 +79,10 @@ class MemoReadWriteActivity :
         is MemoReadWriteViewModel.Event.SendDeleteResult -> {
             if (event.isSuccess) {
                 val intent = Intent(applicationContext, MemoListFragment::class.java)
-                intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, activityViewModel.memoListPosition)
+                intent.putExtra(
+                    MemoListFragment.INTENT_KEY_LIST_POSITION,
+                    activityViewModel.memoListPosition
+                )
                 setResult(MemoListFragment.RESULT_DELETE, intent)
                 finish()
             } else {
@@ -173,7 +178,10 @@ class MemoReadWriteActivity :
     private fun deleteMemo() {
         activityViewModel.requestDeleteMemoData()
         val intent = Intent(applicationContext, MemoListFragment::class.java)
-        intent.putExtra(MemoListFragment.INTENT_KEY_LIST_POSITION, activityViewModel.memoListPosition)
+        intent.putExtra(
+            MemoListFragment.INTENT_KEY_LIST_POSITION,
+            activityViewModel.memoListPosition
+        )
         setResult(MemoListFragment.RESULT_DELETE, intent)
         finish()
     }
@@ -210,7 +218,8 @@ class MemoReadWriteActivity :
         when (activityViewModel.mode) {
             MemoListFragment.MEMO_ADD_MODE -> {
                 if (binding.etMemoReadWriteActivityTitle.text.toString().isNotEmpty() ||
-                    binding.etMemoReadWriteActivityContent.text.toString().isNotEmpty()) {
+                    binding.etMemoReadWriteActivityContent.text.toString().isNotEmpty()
+                ) {
                     showCheckActivityFinishDialog(getString(R.string.MemoListFragment_Msg_Check_Add_Mode_Cancel_Memo))
                 } else {
                     finish()
@@ -221,7 +230,8 @@ class MemoReadWriteActivity :
             }
             MemoListFragment.MEMO_UPDATE_MODE -> {
                 if (activityViewModel.savedTitle != binding.etMemoReadWriteActivityTitle.text.toString() ||
-                    activityViewModel.savedContent != binding.etMemoReadWriteActivityContent.text.toString()) {
+                    activityViewModel.savedContent != binding.etMemoReadWriteActivityContent.text.toString()
+                ) {
                     showCheckActivityFinishDialog(getString(R.string.MemoListFragment_Msg_Check_Update_Mode_Cancel_Memo))
                 } else {
                     finish()
@@ -229,21 +239,18 @@ class MemoReadWriteActivity :
             }
         }
     }
+
     private fun showCheckActivityFinishDialog(noticeText: String) {
         CommonTwoBtnDialog(this, CommonTwoBtnDialog.CommonTwoBtnData(
             noticeText = noticeText,
             leftBtnText = getString(R.string.Common_Cancel),
-            leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                    dialog.dismiss()
-                }
+            leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+                dialog.dismiss()
             },
             rightBtnText = getString(R.string.Common_Ok),
-            rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                    dialog.dismiss()
-                    finish()
-                }
+            rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+                dialog.dismiss()
+                finish()
             }
         )).show()
     }

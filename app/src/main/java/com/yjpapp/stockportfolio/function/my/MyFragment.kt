@@ -33,7 +33,11 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
         super.onAttach(context)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -88,23 +92,19 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                         noticeText = mContext.getString(R.string.My_Msg_Logout_Check),
                         leftBtnText = mContext.getString(R.string.Common_Cancel),
                         rightBtnText = mContext.getString(R.string.Common_Ok),
-                        leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                dialog.dismiss()
-                            }
+                        leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+                            dialog.dismiss()
                         },
-                        rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                when (myViewModel.getLoginType()) {
-                                    StockConfig.LOGIN_TYPE_NAVER -> {
-                                        myViewModel.requestDeleteNaverUserInfo(mContext)
-                                    }
-                                    else -> {
-                                        myViewModel.requestLogout(mContext)
-                                    }
+                        rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+                            when (myViewModel.getLoginType()) {
+                                StockConfig.LOGIN_TYPE_NAVER -> {
+                                    myViewModel.requestDeleteNaverUserInfo(mContext)
                                 }
-                                dialog.dismiss()
+                                else -> {
+                                    myViewModel.requestLogout(mContext)
+                                }
                             }
+                            dialog.dismiss()
                         }
                     )).show()
                 }
@@ -113,16 +113,13 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                         noticeText = mContext.getString(R.string.My_Msg_Member_Off_Check),
                         leftBtnText = mContext.getString(R.string.Common_Cancel),
                         rightBtnText = mContext.getString(R.string.Common_Ok),
-                        leftBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                dialog.dismiss()
-                            }
+                        leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+                            dialog.dismiss()
+
                         },
-                        rightBtnListener = object : CommonTwoBtnDialog.OnClickListener {
-                            override fun onClick(view: View, dialog: CommonTwoBtnDialog) {
-                                myViewModel.requestMemberOff(dialog.context)
-                                dialog.dismiss()
-                            }
+                        rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+                            myViewModel.requestMemberOff(dialog.context)
+                            dialog.dismiss()
                         }
                     )).show()
                 }
@@ -175,6 +172,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
             }
         }
     }
+
     private fun startLoginActivity() {
         Intent(mContext, LoginActivity::class.java).apply {
             mContext.startActivity(this)

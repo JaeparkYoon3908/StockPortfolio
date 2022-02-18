@@ -18,8 +18,8 @@ class CommonTwoBtnDialog(
         var noticeText: String = "",
         var leftBtnText: String = "",
         var rightBtnText: String = "",
-        var leftBtnListener: OnClickListener,
-        var rightBtnListener: OnClickListener
+        var leftBtnListener: (view: View, dialog: CommonTwoBtnDialog) -> Unit,
+        var rightBtnListener: (view: View, dialog: CommonTwoBtnDialog) -> Unit,
     )
 
     private var _binding: CommonDialogTwoBtnBinding? = null
@@ -44,15 +44,11 @@ class CommonTwoBtnDialog(
         binding.apply {
             data = commonTwoBtnData
             btnLeft.setOnClickListener {
-                commonTwoBtnData.leftBtnListener.onClick(it, this@CommonTwoBtnDialog)
+                commonTwoBtnData.leftBtnListener(it, this@CommonTwoBtnDialog)
             }
             btnRight.setOnClickListener {
-                commonTwoBtnData.rightBtnListener.onClick(it, this@CommonTwoBtnDialog)
+                commonTwoBtnData.rightBtnListener(it, this@CommonTwoBtnDialog)
             }
         }
-    }
-
-    interface OnClickListener {
-        fun onClick(view: View, dialog: CommonTwoBtnDialog)
     }
 }
