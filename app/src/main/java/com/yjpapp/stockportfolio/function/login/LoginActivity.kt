@@ -46,7 +46,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private val TAG = LoginActivity::class.simpleName
     private val gso by lazy {
         GoogleSignInOptions
-            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(StockConfig.GOOGLE_SIGN_CLIENT_ID)
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(StockConfig.GOOGLE_SIGN_CLIENT_ID)
             .requestEmail() // email addresses도 요청함
             .build()
     }
@@ -140,14 +141,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                             this@LoginActivity,
                             CommonOneBtnDialog.CommonOneBtnData(
                                 getString(R.string.Login_Naver_Necessary_Info_Check),
-                                getString(R.string.Common_Ok),
-                                object : CommonOneBtnDialog.OnClickListener {
-                                    override fun onClick(view: View, dialog: CommonOneBtnDialog) {
-                                        viewModel.requestDeleteNaverUserInfo(this@LoginActivity)
-                                        dialog.dismiss()
-                                    }
-                                }
-                            )
+                                getString(R.string.Common_Ok)
+                            ) { _: View, dialog: CommonOneBtnDialog ->
+                                viewModel.requestDeleteNaverUserInfo(this@LoginActivity)
+                                dialog.dismiss()
+                            }
                         ).apply {
                             setCancelable(false)
                         }.show()
@@ -159,7 +157,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                             user_email = data.response.email,
                             user_name = data.response.name,
                             login_type = StockConfig.LOGIN_TYPE_NAVER
-                    ))
+                        )
+                    )
                 } else {
                     ResponseAlertManger.showErrorAlert(
                         this@LoginActivity,
@@ -167,7 +166,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     )
                 }
             })
-            serverError.observe(this@LoginActivity, { errorCode->
+            serverError.observe(this@LoginActivity, { errorCode ->
                 when (errorCode) {
                     ServerRespCode.NetworkNotConnected -> {
                         ResponseAlertManger.showNetworkConnectErrorAlert(this@LoginActivity)
@@ -187,47 +186,55 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         googleLoginResult.launch(signInIntent)
     }
 
-    private val googleLoginResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+    private val googleLoginResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task: Task<GoogleSignInAccount> =
+                    GoogleSignIn.getSignedInAccountFromIntent(result.data)
 
-            try {
-                val acct: GoogleSignInAccount? = task.getResult(ApiException::class.java)
-                acct?.let {
-                    val personName = it.displayName
-                    val personGivenName = it.givenName
-                    val personFamilyName = it.familyName
-                    val personEmail = it.email
-                    val personId = it.id
-                    val personPhoto: Uri? = it.photoUrl
-                    StockLog.d(TAG, "handleSignInResult:personName $personName")
-                    StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
-                    StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
-                    StockLog.d(TAG, "handleSignInResult:personId $personId")
-                    StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
-                    StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
+                try {
+                    val acct: GoogleSignInAccount? = task.getResult(ApiException::class.java)
+                    acct?.let {
+                        val personName = it.displayName
+                        val personGivenName = it.givenName
+                        val personFamilyName = it.familyName
+                        val personEmail = it.email
+                        val personId = it.id
+                        val personPhoto: Uri? = it.photoUrl
+                        StockLog.d(TAG, "handleSignInResult:personName $personName")
+                        StockLog.d(TAG, "handleSignInResult:personGivenName $personGivenName")
+                        StockLog.d(TAG, "handleSignInResult:personEmail $personEmail")
+                        StockLog.d(TAG, "handleSignInResult:personId $personId")
+                        StockLog.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
+                        StockLog.d(TAG, "handleSignInResult:personPhoto $personPhoto")
 
-                    requestLogin(ReqSNSLogin(
-                        it.email?: "",
-                        it.displayName?: "",
-                        StockConfig.LOGIN_TYPE_GOOGLE
-                    ))
+                        requestLogin(
+                            ReqSNSLogin(
+                                it.email ?: "",
+                                it.displayName ?: "",
+                                StockConfig.LOGIN_TYPE_GOOGLE
+                            )
+                        )
+                    }
+                } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
+                    // Please refer to the GoogleSignInStatusCodes class reference for more information.
+                    e.message?.let {
+                        val msg = "${getString(R.string.Error_Msg_Normal)} code : ${e.statusCode}"
+                        ResponseAlertManger.showErrorAlert(this, it)
+                    }
+                    StockLog.e(TAG, "signInResult:failed code=" + e.statusCode)
                 }
-            } catch (e: ApiException) { // The ApiException status code indicates the detailed failure reason.
-                // Please refer to the GoogleSignInStatusCodes class reference for more information.
-                e.message?.let {
-                    val msg = "${getString(R.string.Error_Msg_Normal)} code : ${e.statusCode}"
-                    ResponseAlertManger.showErrorAlert(this, it)
-                }
-                StockLog.e(TAG, "signInResult:failed code=" + e.statusCode)
             }
         }
-    }
 
     private fun naverSignIn() {
         val mOAuthLoginModule = OAuthLogin.getInstance()
         mOAuthLoginModule.init(
-            this, StockConfig.NAVER_SIGN_CLIENT_ID, StockConfig.NAVER_SIGN_CLIENT_SECRET, getString(R.string.app_name))
+            this,
+            StockConfig.NAVER_SIGN_CLIENT_ID,
+            StockConfig.NAVER_SIGN_CLIENT_SECRET,
+            getString(R.string.app_name)
+        )
         val mOAuthLoginHandler = @SuppressLint("HandlerLeak") object : OAuthLoginHandler() {
             override fun run(success: Boolean) {
                 if (success) {
@@ -245,7 +252,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     viewModel.requestGetNaverUserInfo(this@LoginActivity)
                     startLoadingAnimation()
                 } else {
-                    val errorCode: String = mOAuthLoginModule.getLastErrorCode(this@LoginActivity).code
+                    val errorCode: String =
+                        mOAuthLoginModule.getLastErrorCode(this@LoginActivity).code
                     val errorDesc: String = mOAuthLoginModule.getLastErrorDesc(this@LoginActivity)
                     StockLog.d(TAG, "errorCode:$errorCode, errorDesc:$errorDesc")
                 }
@@ -261,34 +269,38 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             add("public_profile")
         }
         LoginManager.getInstance().logInWithReadPermissions(this, config)
-        LoginManager.getInstance().registerCallback(facebookCallbackManager, object : FacebookCallback<LoginResult?> {
-            override fun onSuccess(loginResult: LoginResult?) {
-                StockLog.d(TAG, "onSuccess")
-                val accessToken = AccessToken.getCurrentAccessToken()
-                val callback = GraphJSONObjectCallback { `object`, response ->
-                    val respFacebookUserInfo = Gson().fromJson(response.rawResponse, RespFacebookUserInfo::class.java)
-                    requestLogin(ReqSNSLogin(
-                        user_email = respFacebookUserInfo.email,
-                        user_name = respFacebookUserInfo.name,
-                        login_type = StockConfig.LOGIN_TYPE_FACEBOOK)
-                    )
+        LoginManager.getInstance()
+            .registerCallback(facebookCallbackManager, object : FacebookCallback<LoginResult?> {
+                override fun onSuccess(loginResult: LoginResult?) {
+                    StockLog.d(TAG, "onSuccess")
+                    val accessToken = AccessToken.getCurrentAccessToken()
+                    val callback = GraphJSONObjectCallback { `object`, response ->
+                        val respFacebookUserInfo =
+                            Gson().fromJson(response.rawResponse, RespFacebookUserInfo::class.java)
+                        requestLogin(
+                            ReqSNSLogin(
+                                user_email = respFacebookUserInfo.email,
+                                user_name = respFacebookUserInfo.name,
+                                login_type = StockConfig.LOGIN_TYPE_FACEBOOK
+                            )
+                        )
+                    }
+                    val request = GraphRequest.newMeRequest(accessToken, callback)
+                    val originField = "name, email"
+                    val parameters = Bundle()
+                    parameters.putString("fields", originField)
+                    request.parameters = parameters
+                    request.executeAsync()
                 }
-                val request = GraphRequest.newMeRequest(accessToken, callback)
-                val originField = "name, email"
-                val parameters = Bundle()
-                parameters.putString("fields", originField)
-                request.parameters = parameters
-                request.executeAsync()
-            }
 
-            override fun onCancel() {
-                StockLog.d(TAG, "onCancel")
-            }
+                override fun onCancel() {
+                    StockLog.d(TAG, "onCancel")
+                }
 
-            override fun onError(exception: FacebookException) {
-                StockLog.d(TAG, "onError : ${exception.stackTrace}")
-            }
-        })
+                override fun onError(exception: FacebookException) {
+                    StockLog.d(TAG, "onError : ${exception.stackTrace}")
+                }
+            })
     }
 
     private fun startMainActivity() {

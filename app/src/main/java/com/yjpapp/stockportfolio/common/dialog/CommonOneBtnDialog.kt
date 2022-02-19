@@ -18,7 +18,7 @@ class CommonOneBtnDialog(
     data class CommonOneBtnData(
         var noticeText: String = "",
         var btnText: String = "",
-        var btnListener: OnClickListener
+        var btnListener: (view: View, dialog: CommonOneBtnDialog) -> Unit
     )
 
     private var _binding: CommonDialogOneBtnBinding? = null
@@ -42,12 +42,8 @@ class CommonOneBtnDialog(
         binding.apply {
             data = commonOneBtnData
             btnConfirm.setOnSingleClickListener {
-                commonOneBtnData.btnListener.onClick(it, this@CommonOneBtnDialog)
+                commonOneBtnData.btnListener(it, this@CommonOneBtnDialog)
             }
         }
-    }
-
-    interface OnClickListener {
-        fun onClick(view: View, dialog: CommonOneBtnDialog)
     }
 }

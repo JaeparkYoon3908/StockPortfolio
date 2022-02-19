@@ -15,10 +15,8 @@ object ResponseAlertManger {
                 CommonOneBtnDialog.CommonOneBtnData(
                     noticeText = msg,
                     btnText = context.getString(R.string.Common_Ok),
-                    btnListener = object : CommonOneBtnDialog.OnClickListener {
-                        override fun onClick(view: View, dialog: CommonOneBtnDialog) {
-                            dialog.dismiss()
-                        }
+                    btnListener = { _: View, dialog: CommonOneBtnDialog ->
+                        dialog.dismiss()
                     }
                 )
             ).apply {
@@ -40,10 +38,8 @@ object ResponseAlertManger {
                 CommonOneBtnDialog.CommonOneBtnData(
                     noticeText = context.getString(R.string.Error_Msg_Network_Connect_Exception),
                     btnText = context.getString(R.string.Common_Ok),
-                    btnListener = object : CommonOneBtnDialog.OnClickListener {
-                        override fun onClick(view: View, dialog: CommonOneBtnDialog) {
-                            dialog.dismiss()
-                        }
+                    btnListener = { _: View, dialog: CommonOneBtnDialog ->
+                        dialog.dismiss()
                     }
                 )
             ).apply {
