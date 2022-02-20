@@ -31,12 +31,12 @@ class MyStockViewModel @Inject constructor(
     val totalGainPrice = MutableLiveData<String>() //상단 손익
     val totalGainPricePercent = MutableLiveData<String>() //상단 수익률
 
-    var currentPrice = MutableLiveData<String>()
-    val myStockInfoList = MutableLiveData<MutableList<MyStockEntity>>() //나의 주식 목록 List
-    var inputDialogSubjectName = "" //InputDialog 회사명
-    var inputDialogPurchaseDate = "" //InputDialog 매수일
-    var inputDialogPurchasePrice = "" //InputDialog 평균단가
-    var inputDialogPurchaseCount = "" //보유수량
+//    var currentPrice = MutableLiveData<String>()
+//    val myStockInfoList = MutableLiveData<MutableList<MyStockEntity>>() //나의 주식 목록 List
+//    var inputDialogSubjectName = "" //InputDialog 회사명
+//    var inputDialogPurchaseDate = "" //InputDialog 매수일
+//    var inputDialogPurchasePrice = "" //InputDialog 평균단가
+//    var inputDialogPurchaseCount = "" //보유수량
 
 //    val showErrorToast = MutableLiveData<Event<Boolean>>() //필수 값을 모두 입력해주세요 Toast
 //    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
@@ -49,11 +49,6 @@ class MyStockViewModel @Inject constructor(
         val myStockInfoList = myStockRepository.getAllMyStock()
         event(Event.SendMyStockInfoList(myStockInfoList))
     }
-//    fun onViewCreated() {
-//        val myStockInfoList = myStockRepository.getAllMyStock()
-//        event(Event.SendMyStockInfoList(myStockInfoList))
-////        myStockInfoList.value = myStockRepository.getAllMyStock()
-//    }
 
     //확인버튼 클릭 후 Save
     fun saveMyStock(

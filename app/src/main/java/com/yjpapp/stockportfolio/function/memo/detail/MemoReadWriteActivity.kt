@@ -89,10 +89,8 @@ class MemoReadWriteActivity :
                 CommonOneBtnDialog(this@MemoReadWriteActivity, CommonOneBtnDialog.CommonOneBtnData(
                     noticeText = getString(R.string.Error_Msg_Normal),
                     btnText = getString(R.string.Common_Ok),
-                    btnListener = object : CommonOneBtnDialog.OnClickListener {
-                        override fun onClick(view: View, dialog: CommonOneBtnDialog) {
-                            dialog.dismiss()
-                        }
+                    btnListener = { view: View, dialog: CommonOneBtnDialog ->
+                        dialog.dismiss()
                     }
                 )).show()
             }

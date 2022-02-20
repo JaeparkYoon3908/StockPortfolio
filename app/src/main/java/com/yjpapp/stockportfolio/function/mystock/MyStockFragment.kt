@@ -39,7 +39,6 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        myStockViewModel.onViewCreated()
         setHasOptionsMenu(true)
         initLayout()
         initData()
@@ -56,10 +55,10 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
         when (item.itemId) {
             R.id.menu_MyStockFragment_Add -> {
                 myStockViewModel.apply {
-                    inputDialogSubjectName = ""
-                    inputDialogPurchaseDate = ""
-                    inputDialogPurchasePrice = ""
-                    inputDialogPurchaseCount = ""
+//                    inputDialogSubjectName = ""
+//                    inputDialogPurchaseDate = ""
+//                    inputDialogPurchasePrice = ""
+//                    inputDialogPurchaseCount = ""
                 }
                 showInputDialog(true, 0)
             }
@@ -174,10 +173,10 @@ class MyStockFragment : BaseFragment<FragmentMyStockBinding>(R.layout.fragment_m
                 Toasty.error(mContext, getString(R.string.Error_Msg_Not_Found_Data)).show()
                 return
             }
-            inputDialogSubjectName = myStockEntity.subjectName
-            inputDialogPurchaseDate = myStockEntity.purchaseDate
-            inputDialogPurchasePrice = myStockEntity.purchasePrice
-            inputDialogPurchaseCount = myStockEntity.purchaseCount
+//            inputDialogSubjectName = myStockEntity.subjectName
+//            inputDialogPurchaseDate = myStockEntity.purchaseDate
+//            inputDialogPurchasePrice = myStockEntity.purchasePrice
+//            inputDialogPurchaseCount = myStockEntity.purchaseCount
             showInputDialog(false, myStockEntity.id)
         }
     }

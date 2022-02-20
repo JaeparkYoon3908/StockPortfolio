@@ -1,6 +1,5 @@
 package com.yjpapp.stockportfolio.function
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -11,7 +10,7 @@ import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
 import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteFragment
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.function.my.MyFragment
-import com.yjpapp.stockportfolio.function.mystock.MyStockComposeFragment
+import com.yjpapp.stockportfolio.function.mystock.MyStockFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,14 +65,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         startFirstFragment()
     }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (currentFragment == memoListFragment) {
-//            val memoListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_MEMO_LIST)
-//            memoListFragment?.onActivityResult(requestCode, resultCode, data)
-//        }
-//    }
 
     override fun onBackPressed() {
         if (currentFragment == incomeNoteFragment ||

@@ -75,10 +75,10 @@ class MyStockComposeFragment : Fragment() {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Add -> {
                 myStockViewModel.apply {
-                    inputDialogSubjectName = ""
-                    inputDialogPurchaseDate = ""
-                    inputDialogPurchasePrice = ""
-                    inputDialogPurchaseCount = ""
+//                    inputDialogSubjectName = ""
+//                    inputDialogPurchaseDate = ""
+//                    inputDialogPurchasePrice = ""
+//                    inputDialogPurchaseCount = ""
                 }
 //                showInputDialog(true, 0)
             }

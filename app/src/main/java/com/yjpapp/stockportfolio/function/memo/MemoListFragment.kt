@@ -47,9 +47,6 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
         const val MEMO_ADD_MODE = "MEMO_WRITE_MODE" //새 메모 추가모드
         const val MEMO_UPDATE_MODE = "MEMO_UPDATE_MODE" //메모 읽기 모드
 
-        const val REQUEST_ADD = 0
-        const val REQUEST_READ = 1
-
         const val RESULT_EMPTY = 10000
         const val RESULT_DELETE = RESULT_EMPTY + 1
         const val RESULT_UPDATE = RESULT_EMPTY + 2
@@ -141,7 +138,6 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
                 viewModel.getAllMemoInfoList()
             }
             RESULT_EMPTY -> {
-//                val mode = it?.data?.getStringExtra(INTENT_KEY_MEMO_MODE)
                 Toasty.normal(
                     mContext,
                     getString(R.string.MemoListFragment_Empty_Data_Message),
@@ -149,36 +145,10 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
                 ).show()
             }
             RESULT_DELETE, RESULT_UPDATE -> {
-//                val position = it?.data?.getIntExtra(INTENT_KEY_LIST_POSITION, 0)!!
                 viewModel.getAllMemoInfoList()
             }
         }
     }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        when (resultCode) {
-//            RESULT_OK -> {
-//                when (requestCode) {
-//                    REQUEST_ADD -> {
-//                        viewModel.getAllMemoInfoList()
-//                    }
-//                }
-//            }
-//            RESULT_EMPTY -> {
-////                val mode = data?.getStringExtra(INTENT_KEY_MEMO_MODE)
-//                Toasty.normal(
-//                    mContext,
-//                    getString(R.string.MemoListFragment_Empty_Data_Message),
-//                    Toasty.LENGTH_LONG
-//                ).show()
-//            }
-//            RESULT_DELETE, RESULT_UPDATE -> {
-////                val position = data?.getIntExtra(INTENT_KEY_LIST_POSITION, 0)!!
-//                viewModel.getAllMemoInfoList()
-//            }
-//        }
-//    }
 
     private fun initRecyclerView() {
         memoListAdapter.callBack = memoListAdapterCallBack
@@ -209,13 +179,11 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-//                finish()
             }
             R.id.menu_MemoListFragment_Add -> {
                 val intent = Intent(mContext, MemoReadWriteActivity::class.java)
                 intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_ADD_MODE)
                 memoResultLauncher.launch(intent)
-//                startReadWriteActivityForResult(intent, REQUEST_ADD)
             }
 
             R.id.menu_MemoListFragment_Delete -> {
@@ -224,11 +192,6 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
         }
         return super.onOptionsItemSelected(item)
     }
-
-    //View Interface CallBack
-//    private fun startReadWriteActivityForResult(intent: Intent, requestCode: Int) {
-//        activity?.startActivityForResult(intent, requestCode)
-//    }
 
     private fun showAddButton() {
         menu?.findItem(R.id.menu_MemoListFragment_Add)?.isVisible = true
