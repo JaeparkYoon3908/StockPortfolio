@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.function.mystock
 
 
 import android.content.Context
+import androidx.compose.runtime.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,13 +31,8 @@ class MyStockViewModel @Inject constructor(
     val totalEvaluationAmount = MutableLiveData<String>() //상단 총 평가금액
     val totalGainPrice = MutableLiveData<String>() //상단 손익
     val totalGainPricePercent = MutableLiveData<String>() //상단 수익률
-
-//    var currentPrice = MutableLiveData<String>()
-//    val myStockInfoList = MutableLiveData<MutableList<MyStockEntity>>() //나의 주식 목록 List
-//    var inputDialogSubjectName = "" //InputDialog 회사명
-//    var inputDialogPurchaseDate = "" //InputDialog 매수일
-//    var inputDialogPurchasePrice = "" //InputDialog 평균단가
-//    var inputDialogPurchaseCount = "" //보유수량
+    var myStockInfoList = mutableStateListOf<MyStockEntity>() //나의 주식 목록 List
+        private set
 
 //    val showErrorToast = MutableLiveData<Event<Boolean>>() //필수 값을 모두 입력해주세요 Toast
 //    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
@@ -46,7 +42,7 @@ class MyStockViewModel @Inject constructor(
      * MyStockFragment 영역
      */
     init {
-        val myStockInfoList = myStockRepository.getAllMyStock()
+        myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
         event(Event.SendMyStockInfoList(myStockInfoList))
     }
 
@@ -72,8 +68,9 @@ class MyStockViewModel @Inject constructor(
                 myStockRepository.updateMyStock(myStockEntity)
                 NOTIFY_HANDLER_UPDATE
             }
-//            myStockInfoList.value = myStockRepository.getAllMyStock()
-            event(Event.SendMyStockInfoList(myStockRepository.getAllMyStock()))
+            myStockInfoList.add(myStockEntity)
+
+//            event(Event.SendMyStockInfoList(myStockRepository.getAllMyStock()))
             return true
         } catch (e: Exception) {
             e.stackTrace

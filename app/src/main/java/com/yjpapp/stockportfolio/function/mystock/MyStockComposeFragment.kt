@@ -11,9 +11,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -28,7 +26,10 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.common.theme.BackgroundFBFBFBFB
+import com.yjpapp.stockportfolio.common.theme.Color80000000
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
+import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import dagger.hilt.android.AndroidEntryPoint
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
@@ -74,13 +75,7 @@ class MyStockComposeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Add -> {
-                myStockViewModel.apply {
-//                    inputDialogSubjectName = ""
-//                    inputDialogPurchaseDate = ""
-//                    inputDialogPurchasePrice = ""
-//                    inputDialogPurchaseCount = ""
-                }
-//                showInputDialog(true, 0)
+                showInputDialog(true, 0)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -104,45 +99,6 @@ class MyStockComposeFragment : Fragment() {
     /**
      * Compose 영역
      */
-    @Preview
-    @Composable
-    private fun SimpleComposable() {
-        Column {
-            Text(
-                text = "Hello world.",
-                modifier = Modifier.clickable {
-                    Toasty.normal(requireContext(), "Test!!").show()
-                }
-            )
-
-            Text(
-                text = "Alan walker",
-                modifier = Modifier.clickable {
-                    Toasty.normal(requireContext(), "Test!!").show()
-                }
-            )
-
-            Text(
-                text = "All for down.",
-                modifier = Modifier.clickable {
-                    Toasty.normal(requireContext(), "Test!!").show()
-                }
-            )
-
-            val count = remember { mutableStateOf(0) }
-            Text(
-                text = count.value.toString(),
-                fontSize = 25.sp,
-                color = colorResource(id = R.color.color_4876c7),
-                modifier = Modifier
-                    .padding(start = 20.dp, top = 20.dp)
-                    .width(400.dp)
-                    .height(100.dp)
-                    .clickable { count.value += 1 }
-            )
-        }
-    }
-
     @Preview
     @Composable
     private fun TotalPriceComposable() {
@@ -256,16 +212,24 @@ class MyStockComposeFragment : Fragment() {
     @Preview
     @Composable
     private fun StockListComposable() {
-        LazyColumn {
-            items(10) {
-                StockListItem(order = it)
+        LazyColumn(
+            reverseLayout = true
+        ) {
+            items(myStockViewModel.myStockInfoList.size) {
+                StockListItem(
+                    position = it,
+                    myStockEntity = myStockViewModel.myStockInfoList[it]
+                )
             }
         }
     }
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
-    private fun StockListItem(order: Int) {
+    private fun StockListItem(
+        position: Int,
+        myStockEntity: MyStockEntity
+    ) {
         var isOpenRevealSwipe = false
 
         val maxRevealDp = 110.dp
@@ -275,7 +239,7 @@ class MyStockComposeFragment : Fragment() {
                 .wrapContentHeight()
                 .fillMaxWidth(),
             maxRevealDp = maxRevealDp,
-            backgroundCardEndColor = colorResource(id = R.color.color_background_fbfbfb),
+            backgroundCardEndColor = BackgroundFBFBFBFB,
             animateBackgroundCardColor = false,
             directions = setOf(
 //        RevealDirection.StartToEnd,
@@ -293,6 +257,7 @@ class MyStockComposeFragment : Fragment() {
                 Column(
                     modifier = Modifier
                         .width(maxRevealDp)
+                        .background(Color80000000)
                         .fillMaxHeight(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -367,7 +332,7 @@ class MyStockComposeFragment : Fragment() {
                         .padding(start = 15.dp, end = 15.dp)
                     ) {
                         Text(
-                            text = "회사 이름",
+                            text = myStockEntity.subjectName,
                             fontSize = 16.sp,
                             maxLines = 1,
                             color = colorResource(id = R.color.color_222222),
