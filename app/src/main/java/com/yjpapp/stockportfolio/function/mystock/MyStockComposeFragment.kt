@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.common.theme.BackgroundFBFBFBFB
-import com.yjpapp.stockportfolio.common.theme.Color80000000
+import com.yjpapp.stockportfolio.common.theme.Color_FBFBFBFB
+import com.yjpapp.stockportfolio.common.theme.Color_80000000
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import dagger.hilt.android.AndroidEntryPoint
@@ -239,7 +239,7 @@ class MyStockComposeFragment : Fragment() {
                 .wrapContentHeight()
                 .fillMaxWidth(),
             maxRevealDp = maxRevealDp,
-            backgroundCardEndColor = BackgroundFBFBFBFB,
+            backgroundCardEndColor = Color_FBFBFBFB,
             animateBackgroundCardColor = false,
             directions = setOf(
 //        RevealDirection.StartToEnd,
@@ -257,7 +257,6 @@ class MyStockComposeFragment : Fragment() {
                 Column(
                     modifier = Modifier
                         .width(maxRevealDp)
-                        .background(Color80000000)
                         .fillMaxHeight(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -270,7 +269,7 @@ class MyStockComposeFragment : Fragment() {
                             }
                             .fillMaxWidth()
                             .weight(0.333f)
-                            .background(color = colorResource(id = R.color.color_80000000))
+                            .background(color = Color_80000000)
                     ) {
 
                         Text(

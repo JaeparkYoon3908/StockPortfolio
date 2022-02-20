@@ -8,5 +8,5 @@ fun getColor(colorString: String): Color {
 
 val Black = Color(0xff000000)
 val White = Color(0xffffffff)
-val BackgroundFBFBFBFB = Color(0xfffbfbfb)
-val Color80000000 = Color(0x80000000)
+val Color_FBFBFBFB = Color(0xfffbfbfb)
+val Color_80000000 = Color(0x80000000)
