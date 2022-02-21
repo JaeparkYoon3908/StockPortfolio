@@ -42,7 +42,7 @@ import es.dmoral.toasty.Toasty
  * @since 2022.02
  */
 @AndroidEntryPoint
-class MyStockComposeFragment : Fragment() {
+class MyStockFragment : Fragment() {
     private val myStockViewModel: MyStockViewModel by viewModels()
     private lateinit var mContext: Context
 
