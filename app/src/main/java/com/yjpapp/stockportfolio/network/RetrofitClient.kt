@@ -22,7 +22,7 @@ class RetrofitClient(
     enum class BaseServerURL(val url: String) {
         MY("http://112.147.50.241"),
         NAVER_OPEN_API("https://openapi.naver.com"),
-        NAVER_NID("https:Z//nid.naver.com")
+        NAVER_NID("https://nid.naver.com")
     }
 
     private val TAG = RetrofitClient::class.java.simpleName

@@ -418,7 +418,7 @@ class MyStockFragment : Fragment() {
                                 .weight(0.5f)
                         ) {
                             Text(
-                                text = "매수일",
+                                text = getString(R.string.MyStockFragment_Purchase_Date),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_666666)
