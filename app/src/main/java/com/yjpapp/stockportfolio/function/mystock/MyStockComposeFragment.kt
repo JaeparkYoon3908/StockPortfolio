@@ -7,11 +7,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -26,8 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.common.theme.Color_FBFBFBFB
 import com.yjpapp.stockportfolio.common.theme.Color_80000000
+import com.yjpapp.stockportfolio.common.theme.Color_FBFBFBFB
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +36,11 @@ import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 import es.dmoral.toasty.Toasty
 
+/**
+ * 1.5 신규버전 업데이트 기능 (나의 주식)
+ * @author Yoon Jae-park
+ * @since 2022.02
+ */
 @AndroidEntryPoint
 class MyStockComposeFragment : Fragment() {
     private val myStockViewModel: MyStockViewModel by viewModels()
@@ -75,25 +81,10 @@ class MyStockComposeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Add -> {
-                showInputDialog(true, 0)
+                showInputDialog(null)
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showInputDialog(isInsertMode: Boolean, id: Int) {
-        MyStockInputDialog(mContext, object : MyStockInputDialog.CallBack {
-            override fun onInputDialogCompleteClicked(
-                dialog: MyStockInputDialog,
-                myStockInputDialogData: MyStockInputDialog.MyStockInputDialogData
-            ) {
-                if (!myStockViewModel.saveMyStock(mContext, isInsertMode, id, myStockInputDialogData)) {
-                    Toasty.error(mContext, mContext.getString(R.string.Error_Msg_Normal), Toasty.LENGTH_SHORT).show()
-                    return
-                }
-                dialog.dismiss()
-            }
-        }).show()
     }
 
     /**
@@ -102,14 +93,15 @@ class MyStockComposeFragment : Fragment() {
     @Preview
     @Composable
     private fun TotalPriceComposable() {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = dimensionResource(id = R.dimen.common_15dp),
-                end = dimensionResource(id = R.dimen.common_15dp)
-            )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = dimensionResource(id = R.dimen.common_15dp),
+                    end = dimensionResource(id = R.dimen.common_15dp)
+                )
         ) {
-            Row (
+            Row(
                 modifier = Modifier
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
             ) {
@@ -133,7 +125,7 @@ class MyStockComposeFragment : Fragment() {
                 )
             }
 
-            Row (
+            Row(
                 modifier = Modifier
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
 
@@ -157,7 +149,7 @@ class MyStockComposeFragment : Fragment() {
                 )
             }
 
-            Row (
+            Row(
                 modifier = Modifier
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
             ) {
@@ -179,7 +171,7 @@ class MyStockComposeFragment : Fragment() {
                 )
             }
 
-            Row (
+            Row(
                 modifier = Modifier
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
             ) {
@@ -209,11 +201,42 @@ class MyStockComposeFragment : Fragment() {
         }
     }
 
+    private fun showInputDialog(
+        dialogData: MyStockInputDialog.MyStockInputDialogData?
+    ) {
+        MyStockInputDialog(
+            mContext = mContext,
+            myStockInputDialogData = dialogData,
+            callBack = object : MyStockInputDialog.CallBack {
+                override fun onInputDialogCompleteClicked(
+                    dialog: MyStockInputDialog,
+                    userInputDialogData: MyStockInputDialog.MyStockInputDialogData
+                ) {
+
+                    if (!myStockViewModel.saveMyStock(
+                            context = mContext,
+                            id = dialogData?.id?: 0,
+                            userInputDialogData = userInputDialogData)
+                    ) {
+                        Toasty.error(
+                            mContext,
+                            mContext.getString(R.string.Error_Msg_Normal),
+                            Toasty.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
+                    dialog.dismiss()
+                }
+            }).show()
+    }
+
     @Preview
     @Composable
     private fun StockListComposable() {
+        val listState = rememberLazyListState()
         LazyColumn(
-            reverseLayout = true
+            reverseLayout = true,
+            state = listState
         ) {
             items(myStockViewModel.myStockInfoList.size) {
                 StockListItem(
@@ -265,7 +288,14 @@ class MyStockComposeFragment : Fragment() {
                         contentAlignment = Center,
                         modifier = Modifier
                             .clickable {
-                                showInputDialog(isInsertMode = false, id = 5)
+                                val dialogData = MyStockInputDialog.MyStockInputDialogData(
+                                    id = myStockEntity.id,
+                                    subjectName = myStockEntity.subjectName,
+                                    purchaseDate = myStockEntity.purchaseDate,
+                                    purchasePrice = myStockEntity.purchasePrice,
+                                    purchaseCount = myStockEntity.purchaseCount
+                                )
+                                showInputDialog(dialogData)
                             }
                             .fillMaxWidth()
                             .weight(0.333f)
@@ -273,9 +303,9 @@ class MyStockComposeFragment : Fragment() {
                     ) {
 
                         Text(
-                            text = "편집",
+                            text = mContext.getString(R.string.Common_Edit),
                             fontSize = 16.sp,
-                            color = colorResource(id = R.color.color_ffffff),
+                            color = colorResource(id = R.color.color_ffffff)
                         )
                     }
                     Box(
@@ -289,7 +319,7 @@ class MyStockComposeFragment : Fragment() {
                             .background(color = colorResource(id = R.color.color_4876c7))
                     ) {
                         Text(
-                            text = "매도",
+                            text = mContext.getString(R.string.Common_Sell),
                             fontSize = 16.sp,
                             color = colorResource(id = R.color.color_ffffff)
                         )
@@ -305,7 +335,7 @@ class MyStockComposeFragment : Fragment() {
                             .background(color = colorResource(id = R.color.color_cd4632))
                     ) {
                         Text(
-                            text = "삭제",
+                            text = mContext.getString(R.string.Common_Delete),
                             fontSize = 16.sp,
                             color = colorResource(id = R.color.color_ffffff)
                         )
@@ -313,12 +343,13 @@ class MyStockComposeFragment : Fragment() {
                 }
             }
         ) {
-            Card( modifier = Modifier
-                .fillMaxSize()
-                .wrapContentHeight(),
+            Card(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentHeight(),
                 elevation = 0.dp,
                 backgroundColor = colorResource(id = R.color.color_background_fbfbfb)
-            ){
+            ) {
                 Column(
                     modifier = Modifier
 //                    .padding(bottom = 10.dp)
@@ -327,8 +358,9 @@ class MyStockComposeFragment : Fragment() {
 //                    .background(color = colorResource(id = R.color.color_background_fbfbfb))
                 ) {
 
-                    Row(Modifier
-                        .padding(start = 15.dp, end = 15.dp)
+                    Row(
+                        Modifier
+                            .padding(start = 15.dp, end = 15.dp)
                     ) {
                         Text(
                             text = myStockEntity.subjectName,

@@ -11,7 +11,6 @@ import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteFragment
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.function.my.MyFragment
 import com.yjpapp.stockportfolio.function.mystock.MyStockComposeFragment
-import com.yjpapp.stockportfolio.function.mystock.MyStockFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,7 +29,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         const val FRAGMENT_TAG_MY = "my"
     }
 
-//    private val myStockFragment = MyStockFragment()
     private val myStockFragment = MyStockComposeFragment()
     private val incomeNoteFragment = IncomeNoteFragment()
     private val memoListFragment = MemoListFragment()

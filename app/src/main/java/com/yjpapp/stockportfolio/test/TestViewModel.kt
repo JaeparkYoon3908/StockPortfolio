@@ -9,13 +9,18 @@ import com.yjpapp.stockportfolio.test.model.LatestNewsUiState
 import com.yjpapp.stockportfolio.test.model.UserMessage
 import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.NetworkUtils
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
-class TestViewModel: ViewModel() {
+@HiltViewModel
+class TestViewModel @Inject constructor(
+
+) : ViewModel() {
     private val _uiState = MutableStateFlow(LatestNewsUiState(isLoading = true))
     val uiState: StateFlow<LatestNewsUiState> get() = _uiState
 
@@ -67,7 +72,6 @@ class TestViewModel: ViewModel() {
     }
 
     fun refreshNewSingleLiveData(message: String) {
-
         _eventLiveData.value = Event(message)
     }
 }

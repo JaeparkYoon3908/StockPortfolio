@@ -24,6 +24,7 @@ import es.dmoral.toasty.Toasty
 
 class MyStockInputDialog(
     private val mContext: Context,
+    private var myStockInputDialogData: MyStockInputDialogData? = MyStockInputDialogData(),
     private val callBack: CallBack
 ) : AlertDialog(mContext),
     SupportedDatePickerDialog.OnDateSetListener
@@ -41,6 +42,7 @@ class MyStockInputDialog(
     private var purchaseDay = ""
     private var convertText = ""
     data class MyStockInputDialogData(
+        var id: Int = -1,
         var subjectName: String = "",
         var purchaseDate: String = "",
         var purchasePrice: String = "",
@@ -60,7 +62,12 @@ class MyStockInputDialog(
         //EditText focus 했을 때 키보드가 보이도록 설정
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         Utils.setDialogWidthResize(mContext, this, 0.85f)
+        initData()
         initView()
+    }
+
+    private fun initData() {
+        binding.data = myStockInputDialogData
     }
 
     private fun initView() {
@@ -179,6 +186,6 @@ class MyStockInputDialog(
     }
 
     interface CallBack {
-        fun onInputDialogCompleteClicked(dialog: MyStockInputDialog, myStockInputDialogData: MyStockInputDialogData)
+        fun onInputDialogCompleteClicked(dialog: MyStockInputDialog, userInputDialogData: MyStockInputDialogData)
     }
 }

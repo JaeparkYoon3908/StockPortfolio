@@ -23,10 +23,6 @@ class MyStockViewModel @Inject constructor(
     private val _eventFlow = MutableEventFlow<Event>()
     val eventFlow = _eventFlow.asEventFlow()
 
-    val NOTIFY_HANDLER_INSERT = "NOTIFY_INSERT"
-    val NOTIFY_HANDLER_DELETE = "NOTIFY_DELETE"
-    val NOTIFY_HANDLER_UPDATE = "NOTIFY_UPDATE"
-
     val totalPurchasePrice = MutableLiveData<String>() //상단 총 매수금액
     val totalEvaluationAmount = MutableLiveData<String>() //상단 총 평가금액
     val totalGainPrice = MutableLiveData<String>() //상단 손익
@@ -36,7 +32,6 @@ class MyStockViewModel @Inject constructor(
 
 //    val showErrorToast = MutableLiveData<Event<Boolean>>() //필수 값을 모두 입력해주세요 Toast
 //    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
-    var notifyHandler = NOTIFY_HANDLER_INSERT //RecyclerView adapter notify handler
 
     /**
      * MyStockFragment 영역
@@ -49,28 +44,24 @@ class MyStockViewModel @Inject constructor(
     //확인버튼 클릭 후 Save
     fun saveMyStock(
         context: Context,
-        isInsertMode: Boolean,
         id: Int,
-        myStockInputDialogData: MyStockInputDialog.MyStockInputDialogData
+        userInputDialogData: MyStockInputDialog.MyStockInputDialogData
     ): Boolean {
         try {
             val myStockEntity = MyStockEntity(
                 id,
-                myStockInputDialogData.subjectName,
-                myStockInputDialogData.purchaseDate,
-                myStockInputDialogData.purchasePrice,
-                myStockInputDialogData.purchaseCount
+                userInputDialogData.subjectName,
+                userInputDialogData.purchaseDate,
+                userInputDialogData.purchasePrice,
+                userInputDialogData.purchaseCount
             )
-            notifyHandler = if (isInsertMode) {
+            if (id == 0) {
                 myStockRepository.insertMyStock(myStockEntity)
-                NOTIFY_HANDLER_INSERT
+                myStockInfoList.add(myStockEntity)
             } else {
                 myStockRepository.updateMyStock(myStockEntity)
-                NOTIFY_HANDLER_UPDATE
+                myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
             }
-            myStockInfoList.add(myStockEntity)
-
-//            event(Event.SendMyStockInfoList(myStockRepository.getAllMyStock()))
             return true
         } catch (e: Exception) {
             e.stackTrace
@@ -81,7 +72,6 @@ class MyStockViewModel @Inject constructor(
 
     fun deleteMyStock(myStockEntity: MyStockEntity) {
         myStockRepository.deleteMyStock((myStockEntity))
-        notifyHandler = NOTIFY_HANDLER_DELETE
         val myStockInfoList = myStockRepository.getAllMyStock()
         event(Event.SendMyStockInfoList(myStockInfoList))
     }
