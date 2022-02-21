@@ -24,23 +24,23 @@ class IncomeNoteRepository(
     private val retrofitClient: RetrofitClient
 ) {
     suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPostIncomeNote(reqIncomeNoteInfo)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestPostIncomeNote(reqIncomeNoteInfo)
     }
 
     suspend fun requestDeleteIncomeNote(context: Context, id: Int): Response<RespStatusInfo>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteIncomeNote(id)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestDeleteIncomeNote(id)
     }
 
     suspend fun requestPutIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestPutIncomeNote(reqIncomeNoteInfo)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestPutIncomeNote(reqIncomeNoteInfo)
     }
 
     suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>) : Response<RespIncomeNoteListInfo>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestGetIncomeNote(params)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestGetIncomeNote(params)
     }
 
     suspend fun requestTotalGain(context: Context, params: HashMap<String, String>): Response<RespTotalGainIncomeNoteData>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestTotalGainIncomeNote(params)
+        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestTotalGainIncomeNote(params)
     }
 
     inner class IncomeNotePagingSource(val context: Context, var startDate: String, var endDate: String): PagingSource<Int, RespIncomeNoteListInfo.IncomeNoteInfo>() {

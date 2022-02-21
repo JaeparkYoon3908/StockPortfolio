@@ -20,7 +20,7 @@ class RetrofitClient(
     private val preferenceRepository: PreferenceRepository
 ) {
     enum class BaseServerURL(val url: String) {
-        MY("http://112.147.50.241"),
+        RaspberryPi("http://112.147.50.241"),
         NAVER_OPEN_API("https://openapi.naver.com"),
         NAVER_NID("https://nid.naver.com")
     }
@@ -29,17 +29,17 @@ class RetrofitClient(
     private val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
     private val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
+
     fun getService(context: Context, baseServerURL: BaseServerURL): RetrofitService? {
         if (!NetworkUtils.isInternetAvailable(context)) {
             return null
         }
         val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceRepository)
-
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-        val okHttpBuilder = OkHttpClient.Builder().apply {
+        val client = OkHttpClient.Builder().apply {
             addInterceptor(interceptor)
             if (BuildConfig.DEBUG) {
                 addInterceptor(httpLoggingInterceptor)
@@ -47,8 +47,7 @@ class RetrofitClient(
             retryOnConnectionFailure(true)
             connectTimeout(CONNECT_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
             readTimeout(READ_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
-        }
-        val client = okHttpBuilder.build()
+        }.build()
 
         val retrofit = Retrofit.Builder().apply {
             baseUrl(baseServerURL.url)
@@ -68,7 +67,7 @@ class RetrofitClient(
         override fun intercept(chain: Interceptor.Chain): Response {
             val builder =
                 when (baseServerURL) {
-                    BaseServerURL.MY -> {
+                    BaseServerURL.RaspberryPi -> {
                         val authorization = preferenceRepository
                             .getPreference(PrefKey.KEY_USER_TOKEN) ?: ""
                         getClientBuilderWithToken(context, chain, authorization)

@@ -20,10 +20,10 @@ class UserRepository(
 ) {
 
     suspend fun postUserInfo(context: Context, reqSnsLogin: ReqSNSLogin) =
-        retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestRegUser(reqSnsLogin)
+        retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestRegUser(reqSnsLogin)
 
     suspend fun getUserInfo(context: Context, params: HashMap<String, String>) =
-        retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestUserInfo(params)
+        retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestUserInfo(params)
 
     suspend fun getNaverUserInfo(context: Context) =
         retrofitClient.getService(context, RetrofitClient.BaseServerURL.NAVER_OPEN_API)?.requestGetNaverUserInfo()
@@ -46,7 +46,7 @@ class UserRepository(
     }
 
     suspend fun deleteUserInfo(context: Context) =
-        retrofitClient.getService(context, RetrofitClient.BaseServerURL.MY)?.requestDeleteUserInfo()
+        retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestDeleteUserInfo()
 
     fun getLoginType(): String {
         return preferenceRepository.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
