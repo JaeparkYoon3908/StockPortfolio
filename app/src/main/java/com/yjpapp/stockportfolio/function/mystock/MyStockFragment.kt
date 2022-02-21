@@ -212,11 +212,11 @@ class MyStockFragment : Fragment() {
                     dialog: MyStockInputDialog,
                     userInputDialogData: MyStockInputDialog.MyStockInputDialogData
                 ) {
-
                     if (!myStockViewModel.saveMyStock(
                             context = mContext,
                             id = dialogData?.id?: 0,
-                            userInputDialogData = userInputDialogData)
+                            userInputDialogData = userInputDialogData
+                        )
                     ) {
                         Toasty.error(
                             mContext,
@@ -386,7 +386,7 @@ class MyStockFragment : Fragment() {
                             )
                             //수익
                             Text(
-                                text = "700",
+                                text = myStockEntity.purchasePrice,
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_666666),
@@ -425,7 +425,7 @@ class MyStockFragment : Fragment() {
                             )
 
                             Text(
-                                text = "2021-03-29",
+                                text = myStockEntity.purchaseDate,
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_222222),
@@ -448,7 +448,7 @@ class MyStockFragment : Fragment() {
                             )
 
                             Text(
-                                text = "2,500",
+                                text = myStockEntity.purchasePrice,
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_222222),
