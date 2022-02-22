@@ -17,6 +17,7 @@ import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.util.Utils
 import es.dmoral.toasty.Toasty
@@ -72,11 +73,11 @@ class MyStockInputDialog(
 
     private fun initView() {
         binding.apply {
-            etSubjectName.setOnClickListener {
+            etSubjectName.setOnSingleClickListener {
 //                    val intent = Intent(mContext, StockSearchActivity::class.java)
 //                    startActivityForResult(intent, 10000)
             }
-            etPurchaseDate.setOnClickListener {
+            etPurchaseDate.setOnSingleClickListener {
                 var year = ""
                 var month = ""
                 if (binding.etPurchaseDate.text.toString() != "") {
@@ -105,8 +106,8 @@ class MyStockInputDialog(
                     show()
                 }
             }
-            txtCancel.setOnClickListener { dismiss() }
-            txtComplete.setOnClickListener {
+            txtCancel.setOnSingleClickListener { dismiss() }
+            txtComplete.setOnSingleClickListener {
                 val subjectName: String = binding.etSubjectName.text.toString()
                 val purchaseDate: String = binding.etPurchaseDate.text.toString()
                 val purchasePrice: String = binding.etPurchasePrice.text.toString()
@@ -118,7 +119,7 @@ class MyStockInputDialog(
                     subjectName.isEmpty()
                 ){
                     Toasty.error(mContext, mContext.getString(R.string.MyStockInputDialog_Error_Message), Toasty.LENGTH_SHORT).show()
-                    return@setOnClickListener
+                    return@setOnSingleClickListener
                 }
                 callBack.onInputDialogCompleteClicked(
                     this@MyStockInputDialog,

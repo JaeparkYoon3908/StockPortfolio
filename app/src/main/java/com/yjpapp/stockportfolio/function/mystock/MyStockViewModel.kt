@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.function.mystock
 
 import android.content.Context
 import androidx.compose.runtime.*
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,8 +33,10 @@ class MyStockViewModel @Inject constructor(
     val totalGainPricePercent = MutableLiveData<String>() //상단 수익률
     var myStockInfoList = mutableStateListOf<MyStockEntity>() //나의 주식 목록 List
         private set
-    private val _scrollIndex = MutableStateFlow(myStockInfoList.size)
+    private val _scrollIndex by lazy { MutableStateFlow(myStockInfoList.size) }
     val scrollIndex: StateFlow<Int> get() = _scrollIndex
+//    private val _scrollIndexLiveData = MutableLiveData<Int>()
+//    val scrollIndexLiveData:LiveData<Int> get() = _scrollIndexLiveData
 //    val showErrorToast = MutableLiveData<Event<Boolean>>() //필수 값을 모두 입력해주세요 Toast
 //    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
 
@@ -62,10 +65,11 @@ class MyStockViewModel @Inject constructor(
             if (id == 0) {
                 myStockRepository.insertMyStock(myStockEntity)
                 myStockInfoList.add(myStockEntity)
-                _scrollIndex.value = 0
+                _scrollIndex.value = myStockInfoList.size - 1
             } else {
                 myStockRepository.updateMyStock(myStockEntity)
-                myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
+                myStockInfoList.clear()
+                myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
             }
             return true
         } catch (e: Exception) {
@@ -84,9 +88,6 @@ class MyStockViewModel @Inject constructor(
             e.stackTrace
             false
         }
-//        val myStockInfoList = myStockRepository.getAllMyStock()
-//        event(Event.SendMyStockInfoList(myStockInfoList))
-
     }
 
     private fun event(event: Event) {

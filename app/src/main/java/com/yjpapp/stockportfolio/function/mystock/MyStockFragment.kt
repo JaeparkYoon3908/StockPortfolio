@@ -32,6 +32,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.Color_80000000
 import com.yjpapp.stockportfolio.common.theme.Color_FBFBFBFB
@@ -91,10 +92,50 @@ class MyStockFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Add -> {
+                if (myStockViewModel.myStockInfoList.size >= 10) {
+                    Toasty.info(
+                        mContext,
+                        getString(
+                            R.string.MyStockFragment_Notice_Max_List
+                        ),
+                        Toasty.LENGTH_LONG
+                    ).show()
+                    return false
+                }
                 showInputDialog(null)
+
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showInputDialog(
+        dialogData: MyStockInputDialog.MyStockInputDialogData?
+    ) {
+        MyStockInputDialog(
+            mContext = mContext,
+            myStockInputDialogData = dialogData,
+            callBack = object : MyStockInputDialog.CallBack {
+                override fun onInputDialogCompleteClicked(
+                    dialog: MyStockInputDialog,
+                    userInputDialogData: MyStockInputDialog.MyStockInputDialogData
+                ) {
+                    if (!myStockViewModel.saveMyStock(
+                            context = mContext,
+                            id = dialogData?.id ?: 0,
+                            userInputDialogData = userInputDialogData
+                        )
+                    ) {
+                        Toasty.error(
+                            mContext,
+                            mContext.getString(R.string.Error_Msg_Normal),
+                            Toasty.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
+                    dialog.dismiss()
+                }
+            }).show()
     }
 
     /**
@@ -211,40 +252,12 @@ class MyStockFragment : Fragment() {
         }
     }
 
-    private fun showInputDialog(
-        dialogData: MyStockInputDialog.MyStockInputDialogData?
-    ) {
-        MyStockInputDialog(
-            mContext = mContext,
-            myStockInputDialogData = dialogData,
-            callBack = object : MyStockInputDialog.CallBack {
-                override fun onInputDialogCompleteClicked(
-                    dialog: MyStockInputDialog,
-                    userInputDialogData: MyStockInputDialog.MyStockInputDialogData
-                ) {
-                    if (!myStockViewModel.saveMyStock(
-                            context = mContext,
-                            id = dialogData?.id?: 0,
-                            userInputDialogData = userInputDialogData
-                        )
-                    ) {
-                        Toasty.error(
-                            mContext,
-                            mContext.getString(R.string.Error_Msg_Normal),
-                            Toasty.LENGTH_SHORT
-                        ).show()
-                        return
-                    }
-                    dialog.dismiss()
-                }
-            }).show()
-    }
-
     @SuppressLint("CoroutineCreationDuringComposition")
     @Preview
     @Composable
     private fun StockListComposable() {
         val listState = rememberLazyListState()
+        val coroutineScope = rememberCoroutineScope()
         LazyColumn(
             reverseLayout = true,
             state = listState
@@ -256,9 +269,9 @@ class MyStockFragment : Fragment() {
                 )
             }
         }
-        lifecycleScope.launch {
+        coroutineScope.launch {
             myStockViewModel.scrollIndex.collect { position ->
-                listState.scrollToItem(myStockViewModel.myStockInfoList.size)
+                listState.scrollToItem(position)
             }
         }
     }
@@ -340,7 +353,7 @@ class MyStockFragment : Fragment() {
                             .background(color = colorResource(id = R.color.color_4876c7))
                     ) {
                         Text(
-                            text = mContext.getString(R.string.Common_Sell),
+                            text = getString(R.string.Common_Sell),
                             fontSize = 16.sp,
                             color = colorResource(id = R.color.color_ffffff)
                         )
@@ -354,11 +367,11 @@ class MyStockFragment : Fragment() {
                                     CommonTwoBtnDialog.CommonTwoBtnData(
                                         noticeText = getString(R.string.Common_Notice_Delete_Check),
                                         leftBtnText = getString(R.string.Common_Cancel),
-                                        leftBtnListener = { view: View, dialog: CommonTwoBtnDialog ->
+                                        leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
                                             dialog.dismiss()
                                         },
                                         rightBtnText = getString(R.string.Common_Ok),
-                                        rightBtnListener = { view: View, dialog: CommonTwoBtnDialog ->
+                                        rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
                                             if (!myStockViewModel.deleteMyStock(myStockEntity)) {
                                                 Toasty
                                                     .error(
