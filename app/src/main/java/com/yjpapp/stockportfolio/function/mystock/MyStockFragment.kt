@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.function.mystock
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.*
@@ -13,6 +14,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -26,7 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.Color_80000000
 import com.yjpapp.stockportfolio.common.theme.Color_FBFBFBFB
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
@@ -34,7 +40,11 @@ import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import dagger.hilt.android.AndroidEntryPoint
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
+import de.charlex.compose.rememberRevealState
+import de.charlex.compose.reset
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * 1.5 신규버전 업데이트 기능 (나의 주식)
@@ -230,6 +240,7 @@ class MyStockFragment : Fragment() {
             }).show()
     }
 
+    @SuppressLint("CoroutineCreationDuringComposition")
     @Preview
     @Composable
     private fun StockListComposable() {
@@ -245,6 +256,11 @@ class MyStockFragment : Fragment() {
                 )
             }
         }
+        lifecycleScope.launch {
+            myStockViewModel.scrollIndex.collect { position ->
+                listState.scrollToItem(myStockViewModel.myStockInfoList.size)
+            }
+        }
     }
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -253,8 +269,8 @@ class MyStockFragment : Fragment() {
         position: Int,
         myStockEntity: MyStockEntity
     ) {
-        var isOpenRevealSwipe = false
-
+        val revealSwipeState = rememberRevealState()
+        val coroutineScope = rememberCoroutineScope()
         val maxRevealDp = 110.dp
         RevealSwipe(
             modifier = Modifier
@@ -264,6 +280,7 @@ class MyStockFragment : Fragment() {
             maxRevealDp = maxRevealDp,
             backgroundCardEndColor = Color_FBFBFBFB,
             animateBackgroundCardColor = false,
+            state = revealSwipeState,
             directions = setOf(
 //        RevealDirection.StartToEnd,
                 RevealDirection.EndToStart
@@ -296,14 +313,16 @@ class MyStockFragment : Fragment() {
                                     purchaseCount = myStockEntity.purchaseCount
                                 )
                                 showInputDialog(dialogData)
+                                coroutineScope.launch {
+                                    revealSwipeState.reset()
+                                }
                             }
                             .fillMaxWidth()
                             .weight(0.333f)
                             .background(color = Color_80000000)
                     ) {
-
                         Text(
-                            text = mContext.getString(R.string.Common_Edit),
+                            text = getString(R.string.Common_Edit),
                             fontSize = 16.sp,
                             color = colorResource(id = R.color.color_ffffff)
                         )
@@ -312,7 +331,9 @@ class MyStockFragment : Fragment() {
                         contentAlignment = Center,
                         modifier = Modifier
                             .clickable {
-
+                                coroutineScope.launch {
+                                    revealSwipeState.reset()
+                                }
                             }
                             .fillMaxWidth()
                             .weight(0.333f)
@@ -328,14 +349,40 @@ class MyStockFragment : Fragment() {
                         contentAlignment = Center,
                         modifier = Modifier
                             .clickable {
-
+                                CommonTwoBtnDialog(
+                                    mContext = mContext,
+                                    CommonTwoBtnDialog.CommonTwoBtnData(
+                                        noticeText = getString(R.string.Common_Notice_Delete_Check),
+                                        leftBtnText = getString(R.string.Common_Cancel),
+                                        leftBtnListener = { view: View, dialog: CommonTwoBtnDialog ->
+                                            dialog.dismiss()
+                                        },
+                                        rightBtnText = getString(R.string.Common_Ok),
+                                        rightBtnListener = { view: View, dialog: CommonTwoBtnDialog ->
+                                            if (!myStockViewModel.deleteMyStock(myStockEntity)) {
+                                                Toasty
+                                                    .error(
+                                                        mContext,
+                                                        R.string.Common_Cancel,
+                                                        Toasty.LENGTH_SHORT
+                                                    )
+                                                    .show()
+                                                return@CommonTwoBtnData
+                                            }
+                                            dialog.dismiss()
+                                        }
+                                    )
+                                ).show()
+                                coroutineScope.launch {
+                                    revealSwipeState.reset()
+                                }
                             }
                             .fillMaxWidth()
                             .weight(0.333f)
                             .background(color = colorResource(id = R.color.color_cd4632))
                     ) {
                         Text(
-                            text = mContext.getString(R.string.Common_Delete),
+                            text = getString(R.string.Common_Delete),
                             fontSize = 16.sp,
                             color = colorResource(id = R.color.color_ffffff)
                         )

@@ -12,7 +12,10 @@ import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.repository.MyStockRepository
+import com.yjpapp.stockportfolio.test.model.LatestNewsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +32,8 @@ class MyStockViewModel @Inject constructor(
     val totalGainPricePercent = MutableLiveData<String>() //상단 수익률
     var myStockInfoList = mutableStateListOf<MyStockEntity>() //나의 주식 목록 List
         private set
-
+    private val _scrollIndex = MutableStateFlow(myStockInfoList.size)
+    val scrollIndex: StateFlow<Int> get() = _scrollIndex
 //    val showErrorToast = MutableLiveData<Event<Boolean>>() //필수 값을 모두 입력해주세요 Toast
 //    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
 
@@ -58,6 +62,7 @@ class MyStockViewModel @Inject constructor(
             if (id == 0) {
                 myStockRepository.insertMyStock(myStockEntity)
                 myStockInfoList.add(myStockEntity)
+                _scrollIndex.value = 0
             } else {
                 myStockRepository.updateMyStock(myStockEntity)
                 myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
@@ -70,10 +75,18 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    fun deleteMyStock(myStockEntity: MyStockEntity) {
-        myStockRepository.deleteMyStock((myStockEntity))
-        val myStockInfoList = myStockRepository.getAllMyStock()
-        event(Event.SendMyStockInfoList(myStockInfoList))
+    fun deleteMyStock(myStockEntity: MyStockEntity): Boolean {
+        return try {
+            myStockInfoList.remove(myStockEntity)
+            myStockRepository.deleteMyStock((myStockEntity))
+            true
+        } catch (e: Exception) {
+            e.stackTrace
+            false
+        }
+//        val myStockInfoList = myStockRepository.getAllMyStock()
+//        event(Event.SendMyStockInfoList(myStockInfoList))
+
     }
 
     private fun event(event: Event) {
