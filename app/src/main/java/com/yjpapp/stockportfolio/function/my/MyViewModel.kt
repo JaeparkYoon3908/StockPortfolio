@@ -38,7 +38,7 @@ class MyViewModel @Inject constructor(
     }
     fun requestMemberOff(context: Context) {
         viewModelScope.launch {
-            val result = userRepository.deleteUserInfo(context)
+            val result = userRepository.deleteUserInfo()
             if (result == null) {
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
@@ -60,7 +60,7 @@ class MyViewModel @Inject constructor(
             params["grant_type"] = "delete"
             params["service_provider"] = "NAVER"
 
-            val result = userRepository.deleteNaverUserInfo(context, params)
+            val result = userRepository.deleteNaverUserInfo(params)
             if (result == null) {
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch

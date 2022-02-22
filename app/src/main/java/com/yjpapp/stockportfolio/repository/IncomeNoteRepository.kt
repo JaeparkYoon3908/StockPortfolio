@@ -23,27 +23,27 @@ class IncomeNoteRepository(
     private val preferenceRepository: PreferenceRepository,
     private val retrofitClient: RetrofitClient
 ) {
-    suspend fun requestPostIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestPostIncomeNote(reqIncomeNoteInfo)
+    suspend fun requestPostIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
+        return retrofitClient.getService(RetrofitClient.BaseServerURL.RaspberryPi)?.requestPostIncomeNote(reqIncomeNoteInfo)
     }
 
-    suspend fun requestDeleteIncomeNote(context: Context, id: Int): Response<RespStatusInfo>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestDeleteIncomeNote(id)
+    suspend fun requestDeleteIncomeNote(id: Int): Response<RespStatusInfo>? {
+        return retrofitClient.getService(RetrofitClient.BaseServerURL.RaspberryPi)?.requestDeleteIncomeNote(id)
     }
 
-    suspend fun requestPutIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestPutIncomeNote(reqIncomeNoteInfo)
+    suspend fun requestPutIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo): Response<RespIncomeNoteListInfo.IncomeNoteInfo>? {
+        return retrofitClient.getService(RetrofitClient.BaseServerURL.RaspberryPi)?.requestPutIncomeNote(reqIncomeNoteInfo)
     }
 
-    suspend fun requestGetIncomeNote(context: Context, params: HashMap<String, String>) : Response<RespIncomeNoteListInfo>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestGetIncomeNote(params)
+    suspend fun requestGetIncomeNote(params: HashMap<String, String>) : Response<RespIncomeNoteListInfo>? {
+        return retrofitClient.getService(RetrofitClient.BaseServerURL.RaspberryPi)?.requestGetIncomeNote(params)
     }
 
-    suspend fun requestTotalGain(context: Context, params: HashMap<String, String>): Response<RespTotalGainIncomeNoteData>? {
-        return retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestTotalGainIncomeNote(params)
+    suspend fun requestTotalGain(params: HashMap<String, String>): Response<RespTotalGainIncomeNoteData>? {
+        return retrofitClient.getService(RetrofitClient.BaseServerURL.RaspberryPi)?.requestTotalGainIncomeNote(params)
     }
 
-    inner class IncomeNotePagingSource(val context: Context, var startDate: String, var endDate: String): PagingSource<Int, RespIncomeNoteListInfo.IncomeNoteInfo>() {
+    inner class IncomeNotePagingSource(var startDate: String, var endDate: String): PagingSource<Int, RespIncomeNoteListInfo.IncomeNoteInfo>() {
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RespIncomeNoteListInfo.IncomeNoteInfo> {
             val page = params.key ?: 1
             return try {
@@ -52,7 +52,7 @@ class IncomeNoteRepository(
                 hashMap["size"] = params.loadSize.toString()
                 hashMap["startDate"] = startDate
                 hashMap["endDate"] = endDate
-                val data = requestGetIncomeNote(context, hashMap)
+                val data = requestGetIncomeNote(hashMap)
                 LoadResult.Page(
                     data = data?.body()?.income_note!!,
                     prevKey = if (page == 1) null else page - 1,
@@ -72,10 +72,10 @@ class IncomeNoteRepository(
     }
 
     var currentPagingSource: IncomeNotePagingSource? = null
-    fun getIncomeNoteListByPaging(context: Context, startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteListInfo.IncomeNoteInfo>> {
+    fun getIncomeNoteListByPaging(startDate: String, endDate: String): Flow<PagingData<RespIncomeNoteListInfo.IncomeNoteInfo>> {
         return Pager(
             config = PagingConfig(pageSize = 10, enablePlaceholders = false),
-            pagingSourceFactory = { IncomeNotePagingSource(context, startDate, endDate).also {
+            pagingSourceFactory = { IncomeNotePagingSource(startDate, endDate).also {
                 currentPagingSource = it
             } }).flow
     }

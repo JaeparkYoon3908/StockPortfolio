@@ -57,15 +57,15 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
 
     private fun subscribeUI(owner: LifecycleOwner) {
         myViewModel.apply {
-            isMemberOffSuccess.observe(owner, { isSuccess ->
+            isMemberOffSuccess.observe(owner) { isSuccess ->
                 if (isSuccess) {
                     myViewModel.requestDeleteUserInfo()
                     startLoginActivity()
                     requireActivity().finish()
                 }
-            })
+            }
 
-            respDeleteNaverUserInfo.observe(owner, { data ->
+            respDeleteNaverUserInfo.observe(owner) { data ->
                 if (data.result == "success") {
                     myViewModel.requestLogout(mContext)
                 } else {
@@ -75,7 +75,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                     }
                     ResponseAlertManger.showErrorAlert(requireContext(), msg)
                 }
-            })
+            }
         }
     }
 

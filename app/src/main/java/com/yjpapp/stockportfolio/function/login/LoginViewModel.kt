@@ -35,9 +35,9 @@ class LoginViewModel @Inject constructor(
      * API
      */
     val loginResultData = MutableLiveData<RespLoginUserInfo>()
-    fun requestLogin(context: Context, reqSnsLogin: ReqSNSLogin) {
+    fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = userRepository.postUserInfo(context, reqSnsLogin)
+            val result = userRepository.postUserInfo(reqSnsLogin)
             if (result == null) {
                 serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
@@ -52,9 +52,9 @@ class LoginViewModel @Inject constructor(
     }
 
     val respGetNaverUserInfo = MutableLiveData<RespGetNaverUserInfo>()
-    fun requestGetNaverUserInfo(context: Context) {
+    fun requestGetNaverUserInfo() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = userRepository.getNaverUserInfo(context)
+            val result = userRepository.getNaverUserInfo()
             if (result == null) {
                 serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
@@ -67,7 +67,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun requestRetryNaverUserLogin(context: Context) {
+    fun requestRetryNaverUserLogin() {
         viewModelScope.launch(Dispatchers.IO) {
             val naverAccessToken = userRepository.getNaverAccessToken()
             val params = HashMap<String, String>()
@@ -77,7 +77,7 @@ class LoginViewModel @Inject constructor(
             params["state"] = ""
             params["auth_type"] = "reprompt"
 
-            val result = userRepository.retryNaverUserLogin(context, params)
+            val result = userRepository.retryNaverUserLogin(params)
             if (result == null) {
                 serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch
@@ -101,7 +101,7 @@ class LoginViewModel @Inject constructor(
             params["grant_type"] = "delete"
             params["service_provider"] = "NAVER"
 
-            val result = userRepository.deleteNaverUserInfo(context, params)
+            val result = userRepository.deleteNaverUserInfo(params)
             if (result == null) {
                 serverError.postValue(ServerRespCode.NetworkNotConnected)
                 return@launch

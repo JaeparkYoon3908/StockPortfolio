@@ -54,9 +54,10 @@ class HiltModule {
     @Provides
     @Singleton
     fun provideRetrofitClient(
+        @ApplicationContext context: Context,
         preferenceRepository: PreferenceRepository
     ): RetrofitClient {
-        return RetrofitClient(preferenceRepository)
+        return RetrofitClient(context, preferenceRepository)
     }
 
     @Provides

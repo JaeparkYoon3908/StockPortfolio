@@ -50,7 +50,7 @@ class IncomeNoteViewModel @Inject constructor(
         }
         viewModelScope.launch {
             try {
-                val result = incomeNoteRepository.requestGetIncomeNote(context, params)
+                val result = incomeNoteRepository.requestGetIncomeNote(params)
                 if (result == null) {
                     ResponseAlertManger.showNetworkConnectErrorAlert(context)
                     return@launch
@@ -77,7 +77,7 @@ class IncomeNoteViewModel @Inject constructor(
             params["endDate"] = makeDateString(initEndYYYYMMDD)
         }
         CoroutineScope(Dispatchers.Main).launch {
-            val result = incomeNoteRepository.requestTotalGain(context, params)
+            val result = incomeNoteRepository.requestTotalGain(params)
             if (result == null) {
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
@@ -92,7 +92,7 @@ class IncomeNoteViewModel @Inject constructor(
 
     fun requestDeleteIncomeNote(context: Context, id: Int, position: Int) {
         viewModelScope.launch {
-            val result = incomeNoteRepository.requestDeleteIncomeNote(context, id)
+            val result = incomeNoteRepository.requestDeleteIncomeNote(id)
             if (result == null) {
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
@@ -105,7 +105,7 @@ class IncomeNoteViewModel @Inject constructor(
 
     fun requestModifyIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
-            val result = incomeNoteRepository.requestPutIncomeNote(context, reqIncomeNoteInfo)
+            val result = incomeNoteRepository.requestPutIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
@@ -120,7 +120,7 @@ class IncomeNoteViewModel @Inject constructor(
 
     fun requestAddIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
-            val result = incomeNoteRepository.requestPostIncomeNote(context, reqIncomeNoteInfo)
+            val result = incomeNoteRepository.requestPostIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch

@@ -17,6 +17,7 @@ import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 
 class RetrofitClient(
+    private val context: Context,
     private val preferenceRepository: PreferenceRepository
 ) {
     enum class BaseServerURL(val url: String) {
@@ -29,8 +30,7 @@ class RetrofitClient(
     private val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
     private val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
-
-    fun getService(context: Context, baseServerURL: BaseServerURL): RetrofitService? {
+    fun getService(baseServerURL: BaseServerURL): RetrofitService? {
         if (!NetworkUtils.isInternetAvailable(context)) {
             return null
         }

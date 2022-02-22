@@ -118,7 +118,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun subscribeUI() {
         viewModel.apply {
-            loginResultData.observe(this@LoginActivity, { response ->
+            loginResultData.observe(this@LoginActivity) { response ->
                 StockLog.d(TAG, "email = ${response.data.email}")
                 StockLog.d(TAG, "name = ${response.data.name}")
                 StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
@@ -132,9 +132,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 requestSetPreference(PrefKey.KEY_AUTO_LOGIN, true.toString())
 
                 startMainActivity()
-            })
+            }
 
-            respGetNaverUserInfo.observe(this@LoginActivity, { data ->
+            respGetNaverUserInfo.observe(this@LoginActivity) { data ->
                 if (data.message == "success") {
                     if (data.response.email.isEmpty() || data.response.name.isEmpty()) {
                         CommonOneBtnDialog(
@@ -152,7 +152,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                         return@observe
                     }
                     viewModel.requestLogin(
-                        this@LoginActivity,
                         ReqSNSLogin(
                             user_email = data.response.email,
                             user_name = data.response.name,
@@ -165,19 +164,19 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                         getString(R.string.Error_Msg_Normal)
                     )
                 }
-            })
-            serverError.observe(this@LoginActivity, { errorCode ->
+            }
+            serverError.observe(this@LoginActivity) { errorCode ->
                 when (errorCode) {
                     ServerRespCode.NetworkNotConnected -> {
                         ResponseAlertManger.showNetworkConnectErrorAlert(this@LoginActivity)
                         stopLoadingAnimation()
                     }
                 }
-            })
+            }
 
-            respDeleteNaverUserInfo.observe(this@LoginActivity, { data ->
+            respDeleteNaverUserInfo.observe(this@LoginActivity) { data ->
                 stopLoadingAnimation()
-            })
+            }
         }
     }
 
@@ -249,7 +248,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     val authorization = "$tokenType $accessToken"
                     viewModel.requestSetPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
                     viewModel.requestSetPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
-                    viewModel.requestGetNaverUserInfo(this@LoginActivity)
+                    viewModel.requestGetNaverUserInfo()
                     startLoadingAnimation()
                 } else {
                     val errorCode: String =
@@ -317,7 +316,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         startLoadingAnimation()
-        viewModel.requestLogin(this@LoginActivity, reqSnsLogin)
+        viewModel.requestLogin(reqSnsLogin)
     }
 
     private fun startLoadingAnimation() {

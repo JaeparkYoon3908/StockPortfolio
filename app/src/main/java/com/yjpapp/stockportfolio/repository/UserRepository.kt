@@ -19,20 +19,20 @@ class UserRepository(
     private val retrofitClient: RetrofitClient
 ) {
 
-    suspend fun postUserInfo(context: Context, reqSnsLogin: ReqSNSLogin) =
-        retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestRegUser(reqSnsLogin)
+    suspend fun postUserInfo(reqSnsLogin: ReqSNSLogin) =
+        retrofitClient.getService(RetrofitClient.BaseServerURL.RaspberryPi)?.requestRegUser(reqSnsLogin)
 
-    suspend fun getUserInfo(context: Context, params: HashMap<String, String>) =
-        retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestUserInfo(params)
+    suspend fun getUserInfo(params: HashMap<String, String>) =
+        retrofitClient.getService(RetrofitClient.BaseServerURL.RaspberryPi)?.requestUserInfo(params)
 
-    suspend fun getNaverUserInfo(context: Context) =
-        retrofitClient.getService(context, RetrofitClient.BaseServerURL.NAVER_OPEN_API)?.requestGetNaverUserInfo()
+    suspend fun getNaverUserInfo() =
+        retrofitClient.getService(RetrofitClient.BaseServerURL.NAVER_OPEN_API)?.requestGetNaverUserInfo()
 
-    suspend fun deleteNaverUserInfo(context: Context, params: HashMap<String, String>) =
-        retrofitClient.getService(context, RetrofitClient.BaseServerURL.NAVER_NID)?.requestDeleteNaverUserInfo(params)
+    suspend fun deleteNaverUserInfo(params: HashMap<String, String>) =
+        retrofitClient.getService(RetrofitClient.BaseServerURL.NAVER_NID)?.requestDeleteNaverUserInfo(params)
 
-    suspend fun retryNaverUserLogin(context: Context, params: HashMap<String, String>) =
-        retrofitClient.getService(context, RetrofitClient.BaseServerURL.NAVER_NID)?.requestRetryNaverUserLogin(params)
+    suspend fun retryNaverUserLogin(params: HashMap<String, String>) =
+        retrofitClient.getService(RetrofitClient.BaseServerURL.NAVER_NID)?.requestRetryNaverUserLogin(params)
 
     fun logout(context: Context) {
         //프리퍼런스 reset
@@ -45,8 +45,8 @@ class UserRepository(
         context.startActivity(intent)
     }
 
-    suspend fun deleteUserInfo(context: Context) =
-        retrofitClient.getService(context, RetrofitClient.BaseServerURL.RaspberryPi)?.requestDeleteUserInfo()
+    suspend fun deleteUserInfo() =
+        retrofitClient.getService(RetrofitClient.BaseServerURL.RaspberryPi)?.requestDeleteUserInfo()
 
     fun getLoginType(): String {
         return preferenceRepository.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
