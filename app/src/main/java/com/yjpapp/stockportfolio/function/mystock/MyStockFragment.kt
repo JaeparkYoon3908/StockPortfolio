@@ -29,10 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.Color_80000000
 import com.yjpapp.stockportfolio.common.theme.Color_FBFBFBFB
@@ -128,7 +126,7 @@ class MyStockFragment : Fragment() {
                     ) {
                         Toasty.error(
                             mContext,
-                            mContext.getString(R.string.Error_Msg_Normal),
+                            getString(R.string.Error_Msg_Normal),
                             Toasty.LENGTH_SHORT
                         ).show()
                         return
@@ -267,10 +265,19 @@ class MyStockFragment : Fragment() {
                     position = it,
                     myStockEntity = myStockViewModel.myStockInfoList[it]
                 )
+
             }
         }
-        coroutineScope.launch {
-            myStockViewModel.scrollIndex.collect { position ->
+//        coroutineScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+//                myStockViewModel.scrollIndex.collect { position ->
+//                    listState.scrollToItem(position)
+//                }
+//            }
+//        }
+
+        myStockViewModel.scrollIndex.observe(viewLifecycleOwner) { position ->
+            coroutineScope.launch {
                 listState.scrollToItem(position)
             }
         }
@@ -499,7 +506,7 @@ class MyStockFragment : Fragment() {
                             horizontalArrangement = Arrangement.End
                         ) {
                             Text(
-                                text = "평단가",
+                                text = getString(R.string.MyStockFragment_Purchase_Average),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_666666),
@@ -526,14 +533,14 @@ class MyStockFragment : Fragment() {
                             modifier = Modifier.weight(0.5f)
                         ) {
                             Text(
-                                text = "매수수량",
+                                text = getString(R.string.MyStockFragment_Holding_Quantity),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_666666)
                             )
 
                             Text(
-                                text = "270",
+                                text = myStockEntity.purchaseCount,
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_222222),
@@ -549,7 +556,7 @@ class MyStockFragment : Fragment() {
                             horizontalArrangement = Arrangement.End
                         ) {
                             Text(
-                                text = "현재가",
+                                text = getString(R.string.MyStockFragment_Current_Price),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_666666),
