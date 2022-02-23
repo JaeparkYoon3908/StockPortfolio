@@ -31,11 +31,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.Color_80000000
 import com.yjpapp.stockportfolio.common.theme.Color_FBFBFBFB
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
+import com.yjpapp.stockportfolio.util.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
@@ -119,11 +121,11 @@ class MyStockFragment : Fragment() {
                     userInputDialogData: MyStockInputDialog.MyStockInputDialogData
                 ) {
                     val myStockEntity = MyStockEntity(
-                        dialogData?.id?: 0,
-                        userInputDialogData.subjectName,
-                        userInputDialogData.purchaseDate,
-                        userInputDialogData.purchasePrice,
-                        userInputDialogData.purchaseCount
+                        id = dialogData?.id?: 0,
+                        subjectName = userInputDialogData.subjectName,
+                        purchaseDate = userInputDialogData.purchaseDate,
+                        purchasePrice = userInputDialogData.purchasePrice,
+                        purchaseCount = userInputDialogData.purchaseCount
                     )
                     if (!myStockViewModel.saveMyStock(mContext, myStockEntity)) {
                         Toasty.error(
@@ -455,7 +457,7 @@ class MyStockFragment : Fragment() {
                             )
                             //수익
                             Text(
-                                text = myStockEntity.purchasePrice,
+                                text = Utils.getPriceNum(myStockEntity.purchasePrice),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_666666),
@@ -517,7 +519,7 @@ class MyStockFragment : Fragment() {
                             )
 
                             Text(
-                                text = myStockEntity.purchasePrice,
+                                text = Utils.getPriceNum(myStockEntity.purchasePrice),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_222222),

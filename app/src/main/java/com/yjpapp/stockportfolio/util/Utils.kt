@@ -39,11 +39,14 @@ object Utils {
     //yyyy.mm.dd로 변환
     fun getTodayYYYY_MM_DD(): String{
         val yyyymmdd = getTodayYYYYMMDD()
-        var result: String = ""
-        result += yyyymmdd.substring(0, 4) + "."
-        result += yyyymmdd.substring(4, 6) + "."
-        result += yyyymmdd.substring(6, 8)
-        return result
+        val result = StringBuilder().apply {
+            append(yyyymmdd.substring(0, 4))
+            append(".")
+            append(yyyymmdd.substring(4, 6))
+            append(".")
+            append(yyyymmdd.substring(6, 8))
+        }
+        return result.toString()
     }
 
     //현재 yyyy.mm 반환
@@ -70,6 +73,14 @@ object Utils {
         val decimalFormat = DecimalFormat("###,###")
         result = decimalFormat.format(num.replace(",", "").toDouble())
         return result
+    }
+    //5000000 => $5,000,000 변환
+    fun getPriceNum(num: String): String {
+        val result = StringBuilder().apply {
+            append(StockConfig.moneySymbol)
+            append(getNumInsertComma(num))
+        }
+        return result.toString()
     }
 
     //14% => 14 변환.

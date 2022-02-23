@@ -98,7 +98,6 @@ class CommonDatePickerDialog(
                 binding.pickerMonth.value,
                 binding.pickerDay.value
             )
-            dismiss()
         }
     }
 

@@ -166,6 +166,7 @@ class IncomeNoteInputDialog(
                         } else {
                             dayOfMonth.toString()
                         }
+                        dismiss()
                     }
                     show()
                 }

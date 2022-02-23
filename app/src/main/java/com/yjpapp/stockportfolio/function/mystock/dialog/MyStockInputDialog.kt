@@ -80,14 +80,29 @@ class MyStockInputDialog(
             etPurchaseDate.setOnSingleClickListener {
                 var year = ""
                 var month = ""
+                var day = ""
                 if (binding.etPurchaseDate.text.toString() != "") {
-                    val split = binding.etPurchaseDate.text.toString().split(".")
+                    val split = binding.etPurchaseDate.text.toString().split("-")
                     year = split[0]
                     month = split[1]
+                    day = split[2]
                 }
                 //매수 날짜 선택 다이얼로그 show
-                CommonDatePickerDialog(mContext, year, month).apply {
+                CommonDatePickerDialog(mContext, year, month, day).apply {
                     setListener { _: DatePicker?, year, month, dayOfMonth ->
+                        val todaySplit = Utils.getTodayYYYY_MM_DD().split(".")
+                        if (year > todaySplit[0].toInt()) {
+                            Toasty.error(mContext, "선택하신 연도가 현재 보다 큽니다.",Toasty.LENGTH_LONG).show()
+                            return@setListener
+                        }
+                        if (month > todaySplit[1].toInt()) {
+                            Toasty.error(mContext, "선택하신 월이 현재 보다 큽니다.",Toasty.LENGTH_LONG).show()
+                            return@setListener
+                        }
+                        if (dayOfMonth > todaySplit[2].toInt()) {
+                            Toasty.error(mContext, "선택하신 일이 현재 보다 큽니다.",Toasty.LENGTH_LONG).show()
+                            return@setListener
+                        }
                         uiHandler.sendEmptyMessage(MSG.SELL_DATE_DATA_INPUT)
                         purchaseYear = year.toString()
                         purchaseMonth = if (month < 10) {
@@ -100,8 +115,7 @@ class MyStockInputDialog(
                         } else {
                             dayOfMonth.toString()
                         }
-//                        myStockViewModel.inputDialogPurchaseDate =
-//                            "$purchaseYear.$purchaseMonth"
+                        dismiss()
                     }
                     show()
                 }
