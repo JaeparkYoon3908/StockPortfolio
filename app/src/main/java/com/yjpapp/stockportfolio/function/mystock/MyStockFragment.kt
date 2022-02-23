@@ -118,12 +118,14 @@ class MyStockFragment : Fragment() {
                     dialog: MyStockInputDialog,
                     userInputDialogData: MyStockInputDialog.MyStockInputDialogData
                 ) {
-                    if (!myStockViewModel.saveMyStock(
-                            context = mContext,
-                            id = dialogData?.id ?: 0,
-                            userInputDialogData = userInputDialogData
-                        )
-                    ) {
+                    val myStockEntity = MyStockEntity(
+                        dialogData?.id?: 0,
+                        userInputDialogData.subjectName,
+                        userInputDialogData.purchaseDate,
+                        userInputDialogData.purchasePrice,
+                        userInputDialogData.purchaseCount
+                    )
+                    if (!myStockViewModel.saveMyStock(mContext, myStockEntity)) {
                         Toasty.error(
                             mContext,
                             getString(R.string.Error_Msg_Normal),

@@ -49,20 +49,9 @@ class MyStockViewModel @Inject constructor(
     }
 
     //확인버튼 클릭 후 Save
-    fun saveMyStock(
-        context: Context,
-        id: Int,
-        userInputDialogData: MyStockInputDialog.MyStockInputDialogData
-    ): Boolean {
+    fun saveMyStock(context: Context, myStockEntity: MyStockEntity): Boolean {
         try {
-            val myStockEntity = MyStockEntity(
-                id,
-                userInputDialogData.subjectName,
-                userInputDialogData.purchaseDate,
-                userInputDialogData.purchasePrice,
-                userInputDialogData.purchaseCount
-            )
-            if (id == 0) {
+            if (myStockEntity.id == 0) {
                 myStockRepository.insertMyStock(myStockEntity)
                 myStockInfoList.add(myStockEntity)
                 _scrollIndex.value = myStockInfoList.size - 1
@@ -81,8 +70,8 @@ class MyStockViewModel @Inject constructor(
 
     fun deleteMyStock(myStockEntity: MyStockEntity): Boolean {
         return try {
-            myStockInfoList.remove(myStockEntity)
             myStockRepository.deleteMyStock((myStockEntity))
+            myStockInfoList.remove(myStockEntity)
             true
         } catch (e: Exception) {
             e.stackTrace
