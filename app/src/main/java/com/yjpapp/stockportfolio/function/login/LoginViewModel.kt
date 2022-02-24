@@ -1,9 +1,11 @@
 package com.yjpapp.stockportfolio.function.login
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.navercorp.nid.NaverIdLoginSDK
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespGetNaverUserInfo
@@ -12,7 +14,10 @@ import com.yjpapp.stockportfolio.model.response.RespNaverDeleteUserInfo
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,68 +35,33 @@ class LoginViewModel @Inject constructor(
      * Common
      */
     private val TAG = LoginViewModel::class.java.simpleName
-    val serverError = MutableLiveData<Int>()
+    private val _serverError = MutableStateFlow(0)
+    val serverError: StateFlow<Int> get() = _serverError
+
     /**
      * API
      */
-    val loginResultData = MutableLiveData<RespLoginUserInfo>()
+    private val _loginResultData = MutableStateFlow(RespLoginUserInfo())
+    val loginResultData: StateFlow<RespLoginUserInfo> get() = _loginResultData
     fun requestLogin(reqSnsLogin: ReqSNSLogin) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = userRepository.postUserInfo(reqSnsLogin)
             if (result == null) {
-                serverError.postValue(ServerRespCode.NetworkNotConnected)
+                _serverError.emit(ServerRespCode.NetworkNotConnected)
                 return@launch
             }
-            if (result.isSuccessful && result.body() != null) {
-                when (result.body()!!.status) {
-
-                }
-                loginResultData.postValue(result.body())
-            }
-        }
-    }
-
-    val respGetNaverUserInfo = MutableLiveData<RespGetNaverUserInfo>()
-    fun requestGetNaverUserInfo() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = userRepository.getNaverUserInfo()
-            if (result == null) {
-                serverError.postValue(ServerRespCode.NetworkNotConnected)
+            if (result.body() == null) {
                 return@launch
             }
-            if (result.isSuccessful) {
-                respGetNaverUserInfo.postValue(result.body())
-            } else {
-
-            }
-        }
-    }
-
-    fun requestRetryNaverUserLogin() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val naverAccessToken = userRepository.getNaverAccessToken()
-            val params = HashMap<String, String>()
-            params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
-            params["response_type"] = "code"
-            params["redirect_uri"] = ""
-            params["state"] = ""
-            params["auth_type"] = "reprompt"
-
-            val result = userRepository.retryNaverUserLogin(params)
-            if (result == null) {
-                serverError.postValue(ServerRespCode.NetworkNotConnected)
+            if (!result.isSuccessful) {
                 return@launch
             }
-            if (result.isSuccessful) {
-
-            } else {
-
-            }
+            _loginResultData.emit(result.body()!!)
         }
     }
 
     val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
-    fun requestDeleteNaverUserInfo(context: Context) {
+    fun requestDeleteNaverUserInfo() {
         viewModelScope.launch(Dispatchers.IO) {
             val naverAccessToken = userRepository.getNaverAccessToken()
             val params = HashMap<String, String>()
@@ -103,7 +73,7 @@ class LoginViewModel @Inject constructor(
 
             val result = userRepository.deleteNaverUserInfo(params)
             if (result == null) {
-                serverError.postValue(ServerRespCode.NetworkNotConnected)
+                _serverError.emit(ServerRespCode.NetworkNotConnected)
                 return@launch
             }
             if (result.isSuccessful) {
@@ -112,7 +82,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun requestSetPreference(prefKey: String, value: String) {
+    fun requestSetPreference(prefKey: String, value: String?) {
         userRepository.setPreference(prefKey, value)
     }
 
@@ -124,4 +94,7 @@ class LoginViewModel @Inject constructor(
         return userRepository.isExistPreference(prefKey)
     }
 
+    fun requestNaverLogout() {
+        NaverIdLoginSDK.logout()
+    }
 }

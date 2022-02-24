@@ -10,11 +10,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.databinding.ActivitySplashBinding
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -40,22 +43,20 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_spla
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initData()
-        startMainActivity()
+        startLoginActivity()
     }
 
     private fun initData() {
         viewModel.requestInitMySetting()
     }
 
-    private fun initLayout() {}
-
-    private fun startMainActivity(){
-        Handler(Looper.getMainLooper()).postDelayed({
+    private fun startLoginActivity(){
+        lifecycleScope.launch {
+            delay(1500)
             val intent = Intent(applicationContext, LoginActivity::class.java)
             finish()
             startActivity(intent)
-
-        }, 1500)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -67,7 +68,7 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_spla
                 Toast.makeText(applicationContext, "앱을 시작하려면 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
             } else {
                 //권한이 허용된 경우 다음 코드 진행
-                startMainActivity()
+                startLoginActivity()
             }
         }
     }
