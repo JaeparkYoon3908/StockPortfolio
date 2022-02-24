@@ -49,27 +49,27 @@ class MyViewModel @Inject constructor(
         }
     }
 
-    val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
-    fun requestDeleteNaverUserInfo(context: Context) {
-        viewModelScope.launch {
-            val naverAccessToken = userRepository.getNaverAccessToken()
-            val params = HashMap<String, String>()
-            params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
-            params["client_secret"] = StockConfig.NAVER_SIGN_CLIENT_SECRET
-            params["access_token"] = naverAccessToken
-            params["grant_type"] = "delete"
-            params["service_provider"] = "NAVER"
-
-            val result = userRepository.deleteNaverUserInfo(params)
-            if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
-                return@launch
-            }
-            if (result.isSuccessful) {
-                respDeleteNaverUserInfo.postValue(result.body())
-            }
-        }
-    }
+//    val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
+//    fun requestDeleteNaverUserInfo(context: Context) {
+//        viewModelScope.launch {
+//            val naverAccessToken = userRepository.getNaverAccessToken()
+//            val params = HashMap<String, String>()
+//            params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
+//            params["client_secret"] = StockConfig.NAVER_SIGN_CLIENT_SECRET
+//            params["access_token"] = naverAccessToken
+//            params["grant_type"] = "delete"
+//            params["service_provider"] = "NAVER"
+//
+//            val result = userRepository.deleteNaverUserInfo(params)
+//            if (result == null) {
+//                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+//                return@launch
+//            }
+//            if (result.isSuccessful) {
+//                respDeleteNaverUserInfo.postValue(result.body())
+//            }
+//        }
+//    }
 
     fun requestSetAutoLogin(isAutoLogin: Boolean) {
         myRepository.setAutoLogin(isAutoLogin)

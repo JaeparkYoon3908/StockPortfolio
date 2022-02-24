@@ -92,15 +92,15 @@ class MyStockInputDialog(
                     setListener { _: DatePicker?, year, month, dayOfMonth ->
                         val todaySplit = Utils.getTodayYYYY_MM_DD().split(".")
                         if (year > todaySplit[0].toInt()) {
-                            Toasty.error(mContext, "선택하신 연도가 현재 보다 큽니다.",Toasty.LENGTH_LONG).show()
+                            Toasty.error(mContext, "선택하신 연도가 현재 보다 큽니다.", Toasty.LENGTH_LONG).show()
                             return@setListener
                         }
                         if (month > todaySplit[1].toInt()) {
-                            Toasty.error(mContext, "선택하신 월이 현재 보다 큽니다.",Toasty.LENGTH_LONG).show()
+                            Toasty.error(mContext, "선택하신 월이 현재 보다 큽니다.", Toasty.LENGTH_LONG).show()
                             return@setListener
                         }
                         if (dayOfMonth > todaySplit[2].toInt()) {
-                            Toasty.error(mContext, "선택하신 일이 현재 보다 큽니다.",Toasty.LENGTH_LONG).show()
+                            Toasty.error(mContext, "선택하신 일이 현재 보다 큽니다.", Toasty.LENGTH_LONG).show()
                             return@setListener
                         }
                         uiHandler.sendEmptyMessage(MSG.SELL_DATE_DATA_INPUT)

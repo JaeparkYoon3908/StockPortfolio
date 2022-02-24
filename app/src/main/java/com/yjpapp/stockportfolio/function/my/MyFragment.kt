@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import com.navercorp.nid.NaverIdLoginSDK
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
@@ -65,17 +66,17 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                 }
             }
 
-            respDeleteNaverUserInfo.observe(owner) { data ->
-                if (data.result == "success") {
-                    myViewModel.requestLogout(mContext)
-                } else {
-                    var msg = requireContext().getString(R.string.Error_Msg_Normal)
-                    if (data.error_description.isNotEmpty()) {
-                        msg = data.error_description
-                    }
-                    ResponseAlertManger.showErrorAlert(requireContext(), msg)
-                }
-            }
+//            respDeleteNaverUserInfo.observe(owner) { data ->
+//                if (data.result == "success") {
+//                    myViewModel.requestLogout(mContext)
+//                } else {
+//                    var msg = requireContext().getString(R.string.Error_Msg_Normal)
+//                    if (data.error_description.isNotEmpty()) {
+//                        msg = data.error_description
+//                    }
+//                    ResponseAlertManger.showErrorAlert(requireContext(), msg)
+//                }
+//            }
         }
     }
 
@@ -98,7 +99,9 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                         rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
                             when (myViewModel.getLoginType()) {
                                 StockConfig.LOGIN_TYPE_NAVER -> {
-                                    myViewModel.requestDeleteNaverUserInfo(mContext)
+//                                    myViewModel.requestDeleteNaverUserInfo(mContext)
+                                    NaverIdLoginSDK.logout()
+                                    myViewModel.requestLogout(mContext)
                                 }
                                 else -> {
                                     myViewModel.requestLogout(mContext)

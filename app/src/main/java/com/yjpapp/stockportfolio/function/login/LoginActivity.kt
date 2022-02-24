@@ -6,8 +6,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.facebook.*
 import com.facebook.GraphRequest.GraphJSONObjectCallback
 import com.facebook.appevents.AppEventsLogger
@@ -19,13 +23,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.NidOAuthLogin
+import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
 import com.nhn.android.naverlogin.OAuthLogin
-import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
+import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
 import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
@@ -34,6 +42,11 @@ import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 /**
@@ -85,99 +98,74 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         initData()
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         binding.unbind()
     }
 
     private fun initData() {
-        viewModel.apply {
+        viewModel.run {
             val isAutoLoginAble = requestGetPreference(PrefKey.KEY_AUTO_LOGIN)
             val isAutoLoginSetting = requestGetPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
             if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
                 val userEmail = requestGetPreference(PrefKey.KEY_USER_EMAIL)
                 val userName = requestGetPreference(PrefKey.KEY_USER_NAME)
                 val loginType = requestGetPreference(PrefKey.KEY_USER_LOGIN_TYPE)
-                requestLogin(ReqSNSLogin(userEmail, userName, loginType))
+                when (loginType) {
+                    StockConfig.LOGIN_TYPE_NAVER -> {
+                        naverSignIn()
+                    }
+                    else -> {
+                        requestLogin(ReqSNSLogin(userEmail, userName, loginType))
+                    }
+                }
             }
         }
         binding.apply {
-            lifecycleOwner = this@LoginActivity
             callback = loginCallBack
+            lifecycleOwner = this@LoginActivity
         }
         subscribeUI()
     }
 
     private fun subscribeUI() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loginResultData.collect { response ->
+                    if (response.status == ServerRespCode.OK) {
+                        StockLog.d(TAG, "email = ${response.data.email}")
+                        StockLog.d(TAG, "name = ${response.data.name}")
+                        StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
+                        StockLog.d(TAG, "login_type = ${response.data.login_type}")
+
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_INDEX, response.data.userIndex.toString())
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_NAME, response.data.name)
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_EMAIL, response.data.email)
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_LOGIN_TYPE, response.data.login_type)
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_TOKEN, response.data.token)
+                        viewModel.requestSetPreference(PrefKey.KEY_AUTO_LOGIN, true.toString())
+
+                        startMainActivity()
+                    }
+                }
+
+                viewModel.serverError.collect { errorCode ->
+                    when (errorCode) {
+                        ServerRespCode.NetworkNotConnected -> {
+                            ResponseAlertManger.showNetworkConnectErrorAlert(this@LoginActivity)
+                            stopLoadingAnimation()
+                        }
+                    }
+                }
+            }
+        }
+
         viewModel.apply {
-            loginResultData.observe(this@LoginActivity) { response ->
-                StockLog.d(TAG, "email = ${response.data.email}")
-                StockLog.d(TAG, "name = ${response.data.name}")
-                StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
-                StockLog.d(TAG, "login_type = ${response.data.login_type}")
-
-                requestSetPreference(PrefKey.KEY_USER_INDEX, response.data.userIndex.toString())
-                requestSetPreference(PrefKey.KEY_USER_NAME, response.data.name)
-                requestSetPreference(PrefKey.KEY_USER_EMAIL, response.data.email)
-                requestSetPreference(PrefKey.KEY_USER_LOGIN_TYPE, response.data.login_type)
-                requestSetPreference(PrefKey.KEY_USER_TOKEN, response.data.token)
-                requestSetPreference(PrefKey.KEY_AUTO_LOGIN, true.toString())
-
-                startMainActivity()
-            }
-
-            respGetNaverUserInfo.observe(this@LoginActivity) { data ->
-                if (data.message == "success") {
-                    if (data.response.email.isEmpty() || data.response.name.isEmpty()) {
-                        CommonOneBtnDialog(
-                            this@LoginActivity,
-                            CommonOneBtnDialog.CommonOneBtnData(
-                                getString(R.string.Login_Naver_Necessary_Info_Check),
-                                getString(R.string.Common_Ok)
-                            ) { _: View, dialog: CommonOneBtnDialog ->
-                                viewModel.requestDeleteNaverUserInfo(this@LoginActivity)
-                                dialog.dismiss()
-                            }
-                        ).apply {
-                            setCancelable(false)
-                        }.show()
-                        return@observe
-                    }
-                    viewModel.requestLogin(
-                        ReqSNSLogin(
-                            user_email = data.response.email,
-                            user_name = data.response.name,
-                            login_type = StockConfig.LOGIN_TYPE_NAVER
-                        )
-                    )
-                } else {
-                    ResponseAlertManger.showErrorAlert(
-                        this@LoginActivity,
-                        getString(R.string.Error_Msg_Normal)
-                    )
-                }
-            }
-            serverError.observe(this@LoginActivity) { errorCode ->
-                when (errorCode) {
-                    ServerRespCode.NetworkNotConnected -> {
-                        ResponseAlertManger.showNetworkConnectErrorAlert(this@LoginActivity)
-                        stopLoadingAnimation()
-                    }
-                }
-            }
-
             respDeleteNaverUserInfo.observe(this@LoginActivity) { data ->
                 stopLoadingAnimation()
             }
         }
+
     }
 
     private fun googleSignIn() {
@@ -227,38 +215,70 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         }
 
     private fun naverSignIn() {
-        val mOAuthLoginModule = OAuthLogin.getInstance()
-        mOAuthLoginModule.init(
-            this,
-            StockConfig.NAVER_SIGN_CLIENT_ID,
-            StockConfig.NAVER_SIGN_CLIENT_SECRET,
-            getString(R.string.app_name)
+        NaverIdLoginSDK.initialize(
+            context = this@LoginActivity,
+            clientId = StockConfig.NAVER_SIGN_CLIENT_ID,
+            clientSecret = StockConfig.NAVER_SIGN_CLIENT_SECRET,
+            clientName = getString(R.string.app_name)
         )
-        val mOAuthLoginHandler = @SuppressLint("HandlerLeak") object : OAuthLoginHandler() {
-            override fun run(success: Boolean) {
-                if (success) {
-                    val accessToken: String = mOAuthLoginModule.getAccessToken(this@LoginActivity)
-                    val refreshToken: String = mOAuthLoginModule.getRefreshToken(this@LoginActivity)
-                    val expiresAt: Long = mOAuthLoginModule.getExpiresAt(this@LoginActivity)
-                    val tokenType: String = mOAuthLoginModule.getTokenType(this@LoginActivity)
-                    StockLog.d(TAG, "accessToken : $accessToken")
-                    StockLog.d(TAG, "refreshToken : $refreshToken")
-                    StockLog.d(TAG, "expiresAt : $expiresAt")
-                    StockLog.d(TAG, "tokenType : $tokenType")
-                    val authorization = "$tokenType $accessToken"
-                    viewModel.requestSetPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
-                    viewModel.requestSetPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
-                    viewModel.requestGetNaverUserInfo()
-                    startLoadingAnimation()
-                } else {
-                    val errorCode: String =
-                        mOAuthLoginModule.getLastErrorCode(this@LoginActivity).code
-                    val errorDesc: String = mOAuthLoginModule.getLastErrorDesc(this@LoginActivity)
-                    StockLog.d(TAG, "errorCode:$errorCode, errorDesc:$errorDesc")
-                }
+
+        val oauthLoginCallback = object : OAuthLoginCallback {
+            override fun onSuccess() {
+                val accessToken: String? = NaverIdLoginSDK.getAccessToken()
+                val refreshToken: String? = NaverIdLoginSDK.getRefreshToken()
+                val expiresAt: Long = NaverIdLoginSDK.getExpiresAt()
+                val tokenType: String? = NaverIdLoginSDK.getTokenType()
+                val state = NaverIdLoginSDK.getState().toString()
+                StockLog.d(TAG, "accessToken : $accessToken")
+                StockLog.d(TAG, "refreshToken : $refreshToken")
+                StockLog.d(TAG, "expiresAt : $expiresAt")
+                StockLog.d(TAG, "tokenType : $tokenType")
+                StockLog.d(TAG, "state : $state")
+
+                val authorization = "$tokenType $accessToken"
+                viewModel.requestSetPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
+                viewModel.requestSetPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
+                startLoadingAnimation()
+
+                NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse>{
+                    override fun onError(errorCode: Int, message: String) {
+                        StockLog.d(TAG, "onError : $message")
+                    }
+
+                    override fun onFailure(httpStatus: Int, message: String) {
+                        StockLog.d(TAG, "onFailure : $message")
+                    }
+
+                    override fun onSuccess(result: NidProfileResponse) {
+                        StockLog.d(TAG, "onSuccess : ${result.profile?.toString()}")
+                        result.profile?.let {
+                            if (it.email.isNullOrEmpty()) {
+                                return
+                            }
+                            if (it.name.isNullOrEmpty()) {
+                                return
+                            }
+                            viewModel.requestLogin(
+                                ReqSNSLogin(
+                                    user_email = it.email!!,
+                                    user_name = it.name!!,
+                                    login_type = StockConfig.LOGIN_TYPE_NAVER
+                                )
+                            )
+                        }
+                    }
+                })
+            }
+            override fun onFailure(httpStatus: Int, message: String) {
+                val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                Toast.makeText(this@LoginActivity,"errorCode:$errorCode, errorDesc:$errorDescription",Toast.LENGTH_SHORT).show()
+            }
+            override fun onError(errorCode: Int, message: String) {
+                onFailure(errorCode, message)
             }
         }
-        mOAuthLoginModule.startOauthLoginActivity(this, mOAuthLoginHandler);
+        NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
     }
 
     private fun facebookSignIn() {

@@ -1,18 +1,12 @@
 package com.yjpapp.stockportfolio.repository
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
-import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.network.RetrofitClient
-import es.dmoral.toasty.Toasty
-import kotlin.system.exitProcess
 
 class UserRepository(
     private val preferenceRepository: PreferenceRepository,
@@ -64,29 +58,11 @@ class UserRepository(
         return preferenceRepository.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
     }
 
-    fun runBackPressAppCloseEvent(
-        mContext: Context,
-        activity: Activity,
-    ){
-        val isAllowAppClose = preferenceRepository.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)
-        if(isAllowAppClose == StockConfig.TRUE){
-            activity.finishAffinity()
-            System.runFinalization()
-            exitProcess(0)
-        }else{
-            Toasty.normal(mContext, mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
-            preferenceRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
-            Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                preferenceRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
-            },3000)
-        }
-    }
-
     fun isAllowAppClose(): String {
         return preferenceRepository.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)?: StockConfig.FALSE
     }
 
-    fun setPreference(prefKey: String, value: String) {
+    fun setPreference(prefKey: String, value: String?) {
         preferenceRepository.setPreference(prefKey, value)
     }
 

@@ -69,6 +69,9 @@ class MyRepository(
             if (!isExists(PrefKey.KEY_SETTING_AUTO_LOGIN)) {
                 setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)
             }
+            if (!isExists(PrefKey.KEY_AUTO_LOGIN)) {
+                setPreference(PrefKey.KEY_AUTO_LOGIN, false)
+            }
             //나의 주식
             if (!isExists(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)) {
                 setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, true)

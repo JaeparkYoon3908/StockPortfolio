@@ -29,12 +29,11 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
-import com.yjpapp.stockportfolio.common.theme.Color_80000000
-import com.yjpapp.stockportfolio.common.theme.Color_FBFBFBFB
+import com.yjpapp.stockportfolio.common.theme.*
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.util.Utils
@@ -103,7 +102,6 @@ class MyStockFragment : Fragment() {
                     return false
                 }
                 showInputDialog(null)
-
             }
         }
         return super.onOptionsItemSelected(item)
@@ -127,6 +125,7 @@ class MyStockFragment : Fragment() {
                         purchasePrice = userInputDialogData.purchasePrice,
                         purchaseCount = userInputDialogData.purchaseCount
                     )
+
                     if (!myStockViewModel.saveMyStock(mContext, myStockEntity)) {
                         Toasty.error(
                             mContext,
@@ -136,6 +135,13 @@ class MyStockFragment : Fragment() {
                         return
                     }
                     dialog.dismiss()
+
+                    if (dialogData == null) {
+                        Toasty.info(mContext, "추가 완료 됐습니다.", Toasty.LENGTH_SHORT).show()
+                        return
+                    }
+
+                    Toasty.info(mContext, "수정 완료 됐습니다.", Toasty.LENGTH_SHORT).show()
                 }
             }).show()
     }
@@ -159,8 +165,8 @@ class MyStockFragment : Fragment() {
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
             ) {
                 Text(
-                    text = stringResource(id = R.string.MyStockFragment_Total_Purchase_Price),
-                    color = colorResource(id = R.color.color_222222),
+                    text = getString(R.string.MyStockFragment_Total_Purchase_Price),
+                    color = Color_222222,
                     fontSize = 16.sp,
                     maxLines = 1,
                     modifier = Modifier
@@ -169,7 +175,7 @@ class MyStockFragment : Fragment() {
                 )
                 Text(
                     text = "5000000000",
-                    color = colorResource(id = R.color.color_222222),
+                    color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -184,8 +190,8 @@ class MyStockFragment : Fragment() {
 
             ) {
                 Text(
-                    text = stringResource(id = R.string.MyStockFragment_Total_Evaluation_Amount),
-                    color = colorResource(id = R.color.color_222222),
+                    text = getString(R.string.MyStockFragment_Total_Evaluation_Amount),
+                    color = Color_222222,
                     fontSize = 16.sp,
                     maxLines = 1,
                     modifier = Modifier
@@ -193,7 +199,7 @@ class MyStockFragment : Fragment() {
                 )
                 Text(
                     text = "5000000000",
-                    color = colorResource(id = R.color.color_222222),
+                    color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -207,8 +213,8 @@ class MyStockFragment : Fragment() {
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
             ) {
                 Text(
-                    text = stringResource(id = R.string.Common_gains_losses),
-                    color = colorResource(id = R.color.color_222222),
+                    text = getString(R.string.Common_gains_losses),
+                    color = Color_222222,
                     fontSize = 16.sp,
                     maxLines = 1,
                     modifier = Modifier
@@ -229,8 +235,8 @@ class MyStockFragment : Fragment() {
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
             ) {
                 Text(
-                    text = stringResource(id = R.string.Common_GainPercent),
-                    color = colorResource(id = R.color.color_222222),
+                    text = getString(R.string.Common_GainPercent),
+                    color = Color_222222,
                     fontSize = 16.sp,
                     maxLines = 1,
                     modifier = Modifier
@@ -246,7 +252,7 @@ class MyStockFragment : Fragment() {
                 )
             }
             Divider(
-                color = colorResource(id = R.color.color_line_1a000000),
+                color = Color_Line_1A000000,
                 thickness = 1.dp,
                 modifier = Modifier
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
@@ -254,7 +260,7 @@ class MyStockFragment : Fragment() {
         }
     }
 
-    @SuppressLint("CoroutineCreationDuringComposition")
+    @SuppressLint("CoroutineCreationDuringComposition", "UnsafeRepeatOnLifecycleDetector")
     @Preview
     @Composable
     private fun StockListComposable() {
@@ -269,22 +275,21 @@ class MyStockFragment : Fragment() {
                     position = it,
                     myStockEntity = myStockViewModel.myStockInfoList[it]
                 )
-
             }
         }
-//        coroutineScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-//                myStockViewModel.scrollIndex.collect { position ->
-//                    listState.scrollToItem(position)
-//                }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                myStockViewModel.scrollIndex.collect { position ->
+                    listState.scrollToItem(position)
+                }
+            }
+        }
+
+//        myStockViewModel.scrollIndex.observe(viewLifecycleOwner) { position ->
+//            coroutineScope.launch {
+//                listState.scrollToItem(position)
 //            }
 //        }
-
-        myStockViewModel.scrollIndex.observe(viewLifecycleOwner) { position ->
-            coroutineScope.launch {
-                listState.scrollToItem(position)
-            }
-        }
     }
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -302,7 +307,7 @@ class MyStockFragment : Fragment() {
                 .wrapContentHeight()
                 .fillMaxWidth(),
             maxRevealDp = maxRevealDp,
-            backgroundCardEndColor = Color_FBFBFBFB,
+            backgroundCardEndColor = Color_FBFBFB,
             animateBackgroundCardColor = false,
             state = revealSwipeState,
             directions = setOf(
@@ -348,7 +353,7 @@ class MyStockFragment : Fragment() {
                         Text(
                             text = getString(R.string.Common_Edit),
                             fontSize = 16.sp,
-                            color = colorResource(id = R.color.color_ffffff)
+                            color = Color_FFFFFF
                         )
                     }
                     Box(
@@ -361,12 +366,12 @@ class MyStockFragment : Fragment() {
                             }
                             .fillMaxWidth()
                             .weight(0.333f)
-                            .background(color = colorResource(id = R.color.color_4876c7))
+                            .background(color = Color_4876C7)
                     ) {
                         Text(
                             text = getString(R.string.Common_Sell),
                             fontSize = 16.sp,
-                            color = colorResource(id = R.color.color_ffffff)
+                            color = Color_FFFFFF
                         )
                     }
                     Box(
@@ -403,12 +408,12 @@ class MyStockFragment : Fragment() {
                             }
                             .fillMaxWidth()
                             .weight(0.333f)
-                            .background(color = colorResource(id = R.color.color_cd4632))
+                            .background(color = Color_CD4632)
                     ) {
                         Text(
                             text = getString(R.string.Common_Delete),
                             fontSize = 16.sp,
-                            color = colorResource(id = R.color.color_ffffff)
+                            color = Color_FFFFFF
                         )
                     }
                 }
@@ -419,7 +424,7 @@ class MyStockFragment : Fragment() {
                     .fillMaxSize()
                     .wrapContentHeight(),
                 elevation = 0.dp,
-                backgroundColor = colorResource(id = R.color.color_background_fbfbfb)
+                backgroundColor = Color_FBFBFB
             ) {
                 Column(
                     modifier = Modifier
@@ -437,7 +442,7 @@ class MyStockFragment : Fragment() {
                             text = myStockEntity.subjectName,
                             fontSize = 16.sp,
                             maxLines = 1,
-                            color = colorResource(id = R.color.color_222222),
+                            color = Color_222222,
                             modifier = Modifier
                                 .weight(0.55f)
                                 .padding(top = 10.dp)
@@ -453,14 +458,14 @@ class MyStockFragment : Fragment() {
                                 text = stringResource(id = R.string.MyStockFragment_Gain),
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = colorResource(id = R.color.color_222222),
+                                color = Color_222222,
                             )
                             //수익
                             Text(
                                 text = Utils.getPriceNum(myStockEntity.purchasePrice),
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = colorResource(id = R.color.color_666666),
+                                color = Color_666666,
                                 modifier = Modifier
                                     .padding(start = 5.dp)
                             )
@@ -469,7 +474,7 @@ class MyStockFragment : Fragment() {
                                 text = "(0.93)",
                                 fontSize = 12.sp,
                                 maxLines = 1,
-                                color = colorResource(id = R.color.color_222222),
+                                color = Color_222222,
                                 modifier = Modifier
                                     .padding(start = 5.dp)
                             )
@@ -492,14 +497,14 @@ class MyStockFragment : Fragment() {
                                 text = getString(R.string.MyStockFragment_Purchase_Date),
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = colorResource(id = R.color.color_666666)
+                                color = Color_666666
                             )
 
                             Text(
                                 text = myStockEntity.purchaseDate,
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = colorResource(id = R.color.color_222222),
+                                color = Color_222222,
                                 modifier = Modifier
                                     .padding(start = 10.dp)
                             )
@@ -513,7 +518,7 @@ class MyStockFragment : Fragment() {
                                 text = getString(R.string.MyStockFragment_Purchase_Average),
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = colorResource(id = R.color.color_666666),
+                                color = Color_666666,
                                 modifier = Modifier
                                     .padding(start = 10.dp)
                             )
@@ -522,7 +527,7 @@ class MyStockFragment : Fragment() {
                                 text = Utils.getPriceNum(myStockEntity.purchasePrice),
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = colorResource(id = R.color.color_222222),
+                                color = Color_222222,
                                 modifier = Modifier
                                     .padding(start = 10.dp)
                             )
@@ -563,7 +568,7 @@ class MyStockFragment : Fragment() {
                                 text = getString(R.string.MyStockFragment_Current_Price),
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = colorResource(id = R.color.color_666666),
+                                color = Color_666666,
                                 modifier = Modifier
                                     .padding(start = 10.dp)
                             )
@@ -572,7 +577,7 @@ class MyStockFragment : Fragment() {
                                 text = "2,600",
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = colorResource(id = R.color.color_222222),
+                                color = Color_222222,
                                 modifier = Modifier
                                     .padding(start = 10.dp)
                             )
