@@ -42,17 +42,7 @@ class TestActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 testViewModel.uiState.collect { uiState ->
-                    uiState.userMessages.firstOrNull()?.let { userMessage ->
-                        // TODO: Show Snackbar with userMessage.
-                        // Once the message is displayed and
-                        // dismissed, notify the ViewModel.
-                        Toast.makeText(
-                            this@TestActivity,
-                            uiState.userMessages.firstOrNull()?.message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        testViewModel.userMessageShown(userMessage.id)
-                    }
+
                 }
             }
         }

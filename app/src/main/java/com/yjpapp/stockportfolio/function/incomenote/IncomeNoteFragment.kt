@@ -23,7 +23,7 @@ import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.flow.collect
@@ -174,8 +174,8 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             data = IncomeNoteInputDialog.IncomeNoteInputDialogData(
                 subjectName = it.subjectName,
                 sellDate = it.sellDate,
-                purchasePrice = Utils.getNumInsertComma(BigDecimal(it.purchasePrice).toString()),
-                sellPrice = Utils.getNumInsertComma(BigDecimal(it.sellPrice).toString()),
+                purchasePrice = StockUtils.getNumInsertComma(BigDecimal(it.purchasePrice).toString()),
+                sellPrice = StockUtils.getNumInsertComma(BigDecimal(it.sellPrice).toString()),
                 sellCount = it.sellCount.toString(),
             )
         }
@@ -308,7 +308,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             val totalGainPercent = event.data.total_percent
             binding.let {
                 val totalRealizationGainsLossesNumber =
-                    Utils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
+                    StockUtils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
                 it.txtTotalRealizationGainsLossesData.text =
                     "${StockConfig.moneySymbol}$totalRealizationGainsLossesNumber"
                 if (totalGainPercent >= 0) {
@@ -319,7 +319,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                     it.txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
                 }
                 it.txtTotalRealizationGainsLossesPercent.text =
-                    Utils.getRoundsPercentNumber(totalGainPercent)
+                    StockUtils.getRoundsPercentNumber(totalGainPercent)
             }
         }
         is IncomeNoteViewModel.Event.IncomeNoteDeleteSuccess -> {

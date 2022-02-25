@@ -22,7 +22,7 @@ import com.yjpapp.stockportfolio.databinding.CustomDialogInputIncomeNoteBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.extension.OnSingleClickListener
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 
 
 class IncomeNoteInputDialog(
@@ -83,7 +83,7 @@ class IncomeNoteInputDialog(
 
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-        Utils.setDialogWidthResize(mContext, this, 0.85f)
+        StockUtils.setDialogWidthResize(mContext, this, 0.85f)
     }
 
     private val onClickListener = OnSingleClickListener { view: View? ->
@@ -122,10 +122,10 @@ class IncomeNoteInputDialog(
                 val sellDate = binding.etSellDate.text.toString()
                 //매수금액
                 val purchasePrice = binding.etPurchasePrice.text.toString()
-                val purchasePriceNumber = Utils.getNumDeletedComma(purchasePrice).toDouble()
+                val purchasePriceNumber = StockUtils.getNumDeletedComma(purchasePrice).toDouble()
                 //매도금액
                 val sellPrice = binding.etSellPrice.text.toString()
-                val sellPriceNumber = Utils.getNumDeletedComma(sellPrice).toDouble()
+                val sellPriceNumber = StockUtils.getNumDeletedComma(sellPrice).toDouble()
                 //매도수량
                 val sellCount = binding.etSellCount.text.toString().toInt()
 
@@ -184,7 +184,7 @@ class IncomeNoteInputDialog(
             count: Int
         ) {
             if (!TextUtils.isEmpty(charSequence.toString()) && charSequence.toString() != convertText) {
-                convertText = Utils.getNumInsertComma(charSequence.toString())
+                convertText = StockUtils.getNumInsertComma(charSequence.toString())
                 if (binding.etPurchasePrice.hasFocus()) {
                     binding.etPurchasePrice.setText(convertText)
                     binding.etPurchasePrice.setSelection(convertText.length) //커서를 오른쪽 끝으로 보낸다.

@@ -27,7 +27,7 @@ import java.util.*
  * @author Yoon Jae-park
  * @since 2020.07
  */
-object Utils {
+object StockUtils {
     //yyyymmdd로 변환
     fun getTodayYYYYMMDD(): String {
         val currentTime: Long = System.currentTimeMillis()

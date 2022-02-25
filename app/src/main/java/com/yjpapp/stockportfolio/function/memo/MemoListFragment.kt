@@ -21,7 +21,7 @@ import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteActivity
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
@@ -268,7 +268,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
                 hideDeleteButton()
             }
             if (viewModel.isMemoVibration()) {
-                Utils.runVibration(mContext, 100)
+                StockUtils.runVibration(mContext, 100)
             }
             memoListAdapter.isDeleteModeOn = !memoListAdapter.isDeleteModeOn
             viewModel.getAllMemoInfoList()

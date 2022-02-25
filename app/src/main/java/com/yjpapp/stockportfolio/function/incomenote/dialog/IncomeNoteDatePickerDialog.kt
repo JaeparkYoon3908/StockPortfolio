@@ -11,7 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogIncomeNoteDatePickerBinding
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 import es.dmoral.toasty.Toasty
 
 class IncomeNoteDatePickerDialog(
@@ -111,7 +111,7 @@ class IncomeNoteDatePickerDialog(
     }
 
     private fun initLayout() {
-        val nowYYYYMMDD: List<String> = Utils.getTodayYYMMDD()
+        val nowYYYYMMDD: List<String> = StockUtils.getTodayYYMMDD()
         viewBinding.apply {
             btnConfirm.setOnClickListener(onClickListener)
             btnCancel.setOnClickListener(onClickListener)

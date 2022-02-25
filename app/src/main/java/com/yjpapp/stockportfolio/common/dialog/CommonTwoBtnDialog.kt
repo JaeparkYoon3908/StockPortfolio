@@ -8,7 +8,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CommonDialogTwoBtnBinding
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 
 class CommonTwoBtnDialog(
     private val mContext: Context,
@@ -35,7 +35,7 @@ class CommonTwoBtnDialog(
         )
         setContentView(binding.root)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
-        Utils.setDialogWidthResize(mContext, this, 0.8f)
+        StockUtils.setDialogWidthResize(mContext, this, 0.8f)
 
         initData()
     }

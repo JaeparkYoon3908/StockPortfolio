@@ -19,7 +19,7 @@ import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 import es.dmoral.toasty.Toasty
 
 
@@ -62,7 +62,7 @@ class MyStockInputDialog(
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         //EditText focus 했을 때 키보드가 보이도록 설정
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-        Utils.setDialogWidthResize(mContext, this, 0.85f)
+        StockUtils.setDialogWidthResize(mContext, this, 0.85f)
         initData()
         initView()
     }
@@ -90,7 +90,7 @@ class MyStockInputDialog(
                 //매수 날짜 선택 다이얼로그 show
                 CommonDatePickerDialog(mContext, year, month, day).apply {
                     setListener { _: DatePicker?, year, month, dayOfMonth ->
-                        val todaySplit = Utils.getTodayYYYY_MM_DD().split(".")
+                        val todaySplit = StockUtils.getTodayYYYY_MM_DD().split(".")
                         if (year > todaySplit[0].toInt()) {
                             Toasty.error(mContext, "선택하신 연도가 현재 보다 큽니다.", Toasty.LENGTH_LONG).show()
                             return@setListener
@@ -148,7 +148,7 @@ class MyStockInputDialog(
                 override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     if (!TextUtils.isEmpty(s.toString()) && s.toString() != this@MyStockInputDialog.convertText) {
-                        this@MyStockInputDialog.convertText = Utils.getNumInsertComma(s.toString())
+                        this@MyStockInputDialog.convertText = StockUtils.getNumInsertComma(s.toString())
                         binding.etPurchasePrice.setText(this@MyStockInputDialog.convertText)
                         binding.etPurchasePrice.setSelection(this@MyStockInputDialog.convertText.length) //커서를 오른쪽 끝으로 보낸다.
                     }

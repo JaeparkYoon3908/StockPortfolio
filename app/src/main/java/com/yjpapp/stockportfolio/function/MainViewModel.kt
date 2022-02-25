@@ -5,12 +5,15 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -30,9 +33,10 @@ class MainViewModel @Inject constructor(
         } else {
             Toasty.normal(mContext, mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
             requestSetPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
-            Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            viewModelScope.launch {
+                delay(3000)
                 requestSetPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
-            },3000)
+            }
         }
     }
 

@@ -7,7 +7,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.BindingAdapter
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 import java.math.BigDecimal
 import java.util.*
 
@@ -40,7 +40,7 @@ fun setNumColor(textView: TextView, numToDouble: Double) {
 
 @BindingAdapter("binding:setPercentColor")
 fun setPercentNumColor(textView: TextView, percentNum: String) {
-    val percentNumToDouble = Utils.getNumDeletedPercent(percentNum).toDouble()
+    val percentNumToDouble = StockUtils.getNumDeletedPercent(percentNum).toDouble()
     if (percentNumToDouble >= 0) {
         textView.setTextColor(textView.context.getColor(R.color.color_e52b4e))
     }else{
@@ -51,7 +51,7 @@ fun setPercentNumColor(textView: TextView, percentNum: String) {
 @BindingAdapter("binding:setPrice")
 fun setPrice(textView: TextView, price: Double) {
     val moneySymbol = Currency.getInstance(Locale.KOREA).symbol
-    textView.text = moneySymbol + Utils.getNumInsertComma(BigDecimal(price).toString())
+    textView.text = moneySymbol + StockUtils.getNumInsertComma(BigDecimal(price).toString())
 }
 
 @BindingAdapter("android:text")
@@ -77,7 +77,7 @@ fun visibility(view: View, visibility: Boolean) {
  */
 @BindingAdapter("binding:addPercentText")
 fun addPercentText(textView: TextView, number: Double) {
-    textView.text = "(${Utils.getRoundsPercentNumber(number)})"
+    textView.text = "(${StockUtils.getRoundsPercentNumber(number)})"
 }
 
 /**

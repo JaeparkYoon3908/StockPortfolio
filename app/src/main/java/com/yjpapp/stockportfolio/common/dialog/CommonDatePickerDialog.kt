@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogMonthYearPickerBinding
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 
 class CommonDatePickerDialog(
     val mContext: Context,
@@ -43,13 +43,13 @@ class CommonDatePickerDialog(
             false
         )
         setContentView(binding.root)
-        Utils.setDialogWidthResize(mContext, this, 0.85f)
+        StockUtils.setDialogWidthResize(mContext, this, 0.85f)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         initView()
     }
 
     private fun initView() {
-        val nowYYYYMMDD: List<String> = Utils.getTodayYYMMDD()
+        val nowYYYYMMDD: List<String> = StockUtils.getTodayYYMMDD()
 
         binding.pickerYear.apply {
             minValue = MIN_YEAR

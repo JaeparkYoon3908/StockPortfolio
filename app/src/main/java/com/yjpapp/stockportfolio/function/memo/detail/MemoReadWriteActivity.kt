@@ -17,7 +17,7 @@ import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -190,7 +190,7 @@ class MemoReadWriteActivity :
                 if (etMemoReadWriteActivityTitle.text.toString() == "" && etMemoReadWriteActivityContent.text.toString() == "") {
                     setResult(MemoListFragment.RESULT_EMPTY)
                 } else {
-                    val date = Utils.getTodayYYYY_MM_DD()
+                    val date = StockUtils.getTodayYYYY_MM_DD()
                     val title = etMemoReadWriteActivityTitle.text.toString()
                     val content = etMemoReadWriteActivityContent.text.toString()
                     activityViewModel.requestAddMemoData(date, title, content)
@@ -201,7 +201,7 @@ class MemoReadWriteActivity :
                 if (etMemoReadWriteActivityTitle.text.toString() == "" && etMemoReadWriteActivityContent.text.toString() == "") {
                     setResult(MemoListFragment.RESULT_EMPTY)
                 } else {
-                    val date = Utils.getTodayYYYY_MM_DD()
+                    val date = StockUtils.getTodayYYYY_MM_DD()
                     val title = etMemoReadWriteActivityTitle.text.toString()
                     val content = etMemoReadWriteActivityContent.text.toString()
                     activityViewModel.requestUpdateMemoData(date, title, content)

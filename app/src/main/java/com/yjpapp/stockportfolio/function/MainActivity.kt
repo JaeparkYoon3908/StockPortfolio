@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
@@ -13,6 +14,7 @@ import com.yjpapp.stockportfolio.function.my.MyFragment
 import com.yjpapp.stockportfolio.function.mystock.MyStockFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * Main
@@ -95,13 +97,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     switchingBottomIconMy()
                 }
             }
-        } else {
-            //TODO 나의 주식 릴리즈 이후 오픈
+            return
+        }
+        //TODO 나의 주식 릴리즈 이후 오픈
 //            showFragment(myStockFragment)
 //            switchingBottomIconMyStock()
-            showFragment(incomeNoteFragment)
-            switchingBottomIconIncomeNote()
-        }
+        showFragment(incomeNoteFragment)
+        switchingBottomIconIncomeNote()
     }
 
     private fun showFragment(fragment: Fragment) {

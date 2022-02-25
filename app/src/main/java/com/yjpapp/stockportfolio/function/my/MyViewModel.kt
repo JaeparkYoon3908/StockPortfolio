@@ -4,12 +4,10 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.model.response.RespNaverDeleteUserInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +18,7 @@ class MyViewModel @Inject constructor(
     private val myRepository: MyRepository
 ): ViewModel() {
     val userName = userRepository.getUserName()
-    val userEmail = Utils.getEmailMasking(userRepository.getUserEmail())
+    val userEmail = StockUtils.getEmailMasking(userRepository.getUserEmail())
     val userLoginType = userRepository.getLoginType()
     val isMyStockAutoRefresh = myRepository.getMyStockAutoRefresh()
     val isMyStockAutoAdd = myRepository.getMyStockAutoAdd()

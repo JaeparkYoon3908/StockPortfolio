@@ -13,8 +13,8 @@ import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -34,9 +34,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
+import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
-import com.yjpapp.stockportfolio.util.Utils
+import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
@@ -79,6 +80,11 @@ class MyStockFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        lifecycleScope.launch {
+            repeatOnStarted {
+                myStockViewModel.eventFlow.collect { event -> handleEvent(event) }
+            }
+        }
     }
 
     private var menu: Menu? = null
@@ -105,6 +111,17 @@ class MyStockFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun handleEvent(event: MyStockViewModel.Event) {
+        when (event) {
+            is MyStockViewModel.Event.ShowInfoToastMessage -> {
+                Toasty.info(mContext, event.msg, Toasty.LENGTH_LONG).show()
+            }
+            is MyStockViewModel.Event.ShowErrorToastMessage -> {
+                Toasty.error(mContext, event.msg, Toasty.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun showInputDialog(
@@ -135,23 +152,16 @@ class MyStockFragment : Fragment() {
                         return
                     }
                     dialog.dismiss()
-
-                    if (dialogData == null) {
-                        Toasty.info(mContext, "추가 완료 됐습니다.", Toasty.LENGTH_SHORT).show()
-                        return
-                    }
-
-                    Toasty.info(mContext, "수정 완료 됐습니다.", Toasty.LENGTH_SHORT).show()
                 }
             }).show()
     }
-
     /**
      * Compose 영역
      */
     @Preview
     @Composable
     private fun TotalPriceComposable() {
+        var totalPurchasePrice by rememberSaveable { mutableStateOf(myStockViewModel.testText) }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -174,7 +184,7 @@ class MyStockFragment : Fragment() {
 
                 )
                 Text(
-                    text = "5000000000",
+                    text = totalPurchasePrice,
                     color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
@@ -221,7 +231,7 @@ class MyStockFragment : Fragment() {
                         .weight(0.30f)
                 )
                 Text(
-                    text = "5000000000",
+                    text = "500000",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -462,7 +472,7 @@ class MyStockFragment : Fragment() {
                             )
                             //수익
                             Text(
-                                text = Utils.getPriceNum(myStockEntity.purchasePrice),
+                                text = StockUtils.getPriceNum(myStockEntity.purchasePrice),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = Color_666666,
@@ -524,7 +534,7 @@ class MyStockFragment : Fragment() {
                             )
 
                             Text(
-                                text = Utils.getPriceNum(myStockEntity.purchasePrice),
+                                text = StockUtils.getPriceNum(myStockEntity.purchasePrice),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = Color_222222,
