@@ -53,7 +53,9 @@ class MyStockViewModel @Inject constructor(
         try {
             if (myStockEntity.id == 0) {
                 myStockRepository.insertMyStock(myStockEntity)
-                myStockInfoList.add(myStockEntity)
+                myStockRepository.getAllMyStock().last {
+                    myStockInfoList.add(it)
+                }
                 _scrollIndex.value = myStockInfoList.size - 1
             } else {
                 myStockRepository.updateMyStock(myStockEntity)
