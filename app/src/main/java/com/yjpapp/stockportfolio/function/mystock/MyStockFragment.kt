@@ -161,7 +161,7 @@ class MyStockFragment : Fragment() {
     @Preview
     @Composable
     private fun TotalPriceComposable() {
-        var totalPurchasePrice by rememberSaveable { mutableStateOf(myStockViewModel.testText) }
+        val total by myStockViewModel.totalPurchasePrice.collectAsState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -184,7 +184,7 @@ class MyStockFragment : Fragment() {
 
                 )
                 Text(
-                    text = totalPurchasePrice,
+                    text = total,
                     color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,

@@ -27,8 +27,8 @@ class MyStockViewModel @Inject constructor(
 ) : ViewModel() {
     private val _eventFlow = MutableEventFlow<Event>()
     val eventFlow = _eventFlow.asEventFlow()
-    private val _totalPurchasePrice = mutableStateOf("")
-    val totalPurchasePrice: State<String> get() = _totalPurchasePrice //상단 총 매수금액
+    private val _totalPurchasePrice = MutableStateFlow("")
+    val totalPurchasePrice: StateFlow<String> get() = _totalPurchasePrice //상단 총 매수금액
     var testText = ""
     private val _totalEvaluationAmount = MutableStateFlow("")
     val totalEvaluationAmount: StateFlow<String> get() = _totalEvaluationAmount //상단 총 평가금액
@@ -103,7 +103,7 @@ class MyStockViewModel @Inject constructor(
         }
         viewModelScope.launch {
             val price = StockUtils.getPriceNum(totalPurchasePrice.toString())
-            _totalPurchasePrice.value = (price)
+            _totalPurchasePrice.emit(price)
             testText = price
         }
     }
