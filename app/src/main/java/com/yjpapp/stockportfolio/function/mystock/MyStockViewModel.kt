@@ -29,22 +29,16 @@ class MyStockViewModel @Inject constructor(
     val eventFlow = _eventFlow.asEventFlow()
     private val _totalPurchasePrice = MutableStateFlow("")
     val totalPurchasePrice: StateFlow<String> get() = _totalPurchasePrice //상단 총 매수금액
-    var testText = ""
     private val _totalEvaluationAmount = MutableStateFlow("")
     val totalEvaluationAmount: StateFlow<String> get() = _totalEvaluationAmount //상단 총 평가금액
     private val _totalGainPrice = MutableStateFlow("")
     val totalGainPrice: StateFlow<String> get() = _totalGainPrice //상단 손익
     private val _totalGainPricePercent = MutableStateFlow("")
     val totalGainPricePercent: StateFlow<String> get() = _totalGainPricePercent //상단 수익률
-
     var myStockInfoList = mutableStateListOf<MyStockEntity>() //나의 주식 목록 List
         private set
     private val _scrollIndex by lazy { MutableStateFlow(myStockInfoList.size) }
     val scrollIndex: StateFlow<Int> get() = _scrollIndex
-//    private val _scrollIndex by lazy { MutableLiveData(myStockInfoList.size) }
-//    val scrollIndex:LiveData<Int> get() = _scrollIndex
-//    val showErrorToast = MutableLiveData<Event<Boolean>>() //필수 값을 모두 입력해주세요 Toast
-//    val showDBSaveErrorToast = MutableLiveData<Event<Boolean>>() //DB가 에러나서 저장 안된다는 Toast
 
     /**
      * MyStockFragment 영역
@@ -104,7 +98,6 @@ class MyStockViewModel @Inject constructor(
         viewModelScope.launch {
             val price = StockUtils.getPriceNum(totalPurchasePrice.toString())
             _totalPurchasePrice.emit(price)
-            testText = price
         }
     }
 

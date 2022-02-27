@@ -14,7 +14,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -161,7 +160,10 @@ class MyStockFragment : Fragment() {
     @Preview
     @Composable
     private fun TotalPriceComposable() {
-        val total by myStockViewModel.totalPurchasePrice.collectAsState()
+        val totalPurchasePrice by myStockViewModel.totalPurchasePrice.collectAsState()
+        val totalEvaluationAmount by myStockViewModel.totalEvaluationAmount.collectAsState()
+        val totalGainPrice by myStockViewModel.totalGainPrice.collectAsState()
+        val totalGainPricePercent by myStockViewModel.totalGainPricePercent.collectAsState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -184,7 +186,7 @@ class MyStockFragment : Fragment() {
 
                 )
                 Text(
-                    text = total,
+                    text = totalPurchasePrice,
                     color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
