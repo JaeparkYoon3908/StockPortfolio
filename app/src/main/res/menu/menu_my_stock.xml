@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_MyStockFragment_Refresh"
+        android:title="@string/Common_Refresh"
+        app:showAsAction="ifRoom"
+        />
+
     <item android:id="@+id/menu_MyStockFragment_Add"
         android:title=""
         android:icon="@drawable/icon_add2"
         app:showAsAction="ifRoom"
         />
-<!--    <item android:id="@+id/menu_MyStockFragment_Edit"-->
-<!--        android:title="@string/Common_Edit"-->
-<!--        android:icon="@drawable/icon_setting_2"-->
-<!--        app:showAsAction="ifRoom"-->
-<!--        />-->
 </menu>

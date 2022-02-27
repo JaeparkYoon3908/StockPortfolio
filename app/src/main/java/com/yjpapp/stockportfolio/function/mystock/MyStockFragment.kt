@@ -95,6 +95,9 @@ class MyStockFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.menu_MyStockFragment_Refresh -> {
+
+            }
             R.id.menu_MyStockFragment_Add -> {
                 if (myStockViewModel.myStockInfoList.size >= 10) {
                     Toasty.info(
@@ -183,7 +186,6 @@ class MyStockFragment : Fragment() {
                     maxLines = 1,
                     modifier = Modifier
                         .weight(0.30f)
-
                 )
                 Text(
                     text = totalPurchasePrice,
@@ -296,12 +298,6 @@ class MyStockFragment : Fragment() {
                 }
             }
         }
-
-//        myStockViewModel.scrollIndex.observe(viewLifecycleOwner) { position ->
-//            coroutineScope.launch {
-//                listState.scrollToItem(position)
-//            }
-//        }
     }
 
     @OptIn(ExperimentalMaterialApi::class)

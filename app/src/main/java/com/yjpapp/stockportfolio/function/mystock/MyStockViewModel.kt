@@ -45,7 +45,7 @@ class MyStockViewModel @Inject constructor(
      */
     init {
         myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
-        calculateTopData(myStockInfoList)
+        calculateTopData()
     }
 
     //확인버튼 클릭 후 Save
@@ -64,7 +64,7 @@ class MyStockViewModel @Inject constructor(
                 myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
                 event(Event.ShowInfoToastMessage("수정 완료 됐습니다."))
             }
-            calculateTopData(myStockInfoList)
+            calculateTopData()
             return true
         } catch (e: Exception) {
             e.stackTrace
@@ -77,6 +77,7 @@ class MyStockViewModel @Inject constructor(
         return try {
             myStockRepository.deleteMyStock((myStockEntity))
             myStockInfoList.remove(myStockEntity)
+            calculateTopData()
             true
         } catch (e: Exception) {
             e.stackTrace
@@ -84,13 +85,13 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    private fun calculateTopData(myStockEntityList: MutableList<MyStockEntity>) {
+    private fun calculateTopData() {
         var totalPurchasePrice = 0.00
         var totalEvaluationAmount = 0.00
         var totalGainPrice = 0.00
         var totalGainPricePercent = 0.00
 
-        myStockEntityList.forEach {
+        myStockInfoList.forEach {
             val purchasePrice = StockUtils.getNumDeletedComma(it.purchasePrice).toDouble()
             val purchaseCount = it.purchaseCount.toDouble()
             totalPurchasePrice += purchasePrice * purchaseCount
@@ -99,6 +100,10 @@ class MyStockViewModel @Inject constructor(
             val price = StockUtils.getPriceNum(totalPurchasePrice.toString())
             _totalPurchasePrice.emit(price)
         }
+    }
+
+    fun getCurrentPrices() {
+
     }
 
     private fun event(event: Event) {
