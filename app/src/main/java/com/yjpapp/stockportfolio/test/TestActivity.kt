@@ -84,7 +84,7 @@ class TestActivity : AppCompatActivity() {
                                 Jsoup.connect(url).get()
                             }
                             val blind = doc.select(".blind")
-                            if (blind.isNotEmpty()) {
+                            if (blind.isNotEmpty() && blind.size > 19) {
                                 var currentPrice = blind[15].text()
                                 var dayToDayPrice = blind[16].text()
                                 var dayToDayPercent = blind[17].text()
