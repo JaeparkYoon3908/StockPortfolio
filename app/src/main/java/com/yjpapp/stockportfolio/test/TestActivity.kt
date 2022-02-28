@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.test
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -14,9 +15,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.ActivityTestBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
 import java.lang.ref.WeakReference
 
 /**
@@ -61,55 +65,43 @@ class TestActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-//        testViewModel.liveData.observe(this@TestActivity, { message ->
-//            Toast.makeText(this@TestActivity, message, Toast.LENGTH_SHORT).show()
-//        })
-
-//        testViewModel.eventLiveData.observe(this@TestActivity, {
-//            it.getContentIfNotHandled()?.let { message ->
-//                Toast.makeText(this@TestActivity, message, Toast.LENGTH_SHORT).show()
-//            }
-//        })
         testViewModel.refreshNewLiveData("send onResume()")
     }
 
     interface CallBack {
         fun onClick(view: View)
     }
-
+    val codeArray = arrayListOf("373220", "055550", "051905", "005935", "029960", "363280", "068270", "105560", "035420", "016360")
+    var text = StringBuilder()
     private val callBack = object : CallBack {
         override fun onClick(view: View) {
             when (view.id) {
                 R.id.button -> {
-//                    testViewModel.activityDataSendText = "Change text from activity"
-//
-//                    //Fragment 띄우기기
-//                    supportFragmentManager
-//                        .beginTransaction()
-//                        .add(
-//                            R.id.fragmentContainerView,
-//                            StockSearchFragment(),
-//                            StockSearchFragment::class.java.simpleName
-//                        )
-//                        .commit()
-//                    binding.button.visibility = View.GONE
-
-//                    lifecycleScope.launch {
-//                        delay(3000)
-//                        testViewModel.refreshNews(this@TestActivity,  "1번 메시지")
-//                        testViewModel.refreshNews(this@TestActivity,  "2번 메시지")
-
-//                        testViewModel.refreshNewLiveData("1번 메시지")
-//                        testViewModel.refreshNewLiveData("2번 메시지")
-//                    }
-
-//                    testViewModel.refreshNewSingleLiveData("1번 메시지")
-//                    testViewModel.refreshNewSingleLiveData("2번 메시지")
                     lifecycleScope.launch {
-                        repeat(500) {
-                            testViewModel.refreshNewSingleLiveData("반복 토스트")
+                        repeat(codeArray.size) {
+                            val url = "https://finance.naver.com/item/main.naver?code=${codeArray[it]}"
+                            val doc = withContext(Dispatchers.IO) {
+                                Jsoup.connect(url).get()
+                            }
+                            val blind = doc.select(".blind")
+                            if (blind.isNotEmpty()) {
+                                var currentPrice = blind[15].text()
+                                var dayToDayPrice = blind[16].text()
+                                var dayToDayPercent = blind[17].text()
+                                var yesterdayPrice = blind[18].text()
+                                if (blind.size == 34) {
+                                    currentPrice = blind[16].text()
+                                    dayToDayPrice = blind[17].text()
+                                    dayToDayPercent = blind[18].text()
+                                    yesterdayPrice = blind[19].text()
+
+                                }
+                                text.append(currentPrice).append("\n")
+                            }
                         }
+                        binding.textView.text = text.toString()
                     }
+
                 }
                 R.id.button_2 -> {
                     val intent = Intent(this@TestActivity, TestDetailActivity::class.java)
