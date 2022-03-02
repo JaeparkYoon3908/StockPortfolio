@@ -30,9 +30,11 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/cons_MainActivity_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/color_ffffff"
+            app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@+id/view_bottom_line"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_MainActivity"/>
 
@@ -42,129 +44,21 @@
             android:layout_height="@dimen/common_1dp"
             android:background="@color/color_line_1a000000"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
             tools:visibility="visible" />
 
-        <LinearLayout
-            android:id="@+id/lin_MainActivity_BottomMenu_MyStock"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/common_60dp"
-            android:gravity="center"
-            android:onClick="clickBottomMenu"
-            android:orientation="vertical"
-            android:visibility="gone"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/color_ffffff"
+            app:itemIconTint="@color/selector_bottom_text_color"
+            app:itemTextColor="@color/selector_bottom_text_color"
+            app:itemHorizontalTranslationEnabled="true"
+            app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:visibility="visible">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/img_MainActivity_BottomMenu_MyStock"
-                android:layout_width="@dimen/common_25dp"
-                android:layout_height="@dimen/common_25dp"
-                android:src="@drawable/selector_icon_my_stock" />
-
-            <TextView
-                android:id="@+id/txt_MainActivity_BottomMenu_MyStock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/MyStockFragment_Title"
-                android:textColor="@color/selector_bottom_text_color" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_MainActivity_BottomMenu_IncomeNote"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/common_60dp"
-            android:gravity="center"
-            android:onClick="clickBottomMenu"
-            android:orientation="vertical"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_Memo"
-            app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_MyStock"
-            tools:visibility="visible">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/img_MainActivity_BottomMenu_IncomeNote"
-                android:layout_width="@dimen/common_25dp"
-                android:layout_height="@dimen/common_25dp"
-                android:src="@drawable/selector_icon_income_note" />
-
-            <TextView
-                android:id="@+id/txt_MainActivity_BottomMenu_IncomeNote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/IncomeNoteFragment_Title"
-                android:textColor="@color/selector_bottom_text_color" />
-        </LinearLayout>
-        <!--    <View-->
-        <!--        android:layout_width="@dimen/common_1dp"-->
-        <!--        android:layout_height="0dp"-->
-        <!--        android:background="@color/color_line_1a000000"-->
-        <!--        app:layout_constraintTop_toTopOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"-->
-        <!--        app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"-->
-        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--        />-->
-
-        <LinearLayout
-            android:id="@+id/lin_MainActivity_BottomMenu_Memo"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/common_60dp"
-            android:gravity="center"
-            android:onClick="clickBottomMenu"
-            android:orientation="vertical"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/lin_MainActivity_BottomMenu_My"
-            app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_IncomeNote"
-            tools:visibility="visible">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/img_MainActivity_BottomMenu_Memo"
-                android:layout_width="@dimen/common_25dp"
-                android:layout_height="@dimen/common_25dp"
-                android:src="@drawable/selector_icon_memo" />
-
-            <TextView
-                android:id="@+id/txt_MainActivity_BottomMenu_Memo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/MemoListFragment_Title"
-                android:textColor="@color/selector_bottom_text_color" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_MainActivity_BottomMenu_My"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/common_60dp"
-            android:gravity="center"
-            android:onClick="clickBottomMenu"
-            android:orientation="vertical"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lin_MainActivity_BottomMenu_Memo"
-            tools:visibility="visible">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/img_MainActivity_BottomMenu_Ad"
-                android:layout_width="@dimen/common_25dp"
-                android:layout_height="@dimen/common_25dp"
-                android:src="@drawable/selector_icon_my" />
-
-            <TextView
-                android:id="@+id/txt_MainActivity_BottomMenu_Ad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/MyFragment_Title"
-                android:textColor="@color/selector_bottom_text_color" />
-        </LinearLayout>
+            app:layout_constraintDimensionRatio="H, 1 : 0.17"
+            app:menu="@menu/menu_main_bottom_navi" />
 
         <View
             android:id="@+id/view_masking"

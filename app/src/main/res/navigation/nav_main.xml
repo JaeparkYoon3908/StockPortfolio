@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/apk/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/incomeNoteFragment"
+    >
+
+    <keep_state_fragment
+        android:id="@+id/myStockFragment"
+        android:name="com.yjpapp.stockportfolio.function.mystock.MyStockFragment"
+        android:label="MyStockFragment"
+        />
+
+    <keep_state_fragment
+        android:id="@+id/incomeNoteFragment"
+        android:name="com.yjpapp.stockportfolio.function.incomenote.IncomeNoteFragment"
+        android:label="IncomeNoteFragment"
+        tools:layout="@layout/fragment_income_note"
+        />
+
+    <keep_state_fragment
+        android:id="@+id/memoListFragment"
+        android:name="com.yjpapp.stockportfolio.function.memo.MemoListFragment"
+        android:label="MemoListFragment"
+        tools:layout="@layout/fragment_memo_list"
+        />
+
+    <keep_state_fragment
+        android:id="@+id/myFragment"
+        android:name="com.yjpapp.stockportfolio.function.my.MyFragment"
+        android:label="MyFragment"
+        tools:layout="@layout/fragment_my"
+        />
+
+</navigation>

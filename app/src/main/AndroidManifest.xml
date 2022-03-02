@@ -29,17 +29,14 @@
 
         <activity
             android:name=".function.MainActivity"
-            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".function.memo.detail.MemoReadWriteActivity"
-            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".function.login.LoginActivity"
-            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
@@ -57,12 +54,10 @@
 
         <activity
             android:name=".test.TestActivity"
-            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".test.TestDetailActivity"
-            android:exported="false"
             android:screenOrientation="portrait" />
 
         <service

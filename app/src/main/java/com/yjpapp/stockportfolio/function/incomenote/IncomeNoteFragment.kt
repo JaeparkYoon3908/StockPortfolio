@@ -110,11 +110,6 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
 
     private val onClickListener = OnSingleClickListener { view: View? ->
         when (view?.id) {
-            R.id.lin_MainActivity_BottomMenu_Memo -> {
-                val intent = Intent(mContext, MemoListFragment::class.java)
-                startActivity(intent)
-            }
-
             R.id.btn_date -> {
                 IncomeNoteDatePickerDialog(
                     datePickerDialogCallBack,

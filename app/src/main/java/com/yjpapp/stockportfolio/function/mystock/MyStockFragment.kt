@@ -155,6 +155,10 @@ class MyStockFragment : Fragment() {
                     }
                     dialog.dismiss()
                 }
+
+                override fun showStockSearchFragment() {
+
+                }
             }).show()
     }
     /**
@@ -212,7 +216,7 @@ class MyStockFragment : Fragment() {
                         .weight(0.30f)
                 )
                 Text(
-                    text = "5000000000",
+                    text = totalEvaluationAmount,
                     color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
@@ -235,7 +239,7 @@ class MyStockFragment : Fragment() {
                         .weight(0.30f)
                 )
                 Text(
-                    text = "500000",
+                    text = totalGainPrice,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -257,7 +261,7 @@ class MyStockFragment : Fragment() {
                         .weight(0.30f)
                 )
                 Text(
-                    text = "5000000000",
+                    text = totalGainPricePercent,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,

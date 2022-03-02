@@ -74,8 +74,7 @@ class MyStockInputDialog(
     private fun initView() {
         binding.apply {
             etSubjectName.setOnSingleClickListener {
-//                    val intent = Intent(mContext, StockSearchActivity::class.java)
-//                    startActivityForResult(intent, 10000)
+
             }
             etPurchaseDate.setOnSingleClickListener {
                 var year = ""
@@ -202,5 +201,6 @@ class MyStockInputDialog(
 
     interface CallBack {
         fun onInputDialogCompleteClicked(dialog: MyStockInputDialog, userInputDialogData: MyStockInputDialogData)
+        fun showStockSearchFragment()
     }
 }

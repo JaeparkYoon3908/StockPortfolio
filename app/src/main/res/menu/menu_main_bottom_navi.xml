@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/myStockFragment"
+        android:icon="@drawable/ic_my_stock"
+        android:title="@string/MyStockFragment_Title" />
+
+    <item
+        android:id="@id/incomeNoteFragment"
+        android:icon="@drawable/ic_income_note"
+        android:title="@string/IncomeNoteFragment_Title" />
+
+    <item
+        android:id="@id/memoListFragment"
+        android:icon="@drawable/ic_memo_list"
+        android:title="@string/MemoListFragment_Title" />
+
+    <item
+        android:id="@id/myFragment"
+        android:icon="@drawable/ic_my"
+        android:title="@string/MyFragment_Title" />
+</menu>
