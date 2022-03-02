@@ -3,8 +3,6 @@ package com.yjpapp.stockportfolio.function
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.plusAssign
 import androidx.navigation.ui.setupWithNavController
@@ -36,14 +34,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun initData() {
-        viewModel.requestSetPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
+        viewModel.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
     }
 
     private fun initLayout() {
         binding.apply {
             setSupportActionBar(toolbarMainActivity)
         }
-
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
