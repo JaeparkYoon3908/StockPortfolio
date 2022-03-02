@@ -24,11 +24,15 @@ abstract class BaseActivity<T : ViewDataBinding>(
     private val connectivityManager by lazy {
         applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
+    private var isShowDialog = false
     private val networkConnectedCallBack by lazy {
         object : ConnectivityManager.NetworkCallback() {
             override fun onLost(network: Network) {
                 super.onLost(network)
-                ResponseAlertManger.showNetworkConnectErrorAlert(this@BaseActivity)
+                if (!isShowDialog) {
+                    ResponseAlertManger.showNetworkConnectErrorAlert(this@BaseActivity)
+                }
+                isShowDialog = true
             }
         }
     }
@@ -41,6 +45,7 @@ abstract class BaseActivity<T : ViewDataBinding>(
     @SuppressLint("MissingPermission")
     override fun onResume() {
         super.onResume()
+        isShowDialog = false
         val networkRequest = NetworkRequest.Builder() // addTransportType : 주어진 전송 요구 사항을 빌더에 추가
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR) // TRANSPORT_CELLULAR : 이 네트워크가 셀룰러 전송을 사용함을 나타냅니다.
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI) // TRANSPORT_WIFI : 이 네트워크가 Wi-Fi 전송을 사용함을 나타냅니다.

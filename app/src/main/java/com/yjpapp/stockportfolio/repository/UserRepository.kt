@@ -28,15 +28,11 @@ class UserRepository(
     suspend fun retryNaverUserLogin(params: HashMap<String, String>) =
         retrofitClient.getService(RetrofitClient.BaseServerURL.NAVER_NID)?.requestRetryNaverUserLogin(params)
 
-    fun logout(context: Context) {
+    fun logout() {
         //프리퍼런스 reset
         preferenceRepository.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
         preferenceRepository.setPreference(PrefKey.KEY_USER_INDEX, "")
         preferenceRepository.setPreference(PrefKey.KEY_USER_TOKEN, "")
-
-        val intent = Intent(context, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(intent)
     }
 
     suspend fun deleteUserInfo() =

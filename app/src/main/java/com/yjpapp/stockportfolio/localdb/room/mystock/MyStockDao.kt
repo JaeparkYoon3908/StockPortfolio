@@ -1,7 +1,6 @@
 package com.yjpapp.stockportfolio.localdb.room.mystock
 
 import androidx.room.*
-import kotlin.jvm.Throws
 
 @Dao
 interface MyStockDao {

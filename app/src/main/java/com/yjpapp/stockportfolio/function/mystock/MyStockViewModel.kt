@@ -16,9 +16,12 @@ import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +48,7 @@ class MyStockViewModel @Inject constructor(
      */
     init {
         myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
+//        getCurrentPrices()
         calculateTopData()
     }
 
@@ -103,7 +107,29 @@ class MyStockViewModel @Inject constructor(
     }
 
     fun getCurrentPrices() {
+        viewModelScope.launch {
+            repeat(myStockInfoList.size) {
+                val url = "https://finance.naver.com/item/main.naver?code=${myStockInfoList[it].subjectCode}"
+                val doc = withContext(Dispatchers.IO) {
+                    Jsoup.connect(url).get()
+                }
+                val blind = doc.select(".blind")
+                if (blind.isNotEmpty() && blind.size > 19) {
+                    var currentPrice = blind[15].text()
+                    var dayToDayPrice = blind[16].text()
+                    var dayToDayPercent = blind[17].text()
+                    var yesterdayPrice = blind[18].text()
+                    if (blind.size == 34) {
+                        currentPrice = blind[16].text()
+                        dayToDayPrice = blind[17].text()
+                        dayToDayPercent = blind[18].text()
+                        yesterdayPrice = blind[19].text()
 
+                    }
+                    myStockInfoList[it].currentPrice = currentPrice
+                }
+            }
+        }
     }
 
     private fun event(event: Event) {
@@ -115,5 +141,7 @@ class MyStockViewModel @Inject constructor(
     sealed class Event {
         data class ShowInfoToastMessage(val msg: String): Event()
         data class ShowErrorToastMessage(val msg: String): Event()
+        data class ShowLoadingImage(val msg: Unit): Event()
+        data class HideLoadingImage(val msg: Unit): Event()
     }
 }
