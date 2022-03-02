@@ -223,4 +223,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         binding.txtMainActivityBottomMenuAd.isSelected =
             !binding.txtMainActivityBottomMenuAd.isSelected
     }
+
+    fun startLoadingAnimation() {
+        binding.viewMasking.visibility = View.VISIBLE
+        binding.ivLoading.visibility = View.VISIBLE
+        binding.ivLoading.startAnimation()
+    }
+
+    fun stopLoadingAnimation() {
+        binding.viewMasking.visibility = View.GONE
+        binding.ivLoading.visibility = View.GONE
+        binding.ivLoading.stopAnimation()
+    }
 }

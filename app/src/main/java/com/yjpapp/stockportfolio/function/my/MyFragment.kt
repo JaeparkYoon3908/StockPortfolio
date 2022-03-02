@@ -7,18 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
-import com.navercorp.nid.NaverIdLoginSDK
+import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseFragment
-import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.extension.repeatOnStarted
+import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.function.login.LoginActivity
-import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.test.TestActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * 마이 화면
@@ -29,8 +30,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
     private val myViewModel: MyViewModel by viewModels()
-
+    private var mainActivity: MainActivity? = null
     override fun onAttach(context: Context) {
+        try {
+            mainActivity = requireActivity() as MainActivity
+        } catch (e: ClassCastException) {
+            e.stackTrace
+        }
         super.onAttach(context)
     }
 
@@ -53,30 +59,25 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
             callBack = this@MyFragment.callBack
             lifecycleOwner = this@MyFragment
         }
-        subscribeUI(this)
+        lifecycleScope.launch {
+            repeatOnStarted {
+                myViewModel.eventFlow.collect { handleEvent(it) }
+            }
+        }
     }
 
-    private fun subscribeUI(owner: LifecycleOwner) {
-        myViewModel.apply {
-            isMemberOffSuccess.observe(owner) { isSuccess ->
-                if (isSuccess) {
-                    myViewModel.requestDeleteUserInfo()
-                    startLoginActivity()
-                    requireActivity().finish()
-                }
+    private fun handleEvent(event: MyViewModel.Event) {
+        when (event) {
+            is MyViewModel.Event.StartLoginActivity -> {
+                startLoginActivity()
+                requireActivity().finish()
             }
-
-//            respDeleteNaverUserInfo.observe(owner) { data ->
-//                if (data.result == "success") {
-//                    myViewModel.requestLogout(mContext)
-//                } else {
-//                    var msg = requireContext().getString(R.string.Error_Msg_Normal)
-//                    if (data.error_description.isNotEmpty()) {
-//                        msg = data.error_description
-//                    }
-//                    ResponseAlertManger.showErrorAlert(requireContext(), msg)
-//                }
-//            }
+            is MyViewModel.Event.StartLoadingAnimation -> {
+                mainActivity?.startLoadingAnimation()
+            }
+            is MyViewModel.Event.StopLoadingAnimation -> {
+                mainActivity?.stopLoadingAnimation()
+            }
         }
     }
 
@@ -97,16 +98,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                             dialog.dismiss()
                         },
                         rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
-                            when (myViewModel.getLoginType()) {
-                                StockConfig.LOGIN_TYPE_NAVER -> {
-//                                    myViewModel.requestDeleteNaverUserInfo(mContext)
-                                    NaverIdLoginSDK.logout()
-                                    myViewModel.requestLogout(mContext)
-                                }
-                                else -> {
-                                    myViewModel.requestLogout(mContext)
-                                }
-                            }
+                            myViewModel.requestLogout(mContext)
                             dialog.dismiss()
                         }
                     )).show()
@@ -178,6 +170,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
 
     private fun startLoginActivity() {
         Intent(mContext, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             mContext.startActivity(this)
         }
     }

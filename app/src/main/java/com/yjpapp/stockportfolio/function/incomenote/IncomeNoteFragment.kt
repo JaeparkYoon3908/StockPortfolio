@@ -343,8 +343,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             Toasty.normal(mContext, toastMsg).show()
             viewModel.requestTotalGain(mContext)
             if (event.data.id != -1) {
-                val beforeModifyIncomeNote =
-                    incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }
+                val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }
                 val index = incomeNoteListAdapter.incomeNoteListInfo.indexOf(beforeModifyIncomeNote)
                 incomeNoteListAdapter.incomeNoteListInfo[index] = event.data
                 incomeNoteListAdapter.notifyDataSetChanged()

@@ -272,7 +272,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             override fun onFailure(httpStatus: Int, message: String) {
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                 val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                Toast.makeText(this@LoginActivity,"errorCode:$errorCode, errorDesc:$errorDescription",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@LoginActivity,"일시적 오류가 발생했습니다. 잠시 후 다시 시도해주세요. msg : $message",Toast.LENGTH_SHORT).show()
             }
             override fun onError(errorCode: Int, message: String) {
                 onFailure(errorCode, message)

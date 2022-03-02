@@ -1,9 +1,13 @@
 package com.yjpapp.stockportfolio.function.my
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.navercorp.nid.oauth.NidOAuthLogin
+import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.extension.MutableEventFlow
+import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
@@ -17,6 +21,8 @@ class MyViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val myRepository: MyRepository
 ): ViewModel() {
+    private val _eventFlow = MutableEventFlow<Event>()
+    val eventFlow = _eventFlow.asEventFlow()
     val userName = userRepository.getUserName()
     val userEmail = StockUtils.getEmailMasking(userRepository.getUserEmail())
     val userLoginType = userRepository.getLoginType()
@@ -28,46 +34,78 @@ class MyViewModel @Inject constructor(
     val isShowMemoDeleteCheck = myRepository.getShowMemoDeleteCheck()
     val isMemoLongClickVibrateCheck = myRepository.getMemoVibrateOff()
 
-    val isMemberOffSuccess = MutableLiveData<Boolean>()
-    val isNetworkConnectException = MutableLiveData<Boolean>()
+//    val isMemberOffSuccess = MutableLiveData<Boolean>()
+//    val isNetworkConnectException = MutableLiveData<Boolean>()
 
     fun requestLogout(context: Context) {
-        userRepository.logout(context)
+        event(Event.StartLoadingAnimation(""))
+        when (userRepository.getLoginType()) {
+            StockConfig.LOGIN_TYPE_NAVER -> {
+                NidOAuthLogin().callDeleteTokenApi(context, object : OAuthLoginCallback {
+                    override fun onSuccess() {
+                        //서버에서 토큰 삭제에 성공한 상태입니다.
+                        userRepository.logout()
+                        event(Event.StopLoadingAnimation(""))
+                        event(Event.StartLoginActivity(""))
+                    }
+                    override fun onFailure(httpStatus: Int, message: String) {
+                        // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+                        // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+                        event(Event.StopLoadingAnimation(""))
+                        ResponseAlertManger.showErrorAlert(context, message)
+                    }
+                    override fun onError(errorCode: Int, message: String) {
+                        // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+                        // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+                        onFailure(errorCode, message)
+                    }
+                })
+            }
+            StockConfig.LOGIN_TYPE_GOOGLE, StockConfig.LOGIN_TYPE_FACEBOOK -> {
+                userRepository.logout()
+                event(Event.StartLoginActivity(""))
+            }
+        }
     }
     fun requestMemberOff(context: Context) {
         viewModelScope.launch {
+            event(Event.StartLoadingAnimation(""))
             val result = userRepository.deleteUserInfo()
             if (result == null) {
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
-            if (result.isSuccessful) {
-                isMemberOffSuccess.value = true
+            when (userRepository.getLoginType()) {
+                StockConfig.LOGIN_TYPE_NAVER -> {
+                    NidOAuthLogin().callDeleteTokenApi(context, object : OAuthLoginCallback {
+                        override fun onSuccess() {
+                            event(Event.StopLoadingAnimation(""))
+                            if (result.isSuccessful) {
+                                requestDeleteUserInfo()
+                                event(Event.StartLoginActivity(""))
+                                return
+                            }
+                        }
+                        override fun onFailure(httpStatus: Int, message: String) {
+                            event(Event.StopLoadingAnimation(""))
+                            ResponseAlertManger.showErrorAlert(context, message)
+                        }
+                        override fun onError(errorCode: Int, message: String) {
+                            onFailure(errorCode, message)
+                        }
+                    })
+                }
+                StockConfig.LOGIN_TYPE_GOOGLE, StockConfig.LOGIN_TYPE_FACEBOOK -> {
+                    if (result.isSuccessful) {
+                        requestDeleteUserInfo()
+                        event(Event.StopLoadingAnimation(""))
+                        event(Event.StartLoginActivity(""))
+                        return@launch
+                    }
+                }
             }
         }
     }
-
-//    val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
-//    fun requestDeleteNaverUserInfo(context: Context) {
-//        viewModelScope.launch {
-//            val naverAccessToken = userRepository.getNaverAccessToken()
-//            val params = HashMap<String, String>()
-//            params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
-//            params["client_secret"] = StockConfig.NAVER_SIGN_CLIENT_SECRET
-//            params["access_token"] = naverAccessToken
-//            params["grant_type"] = "delete"
-//            params["service_provider"] = "NAVER"
-//
-//            val result = userRepository.deleteNaverUserInfo(params)
-//            if (result == null) {
-//                ResponseAlertManger.showNetworkConnectErrorAlert(context)
-//                return@launch
-//            }
-//            if (result.isSuccessful) {
-//                respDeleteNaverUserInfo.postValue(result.body())
-//            }
-//        }
-//    }
 
     fun requestSetAutoLogin(isAutoLogin: Boolean) {
         myRepository.setAutoLogin(isAutoLogin)
@@ -95,5 +133,19 @@ class MyViewModel @Inject constructor(
     }
     fun getLoginType(): String {
         return userRepository.getLoginType()
+    }
+
+    private fun event(event: Event) {
+        viewModelScope.launch {
+            _eventFlow.emit(event)
+        }
+    }
+
+    sealed class Event {
+//        data class ShowInfoToastMessage(val msg: String): Event()
+//        data class ShowErrorToastMessage(val msg: String): Event()
+        data class StartLoadingAnimation(val msg: String): Event()
+        data class StopLoadingAnimation(val msg: String): Event()
+        data class StartLoginActivity(val msg: String): Event()
     }
 }
