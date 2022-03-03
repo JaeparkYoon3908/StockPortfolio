@@ -55,7 +55,6 @@ class IncomeNoteViewModel @Inject constructor(
                     ResponseAlertManger.showNetworkConnectErrorAlert(context)
                     return@launch
                 }
-
                 if (result.isSuccessful) {
                     result.body()?.let {
                         event(Event.FetchUIncomeNotes(it.income_note))

@@ -30,10 +30,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
+import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.util.StockUtils
@@ -55,7 +58,7 @@ import kotlinx.coroutines.launch
 class MyStockFragment : Fragment() {
     private val myStockViewModel: MyStockViewModel by viewModels()
     private lateinit var mContext: Context
-
+    private lateinit var navController: NavController
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -84,6 +87,7 @@ class MyStockFragment : Fragment() {
                 myStockViewModel.eventFlow.collect { event -> handleEvent(event) }
             }
         }
+        navController = Navigation.findNavController(view)
     }
 
     private var menu: Menu? = null
@@ -154,10 +158,6 @@ class MyStockFragment : Fragment() {
                         return
                     }
                     dialog.dismiss()
-                }
-
-                override fun showStockSearchFragment() {
-
                 }
             }).show()
     }

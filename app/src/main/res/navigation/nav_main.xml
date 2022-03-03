@@ -10,7 +10,12 @@
         android:id="@+id/myStockFragment"
         android:name="com.yjpapp.stockportfolio.function.mystock.MyStockFragment"
         android:label="MyStockFragment"
-        />
+        >
+        <action
+            android:id="@+id/action_myStockFragment_to_stockSearchFragment"
+            app:destination="@+id/stockSearchFragment"
+            />
+    </keep_state_fragment>
 
     <keep_state_fragment
         android:id="@+id/incomeNoteFragment"
@@ -32,5 +37,15 @@
         android:label="MyFragment"
         tools:layout="@layout/fragment_my"
         />
+
+    <fragment
+        android:id="@+id/stockSearchFragment"
+        android:name="com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity"
+        android:label="StockSearchFragment">
+        <action
+            android:id="@+id/action_stockSearchFragment_to_myStockFragment"
+            app:destination="@+id/myStockFragment"
+            />
+    </fragment>
 
 </navigation>

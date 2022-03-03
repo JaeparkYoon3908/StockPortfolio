@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.function.mystock.dialog
 
 import androidx.appcompat.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,15 +11,19 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
 import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
+import com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity
 import com.yjpapp.stockportfolio.util.StockUtils
 import es.dmoral.toasty.Toasty
 
@@ -74,7 +79,7 @@ class MyStockInputDialog(
     private fun initView() {
         binding.apply {
             etSubjectName.setOnSingleClickListener {
-
+                mContext.startActivity(Intent(mContext, StockSearchActivity::class.java))
             }
             etPurchaseDate.setOnSingleClickListener {
                 var year = ""
@@ -121,10 +126,10 @@ class MyStockInputDialog(
             }
             txtCancel.setOnSingleClickListener { dismiss() }
             txtComplete.setOnSingleClickListener {
-                val subjectName: String = binding.etSubjectName.text.toString()
-                val purchaseDate: String = binding.etPurchaseDate.text.toString()
-                val purchasePrice: String = binding.etPurchasePrice.text.toString()
-                val purchaseCount: String = binding.etPurchaseCount.text.toString()
+                val subjectName: String = etSubjectName.text.toString()
+                val purchaseDate: String = etPurchaseDate.text.toString()
+                val purchasePrice: String = etPurchasePrice.text.toString()
+                val purchaseCount: String = etPurchaseCount.text.toString()
 
                 if (purchaseCount.isEmpty() ||
                     purchaseDate.isEmpty() ||
@@ -148,13 +153,13 @@ class MyStockInputDialog(
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     if (!TextUtils.isEmpty(s.toString()) && s.toString() != this@MyStockInputDialog.convertText) {
                         this@MyStockInputDialog.convertText = StockUtils.getNumInsertComma(s.toString())
-                        binding.etPurchasePrice.setText(this@MyStockInputDialog.convertText)
-                        binding.etPurchasePrice.setSelection(this@MyStockInputDialog.convertText.length) //커서를 오른쪽 끝으로 보낸다.
+                        etPurchasePrice.setText(this@MyStockInputDialog.convertText)
+                        etPurchasePrice.setSelection(this@MyStockInputDialog.convertText.length) //커서를 오른쪽 끝으로 보낸다.
                     }
                     if (s.isEmpty()) {
-                        binding.txtPurchasePriceSymbol.setTextColor(mContext.getColor(R.color.color_666666))
+                        txtPurchasePriceSymbol.setTextColor(mContext.getColor(R.color.color_666666))
                     } else {
-                        binding.txtPurchasePriceSymbol.setTextColor(mContext.getColor(R.color.color_222222))
+                        txtPurchasePriceSymbol.setTextColor(mContext.getColor(R.color.color_222222))
                     }
                 }
                 override fun afterTextChanged(p0: Editable?) {}
@@ -201,6 +206,5 @@ class MyStockInputDialog(
 
     interface CallBack {
         fun onInputDialogCompleteClicked(dialog: MyStockInputDialog, userInputDialogData: MyStockInputDialogData)
-        fun showStockSearchFragment()
     }
 }
