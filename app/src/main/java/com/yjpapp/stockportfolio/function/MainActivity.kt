@@ -9,10 +9,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
-import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteFragment
-import com.yjpapp.stockportfolio.function.memo.MemoListFragment
-import com.yjpapp.stockportfolio.function.my.MyFragment
-import com.yjpapp.stockportfolio.function.mystock.MyStockFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.KeepStateNavigator
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +47,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         val navigator = KeepStateNavigator(this, navHostFragment.childFragmentManager, binding.consMainActivityFragment.id)
         navController.navigatorProvider += navigator
         navController.setGraph(R.navigation.nav_main)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.myStockFragment -> {
+                    binding.txtMainActivityTitle.text = getString(R.string.MyStockFragment_Title)
+                }
+                R.id.incomeNoteFragment -> {
+                    binding.txtMainActivityTitle.text = getString(R.string.IncomeNoteFragment_Title)
+                }
+                R.id.memoListFragment -> {
+                    binding.txtMainActivityTitle.text = getString(R.string.MemoListFragment_Title)
+                }
+                R.id.myFragment -> {
+                    binding.txtMainActivityTitle.text = getString(R.string.MyFragment_Title)
+                }
+            }
+        }
         binding.bottomNavigationView.setupWithNavController(navController)
     }
 
