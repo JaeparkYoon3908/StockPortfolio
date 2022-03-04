@@ -35,8 +35,17 @@
             android:layout_height="0dp"
             android:background="@color/color_ffffff"
             app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@+id/view_bottom_line"
+            app:layout_constraintBottom_toTopOf="@+id/adView"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_MainActivity"/>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/cons_MainActivity_fragment"
+            app:layout_constraintBottom_toTopOf="@+id/view_bottom_line"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-3940256099942544/6300978111"/>
 
         <View
             android:id="@+id/view_bottom_line"

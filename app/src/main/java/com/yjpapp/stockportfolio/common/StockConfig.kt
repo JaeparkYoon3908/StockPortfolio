@@ -31,4 +31,10 @@ object StockConfig {
 
     val TRUE = "true"
     val FALSE = "false"
+
+    /**
+     * AdMob
+     */
+    val AD_MOB_ID = "pub-6147567013464925"
+    val TEST_AD_MOB_ID = "ca-app-pub-3940256099942544/6300978111"
 }

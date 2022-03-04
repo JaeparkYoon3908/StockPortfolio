@@ -45,6 +45,8 @@
             android:layout_marginEnd="@dimen/common_20dp"
             android:background="@drawable/border_line_bottom"
             android:hint="@string/EditIncomeNoteDialog_SubjectName_Hint"
+            android:cursorVisible="false"
+            android:focusable="false"
             android:text="@{data.subjectName}"
             android:textSize="@dimen/common_15dp"
             app:layout_constraintBottom_toBottomOf="@+id/txt_subject_name"

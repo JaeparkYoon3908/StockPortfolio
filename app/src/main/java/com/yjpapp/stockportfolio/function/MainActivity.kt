@@ -6,8 +6,13 @@ import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.plusAssign
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.KeepStateNavigator
@@ -31,6 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private fun initData() {
         viewModel.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, "false")
+        binding.lifecycleOwner = this
     }
 
     private fun initLayout() {
@@ -64,6 +70,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             }
         }
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        AdView(this).apply {
+            adSize = AdSize.BANNER
+            adUnitId = StockConfig.TEST_AD_MOB_ID
+        }
+
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
     }
 
     override fun onBackPressed() {
