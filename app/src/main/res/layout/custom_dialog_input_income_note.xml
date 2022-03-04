@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="data"
             type="com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog.IncomeNoteInputDialogData" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/EditMainDialog_MainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:layout_marginEnd="@dimen/common_10dp"
         android:background="@drawable/bg_ffffff_r12">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_subject_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             app:layout_constraintStart_toEndOf="@+id/txt_subject_name"
             app:layout_constraintTop_toTopOf="@+id/txt_subject_name" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sell_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             app:layout_constraintStart_toEndOf="@+id/txt_sell_date"
             app:layout_constraintTop_toTopOf="@+id/txt_sell_date" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_purchase_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_sell_date" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_purchase_price_symbol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
             app:layout_constraintStart_toEndOf="@+id/txt_purchase_price_symbol"
             app:layout_constraintTop_toTopOf="@+id/txt_purchase_price" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sell_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_purchase_price" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sell_price_symbol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
             app:layout_constraintStart_toEndOf="@+id/txt_sell_price"
             app:layout_constraintTop_toBottomOf="@+id/txt_purchase_price" />
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_sell_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -155,7 +155,7 @@
             app:layout_constraintStart_toEndOf="@+id/txt_sell_price_symbol"
             app:layout_constraintTop_toTopOf="@+id/txt_sell_price" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sell_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -186,14 +186,7 @@
             app:layout_constraintStart_toEndOf="@+id/txt_sell_count"
             app:layout_constraintTop_toTopOf="@+id/txt_sell_count" />
 
-        <!--    <View-->
-        <!--        android:id="@+id/bottom_line"-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="@dimen/common_1dp"-->
-        <!--        android:background="@color/color_line_1a000000"-->
-        <!--        app:layout_constraintBottom_toTopOf="@+id/txt_cancel" />-->
-
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_cancel"
             android:layout_width="0dp"
             android:layout_height="@dimen/common_50dp"
@@ -207,13 +200,6 @@
             app:layout_constraintEnd_toStartOf="@+id/txt_complete"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent="0.5" />
-
-        <!--    <View-->
-        <!--        android:layout_width="@dimen/common_1dp"-->
-        <!--        android:layout_height="@dimen/common_50dp"-->
-        <!--        android:background="@color/color_line_1a000000"-->
-        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--        app:layout_constraintStart_toEndOf="@+id/txt_cancel" />-->
 
         <TextView
             android:id="@+id/txt_complete"
