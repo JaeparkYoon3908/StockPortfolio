@@ -7,21 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Icon
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yjpapp.stockportfolio.common.theme.Color_222222
-import com.yjpapp.stockportfolio.common.theme.Color_4876C7
-import com.yjpapp.stockportfolio.common.theme.Color_CD4632
 import com.yjpapp.stockportfolio.common.theme.Color_FFFFFF
+import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -59,21 +57,46 @@ class StockSearchActivity : AppCompatActivity() {
                 .padding(20.dp)
                 .background(Color_FFFFFF)
         ) {
-            var searchKeyWord by remember { mutableStateOf("")}
+            var userInputKeyWord by remember { mutableStateOf("") }
+            var showClearIcon by remember { mutableStateOf(false) }
             TextField(
-                value = searchKeyWord,
+                value = userInputKeyWord,
                 onValueChange = {
-                    searchKeyWord = it
+                    userInputKeyWord = it
+                    showClearIcon = userInputKeyWord.isNotEmpty()
                 },
                 maxLines = 1,
                 singleLine = true,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "",
+                        tint = Color_222222
+                    )
+                },
                 trailingIcon = {
-                    Icon(Icons.Filled.Search, "", tint = Color_222222)
+                    if (showClearIcon) {
+                        IconButton(onClick = { userInputKeyWord = "" }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Clear,
+                                tint = MaterialTheme.colors.onBackground,
+                                contentDescription = "Clear icon"
+                            )
+                        }
+                    }
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color_FFFFFF,
                     focusedIndicatorColor = Color_222222,
                     cursorColor = Color_222222
+                ),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        StockLog.d(TAG, "onSearch")
+                    },
+                    onDone = {
+                        StockLog.d(TAG, "onDone")
+                    }
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
