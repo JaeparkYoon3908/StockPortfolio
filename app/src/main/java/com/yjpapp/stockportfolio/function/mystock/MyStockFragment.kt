@@ -1,9 +1,12 @@
 package com.yjpapp.stockportfolio.function.mystock
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -38,6 +41,7 @@ import com.yjpapp.stockportfolio.common.theme.*
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
+import com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -159,7 +163,7 @@ class MyStockFragment : Fragment() {
                     }
                     dialog.dismiss()
                 }
-            }).show()
+            }).show(childFragmentManager, "MyStockInputDialog")
     }
     /**
      * Compose 영역

@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.util
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageInfo
@@ -260,7 +261,7 @@ object StockUtils {
         return email.contains("@naver.com") && pattern.matcher(email).matches()
     }
 
-    fun setDialogWidthResize(context: Context, dialog: AlertDialog, width: Float) {
+    fun setDialogWidthResize(context: Context, dialog: Dialog?, width: Float) {
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
         if (Build.VERSION.SDK_INT < 30){
@@ -269,7 +270,7 @@ object StockUtils {
 
             display.getSize(size)
 
-            val window = dialog.window
+            val window = dialog?.window
 
             val x = (size.x * width).toInt()
 //            val y = (size.y * height).toInt()
@@ -278,7 +279,7 @@ object StockUtils {
         } else {
             val rect = windowManager.currentWindowMetrics.bounds
 
-            val window = dialog.window
+            val window = dialog?.window
 
             val x = (rect.width() * width).toInt()
 //            val y = (rect.height() * height).toInt()

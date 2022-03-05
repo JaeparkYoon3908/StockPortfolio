@@ -1,10 +1,12 @@
 package com.yjpapp.stockportfolio.function.mystock.search
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
@@ -20,8 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yjpapp.stockportfolio.common.theme.Color_222222
 import com.yjpapp.stockportfolio.common.theme.Color_FFFFFF
+import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
 
 /**
  * @link 주식 추가 다이얼로그 -> 회사명 입력 할 때 띄워지는 Fragment
@@ -123,12 +127,12 @@ class StockSearchActivity : AppCompatActivity() {
             items(
                 count = viewModel.searchResult.size
             ){
-                SearchListItem(company = viewModel.searchResult[it])
+                SearchListItem(subjectName = viewModel.searchResult[it])
             }
         }
     }
     @Composable
-    private fun SearchListItem(company: String) {
+    private fun SearchListItem(subjectName: SubjectName) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -136,9 +140,16 @@ class StockSearchActivity : AppCompatActivity() {
                 .background(Color_FFFFFF)
         ) {
             Text(
-                text = company,
+                text = subjectName.text,
                 fontSize = 16.sp,
-                color = Color_222222
+                color = Color_222222,
+                modifier = Modifier.clickable {
+                    val intent = Intent().apply {
+                        putExtra("subjectName", subjectName)
+                    }
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
             )
         }
     }

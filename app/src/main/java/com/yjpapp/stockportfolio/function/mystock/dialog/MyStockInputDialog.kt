@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.function.mystock.dialog
 
-import androidx.appcompat.app.AlertDialog
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,18 +12,19 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.DatePicker
-import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.DialogFragment
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
 import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity
+import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.util.StockUtils
 import es.dmoral.toasty.Toasty
 
@@ -32,10 +33,8 @@ class MyStockInputDialog(
     private val mContext: Context,
     private var myStockInputDialogData: MyStockInputDialogData? = MyStockInputDialogData(),
     private val callBack: CallBack
-) : AlertDialog(mContext),
-    SupportedDatePickerDialog.OnDateSetListener
-{
-
+) : DialogFragment(),
+    SupportedDatePickerDialog.OnDateSetListener {
     object MSG {
         const val SELL_DATE_DATA_INPUT: Int = 0
     }
@@ -47,6 +46,7 @@ class MyStockInputDialog(
     private var purchaseMonth = ""
     private var purchaseDay = ""
     private var convertText = ""
+
     data class MyStockInputDialogData(
         var id: Int = -1,
         var subjectName: String = "",
@@ -55,19 +55,25 @@ class MyStockInputDialog(
         var purchaseCount: String = "",
     )
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
-            R.layout.custom_dialog_input_my_stock,
-            null,
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = CustomDialogInputMyStockBinding.inflate(
+            inflater,
+            container,
             false
         )
-        setContentView(binding.root)
-        window?.setBackgroundDrawableResource(android.R.color.transparent)
-        //EditText focus 했을 때 키보드가 보이도록 설정
-        window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-        StockUtils.setDialogWidthResize(mContext, this, 0.85f)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+//        EditText focus 했을 때 키보드가 보이도록 설정
+//        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        StockUtils.setDialogWidthResize(mContext, dialog, 0.85f)
         initData()
         initView()
     }
@@ -79,7 +85,8 @@ class MyStockInputDialog(
     private fun initView() {
         binding.apply {
             etSubjectName.setOnSingleClickListener {
-                mContext.startActivity(Intent(mContext, StockSearchActivity::class.java))
+                val intent = Intent(mContext, StockSearchActivity::class.java)
+                stockSearchActivityResult.launch(intent)
             }
             etPurchaseDate.setOnSingleClickListener {
                 var year = ""
@@ -135,24 +142,30 @@ class MyStockInputDialog(
                     purchaseDate.isEmpty() ||
                     purchasePrice.isEmpty() ||
                     subjectName.isEmpty()
-                ){
-                    Toasty.error(mContext, mContext.getString(R.string.MyStockInputDialog_Error_Message), Toasty.LENGTH_SHORT).show()
+                ) {
+                    Toasty.error(
+                        mContext,
+                        mContext.getString(R.string.MyStockInputDialog_Error_Message),
+                        Toasty.LENGTH_SHORT
+                    ).show()
                     return@setOnSingleClickListener
                 }
                 callBack.onInputDialogCompleteClicked(
                     this@MyStockInputDialog,
                     MyStockInputDialogData(
-                    subjectName = subjectName,
-                    purchaseDate = purchaseDate,
-                    purchasePrice = purchasePrice,
-                    purchaseCount = purchaseCount
-                ))
+                        subjectName = subjectName,
+                        purchaseDate = purchaseDate,
+                        purchasePrice = purchasePrice,
+                        purchaseCount = purchaseCount
+                    )
+                )
             }
-            etPurchasePrice.addTextChangedListener(object : TextWatcher{
+            etPurchasePrice.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     if (!TextUtils.isEmpty(s.toString()) && s.toString() != this@MyStockInputDialog.convertText) {
-                        this@MyStockInputDialog.convertText = StockUtils.getNumInsertComma(s.toString())
+                        this@MyStockInputDialog.convertText =
+                            StockUtils.getNumInsertComma(s.toString())
                         etPurchasePrice.setText(this@MyStockInputDialog.convertText)
                         etPurchasePrice.setSelection(this@MyStockInputDialog.convertText.length) //커서를 오른쪽 끝으로 보낸다.
                     }
@@ -162,18 +175,22 @@ class MyStockInputDialog(
                         txtPurchasePriceSymbol.setTextColor(mContext.getColor(R.color.color_222222))
                     }
                 }
+
                 override fun afterTextChanged(p0: Editable?) {}
             })
-            etPurchaseCount.addTextChangedListener(object : TextWatcher{
+            etPurchaseCount.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
                 }
+
                 override fun afterTextChanged(p0: Editable?) {}
             })
         }
     }
+
     private val uiHandler = Handler(Looper.getMainLooper(), UIHandler())
+
     private inner class UIHandler : Handler.Callback {
         override fun handleMessage(msg: Message): Boolean {
             when (msg.what) {
@@ -200,11 +217,20 @@ class MyStockInputDialog(
         uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
     }
 
-    private fun onCancelButtonClick() {
-        dismiss()
-    }
+    private val stockSearchActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val subjectName = result.data?.getSerializableExtra("subjectName")
+                if (subjectName is SubjectName) {
+                    binding.etSubjectName.setText(subjectName.text)
+                }
+            }
+        }
 
     interface CallBack {
-        fun onInputDialogCompleteClicked(dialog: MyStockInputDialog, userInputDialogData: MyStockInputDialogData)
+        fun onInputDialogCompleteClicked(
+            dialog: MyStockInputDialog,
+            userInputDialogData: MyStockInputDialogData
+        )
     }
 }
