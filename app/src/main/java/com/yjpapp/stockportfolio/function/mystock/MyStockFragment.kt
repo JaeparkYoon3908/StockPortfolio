@@ -288,7 +288,9 @@ class MyStockFragment : Fragment() {
             reverseLayout = true,
             state = listState
         ) {
-            items(myStockViewModel.myStockInfoList.size) {
+            items(
+                count = myStockViewModel.myStockInfoList.size
+            ) {
                 StockListItem(
                     position = it,
                     myStockEntity = myStockViewModel.myStockInfoList[it]

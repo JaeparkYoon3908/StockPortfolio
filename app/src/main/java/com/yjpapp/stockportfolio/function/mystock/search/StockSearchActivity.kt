@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.yjpapp.stockportfolio.common.theme.Color_222222
 import com.yjpapp.stockportfolio.common.theme.Color_FFFFFF
 import com.yjpapp.stockportfolio.util.StockLog
@@ -43,9 +44,16 @@ class StockSearchActivity : AppCompatActivity() {
                     .background(Color_FFFFFF)
             ){
                 SearchBar()
+                SearchList()
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.initAllStockList(this)
+    }
+
     @Preview
     @Composable
     private fun SearchBar() {
@@ -68,11 +76,13 @@ class StockSearchActivity : AppCompatActivity() {
                 maxLines = 1,
                 singleLine = true,
                 leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "",
-                        tint = Color_222222
-                    )
+                    IconButton(onClick = { viewModel.requestSearchList(userInputKeyWord) }) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "",
+                            tint = Color_222222
+                        )
+                    }
                 },
                 trailingIcon = {
                     if (showClearIcon) {
@@ -96,6 +106,7 @@ class StockSearchActivity : AppCompatActivity() {
                     },
                     onDone = {
                         StockLog.d(TAG, "onDone")
+                        viewModel.requestSearchList(userInputKeyWord)
                     }
                 ),
                 modifier = Modifier
@@ -109,7 +120,26 @@ class StockSearchActivity : AppCompatActivity() {
     @Composable
     private fun SearchList() {
         LazyColumn {
-
+            items(
+                count = viewModel.searchResult.size
+            ){
+                SearchListItem(company = viewModel.searchResult[it])
+            }
+        }
+    }
+    @Composable
+    private fun SearchListItem(company: String) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, bottom = 15.dp)
+                .background(Color_FFFFFF)
+        ) {
+            Text(
+                text = company,
+                fontSize = 16.sp,
+                color = Color_222222
+            )
         }
     }
 }

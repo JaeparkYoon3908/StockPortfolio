@@ -2,16 +2,13 @@ package com.yjpapp.stockportfolio.function.mystock
 
 
 import android.content.Context
-import androidx.compose.runtime.*
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.airbnb.lottie.utils.Utils
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
-import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.StockUtils
