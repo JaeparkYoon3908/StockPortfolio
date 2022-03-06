@@ -133,7 +133,7 @@ class IncomeNoteViewModel @Inject constructor(
     }
 
     fun makeDateString(dateList: List<String>): String {
-        val result = StringBuilder()
+        val result = StringBuffer()
         if (dateList.size == 3) {
             dateList.forEachIndexed { index, s ->
                 result.append(s)

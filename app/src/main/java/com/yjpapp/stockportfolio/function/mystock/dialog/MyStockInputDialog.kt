@@ -46,10 +46,11 @@ class MyStockInputDialog(
     private var purchaseMonth = ""
     private var purchaseDay = ""
     private var convertText = ""
+    private var selectedSubjectName = SubjectName()
 
     data class MyStockInputDialogData(
         var id: Int = -1,
-        var subjectName: String = "",
+        var subjectName: SubjectName = SubjectName(),
         var purchaseDate: String = "",
         var purchasePrice: String = "",
         var purchaseCount: String = "",
@@ -80,6 +81,9 @@ class MyStockInputDialog(
 
     private fun initData() {
         binding.data = myStockInputDialogData
+        myStockInputDialogData?.let {
+            selectedSubjectName = it.subjectName
+        }
     }
 
     private fun initView() {
@@ -153,7 +157,7 @@ class MyStockInputDialog(
                 callBack.onInputDialogCompleteClicked(
                     this@MyStockInputDialog,
                     MyStockInputDialogData(
-                        subjectName = subjectName,
+                        subjectName = selectedSubjectName,
                         purchaseDate = purchaseDate,
                         purchasePrice = purchasePrice,
                         purchaseCount = purchaseCount
@@ -222,6 +226,7 @@ class MyStockInputDialog(
             if (result.resultCode == Activity.RESULT_OK) {
                 val subjectName = result.data?.getSerializableExtra("subjectName")
                 if (subjectName is SubjectName) {
+                    selectedSubjectName = subjectName
                     binding.etSubjectName.setText(subjectName.text)
                 }
             }

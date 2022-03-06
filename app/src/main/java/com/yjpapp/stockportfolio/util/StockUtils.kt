@@ -40,7 +40,7 @@ object StockUtils {
     //yyyy.mm.dd로 변환
     fun getTodayYYYY_MM_DD(): String{
         val yyyymmdd = getTodayYYYYMMDD()
-        val result = StringBuilder().apply {
+        val result = StringBuffer().apply {
             append(yyyymmdd.substring(0, 4))
             append(".")
             append(yyyymmdd.substring(4, 6))
@@ -60,7 +60,7 @@ object StockUtils {
 
     //5,000,000 => 5000000 변환
     fun getNumDeletedComma(num: String): String{
-        val result = StringBuilder()
+        val result = StringBuffer()
         val split = num.split(",")
         for (i in split.indices) {
             result.append(split[i])
@@ -77,7 +77,7 @@ object StockUtils {
     }
     //5000000 => $5,000,000 변환
     fun getPriceNum(num: String): String {
-        val result = StringBuilder().apply {
+        val result = StringBuffer().apply {
             append(StockConfig.moneySymbol)
             append(getNumInsertComma(num))
         }

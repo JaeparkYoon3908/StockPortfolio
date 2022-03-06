@@ -72,7 +72,7 @@ class TestActivity : AppCompatActivity() {
         fun onClick(view: View)
     }
     val codeArray = arrayListOf("373220", "055550", "051905", "005935", "029960", "363280", "068270", "105560", "035420", "016360")
-    var text = StringBuilder()
+    var text = StringBuffer()
     private val callBack = object : CallBack {
         override fun onClick(view: View) {
             when (view.id) {

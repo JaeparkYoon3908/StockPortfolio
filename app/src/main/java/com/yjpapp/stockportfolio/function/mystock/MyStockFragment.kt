@@ -43,6 +43,7 @@ import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
+import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import de.charlex.compose.RevealDirection
@@ -147,7 +148,8 @@ class MyStockFragment : Fragment() {
                 ) {
                     val myStockEntity = MyStockEntity(
                         id = dialogData?.id?: 0,
-                        subjectName = userInputDialogData.subjectName,
+                        subjectName = userInputDialogData.subjectName.text,
+                        subjectCode = userInputDialogData.subjectName.code,
                         purchaseDate = userInputDialogData.purchaseDate,
                         purchasePrice = userInputDialogData.purchasePrice,
                         purchaseCount = userInputDialogData.purchaseCount
@@ -354,7 +356,10 @@ class MyStockFragment : Fragment() {
                             .clickable {
                                 val dialogData = MyStockInputDialog.MyStockInputDialogData(
                                     id = myStockEntity.id,
-                                    subjectName = myStockEntity.subjectName,
+                                    subjectName = SubjectName(
+                                        text = myStockEntity.subjectName,
+                                        code = myStockEntity.subjectCode
+                                    ),
                                     purchaseDate = myStockEntity.purchaseDate,
                                     purchasePrice = myStockEntity.purchasePrice,
                                     purchaseCount = myStockEntity.purchaseCount

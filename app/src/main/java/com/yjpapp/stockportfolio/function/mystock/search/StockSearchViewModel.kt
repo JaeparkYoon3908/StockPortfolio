@@ -40,10 +40,20 @@ class StockSearchViewModel @Inject constructor(
         _allStockList.forEach {
             if (it[3].contains(keyWord)) {
                 searchResult.add(SubjectName(
-                    code = it[1],
+                    code = remakeSubjectCode(it[1]),
                     text = it[3]
                 ))
             }
         }
+    }
+    //종목 코드 6자리 만들기
+    private fun remakeSubjectCode(code: String): String {
+        val result = StringBuffer()
+        val repeatCount = 6 - code.length
+        for (i in 0 until repeatCount) {
+            result.append("0")
+        }
+        result.append(code)
+        return result.toString()
     }
 }
