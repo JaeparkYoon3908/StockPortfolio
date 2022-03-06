@@ -1,12 +1,9 @@
 package com.yjpapp.stockportfolio.function.mystock
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -39,9 +36,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
-import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
-import com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.util.StockUtils
@@ -146,24 +141,31 @@ class MyStockFragment : Fragment() {
                     dialog: MyStockInputDialog,
                     userInputDialogData: MyStockInputDialog.MyStockInputDialogData
                 ) {
-                    val myStockEntity = MyStockEntity(
-                        id = dialogData?.id?: 0,
-                        subjectName = userInputDialogData.subjectName.text,
-                        subjectCode = userInputDialogData.subjectName.code,
-                        purchaseDate = userInputDialogData.purchaseDate,
-                        purchasePrice = userInputDialogData.purchasePrice,
-                        purchaseCount = userInputDialogData.purchaseCount
-                    )
-
-                    if (!myStockViewModel.saveMyStock(mContext, myStockEntity)) {
-                        Toasty.error(
-                            mContext,
-                            getString(R.string.Error_Msg_Normal),
-                            Toasty.LENGTH_SHORT
-                        ).show()
-                        return
+                    lifecycleScope.launch {
+                        val currentPrice = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
+//                        val currentPrice = ""
+                        val myStockEntity = MyStockEntity(
+                            id = dialogData?.id?: 0,
+                            subjectName = userInputDialogData.subjectName.text,
+                            subjectCode = userInputDialogData.subjectName.code,
+                            purchaseDate = userInputDialogData.purchaseDate,
+                            purchasePrice = userInputDialogData.purchasePrice,
+                            purchaseCount = userInputDialogData.purchaseCount,
+                            currentPrice = currentPrice
+                        )
+                        if (dialogData == null) {
+                            val isAddSuccess = myStockViewModel.addMyStock(mContext, myStockEntity)
+                            if (isAddSuccess) {
+                                dialog.dismiss()
+                            }
+                        }
+                        if (dialogData != null) {
+                            val isUpdateSuccess = myStockViewModel.updateMyStock(mContext, myStockEntity)
+                            if (isUpdateSuccess) {
+                                dialog.dismiss()
+                            }
+                        }
                     }
-                    dialog.dismiss()
                 }
             }).show(childFragmentManager, "MyStockInputDialog")
     }
@@ -597,7 +599,7 @@ class MyStockFragment : Fragment() {
                             )
 
                             Text(
-                                text = "2,600",
+                                text = myStockEntity.currentPrice,
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = Color_222222,

@@ -18,12 +18,14 @@ import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import javax.inject.Inject
 
@@ -55,28 +57,35 @@ class MyStockViewModel @Inject constructor(
         calculateTopData()
     }
 
-    //확인버튼 클릭 후 Save
-    fun saveMyStock(context: Context, myStockEntity: MyStockEntity): Boolean {
-        try {
-            if (myStockEntity.id == 0) {
-                myStockRepository.insertMyStock(myStockEntity)
-                myStockRepository.getAllMyStock().last {
-                    myStockInfoList.add(it)
-                }
-                _scrollIndex.value = myStockInfoList.size - 1
-                event(Event.ShowInfoToastMessage("추가 완료 됐습니다."))
-            } else {
-                myStockRepository.updateMyStock(myStockEntity)
-                myStockInfoList.clear()
-                myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
-                event(Event.ShowInfoToastMessage("수정 완료 됐습니다."))
+    fun addMyStock(context: Context, myStockEntity: MyStockEntity): Boolean {
+        return try {
+            myStockRepository.insertMyStock(myStockEntity)
+            myStockRepository.getAllMyStock().last {
+                myStockInfoList.add(it)
             }
+            _scrollIndex.value = myStockInfoList.size - 1
+            event(Event.ShowInfoToastMessage("추가 완료 됐습니다."))
             calculateTopData()
-            return true
+            true
         } catch (e: Exception) {
             e.stackTrace
             event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
-            return false
+            false
+        }
+    }
+
+    fun updateMyStock(context: Context, myStockEntity: MyStockEntity): Boolean {
+        return try {
+            myStockRepository.updateMyStock(myStockEntity)
+            myStockInfoList.clear()
+            myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
+            event(Event.ShowInfoToastMessage("수정 완료 됐습니다."))
+            calculateTopData()
+            true
+        } catch (e: Exception) {
+            e.stackTrace
+            event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
+            false
         }
     }
 
@@ -109,7 +118,7 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    fun getCurrentPrices() {
+    fun getAllCurrentPrices() {
         viewModelScope.launch {
             repeat(myStockInfoList.size) {
                 val url = "https://finance.naver.com/item/main.naver?code=${myStockInfoList[it].subjectCode}"
@@ -133,6 +142,45 @@ class MyStockViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    suspend fun getCurrentPrice(subjectCode: String): String {
+        var currentPrice = ""
+        val job = viewModelScope.async {
+            getCurrentPriceJob(subjectCode = subjectCode)
+        }
+        currentPrice = job.await()
+        return currentPrice
+    }
+
+    private suspend fun getCurrentPriceJob(subjectCode: String): String {
+        var currentPrice = ""
+        val url = "https://finance.naver.com/item/main.naver?code=$subjectCode"
+        val doc = withContext(Dispatchers.IO) {
+            try {
+                Jsoup.connect(url).get()
+            } catch (e: Exception) {
+                e.stackTrace
+                null
+            }
+        }
+        val blind = doc?.select(".blind")
+        blind?.let {
+            if (it.isNotEmpty() && it.size > 19) {
+                currentPrice = blind[15].text()
+                var dayToDayPrice = blind[16].text()
+                var dayToDayPercent = blind[17].text()
+                var yesterdayPrice = blind[18].text()
+                if (blind.size == 34) {
+                    currentPrice = blind[16].text()
+                    dayToDayPrice = blind[17].text()
+                    dayToDayPercent = blind[18].text()
+                    yesterdayPrice = blind[19].text()
+                }
+            }
+        }
+        //TODO currentPrice값이 빈 값일 때 예외처리
+        return currentPrice
     }
 
     /**

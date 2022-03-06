@@ -160,7 +160,7 @@ class MyStockInputDialog(
                         subjectName = selectedSubjectName,
                         purchaseDate = purchaseDate,
                         purchasePrice = purchasePrice,
-                        purchaseCount = purchaseCount
+                        purchaseCount = purchaseCount,
                     )
                 )
             }

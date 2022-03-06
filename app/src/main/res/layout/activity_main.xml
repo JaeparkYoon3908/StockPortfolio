@@ -42,6 +42,7 @@
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/cons_MainActivity_fragment"
             app:layout_constraintBottom_toTopOf="@+id/view_bottom_line"
             app:adSize="BANNER"
