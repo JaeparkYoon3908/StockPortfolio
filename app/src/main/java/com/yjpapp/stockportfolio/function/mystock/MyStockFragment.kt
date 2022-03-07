@@ -287,7 +287,7 @@ class MyStockFragment : Fragment() {
     @Preview
     @Composable
     private fun StockListComposable() {
-//        val coroutineScope = rememberCoroutineScope()
+        val coroutineScope = rememberCoroutineScope()
         Scaffold { paddingValues ->
             val listState = rememberLazyListState()
             LazyColumn(
@@ -305,13 +305,13 @@ class MyStockFragment : Fragment() {
                     )
                 }
             }
-//            coroutineScope.launch {
-//                repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                    myStockViewModel.scrollIndex.collect { position ->
-//                        listState.scrollToItem(position)
-//                    }
-//                }
-//            }
+            coroutineScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    myStockViewModel.scrollIndex.collect { position ->
+                        listState.scrollToItem(position)
+                    }
+                }
+            }
         }
 
     }

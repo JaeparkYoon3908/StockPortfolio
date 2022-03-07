@@ -63,7 +63,7 @@ class MyStockViewModel @Inject constructor(
             myStockRepository.getAllMyStock().last {
                 myStockInfoList.add(it)
             }
-            _scrollIndex.value = myStockInfoList.size - 1
+            _scrollIndex.value = myStockInfoList.size
             event(Event.ShowInfoToastMessage("추가 완료 됐습니다."))
             calculateTopData()
             true
@@ -120,25 +120,26 @@ class MyStockViewModel @Inject constructor(
 
     fun getAllCurrentPrices() {
         viewModelScope.launch {
-            repeat(myStockInfoList.size) {
-                val url = "https://finance.naver.com/item/main.naver?code=${myStockInfoList[it].subjectCode}"
+            repeat(myStockInfoList.size) { count ->
+                val url = "https://finance.naver.com/item/main.naver?code=${myStockInfoList[count].subjectCode}"
                 val doc = withContext(Dispatchers.IO) {
-                    Jsoup.connect(url).get()
-                }
-                val blind = doc.select(".blind")
-                if (blind.isNotEmpty() && blind.size > 19) {
-                    var currentPrice = blind[15].text()
-                    var dayToDayPrice = blind[16].text()
-                    var dayToDayPercent = blind[17].text()
-                    var yesterdayPrice = blind[18].text()
-                    if (blind.size == 34) {
-                        currentPrice = blind[16].text()
-                        dayToDayPrice = blind[17].text()
-                        dayToDayPercent = blind[18].text()
-                        yesterdayPrice = blind[19].text()
-
+                    try {
+                        Jsoup.connect(url).get()
+                    } catch (e: Exception) {
+                        e.stackTrace
+                        null
                     }
-                    myStockInfoList[it].currentPrice = currentPrice
+                }
+                val blind = doc?.select(".blind")
+                blind?.let {
+                    if (it.isNotEmpty() && it.size > 19) {
+                        val startIndex = it.size - 18
+                        var currentPrice = it[startIndex].text()
+                        var dayToDayPrice = it[startIndex + 1].text()
+                        var dayToDayPercent = it[startIndex + 2].text()
+                        var yesterdayPrice = it[startIndex + 3].text()
+                        myStockInfoList[count].currentPrice = currentPrice
+                    }
                 }
             }
         }
@@ -155,6 +156,9 @@ class MyStockViewModel @Inject constructor(
 
     private suspend fun getCurrentPriceJob(subjectCode: String): String {
         var currentPrice = ""
+        var dayToDayPrice = ""
+        var dayToDayPercent = ""
+        var yesterdayPrice = ""
         val url = "https://finance.naver.com/item/main.naver?code=$subjectCode"
         val doc = withContext(Dispatchers.IO) {
             try {
@@ -167,16 +171,11 @@ class MyStockViewModel @Inject constructor(
         val blind = doc?.select(".blind")
         blind?.let {
             if (it.isNotEmpty() && it.size > 19) {
-                currentPrice = blind[15].text()
-                var dayToDayPrice = blind[16].text()
-                var dayToDayPercent = blind[17].text()
-                var yesterdayPrice = blind[18].text()
-                if (blind.size == 34) {
-                    currentPrice = blind[16].text()
-                    dayToDayPrice = blind[17].text()
-                    dayToDayPercent = blind[18].text()
-                    yesterdayPrice = blind[19].text()
-                }
+                val startIndex = it.size - 18
+                currentPrice = blind[startIndex].text()
+                dayToDayPrice = blind[startIndex + 1].text()
+                dayToDayPercent = blind[startIndex + 2].text()
+                yesterdayPrice = blind[startIndex + 3].text()
             }
         }
         //TODO currentPrice값이 빈 값일 때 예외처리
