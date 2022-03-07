@@ -9,10 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
@@ -290,28 +287,33 @@ class MyStockFragment : Fragment() {
     @Preview
     @Composable
     private fun StockListComposable() {
-        val listState = rememberLazyListState()
-        val coroutineScope = rememberCoroutineScope()
-        LazyColumn(
-            reverseLayout = true,
-            state = listState
-        ) {
-            items(
-                count = myStockViewModel.myStockInfoList.size
+//        val coroutineScope = rememberCoroutineScope()
+        Scaffold { paddingValues ->
+            val listState = rememberLazyListState()
+            LazyColumn(
+                reverseLayout = true,
+                state = listState,
+                contentPadding = paddingValues,
+                modifier = Modifier.fillMaxSize()
             ) {
-                StockListItem(
-                    position = it,
-                    myStockEntity = myStockViewModel.myStockInfoList[it]
-                )
-            }
-        }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                myStockViewModel.scrollIndex.collect { position ->
-                    listState.scrollToItem(position)
+                items(
+                    count = myStockViewModel.myStockInfoList.size
+                ) {
+                    StockListItem(
+                        position = it,
+                        myStockEntity = myStockViewModel.myStockInfoList[it]
+                    )
                 }
             }
+//            coroutineScope.launch {
+//                repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                    myStockViewModel.scrollIndex.collect { position ->
+//                        listState.scrollToItem(position)
+//                    }
+//                }
+//            }
         }
+
     }
 
     @OptIn(ExperimentalMaterialApi::class)
