@@ -294,7 +294,9 @@ class MyStockFragment : Fragment() {
                 reverseLayout = true,
                 state = listState,
                 contentPadding = paddingValues,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
             ) {
                 items(
                     count = myStockViewModel.myStockInfoList.size
