@@ -31,7 +31,7 @@ import es.dmoral.toasty.Toasty
 
 class MyStockInputDialog(
     private val mContext: Context,
-    private var myStockInputDialogData: MyStockInputDialogData? = MyStockInputDialogData(),
+    private var myStockInputDialogData: MyStockInputDialogData?,
     private val callBack: CallBack
 ) : DialogFragment(),
     SupportedDatePickerDialog.OnDateSetListener {
@@ -80,8 +80,8 @@ class MyStockInputDialog(
     }
 
     private fun initData() {
-        binding.data = myStockInputDialogData
         myStockInputDialogData?.let {
+            binding.data = it
             selectedSubjectName = it.subjectName
         }
     }
@@ -150,6 +150,14 @@ class MyStockInputDialog(
                     Toasty.error(
                         mContext,
                         mContext.getString(R.string.MyStockInputDialog_Error_Message),
+                        Toasty.LENGTH_SHORT
+                    ).show()
+                    return@setOnSingleClickListener
+                }
+                if (purchaseCount.toInt() == 0) {
+                    Toasty.error(
+                        mContext,
+                        mContext.getString(R.string.MyStockInputDialog_Error_Message_Purchase_Count),
                         Toasty.LENGTH_SHORT
                     ).show()
                     return@setOnSingleClickListener

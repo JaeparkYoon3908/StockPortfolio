@@ -140,14 +140,13 @@ class MyStockFragment : Fragment() {
                 ) {
                     lifecycleScope.launch {
                         val currentPrice = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
-//                        val currentPrice = ""
                         val myStockEntity = MyStockEntity(
                             id = dialogData?.id?: 0,
                             subjectName = userInputDialogData.subjectName.text,
                             subjectCode = userInputDialogData.subjectName.code,
                             purchaseDate = userInputDialogData.purchaseDate,
                             purchasePrice = userInputDialogData.purchasePrice,
-                            purchaseCount = userInputDialogData.purchaseCount,
+                            purchaseCount = userInputDialogData.purchaseCount.toInt(),
                             currentPrice = currentPrice
                         )
                         if (dialogData == null) {
@@ -368,7 +367,7 @@ class MyStockFragment : Fragment() {
                                     ),
                                     purchaseDate = myStockEntity.purchaseDate,
                                     purchasePrice = myStockEntity.purchasePrice,
-                                    purchaseCount = myStockEntity.purchaseCount
+                                    purchaseCount = myStockEntity.purchaseCount.toString()
                                 )
                                 showInputDialog(dialogData)
                                 coroutineScope.launch {
@@ -578,7 +577,7 @@ class MyStockFragment : Fragment() {
                             )
 
                             Text(
-                                text = myStockEntity.purchaseCount,
+                                text = myStockEntity.purchaseCount.toString(),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = colorResource(id = R.color.color_222222),
