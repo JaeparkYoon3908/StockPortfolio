@@ -9,6 +9,7 @@ data class MyStockEntity (
     @PrimaryKey(autoGenerate = true) var id: Int = 0 //id
     , @ColumnInfo(name = "subjectName") var subjectName: String = "" //종목명
     , @ColumnInfo(name = "subjectCode") var subjectCode: String = "" //종목코드
+    , @ColumnInfo(name = "gainPrice") var gainPrice: String = "" //수익
     , @ColumnInfo(name = "purchaseDate") var purchaseDate: String = "" //매수일
     , @ColumnInfo(name = "purchasePrice") var purchasePrice: String = "" //평균단가
     , @ColumnInfo(name = "purchaseCount") var purchaseCount: Int = 0 //보유수량

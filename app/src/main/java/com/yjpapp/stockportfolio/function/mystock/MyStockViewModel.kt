@@ -102,19 +102,24 @@ class MyStockViewModel @Inject constructor(
     }
 
     private fun calculateTopData() {
-        var totalPurchasePrice = 0.00
-        var totalEvaluationAmount = 0.00
-        var totalGainPrice = 0.00
-        var totalGainPricePercent = 0.00
+        var totalPurchasePrice = 0.00 // 총 매수금액
+        var totalEvaluationAmount = 0.00 // 총 평가금액
+        var totalGainPrice = 0.00 //손익
+        var totalGainPricePercent = 0.00 //수익률
 
         myStockInfoList.forEach {
             val purchasePrice = StockUtils.getNumDeletedComma(it.purchasePrice).toDouble()
+            val currentPrice = StockUtils.getNumDeletedComma(it.currentPrice).toDouble()
             val purchaseCount = it.purchaseCount.toDouble()
             totalPurchasePrice += purchasePrice * purchaseCount
+            totalEvaluationAmount += currentPrice * purchaseCount
         }
+        totalGainPrice = totalEvaluationAmount - totalPurchasePrice
+
         viewModelScope.launch {
-            val price = StockUtils.getPriceNum(totalPurchasePrice.toString())
-            _totalPurchasePrice.emit(price)
+            _totalPurchasePrice.emit(totalPurchasePrice.toString())
+            _totalEvaluationAmount.emit(totalEvaluationAmount.toString())
+            _totalGainPrice.emit(totalGainPrice.toString())
         }
     }
 

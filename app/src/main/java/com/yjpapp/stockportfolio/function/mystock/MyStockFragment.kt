@@ -140,10 +140,15 @@ class MyStockFragment : Fragment() {
                 ) {
                     lifecycleScope.launch {
                         val currentPrice = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
+                        val currentPriceNumber = StockUtils.getNumDeletedComma(currentPrice).toInt()
+                        val purchasePriceNumber = StockUtils.getNumDeletedComma(userInputDialogData.purchasePrice).toInt()
+                        val purchaseCountNumber = userInputDialogData.purchaseCount.toInt()
+                        val gainPrice = (currentPriceNumber - purchasePriceNumber) * purchaseCountNumber
                         val myStockEntity = MyStockEntity(
                             id = dialogData?.id?: 0,
                             subjectName = userInputDialogData.subjectName.text,
                             subjectCode = userInputDialogData.subjectName.code,
+                            gainPrice = StockUtils.getNumInsertComma(gainPrice.toString()),
                             purchaseDate = userInputDialogData.purchaseDate,
                             purchasePrice = userInputDialogData.purchasePrice,
                             purchaseCount = userInputDialogData.purchaseCount.toInt(),
@@ -196,7 +201,7 @@ class MyStockFragment : Fragment() {
                         .weight(0.30f)
                 )
                 Text(
-                    text = totalPurchasePrice,
+                    text = StockUtils.getPriceNum(totalPurchasePrice),
                     color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
@@ -220,7 +225,7 @@ class MyStockFragment : Fragment() {
                         .weight(0.30f)
                 )
                 Text(
-                    text = totalEvaluationAmount,
+                    text = StockUtils.getPriceNum(totalEvaluationAmount),
                     color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
@@ -243,7 +248,9 @@ class MyStockFragment : Fragment() {
                         .weight(0.30f)
                 )
                 Text(
-                    text = totalGainPrice,
+                    text = StockUtils.getPriceNum(totalGainPrice),
+                    color = if (StockUtils.getNumDeletedComma(totalGainPrice).toDouble() > 0) Color_CD4632
+                    else Color_4876C7,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -314,7 +321,6 @@ class MyStockFragment : Fragment() {
                 }
             }
         }
-
     }
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -490,10 +496,11 @@ class MyStockFragment : Fragment() {
                             )
                             //수익
                             Text(
-                                text = StockUtils.getPriceNum(myStockEntity.purchasePrice),
+                                text = StockUtils.getPriceNum(myStockEntity.gainPrice),
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = Color_666666,
+                                color = if (StockUtils.getNumDeletedComma(myStockEntity.gainPrice).toDouble() > 0) Color_CD4632
+                                else Color_4876C7,
                                 modifier = Modifier
                                     .padding(start = 5.dp)
                             )
@@ -502,7 +509,8 @@ class MyStockFragment : Fragment() {
                                 text = "(0.93)",
                                 fontSize = 12.sp,
                                 maxLines = 1,
-                                color = Color_222222,
+                                color = if (StockUtils.getNumDeletedComma(myStockEntity.gainPrice).toDouble() > 0) Color_CD4632
+                                else Color_4876C7,
                                 modifier = Modifier
                                     .padding(start = 5.dp)
                             )
@@ -602,7 +610,7 @@ class MyStockFragment : Fragment() {
                             )
 
                             Text(
-                                text = myStockEntity.currentPrice,
+                                text = StockUtils.getPriceNum(myStockEntity.currentPrice),
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = Color_222222,
