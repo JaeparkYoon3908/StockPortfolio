@@ -4,29 +4,21 @@ package com.yjpapp.stockportfolio.function.mystock
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.opencsv.CSVReader
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
-import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 import javax.inject.Inject
 
 @HiltViewModel
@@ -151,11 +143,9 @@ class MyStockViewModel @Inject constructor(
     }
 
     suspend fun getCurrentPrice(subjectCode: String): String {
-        var currentPrice = ""
-        val job = viewModelScope.async {
+        val currentPrice = withContext(viewModelScope.coroutineContext) {
             getCurrentPriceJob(subjectCode = subjectCode)
         }
-        currentPrice = job.await()
         return currentPrice
     }
 

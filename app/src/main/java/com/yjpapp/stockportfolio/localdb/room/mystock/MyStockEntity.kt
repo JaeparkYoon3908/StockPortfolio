@@ -14,4 +14,7 @@ data class MyStockEntity (
     , @ColumnInfo(name = "purchasePrice") var purchasePrice: String = "" //평균단가
     , @ColumnInfo(name = "purchaseCount") var purchaseCount: Int = 0 //보유수량
     , @ColumnInfo(name = "currentPrice") var currentPrice: String = "" //현재가
+//    , @ColumnInfo(name = "currentPrice") var currentPrice: String = "" //현재가
+//    , @ColumnInfo(name = "currentPrice") var currentPrice: String = "" //현재가
+
     )
