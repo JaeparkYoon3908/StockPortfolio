@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@{StockConfig.INSTANCE.moneySymbol}"
+            android:text="@{StockConfig.INSTANCE.koreaMoneySymbol}"
             android:textColor="@color/color_666666"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/txt_purchase_count"

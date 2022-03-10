@@ -1,14 +1,14 @@
 package com.yjpapp.stockportfolio.common.dialog
 
-import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CommonDialogTwoBtnBinding
-import com.yjpapp.stockportfolio.util.StockUtils
+import com.yjpapp.stockportfolio.util.DisplayUtils
 
 class CommonTwoBtnDialog(
     private val mContext: Context,
@@ -35,7 +35,7 @@ class CommonTwoBtnDialog(
         )
         setContentView(binding.root)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
-        StockUtils.setDialogWidthResize(mContext, this, 0.8f)
+        DisplayUtils.setDialogWidthResize(mContext, this, 0.8f)
 
         initData()
     }

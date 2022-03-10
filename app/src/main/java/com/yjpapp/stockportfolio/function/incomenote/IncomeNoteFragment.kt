@@ -2,7 +2,6 @@ package com.yjpapp.stockportfolio.function.incomenote
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
@@ -19,7 +18,6 @@ import com.yjpapp.stockportfolio.extension.OnSingleClickListener
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePickerDialog
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
-import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
@@ -305,7 +303,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                 val totalRealizationGainsLossesNumber =
                     StockUtils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
                 it.txtTotalRealizationGainsLossesData.text =
-                    "${StockConfig.moneySymbol}$totalRealizationGainsLossesNumber"
+                    "${StockConfig.koreaMoneySymbol}$totalRealizationGainsLossesNumber"
                 if (totalGainPercent >= 0) {
                     it.txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
                     it.txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))

@@ -1,26 +1,22 @@
 package com.yjpapp.stockportfolio.util
 
 import android.annotation.SuppressLint
-import android.app.Dialog
-import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.VersionedPackage
-import android.content.res.Resources
-import android.graphics.Point
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Base64
-import android.view.ViewGroup
-import android.view.WindowManager
 import com.yjpapp.stockportfolio.common.StockConfig
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 /**
  * 개발에 필요한 함수들
@@ -78,7 +74,7 @@ object StockUtils {
     //5000000 => $5,000,000 변환
     fun getPriceNum(num: String): String {
         val result = StringBuffer().apply {
-            append(StockConfig.moneySymbol)
+            append(StockConfig.koreaMoneySymbol)
             append(getNumInsertComma(num))
         }
         return result.toString()
@@ -137,6 +133,17 @@ object StockUtils {
         return result
     }
 
+    //전일대비 가격 구하기
+    fun getDayToDayPrice(yesterdayPrice: Double, currentPrice: Double, local: String = StockConfig.LOCAL_KOREA): String {
+        when (local) {
+            StockConfig.LOCAL_KOREA -> {
+                return getNumInsertComma((currentPrice - yesterdayPrice).roundToInt().toString())
+            }
+        }
+        //기본 값 : USA
+        return getNumInsertComma((currentPrice - yesterdayPrice).toString())
+    }
+
     @SuppressLint("MissingPermission")
     fun runVibration(mContext: Context, milliseconds: Long){
         val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
@@ -147,54 +154,6 @@ object StockUtils {
             vibrator!!.vibrate(milliseconds);
         }
     }
-
-    fun dpToPx(dp: Int): Int {
-        return (dp * Resources.getSystem().displayMetrics.density).toInt()
-    }
-
-    fun pxToDp(px: Int): Int {
-        return (px / Resources.getSystem().displayMetrics.density).toInt()
-    }
-
-    //Hilt 적용 후 PreferenceController SIngleTon 삭제 후 오류로 인한 수정
-//    fun runBackPressAppCloseEvent(
-//        mContext: Context,
-//        activity: Activity,
-//    ){
-//        val isAllowAppClose = PreferenceController.getInstance(mContext).getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)
-//        if(isAllowAppClose == StockConfig.TRUE){
-//            activity.finishAffinity()
-//            System.runFinalization()
-//            exitProcess(0)
-//        }else{
-//            Toasty.normal(mContext,mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
-//            PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
-//            Handler(Looper.getMainLooper()).postDelayed(Runnable {
-//                PreferenceController.getInstance(mContext).setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
-//            },3000)
-//        }
-//    }
-
-//    fun getMyPhoneNum(mContext: Context): String{
-//        var phoneNum = ""
-//        val telManager = mContext.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
-//        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED &&
-//                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED &&
-//                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-//            return ""
-//        }
-//        phoneNum = telManager.line1Number?: ""
-//        if(phoneNum.isNotEmpty()){
-//            if(phoneNum.startsWith("+82")){
-//                phoneNum = phoneNum.replace("+82", "0")
-//            }
-//        }
-//
-//        if(phoneNum==null){
-//            phoneNum = ""
-//        }
-//        return phoneNum
-//    }
 
     private fun getHashKey(packageManager: PackageManager, packageName: VersionedPackage) {
         var packageInfo: PackageInfo? = null
@@ -214,78 +173,6 @@ object StockUtils {
             } catch (e: NoSuchAlgorithmException) {
                 StockLog.e("KeyHash", "Unable to get MessageDigest. signature=$signature", e)
             }
-        }
-    }
-
-    //이메일 마스킹킹
-    fun getEmailMasking(email: String?): String {
-        if (email == null) {
-            return ""
-        }
-        val result = StringBuffer()
-        val nickNameSplit = email.split("@")
-        if (nickNameSplit.size == 2) {
-            if (nickNameSplit[0].length > 3) {
-                result.append(nickNameSplit[0].substring(0, 3))
-            } else {
-                result.append(nickNameSplit[0])
-            }
-            result.append("***")
-                .append("@")
-                .append(nickNameSplit[1])
-        }
-
-        return result.toString()
-    }
-
-    fun isEmailForm(email: String?, loginType: String): Boolean {
-        if (email == null) return false
-        val pattern = android.util.Patterns.EMAIL_ADDRESS
-        return when (loginType) {
-            StockConfig.LOGIN_TYPE_NAVER -> {
-                email.contains("@naver.com") && pattern.matcher(email).matches()
-            }
-            StockConfig.LOGIN_TYPE_GOOGLE -> {
-                email.contains("@gmail.com") && pattern.matcher(email).matches()
-            }
-            StockConfig.LOGIN_TYPE_FACEBOOK -> {
-                pattern.matcher(email).matches()
-            }
-            else -> false
-        }
-    }
-
-    fun isNaverEmailForm(email: String?): Boolean {
-        if (email == null) return false
-        val pattern = android.util.Patterns.EMAIL_ADDRESS
-        return email.contains("@naver.com") && pattern.matcher(email).matches()
-    }
-
-    fun setDialogWidthResize(context: Context, dialog: Dialog?, width: Float) {
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-
-        if (Build.VERSION.SDK_INT < 30){
-            val display = windowManager.defaultDisplay
-            val size = Point()
-
-            display.getSize(size)
-
-            val window = dialog?.window
-
-            val x = (size.x * width).toInt()
-//            val y = (size.y * height).toInt()
-            val y = ViewGroup.LayoutParams.WRAP_CONTENT
-            window?.setLayout(x, y)
-        } else {
-            val rect = windowManager.currentWindowMetrics.bounds
-
-            val window = dialog?.window
-
-            val x = (rect.width() * width).toInt()
-//            val y = (rect.height() * height).toInt()
-            val y = ViewGroup.LayoutParams.WRAP_CONTENT
-
-            window?.setLayout(x, y)
         }
     }
 }

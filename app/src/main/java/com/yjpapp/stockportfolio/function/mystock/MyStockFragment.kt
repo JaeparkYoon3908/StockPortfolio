@@ -139,7 +139,8 @@ class MyStockFragment : Fragment() {
                     userInputDialogData: MyStockInputDialog.MyStockInputDialogData
                 ) {
                     lifecycleScope.launch {
-                        val currentPrice = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
+                        val currentPriceData = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
+                        val currentPrice = currentPriceData.currentPrice
                         val currentPriceNumber = StockUtils.getNumDeletedComma(currentPrice).toInt()
                         val purchasePriceNumber = StockUtils.getNumDeletedComma(userInputDialogData.purchasePrice).toInt()
                         val purchaseCountNumber = userInputDialogData.purchaseCount.toInt()
@@ -152,7 +153,9 @@ class MyStockFragment : Fragment() {
                             purchaseDate = userInputDialogData.purchaseDate,
                             purchasePrice = userInputDialogData.purchasePrice,
                             purchaseCount = userInputDialogData.purchaseCount.toInt(),
-                            currentPrice = currentPrice
+                            currentPrice = currentPrice,
+                            dayToDayPrice = currentPriceData.dayToDayPrice,
+                            dayToDayPercent = currentPriceData.dayToDayPercent
                         )
                         if (dialogData == null) {
                             val isAddSuccess = myStockViewModel.addMyStock(mContext, myStockEntity)
@@ -598,7 +601,8 @@ class MyStockFragment : Fragment() {
                             modifier = Modifier
                                 .weight(0.5f)
                                 .padding(bottom = 10.dp),
-                            horizontalArrangement = Arrangement.End
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = getString(R.string.MyStockFragment_Current_Price),
@@ -616,6 +620,23 @@ class MyStockFragment : Fragment() {
                                 color = Color_222222,
                                 modifier = Modifier
                                     .padding(start = 10.dp)
+                            )
+
+                            Text(
+                                text = myStockEntity.dayToDayPrice,
+                                fontSize = 12.sp,
+                                maxLines = 1,
+                                color = Color_222222,
+                                modifier = Modifier
+                                    .padding(start = 5.dp)
+
+                            )
+
+                            Text(
+                                text = myStockEntity.dayToDayPercent,
+                                fontSize = 12.sp,
+                                maxLines = 1,
+                                color = Color_222222,
                             )
                         }
                     }

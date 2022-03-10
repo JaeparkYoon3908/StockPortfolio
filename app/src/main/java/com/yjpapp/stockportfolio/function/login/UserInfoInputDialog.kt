@@ -12,7 +12,8 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.DialogUserInfoInputBinding
-import com.yjpapp.stockportfolio.util.StockUtils
+import com.yjpapp.stockportfolio.util.DisplayUtils
+import com.yjpapp.stockportfolio.util.PatternUtils
 import es.dmoral.toasty.Toasty
 
 class UserInfoInputDialog(
@@ -60,7 +61,7 @@ class UserInfoInputDialog(
                     if (etEmailText.isEmpty()) {
                         Toasty.error(mContext, "이메일을 입력해주세요.").show()
                     }
-                    else if (!StockUtils.isEmailForm(etEmailText.toString(), data.loginType)){
+                    else if (!PatternUtils.isEmailForm(etEmailText.toString(), data.loginType)){
                         Toasty.error(mContext, "이메일을 형식에 맞게 입력해주세요.").show()
                     }
                     else {
@@ -104,7 +105,7 @@ class UserInfoInputDialog(
                         else if (etEmailText.isEmpty()) {
                             Toasty.error(mContext, "이메일을 입력해주세요.").show()
                         }
-                        else if (!StockUtils.isEmailForm(etEmailText.toString(), data.loginType)) {
+                        else if (!PatternUtils.isEmailForm(etEmailText.toString(), data.loginType)) {
                             Toasty.error(mContext, "이메일을 형식에 맞게 입력해주세요.").show()
                         } else {
                             confirmBtnListener(
@@ -143,7 +144,7 @@ class UserInfoInputDialog(
         val deviceWidth = size.x
         //사이즈 설정
         params?.width = (deviceWidth * 0.8).toInt()
-        params?.height = StockUtils.dpToPx(350)
+        params?.height = DisplayUtils.dpToPx(350)
         window?.attributes = params as WindowManager.LayoutParams
     }
 }

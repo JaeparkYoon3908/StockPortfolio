@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogMonthYearPickerBinding
+import com.yjpapp.stockportfolio.util.DisplayUtils
 import com.yjpapp.stockportfolio.util.StockUtils
 
 class CommonDatePickerDialog(
@@ -43,7 +44,7 @@ class CommonDatePickerDialog(
             false
         )
         setContentView(binding.root)
-        StockUtils.setDialogWidthResize(mContext, this, 0.85f)
+        DisplayUtils.setDialogWidthResize(mContext, this, 0.85f)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         initView()
     }

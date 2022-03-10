@@ -14,7 +14,15 @@ data class MyStockEntity (
     , @ColumnInfo(name = "purchasePrice") var purchasePrice: String = "" //평균단가
     , @ColumnInfo(name = "purchaseCount") var purchaseCount: Int = 0 //보유수량
     , @ColumnInfo(name = "currentPrice") var currentPrice: String = "" //현재가
-//    , @ColumnInfo(name = "currentPrice") var currentPrice: String = "" //현재가
-//    , @ColumnInfo(name = "currentPrice") var currentPrice: String = "" //현재가
+    , @ColumnInfo(name = "dayToDayPrice") var dayToDayPrice: String = "" //전일 대비 변동 가격
+    , @ColumnInfo(name = "dayToDayPercent") var dayToDayPercent: String = "" //현재 상승 퍼센트
+    , @ColumnInfo(name = "yesterdayPrice") var yesterdayPrice: String = "" //어제 가격
 
+    ) {
+    data class CurrentPriceData(
+        var currentPrice: String = "",
+        var dayToDayPrice: String = "",
+        var dayToDayPercent: String = "",
+        var yesterdayPrice: String = "",
     )
+}

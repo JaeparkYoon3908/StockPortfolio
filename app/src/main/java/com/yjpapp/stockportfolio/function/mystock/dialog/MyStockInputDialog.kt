@@ -13,7 +13,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.DatePicker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
@@ -25,6 +24,7 @@ import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity
 import com.yjpapp.stockportfolio.model.SubjectName
+import com.yjpapp.stockportfolio.util.DisplayUtils
 import com.yjpapp.stockportfolio.util.StockUtils
 import es.dmoral.toasty.Toasty
 
@@ -74,7 +74,7 @@ class MyStockInputDialog(
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
 //        EditText focus 했을 때 키보드가 보이도록 설정
 //        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-        StockUtils.setDialogWidthResize(mContext, dialog, 0.85f)
+        DisplayUtils.setDialogWidthResize(mContext, dialog, 0.85f)
         initData()
         initView()
     }

@@ -142,18 +142,15 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    suspend fun getCurrentPrice(subjectCode: String): String {
+    suspend fun getCurrentPrice(subjectCode: String): MyStockEntity.CurrentPriceData {
         val currentPrice = withContext(viewModelScope.coroutineContext) {
             getCurrentPriceJob(subjectCode = subjectCode)
         }
         return currentPrice
     }
 
-    private suspend fun getCurrentPriceJob(subjectCode: String): String {
-        var currentPrice = ""
-        var dayToDayPrice = ""
-        var dayToDayPercent = ""
-        var yesterdayPrice = ""
+    private suspend fun getCurrentPriceJob(subjectCode: String): MyStockEntity.CurrentPriceData {
+        val result = MyStockEntity.CurrentPriceData()
         val url = "https://finance.naver.com/item/main.naver?code=$subjectCode"
         val doc = withContext(Dispatchers.IO) {
             try {
@@ -167,14 +164,16 @@ class MyStockViewModel @Inject constructor(
         blind?.let {
             if (it.isNotEmpty() && it.size > 19) {
                 val startIndex = it.size - 18
-                currentPrice = blind[startIndex].text()
-                dayToDayPrice = blind[startIndex + 1].text()
-                dayToDayPercent = blind[startIndex + 2].text()
-                yesterdayPrice = blind[startIndex + 3].text()
+                result.apply {
+                    currentPrice = blind[startIndex].text()
+                    dayToDayPrice = blind[startIndex + 1].text()
+                    dayToDayPercent = blind[startIndex + 2].text()
+                    yesterdayPrice = blind[startIndex + 3].text()
+                }
             }
         }
-        //TODO currentPrice값이 빈 값일 때 예외처리
-        return currentPrice
+        //TODO currentPrice 값이 빈 값일 때 예외처리
+        return result
     }
 
     /**

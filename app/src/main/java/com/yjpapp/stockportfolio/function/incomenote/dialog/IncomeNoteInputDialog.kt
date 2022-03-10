@@ -22,6 +22,7 @@ import com.yjpapp.stockportfolio.databinding.CustomDialogInputIncomeNoteBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.extension.OnSingleClickListener
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
+import com.yjpapp.stockportfolio.util.DisplayUtils
 import com.yjpapp.stockportfolio.util.StockUtils
 
 
@@ -75,15 +76,15 @@ class IncomeNoteInputDialog(
             etPurchasePrice.addTextChangedListener(textWatcher)
             etSellPrice.addTextChangedListener(textWatcher)
 
-            txtPurchasePriceSymbol.text = StockConfig.moneySymbol
-            txtSellPriceSymbol.text = StockConfig.moneySymbol
+            txtPurchasePriceSymbol.text = StockConfig.koreaMoneySymbol
+            txtSellPriceSymbol.text = StockConfig.koreaMoneySymbol
 
             data = this@IncomeNoteInputDialog.data
         }
 
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-        StockUtils.setDialogWidthResize(mContext, this, 0.85f)
+        DisplayUtils.setDialogWidthResize(mContext, this, 0.85f)
     }
 
     private val onClickListener = OnSingleClickListener { view: View? ->

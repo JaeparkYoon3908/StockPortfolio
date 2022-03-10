@@ -9,6 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CustomDialogIncomeNoteFilterBinding
+import com.yjpapp.stockportfolio.util.DisplayUtils
 import com.yjpapp.stockportfolio.util.StockUtils
 
 class IncomeNoteFilterDialog(): BottomSheetDialogFragment() {
@@ -43,7 +44,7 @@ class IncomeNoteFilterDialog(): BottomSheetDialogFragment() {
         super.onStart()
 
         val bottomSheet: View? = dialog?.findViewById(R.id.design_bottom_sheet)
-        BottomSheetBehavior.from(bottomSheet!!).peekHeight = StockUtils.dpToPx(190)
+        BottomSheetBehavior.from(bottomSheet!!).peekHeight = DisplayUtils.dpToPx(190)
     }
 
     private val onClickListener = View.OnClickListener { view: View? ->

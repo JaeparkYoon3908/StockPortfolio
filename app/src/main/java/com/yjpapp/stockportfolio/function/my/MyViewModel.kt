@@ -11,7 +11,7 @@ import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
-import com.yjpapp.stockportfolio.util.StockUtils
+import com.yjpapp.stockportfolio.util.PatternUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class MyViewModel @Inject constructor(
     private val _eventFlow = MutableEventFlow<Event>()
     val eventFlow = _eventFlow.asEventFlow()
     val userName = userRepository.getUserName()
-    val userEmail = StockUtils.getEmailMasking(userRepository.getUserEmail())
+    val userEmail = PatternUtils.getEmailMasking(userRepository.getUserEmail())
     val userLoginType = userRepository.getLoginType()
     val isMyStockAutoRefresh = myRepository.getMyStockAutoRefresh()
     val isMyStockAutoAdd = myRepository.getMyStockAutoAdd()
@@ -43,20 +43,20 @@ class MyViewModel @Inject constructor(
             StockConfig.LOGIN_TYPE_NAVER -> {
                 NidOAuthLogin().callDeleteTokenApi(context, object : OAuthLoginCallback {
                     override fun onSuccess() {
-                        //¼­¹ö¿¡¼­ ÅäÅ« »èÁ¦¿¡ ¼º°øÇÑ »óÅÂÀÔ´Ï´Ù.
+                        //ì„œë²„ì—ì„œ í† í° ì‚­ì œì— ì„±ê³µí•œ ìƒíƒœì…ë‹ˆë‹¤.
                         userRepository.logout()
                         event(Event.StopLoadingAnimation(""))
                         event(Event.StartLoginActivity(""))
                     }
                     override fun onFailure(httpStatus: Int, message: String) {
-                        // ¼­¹ö¿¡¼­ ÅäÅ« »èÁ¦¿¡ ½ÇÆĞÇß¾îµµ Å¬¶óÀÌ¾ğÆ®¿¡ ÀÖ´Â ÅäÅ«Àº »èÁ¦µÇ¾î ·Î±×¾Æ¿ôµÈ »óÅÂÀÔ´Ï´Ù.
-                        // Å¬¶óÀÌ¾ğÆ®¿¡ ÅäÅ« Á¤º¸°¡ ¾ø±â ¶§¹®¿¡ Ãß°¡·Î Ã³¸®ÇÒ ¼ö ÀÖ´Â ÀÛ¾÷Àº ¾ø½À´Ï´Ù.
+                        // ì„œë²„ì—ì„œ í† í° ì‚­ì œì— ì‹¤íŒ¨í–ˆì–´ë„ í´ë¼ì´ì–¸íŠ¸ì— ìˆëŠ” í† í°ì€ ì‚­ì œë˜ì–´ ë¡œê·¸ì•„ì›ƒëœ ìƒíƒœì…ë‹ˆë‹¤.
+                        // í´ë¼ì´ì–¸íŠ¸ì— í† í° ì •ë³´ê°€ ì—†ê¸° ë•Œë¬¸ì— ì¶”ê°€ë¡œ ì²˜ë¦¬í•  ìˆ˜ ìˆëŠ” ì‘ì—…ì€ ì—†ìŠµë‹ˆë‹¤.
                         event(Event.StopLoadingAnimation(""))
                         ResponseAlertManger.showErrorAlert(context, message)
                     }
                     override fun onError(errorCode: Int, message: String) {
-                        // ¼­¹ö¿¡¼­ ÅäÅ« »èÁ¦¿¡ ½ÇÆĞÇß¾îµµ Å¬¶óÀÌ¾ğÆ®¿¡ ÀÖ´Â ÅäÅ«Àº »èÁ¦µÇ¾î ·Î±×¾Æ¿ôµÈ »óÅÂÀÔ´Ï´Ù.
-                        // Å¬¶óÀÌ¾ğÆ®¿¡ ÅäÅ« Á¤º¸°¡ ¾ø±â ¶§¹®¿¡ Ãß°¡·Î Ã³¸®ÇÒ ¼ö ÀÖ´Â ÀÛ¾÷Àº ¾ø½À´Ï´Ù.
+                        // ì„œë²„ì—ì„œ í† í° ì‚­ì œì— ì‹¤íŒ¨í–ˆì–´ë„ í´ë¼ì´ì–¸íŠ¸ì— ìˆëŠ” í† í°ì€ ì‚­ì œë˜ì–´ ë¡œê·¸ì•„ì›ƒëœ ìƒíƒœì…ë‹ˆë‹¤.
+                        // í´ë¼ì´ì–¸íŠ¸ì— í† í° ì •ë³´ê°€ ì—†ê¸° ë•Œë¬¸ì— ì¶”ê°€ë¡œ ì²˜ë¦¬í•  ìˆ˜ ìˆëŠ” ì‘ì—…ì€ ì—†ìŠµë‹ˆë‹¤.
                         onFailure(errorCode, message)
                     }
                 })
