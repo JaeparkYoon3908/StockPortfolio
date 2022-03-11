@@ -36,6 +36,7 @@ import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.model.SubjectName
+import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import de.charlex.compose.RevealDirection
@@ -140,6 +141,12 @@ class MyStockFragment : Fragment() {
                 ) {
                     lifecycleScope.launch {
                         val currentPriceData = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
+                        currentPriceData.run {
+                            if (currentPrice.isEmpty() || yesterdayPrice.isEmpty()) {
+                                ResponseAlertManger.showErrorAlert(mContext, getString(R.string.Error_Msg_Network_Connect_Exception))
+                                return@launch
+                            }
+                        }
                         val currentPrice = currentPriceData.currentPrice
                         val currentPriceNumber = StockUtils.getNumDeletedComma(currentPrice).toInt()
                         val purchasePriceNumber = StockUtils.getNumDeletedComma(userInputDialogData.purchasePrice).toInt()
@@ -155,7 +162,8 @@ class MyStockFragment : Fragment() {
                             purchaseCount = userInputDialogData.purchaseCount.toInt(),
                             currentPrice = currentPrice,
                             dayToDayPrice = currentPriceData.dayToDayPrice,
-                            dayToDayPercent = currentPriceData.dayToDayPercent
+                            dayToDayPercent = currentPriceData.dayToDayPercent,
+                            yesterdayPrice = currentPriceData.yesterdayPrice
                         )
                         if (dialogData == null) {
                             val isAddSuccess = myStockViewModel.addMyStock(mContext, myStockEntity)
@@ -614,29 +622,41 @@ class MyStockFragment : Fragment() {
                             )
 
                             Text(
-                                text = StockUtils.getPriceNum(myStockEntity.currentPrice),
+                                text = myStockEntity.currentPrice,
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = Color_222222,
                                 modifier = Modifier
                                     .padding(start = 10.dp)
                             )
-
+                            val currentPriceNum = StockUtils.getNumDeletedComma(myStockEntity.currentPrice).toDouble()
+                            val yesterdayPriceNum = StockUtils.getNumDeletedComma(myStockEntity.yesterdayPrice).toDouble()
                             Text(
-                                text = myStockEntity.dayToDayPrice,
+                                text = StockUtils.getDayToDayPrice(
+                                    currentPrice = currentPriceNum,
+                                    yesterdayPrice = yesterdayPriceNum
+                                ),
                                 fontSize = 12.sp,
                                 maxLines = 1,
-                                color = Color_222222,
+                                color = when {
+                                    currentPriceNum - yesterdayPriceNum > 0 -> Color_CD4632
+                                    currentPriceNum == yesterdayPriceNum -> Color_222222
+                                    else -> Color_4876C7
+                                },
                                 modifier = Modifier
                                     .padding(start = 5.dp)
 
                             )
 
                             Text(
-                                text = myStockEntity.dayToDayPercent,
+                                text = "(${myStockEntity.dayToDayPercent}%)",
                                 fontSize = 12.sp,
                                 maxLines = 1,
-                                color = Color_222222,
+                                color = when {
+                                    currentPriceNum - yesterdayPriceNum > 0 -> Color_CD4632
+                                    currentPriceNum == yesterdayPriceNum -> Color_222222
+                                    else -> Color_4876C7
+                                },
                             )
                         }
                     }

@@ -34,7 +34,7 @@ object StockUtils {
     }
 
     //yyyy.mm.dd로 변환
-    fun getTodayYYYY_MM_DD(): String{
+    fun getTodayYYYY_MM_DD(): String {
         val yyyymmdd = getTodayYYYYMMDD()
         val result = StringBuffer().apply {
             append(yyyymmdd.substring(0, 4))
@@ -55,7 +55,7 @@ object StockUtils {
     }
 
     //5,000,000 => 5000000 변환
-    fun getNumDeletedComma(num: String): String{
+    fun getNumDeletedComma(num: String): String {
         val result = StringBuffer()
         val split = num.split(",")
         for (i in split.indices) {
@@ -65,12 +65,13 @@ object StockUtils {
     }
 
     //5000000 => 5,000,000 변환
-    fun getNumInsertComma(num: String): String{
+    fun getNumInsertComma(num: String): String {
         var result = ""
         val decimalFormat = DecimalFormat("###,###")
         result = decimalFormat.format(num.replace(",", "").toDouble())
         return result
     }
+
     //5000000 => $5,000,000 변환
     fun getPriceNum(num: String): String {
         val result = StringBuffer().apply {
@@ -81,7 +82,7 @@ object StockUtils {
     }
 
     //14% => 14 변환.
-    fun getNumDeletedPercent(num: String): String{
+    fun getNumDeletedPercent(num: String): String {
         var result: String = ""
         val split = num.split("%")
         for (i in split.indices) {
@@ -91,7 +92,7 @@ object StockUtils {
     }
 
     //2020.11.18 =>20201118 변환.
-    fun getNumDeletedDot(num: String): String{
+    fun getNumDeletedDot(num: String): String {
         var result: String = ""
         val split = num.split(".")
         for (i in split.indices) {
@@ -101,32 +102,19 @@ object StockUtils {
     }
 
     //수익률 계산
-    fun calculateGainPercent(purchasePrice: String, sellPrice: String): Double{
+    fun calculateGainPercent(purchasePrice: String, sellPrice: String): Double {
         val purchasePriceNum = getNumDeletedComma(purchasePrice)
         val sellPriceNum = getNumDeletedComma(sellPrice)
 
-        return (((sellPriceNum.toDouble() / purchasePriceNum.toDouble()) -1) * 100)
+        return (((sellPriceNum.toDouble() / purchasePriceNum.toDouble()) - 1) * 100)
     }
 
-//    //전체 수익률 계산 함수 -> (수익률) = (매도총금액) / (매수총금액) * 100 - 100
-//    fun calculateTotalGainPercent(incomeNoteInfoList: MutableList<RespIncomeNoteInfo.IncomeNoteList?>): Double{
-//        var allPurchasePrice = 0.0
-//        var allSellPrice = 0.0
-//        incomeNoteInfoList.forEach {
-//            if(it?.purchasePrice != null && it.realPainLossesAmount != null){
-//                allPurchasePrice += getNumDeletedComma(it.purchasePrice!!).toDouble() * it.sellCount
-//                allSellPrice += getNumDeletedComma(it.sellPrice!!).toDouble() * it.sellCount
-//            }
-//        }
-//        return ((allSellPrice / allPurchasePrice) * 100) - 100
-//    }
-
     //퍼센티지 붙이기
-    fun getRoundsPercentNumber(number: Double): String{
+    fun getRoundsPercentNumber(number: Double): String {
         var result = ""
-        result = try{
+        result = try {
             String.format("%.2f", number)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             "0"
         }
         result += "%"
@@ -134,7 +122,11 @@ object StockUtils {
     }
 
     //전일대비 가격 구하기
-    fun getDayToDayPrice(yesterdayPrice: Double, currentPrice: Double, local: String = StockConfig.LOCAL_KOREA): String {
+    fun getDayToDayPrice(
+        yesterdayPrice: Double,
+        currentPrice: Double,
+        local: String = StockConfig.LOCAL_KOREA
+    ): String {
         when (local) {
             StockConfig.LOCAL_KOREA -> {
                 return getNumInsertComma((currentPrice - yesterdayPrice).roundToInt().toString())
@@ -145,12 +137,16 @@ object StockUtils {
     }
 
     @SuppressLint("MissingPermission")
-    fun runVibration(mContext: Context, milliseconds: Long){
+    fun runVibration(mContext: Context, milliseconds: Long) {
         val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator!!.vibrate(VibrationEffect.createOneShot(milliseconds,
-                VibrationEffect.DEFAULT_AMPLITUDE))
-        }else{
+            vibrator!!.vibrate(
+                VibrationEffect.createOneShot(
+                    milliseconds,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
+        } else {
             vibrator!!.vibrate(milliseconds);
         }
     }
@@ -159,7 +155,8 @@ object StockUtils {
         var packageInfo: PackageInfo? = null
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+                packageInfo =
+                    packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
             }
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
