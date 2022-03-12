@@ -471,12 +471,12 @@ class MyStockFragment : Fragment() {
                 elevation = 0.dp,
                 backgroundColor = Color_FBFBFB
             ) {
+                val purchasePriceNumber = StockUtils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
+                val currentPriceNumber = StockUtils.getNumDeletedComma(myStockEntity.currentPrice).toDouble()
                 Column(
                     modifier = Modifier
 //                    .padding(bottom = 10.dp)
                         .wrapContentHeight()
-//                    .fillMaxWidth()
-//                    .background(color = colorResource(id = R.color.color_background_fbfbfb))
                 ) {
 
                     Row(
@@ -515,9 +515,13 @@ class MyStockFragment : Fragment() {
                                 modifier = Modifier
                                     .padding(start = 5.dp)
                             )
+
                             //수익 퍼센트
+                            val allPurchasePriceNum = (purchasePriceNumber * myStockEntity.purchaseCount)
+                            val allCurrentPriceNum = (currentPriceNumber * myStockEntity.purchaseCount)
+                            val gainPercentNum = StockUtils.calculateGainPercent(allPurchasePriceNum, allCurrentPriceNum)
                             Text(
-                                text = "(0.93)",
+                                text = "(${StockUtils.getRoundsPercentNumber(gainPercentNum)})",
                                 fontSize = 12.sp,
                                 maxLines = 1,
                                 color = if (StockUtils.getNumDeletedComma(myStockEntity.gainPrice).toDouble() > 0) Color_CD4632

@@ -102,17 +102,17 @@ object StockUtils {
     }
 
     //수익률 계산
-    fun calculateGainPercent(purchasePrice: String, sellPrice: String): Double {
-        val purchasePriceNum = getNumDeletedComma(purchasePrice)
-        val sellPriceNum = getNumDeletedComma(sellPrice)
+    fun calculateGainPercent(purchasePrice: Double, sellPrice: Double): Double{
+//        val purchasePriceNum = getNumDeletedComma(purchasePrice)
+//        val sellPriceNum = getNumDeletedComma(sellPrice)
 
-        return (((sellPriceNum.toDouble() / purchasePriceNum.toDouble()) - 1) * 100)
+        return (((sellPrice / purchasePrice) -1) * 100)
     }
 
     //퍼센티지 붙이기
-    fun getRoundsPercentNumber(number: Double): String {
+    fun getRoundsPercentNumber(number: Double): String{
         var result = ""
-        result = try {
+        result = try{
             String.format("%.2f", number)
         } catch (e: Exception) {
             "0"
