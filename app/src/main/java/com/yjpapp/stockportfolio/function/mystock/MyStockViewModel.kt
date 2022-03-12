@@ -93,6 +93,10 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
+    fun refreshCurrentPrice() {
+
+    }
+
     private fun calculateTopData() {
         var totalPurchasePrice = 0.00 // 총 매수금액
         var totalEvaluationAmount = 0.00 // 총 평가금액
@@ -107,11 +111,13 @@ class MyStockViewModel @Inject constructor(
             totalEvaluationAmount += currentPrice * purchaseCount
         }
         totalGainPrice = totalEvaluationAmount - totalPurchasePrice
+        totalGainPricePercent = StockUtils.calculateGainPercent(totalPurchasePrice, totalEvaluationAmount)
 
         viewModelScope.launch {
             _totalPurchasePrice.emit(totalPurchasePrice.toString())
             _totalEvaluationAmount.emit(totalEvaluationAmount.toString())
             _totalGainPrice.emit(totalGainPrice.toString())
+            _totalGainPricePercent.emit(StockUtils.getRoundsPercentNumber(totalGainPricePercent))
         }
     }
 
@@ -172,7 +178,6 @@ class MyStockViewModel @Inject constructor(
                 }
             }
         }
-        //TODO currentPrice 값이 빈 값일 때 예외처리
         return result
     }
 

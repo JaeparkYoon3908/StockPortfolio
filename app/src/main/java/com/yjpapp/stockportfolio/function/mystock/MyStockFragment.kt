@@ -284,6 +284,8 @@ class MyStockFragment : Fragment() {
                 )
                 Text(
                     text = totalGainPricePercent,
+                    color = if (StockUtils.getNumDeletedComma(totalGainPrice).toDouble() > 0) Color_CD4632
+                    else Color_4876C7,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
