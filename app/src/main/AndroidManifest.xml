@@ -41,7 +41,7 @@
 
         <activity android:name=".function.mystock.search.StockSearchActivity"
             android:screenOrientation="fullSensor"
-            />
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name="com.facebook.CustomTabActivity"

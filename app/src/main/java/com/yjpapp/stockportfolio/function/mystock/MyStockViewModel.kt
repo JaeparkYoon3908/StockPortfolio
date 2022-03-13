@@ -93,10 +93,6 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    fun refreshCurrentPrice() {
-
-    }
-
     private fun calculateTopData() {
         var totalPurchasePrice = 0.00 // 총 매수금액
         var totalEvaluationAmount = 0.00 // 총 평가금액
@@ -121,7 +117,7 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    fun getAllCurrentPrices() {
+    fun refreshAllPrices() {
         viewModelScope.launch {
             repeat(myStockInfoList.size) { count ->
                 val url = "https://finance.naver.com/item/main.naver?code=${myStockInfoList[count].subjectCode}"
@@ -137,11 +133,22 @@ class MyStockViewModel @Inject constructor(
                 blind?.let {
                     if (it.isNotEmpty() && it.size > 19) {
                         val startIndex = it.size - 18
-                        var currentPrice = it[startIndex].text()
-                        var dayToDayPrice = it[startIndex + 1].text()
-                        var dayToDayPercent = it[startIndex + 2].text()
-                        var yesterdayPrice = it[startIndex + 3].text()
-                        myStockInfoList[count].currentPrice = currentPrice
+                        val currentPrice = it[startIndex].text()
+                        val dayToDayPrice = it[startIndex + 1].text()
+                        val dayToDayPercent = it[startIndex + 2].text()
+                        val yesterdayPrice = it[startIndex + 3].text()
+
+                        val currentPriceNumber = StockUtils.getNumDeletedComma(currentPrice).toInt()
+                        val purchasePriceNumber = StockUtils.getNumDeletedComma(myStockInfoList[count].purchasePrice).toInt()
+                        val purchaseCountNumber = myStockInfoList[count].purchaseCount
+                        val gainPrice = (currentPriceNumber - purchasePriceNumber) * purchaseCountNumber
+                        myStockInfoList[count].apply {
+                            this.currentPrice = currentPrice
+                            this.dayToDayPercent = dayToDayPercent
+                            this.dayToDayPrice = dayToDayPrice
+                            this.yesterdayPrice = yesterdayPrice
+                            this.gainPrice = StockUtils.getNumInsertComma(gainPrice.toString())
+                        }
                     }
                 }
             }

@@ -98,7 +98,7 @@ class MyStockFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Refresh -> {
-
+                myStockViewModel.refreshAllPrices()
             }
             R.id.menu_MyStockFragment_Add -> {
                 if (myStockViewModel.myStockInfoList.size >= 10) {

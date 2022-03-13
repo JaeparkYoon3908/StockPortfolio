@@ -24,7 +24,6 @@ class StockSearchViewModel @Inject constructor(
     private val myStockRepository: MyStockRepository
 ): ViewModel() {
     private var _allStockList: MutableList<Array<String>> = mutableListOf()
-    val allStockList: List<Array<String>> get() = _allStockList
     var searchResult = mutableStateListOf<SubjectName>()
         private set
 

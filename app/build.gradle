@@ -123,6 +123,4 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
     //Read csv
     implementation 'com.opencsv:opencsv:4.4'
-
-
 }

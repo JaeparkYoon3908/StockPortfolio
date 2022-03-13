@@ -16,16 +16,18 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.yjpapp.stockportfolio.common.theme.Color_222222
 import com.yjpapp.stockportfolio.common.theme.Color_FFFFFF
 import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
 
 /**
  * @link 주식 추가 다이얼로그 -> 회사명 입력 할 때 띄워지는 Fragment
@@ -40,6 +42,7 @@ class StockSearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             Column(
                 modifier = Modifier
@@ -58,6 +61,7 @@ class StockSearchActivity : AppCompatActivity() {
         viewModel.initAllStockList(this)
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     @Preview
     @Composable
     private fun SearchBar() {
@@ -71,6 +75,7 @@ class StockSearchActivity : AppCompatActivity() {
         ) {
             var userInputKeyWord by remember { mutableStateOf("") }
             var showClearIcon by remember { mutableStateOf(false) }
+            val keyboardController = LocalSoftwareKeyboardController.current
             TextField(
                 value = userInputKeyWord,
                 onValueChange = {
@@ -80,7 +85,12 @@ class StockSearchActivity : AppCompatActivity() {
                 maxLines = 1,
                 singleLine = true,
                 leadingIcon = {
-                    IconButton(onClick = { viewModel.requestSearchList(userInputKeyWord) }) {
+                    IconButton(
+                        onClick = {
+                            viewModel.requestSearchList(userInputKeyWord)
+                            keyboardController?.hide()
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Search,
                             contentDescription = "",
@@ -111,11 +121,11 @@ class StockSearchActivity : AppCompatActivity() {
                     onDone = {
                         StockLog.d(TAG, "onDone")
                         viewModel.requestSearchList(userInputKeyWord)
+                        keyboardController?.hide()
                     }
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-
             )
         }
     }
