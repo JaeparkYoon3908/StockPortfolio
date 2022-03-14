@@ -33,7 +33,7 @@ class MyStockViewModel @Inject constructor(
     val totalEvaluationAmount: StateFlow<String> get() = _totalEvaluationAmount //상단 총 평가금액
     private val _totalGainPrice = MutableStateFlow("")
     val totalGainPrice: StateFlow<String> get() = _totalGainPrice //상단 손익
-    private val _totalGainPricePercent = MutableStateFlow("")
+    private val _totalGainPricePercent = MutableStateFlow("0%")
     val totalGainPricePercent: StateFlow<String> get() = _totalGainPricePercent //상단 수익률
     var myStockInfoList = mutableStateListOf<MyStockEntity>() //나의 주식 목록 List
         private set
@@ -44,6 +44,7 @@ class MyStockViewModel @Inject constructor(
      * MyStockFragment 영역
      */
     init {
+        myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
         refreshAllPrices()
 //        getCurrentPrices()
         calculateTopData()
