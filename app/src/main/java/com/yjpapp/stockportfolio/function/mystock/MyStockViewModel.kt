@@ -44,7 +44,7 @@ class MyStockViewModel @Inject constructor(
      * MyStockFragment 영역
      */
     init {
-        myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
+        refreshAllPrices()
 //        getCurrentPrices()
         calculateTopData()
     }
@@ -151,7 +151,10 @@ class MyStockViewModel @Inject constructor(
                         }
                     }
                 }
+                myStockRepository.updateMyStock(myStockInfoList[count])
             }
+            myStockInfoList.clear()
+            myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
         }
     }
 
