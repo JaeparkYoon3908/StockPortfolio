@@ -617,6 +617,7 @@ class MyStockFragment : Fragment() {
                             modifier = Modifier
                                 .weight(0.5f)
                         ) {
+                            //매수일
                             Text(
                                 text = getString(R.string.MyStockFragment_Purchase_Date),
                                 fontSize = 14.sp,
@@ -638,6 +639,7 @@ class MyStockFragment : Fragment() {
                                 .weight(0.5f),
                             horizontalArrangement = Arrangement.End
                         ) {
+                            //평균단가
                             Text(
                                 text = getString(R.string.MyStockFragment_Purchase_Average),
                                 fontSize = 14.sp,
@@ -663,7 +665,7 @@ class MyStockFragment : Fragment() {
                             .padding(start = 15.dp, end = 15.dp, top = 10.dp)
                     ) {
                         Row(
-                            modifier = Modifier.weight(0.35f)
+                            modifier = Modifier.weight(0.5f)
                         ) {
                             Text(
                                 text = getString(R.string.MyStockFragment_Holding_Quantity),
@@ -684,8 +686,8 @@ class MyStockFragment : Fragment() {
 
                         Row(
                             modifier = Modifier
-                                .weight(0.65f)
-                                .padding(bottom = 10.dp),
+                                .padding(bottom = 10.dp)
+                                .weight(0.5f),
                             horizontalArrangement = Arrangement.End,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -712,7 +714,7 @@ class MyStockFragment : Fragment() {
                                     currentPrice = currentPriceNumber,
                                     yesterdayPrice = yesterdayPriceNumber
                                 ),
-                                fontSize = 12.sp,
+                                fontSize = 11.sp,
                                 maxLines = 1,
                                 color = when {
                                     currentPriceNumber - yesterdayPriceNumber > 0 -> Color_CD4632
@@ -726,7 +728,7 @@ class MyStockFragment : Fragment() {
 
                             MarqueeText(
                                 text = "(${myStockEntity.dayToDayPercent}%)",
-                                fontSize = 12.sp,
+                                fontSize = 11.sp,
                                 color = when {
                                     currentPriceNumber - yesterdayPriceNumber > 0 -> Color_CD4632
                                     currentPriceNumber == yesterdayPriceNumber -> Color_222222
