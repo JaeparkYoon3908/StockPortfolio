@@ -105,8 +105,9 @@ object StockUtils {
     fun calculateGainPercent(purchasePrice: Double, sellPrice: Double): Double{
 //        val purchasePriceNum = getNumDeletedComma(purchasePrice)
 //        val sellPriceNum = getNumDeletedComma(sellPrice)
-
-        return (((sellPrice / purchasePrice) -1) * 100)
+        var result = (((sellPrice / purchasePrice) -1) * 100)
+        if (result.equals(Double.NaN)) result = 0.00
+        return result
     }
 
     //퍼센티지 붙이기

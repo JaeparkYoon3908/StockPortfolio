@@ -11,7 +11,7 @@
 
         <variable
             name="data"
-            type="com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog.MyStockInputDialogData" />
+            type="com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

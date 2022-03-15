@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.yjpapp.stockportfolio.common.StockConfig"/>
+        <variable
+            name="convertText"
+            type="String" />
+
+        <variable
+            name="data"
+            type="com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/EditMainDialog_MainContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/common_30dp"
+        android:layout_marginEnd="@dimen/common_30dp"
+        android:background="@drawable/bg_ffffff_r12"
+        >
+
+        <TextView
+            android:id="@+id/txt_sell_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_30dp"
+            android:layout_marginStart="@dimen/common_20dp"
+            android:text="@string/IncomeNoteFragment_Sell_Date"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/common_16dp"
+            app:layout_constraintBottom_toTopOf="@+id/txt_sell_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_sell_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_10dp"
+            android:background="@drawable/border_line_bottom"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:text="@{data.purchaseDate}"
+            android:hint="@string/EditIncomeNoteDialog_Sell_Date_Hint"
+            android:textColor="@color/color_222222"
+            android:textSize="@dimen/common_15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_sell_date"
+            app:layout_constraintStart_toEndOf="@+id/txt_sell_date"
+            app:layout_constraintTop_toTopOf="@+id/txt_sell_date" />
+
+
+        <TextView
+            android:id="@+id/txt_sell_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_30dp"
+            android:layout_marginStart="@dimen/common_20dp"
+            android:text="@string/MyStockFragment_Sell_Price"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/common_16dp"
+            app:layout_constraintBottom_toTopOf="@+id/txt_sell_count"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_sell_date" />
+
+        <TextView
+            android:id="@+id/txt_sell_price_symbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@{StockConfig.INSTANCE.koreaMoneySymbol}"
+            android:textColor="@color/color_666666"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/txt_sell_count"
+            app:layout_constraintStart_toEndOf="@+id/txt_sell_price"
+            app:layout_constraintTop_toBottomOf="@+id/txt_sell_date" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_sell_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_2dp"
+            android:layout_marginEnd="@dimen/common_20dp"
+            android:background="@drawable/border_line_bottom"
+            android:hint="@string/MyStockFragment_Sell_Price_Hint"
+            android:inputType="number"
+            android:text="@{data.purchasePrice}"
+            android:textColor="@color/color_222222"
+            android:textSize="@dimen/common_15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_sell_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_sell_price_symbol"
+            app:layout_constraintTop_toTopOf="@+id/txt_sell_price"
+            android:importantForAutofill="no" />
+
+        <TextView
+            android:id="@+id/txt_sell_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_30dp"
+            android:layout_marginBottom="@dimen/common_30dp"
+            android:layout_marginStart="@dimen/common_20dp"
+            android:text="@string/MyStockFragment_Sell_Count"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/common_16dp"
+            app:layout_constraintBottom_toTopOf="@+id/txt_cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_sell_price" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_sell_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/border_line_bottom"
+            android:hint="@string/MyStockFragment_Sell_Count_Hint"
+            android:inputType="number"
+            android:text="@{data.purchaseCount}"
+            android:textColor="@color/color_222222"
+            android:textSize="@dimen/common_15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_sell_count"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_sell_count"
+            app:layout_constraintTop_toTopOf="@+id/txt_sell_count"
+            android:importantForAutofill="no"
+            />
+
+        <TextView
+            android:id="@+id/txt_cancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_50dp"
+            android:background="@drawable/bg_f1f1f1_r12_bottom_left"
+            android:gravity="center"
+            android:text="@string/Common_Cancel"
+            android:textColor="@color/color_222222"
+            android:textSize="@dimen/common_15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_complete"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <TextView
+            android:id="@+id/txt_complete"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/common_50dp"
+            android:background="@drawable/bg_e52b4e_r12_bottom_right"
+            android:gravity="center"
+            android:text="@string/Common_Complete"
+            android:textColor="@color/color_ffffff"
+            android:textSize="@dimen/common_15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_cancel"
+            app:layout_constraintWidth_percent="0.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

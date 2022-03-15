@@ -19,7 +19,7 @@ import androidx.fragment.app.DialogFragment
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
-import com.yjpapp.stockportfolio.databinding.CustomDialogInputMyStockBinding
+import com.yjpapp.stockportfolio.databinding.CustomDialogPurchaseInputMyStockBinding
 import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity
@@ -29,9 +29,9 @@ import com.yjpapp.stockportfolio.util.StockUtils
 import es.dmoral.toasty.Toasty
 
 
-class MyStockInputDialog(
+class MyStockPurchaseInputDialog(
     private val mContext: Context,
-    private var myStockInputDialogData: MyStockInputDialogData?,
+    private var dialogData: MyStockPurchaseInputDialogData?,
     private val callBack: CallBack
 ) : DialogFragment(),
     SupportedDatePickerDialog.OnDateSetListener {
@@ -39,7 +39,7 @@ class MyStockInputDialog(
         const val SELL_DATE_DATA_INPUT: Int = 0
     }
 
-    private var _binding: CustomDialogInputMyStockBinding? = null
+    private var _binding: CustomDialogPurchaseInputMyStockBinding? = null
     private val binding get() = _binding!!
 
     private var purchaseYear = ""
@@ -48,7 +48,7 @@ class MyStockInputDialog(
     private var convertText = ""
     private var selectedSubjectName = SubjectName()
 
-    data class MyStockInputDialogData(
+    data class MyStockPurchaseInputDialogData(
         var id: Int = -1,
         var subjectName: SubjectName = SubjectName(),
         var purchaseDate: String = "",
@@ -61,7 +61,7 @@ class MyStockInputDialog(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = CustomDialogInputMyStockBinding.inflate(
+        _binding = CustomDialogPurchaseInputMyStockBinding.inflate(
             inflater,
             container,
             false
@@ -80,7 +80,7 @@ class MyStockInputDialog(
     }
 
     private fun initData() {
-        myStockInputDialogData?.let {
+        dialogData?.let {
             binding.data = it
             selectedSubjectName = it.subjectName
         }
@@ -163,8 +163,8 @@ class MyStockInputDialog(
                     return@setOnSingleClickListener
                 }
                 callBack.onInputDialogCompleteClicked(
-                    this@MyStockInputDialog,
-                    MyStockInputDialogData(
+                    this@MyStockPurchaseInputDialog,
+                    MyStockPurchaseInputDialogData(
                         subjectName = selectedSubjectName,
                         purchaseDate = purchaseDate,
                         purchasePrice = purchasePrice,
@@ -175,11 +175,11 @@ class MyStockInputDialog(
             etPurchasePrice.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    if (!TextUtils.isEmpty(s.toString()) && s.toString() != this@MyStockInputDialog.convertText) {
-                        this@MyStockInputDialog.convertText =
+                    if (!TextUtils.isEmpty(s.toString()) && s.toString() != this@MyStockPurchaseInputDialog.convertText) {
+                        this@MyStockPurchaseInputDialog.convertText =
                             StockUtils.getNumInsertComma(s.toString())
-                        etPurchasePrice.setText(this@MyStockInputDialog.convertText)
-                        etPurchasePrice.setSelection(this@MyStockInputDialog.convertText.length) //커서를 오른쪽 끝으로 보낸다.
+                        etPurchasePrice.setText(this@MyStockPurchaseInputDialog.convertText)
+                        etPurchasePrice.setSelection(this@MyStockPurchaseInputDialog.convertText.length) //커서를 오른쪽 끝으로 보낸다.
                     }
                     if (s.isEmpty()) {
                         txtPurchasePriceSymbol.setTextColor(mContext.getColor(R.color.color_666666))
@@ -242,8 +242,8 @@ class MyStockInputDialog(
 
     interface CallBack {
         fun onInputDialogCompleteClicked(
-            dialog: MyStockInputDialog,
-            userInputDialogData: MyStockInputDialogData
+            dialog: MyStockPurchaseInputDialog,
+            userPurchaseInputDialogData: MyStockPurchaseInputDialogData
         )
     }
 }

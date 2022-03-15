@@ -7,10 +7,19 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
+import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
+import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
+import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
+import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
+import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.repository.MyStockRepository
+import com.yjpapp.stockportfolio.repository.PreferenceRepository
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +32,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyStockViewModel @Inject constructor(
-    private val myStockRepository: MyStockRepository
+    private val myStockRepository: MyStockRepository,
+    private val incomeNoteRepository: IncomeNoteRepository,
+    private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
     private val _eventFlow = MutableEventFlow<Event>()
     val eventFlow = _eventFlow.asEventFlow()
@@ -82,15 +93,14 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    fun deleteMyStock(myStockEntity: MyStockEntity): Boolean {
-        return try {
+    fun deleteMyStock(context: Context, myStockEntity: MyStockEntity) {
+        try {
             myStockRepository.deleteMyStock((myStockEntity))
             myStockInfoList.remove(myStockEntity)
             calculateTopData()
-            true
         } catch (e: Exception) {
             e.stackTrace
-            false
+            event(Event.ShowErrorToastMessage(context.getString(R.string.Common_Cancel)))
         }
     }
 
@@ -109,7 +119,6 @@ class MyStockViewModel @Inject constructor(
         }
         totalGainPrice = totalEvaluationAmount - totalPurchasePrice
         totalGainPricePercent = StockUtils.calculateGainPercent(totalPurchasePrice, totalEvaluationAmount)
-
         viewModelScope.launch {
             _totalPurchasePrice.emit(totalPurchasePrice.toString())
             _totalEvaluationAmount.emit(totalEvaluationAmount.toString())
@@ -156,6 +165,7 @@ class MyStockViewModel @Inject constructor(
             }
             myStockInfoList.clear()
             myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
+            calculateTopData()
         }
     }
 
@@ -192,6 +202,35 @@ class MyStockViewModel @Inject constructor(
         return result
     }
 
+    fun isDeleteCheck(): Boolean {
+        val isDeleteCheckPref = preferenceRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
+        return isDeleteCheckPref == StockConfig.TRUE
+    }
+
+    fun isAutoAdd(): Boolean {
+        val isAutoAddPref = preferenceRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
+        return isAutoAddPref == StockConfig.TRUE
+    }
+
+    /**
+     * IncomeNote 연동
+     */
+    fun requestAddIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo, myStockEntity: MyStockEntity) {
+        viewModelScope.launch {
+            val result = incomeNoteRepository.requestPostIncomeNote(reqIncomeNoteInfo)
+            if (result == null) {
+                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                return@launch
+            }
+            if (result.isSuccessful) {
+                result.body()?.let { incomeNoteInfo ->
+                    incomeNoteInfo.gainPercent
+                    event(Event.SuccessIncomeNoteAdd(myStockEntity))
+                }
+            }
+        }
+    }
+
     /**
      * Event 정의
      */
@@ -206,5 +245,6 @@ class MyStockViewModel @Inject constructor(
         data class ShowErrorToastMessage(val msg: String): Event()
         data class ShowLoadingImage(val msg: Unit): Event()
         data class HideLoadingImage(val msg: Unit): Event()
+        data class SuccessIncomeNoteAdd(val data: MyStockEntity): Event()
     }
 }

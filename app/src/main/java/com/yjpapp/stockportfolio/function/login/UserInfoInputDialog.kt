@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.databinding.DialogUserInfoInputBinding
+import com.yjpapp.stockportfolio.databinding.CustomDialogUserInfoInputBinding
 import com.yjpapp.stockportfolio.util.DisplayUtils
 import com.yjpapp.stockportfolio.util.PatternUtils
 import es.dmoral.toasty.Toasty
@@ -31,14 +31,14 @@ class UserInfoInputDialog(
         var email: String = ""
     )
 
-    private var _binding: DialogUserInfoInputBinding? = null
+    private var _binding: CustomDialogUserInfoInputBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = DataBindingUtil.inflate(
             LayoutInflater.from(mContext),
-            R.layout.dialog_user_info_input,
+            R.layout.custom_dialog_user_info_input,
             null,
             false
         )

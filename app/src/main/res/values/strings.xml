@@ -81,6 +81,12 @@
     <string name="MyStockFragment_Gain">수익</string>
     <string name="MyStockFragment_Purchase_Date">매수일</string>
     <string name="MyStockFragment_Notice_Max_List">최대 10개까지 등록 할 수 있습니다.</string>
+    <string name="MyStockFragment_Sell_Price">매도단가</string>
+    <string name="MyStockFragment_Sell_Price_Hint">1주당 매도한 평균 단가</string>
+    <string name="MyStockFragment_Sell_Count">매도수량</string>
+    <string name="MyStockFragment_Sell_Count_Hint">총 매도수량</string>
+    <string name="MyStockInputDialog_Error_Message_Sell_Count">판매수량을 입력해주세요.</string>
+    <string name="MyStockInputDialog_Error_Message_Sell_Count_Over">판매 수량은 보유 수량을 넘을 수 없습니다.</string>
 
     <string name="MyStockInputDialog_Purchase_Count">보유수량</string>
     <string name="MyStockInputDialog_Purchase_Count_Hint">보유한 주식 수</string>

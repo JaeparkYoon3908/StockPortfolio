@@ -33,9 +33,11 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
-import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockInputDialog
+import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog
+import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockSellInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.model.SubjectName
+import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +56,7 @@ import kotlinx.coroutines.launch
  */
 @AndroidEntryPoint
 class MyStockFragment : Fragment() {
+    private val TAG = MyStockFragment::class.java.simpleName
     private val myStockViewModel: MyStockViewModel by viewModels()
     private lateinit var mContext: Context
     private lateinit var navController: NavController
@@ -111,7 +114,7 @@ class MyStockFragment : Fragment() {
                     ).show()
                     return false
                 }
-                showInputDialog(null)
+                showPurchaseInputDialog(null)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -125,19 +128,25 @@ class MyStockFragment : Fragment() {
             is MyStockViewModel.Event.ShowErrorToastMessage -> {
                 Toasty.error(mContext, event.msg, Toasty.LENGTH_LONG).show()
             }
+            is MyStockViewModel.Event.SuccessIncomeNoteAdd -> {
+                myStockViewModel.deleteMyStock(
+                    context = requireContext(),
+                    myStockEntity = event.data
+                )
+            }
         }
     }
 
-    private fun showInputDialog(
-        dialogData: MyStockInputDialog.MyStockInputDialogData?
+    private fun showPurchaseInputDialog(
+        dialogData: MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData?
     ) {
-        MyStockInputDialog(
+        MyStockPurchaseInputDialog(
             mContext = mContext,
-            myStockInputDialogData = dialogData,
-            callBack = object : MyStockInputDialog.CallBack {
+            dialogData = dialogData,
+            callBack = object : MyStockPurchaseInputDialog.CallBack {
                 override fun onInputDialogCompleteClicked(
-                    dialog: MyStockInputDialog,
-                    userInputDialogData: MyStockInputDialog.MyStockInputDialogData
+                    dialog: MyStockPurchaseInputDialog,
+                    userInputDialogData: MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData
                 ) {
                     lifecycleScope.launch {
                         val currentPriceData = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
@@ -180,6 +189,35 @@ class MyStockFragment : Fragment() {
                     }
                 }
             }).show(childFragmentManager, "MyStockInputDialog")
+    }
+
+    private fun showSellInputDialog(myStockEntity: MyStockEntity) {
+        MyStockSellInputDialog(
+            mContext = requireContext(),
+            dialogData = MyStockSellInputDialog.MyStockSellInputDialogData(
+                myStockEntity = myStockEntity
+            ),
+            callBack = object : MyStockSellInputDialog.CallBack {
+                override fun onInputDialogCompleteClicked(
+                    dialog: MyStockSellInputDialog,
+                    userInputDialogData: MyStockSellInputDialog.MyStockSellInputDialogData
+                ) {
+                    myStockViewModel.requestAddIncomeNote(
+                        context = requireContext(),
+                        reqIncomeNoteInfo = ReqIncomeNoteInfo(
+                            subjectName = myStockEntity.subjectName,
+                            sellDate = userInputDialogData.sellDate,
+                            purchasePrice = StockUtils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble(),
+                            sellPrice = StockUtils.getNumDeletedComma(userInputDialogData.sellPrice).toDouble(),
+                            sellCount = userInputDialogData.sellCount.toInt()
+                        ),
+                        myStockEntity = myStockEntity
+                    )
+                    dialog.dismiss()
+                }
+
+            }
+        ).show(requireActivity().supportFragmentManager, TAG)
     }
     /**
      * Compose 영역
@@ -260,8 +298,11 @@ class MyStockFragment : Fragment() {
                 )
                 Text(
                     text = StockUtils.getPriceNum(totalGainPrice),
-                    color = if (StockUtils.getNumDeletedComma(totalGainPrice).toDouble() > 0) Color_CD4632
-                    else Color_4876C7,
+                    color = when {
+                        StockUtils.getNumDeletedComma(totalGainPrice).toDouble() > 0 -> Color_CD4632
+                        StockUtils.getNumDeletedComma(totalGainPrice).toDouble() < 0 -> Color_4876C7
+                        else -> Color_222222
+                    },
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -284,8 +325,11 @@ class MyStockFragment : Fragment() {
                 )
                 Text(
                     text = totalGainPricePercent,
-                    color = if (StockUtils.getNumDeletedComma(totalGainPrice).toDouble() > 0) Color_CD4632
-                    else Color_4876C7,
+                    color = when {
+                        StockUtils.getNumDeletedComma(totalGainPrice).toDouble() > 0 -> Color_CD4632
+                        StockUtils.getNumDeletedComma(totalGainPrice).toDouble() < 0 -> Color_4876C7
+                        else -> Color_222222
+                    },
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -378,7 +422,7 @@ class MyStockFragment : Fragment() {
                         contentAlignment = Center,
                         modifier = Modifier
                             .clickable {
-                                val dialogData = MyStockInputDialog.MyStockInputDialogData(
+                                val dialogData = MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData(
                                     id = myStockEntity.id,
                                     subjectName = SubjectName(
                                         text = myStockEntity.subjectName,
@@ -388,7 +432,7 @@ class MyStockFragment : Fragment() {
                                     purchasePrice = myStockEntity.purchasePrice,
                                     purchaseCount = myStockEntity.purchaseCount.toString()
                                 )
-                                showInputDialog(dialogData)
+                                showPurchaseInputDialog(dialogData)
                                 coroutineScope.launch {
                                     revealSwipeState.reset()
                                 }
@@ -407,6 +451,7 @@ class MyStockFragment : Fragment() {
                         contentAlignment = Center,
                         modifier = Modifier
                             .clickable {
+                                showSellInputDialog(myStockEntity)
                                 coroutineScope.launch {
                                     revealSwipeState.reset()
                                 }
@@ -425,6 +470,13 @@ class MyStockFragment : Fragment() {
                         contentAlignment = Center,
                         modifier = Modifier
                             .clickable {
+                                if (!myStockViewModel.isDeleteCheck()) {
+                                    myStockViewModel.deleteMyStock(
+                                        context = requireContext(),
+                                        myStockEntity = myStockEntity
+                                    )
+                                    return@clickable
+                                }
                                 CommonTwoBtnDialog(
                                     mContext = mContext,
                                     CommonTwoBtnDialog.CommonTwoBtnData(
@@ -435,16 +487,10 @@ class MyStockFragment : Fragment() {
                                         },
                                         rightBtnText = getString(R.string.Common_Ok),
                                         rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
-                                            if (!myStockViewModel.deleteMyStock(myStockEntity)) {
-                                                Toasty
-                                                    .error(
-                                                        mContext,
-                                                        R.string.Common_Cancel,
-                                                        Toasty.LENGTH_SHORT
-                                                    )
-                                                    .show()
-                                                return@CommonTwoBtnData
-                                            }
+                                            myStockViewModel.deleteMyStock(
+                                                context = requireContext(),
+                                                myStockEntity = myStockEntity
+                                            )
                                             dialog.dismiss()
                                         }
                                     )
@@ -475,6 +521,8 @@ class MyStockFragment : Fragment() {
             ) {
                 val purchasePriceNumber = StockUtils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
                 val currentPriceNumber = StockUtils.getNumDeletedComma(myStockEntity.currentPrice).toDouble()
+                val gainPriceNumber = StockUtils.getNumDeletedComma(myStockEntity.gainPrice).toDouble()
+                val yesterdayPriceNumber = StockUtils.getNumDeletedComma(myStockEntity.yesterdayPrice).toDouble()
                 Column(
                     modifier = Modifier
 //                    .padding(bottom = 10.dp)
@@ -512,8 +560,11 @@ class MyStockFragment : Fragment() {
                                 text = StockUtils.getPriceNum(myStockEntity.gainPrice),
                                 fontSize = 14.sp,
                                 maxLines = 1,
-                                color = if (StockUtils.getNumDeletedComma(myStockEntity.gainPrice).toDouble() > 0) Color_CD4632
-                                else Color_4876C7,
+                                color = when {
+                                    gainPriceNumber > 0 -> Color_CD4632
+                                    gainPriceNumber < 0 -> Color_4876C7
+                                    else -> Color_222222
+                                },
                                 modifier = Modifier
                                     .padding(start = 5.dp)
                             )
@@ -526,8 +577,11 @@ class MyStockFragment : Fragment() {
                                 text = "(${StockUtils.getRoundsPercentNumber(gainPercentNum)})",
                                 fontSize = 12.sp,
                                 maxLines = 1,
-                                color = if (StockUtils.getNumDeletedComma(myStockEntity.gainPrice).toDouble() > 0) Color_CD4632
-                                else Color_4876C7,
+                                color = when {
+                                    gainPriceNumber > 0 -> Color_CD4632
+                                    gainPriceNumber < 0 -> Color_4876C7
+                                    else -> Color_222222
+                                },
                                 modifier = Modifier
                                     .padding(start = 5.dp)
                             )
@@ -635,18 +689,17 @@ class MyStockFragment : Fragment() {
                                 modifier = Modifier
                                     .padding(start = 10.dp)
                             )
-                            val currentPriceNum = StockUtils.getNumDeletedComma(myStockEntity.currentPrice).toDouble()
-                            val yesterdayPriceNum = StockUtils.getNumDeletedComma(myStockEntity.yesterdayPrice).toDouble()
+
                             Text(
                                 text = StockUtils.getDayToDayPrice(
-                                    currentPrice = currentPriceNum,
-                                    yesterdayPrice = yesterdayPriceNum
+                                    currentPrice = currentPriceNumber,
+                                    yesterdayPrice = yesterdayPriceNumber
                                 ),
                                 fontSize = 12.sp,
                                 maxLines = 1,
                                 color = when {
-                                    currentPriceNum - yesterdayPriceNum > 0 -> Color_CD4632
-                                    currentPriceNum == yesterdayPriceNum -> Color_222222
+                                    currentPriceNumber - yesterdayPriceNumber > 0 -> Color_CD4632
+                                    currentPriceNumber == yesterdayPriceNumber -> Color_222222
                                     else -> Color_4876C7
                                 },
                                 modifier = Modifier
@@ -659,8 +712,8 @@ class MyStockFragment : Fragment() {
                                 fontSize = 12.sp,
                                 maxLines = 1,
                                 color = when {
-                                    currentPriceNum - yesterdayPriceNum > 0 -> Color_CD4632
-                                    currentPriceNum == yesterdayPriceNum -> Color_222222
+                                    currentPriceNumber - yesterdayPriceNumber > 0 -> Color_CD4632
+                                    currentPriceNumber == yesterdayPriceNumber -> Color_222222
                                     else -> Color_4876C7
                                 },
                             )
