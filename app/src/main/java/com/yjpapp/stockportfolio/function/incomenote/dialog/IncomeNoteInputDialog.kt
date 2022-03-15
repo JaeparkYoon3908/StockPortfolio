@@ -72,10 +72,8 @@ class IncomeNoteInputDialog(
             txtCancel.setOnClickListener(onClickListener)
             txtComplete.setOnClickListener(onClickListener)
             EditMainDialogMainContainer.setOnClickListener(onClickListener)
-
             etPurchasePrice.addTextChangedListener(textWatcher)
             etSellPrice.addTextChangedListener(textWatcher)
-
             txtPurchasePriceSymbol.text = StockConfig.koreaMoneySymbol
             txtSellPriceSymbol.text = StockConfig.koreaMoneySymbol
 

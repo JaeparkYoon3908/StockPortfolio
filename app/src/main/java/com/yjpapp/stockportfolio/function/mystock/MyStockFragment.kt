@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,12 +15,25 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
@@ -30,6 +44,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
@@ -46,6 +61,7 @@ import de.charlex.compose.RevealSwipe
 import de.charlex.compose.rememberRevealState
 import de.charlex.compose.reset
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -422,16 +438,17 @@ class MyStockFragment : Fragment() {
                         contentAlignment = Center,
                         modifier = Modifier
                             .clickable {
-                                val dialogData = MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData(
-                                    id = myStockEntity.id,
-                                    subjectName = SubjectName(
-                                        text = myStockEntity.subjectName,
-                                        code = myStockEntity.subjectCode
-                                    ),
-                                    purchaseDate = myStockEntity.purchaseDate,
-                                    purchasePrice = myStockEntity.purchasePrice,
-                                    purchaseCount = myStockEntity.purchaseCount.toString()
-                                )
+                                val dialogData =
+                                    MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData(
+                                        id = myStockEntity.id,
+                                        subjectName = SubjectName(
+                                            text = myStockEntity.subjectName,
+                                            code = myStockEntity.subjectCode
+                                        ),
+                                        purchaseDate = myStockEntity.purchaseDate,
+                                        purchasePrice = myStockEntity.purchasePrice,
+                                        purchaseCount = myStockEntity.purchaseCount.toString()
+                                    )
                                 showPurchaseInputDialog(dialogData)
                                 coroutineScope.launch {
                                     revealSwipeState.reset()
@@ -646,7 +663,7 @@ class MyStockFragment : Fragment() {
                             .padding(start = 15.dp, end = 15.dp, top = 10.dp)
                     ) {
                         Row(
-                            modifier = Modifier.weight(0.5f)
+                            modifier = Modifier.weight(0.35f)
                         ) {
                             Text(
                                 text = getString(R.string.MyStockFragment_Holding_Quantity),
@@ -667,7 +684,7 @@ class MyStockFragment : Fragment() {
 
                         Row(
                             modifier = Modifier
-                                .weight(0.5f)
+                                .weight(0.65f)
                                 .padding(bottom = 10.dp),
                             horizontalArrangement = Arrangement.End,
                             verticalAlignment = Alignment.CenterVertically
@@ -682,7 +699,7 @@ class MyStockFragment : Fragment() {
                             )
 
                             Text(
-                                text = myStockEntity.currentPrice,
+                                text = "${StockConfig.koreaMoneySymbol}${myStockEntity.currentPrice}",
                                 fontSize = 14.sp,
                                 maxLines = 1,
                                 color = Color_222222,
@@ -707,10 +724,9 @@ class MyStockFragment : Fragment() {
 
                             )
 
-                            Text(
+                            MarqueeText(
                                 text = "(${myStockEntity.dayToDayPercent}%)",
                                 fontSize = 12.sp,
-                                maxLines = 1,
                                 color = when {
                                     currentPriceNumber - yesterdayPriceNumber > 0 -> Color_CD4632
                                     currentPriceNumber == yesterdayPriceNumber -> Color_222222
@@ -723,4 +739,144 @@ class MyStockFragment : Fragment() {
             }
         }
     }
+
+    @Composable
+    fun MarqueeText(
+        text: String,
+        modifier: Modifier = Modifier,
+        gradientEdgeColor: Color = Color.White,
+        color: Color = Color.Unspecified,
+        fontSize: TextUnit = TextUnit.Unspecified,
+        fontStyle: FontStyle? = null,
+        fontWeight: FontWeight? = null,
+        fontFamily: FontFamily? = null,
+        letterSpacing: TextUnit = TextUnit.Unspecified,
+        textDecoration: TextDecoration? = null,
+        textAlign: TextAlign? = null,
+        lineHeight: TextUnit = TextUnit.Unspecified,
+        overflow: TextOverflow = TextOverflow.Clip,
+        softWrap: Boolean = true,
+        onTextLayout: (TextLayoutResult) -> Unit = {},
+        style: TextStyle = LocalTextStyle.current,
+    ) {
+        val createText = @Composable { localModifier: Modifier ->
+            Text(
+                text,
+                textAlign = textAlign,
+                modifier = localModifier,
+                color = color,
+                fontSize = fontSize,
+                fontStyle = fontStyle,
+                fontWeight = fontWeight,
+                fontFamily = fontFamily,
+                letterSpacing = letterSpacing,
+                textDecoration = textDecoration,
+                lineHeight = lineHeight,
+                overflow = overflow,
+                softWrap = softWrap,
+                maxLines = 1,
+                onTextLayout = onTextLayout,
+                style = style,
+            )
+        }
+        var offset by remember { mutableStateOf(0) }
+        val textLayoutInfoState = remember { mutableStateOf<TextLayoutInfo?>(null) }
+        LaunchedEffect(textLayoutInfoState.value) {
+            val textLayoutInfo = textLayoutInfoState.value ?: return@LaunchedEffect
+            if (textLayoutInfo.textWidth <= textLayoutInfo.containerWidth) return@LaunchedEffect
+            val duration = 2500 * textLayoutInfo.textWidth / textLayoutInfo.containerWidth
+            val delay = 1000L
+
+            do {
+                val animation = TargetBasedAnimation(
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(
+                            durationMillis = duration,
+                            delayMillis = 1000,
+                            easing = LinearEasing,
+                        ),
+                        repeatMode = RepeatMode.Restart
+                    ),
+                    typeConverter = Int.VectorConverter,
+                    initialValue = 0,
+                    targetValue = -textLayoutInfo.textWidth
+                )
+                val startTime = withFrameNanos { it }
+                do {
+                    val playTime = withFrameNanos { it } - startTime
+                    offset = (animation.getValueFromNanos(playTime))
+                } while (!animation.isFinishedFromNanos(playTime))
+                delay(delay)
+            } while (true)
+        }
+
+        SubcomposeLayout(
+            modifier = modifier.clipToBounds()
+        ) { constraints ->
+            val infiniteWidthConstraints = constraints.copy(maxWidth = Int.MAX_VALUE)
+            var mainText = subcompose(MarqueeLayers.MainText) {
+                createText(Modifier)
+            }.first().measure(infiniteWidthConstraints)
+
+            var gradient: Placeable? = null
+
+            var secondPlaceableWithOffset: Pair<Placeable, Int>? = null
+            if (mainText.width <= constraints.maxWidth) {
+                mainText = subcompose(MarqueeLayers.SecondaryText) {
+                    createText(Modifier.fillMaxWidth())
+                }.first().measure(constraints)
+                textLayoutInfoState.value = null
+            } else {
+                val spacing = constraints.maxWidth * 2 / 3
+                textLayoutInfoState.value = TextLayoutInfo(
+                    textWidth = mainText.width + spacing,
+                    containerWidth = constraints.maxWidth
+                )
+                val secondTextOffset = mainText.width + offset + spacing
+                val secondTextSpace = constraints.maxWidth - secondTextOffset
+                if (secondTextSpace > 0) {
+                    secondPlaceableWithOffset = subcompose(MarqueeLayers.SecondaryText) {
+                        createText(Modifier)
+                    }.first().measure(infiniteWidthConstraints) to secondTextOffset
+                }
+                gradient = subcompose(MarqueeLayers.EdgesGradient) {
+                    Row {
+                        GradientEdge(gradientEdgeColor, Color.Transparent)
+                        Spacer(Modifier.weight(1f))
+                        GradientEdge(Color.Transparent, gradientEdgeColor)
+                    }
+                }.first().measure(constraints.copy(maxHeight = mainText.height))
+            }
+
+            layout(
+                width = constraints.maxWidth,
+                height = mainText.height
+            ) {
+                mainText.place(offset, 0)
+                secondPlaceableWithOffset?.let {
+                    it.first.place(it.second, 0)
+                }
+                gradient?.place(0, 0)
+            }
+        }
+    }
+
+    @Composable
+    private fun GradientEdge(
+        startColor: Color, endColor: Color,
+    ) {
+        Box(
+            modifier = Modifier
+                .width(10.dp)
+                .fillMaxHeight()
+                .background(
+                    brush = Brush.horizontalGradient(
+                        0f to startColor, 1f to endColor,
+                    )
+                )
+        )
+    }
+
+    private enum class MarqueeLayers { MainText, SecondaryText, EdgesGradient }
+    private data class TextLayoutInfo(val textWidth: Int, val containerWidth: Int)
 }
