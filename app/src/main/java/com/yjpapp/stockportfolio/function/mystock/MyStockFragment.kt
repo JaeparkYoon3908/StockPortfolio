@@ -662,10 +662,10 @@ class MyStockFragment : Fragment() {
                     Row(
                         Modifier
                             .fillMaxWidth()
-                            .padding(start = 15.dp, end = 15.dp, top = 10.dp)
+                            .padding(start = 15.dp, end = 15.dp, top = 10.dp, bottom = 10.dp)
                     ) {
                         Row(
-                            modifier = Modifier.weight(0.5f)
+                            modifier = Modifier.weight(0.35f)
                         ) {
                             Text(
                                 text = getString(R.string.MyStockFragment_Holding_Quantity),
@@ -686,8 +686,7 @@ class MyStockFragment : Fragment() {
 
                         Row(
                             modifier = Modifier
-                                .padding(bottom = 10.dp)
-                                .weight(0.5f),
+                                .weight(0.65f),
                             horizontalArrangement = Arrangement.End,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -726,7 +725,7 @@ class MyStockFragment : Fragment() {
 
                             )
 
-                            MarqueeText(
+                            Text(
                                 text = "(${myStockEntity.dayToDayPercent}%)",
                                 fontSize = 11.sp,
                                 color = when {
