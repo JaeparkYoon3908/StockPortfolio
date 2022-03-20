@@ -37,7 +37,7 @@ class StockSearchViewModel @Inject constructor(
     fun requestSearchList(keyWord: String) {
         searchResult.clear()
         _allStockList.forEach {
-            if (it[3].contains(keyWord)) {
+            if (it[3].contains(other = keyWord, ignoreCase = true)) {
                 searchResult.add(SubjectName(
                     code = remakeSubjectCode(it[1]),
                     text = it[3]
