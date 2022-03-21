@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Database(
     entities = [MyStockEntity::class, MemoListEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 

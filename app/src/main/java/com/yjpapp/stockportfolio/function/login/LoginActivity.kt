@@ -224,10 +224,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
         val oauthLoginCallback = object : OAuthLoginCallback {
             override fun onSuccess() {
-                val accessToken: String? = NaverIdLoginSDK.getAccessToken()
-                val refreshToken: String? = NaverIdLoginSDK.getRefreshToken()
+                val accessToken: String = NaverIdLoginSDK.getAccessToken()?: ""
+                val refreshToken: String = NaverIdLoginSDK.getRefreshToken()?: ""
                 val expiresAt: Long = NaverIdLoginSDK.getExpiresAt()
-                val tokenType: String? = NaverIdLoginSDK.getTokenType()
+                val tokenType: String = NaverIdLoginSDK.getTokenType()?: ""
                 val state: String = NaverIdLoginSDK.getState().toString()
                 StockLog.d(TAG, "accessToken : $accessToken")
                 StockLog.d(TAG, "refreshToken : $refreshToken")
@@ -235,15 +235,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 StockLog.d(TAG, "tokenType : $tokenType")
                 StockLog.d(TAG, "state : $state")
 
-                if (accessToken.isNullOrBlank()) {
+                if (accessToken.isEmpty()) {
                     onFailure(700, "accessToken is empty")
                     return
                 }
-                if (refreshToken.isNullOrBlank()) {
+                if (refreshToken.isEmpty()) {
                     onFailure(701, "refreshToken is empty")
                     return
                 }
-                if (tokenType.isNullOrBlank()) {
+                if (tokenType.isEmpty()) {
                     onFailure(702, "tokenType is empty")
                     return
                 }
@@ -279,8 +279,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                             }
                             viewModel.requestLogin(
                                 ReqSNSLogin(
-                                    user_email = it.email!!,
-                                    user_name = it.name!!,
+                                    user_email = it.email?: "",
+                                    user_name = it.name?: "",
                                     login_type = StockConfig.LOGIN_TYPE_NAVER
                                 )
                             )
