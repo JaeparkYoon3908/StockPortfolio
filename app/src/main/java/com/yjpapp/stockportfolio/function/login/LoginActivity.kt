@@ -228,13 +228,25 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 val refreshToken: String? = NaverIdLoginSDK.getRefreshToken()
                 val expiresAt: Long = NaverIdLoginSDK.getExpiresAt()
                 val tokenType: String? = NaverIdLoginSDK.getTokenType()
-                val state = NaverIdLoginSDK.getState().toString()
+                val state: String = NaverIdLoginSDK.getState().toString()
                 StockLog.d(TAG, "accessToken : $accessToken")
                 StockLog.d(TAG, "refreshToken : $refreshToken")
                 StockLog.d(TAG, "expiresAt : $expiresAt")
                 StockLog.d(TAG, "tokenType : $tokenType")
                 StockLog.d(TAG, "state : $state")
 
+                if (accessToken.isNullOrBlank()) {
+                    onFailure(700, "accessToken is empty")
+                    return
+                }
+                if (refreshToken.isNullOrBlank()) {
+                    onFailure(701, "refreshToken is empty")
+                    return
+                }
+                if (tokenType.isNullOrBlank()) {
+                    onFailure(702, "tokenType is empty")
+                    return
+                }
                 val authorization = "$tokenType $accessToken"
                 viewModel.requestSetPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN, accessToken)
                 viewModel.requestSetPreference(PrefKey.KEY_NAVER_USER_TOKEN, authorization)
@@ -243,6 +255,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse>{
                     override fun onError(errorCode: Int, message: String) {
                         StockLog.d(TAG, "onError : $message")
+                        Toast.makeText(
+                            this@LoginActivity,
+                            getString(R.string.Login_Naver_Login_Error_Msg, message)
+                            ,Toast.LENGTH_SHORT
+                        ).show()
                     }
 
                     override fun onFailure(httpStatus: Int, message: String) {
@@ -253,9 +270,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                         StockLog.d(TAG, "onSuccess : ${result.profile?.toString()}")
                         result.profile?.let {
                             if (it.email.isNullOrEmpty()) {
+                                onError(704, "email data is empty")
                                 return
                             }
                             if (it.name.isNullOrEmpty()) {
+                                onError(704, "name data is empty")
                                 return
                             }
                             viewModel.requestLogin(
@@ -272,7 +291,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             override fun onFailure(httpStatus: Int, message: String) {
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                 val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                Toast.makeText(this@LoginActivity,"일시적 오류가 발생했습니다. 잠시 후 다시 시도해주세요. msg : $message",Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@LoginActivity,
+                    getString(R.string.Login_Naver_Login_Error_Msg, message)
+                    ,Toast.LENGTH_SHORT
+                ).show()
             }
             override fun onError(errorCode: Int, message: String) {
                 onFailure(errorCode, message)

@@ -101,7 +101,8 @@
     <string name="Login_Naver_Id_Login">네이버 아이디 로그인</string>
     <string name="Login_Kakao_Id_Login">페이스북 아이디 로그인</string>
     <string name="Login_User_Input_Dialog_Title">필수 정보 제공에 동의하지 않았습니다.\n서비스를 이용하기 위해 필수 정보를 입력해주세요.</string>
-    <string name="Login_Naver_Necessary_Info_Check">"필수 정보 제공 항목에 동의해주세요."</string>
+    <string name="Login_Naver_Necessary_Info_Check">필수 정보 제공 항목에 동의해주세요.</string>
+    <string name="Login_Naver_Login_Error_Msg">일시적 오류가 발생했습니다. 잠시 후 다시 시도해주세요. msg: %s</string>
 
     <string name="My_Account">님의 계정</string>
     <string name="My_Logout">로그아웃</string>
