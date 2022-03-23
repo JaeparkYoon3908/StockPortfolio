@@ -73,7 +73,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         AdView(this).apply {
             adSize = AdSize.BANNER
-            adUnitId = StockConfig.TEST_AD_MOB_ID
+            adUnitId = StockConfig.AD_MOB_ID
         }
 
         MobileAds.initialize(this) {}
