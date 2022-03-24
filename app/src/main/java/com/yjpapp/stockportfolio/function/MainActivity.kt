@@ -78,16 +78,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         MobileAds.initialize(this) {}
         val adRequest = AdRequest.Builder().build()
+
         binding.adView.loadAd(adRequest)
     }
 
     override fun onBackPressed() {
-//        if (currentFragment == incomeNoteFragment ||
-//            currentFragment == memoListFragment
-//        ) {
-//            super.onBackPressed()
-//            return
-//        }
+
         viewModel.runBackPressAppCloseEvent(applicationContext, this)
     }
 

@@ -10,6 +10,7 @@
         android:name=".StockPortfolioApp"
         android:allowBackup="true"
         android:icon="@mipmap/app_icon_ver3"
+        android:hardwareAccelerated="true"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:launchMode="singleTop"
@@ -29,6 +30,7 @@
 
         <activity
             android:name=".function.MainActivity"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
 
         <activity
@@ -81,7 +83,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4132154272836445~8488670395" />
+            android:value="ca-app-pub-6147567013464925~2757588331" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
