@@ -11,8 +11,8 @@ android {
         applicationId "com.yjpapp.stockportfolio"
         minSdkVersion 23
         targetSdkVersion 32
-        versionCode 23
-        versionName "2.0.13"
+        versionCode 24
+        versionName "2.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
