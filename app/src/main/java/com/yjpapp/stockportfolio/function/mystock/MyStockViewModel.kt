@@ -50,6 +50,7 @@ class MyStockViewModel @Inject constructor(
         private set
     private val _scrollIndex by lazy { MutableStateFlow(myStockInfoList.size) }
     val scrollIndex: StateFlow<Int> get() = _scrollIndex
+    var isCurrentPriceRefreshing = false
 
     /**
      * MyStockFragment 영역
@@ -136,29 +137,37 @@ class MyStockViewModel @Inject constructor(
                         Jsoup.connect(url).get()
                     } catch (e: Exception) {
                         e.stackTrace
+                        event(Event.RefreshCurrentPriceDone(false))
                         null
                     }
                 }
-                val blind = doc?.select(".blind")
-                blind?.let {
-                    if (it.isNotEmpty() && it.size > 19) {
-                        val startIndex = it.size - 18
-                        val currentPrice = it[startIndex].text()
-                        val dayToDayPrice = it[startIndex + 1].text()
-                        val dayToDayPercent = it[startIndex + 2].text()
-                        val yesterdayPrice = it[startIndex + 3].text()
+                if (doc == null) {
+                    event(Event.RefreshCurrentPriceDone(false))
+                    return@launch
+                }
+                val blind = doc.select(".blind")
+                if (blind.isNullOrEmpty()) {
+                    event(Event.RefreshCurrentPriceDone(false))
+                    return@launch
+                }
 
-                        val currentPriceNumber = StockUtils.getNumDeletedComma(currentPrice).toInt()
-                        val purchasePriceNumber = StockUtils.getNumDeletedComma(myStockInfoList[count].purchasePrice).toInt()
-                        val purchaseCountNumber = myStockInfoList[count].purchaseCount
-                        val gainPrice = (currentPriceNumber - purchasePriceNumber) * purchaseCountNumber
-                        myStockInfoList[count].apply {
-                            this.currentPrice = currentPrice
-                            this.dayToDayPercent = dayToDayPercent
-                            this.dayToDayPrice = dayToDayPrice
-                            this.yesterdayPrice = yesterdayPrice
-                            this.gainPrice = StockUtils.getNumInsertComma(gainPrice.toString())
-                        }
+                if (blind.size > 19) {
+                    val startIndex = blind.size - 18
+                    val currentPrice = blind[startIndex].text()
+                    val dayToDayPrice = blind[startIndex + 1].text()
+                    val dayToDayPercent = blind[startIndex + 2].text()
+                    val yesterdayPrice = blind[startIndex + 3].text()
+
+                    val currentPriceNumber = StockUtils.getNumDeletedComma(currentPrice).toInt()
+                    val purchasePriceNumber = StockUtils.getNumDeletedComma(myStockInfoList[count].purchasePrice).toInt()
+                    val purchaseCountNumber = myStockInfoList[count].purchaseCount
+                    val gainPrice = (currentPriceNumber - purchasePriceNumber) * purchaseCountNumber
+                    myStockInfoList[count].apply {
+                        this.currentPrice = currentPrice
+                        this.dayToDayPercent = dayToDayPercent
+                        this.dayToDayPrice = dayToDayPrice
+                        this.yesterdayPrice = yesterdayPrice
+                        this.gainPrice = StockUtils.getNumInsertComma(gainPrice.toString())
                     }
                 }
                 myStockRepository.updateMyStock(myStockInfoList[count])
@@ -166,6 +175,7 @@ class MyStockViewModel @Inject constructor(
             myStockInfoList.clear()
             myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
             calculateTopData()
+            event(Event.RefreshCurrentPriceDone(true))
         }
     }
 
@@ -246,5 +256,6 @@ class MyStockViewModel @Inject constructor(
         data class ShowLoadingImage(val msg: Unit): Event()
         data class HideLoadingImage(val msg: Unit): Event()
         data class SuccessIncomeNoteAdd(val data: MyStockEntity): Event()
+        data class RefreshCurrentPriceDone(val isSuccess: Boolean): Event()
     }
 }

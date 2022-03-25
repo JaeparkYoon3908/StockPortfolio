@@ -76,6 +76,7 @@ class MyStockFragment : Fragment() {
     private val myStockViewModel: MyStockViewModel by viewModels()
     private lateinit var mContext: Context
     private lateinit var navController: NavController
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -117,7 +118,10 @@ class MyStockFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Refresh -> {
-                myStockViewModel.refreshAllPrices()
+                if (!myStockViewModel.isCurrentPriceRefreshing) {
+                    myStockViewModel.refreshAllPrices()
+                    myStockViewModel.isCurrentPriceRefreshing = true
+                }
             }
             R.id.menu_MyStockFragment_Add -> {
                 if (myStockViewModel.myStockInfoList.size >= 10) {
@@ -150,6 +154,14 @@ class MyStockFragment : Fragment() {
                     myStockEntity = event.data
                 )
             }
+            is MyStockViewModel.Event.RefreshCurrentPriceDone -> {
+                if (event.isSuccess)
+                    Toasty.success(requireContext(), getString(R.string.MyStockFragment_Msg_Current_Price_Refresh_Success)).show()
+                else
+                    Toasty.error(requireContext(), getString(R.string.MyStockFragment_Msg_Current_Price_Refresh_Error)).show()
+                myStockViewModel.isCurrentPriceRefreshing = false
+            }
+            else -> {}
         }
     }
 
