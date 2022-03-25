@@ -98,29 +98,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         initData()
     }
 
+    override fun onResume() {
+        super.onResume()
+        startAutoLogin()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         binding.unbind()
     }
 
     private fun initData() {
-        viewModel.run {
-            val isAutoLoginAble = requestGetPreference(PrefKey.KEY_AUTO_LOGIN)
-            val isAutoLoginSetting = requestGetPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
-            if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
-                val userEmail = requestGetPreference(PrefKey.KEY_USER_EMAIL)
-                val userName = requestGetPreference(PrefKey.KEY_USER_NAME)
-                val loginType = requestGetPreference(PrefKey.KEY_USER_LOGIN_TYPE)
-                when (loginType) {
-                    StockConfig.LOGIN_TYPE_NAVER -> {
-                        naverSignIn()
-                    }
-                    else -> {
-                        requestLogin(ReqSNSLogin(userEmail, userName, loginType))
-                    }
-                }
-            }
-        }
         binding.apply {
             callback = loginCallBack
             lifecycleOwner = this@LoginActivity
@@ -150,10 +138,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 }
 
                 viewModel.serverError.collect { errorCode ->
+                    stopLoadingAnimation()
                     when (errorCode) {
                         ServerRespCode.NetworkNotConnected -> {
                             ResponseAlertManger.showNetworkConnectErrorAlert(this@LoginActivity)
-                            stopLoadingAnimation()
                         }
                     }
                 }
@@ -166,6 +154,26 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             }
         }
 
+    }
+
+    private fun startAutoLogin() {
+        viewModel.run {
+            val isAutoLoginAble = requestGetPreference(PrefKey.KEY_AUTO_LOGIN)
+            val isAutoLoginSetting = requestGetPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
+            if (isAutoLoginAble == StockConfig.TRUE && isAutoLoginSetting == StockConfig.TRUE) {
+                val userEmail = requestGetPreference(PrefKey.KEY_USER_EMAIL)
+                val userName = requestGetPreference(PrefKey.KEY_USER_NAME)
+                val loginType = requestGetPreference(PrefKey.KEY_USER_LOGIN_TYPE)
+                when (loginType) {
+                    StockConfig.LOGIN_TYPE_NAVER -> {
+                        naverSignIn()
+                    }
+                    else -> {
+                        this@LoginActivity.requestLogin(ReqSNSLogin(userEmail, userName, loginType))
+                    }
+                }
+            }
+        }
     }
 
     private fun googleSignIn() {
@@ -277,7 +285,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                 onError(704, "name data is empty")
                                 return
                             }
-                            viewModel.requestLogin(
+                            requestLogin(
                                 ReqSNSLogin(
                                     user_email = it.email?: "",
                                     user_name = it.name?: "",
@@ -346,9 +354,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     }
 
     private fun startMainActivity() {
-        stopLoadingAnimation()
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
         startActivity(intent)
+        stopLoadingAnimation()
         finish()
     }
 
