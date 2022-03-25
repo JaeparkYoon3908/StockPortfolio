@@ -4,12 +4,11 @@
 
 
 ### 1. 어플리케이션 화면
-![001](https://user-images.githubusercontent.com/54883589/160115079-4f5f62a8-7400-485c-94c8-ceb132d76b67.png)
-![002](https://user-images.githubusercontent.com/54883589/160115084-bee5de63-becf-43c6-81dc-f5d5529254b5.png)
-![003](https://user-images.githubusercontent.com/54883589/160115087-51d90bc3-7332-4488-be62-78be3e7d3981.png)
-![004](https://user-images.githubusercontent.com/54883589/160115089-f5235be0-3221-45a4-8834-36440cc86499.png)
-![005](https://user-images.githubusercontent.com/54883589/160115090-e4026251-63fb-4e7e-a741-79a9ec6be5d5.png)
-
+![001](https://user-images.githubusercontent.com/54883589/160115354-09e5e065-9323-4b47-98e7-3fa664251779.png)
+![002](https://user-images.githubusercontent.com/54883589/160115357-b4563929-8d9d-4067-9dff-12bae27b0181.png)
+![003](https://user-images.githubusercontent.com/54883589/160115359-74ba3233-d61c-419f-8571-1c8f69bb48c0.png)
+![004](https://user-images.githubusercontent.com/54883589/160115360-25c63ef5-1ae8-4f8e-b0b0-03c6d1437339.png)
+![005](https://user-images.githubusercontent.com/54883589/160115363-ad5090e0-a2b2-4d5f-9b04-a1e0083de09b.png)
 
 ### 2. 기능 소개
 - 수익 노트
