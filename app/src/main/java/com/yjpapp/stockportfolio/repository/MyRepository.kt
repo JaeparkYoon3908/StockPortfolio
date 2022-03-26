@@ -48,21 +48,23 @@ class MyRepository(
         return preferenceRepository.getPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)?: ""
     }
     fun deleteUserPreference() {
-        preferenceRepository.removePreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)
-        preferenceRepository.removePreference(PrefKey.KEY_AUTO_LOGIN)
+        preferenceRepository.apply {
+            removePreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)
+            removePreference(PrefKey.KEY_AUTO_LOGIN)
 
-        preferenceRepository.removePreference(PrefKey.KEY_USER_INDEX)
-        preferenceRepository.removePreference(PrefKey.KEY_USER_LOGIN_TYPE)
-        preferenceRepository.removePreference(PrefKey.KEY_USER_NAME)
-        preferenceRepository.removePreference(PrefKey.KEY_USER_EMAIL)
-        preferenceRepository.removePreference(PrefKey.KEY_USER_TOKEN)
+            removePreference(PrefKey.KEY_USER_INDEX)
+            removePreference(PrefKey.KEY_USER_LOGIN_TYPE)
+            removePreference(PrefKey.KEY_USER_NAME)
+            removePreference(PrefKey.KEY_USER_EMAIL)
+            removePreference(PrefKey.KEY_USER_TOKEN)
 
-        preferenceRepository.removePreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
-        preferenceRepository.removePreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)
-        preferenceRepository.removePreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
-        preferenceRepository.removePreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
-        preferenceRepository.removePreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)
-        preferenceRepository.removePreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)
+            removePreference(PrefKey.KEY_SETTING_AUTO_LOGIN)
+            removePreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)
+            removePreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
+            removePreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
+            removePreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)
+            removePreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)
+        }
     }
     fun initMySetting() {
         preferenceRepository.apply {
