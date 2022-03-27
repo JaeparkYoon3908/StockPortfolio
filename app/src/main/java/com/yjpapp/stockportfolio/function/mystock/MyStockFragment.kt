@@ -337,7 +337,7 @@ class MyStockFragment : Fragment() {
                     color = when {
                         StockUtils.getNumDeletedComma(totalGainPrice).toDouble() > 0 -> Color_CD4632
                         StockUtils.getNumDeletedComma(totalGainPrice).toDouble() < 0 -> Color_4876C7
-                        else -> Color_222222
+                        else -> Color_CD4632
                     },
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
@@ -364,7 +364,7 @@ class MyStockFragment : Fragment() {
                     color = when {
                         StockUtils.getNumDeletedComma(totalGainPrice).toDouble() > 0 -> Color_CD4632
                         StockUtils.getNumDeletedComma(totalGainPrice).toDouble() < 0 -> Color_4876C7
-                        else -> Color_222222
+                        else -> Color_CD4632
                     },
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
