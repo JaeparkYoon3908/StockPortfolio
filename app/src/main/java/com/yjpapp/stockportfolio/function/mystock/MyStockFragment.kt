@@ -118,6 +118,14 @@ class MyStockFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_MyStockFragment_Refresh -> {
+                if (myStockViewModel.myStockInfoList.isEmpty()) {
+                    Toasty.warning(
+                        requireContext(),
+                        getString(R.string.MyStockFragment_Msg_Current_Price_Refresh_Warning)
+                    ).show()
+                    return false
+                }
+
                 if (!myStockViewModel.isCurrentPriceRefreshing) {
                     myStockViewModel.refreshAllPrices()
                     myStockViewModel.isCurrentPriceRefreshing = true

@@ -87,6 +87,7 @@
     <string name="MyStockFragment_Sell_Count_Hint">총 매도수량</string>
     <string name="MyStockFragment_Msg_Current_Price_Refresh_Success">새로고침에 성공했습니다.</string>
     <string name="MyStockFragment_Msg_Current_Price_Refresh_Error">새로운 데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</string>
+    <string name="MyStockFragment_Msg_Current_Price_Refresh_Warning">나의 보유 주식을 추가해주세요.</string>
 
     <string name="MyStockInputDialog_Error_Message_Sell_Count">판매수량을 입력해주세요.</string>
     <string name="MyStockInputDialog_Error_Message_Sell_Count_Over">판매 수량은 보유 수량을 넘을 수 없습니다.</string>
