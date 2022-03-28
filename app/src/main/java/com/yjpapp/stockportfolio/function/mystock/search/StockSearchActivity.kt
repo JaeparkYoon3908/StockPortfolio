@@ -51,7 +51,7 @@ class StockSearchActivity : AppCompatActivity() {
                     .fillMaxHeight()
                     .fillMaxWidth()
                     .background(Color_FFFFFF)
-            ){
+            ) {
                 SearchBar()
                 SearchList()
             }
@@ -143,11 +143,12 @@ class StockSearchActivity : AppCompatActivity() {
         LazyColumn {
             items(
                 count = viewModel.searchResult.size
-            ){
+            ) {
                 SearchListItem(subjectName = viewModel.searchResult[it])
             }
         }
     }
+
     @Composable
     private fun SearchListItem(subjectName: SubjectName) {
         Column(
@@ -160,13 +161,15 @@ class StockSearchActivity : AppCompatActivity() {
                 text = subjectName.text,
                 fontSize = 16.sp,
                 color = Color_222222,
-                modifier = Modifier.clickable {
-                    val intent = Intent().apply {
-                        putExtra("subjectName", subjectName)
+                modifier = Modifier
+                    .clickable {
+                        val intent = Intent().apply {
+                            putExtra("subjectName", subjectName)
+                        }
+                        setResult(RESULT_OK, intent)
+                        finish()
                     }
-                    setResult(RESULT_OK, intent)
-                    finish()
-                }
+                    .fillMaxWidth()
             )
         }
     }
