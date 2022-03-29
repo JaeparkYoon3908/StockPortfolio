@@ -36,8 +36,8 @@ class MyStockViewModel @Inject constructor(
     private val incomeNoteRepository: IncomeNoteRepository,
     private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
-    private val _eventFlow = MutableEventFlow<Event>()
-    val eventFlow = _eventFlow.asEventFlow()
+    private val _uiState = MutableStateFlow<Event>(Event.InitUIState(""))
+    val uiState: StateFlow<Event> get() = _uiState
     private val _totalPurchasePrice = MutableStateFlow("")
     val totalPurchasePrice: StateFlow<String> get() = _totalPurchasePrice //상단 총 매수금액
     private val _totalEvaluationAmount = MutableStateFlow("")
@@ -58,7 +58,6 @@ class MyStockViewModel @Inject constructor(
     init {
         myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
         refreshAllPrices()
-//        getCurrentPrices()
         calculateTopData()
     }
 
@@ -246,11 +245,12 @@ class MyStockViewModel @Inject constructor(
      */
     private fun event(event: Event) {
         viewModelScope.launch {
-            _eventFlow.emit(event)
+            _uiState.emit(event)
         }
     }
 
     sealed class Event {
+        data class InitUIState(val msg: String): Event()
         data class ShowInfoToastMessage(val msg: String): Event()
         data class ShowErrorToastMessage(val msg: String): Event()
         data class ShowLoadingImage(val msg: Unit): Event()

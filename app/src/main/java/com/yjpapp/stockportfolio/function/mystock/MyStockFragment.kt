@@ -102,7 +102,7 @@ class MyStockFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             repeatOnStarted {
-                myStockViewModel.eventFlow.collect { event -> handleEvent(event) }
+                myStockViewModel.uiState.collect { event -> handleEvent(event) }
             }
         }
         navController = Navigation.findNavController(view)
@@ -150,6 +150,7 @@ class MyStockFragment : Fragment() {
 
     private fun handleEvent(event: MyStockViewModel.Event) {
         when (event) {
+            is MyStockViewModel.Event.InitUIState -> {}
             is MyStockViewModel.Event.ShowInfoToastMessage -> {
                 Toasty.info(mContext, event.msg, Toasty.LENGTH_LONG).show()
             }
