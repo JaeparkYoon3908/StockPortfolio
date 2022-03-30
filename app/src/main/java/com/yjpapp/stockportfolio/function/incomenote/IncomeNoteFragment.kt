@@ -189,7 +189,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
         //event handler
         lifecycleScope.launch {
             repeatOnStarted {
-                viewModel.eventFlow.collect { event -> handleEvent(event) }
+                viewModel.uiState.collect { event -> handleEvent(event) }
             }
         }
     }
@@ -296,6 +296,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
 
     @SuppressLint("NotifyDataSetChanged")
     private fun handleEvent(event: IncomeNoteViewModel.Event) = when (event) {
+        is IncomeNoteViewModel.Event.InitUIState -> {}
         is IncomeNoteViewModel.Event.SendTotalGainData -> {
             val totalGainNumber = event.data.total_price
             val totalGainPercent = event.data.total_percent

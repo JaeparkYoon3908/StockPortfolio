@@ -8,11 +8,15 @@ import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
+import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
+import com.yjpapp.stockportfolio.test.model.LatestNewsUiState
 import com.yjpapp.stockportfolio.util.PatternUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,8 +25,8 @@ class MyViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val myRepository: MyRepository
 ): ViewModel() {
-    private val _eventFlow = MutableEventFlow<Event>()
-    val eventFlow = _eventFlow.asEventFlow()
+    private val _uiState = MutableStateFlow<Event>(Event.InitUIState())
+    val uiState: StateFlow<Event> get() = _uiState
     val userName = userRepository.getUserName()
     val userEmail = PatternUtils.getEmailMasking(userRepository.getUserEmail())
     val userLoginType = userRepository.getLoginType()
@@ -137,11 +141,12 @@ class MyViewModel @Inject constructor(
 
     private fun event(event: Event) {
         viewModelScope.launch {
-            _eventFlow.emit(event)
+            _uiState.emit(event)
         }
     }
 
     sealed class Event {
+        data class InitUIState(val msg: String = ""): Event()
 //        data class ShowInfoToastMessage(val msg: String): Event()
 //        data class ShowErrorToastMessage(val msg: String): Event()
         data class StartLoadingAnimation(val msg: String): Event()

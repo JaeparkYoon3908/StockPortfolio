@@ -10,12 +10,15 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
+import com.yjpapp.stockportfolio.function.my.MyViewModel
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.repository.MemoRepository
 import com.yjpapp.stockportfolio.repository.PreferenceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.system.exitProcess
@@ -29,8 +32,8 @@ class MemoListViewModel @Inject constructor(
     private val memoRepository: MemoRepository,
     private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
-    private val _eventFlow = MutableEventFlow<Event>()
-    val eventFlow = _eventFlow.asEventFlow()
+    private val _uiState = MutableStateFlow<Event>(Event.InitUIState())
+    val uiState: StateFlow<Event> get() = _uiState
     private var _allMemoListData = mutableListOf<MemoListEntity>()
     val allMemoListData get() = _allMemoListData
     fun getAllMemoInfoList() {
@@ -77,7 +80,7 @@ class MemoListViewModel @Inject constructor(
 
     private fun event(event: Event) {
         viewModelScope.launch {
-            _eventFlow.emit(event)
+            _uiState.emit(event)
         }
     }
 
@@ -86,6 +89,7 @@ class MemoListViewModel @Inject constructor(
     }
 
     sealed class Event {
+        data class InitUIState(val msg: String = ""): Event()
         data class SendToAllMemoListData(val data: MutableList<MemoListEntity>): Event()
         data class MemoListDataDeleteSuccess(val data: MutableList<MemoListEntity>): Event()
     }

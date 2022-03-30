@@ -61,13 +61,14 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
         }
         lifecycleScope.launch {
             repeatOnStarted {
-                myViewModel.eventFlow.collect { handleEvent(it) }
+                myViewModel.uiState.collect { handleEvent(it) }
             }
         }
     }
 
     private fun handleEvent(event: MyViewModel.Event) {
         when (event) {
+            is MyViewModel.Event.InitUIState -> {}
             is MyViewModel.Event.StartLoginActivity -> {
                 startLoginActivity()
                 requireActivity().finish()
