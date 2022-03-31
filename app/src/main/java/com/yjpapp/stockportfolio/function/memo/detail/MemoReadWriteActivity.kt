@@ -70,7 +70,7 @@ class MemoReadWriteActivity :
         }
         lifecycleScope.launch {
             repeatOnStarted {
-                activityViewModel.eventFlow.collect { event -> handleEvent(event) }
+                activityViewModel.uiState.collect { event -> handleEvent(event) }
             }
         }
     }
