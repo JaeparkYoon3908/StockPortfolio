@@ -355,5 +355,8 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             }
             incomeNoteListAdapter.notifyDataSetChanged()
         }
+        is IncomeNoteViewModel.Event.ResponseServerError -> {
+            Toasty.error(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
+        }
     }
 }

@@ -38,9 +38,6 @@ class MyViewModel @Inject constructor(
     val isShowMemoDeleteCheck = myRepository.getShowMemoDeleteCheck()
     val isMemoLongClickVibrateCheck = myRepository.getMemoVibrateOff()
 
-//    val isMemberOffSuccess = MutableLiveData<Boolean>()
-//    val isNetworkConnectException = MutableLiveData<Boolean>()
-
     fun requestLogout(context: Context) {
         event(Event.StartLoadingAnimation(""))
         when (userRepository.getLoginType()) {
@@ -79,16 +76,18 @@ class MyViewModel @Inject constructor(
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
+
             when (userRepository.getLoginType()) {
                 StockConfig.LOGIN_TYPE_NAVER -> {
                     NidOAuthLogin().callDeleteTokenApi(context, object : OAuthLoginCallback {
                         override fun onSuccess() {
                             event(Event.StopLoadingAnimation(""))
-                            if (result.isSuccessful) {
-                                requestDeleteUserInfo()
-                                event(Event.StartLoginActivity(""))
+                            if (!result.isSuccessful) {
+                                event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
                                 return
                             }
+                            requestDeleteUserInfo()
+                            event(Event.StartLoginActivity(""))
                         }
                         override fun onFailure(httpStatus: Int, message: String) {
                             event(Event.StopLoadingAnimation(""))
@@ -100,12 +99,15 @@ class MyViewModel @Inject constructor(
                     })
                 }
                 StockConfig.LOGIN_TYPE_GOOGLE, StockConfig.LOGIN_TYPE_FACEBOOK -> {
-                    if (result.isSuccessful) {
-                        requestDeleteUserInfo()
-                        event(Event.StopLoadingAnimation(""))
-                        event(Event.StartLoginActivity(""))
+                    if (!result.isSuccessful) {
+                        event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
                         return@launch
                     }
+                    requestDeleteUserInfo()
+                    event(Event.StopLoadingAnimation(""))
+                    event(Event.StartLoginActivity(""))
+                    return@launch
+
                 }
             }
         }
@@ -152,5 +154,6 @@ class MyViewModel @Inject constructor(
         data class StartLoadingAnimation(val msg: String): Event()
         data class StopLoadingAnimation(val msg: String): Event()
         data class StartLoginActivity(val msg: String): Event()
+        data class ResponseServerError(val msg: String): Event()
     }
 }

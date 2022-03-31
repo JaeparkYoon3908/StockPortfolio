@@ -58,12 +58,15 @@ class IncomeNoteViewModel @Inject constructor(
                     ResponseAlertManger.showNetworkConnectErrorAlert(context)
                     return@launch
                 }
-                if (result.isSuccessful) {
-                    result.body()?.let {
-                        event(Event.FetchUIncomeNotes(it.income_note))
-                        if (page * pageSize >= it.page_info.total_elements) {
-                            hasNext = false
-                        }
+                if (!result.isSuccessful) {
+                    event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
+                    return@launch
+                }
+
+                result.body()?.let {
+                    event(Event.FetchUIncomeNotes(it.income_note))
+                    if (page * pageSize >= it.page_info.total_elements) {
+                        hasNext = false
                     }
                 }
             } catch (e: Exception) {
@@ -84,10 +87,13 @@ class IncomeNoteViewModel @Inject constructor(
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
-            if (result.isSuccessful) {
-                result.body()?.let {
-                    event(Event.SendTotalGainData(it))
-                }
+            if (!result.isSuccessful) {
+                event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
+                return@launch
+            }
+
+            result.body()?.let {
+                event(Event.SendTotalGainData(it))
             }
         }
     }
@@ -99,9 +105,12 @@ class IncomeNoteViewModel @Inject constructor(
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
-            if (result.isSuccessful) {
-                event(Event.IncomeNoteDeleteSuccess(position))
+            if (!result.isSuccessful) {
+                event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
+                return@launch
             }
+
+            event(Event.IncomeNoteDeleteSuccess(position))
         }
     }
 
@@ -112,10 +121,12 @@ class IncomeNoteViewModel @Inject constructor(
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
-            if (result.isSuccessful) {
-                result.body()?.let { incomeNoteList ->
-                    event(Event.IncomeNoteModifySuccess(incomeNoteList))
-                }
+            if (!result.isSuccessful) {
+                event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
+                return@launch
+            }
+            result.body()?.let { incomeNoteList ->
+                event(Event.IncomeNoteModifySuccess(incomeNoteList))
             }
         }
     }
@@ -127,10 +138,13 @@ class IncomeNoteViewModel @Inject constructor(
                 ResponseAlertManger.showNetworkConnectErrorAlert(context)
                 return@launch
             }
-            if (result.isSuccessful) {
-                result.body()?.let { incomeNoteInfo ->
-                    event(Event.IncomeNoteAddSuccess(incomeNoteInfo))
-                }
+            if (!result.isSuccessful) {
+                event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
+                return@launch
+            }
+
+            result.body()?.let { incomeNoteInfo ->
+                event(Event.IncomeNoteAddSuccess(incomeNoteInfo))
             }
         }
     }
@@ -180,5 +194,6 @@ class IncomeNoteViewModel @Inject constructor(
         data class IncomeNoteModifySuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()
         data class IncomeNoteAddSuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()
         data class FetchUIncomeNotes(val data: ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>): Event()
+        data class ResponseServerError(val msg: String): Event()
     }
 }

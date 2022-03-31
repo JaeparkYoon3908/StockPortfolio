@@ -18,6 +18,7 @@ import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.test.TestActivity
 import dagger.hilt.android.AndroidEntryPoint
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -78,6 +79,9 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
             }
             is MyViewModel.Event.StopLoadingAnimation -> {
                 mainActivity?.stopLoadingAnimation()
+            }
+            is MyViewModel.Event.ResponseServerError -> {
+                Toasty.error(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
             }
         }
     }
