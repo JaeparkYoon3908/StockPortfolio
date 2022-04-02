@@ -170,6 +170,9 @@ class MyStockFragment : Fragment() {
                     Toasty.error(requireContext(), getString(R.string.MyStockFragment_Msg_Current_Price_Refresh_Error)).show()
                 myStockViewModel.isCurrentPriceRefreshing = false
             }
+            is MyStockViewModel.Event.ResponseServerError -> {
+                Toasty.error(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
+            }
             else -> {}
         }
     }

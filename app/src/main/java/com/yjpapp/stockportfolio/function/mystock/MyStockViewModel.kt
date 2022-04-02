@@ -20,8 +20,10 @@ import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.repository.PreferenceRepository
+import com.yjpapp.stockportfolio.util.NetworkUtils
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,6 +34,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyStockViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val myStockRepository: MyStockRepository,
     private val incomeNoteRepository: IncomeNoteRepository,
     private val preferenceRepository: PreferenceRepository
@@ -128,6 +131,9 @@ class MyStockViewModel @Inject constructor(
     }
 
     fun refreshAllPrices() {
+        if (!NetworkUtils.isInternetAvailable(context)) {
+            return
+        }
         viewModelScope.launch {
             repeat(myStockInfoList.size) { count ->
                 val url = "https://finance.naver.com/item/main.naver?code=${myStockInfoList[count].subjectCode}"
@@ -257,5 +263,6 @@ class MyStockViewModel @Inject constructor(
         data class HideLoadingImage(val msg: Unit): Event()
         data class SuccessIncomeNoteAdd(val data: MyStockEntity): Event()
         data class RefreshCurrentPriceDone(val isSuccess: Boolean): Event()
+        data class ResponseServerError(val msg: String): Event()
     }
 }
