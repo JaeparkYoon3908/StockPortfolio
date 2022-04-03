@@ -27,3 +27,5 @@
  - SQLite -> Room
  - MVP -> MVVM
  - Koin -> Hilt
+ - LiveData -> StateFlow
+  
