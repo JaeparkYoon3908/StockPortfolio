@@ -42,8 +42,6 @@ class LoginViewModel @Inject constructor(
     private val TAG = LoginViewModel::class.java.simpleName
     private val _uiState = MutableStateFlow<Event>(Event.InitUIState())
     val uiState: StateFlow<Event> get() = _uiState
-    private val _serverError = MutableStateFlow(0)
-    val serverError: StateFlow<Int> get() = _serverError
 
     /**
      * API
