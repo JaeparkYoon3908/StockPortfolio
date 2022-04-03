@@ -34,7 +34,9 @@ import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
+import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.MainActivity
+import com.yjpapp.stockportfolio.function.mystock.MyStockViewModel
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
@@ -42,6 +44,7 @@ import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -113,47 +116,42 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             callback = loginCallBack
             lifecycleOwner = this@LoginActivity
         }
-        subscribeUI()
-    }
-
-    private fun subscribeUI() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loginResultData.collect { response ->
-                    if (response.status == ServerRespCode.OK) {
-                        StockLog.d(TAG, "email = ${response.data.email}")
-                        StockLog.d(TAG, "name = ${response.data.name}")
-                        StockLog.d(TAG, "userIndex = ${response.data.userIndex}")
-                        StockLog.d(TAG, "login_type = ${response.data.login_type}")
+            repeatOnStarted {
+                viewModel.uiState.collect { handleEvent(it) }
+            }
+        }
+    }
+    private fun handleEvent(event: LoginViewModel.Event) {
+        when (event) {
+            is LoginViewModel.Event.InitUIState -> {}
+            is LoginViewModel.Event.ResponseServerError -> {
+                Toasty.error(this, event.msg, Toasty.LENGTH_LONG).show()
+            }
+            is LoginViewModel.Event.ResponseDeleteNaverUserInfo -> {
+                stopLoadingAnimation()
+            }
+            is LoginViewModel.Event.ResponseLoginResultData -> {
+                when (event.respLoginUserInfo.status) {
+                    ServerRespCode.OK -> {
+                        StockLog.d(TAG, "email = ${event.respLoginUserInfo.data.email}")
+                        StockLog.d(TAG, "name = ${event.respLoginUserInfo.data.name}")
+                        StockLog.d(TAG, "userIndex = ${event.respLoginUserInfo.data.userIndex}")
+                        StockLog.d(TAG, "login_type = ${event.respLoginUserInfo.data.login_type}")
 
-                        viewModel.requestSetPreference(PrefKey.KEY_USER_INDEX, response.data.userIndex.toString())
-                        viewModel.requestSetPreference(PrefKey.KEY_USER_NAME, response.data.name)
-                        viewModel.requestSetPreference(PrefKey.KEY_USER_EMAIL, response.data.email)
-                        viewModel.requestSetPreference(PrefKey.KEY_USER_LOGIN_TYPE, response.data.login_type)
-                        viewModel.requestSetPreference(PrefKey.KEY_USER_TOKEN, response.data.token)
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_INDEX, event.respLoginUserInfo.data.userIndex.toString())
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_NAME, event.respLoginUserInfo.data.name)
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_EMAIL, event.respLoginUserInfo.data.email)
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_LOGIN_TYPE, event.respLoginUserInfo.data.login_type)
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_TOKEN, event.respLoginUserInfo.data.token)
                         viewModel.requestSetPreference(PrefKey.KEY_AUTO_LOGIN, true.toString())
 
                         startMainActivity()
                     }
-                }
-
-                viewModel.serverError.collect { errorCode ->
-                    stopLoadingAnimation()
-                    when (errorCode) {
-                        ServerRespCode.NetworkNotConnected -> {
-                            ResponseAlertManger.showNetworkConnectErrorAlert(this@LoginActivity)
-                        }
-                    }
+                    else -> {}
                 }
             }
         }
-
-        viewModel.apply {
-            respDeleteNaverUserInfo.observe(this@LoginActivity) { data ->
-                stopLoadingAnimation()
-            }
-        }
-
     }
 
     private fun startAutoLogin() {
