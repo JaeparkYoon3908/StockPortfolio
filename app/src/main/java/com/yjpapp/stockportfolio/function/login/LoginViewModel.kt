@@ -1,24 +1,17 @@
 package com.yjpapp.stockportfolio.function.login
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.NaverIdLoginSDK
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.function.memo.MemoListViewModel
-import com.yjpapp.stockportfolio.function.my.MyViewModel
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
-import com.yjpapp.stockportfolio.model.response.RespGetNaverUserInfo
 import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
 import com.yjpapp.stockportfolio.model.response.RespNaverDeleteUserInfo
-import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -65,7 +58,6 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    val respDeleteNaverUserInfo = MutableLiveData<RespNaverDeleteUserInfo>()
     fun requestDeleteNaverUserInfo() {
         viewModelScope.launch(Dispatchers.IO) {
             val naverAccessToken = userRepository.getNaverAccessToken()
