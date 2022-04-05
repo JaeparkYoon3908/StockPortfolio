@@ -76,6 +76,7 @@ class MemoReadWriteActivity :
     }
 
     private fun handleEvent(event: MemoReadWriteViewModel.Event) = when (event) {
+        is MemoReadWriteViewModel.Event.InitUIState -> {}
         is MemoReadWriteViewModel.Event.SendDeleteResult -> {
             if (event.isSuccess) {
                 val intent = Intent(applicationContext, MemoListFragment::class.java)
