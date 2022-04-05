@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
@@ -25,8 +26,8 @@ class MyViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val myRepository: MyRepository
 ): ViewModel() {
-    private val _uiState = MutableStateFlow<Event>(Event.InitUIState())
-    val uiState: StateFlow<Event> get() = _uiState
+    private val _uiState = MutableEventFlow<Event>()
+    val uiState: EventFlow<Event> get() = _uiState
     val userName = userRepository.getUserName()
     val userEmail = PatternUtils.getEmailMasking(userRepository.getUserEmail())
     val userLoginType = userRepository.getLoginType()
@@ -148,7 +149,6 @@ class MyViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class InitUIState(val msg: String = ""): Event()
 //        data class ShowInfoToastMessage(val msg: String): Event()
 //        data class ShowErrorToastMessage(val msg: String): Event()
         data class StartLoadingAnimation(val msg: String): Event()

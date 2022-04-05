@@ -8,14 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.extension.asEventFlow
-import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteInfo
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.repository.MyStockRepository
@@ -39,8 +36,8 @@ class MyStockViewModel @Inject constructor(
     private val incomeNoteRepository: IncomeNoteRepository,
     private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<Event>(Event.InitUIState(""))
-    val uiState: StateFlow<Event> get() = _uiState
+    private val _uiState = MutableEventFlow<Event>()
+    val uiState: EventFlow<Event> get() = _uiState
     private val _totalPurchasePrice = MutableStateFlow("")
     val totalPurchasePrice: StateFlow<String> get() = _totalPurchasePrice //상단 총 매수금액
     private val _totalEvaluationAmount = MutableStateFlow("")
@@ -64,14 +61,14 @@ class MyStockViewModel @Inject constructor(
         calculateTopData()
     }
 
-    fun addMyStock(context: Context, myStockEntity: MyStockEntity): Boolean {
+    fun addMyStock(myStockEntity: MyStockEntity): Boolean {
         return try {
             myStockRepository.insertMyStock(myStockEntity)
             myStockRepository.getAllMyStock().last {
                 myStockInfoList.add(it)
             }
             _scrollIndex.value = myStockInfoList.size
-            event(Event.ShowInfoToastMessage("추가 완료 됐습니다."))
+            event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)))
             calculateTopData()
             true
         } catch (e: Exception) {
@@ -81,12 +78,12 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    fun updateMyStock(context: Context, myStockEntity: MyStockEntity): Boolean {
+    fun updateMyStock(myStockEntity: MyStockEntity): Boolean {
         return try {
             myStockRepository.updateMyStock(myStockEntity)
             myStockInfoList.clear()
             myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
-            event(Event.ShowInfoToastMessage("수정 완료 됐습니다."))
+            event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Modify_Success)))
             calculateTopData()
             true
         } catch (e: Exception) {
@@ -96,7 +93,7 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    fun deleteMyStock(context: Context, myStockEntity: MyStockEntity) {
+    fun deleteMyStock(myStockEntity: MyStockEntity) {
         try {
             myStockRepository.deleteMyStock((myStockEntity))
             myStockInfoList.remove(myStockEntity)
@@ -230,7 +227,7 @@ class MyStockViewModel @Inject constructor(
     /**
      * IncomeNote 연동
      */
-    fun requestAddIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo, myStockEntity: MyStockEntity) {
+    fun requestAddIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo, myStockEntity: MyStockEntity) {
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPostIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
@@ -256,7 +253,6 @@ class MyStockViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class InitUIState(val msg: String): Event()
         data class ShowInfoToastMessage(val msg: String): Event()
         data class ShowErrorToastMessage(val msg: String): Event()
         data class ShowLoadingImage(val msg: Unit): Event()

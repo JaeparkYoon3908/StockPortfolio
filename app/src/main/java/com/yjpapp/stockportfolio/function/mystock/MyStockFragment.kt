@@ -47,6 +47,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
+import com.yjpapp.stockportfolio.extension.repeatOnResume
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockSellInputDialog
@@ -98,6 +99,7 @@ class MyStockFragment : Fragment() {
         }
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
@@ -125,7 +127,6 @@ class MyStockFragment : Fragment() {
                     ).show()
                     return false
                 }
-
                 if (!myStockViewModel.isCurrentPriceRefreshing) {
                     myStockViewModel.refreshAllPrices()
                     myStockViewModel.isCurrentPriceRefreshing = true
@@ -150,7 +151,6 @@ class MyStockFragment : Fragment() {
 
     private fun handleEvent(event: MyStockViewModel.Event) {
         when (event) {
-            is MyStockViewModel.Event.InitUIState -> {}
             is MyStockViewModel.Event.ShowInfoToastMessage -> {
                 Toasty.info(mContext, event.msg, Toasty.LENGTH_LONG).show()
             }
@@ -159,7 +159,6 @@ class MyStockFragment : Fragment() {
             }
             is MyStockViewModel.Event.SuccessIncomeNoteAdd -> {
                 myStockViewModel.deleteMyStock(
-                    context = requireContext(),
                     myStockEntity = event.data
                 )
             }
@@ -215,13 +214,13 @@ class MyStockFragment : Fragment() {
                             yesterdayPrice = currentPriceData.yesterdayPrice
                         )
                         if (dialogData == null) {
-                            val isAddSuccess = myStockViewModel.addMyStock(mContext, myStockEntity)
+                            val isAddSuccess = myStockViewModel.addMyStock(myStockEntity)
                             if (isAddSuccess) {
                                 dialog.dismiss()
                             }
                         }
                         if (dialogData != null) {
-                            val isUpdateSuccess = myStockViewModel.updateMyStock(mContext, myStockEntity)
+                            val isUpdateSuccess = myStockViewModel.updateMyStock(myStockEntity)
                             if (isUpdateSuccess) {
                                 dialog.dismiss()
                             }
@@ -243,7 +242,6 @@ class MyStockFragment : Fragment() {
                     userInputDialogData: MyStockSellInputDialog.MyStockSellInputDialogData
                 ) {
                     myStockViewModel.requestAddIncomeNote(
-                        context = requireContext(),
                         reqIncomeNoteInfo = ReqIncomeNoteInfo(
                             subjectName = myStockEntity.subjectName,
                             sellDate = userInputDialogData.sellDate,
@@ -513,7 +511,6 @@ class MyStockFragment : Fragment() {
                             .clickable {
                                 if (!myStockViewModel.isDeleteCheck()) {
                                     myStockViewModel.deleteMyStock(
-                                        context = requireContext(),
                                         myStockEntity = myStockEntity
                                     )
                                     return@clickable
@@ -529,7 +526,6 @@ class MyStockFragment : Fragment() {
                                         rightBtnText = getString(R.string.Common_Ok),
                                         rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
                                             myStockViewModel.deleteMyStock(
-                                                context = requireContext(),
                                                 myStockEntity = myStockEntity
                                             )
                                             dialog.dismiss()

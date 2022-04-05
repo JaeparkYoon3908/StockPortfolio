@@ -2,6 +2,8 @@ package com.yjpapp.stockportfolio.function.memo.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.stockportfolio.extension.EventFlow
+import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.repository.MemoRepository
 import com.yjpapp.stockportfolio.repository.PreferenceRepository
@@ -20,8 +22,8 @@ class MemoReadWriteViewModel @Inject constructor(
     private val memoRepository: MemoRepository,
     private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<Event>(Event.InitUIState(""))
-    val uiState: StateFlow<Event> get() = _uiState
+    private val _uiState = MutableEventFlow<Event>()
+    val uiState: EventFlow<Event> get() = _uiState
     var mode: String? = null
     var memoListPosition = 0
     var id = 0
@@ -61,7 +63,6 @@ class MemoReadWriteViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class InitUIState(val msg: String = ""): Event()
         data class SendDeleteResult(val isSuccess: Boolean): Event()
     }
 }

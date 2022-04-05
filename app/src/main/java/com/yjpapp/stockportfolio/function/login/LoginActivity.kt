@@ -124,7 +124,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     }
     private fun handleEvent(event: LoginViewModel.Event) {
         when (event) {
-            is LoginViewModel.Event.InitUIState -> {}
             is LoginViewModel.Event.ResponseServerError -> {
                 Toasty.error(this, event.msg, Toasty.LENGTH_LONG).show()
             }

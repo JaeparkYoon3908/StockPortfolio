@@ -69,7 +69,6 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
 
     private fun handleEvent(event: MyViewModel.Event) {
         when (event) {
-            is MyViewModel.Event.InitUIState -> {}
             is MyViewModel.Event.StartLoginActivity -> {
                 startLoginActivity()
                 requireActivity().finish()

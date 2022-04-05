@@ -8,9 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.extension.asEventFlow
-import com.yjpapp.stockportfolio.function.mystock.MyStockViewModel
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
@@ -22,8 +21,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.system.exitProcess
@@ -33,8 +30,8 @@ class IncomeNoteViewModel @Inject constructor(
     private val incomeNoteRepository: IncomeNoteRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<Event>(Event.InitUIState(""))
-    val uiState: StateFlow<Event> get() = _uiState
+    private val _uiState = MutableEventFlow<Event>()
+    val uiState: EventFlow<Event> get() = _uiState
     var editMode = false
     var incomeNoteId = -1
     var page = 1
@@ -188,7 +185,6 @@ class IncomeNoteViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class InitUIState(val msg: String = ""): Event()
         data class SendTotalGainData(val data: RespTotalGainIncomeNoteData): Event()
         data class IncomeNoteDeleteSuccess(val position: Int): Event()
         data class IncomeNoteModifySuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()

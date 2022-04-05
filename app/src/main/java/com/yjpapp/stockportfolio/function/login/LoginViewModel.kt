@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.NaverIdLoginSDK
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.extension.EventFlow
+import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespLoginUserInfo
 import com.yjpapp.stockportfolio.model.response.RespNaverDeleteUserInfo
@@ -33,8 +35,8 @@ class LoginViewModel @Inject constructor(
      * Common
      */
     private val TAG = LoginViewModel::class.java.simpleName
-    private val _uiState = MutableStateFlow<Event>(Event.InitUIState())
-    val uiState: StateFlow<Event> get() = _uiState
+    private val _uiState = MutableEventFlow<Event>()
+    val uiState: EventFlow<Event> get() = _uiState
 
     /**
      * API
@@ -104,7 +106,6 @@ class LoginViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class InitUIState(val msg: String = ""): Event()
         data class ResponseServerError(val msg: String): Event()
         data class ResponseDeleteNaverUserInfo(val respNaverDeleteUserInfo: RespNaverDeleteUserInfo?): Event()
         data class ResponseLoginResultData(val respLoginUserInfo: RespLoginUserInfo): Event()

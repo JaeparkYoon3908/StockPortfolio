@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.extension.asEventFlow
 import com.yjpapp.stockportfolio.function.my.MyViewModel
@@ -32,8 +33,8 @@ class MemoListViewModel @Inject constructor(
     private val memoRepository: MemoRepository,
     private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<Event>(Event.InitUIState())
-    val uiState: StateFlow<Event> get() = _uiState
+    private val _uiState = MutableEventFlow<Event>()
+    val uiState: EventFlow<Event> get() = _uiState
     private var _allMemoListData = mutableListOf<MemoListEntity>()
     val allMemoListData get() = _allMemoListData
     fun getAllMemoInfoList() {
@@ -89,7 +90,6 @@ class MemoListViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class InitUIState(val msg: String = ""): Event()
         data class SendToAllMemoListData(val data: MutableList<MemoListEntity>): Event()
         data class MemoListDataDeleteSuccess(val data: MutableList<MemoListEntity>): Event()
     }

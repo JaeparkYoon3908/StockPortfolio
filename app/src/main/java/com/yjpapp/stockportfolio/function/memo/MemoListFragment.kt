@@ -106,7 +106,6 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
 
     @SuppressLint("NotifyDataSetChanged")
     private fun handleEvent(event: MemoListViewModel.Event) = when (event) {
-        is MemoListViewModel.Event.InitUIState -> {}
         is MemoListViewModel.Event.SendToAllMemoListData -> {
             val memoList = event.data
             memoListAdapter.memoListData = memoList
