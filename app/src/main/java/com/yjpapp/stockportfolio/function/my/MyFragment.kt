@@ -102,7 +102,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                             dialog.dismiss()
                         },
                         rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
-                            myViewModel.requestLogout(mContext)
+                            myViewModel.requestLogout()
                             dialog.dismiss()
                         }
                     )).show()
@@ -117,7 +117,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
 
                         },
                         rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
-                            myViewModel.requestMemberOff(dialog.context)
+                            myViewModel.requestMemberOff()
                             dialog.dismiss()
                         }
                     )).show()

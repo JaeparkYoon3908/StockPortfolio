@@ -83,7 +83,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     override fun onBackPressed() {
-        viewModel.runBackPressAppCloseEvent(applicationContext, this)
+        viewModel.runBackPressAppCloseEvent(this)
     }
 
 

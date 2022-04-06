@@ -18,6 +18,7 @@ import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ import kotlin.system.exitProcess
 
 @HiltViewModel
 class IncomeNoteViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val incomeNoteRepository: IncomeNoteRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
@@ -40,7 +42,7 @@ class IncomeNoteViewModel @Inject constructor(
     var initEndYYYYMMDD = listOf<String>()
     var hasNext = true
 
-    fun requestGetIncomeNote(context: Context) {
+    fun requestGetIncomeNote() {
         val params = HashMap<String, String>()
         params["page"] = page.toString()
         params["size"] = pageSize.toString()
@@ -72,7 +74,7 @@ class IncomeNoteViewModel @Inject constructor(
         }
     }
 
-    fun requestTotalGain(context: Context) {
+    fun requestTotalGain() {
         val params = hashMapOf<String, String>()
         if (initStartYYYYMMDD.size == 3 && initEndYYYYMMDD.size == 3) {
             params["startDate"] = makeDateString(initStartYYYYMMDD)
@@ -95,7 +97,7 @@ class IncomeNoteViewModel @Inject constructor(
         }
     }
 
-    fun requestDeleteIncomeNote(context: Context, id: Int, position: Int) {
+    fun requestDeleteIncomeNote(id: Int, position: Int) {
         viewModelScope.launch {
             val result = incomeNoteRepository.requestDeleteIncomeNote(id)
             if (result == null) {
@@ -111,7 +113,7 @@ class IncomeNoteViewModel @Inject constructor(
         }
     }
 
-    fun requestModifyIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) {
+    fun requestModifyIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPutIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
@@ -128,7 +130,7 @@ class IncomeNoteViewModel @Inject constructor(
         }
     }
 
-    fun requestAddIncomeNote(context: Context, reqIncomeNoteInfo: ReqIncomeNoteInfo) {
+    fun requestAddIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPostIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
@@ -163,14 +165,14 @@ class IncomeNoteViewModel @Inject constructor(
         return incomeNoteRepository.isShowDeleteCheck()
     }
 
-    fun runBackPressAppCloseEvent(mContext: Context, activity: Activity) {
+    fun runBackPressAppCloseEvent(activity: Activity) {
         val isAllowAppClose = userRepository.isAllowAppClose()
         if (isAllowAppClose == StockConfig.TRUE) {
             activity.finishAffinity()
             System.runFinalization()
             exitProcess(0)
         } else {
-            Toasty.normal(mContext, mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
+            Toasty.normal(context, context.getString(R.string.Common_BackButton_AppClose_Message)).show()
             userRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 userRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)

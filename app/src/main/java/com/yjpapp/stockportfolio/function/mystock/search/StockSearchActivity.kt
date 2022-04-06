@@ -60,7 +60,7 @@ class StockSearchActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.initAllStockList(this)
+        viewModel.initAllStockList()
     }
 
     @OptIn(ExperimentalComposeUiApi::class)

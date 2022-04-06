@@ -66,7 +66,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
                 showAddButton()
                 hideDeleteButton()
             } else {
-                viewModel.runBackPressAppCloseEvent(mContext, activity as Activity)
+                viewModel.runBackPressAppCloseEvent(activity as Activity)
             }
         }
     }

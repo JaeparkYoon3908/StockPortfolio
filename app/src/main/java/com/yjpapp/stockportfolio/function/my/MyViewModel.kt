@@ -8,21 +8,18 @@ import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.extension.asEventFlow
-import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
-import com.yjpapp.stockportfolio.test.model.LatestNewsUiState
 import com.yjpapp.stockportfolio.util.PatternUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val userRepository: UserRepository,
     private val myRepository: MyRepository
 ): ViewModel() {
@@ -39,7 +36,7 @@ class MyViewModel @Inject constructor(
     val isShowMemoDeleteCheck = myRepository.getShowMemoDeleteCheck()
     val isMemoLongClickVibrateCheck = myRepository.getMemoVibrateOff()
 
-    fun requestLogout(context: Context) {
+    fun requestLogout() {
         event(Event.StartLoadingAnimation(""))
         when (userRepository.getLoginType()) {
             StockConfig.LOGIN_TYPE_NAVER -> {
@@ -69,7 +66,7 @@ class MyViewModel @Inject constructor(
             }
         }
     }
-    fun requestMemberOff(context: Context) {
+    fun requestMemberOff() {
         viewModelScope.launch {
             event(Event.StartLoadingAnimation(""))
             val result = userRepository.deleteUserInfo()

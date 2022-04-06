@@ -10,16 +10,13 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.extension.asEventFlow
-import com.yjpapp.stockportfolio.function.my.MyViewModel
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.repository.MemoRepository
 import com.yjpapp.stockportfolio.repository.PreferenceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import es.dmoral.toasty.Toasty
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.system.exitProcess
@@ -30,6 +27,7 @@ import kotlin.system.exitProcess
  */
 @HiltViewModel
 class MemoListViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val memoRepository: MemoRepository,
     private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
@@ -64,14 +62,14 @@ class MemoListViewModel @Inject constructor(
         memoRepository.updateDeleteCheck(id, deleteCheck.toString())
     }
 
-    fun runBackPressAppCloseEvent(mContext: Context, activity: Activity) {
+    fun runBackPressAppCloseEvent(activity: Activity) {
         val isAllowAppClose = preferenceRepository.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)?: StockConfig.FALSE
         if (isAllowAppClose == StockConfig.TRUE) {
             activity.finishAffinity()
             System.runFinalization()
             exitProcess(0)
         } else {
-            Toasty.normal(mContext, mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
+            Toasty.normal(context, context.getString(R.string.Common_BackButton_AppClose_Message)).show()
             preferenceRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 preferenceRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)

@@ -9,6 +9,7 @@ import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -20,16 +21,17 @@ import kotlin.system.exitProcess
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val userRepository: UserRepository
 ): ViewModel() {
-    fun runBackPressAppCloseEvent(mContext: Context, activity: Activity) {
+    fun runBackPressAppCloseEvent(activity: Activity) {
         val isAllowAppClose = userRepository.isAllowAppClose()
         if (isAllowAppClose == StockConfig.TRUE) {
             activity.finishAffinity()
             System.runFinalization()
             exitProcess(0)
         } else {
-            Toasty.normal(mContext, mContext.getString(R.string.Common_BackButton_AppClose_Message)).show()
+            Toasty.normal(context, context.getString(R.string.Common_BackButton_AppClose_Message)).show()
             setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
             viewModelScope.launch {
                 delay(3000)

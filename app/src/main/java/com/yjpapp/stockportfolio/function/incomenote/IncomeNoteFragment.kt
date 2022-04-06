@@ -49,7 +49,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 activity?.let {
-                    viewModel.runBackPressAppCloseEvent(mContext, it)
+                    viewModel.runBackPressAppCloseEvent(it)
                 }
             }
         }
@@ -124,8 +124,8 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                     initStartYYYYMMDD = listOf()
                     initEndYYYYMMDD = listOf()
                     page = 1
-                    requestGetIncomeNote(requireContext())
-                    requestTotalGain(requireContext())
+                    requestGetIncomeNote()
+                    requestTotalGain()
                     setDateText()
                 }
             }
@@ -182,8 +182,8 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
     private fun initData() {
         viewModel.apply {
             page = 1
-            requestGetIncomeNote(mContext)
-            requestTotalGain(mContext)
+            requestGetIncomeNote()
+            requestTotalGain()
             setDateText()
         }
         //event handler
@@ -209,7 +209,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
         ) {
             if (respIncomeNoteListInfo != null) {
                 if (viewModel.isShowDeleteCheck() == StockConfig.FALSE) {
-                    viewModel.requestDeleteIncomeNote(mContext, respIncomeNoteListInfo.id, position)
+                    viewModel.requestDeleteIncomeNote(respIncomeNoteListInfo.id, position)
                     return
                 }
                 CommonTwoBtnDialog(
@@ -224,7 +224,6 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                         rightBtnListener = { view: View, dialog: CommonTwoBtnDialog ->
                             if (incomeNoteListAdapter.itemCount > position) {
                                 viewModel.requestDeleteIncomeNote(
-                                    mContext,
                                     respIncomeNoteListInfo.id,
                                     position
                                 )
@@ -248,8 +247,8 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                     initStartYYYYMMDD = startDateList
                     initEndYYYYMMDD = endDateList
                     page = 1
-                    requestGetIncomeNote(mContext)
-                    requestTotalGain(mContext)
+                    requestGetIncomeNote()
+                    requestTotalGain()
                     setDateText()
                 }
             }
@@ -260,9 +259,9 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
         override fun onInputDialogCompleteClicked(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
             reqIncomeNoteInfo.id = viewModel.incomeNoteId
             if (viewModel.editMode) {
-                viewModel.requestModifyIncomeNote(mContext, reqIncomeNoteInfo)
+                viewModel.requestModifyIncomeNote(reqIncomeNoteInfo)
             } else {
-                viewModel.requestAddIncomeNote(mContext, reqIncomeNoteInfo)
+                viewModel.requestAddIncomeNote(reqIncomeNoteInfo)
             }
         }
     }
@@ -276,7 +275,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                 val lastVisible = layoutManager.findLastCompletelyVisibleItemPosition()
                 if (lastVisible >= totalItemCount - 1) {
                     viewModel.page++
-                    viewModel.requestGetIncomeNote(mContext)
+                    viewModel.requestGetIncomeNote()
                 }
             }
         }
@@ -321,7 +320,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             incomeNoteListAdapter.incomeNoteListInfo.removeAt(event.position)
             incomeNoteListAdapter.notifyItemRemoved(event.position)
             incomeNoteListAdapter.notifyDataSetChanged()
-            viewModel.requestTotalGain(mContext)
+            viewModel.requestTotalGain()
         }
         is IncomeNoteViewModel.Event.IncomeNoteAddSuccess -> {
             val toastMsg = mContext.getString(R.string.Common_Notice_Add_Ok)
@@ -329,18 +328,18 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             incomeNoteListAdapter.incomeNoteListInfo.add(0, event.data)
 //                incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
             incomeNoteListAdapter.notifyDataSetChanged()
-            viewModel.requestTotalGain(mContext)
+            viewModel.requestTotalGain()
         }
         is IncomeNoteViewModel.Event.IncomeNoteModifySuccess -> {
             val toastMsg = mContext.getString(R.string.Common_Notice_Modify_Ok)
             Toasty.normal(mContext, toastMsg).show()
-            viewModel.requestTotalGain(mContext)
+            viewModel.requestTotalGain()
             if (event.data.id != -1) {
                 val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }
                 val index = incomeNoteListAdapter.incomeNoteListInfo.indexOf(beforeModifyIncomeNote)
                 incomeNoteListAdapter.incomeNoteListInfo[index] = event.data
                 incomeNoteListAdapter.notifyDataSetChanged()
-                viewModel.requestTotalGain(mContext)
+                viewModel.requestTotalGain()
             } else {
                 ResponseAlertManger.showErrorAlert(
                     mContext,

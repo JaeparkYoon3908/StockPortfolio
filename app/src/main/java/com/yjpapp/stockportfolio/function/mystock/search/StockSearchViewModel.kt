@@ -9,6 +9,7 @@ import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.inject.Inject
@@ -21,13 +22,14 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class StockSearchViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val myStockRepository: MyStockRepository
 ): ViewModel() {
     private var _allStockList: MutableList<Array<String>> = mutableListOf()
     var searchResult = mutableStateListOf<SubjectName>()
         private set
 
-    fun initAllStockList(context: Context) {
+    fun initAllStockList() {
         val inputStreamReader = InputStreamReader(context.resources.openRawResource(R.raw.korea_all_stock_list),"EUC-KR")
         val bufferedReader = BufferedReader(inputStreamReader)
         val csvReader = CSVReader(bufferedReader)
