@@ -6,13 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseFragment
-import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.function.login.LoginActivity
@@ -29,7 +30,9 @@ import kotlinx.coroutines.launch
  * @since 2021.09
  */
 @AndroidEntryPoint
-class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
+class MyFragment : Fragment() {
+    private var _binding: FragmentMyBinding? = null
+    private val binding: FragmentMyBinding get() = _binding!!
     private val myViewModel: MyViewModel by viewModels()
     private var mainActivity: MainActivity? = null
     override fun onAttach(context: Context) {
@@ -45,13 +48,19 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+    ): View {
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
     }
 
     private fun initData() {
@@ -94,10 +103,10 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
         override fun onClick(view: View) {
             when (view.id) {
                 R.id.btn_logout -> {
-                    CommonTwoBtnDialog(mContext, CommonTwoBtnDialog.CommonTwoBtnData(
-                        noticeText = mContext.getString(R.string.My_Msg_Logout_Check),
-                        leftBtnText = mContext.getString(R.string.Common_Cancel),
-                        rightBtnText = mContext.getString(R.string.Common_Ok),
+                    CommonTwoBtnDialog(requireContext(), CommonTwoBtnDialog.CommonTwoBtnData(
+                        noticeText = requireContext().getString(R.string.My_Msg_Logout_Check),
+                        leftBtnText = requireContext().getString(R.string.Common_Cancel),
+                        rightBtnText = requireContext().getString(R.string.Common_Ok),
                         leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
                             dialog.dismiss()
                         },
@@ -108,10 +117,10 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                     )).show()
                 }
                 R.id.btn_member_off -> {
-                    CommonTwoBtnDialog(mContext, CommonTwoBtnDialog.CommonTwoBtnData(
-                        noticeText = mContext.getString(R.string.My_Msg_Member_Off_Check),
-                        leftBtnText = mContext.getString(R.string.Common_Cancel),
-                        rightBtnText = mContext.getString(R.string.Common_Ok),
+                    CommonTwoBtnDialog(requireContext(), CommonTwoBtnDialog.CommonTwoBtnData(
+                        noticeText = requireContext().getString(R.string.My_Msg_Member_Off_Check),
+                        leftBtnText = requireContext().getString(R.string.Common_Cancel),
+                        rightBtnText = requireContext().getString(R.string.Common_Ok),
                         leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
                             dialog.dismiss()
 
@@ -124,7 +133,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                 }
                 R.id.img_login_type_icon -> {
                     if (BuildConfig.DEBUG) {
-                        val intent = Intent(mContext, TestActivity::class.java)
+                        val intent = Intent(requireContext(), TestActivity::class.java)
                         startActivity(intent)
                     }
                 }
@@ -173,9 +182,9 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
     }
 
     private fun startLoginActivity() {
-        Intent(mContext, LoginActivity::class.java).apply {
+        Intent(requireContext(), LoginActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-            mContext.startActivity(this)
+            requireContext().startActivity(this)
         }
     }
 

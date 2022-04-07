@@ -6,19 +6,17 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseFragment
-import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.databinding.FragmentMemoListBinding
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteActivity
 import com.yjpapp.stockportfolio.util.StockUtils
@@ -35,7 +33,7 @@ import kotlinx.coroutines.launch
  * @since 2020.11
  */
 @AndroidEntryPoint
-class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment_memo_list) {
+class MemoListFragment : Fragment() {
     companion object {
         const val INTENT_KEY_MEMO_MODE = "INTENT_KEY_MEMO_MODE"
         const val INTENT_KEY_MEMO_INFO_ID = "INTENT_KEY_MEMO_INFO_ID"
@@ -51,7 +49,8 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
         const val RESULT_DELETE = RESULT_EMPTY + 1
         const val RESULT_UPDATE = RESULT_EMPTY + 2
     }
-
+    private var _binding: FragmentMemoListBinding? = null
+    private val binding get() = _binding!!
     private lateinit var layoutManager: LinearLayoutManager
     private val memoListAdapter =
         MemoListAdapter(mutableListOf(), null).apply { setHasStableIds(true) }
@@ -73,9 +72,16 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mContext = context
-
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_memo_list, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -139,7 +145,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
             }
             RESULT_EMPTY -> {
                 Toasty.normal(
-                    mContext,
+                    requireContext(),
                     getString(R.string.MemoListFragment_Empty_Data_Message),
                     Toasty.LENGTH_LONG
                 ).show()
@@ -153,7 +159,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
     private fun initRecyclerView() {
         memoListAdapter.callBack = memoListAdapterCallBack
         val memoDataList = viewModel.allMemoListData
-        layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
         //Scroll item 2 to 20 pixels from the top
@@ -181,7 +187,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
             android.R.id.home -> {
             }
             R.id.menu_MemoListFragment_Add -> {
-                val intent = Intent(mContext, MemoReadWriteActivity::class.java)
+                val intent = Intent(requireContext(), MemoReadWriteActivity::class.java)
                 intent.putExtra(INTENT_KEY_MEMO_MODE, MEMO_ADD_MODE)
                 memoResultLauncher.launch(intent)
             }
@@ -224,10 +230,10 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
     }
 
     private fun showDeleteCheckDialog() {
-        CommonTwoBtnDialog(mContext, CommonTwoBtnDialog.CommonTwoBtnData(
-            noticeText = mContext.getString(R.string.MemoListFragment_Delete_Check_Message),
-            leftBtnText = mContext.getString(R.string.Common_Cancel),
-            rightBtnText = mContext.getString(R.string.Common_Ok),
+        CommonTwoBtnDialog(requireContext(), CommonTwoBtnDialog.CommonTwoBtnData(
+            noticeText = requireContext().getString(R.string.MemoListFragment_Delete_Check_Message),
+            leftBtnText = requireContext().getString(R.string.Common_Cancel),
+            rightBtnText = requireContext().getString(R.string.Common_Ok),
             leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
                 dialog.dismiss()
             },
@@ -245,7 +251,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
 
         override fun onMemoListClicked(position: Int) {
             val memoDataList = viewModel.allMemoListData
-            val intent = Intent(mContext, MemoReadWriteActivity::class.java)
+            val intent = Intent(requireContext(), MemoReadWriteActivity::class.java)
             intent.putExtra(INTENT_KEY_LIST_POSITION, position)
             intent.putExtra(INTENT_KEY_MEMO_INFO_ID, memoDataList[position].id)
             intent.putExtra(INTENT_KEY_MEMO_INFO_TITLE, memoDataList[position].title)
@@ -268,7 +274,7 @@ class MemoListFragment : BaseFragment<FragmentMemoListBinding>(R.layout.fragment
                 hideDeleteButton()
             }
             if (viewModel.isMemoVibration()) {
-                StockUtils.runVibration(mContext, 100)
+                StockUtils.runVibration(requireContext(), 100)
             }
             memoListAdapter.isDeleteModeOn = !memoListAdapter.isDeleteModeOn
             viewModel.getAllMemoInfoList()

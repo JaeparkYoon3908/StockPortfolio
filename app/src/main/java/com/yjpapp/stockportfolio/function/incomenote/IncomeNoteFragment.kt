@@ -5,15 +5,16 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseFragment
 import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.extension.OnSingleClickListener
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePickerDialog
@@ -35,7 +36,9 @@ import java.math.BigDecimal
  * @since 2020.08
  */
 @AndroidEntryPoint
-class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.fragment_income_note) {
+class IncomeNoteFragment: Fragment() {
+    private var _binding: FragmentIncomeNoteBinding? = null
+    private val binding get() = _binding!!
     private val TAG = IncomeNoteFragment::class.java.simpleName
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private var incomeNoteListAdapter =
@@ -54,6 +57,15 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_income_note, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -134,7 +146,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
 
     private fun initRecyclerView() {
         binding.recyclerviewIncomeNoteFragment.apply {
-            layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = incomeNoteListAdapter
             addOnScrollListener(onScrollListener)
             addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
@@ -172,7 +184,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                 sellCount = it.sellCount.toString(),
             )
         }
-        IncomeNoteInputDialog(mContext, inputDialogCallBack, data).run {
+        IncomeNoteInputDialog(requireContext(), inputDialogCallBack, data).run {
             if (!isShowing) {
                 show()
             }
@@ -213,11 +225,11 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                     return
                 }
                 CommonTwoBtnDialog(
-                    mContext,
+                    requireContext(),
                     CommonTwoBtnDialog.CommonTwoBtnData(
                         noticeText = "삭제하시겠습니까?",
-                        leftBtnText = mContext.getString(R.string.Common_Cancel),
-                        rightBtnText = mContext.getString(R.string.Common_Ok),
+                        leftBtnText = requireContext().getString(R.string.Common_Cancel),
+                        rightBtnText = requireContext().getString(R.string.Common_Ok),
                         leftBtnListener = { view: View, dialog: CommonTwoBtnDialog ->
                             dialog.dismiss()
                         },
@@ -304,35 +316,35 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                 it.txtTotalRealizationGainsLossesData.text =
                     "${StockConfig.koreaMoneySymbol}$totalRealizationGainsLossesNumber"
                 if (totalGainPercent >= 0) {
-                    it.txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_e52b4e))
-                    it.txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_e52b4e))
+                    it.txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_e52b4e))
+                    it.txtTotalRealizationGainsLossesPercent.setTextColor(requireContext().getColor(R.color.color_e52b4e))
                 } else {
-                    it.txtTotalRealizationGainsLossesData.setTextColor(mContext.getColor(R.color.color_4876c7))
-                    it.txtTotalRealizationGainsLossesPercent.setTextColor(mContext.getColor(R.color.color_4876c7))
+                    it.txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_4876c7))
+                    it.txtTotalRealizationGainsLossesPercent.setTextColor(requireContext().getColor(R.color.color_4876c7))
                 }
                 it.txtTotalRealizationGainsLossesPercent.text =
                     StockUtils.getRoundsPercentNumber(totalGainPercent)
             }
         }
         is IncomeNoteViewModel.Event.IncomeNoteDeleteSuccess -> {
-            val toastMsg = mContext.getString(R.string.Common_Notice_Delete_Ok)
-            Toasty.normal(mContext, toastMsg).show()
+            val toastMsg = requireContext().getString(R.string.Common_Notice_Delete_Ok)
+            Toasty.normal(requireContext(), toastMsg).show()
             incomeNoteListAdapter.incomeNoteListInfo.removeAt(event.position)
             incomeNoteListAdapter.notifyItemRemoved(event.position)
             incomeNoteListAdapter.notifyDataSetChanged()
             viewModel.requestTotalGain()
         }
         is IncomeNoteViewModel.Event.IncomeNoteAddSuccess -> {
-            val toastMsg = mContext.getString(R.string.Common_Notice_Add_Ok)
-            Toasty.info(mContext, toastMsg).show()
+            val toastMsg = requireContext().getString(R.string.Common_Notice_Add_Ok)
+            Toasty.info(requireContext(), toastMsg).show()
             incomeNoteListAdapter.incomeNoteListInfo.add(0, event.data)
 //                incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
             incomeNoteListAdapter.notifyDataSetChanged()
             viewModel.requestTotalGain()
         }
         is IncomeNoteViewModel.Event.IncomeNoteModifySuccess -> {
-            val toastMsg = mContext.getString(R.string.Common_Notice_Modify_Ok)
-            Toasty.normal(mContext, toastMsg).show()
+            val toastMsg = requireContext().getString(R.string.Common_Notice_Modify_Ok)
+            Toasty.normal(requireContext(), toastMsg).show()
             viewModel.requestTotalGain()
             if (event.data.id != -1) {
                 val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }
@@ -342,7 +354,7 @@ class IncomeNoteFragment : BaseFragment<FragmentIncomeNoteBinding>(R.layout.frag
                 viewModel.requestTotalGain()
             } else {
                 ResponseAlertManger.showErrorAlert(
-                    mContext,
+                    requireContext(),
                     getString(R.string.Error_Msg_Normal)
                 )
             }

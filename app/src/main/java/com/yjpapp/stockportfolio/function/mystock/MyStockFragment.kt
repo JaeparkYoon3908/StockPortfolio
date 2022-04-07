@@ -1,7 +1,6 @@
 package com.yjpapp.stockportfolio.function.mystock
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.compose.animation.core.*
@@ -47,7 +46,6 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
-import com.yjpapp.stockportfolio.extension.repeatOnResume
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockSellInputDialog
@@ -75,13 +73,7 @@ import kotlinx.coroutines.launch
 class MyStockFragment : Fragment() {
     private val TAG = MyStockFragment::class.java.simpleName
     private val myStockViewModel: MyStockViewModel by viewModels()
-    private lateinit var mContext: Context
     private lateinit var navController: NavController
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -135,7 +127,7 @@ class MyStockFragment : Fragment() {
             R.id.menu_MyStockFragment_Add -> {
                 if (myStockViewModel.myStockInfoList.size >= 10) {
                     Toasty.info(
-                        mContext,
+                        requireContext(),
                         getString(
                             R.string.MyStockFragment_Notice_Max_List
                         ),
@@ -152,10 +144,10 @@ class MyStockFragment : Fragment() {
     private fun handleEvent(event: MyStockViewModel.Event) {
         when (event) {
             is MyStockViewModel.Event.ShowInfoToastMessage -> {
-                Toasty.info(mContext, event.msg, Toasty.LENGTH_LONG).show()
+                Toasty.info(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
             }
             is MyStockViewModel.Event.ShowErrorToastMessage -> {
-                Toasty.error(mContext, event.msg, Toasty.LENGTH_LONG).show()
+                Toasty.error(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
             }
             is MyStockViewModel.Event.SuccessIncomeNoteAdd -> {
                 myStockViewModel.deleteMyStock(
@@ -180,7 +172,7 @@ class MyStockFragment : Fragment() {
         dialogData: MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData?
     ) {
         MyStockPurchaseInputDialog(
-            mContext = mContext,
+            mContext = requireContext(),
             dialogData = dialogData,
             callBack = object : MyStockPurchaseInputDialog.CallBack {
                 override fun onInputDialogCompleteClicked(
@@ -191,7 +183,7 @@ class MyStockFragment : Fragment() {
                         val currentPriceData = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
                         currentPriceData.run {
                             if (currentPrice.isEmpty() || yesterdayPrice.isEmpty()) {
-                                ResponseAlertManger.showErrorAlert(mContext, getString(R.string.Error_Msg_Network_Connect_Exception))
+                                ResponseAlertManger.showErrorAlert(requireContext(), getString(R.string.Error_Msg_Network_Connect_Exception))
                                 return@launch
                             }
                         }
@@ -516,7 +508,7 @@ class MyStockFragment : Fragment() {
                                     return@clickable
                                 }
                                 CommonTwoBtnDialog(
-                                    mContext = mContext,
+                                    mContext = requireContext(),
                                     CommonTwoBtnDialog.CommonTwoBtnData(
                                         noticeText = getString(R.string.Common_Notice_Delete_Check),
                                         leftBtnText = getString(R.string.Common_Cancel),
