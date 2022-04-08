@@ -54,7 +54,7 @@ class IncomeNoteViewModel @Inject constructor(
             try {
                 val result = incomeNoteRepository.requestGetIncomeNote(params)
                 if (result == null) {
-                    ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                    ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
                     return@launch
                 }
                 if (!result.isSuccessful) {
@@ -83,7 +83,7 @@ class IncomeNoteViewModel @Inject constructor(
         CoroutineScope(Dispatchers.Main).launch {
             val result = incomeNoteRepository.requestTotalGain(params)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
                 return@launch
             }
             if (!result.isSuccessful) {
@@ -101,7 +101,7 @@ class IncomeNoteViewModel @Inject constructor(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestDeleteIncomeNote(id)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
                 return@launch
             }
             if (!result.isSuccessful) {
@@ -117,7 +117,7 @@ class IncomeNoteViewModel @Inject constructor(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPutIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
                 return@launch
             }
             if (!result.isSuccessful) {
@@ -134,7 +134,7 @@ class IncomeNoteViewModel @Inject constructor(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPostIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
                 return@launch
             }
             if (!result.isSuccessful) {

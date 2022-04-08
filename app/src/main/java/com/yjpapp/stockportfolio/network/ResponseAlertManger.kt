@@ -31,8 +31,8 @@ object ResponseAlertManger {
 
     }
 
-    fun showNetworkConnectErrorAlert(context: Context) {
-        if (!isShowDialog) {
+    fun getNetworkConnectErrorDialog(context: Context): CommonOneBtnDialog? {
+        return if (!isShowDialog) {
             CommonOneBtnDialog(
                 context,
                 CommonOneBtnDialog.CommonOneBtnData(
@@ -49,7 +49,9 @@ object ResponseAlertManger {
                 setOnShowListener {
                     isShowDialog = true
                 }
-            }.show()
+            }
+        } else {
+            null
         }
     }
 }

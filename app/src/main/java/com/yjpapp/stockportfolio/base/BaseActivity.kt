@@ -10,6 +10,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 
 abstract class BaseActivity<T : ViewDataBinding>(
@@ -17,7 +18,7 @@ abstract class BaseActivity<T : ViewDataBinding>(
 ) : AppCompatActivity() {
     private var _binding: T? = null
     val binding: T get() = _binding!!
-
+    private val networkConnectErrorDialog by lazy { ResponseAlertManger.getNetworkConnectErrorDialog(this@BaseActivity) }
     /**
      * 네트워크 연결에러 체크
      */
@@ -29,10 +30,20 @@ abstract class BaseActivity<T : ViewDataBinding>(
         object : ConnectivityManager.NetworkCallback() {
             override fun onLost(network: Network) {
                 super.onLost(network)
-                if (!isShowDialog) {
-                    ResponseAlertManger.showNetworkConnectErrorAlert(this@BaseActivity)
+                networkConnectErrorDialog?.let { dialog ->
+                    if (!dialog.isShowing) {
+                        dialog.show()
+                    }
                 }
-                isShowDialog = true
+            }
+
+            override fun onAvailable(network: Network) {
+                super.onAvailable(network)
+                networkConnectErrorDialog?.let { dialog ->
+                    if (dialog.isShowing) {
+                        dialog.hide()
+                    }
+                }
             }
         }
     }

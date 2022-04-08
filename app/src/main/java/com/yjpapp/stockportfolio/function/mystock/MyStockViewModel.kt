@@ -129,6 +129,7 @@ class MyStockViewModel @Inject constructor(
 
     fun refreshAllPrices() {
         if (!NetworkUtils.isInternetAvailable(context)) {
+            event(Event.ShowErrorToastMessage(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
             return
         }
         viewModelScope.launch {
@@ -182,6 +183,10 @@ class MyStockViewModel @Inject constructor(
     }
 
     suspend fun getCurrentPrice(subjectCode: String): MyStockEntity.CurrentPriceData {
+        if (!NetworkUtils.isInternetAvailable(context)) {
+            event(Event.ShowErrorToastMessage(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
+            return MyStockEntity.CurrentPriceData()
+        }
         val currentPrice = withContext(viewModelScope.coroutineContext) {
             getCurrentPriceJob(subjectCode = subjectCode)
         }
@@ -231,7 +236,7 @@ class MyStockViewModel @Inject constructor(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPostIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
                 return@launch
             }
             if (result.isSuccessful) {

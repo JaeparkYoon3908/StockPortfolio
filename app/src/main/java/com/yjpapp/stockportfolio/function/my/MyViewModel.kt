@@ -71,7 +71,7 @@ class MyViewModel @Inject constructor(
             event(Event.StartLoadingAnimation(""))
             val result = userRepository.deleteUserInfo()
             if (result == null) {
-                ResponseAlertManger.showNetworkConnectErrorAlert(context)
+                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
                 return@launch
             }
 
