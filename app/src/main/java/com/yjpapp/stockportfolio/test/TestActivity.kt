@@ -77,30 +77,8 @@ class TestActivity : AppCompatActivity() {
         override fun onClick(view: View) {
             when (view.id) {
                 R.id.button -> {
-                    lifecycleScope.launch {
-                        repeat(codeArray.size) {
-                            val url = "https://finance.naver.com/item/main.naver?code=${codeArray[it]}"
-                            val doc = withContext(Dispatchers.IO) {
-                                Jsoup.connect(url).get()
-                            }
-                            val blind = doc.select(".blind")
-                            if (blind.isNotEmpty() && blind.size > 19) {
-                                var currentPrice = blind[15].text()
-                                var dayToDayPrice = blind[16].text()
-                                var dayToDayPercent = blind[17].text()
-                                var yesterdayPrice = blind[18].text()
-                                if (blind.size == 34) {
-                                    currentPrice = blind[16].text()
-                                    dayToDayPrice = blind[17].text()
-                                    dayToDayPercent = blind[18].text()
-                                    yesterdayPrice = blind[19].text()
-
-                                }
-                                text.append(currentPrice).append("\n")
-                            }
-                        }
-                        binding.textView.text = text.toString()
-                    }
+                    showTestFragment()
+//                    testGetCurrentPrice()
 
                 }
                 R.id.button_2 -> {
@@ -110,25 +88,35 @@ class TestActivity : AppCompatActivity() {
             }
         }
     }
-    private var mToast: WeakReference<Toast>? = null
-    private val mLock = Any()
-    private fun showToast(context: Context?, text: CharSequence?, duration: Int) {
-        synchronized(mLock) {
-            if (mToast != null && mToast!!.get() != null) {
-                return
-            }
-            if (context == null) {
-                return
-            }
+    private fun showTestFragment() {
+        val testFragment = TestFragment()
+        supportFragmentManager.beginTransaction().add(R.id.fragmentContainerView, testFragment).commit()
 
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
-            lifecycleScope.launch {
-                delay(duration.toLong())
-                mToast = null
+    }
+    private fun testGetCurrentPrice() {
+        lifecycleScope.launch {
+            repeat(codeArray.size) {
+                val url = "https://finance.naver.com/item/main.naver?code=${codeArray[it]}"
+                val doc = withContext(Dispatchers.IO) {
+                    Jsoup.connect(url).get()
+                }
+                val blind = doc.select(".blind")
+                if (blind.isNotEmpty() && blind.size > 19) {
+                    var currentPrice = blind[15].text()
+                    var dayToDayPrice = blind[16].text()
+                    var dayToDayPercent = blind[17].text()
+                    var yesterdayPrice = blind[18].text()
+                    if (blind.size == 34) {
+                        currentPrice = blind[16].text()
+                        dayToDayPrice = blind[17].text()
+                        dayToDayPercent = blind[18].text()
+                        yesterdayPrice = blind[19].text()
+
+                    }
+                    text.append(currentPrice).append("\n")
+                }
             }
-            mToast = WeakReference<Toast>(toast)
+            binding.textView.text = text.toString()
         }
     }
-
 }

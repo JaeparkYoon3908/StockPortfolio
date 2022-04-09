@@ -10,6 +10,7 @@ import com.yjpapp.stockportfolio.test.model.UserMessage
 import com.yjpapp.stockportfolio.util.Event
 import com.yjpapp.stockportfolio.util.NetworkUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -24,8 +25,8 @@ class TestViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LatestNewsUiState(isLoading = true))
     val uiState: StateFlow<LatestNewsUiState> get() = _uiState
 
-    private val _liveData = MutableLiveData<String>()
-    val liveData: LiveData<String> get() = _liveData
+    private val _liveData = MutableLiveData<Int>()
+    val liveData: LiveData<Int> get() = _liveData
 
     private val _eventLiveData = MutableLiveData<Event<String>>()
     val eventLiveData: LiveData<Event<String>> get() = _eventLiveData
@@ -64,14 +65,19 @@ class TestViewModel @Inject constructor(
     }
 
     fun refreshNewLiveData(message: String) {
-        _liveData.value = message
+        _liveData.value = 0
     }
 
-    fun userMessageShownByLiveData() {
-
-    }
-
-    fun refreshNewSingleLiveData(message: String) {
-        _eventLiveData.value = Event(message)
+    fun testViewModelScope() {
+        viewModelScope.launch {
+            repeat(5) {
+                _liveData.value = it
+                delay(1000)
+            }
+//            for (i in 0 until 5) {
+//                _liveData.value = i
+//                delay(1000)
+//            }
+        }
     }
 }

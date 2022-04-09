@@ -1,13 +1,13 @@
 package com.yjpapp.stockportfolio.test
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.FragmentTestBinding
 
@@ -27,6 +27,13 @@ class TestFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.textView.text = testViewModel.activityDataSendText
+        initObserver(viewLifecycleOwner)
+        testViewModel.testViewModelScope()
+    }
+
+    private fun initObserver(owner: LifecycleOwner) {
+        testViewModel.liveData.observe(owner) {
+            binding.textView.text = it.toString()
+        }
     }
 }
