@@ -64,9 +64,7 @@ class IncomeNoteViewModel @Inject constructor(
 
                 result.body()?.let {
                     event(Event.FetchUIncomeNotes(it.income_note))
-                    if (page * pageSize >= it.page_info.total_elements) {
-                        hasNext = false
-                    }
+                    hasNext = page * pageSize < it.page_info.total_elements
                 }
             } catch (e: Exception) {
                 e.stackTrace
