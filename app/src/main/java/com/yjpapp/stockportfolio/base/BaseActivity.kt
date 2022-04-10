@@ -6,18 +6,11 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.network.ResponseAlertManger
 
-abstract class BaseActivity<T : ViewDataBinding>(
-    private val layoutId: Int
+abstract class BaseActivity(
 ) : AppCompatActivity() {
-    private var _binding: T? = null
-    val binding: T get() = _binding!!
     private val networkConnectErrorDialog by lazy { ResponseAlertManger.getNetworkConnectErrorDialog(this@BaseActivity) }
     /**
      * 네트워크 연결에러 체크
@@ -48,11 +41,6 @@ abstract class BaseActivity<T : ViewDataBinding>(
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = DataBindingUtil.setContentView(this, layoutId)
-    }
-
     @SuppressLint("MissingPermission")
     override fun onResume() {
         super.onResume()
@@ -66,7 +54,6 @@ abstract class BaseActivity<T : ViewDataBinding>(
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.unbind()
         connectivityManager.unregisterNetworkCallback(networkConnectedCallBack)
     }
 }

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
@@ -29,7 +30,9 @@ import java.util.*
  */
 
 @AndroidEntryPoint
-class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_splash) {
+class SplashActivity: BaseActivity() {
+    private var _binding: ActivitySplashBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: SplashViewModel by viewModels()
     private val permissionList = arrayOf<String>(
         Manifest.permission.READ_PHONE_STATE
@@ -42,6 +45,8 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(R.layout.activity_spla
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
+
         initData()
         startLoginActivity()
     }

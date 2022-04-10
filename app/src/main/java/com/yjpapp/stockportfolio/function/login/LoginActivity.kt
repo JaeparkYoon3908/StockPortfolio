@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.facebook.*
 import com.facebook.GraphRequest.GraphJSONObjectCallback
@@ -39,7 +40,6 @@ import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -49,8 +49,10 @@ import kotlinx.coroutines.launch
  * @since 2021.07
  */
 @AndroidEntryPoint
-class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
+class LoginActivity : BaseActivity() {
     private val TAG = LoginActivity::class.simpleName
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
     private val gso by lazy {
         GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -89,6 +91,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         initData()
     }
 

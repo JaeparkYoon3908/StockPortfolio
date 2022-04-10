@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
@@ -19,7 +20,6 @@ import com.yjpapp.stockportfolio.function.memo.MemoListFragment
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -29,12 +29,14 @@ import kotlinx.coroutines.launch
  * @since 2020.12.27
  */
 @AndroidEntryPoint
-class MemoReadWriteActivity :
-    BaseActivity<ActivityMemoReadWriteBinding>(R.layout.activity_memo_read_write) {
+class MemoReadWriteActivity : BaseActivity() {
+    private var _binding: ActivityMemoReadWriteBinding? = null
+    private val binding get() = _binding!!
     private val activityViewModel: MemoReadWriteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_memo_read_write)
         initView()
         initData()
     }

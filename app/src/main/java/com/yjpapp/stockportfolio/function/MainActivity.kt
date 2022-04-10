@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.function
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.plusAssign
 import androidx.navigation.ui.setupWithNavController
@@ -25,11 +26,14 @@ import dagger.hilt.android.AndroidEntryPoint
  * @since 2020.12
  */
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity : BaseActivity() {
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         initData()
         initLayout()
     }
