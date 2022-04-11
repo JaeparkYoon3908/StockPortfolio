@@ -57,7 +57,7 @@ class MyStockViewModel @Inject constructor(
      */
     init {
         myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
-        refreshAllPrices()
+        if (myStockInfoList.isNotEmpty()) refreshAllPrices()
         calculateTopData()
     }
 
