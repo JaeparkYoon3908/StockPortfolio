@@ -25,8 +25,8 @@ class TestViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LatestNewsUiState(isLoading = true))
     val uiState: StateFlow<LatestNewsUiState> get() = _uiState
 
-    private val _liveData = MutableLiveData<Int>()
-    val liveData: LiveData<Int> get() = _liveData
+    val _liveData = MutableLiveData<Int>()
+//    val liveData: LiveData<Int> get() = _liveData
 
     private val _eventLiveData = MutableLiveData<Event<String>>()
     val eventLiveData: LiveData<Event<String>> get() = _eventLiveData

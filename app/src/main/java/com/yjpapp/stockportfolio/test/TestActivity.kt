@@ -35,8 +35,9 @@ class TestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = DataBindingUtil.setContentView(this, R.layout.activity_test)
-
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_test) //dataBinding
+//        _binding = ActivityTestBinding.inflate(layoutInflater) //viewBinding
+//        setContentView(binding.root)
         initData()
     }
 
@@ -46,6 +47,7 @@ class TestActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 testViewModel.uiState.collect { uiState ->
+
 
                 }
             }

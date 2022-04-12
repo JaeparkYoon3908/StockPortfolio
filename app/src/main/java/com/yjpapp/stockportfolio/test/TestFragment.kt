@@ -21,7 +21,8 @@ class TestFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test, container, false)
+//        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test, container, false)
+        _binding = FragmentTestBinding.inflate(inflater, container, false) //viewBinding
         return binding.root
     }
 
@@ -32,7 +33,7 @@ class TestFragment: Fragment() {
     }
 
     private fun initObserver(owner: LifecycleOwner) {
-        testViewModel.liveData.observe(owner) {
+        testViewModel._liveData.observe(owner) {
             binding.textView.text = it.toString()
         }
     }

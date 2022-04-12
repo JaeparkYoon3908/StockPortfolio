@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 /**
  * 메모리스트 화면
- *
+ * 디자인 패턴 : MVVM
  * @author Yoon Jae-park
  * @since 2020.11
  */

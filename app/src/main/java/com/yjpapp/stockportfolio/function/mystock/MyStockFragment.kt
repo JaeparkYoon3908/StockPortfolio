@@ -61,11 +61,11 @@ import de.charlex.compose.rememberRevealState
 import de.charlex.compose.reset
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * 1.5 신규버전 업데이트 기능 (나의 주식)
+ * 디자인 패턴 : MVVM
  * @author Yoon Jae-park
  * @since 2022.02
  */
@@ -128,9 +128,7 @@ class MyStockFragment : Fragment() {
                 if (myStockViewModel.myStockInfoList.size >= 10) {
                     Toasty.info(
                         requireContext(),
-                        getString(
-                            R.string.MyStockFragment_Notice_Max_List
-                        ),
+                        getString(R.string.MyStockFragment_Notice_Max_List),
                         Toasty.LENGTH_LONG
                     ).show()
                     return false
@@ -245,7 +243,6 @@ class MyStockFragment : Fragment() {
                     )
                     dialog.dismiss()
                 }
-
             }
         ).show(requireActivity().supportFragmentManager, TAG)
     }

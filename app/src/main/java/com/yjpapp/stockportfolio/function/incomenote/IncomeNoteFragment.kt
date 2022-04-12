@@ -25,13 +25,12 @@ import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 /**
  * 수익노트 화면
- * 디자인 패턴 : MVP
+ * 디자인 패턴 : MVVM
  * @author Yoon Jae-park
  * @since 2020.08
  */
