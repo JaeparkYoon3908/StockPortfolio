@@ -2,12 +2,15 @@ package com.yjpapp.stockportfolio.common.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.LinearInterpolator
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.CommonLoadingViewBinding
 
@@ -17,28 +20,30 @@ class CommonLoadingView @JvmOverloads constructor(
     private var binding =
         CommonLoadingViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    enum class LoadingType {
-        NONE,
-        PAGE,
-        SELLER_PAGE
+    enum class LoadingColorType {
+        WHITE,
+        BLACK
     }
 
     private var mAnimation: Animation? = null
 
     init {
-        setLoadingType(LoadingType.SELLER_PAGE)
+        setLoadingImageColor(LoadingColorType.WHITE) //default
         setTouchEnable(false)
     }
 
     /*------------------------------------------------------------------------------------------------------------------------------
 	 * Public Method
-	 ------------------------------------------------------------------------------------------------------------------------------ */
-    fun setLoadingType(animationType: LoadingType?) {
-//        var loadingResId: Int = R.drawable.ic_loading
-//        if (animationType == LoadingType.PAGE) {
-        val loadingResId = R.drawable.ic_seller_page_loading
-//        }
-        binding.loadingImage.setBackgroundResource(loadingResId)
+	 -----------------------a------------------------------------------------------------------------------------------------------- */
+    fun setLoadingImageColor(animationColorType: LoadingColorType) {
+        when (animationColorType) {
+            LoadingColorType.WHITE -> {
+                binding.loadingImage.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#ffffffff"))
+            }
+            LoadingColorType.BLACK -> {
+                binding.loadingImage.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#ff000000"))
+            }
+        }
     }
 
     /**

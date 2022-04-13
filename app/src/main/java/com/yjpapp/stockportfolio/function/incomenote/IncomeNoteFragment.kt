@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
+import com.yjpapp.stockportfolio.common.widget.CommonLoadingView
 import com.yjpapp.stockportfolio.databinding.FragmentIncomeNoteBinding
 import com.yjpapp.stockportfolio.extension.OnSingleClickListener
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
@@ -113,7 +114,7 @@ class IncomeNoteFragment: Fragment() {
             btnDate.setOnClickListener(onClickListener)
             btnSearchAll.setOnClickListener(onClickListener)
         }
-
+        binding.ivLoading.setLoadingImageColor(CommonLoadingView.LoadingColorType.BLACK)
         initRecyclerView()
     }
 
@@ -366,6 +367,15 @@ class IncomeNoteFragment: Fragment() {
         }
         is IncomeNoteViewModel.Event.ResponseServerError -> {
             Toasty.error(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
+        }
+        is IncomeNoteViewModel.Event.StartAndStopLoadingAnimation -> {
+            if (event.isAnimationStart) {
+                binding.ivLoading.visibility = View.VISIBLE
+                binding.ivLoading.startAnimation()
+            } else {
+                binding.ivLoading.visibility = View.GONE
+                binding.ivLoading.stopAnimation()
+            }
         }
     }
 }

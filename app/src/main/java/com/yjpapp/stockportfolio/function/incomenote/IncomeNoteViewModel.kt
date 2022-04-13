@@ -43,6 +43,7 @@ class IncomeNoteViewModel @Inject constructor(
     var hasNext = true
 
     fun requestGetIncomeNote() {
+        event(Event.StartAndStopLoadingAnimation(true))
         val params = HashMap<String, String>()
         params["page"] = page.toString()
         params["size"] = pageSize.toString()
@@ -66,6 +67,7 @@ class IncomeNoteViewModel @Inject constructor(
                     event(Event.FetchUIncomeNotes(it.income_note))
                     hasNext = page * pageSize < it.page_info.total_elements
                 }
+                event(Event.StartAndStopLoadingAnimation(false))
             } catch (e: Exception) {
                 e.stackTrace
             }
@@ -191,5 +193,6 @@ class IncomeNoteViewModel @Inject constructor(
         data class IncomeNoteAddSuccess(val data: RespIncomeNoteListInfo.IncomeNoteInfo): Event()
         data class FetchUIncomeNotes(val data: ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>): Event()
         data class ResponseServerError(val msg: String): Event()
+        data class StartAndStopLoadingAnimation(val isAnimationStart: Boolean): Event()
     }
 }
