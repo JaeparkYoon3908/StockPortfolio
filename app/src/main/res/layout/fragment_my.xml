@@ -49,7 +49,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/img_login_type_icon"
                 android:layout_width="@dimen/common_35dp"
                 android:layout_height="@dimen/common_35dp"
