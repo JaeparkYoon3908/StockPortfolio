@@ -365,12 +365,12 @@ class LoginActivity : BaseActivity() {
     private fun startLoadingAnimation() {
         binding.viewMasking.visibility = View.VISIBLE
         binding.ivLoading.visibility = View.VISIBLE
-        binding.ivLoading.startAnimation()
+//        binding.ivLoading.startAnimation()
     }
 
     private fun stopLoadingAnimation() {
         binding.viewMasking.visibility = View.GONE
         binding.ivLoading.visibility = View.GONE
-        binding.ivLoading.stopAnimation()
+//        binding.ivLoading.stopAnimation()
     }
 }

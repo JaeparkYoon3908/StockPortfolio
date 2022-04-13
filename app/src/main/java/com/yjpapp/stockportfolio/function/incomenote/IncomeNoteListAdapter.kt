@@ -2,11 +2,14 @@ package com.yjpapp.stockportfolio.function.incomenote
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.common.widget.CommonLoadingView
 import com.yjpapp.stockportfolio.databinding.ItemIncomeNoteListBinding
+import com.yjpapp.stockportfolio.databinding.ItemLoadingBinding
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.RecyclerSwipeAdapter
@@ -22,29 +25,62 @@ import java.util.*
 class IncomeNoteListAdapter(
     var incomeNoteListInfo: ArrayList<RespIncomeNoteListInfo.IncomeNoteInfo>,
     var callBack: CallBack?
-) : RecyclerSwipeAdapter<IncomeNoteListAdapter.IncomeNoteListViewHolder>()
+) : RecyclerSwipeAdapter<RecyclerView.ViewHolder>()
 {
-    private lateinit var mContext: Context
+    private val VIEW_TYPE_LIST = 0
+    private val VIEW_TYPE_LOADING = 1
 
+    private lateinit var mContext: Context
     private val swipeItemManger = SwipeItemRecyclerMangerImpl(this)
+    var isLoadingAnimationStart = false
 
     inner class IncomeNoteListViewHolder(var binding: ItemIncomeNoteListBinding) : RecyclerView.ViewHolder(binding.root) {}
+    inner class LoadingViewHolder(var binding: ItemLoadingBinding) : RecyclerView.ViewHolder(binding.root) {}
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IncomeNoteListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         mContext = parent.context
-        val binding: ItemIncomeNoteListBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(parent.context),
-            R.layout.item_income_note_list,
-            parent,
-            false
-        )
-        return IncomeNoteListViewHolder(binding)
+        when (viewType) {
+            VIEW_TYPE_LOADING -> {
+                val binding: ItemLoadingBinding = DataBindingUtil.inflate(
+                    LayoutInflater.from(parent.context),
+                    R.layout.item_loading,
+                    parent,
+                    false
+                )
+                return LoadingViewHolder(binding)
+            }
+            else -> {
+                val binding: ItemIncomeNoteListBinding = DataBindingUtil.inflate(
+                    LayoutInflater.from(parent.context),
+                    R.layout.item_income_note_list,
+                    parent,
+                    false
+                )
+                return IncomeNoteListViewHolder(binding)
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: IncomeNoteListViewHolder, position: Int) {
-        holder.apply {
-            bindDataList(holder, position)
-            bindSwipeLayout(holder, position)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is LoadingViewHolder -> {
+                holder.apply {
+                    binding.ivLoading.setLoadingImageColor(CommonLoadingView.LoadingColorType.BLACK)
+                    if (isLoadingAnimationStart) {
+                        binding.ivLoading.startAnimation()
+                        binding.ivLoading.visibility = View.VISIBLE
+                    } else {
+                        binding.ivLoading.stopAnimation()
+                        binding.ivLoading.visibility = View.GONE
+                    }
+                }
+            }
+            is IncomeNoteListViewHolder -> {
+                holder.apply {
+                    bindDataList(holder, position)
+                    bindSwipeLayout(holder, position)
+                }
+            }
         }
     }
 
@@ -95,5 +131,13 @@ class IncomeNoteListAdapter(
 
     override fun getItemCount(): Int {
         return incomeNoteListInfo.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount - 1) {
+            VIEW_TYPE_LOADING
+        } else {
+            VIEW_TYPE_LIST
+        }
     }
 }

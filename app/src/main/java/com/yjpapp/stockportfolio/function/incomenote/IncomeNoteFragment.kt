@@ -279,9 +279,12 @@ class IncomeNoteFragment: Fragment() {
     }
 
     private val onScrollListener = object : RecyclerView.OnScrollListener() {
+        @SuppressLint("NotifyDataSetChanged")
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             if (viewModel.hasNext) {
+                incomeNoteListAdapter.isLoadingAnimationStart = true
+                incomeNoteListAdapter.notifyDataSetChanged()
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val totalItemCount = layoutManager.itemCount
                 val lastVisible = layoutManager.findLastCompletelyVisibleItemPosition()
@@ -363,6 +366,7 @@ class IncomeNoteFragment: Fragment() {
             event.data.forEach {
                 incomeNoteListAdapter.incomeNoteListInfo.add(it)
             }
+            incomeNoteListAdapter.isLoadingAnimationStart = false
             incomeNoteListAdapter.notifyDataSetChanged()
         }
         is IncomeNoteViewModel.Event.ResponseServerError -> {
@@ -371,10 +375,8 @@ class IncomeNoteFragment: Fragment() {
         is IncomeNoteViewModel.Event.StartAndStopLoadingAnimation -> {
             if (event.isAnimationStart) {
                 binding.ivLoading.visibility = View.VISIBLE
-                binding.ivLoading.startAnimation()
             } else {
                 binding.ivLoading.visibility = View.GONE
-                binding.ivLoading.stopAnimation()
             }
         }
     }

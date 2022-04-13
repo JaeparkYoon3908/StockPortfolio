@@ -30,6 +30,7 @@ class CommonLoadingView @JvmOverloads constructor(
     init {
         setLoadingImageColor(LoadingColorType.WHITE) //default
         setTouchEnable(false)
+        startAnimation()
     }
 
     /*------------------------------------------------------------------------------------------------------------------------------
