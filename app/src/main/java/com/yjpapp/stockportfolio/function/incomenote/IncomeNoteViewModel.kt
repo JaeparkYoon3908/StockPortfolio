@@ -14,7 +14,6 @@ import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
-import com.yjpapp.stockportfolio.network.ResponseAlertManger
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,7 +54,7 @@ class IncomeNoteViewModel @Inject constructor(
             try {
                 val result = incomeNoteRepository.requestGetIncomeNote(params)
                 if (result == null) {
-                    ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
+                    event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                     return@launch
                 }
                 if (!result.isSuccessful) {
@@ -83,7 +82,7 @@ class IncomeNoteViewModel @Inject constructor(
         CoroutineScope(Dispatchers.Main).launch {
             val result = incomeNoteRepository.requestTotalGain(params)
             if (result == null) {
-                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
+                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
             }
             if (!result.isSuccessful) {
@@ -101,7 +100,7 @@ class IncomeNoteViewModel @Inject constructor(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestDeleteIncomeNote(id)
             if (result == null) {
-                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
+                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
             }
             if (!result.isSuccessful) {
@@ -117,7 +116,7 @@ class IncomeNoteViewModel @Inject constructor(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPutIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
-                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
+                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
             }
             if (!result.isSuccessful) {
@@ -134,7 +133,7 @@ class IncomeNoteViewModel @Inject constructor(
         viewModelScope.launch {
             val result = incomeNoteRepository.requestPostIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
-                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
+                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
             }
             if (!result.isSuccessful) {

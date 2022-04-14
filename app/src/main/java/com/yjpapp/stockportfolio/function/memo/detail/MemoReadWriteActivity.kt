@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
  */
 @AndroidEntryPoint
 class MemoReadWriteActivity : BaseActivity() {
+    private val TAG = MemoReadWriteActivity::class.java.simpleName
     private var _binding: ActivityMemoReadWriteBinding? = null
     private val binding get() = _binding!!
     private val activityViewModel: MemoReadWriteViewModel by viewModels()
@@ -94,7 +95,7 @@ class MemoReadWriteActivity : BaseActivity() {
                     btnListener = { view: View, dialog: CommonOneBtnDialog ->
                         dialog.dismiss()
                     }
-                )).show()
+                )).show(supportFragmentManager, TAG)
             }
         }
     }

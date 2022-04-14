@@ -17,10 +17,9 @@ import com.yjpapp.stockportfolio.databinding.FragmentMyBinding
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.function.login.LoginActivity
+import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.test.TestActivity
 import dagger.hilt.android.AndroidEntryPoint
-import es.dmoral.toasty.Toasty
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -31,6 +30,7 @@ import kotlinx.coroutines.launch
  */
 @AndroidEntryPoint
 class MyFragment : Fragment() {
+    private val TAG = MyFragment::class.java.simpleName
     private var _binding: FragmentMyBinding? = null
     private val binding: FragmentMyBinding get() = _binding!!
     private val myViewModel: MyViewModel by viewModels()
@@ -89,7 +89,12 @@ class MyFragment : Fragment() {
                 mainActivity?.stopLoadingAnimation()
             }
             is MyViewModel.Event.ResponseServerError -> {
-                Toasty.error(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
+                CommonDialogManager.showCommonOneBtnDialog(
+                    requireContext(),
+                    requireActivity().supportFragmentManager,
+                    TAG,
+                    event.msg
+                )
             }
         }
     }

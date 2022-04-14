@@ -22,7 +22,7 @@ import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePicker
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
-import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
@@ -313,19 +313,19 @@ class IncomeNoteFragment: Fragment() {
         is IncomeNoteViewModel.Event.SendTotalGainData -> {
             val totalGainNumber = event.data.total_price
             val totalGainPercent = event.data.total_percent
-            binding.let {
+            binding.apply {
                 val totalRealizationGainsLossesNumber =
                     StockUtils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
-                it.txtTotalRealizationGainsLossesData.text =
+                txtTotalRealizationGainsLossesData.text =
                     "${StockConfig.koreaMoneySymbol}$totalRealizationGainsLossesNumber"
                 if (totalGainPercent >= 0) {
-                    it.txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_e52b4e))
-                    it.txtTotalRealizationGainsLossesPercent.setTextColor(requireContext().getColor(R.color.color_e52b4e))
+                    txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_e52b4e))
+                    txtTotalRealizationGainsLossesPercent.setTextColor(requireContext().getColor(R.color.color_e52b4e))
                 } else {
-                    it.txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_4876c7))
-                    it.txtTotalRealizationGainsLossesPercent.setTextColor(requireContext().getColor(R.color.color_4876c7))
+                    txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_4876c7))
+                    txtTotalRealizationGainsLossesPercent.setTextColor(requireContext().getColor(R.color.color_4876c7))
                 }
-                it.txtTotalRealizationGainsLossesPercent.text =
+                txtTotalRealizationGainsLossesPercent.text =
                     StockUtils.getRoundsPercentNumber(totalGainPercent)
             }
         }
@@ -356,8 +356,10 @@ class IncomeNoteFragment: Fragment() {
                 incomeNoteListAdapter.notifyDataSetChanged()
                 viewModel.requestTotalGain()
             } else {
-                ResponseAlertManger.showErrorAlert(
+                CommonDialogManager.showCommonOneBtnDialog(
                     requireContext(),
+                    requireActivity().supportFragmentManager,
+                    TAG,
                     getString(R.string.Error_Msg_Normal)
                 )
             }
@@ -370,7 +372,12 @@ class IncomeNoteFragment: Fragment() {
             incomeNoteListAdapter.notifyDataSetChanged()
         }
         is IncomeNoteViewModel.Event.ResponseServerError -> {
-            Toasty.error(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
+            CommonDialogManager.showCommonOneBtnDialog(
+                requireContext(),
+                requireActivity().supportFragmentManager,
+                TAG,
+                event.msg
+            )
         }
         is IncomeNoteViewModel.Event.StartAndStopLoadingAnimation -> {
             if (event.isAnimationStart) {

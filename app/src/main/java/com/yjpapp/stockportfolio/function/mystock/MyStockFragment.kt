@@ -52,7 +52,7 @@ import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockSellInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
-import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import de.charlex.compose.RevealDirection
@@ -160,7 +160,12 @@ class MyStockFragment : Fragment() {
                 myStockViewModel.isCurrentPriceRefreshing = false
             }
             is MyStockViewModel.Event.ResponseServerError -> {
-                Toasty.error(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
+                CommonDialogManager.showCommonOneBtnDialog(
+                    requireContext(),
+                    requireActivity().supportFragmentManager,
+                    TAG,
+                    event.msg
+                )
             }
             else -> {}
         }
@@ -181,7 +186,13 @@ class MyStockFragment : Fragment() {
                         val currentPriceData = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
                         currentPriceData.run {
                             if (currentPrice.isEmpty() || yesterdayPrice.isEmpty()) {
-                                ResponseAlertManger.showErrorAlert(requireContext(), getString(R.string.Error_Msg_Network_Connect_Exception))
+                                CommonDialogManager
+                                    .showCommonOneBtnDialog(
+                                        requireContext(),
+                                        requireActivity().supportFragmentManager,
+                                        TAG,
+                                        getString(R.string.Error_Msg_Network_Connect_Exception)
+                                    )
                                 return@launch
                             }
                         }

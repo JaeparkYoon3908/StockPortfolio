@@ -5,10 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
 import com.yjpapp.stockportfolio.util.PatternUtils
@@ -51,7 +52,8 @@ class MyViewModel @Inject constructor(
                         // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
                         // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
                         event(Event.StopLoadingAnimation(""))
-                        ResponseAlertManger.showErrorAlert(context, message)
+                        event(Event.ResponseServerError(message))
+
                     }
                     override fun onError(errorCode: Int, message: String) {
                         // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
@@ -71,7 +73,7 @@ class MyViewModel @Inject constructor(
             event(Event.StartLoadingAnimation(""))
             val result = userRepository.deleteUserInfo()
             if (result == null) {
-                ResponseAlertManger.getNetworkConnectErrorDialog(context)?.show()
+                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
             }
 
@@ -89,7 +91,7 @@ class MyViewModel @Inject constructor(
                         }
                         override fun onFailure(httpStatus: Int, message: String) {
                             event(Event.StopLoadingAnimation(""))
-                            ResponseAlertManger.showErrorAlert(context, message)
+                            event(Event.ResponseServerError(message))
                         }
                         override fun onError(errorCode: Int, message: String) {
                             onFailure(errorCode, message)

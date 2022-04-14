@@ -121,7 +121,11 @@ class IncomeNoteListAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return incomeNoteListInfo[position].hashCode().toLong()
+        return if (position == itemCount - 1) {
+            hashCode().toLong()
+        } else {
+            incomeNoteListInfo[position].hashCode().toLong()
+        }
     }
 
     interface CallBack {
@@ -130,7 +134,7 @@ class IncomeNoteListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return incomeNoteListInfo.size
+        return incomeNoteListInfo.size + 1
     }
 
     override fun getItemViewType(position: Int): Int {

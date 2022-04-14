@@ -1,7 +1,6 @@
 package com.yjpapp.stockportfolio.function.login
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -36,7 +35,7 @@ import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
-import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +50,7 @@ import kotlinx.coroutines.launch
  */
 @AndroidEntryPoint
 class LoginActivity : BaseActivity() {
-    private val TAG = LoginActivity::class.simpleName
+    private val TAG = LoginActivity::class.java.simpleName
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
     private val gso by lazy {
@@ -71,7 +70,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private val loginCallBack = object : LoginCallBack {
-        override fun onClick(view: View) { //            startMainActivity()
+        override fun onClick(view: View) {
             binding.run {
                 when (view.id) {
                     btnGoogleLogin.id -> {
@@ -207,7 +206,12 @@ class LoginActivity : BaseActivity() {
                     // Please refer to the GoogleSignInStatusCodes class reference for more information.
                     e.message?.let {
                         val msg = "${getString(R.string.Error_Msg_Normal)} code : ${e.statusCode}"
-                        ResponseAlertManger.showErrorAlert(this, it)
+                        CommonDialogManager.showCommonOneBtnDialog(
+                            this,
+                            supportFragmentManager,
+                            TAG,
+                            it
+                        )
                     }
                     StockLog.e(TAG, "signInResult:failed code=" + e.statusCode)
                 }

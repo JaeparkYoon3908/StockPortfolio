@@ -7,11 +7,11 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.appcompat.app.AppCompatActivity
-import com.yjpapp.stockportfolio.network.ResponseAlertManger
+import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 
-abstract class BaseActivity(
-) : AppCompatActivity() {
-    private val networkConnectErrorDialog by lazy { ResponseAlertManger.getNetworkConnectErrorDialog(this@BaseActivity) }
+abstract class BaseActivity : AppCompatActivity() {
+    private val TAG = BaseActivity::class.java.simpleName
     /**
      * 네트워크 연결에러 체크
      */
@@ -23,20 +23,16 @@ abstract class BaseActivity(
         object : ConnectivityManager.NetworkCallback() {
             override fun onLost(network: Network) {
                 super.onLost(network)
-                networkConnectErrorDialog?.let { dialog ->
-                    if (!dialog.isShowing) {
-                        dialog.show()
-                    }
-                }
+                CommonDialogManager.showCommonOneBtnDialog(
+                this@BaseActivity,
+                    supportFragmentManager,
+                    TAG,
+                    getString(R.string.Error_Msg_Network_Connect_Exception)
+                )
             }
 
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-                networkConnectErrorDialog?.let { dialog ->
-                    if (dialog.isShowing) {
-                        dialog.hide()
-                    }
-                }
             }
         }
     }
