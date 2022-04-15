@@ -197,6 +197,7 @@ class MyStockFragment : Fragment() {
                         val currentPriceData = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
                         currentPriceData.run {
                             if (currentPrice.isEmpty() || yesterdayPrice.isEmpty()) {
+
                                 CommonDialogManager
                                     .showCommonOneBtnDialog(
                                         requireContext(),

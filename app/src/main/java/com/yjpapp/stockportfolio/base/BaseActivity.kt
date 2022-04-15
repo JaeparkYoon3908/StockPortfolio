@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -33,27 +34,21 @@ abstract class BaseActivity : AppCompatActivity() {
             )
         )
     }
-    private var isShowDialog = false
     private val networkConnectedCallBack by lazy {
         object : ConnectivityManager.NetworkCallback() {
             override fun onLost(network: Network) {
                 super.onLost(network)
-                if (networkDisConnectDialogFragment.dialog == null) {
-                    return
-                }
                 if (networkDisConnectDialogFragment.dialog?.isShowing == true) {
                     return
                 }
-                if (!networkDisConnectDialogFragment.isRemoving) {
-                    return
-                }
+
                 networkDisConnectDialogFragment.show(supportFragmentManager, TAG)
 
             }
 
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-                if (networkDisConnectDialogFragment.dialog != null) {
+                if (networkDisConnectDialogFragment.dialog == null) {
                     return
                 }
                 if (networkDisConnectDialogFragment.dialog?.isShowing == false) {
@@ -62,7 +57,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 if (networkDisConnectDialogFragment.isRemoving) {
                     return
                 }
-                networkDisConnectDialogFragment.dismiss()
+                networkDisConnectDialogFragment.dialog?.dismiss()
             }
         }
     }
@@ -70,7 +65,6 @@ abstract class BaseActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     override fun onResume() {
         super.onResume()
-        isShowDialog = false
         val networkRequest = NetworkRequest.Builder() // addTransportType : 주어진 전송 요구 사항을 빌더에 추가
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR) // TRANSPORT_CELLULAR : 이 네트워크가 셀룰러 전송을 사용함을 나타냅니다.
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI) // TRANSPORT_WIFI : 이 네트워크가 Wi-Fi 전송을 사용함을 나타냅니다.
