@@ -10,7 +10,6 @@ import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.repository.MyRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
 import com.yjpapp.stockportfolio.util.PatternUtils

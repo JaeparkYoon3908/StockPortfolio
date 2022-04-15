@@ -35,7 +35,6 @@ import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
-import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
@@ -120,22 +119,7 @@ class LoginActivity : BaseActivity() {
     private fun handleEvent(event: LoginViewModel.Event) {
         when (event) {
             is LoginViewModel.Event.ResponseServerError -> {
-                if (viewModel.isDialogShowing) {
-                    return
-                }
-                val fragmentDialog = CommonOneBtnDialog(
-                    this@LoginActivity,
-                    CommonOneBtnDialog.CommonOneBtnData(
-                        noticeText = event.msg,
-                        btnText = getString(R.string.Common_Ok),
-                        btnListener = { _: View, dialog ->
-                            dialog.dismiss()
-                            viewModel.isDialogShowing = false
-                        }
-                    )
-                )
-                fragmentDialog.show(supportFragmentManager, TAG)
-                viewModel.isDialogShowing = true
+                showOneBtnDialog(event.msg)
             }
             is LoginViewModel.Event.ResponseDeleteNaverUserInfo -> {
                 stopLoadingAnimation()
@@ -221,12 +205,8 @@ class LoginActivity : BaseActivity() {
                     // Please refer to the GoogleSignInStatusCodes class reference for more information.
                     e.message?.let {
                         val msg = "${getString(R.string.Error_Msg_Normal)} code : ${e.statusCode}"
-                        CommonDialogManager.showCommonOneBtnDialog(
-                            this,
-                            supportFragmentManager,
-                            TAG,
-                            it
-                        )
+
+                        showOneBtnDialog(it)
                     }
                     StockLog.e(TAG, "signInResult:failed code=" + e.statusCode)
                 }
@@ -391,5 +371,24 @@ class LoginActivity : BaseActivity() {
         binding.viewMasking.visibility = View.GONE
         binding.ivLoading.visibility = View.GONE
 //        binding.ivLoading.stopAnimation()
+    }
+
+    private fun showOneBtnDialog(msg: String) {
+        if (viewModel.isDialogShowing) {
+            return
+        }
+        val fragmentDialog = CommonOneBtnDialog(
+            this@LoginActivity,
+            CommonOneBtnDialog.CommonOneBtnData(
+                noticeText = msg,
+                btnText = getString(R.string.Common_Ok),
+                btnListener = { _: View, dialog ->
+                    dialog.dismiss()
+                    viewModel.isDialogShowing = false
+                }
+            )
+        )
+        fragmentDialog.show(supportFragmentManager, TAG)
+        viewModel.isDialogShowing = true
     }
 }

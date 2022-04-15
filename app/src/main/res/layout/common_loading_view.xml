@@ -3,9 +3,7 @@
     android:id="@+id/mainContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/common_10dp"
-    android:layout_marginBottom="@dimen/common_10dp">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/loading_image"

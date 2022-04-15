@@ -11,7 +11,6 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 
 abstract class BaseActivity : AppCompatActivity() {

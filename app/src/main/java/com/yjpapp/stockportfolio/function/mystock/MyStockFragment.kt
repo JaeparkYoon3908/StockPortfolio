@@ -52,7 +52,6 @@ import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockSellInputDialog
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
-import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -161,22 +160,7 @@ class MyStockFragment : Fragment() {
                 myStockViewModel.isCurrentPriceRefreshing = false
             }
             is MyStockViewModel.Event.ResponseServerError -> {
-                if (myStockViewModel.isDialogShowing) {
-                    return
-                }
-                val fragmentDialog = CommonOneBtnDialog(
-                    requireContext(),
-                    CommonOneBtnDialog.CommonOneBtnData(
-                        noticeText = event.msg,
-                        btnText = getString(R.string.Common_Ok),
-                        btnListener = { _: View, dialog ->
-                            dialog.dismiss()
-                            myStockViewModel.isDialogShowing = false
-                        }
-                    )
-                )
-                fragmentDialog.show(requireActivity().supportFragmentManager, TAG)
-                myStockViewModel.isDialogShowing = true
+                showOneBtnDialog(event.msg)
             }
             else -> {}
         }
@@ -197,14 +181,7 @@ class MyStockFragment : Fragment() {
                         val currentPriceData = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)
                         currentPriceData.run {
                             if (currentPrice.isEmpty() || yesterdayPrice.isEmpty()) {
-
-                                CommonDialogManager
-                                    .showCommonOneBtnDialog(
-                                        requireContext(),
-                                        requireActivity().supportFragmentManager,
-                                        TAG,
-                                        getString(R.string.Error_Msg_Network_Connect_Exception)
-                                    )
+                                showOneBtnDialog(getString(R.string.Error_Msg_Network_Connect_Exception))
                                 return@launch
                             }
                         }
@@ -268,6 +245,25 @@ class MyStockFragment : Fragment() {
                 }
             }
         ).show(requireActivity().supportFragmentManager, TAG)
+    }
+
+    private fun showOneBtnDialog(msg: String) {
+        if (myStockViewModel.isDialogShowing) {
+            return
+        }
+        val fragmentDialog = CommonOneBtnDialog(
+            requireContext(),
+            CommonOneBtnDialog.CommonOneBtnData(
+                noticeText = msg,
+                btnText = getString(R.string.Common_Ok),
+                btnListener = { _: View, dialog ->
+                    dialog.dismiss()
+                    myStockViewModel.isDialogShowing = false
+                }
+            )
+        )
+        fragmentDialog.show(requireActivity().supportFragmentManager, TAG)
+        myStockViewModel.isDialogShowing = true
     }
     /**
      * Compose 영역

@@ -14,7 +14,6 @@ import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
-import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.repository.MyStockRepository
 import com.yjpapp.stockportfolio.repository.PreferenceRepository

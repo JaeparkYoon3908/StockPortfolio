@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yjpapp.stockportfolio.R
@@ -11,6 +13,7 @@ import com.yjpapp.stockportfolio.common.widget.CommonLoadingView
 import com.yjpapp.stockportfolio.databinding.ItemIncomeNoteListBinding
 import com.yjpapp.stockportfolio.databinding.ItemLoadingBinding
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
+import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.RecyclerSwipeAdapter
 import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
@@ -27,6 +30,7 @@ class IncomeNoteListAdapter(
     var callBack: CallBack?
 ) : RecyclerSwipeAdapter<RecyclerView.ViewHolder>()
 {
+    private val TAG = IncomeNoteListAdapter::class.java.simpleName
     private val VIEW_TYPE_LIST = 0
     private val VIEW_TYPE_LOADING = 1
 
@@ -67,11 +71,13 @@ class IncomeNoteListAdapter(
                 holder.apply {
                     binding.ivLoading.setLoadingImageColor(CommonLoadingView.LoadingColorType.BLACK)
                     if (isLoadingAnimationStart) {
+                        binding.consLoading.visibility = View.VISIBLE
+//                        binding.ivLoading.visibility = View.VISIBLE
                         binding.ivLoading.startAnimation()
-                        binding.ivLoading.visibility = View.VISIBLE
                     } else {
-                        binding.ivLoading.stopAnimation()
-                        binding.ivLoading.visibility = View.GONE
+                        binding.consLoading.visibility = View.VISIBLE
+//                        binding.ivLoading.visibility = View.GONE
+                        binding.ivLoading.startAnimation()
                     }
                 }
             }
@@ -122,7 +128,7 @@ class IncomeNoteListAdapter(
 
     override fun getItemId(position: Int): Long {
         return if (position == itemCount - 1) {
-            hashCode().toLong()
+            position.hashCode().toLong()
         } else {
             incomeNoteListInfo[position].hashCode().toLong()
         }

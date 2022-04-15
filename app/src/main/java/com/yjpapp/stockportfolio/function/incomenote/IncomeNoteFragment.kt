@@ -22,7 +22,6 @@ import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteDatePicker
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
-import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
 import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -323,16 +322,12 @@ class IncomeNoteFragment: Fragment() {
                     if (totalGainPercent >= 0) {
                         txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_e52b4e))
                         txtTotalRealizationGainsLossesPercent.setTextColor(
-                            requireContext().getColor(
-                                R.color.color_e52b4e
-                            )
+                            requireContext().getColor(R.color.color_e52b4e)
                         )
                     } else {
                         txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_4876c7))
                         txtTotalRealizationGainsLossesPercent.setTextColor(
-                            requireContext().getColor(
-                                R.color.color_4876c7
-                            )
+                            requireContext().getColor(R.color.color_4876c7)
                         )
                     }
                     txtTotalRealizationGainsLossesPercent.text =
