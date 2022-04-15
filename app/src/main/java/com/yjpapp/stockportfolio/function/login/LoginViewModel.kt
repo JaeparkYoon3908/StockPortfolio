@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.NaverIdLoginSDK
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
@@ -27,8 +28,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userRepository: UserRepository
-
-) : ViewModel() {
+) : BaseViewModel() {
     /**
      * Common
      */

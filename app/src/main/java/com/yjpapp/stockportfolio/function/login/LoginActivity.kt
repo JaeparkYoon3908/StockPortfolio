@@ -36,6 +36,7 @@ import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.model.response.RespFacebookUserInfo
 import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
+import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
@@ -119,7 +120,22 @@ class LoginActivity : BaseActivity() {
     private fun handleEvent(event: LoginViewModel.Event) {
         when (event) {
             is LoginViewModel.Event.ResponseServerError -> {
-                Toasty.error(this, event.msg, Toasty.LENGTH_LONG).show()
+                if (viewModel.isDialogShowing) {
+                    return
+                }
+                val fragmentDialog = CommonOneBtnDialog(
+                    this@LoginActivity,
+                    CommonOneBtnDialog.CommonOneBtnData(
+                        noticeText = event.msg,
+                        btnText = getString(R.string.Common_Ok),
+                        btnListener = { _: View, dialog ->
+                            dialog.dismiss()
+                            viewModel.isDialogShowing = false
+                        }
+                    )
+                )
+                fragmentDialog.show(supportFragmentManager, TAG)
+                viewModel.isDialogShowing = true
             }
             is LoginViewModel.Event.ResponseDeleteNaverUserInfo -> {
                 stopLoadingAnimation()
@@ -141,7 +157,6 @@ class LoginActivity : BaseActivity() {
 
                         startMainActivity()
                     }
-                    else -> {}
                 }
             }
         }

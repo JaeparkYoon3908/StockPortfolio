@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
@@ -23,7 +24,7 @@ class MyViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userRepository: UserRepository,
     private val myRepository: MyRepository
-): ViewModel() {
+): BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState
     val userName = userRepository.getUserName()

@@ -2,10 +2,12 @@ package com.yjpapp.stockportfolio.common.dialog
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import com.yjpapp.stockportfolio.databinding.CommonDialogOneBtnBinding
 import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.util.DisplayUtils

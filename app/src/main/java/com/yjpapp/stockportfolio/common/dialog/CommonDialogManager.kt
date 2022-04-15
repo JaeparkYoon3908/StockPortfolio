@@ -8,12 +8,16 @@ import javax.inject.Singleton
 
 object CommonDialogManager {
     private var isCommonOneBtnDialogShowing = false
+
     fun showCommonOneBtnDialog(
         context: Context,
         manager: FragmentManager,
         tag: String,
         msg: String
     ) {
+        if (isCommonOneBtnDialogShowing) {
+            return
+        }
         val dialogFragment = CommonOneBtnDialog(
             context,
             CommonOneBtnDialog.CommonOneBtnData(
@@ -24,13 +28,15 @@ object CommonDialogManager {
                 }
             )
         )
+
         dialogFragment.dialog?.setOnDismissListener {
             isCommonOneBtnDialogShowing = false
         }
 
-        if (!isCommonOneBtnDialogShowing) {
-            dialogFragment.show(manager, tag)
+        dialogFragment.dialog?.setOnShowListener {
             isCommonOneBtnDialogShowing = true
         }
+
+        dialogFragment.show(manager, tag)
     }
 }

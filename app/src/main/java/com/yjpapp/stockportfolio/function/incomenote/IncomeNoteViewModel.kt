@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
@@ -30,7 +31,7 @@ class IncomeNoteViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val incomeNoteRepository: IncomeNoteRepository,
     private val userRepository: UserRepository
-) : ViewModel() {
+) : BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState
     var editMode = false
@@ -124,6 +125,10 @@ class IncomeNoteViewModel @Inject constructor(
                 return@launch
             }
             result.body()?.let { incomeNoteList ->
+                if (incomeNoteList.id == -1) {
+                    event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Normal)))
+                    return@launch
+                }
                 event(Event.IncomeNoteModifySuccess(incomeNoteList))
             }
         }

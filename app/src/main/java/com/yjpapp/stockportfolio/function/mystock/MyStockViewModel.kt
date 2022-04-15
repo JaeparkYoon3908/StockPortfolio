@@ -7,6 +7,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
@@ -35,7 +36,7 @@ class MyStockViewModel @Inject constructor(
     private val myStockRepository: MyStockRepository,
     private val incomeNoteRepository: IncomeNoteRepository,
     private val preferenceRepository: PreferenceRepository
-) : ViewModel() {
+) : BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState
     private val _totalPurchasePrice = MutableStateFlow("")

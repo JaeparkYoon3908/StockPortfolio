@@ -6,9 +6,12 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
+import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 
 abstract class BaseActivity : AppCompatActivity() {
     private val TAG = BaseActivity::class.java.simpleName
@@ -18,21 +21,48 @@ abstract class BaseActivity : AppCompatActivity() {
     private val connectivityManager by lazy {
         applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
+    private val networkDisConnectDialogFragment by lazy {
+        CommonOneBtnDialog(
+            this@BaseActivity,
+            CommonOneBtnDialog.CommonOneBtnData(
+                noticeText = getString(R.string.Error_Msg_Network_Connect_Exception),
+                btnText = getString(R.string.Common_Ok),
+                btnListener = { _: View, dialog: CommonOneBtnDialog ->
+                    dialog.dismiss()
+                }
+            )
+        )
+    }
     private var isShowDialog = false
     private val networkConnectedCallBack by lazy {
         object : ConnectivityManager.NetworkCallback() {
             override fun onLost(network: Network) {
                 super.onLost(network)
-                CommonDialogManager.showCommonOneBtnDialog(
-                this@BaseActivity,
-                    supportFragmentManager,
-                    TAG,
-                    getString(R.string.Error_Msg_Network_Connect_Exception)
-                )
+                if (networkDisConnectDialogFragment.dialog == null) {
+                    return
+                }
+                if (networkDisConnectDialogFragment.dialog?.isShowing == true) {
+                    return
+                }
+                if (!networkDisConnectDialogFragment.isRemoving) {
+                    return
+                }
+                networkDisConnectDialogFragment.show(supportFragmentManager, TAG)
+
             }
 
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
+                if (networkDisConnectDialogFragment.dialog != null) {
+                    return
+                }
+                if (networkDisConnectDialogFragment.dialog?.isShowing == false) {
+                    return
+                }
+                if (networkDisConnectDialogFragment.isRemoving) {
+                    return
+                }
+                networkDisConnectDialogFragment.dismiss()
             }
         }
     }

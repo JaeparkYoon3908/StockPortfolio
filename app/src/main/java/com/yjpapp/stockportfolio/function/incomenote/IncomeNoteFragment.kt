@@ -23,6 +23,7 @@ import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialo
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
+import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
@@ -35,6 +36,7 @@ import java.math.BigDecimal
  * @author Yoon Jae-park
  * @since 2020.08
  */
+@Suppress("IMPLICIT_CAST_TO_ANY")
 @AndroidEntryPoint
 class IncomeNoteFragment: Fragment() {
     private var _binding: FragmentIncomeNoteBinding? = null
@@ -307,83 +309,93 @@ class IncomeNoteFragment: Fragment() {
             }
         }
     }
-
     @SuppressLint("NotifyDataSetChanged")
-    private fun handleEvent(event: IncomeNoteViewModel.Event) = when (event) {
-        is IncomeNoteViewModel.Event.SendTotalGainData -> {
-            val totalGainNumber = event.data.total_price
-            val totalGainPercent = event.data.total_percent
-            binding.apply {
-                val totalRealizationGainsLossesNumber =
-                    StockUtils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
-                txtTotalRealizationGainsLossesData.text =
-                    "${StockConfig.koreaMoneySymbol}$totalRealizationGainsLossesNumber"
-                if (totalGainPercent >= 0) {
-                    txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_e52b4e))
-                    txtTotalRealizationGainsLossesPercent.setTextColor(requireContext().getColor(R.color.color_e52b4e))
-                } else {
-                    txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_4876c7))
-                    txtTotalRealizationGainsLossesPercent.setTextColor(requireContext().getColor(R.color.color_4876c7))
+    private fun handleEvent(event: IncomeNoteViewModel.Event) {
+        when (event) {
+            is IncomeNoteViewModel.Event.SendTotalGainData -> {
+                val totalGainNumber = event.data.total_price
+                val totalGainPercent = event.data.total_percent
+                binding.apply {
+                    val totalRealizationGainsLossesNumber =
+                        StockUtils.getNumInsertComma(BigDecimal(totalGainNumber).toString())
+                    txtTotalRealizationGainsLossesData.text =
+                        "${StockConfig.koreaMoneySymbol}$totalRealizationGainsLossesNumber"
+                    if (totalGainPercent >= 0) {
+                        txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_e52b4e))
+                        txtTotalRealizationGainsLossesPercent.setTextColor(
+                            requireContext().getColor(
+                                R.color.color_e52b4e
+                            )
+                        )
+                    } else {
+                        txtTotalRealizationGainsLossesData.setTextColor(requireContext().getColor(R.color.color_4876c7))
+                        txtTotalRealizationGainsLossesPercent.setTextColor(
+                            requireContext().getColor(
+                                R.color.color_4876c7
+                            )
+                        )
+                    }
+                    txtTotalRealizationGainsLossesPercent.text =
+                        StockUtils.getRoundsPercentNumber(totalGainPercent)
                 }
-                txtTotalRealizationGainsLossesPercent.text =
-                    StockUtils.getRoundsPercentNumber(totalGainPercent)
             }
-        }
-        is IncomeNoteViewModel.Event.IncomeNoteDeleteSuccess -> {
-            val toastMsg = requireContext().getString(R.string.Common_Notice_Delete_Ok)
-            Toasty.normal(requireContext(), toastMsg).show()
-            incomeNoteListAdapter.incomeNoteListInfo.removeAt(event.position)
-            incomeNoteListAdapter.notifyItemRemoved(event.position)
-            incomeNoteListAdapter.notifyDataSetChanged()
-            viewModel.requestTotalGain()
-        }
-        is IncomeNoteViewModel.Event.IncomeNoteAddSuccess -> {
-            val toastMsg = requireContext().getString(R.string.Common_Notice_Add_Ok)
-            Toasty.info(requireContext(), toastMsg).show()
-            incomeNoteListAdapter.incomeNoteListInfo.add(0, event.data)
+            is IncomeNoteViewModel.Event.IncomeNoteDeleteSuccess -> {
+                val toastMsg = requireContext().getString(R.string.Common_Notice_Delete_Ok)
+                Toasty.normal(requireContext(), toastMsg).show()
+                incomeNoteListAdapter.incomeNoteListInfo.removeAt(event.position)
+                incomeNoteListAdapter.notifyItemRemoved(event.position)
+                incomeNoteListAdapter.notifyDataSetChanged()
+                viewModel.requestTotalGain()
+            }
+            is IncomeNoteViewModel.Event.IncomeNoteAddSuccess -> {
+                val toastMsg = requireContext().getString(R.string.Common_Notice_Add_Ok)
+                Toasty.info(requireContext(), toastMsg).show()
+                incomeNoteListAdapter.incomeNoteListInfo.add(0, event.data)
 //                incomeNoteListAdapter.notifyItemInserted(incomeNoteListAdapter.itemCount - 1)
-            incomeNoteListAdapter.notifyDataSetChanged()
-            viewModel.requestTotalGain()
-        }
-        is IncomeNoteViewModel.Event.IncomeNoteModifySuccess -> {
-            val toastMsg = requireContext().getString(R.string.Common_Notice_Modify_Ok)
-            Toasty.normal(requireContext(), toastMsg).show()
-            viewModel.requestTotalGain()
-            if (event.data.id != -1) {
-                val beforeModifyIncomeNote = incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }
+                incomeNoteListAdapter.notifyDataSetChanged()
+                viewModel.requestTotalGain()
+            }
+            is IncomeNoteViewModel.Event.IncomeNoteModifySuccess -> {
+                val toastMsg = requireContext().getString(R.string.Common_Notice_Modify_Ok)
+                Toasty.normal(requireContext(), toastMsg).show()
+                val beforeModifyIncomeNote =
+                    incomeNoteListAdapter.incomeNoteListInfo.find { it.id == event.data.id }
                 val index = incomeNoteListAdapter.incomeNoteListInfo.indexOf(beforeModifyIncomeNote)
                 incomeNoteListAdapter.incomeNoteListInfo[index] = event.data
                 incomeNoteListAdapter.notifyDataSetChanged()
                 viewModel.requestTotalGain()
-            } else {
-                CommonDialogManager.showCommonOneBtnDialog(
+            }
+            is IncomeNoteViewModel.Event.FetchUIncomeNotes -> {
+                event.data.forEach {
+                    incomeNoteListAdapter.incomeNoteListInfo.add(it)
+                }
+                incomeNoteListAdapter.isLoadingAnimationStart = false
+                incomeNoteListAdapter.notifyDataSetChanged()
+            }
+            is IncomeNoteViewModel.Event.ResponseServerError -> {
+                if (viewModel.isDialogShowing) {
+                    return
+                }
+                val dialogFragment = CommonOneBtnDialog(
                     requireContext(),
-                    requireActivity().supportFragmentManager,
-                    TAG,
-                    getString(R.string.Error_Msg_Normal)
+                    CommonOneBtnDialog.CommonOneBtnData(
+                        noticeText = event.msg,
+                        btnText = getString(R.string.Common_Ok),
+                        btnListener = { _: View, dialog: CommonOneBtnDialog ->
+                            dialog.dismiss()
+                            viewModel.isDialogShowing = false
+                        }
+                    )
                 )
+                dialogFragment.show(requireActivity().supportFragmentManager, TAG)
+                viewModel.isDialogShowing = true
             }
-        }
-        is IncomeNoteViewModel.Event.FetchUIncomeNotes -> {
-            event.data.forEach {
-                incomeNoteListAdapter.incomeNoteListInfo.add(it)
-            }
-            incomeNoteListAdapter.isLoadingAnimationStart = false
-            incomeNoteListAdapter.notifyDataSetChanged()
-        }
-        is IncomeNoteViewModel.Event.ResponseServerError -> {
-            CommonDialogManager.showCommonOneBtnDialog(
-                requireContext(),
-                requireActivity().supportFragmentManager,
-                TAG,
-                event.msg
-            )
-        }
-        is IncomeNoteViewModel.Event.StartAndStopLoadingAnimation -> {
-            if (event.isAnimationStart) {
-                binding.ivLoading.visibility = View.VISIBLE
-            } else {
-                binding.ivLoading.visibility = View.GONE
+            is IncomeNoteViewModel.Event.StartAndStopLoadingAnimation -> {
+                if (event.isAnimationStart) {
+                    binding.ivLoading.visibility = View.VISIBLE
+                } else {
+                    binding.ivLoading.visibility = View.GONE
+                }
             }
         }
     }

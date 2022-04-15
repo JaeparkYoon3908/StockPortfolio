@@ -53,6 +53,7 @@ import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
+import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import de.charlex.compose.RevealDirection
@@ -160,12 +161,22 @@ class MyStockFragment : Fragment() {
                 myStockViewModel.isCurrentPriceRefreshing = false
             }
             is MyStockViewModel.Event.ResponseServerError -> {
-                CommonDialogManager.showCommonOneBtnDialog(
+                if (myStockViewModel.isDialogShowing) {
+                    return
+                }
+                val fragmentDialog = CommonOneBtnDialog(
                     requireContext(),
-                    requireActivity().supportFragmentManager,
-                    TAG,
-                    event.msg
+                    CommonOneBtnDialog.CommonOneBtnData(
+                        noticeText = event.msg,
+                        btnText = getString(R.string.Common_Ok),
+                        btnListener = { _: View, dialog ->
+                            dialog.dismiss()
+                            myStockViewModel.isDialogShowing = false
+                        }
+                    )
                 )
+                fragmentDialog.show(requireActivity().supportFragmentManager, TAG)
+                myStockViewModel.isDialogShowing = true
             }
             else -> {}
         }

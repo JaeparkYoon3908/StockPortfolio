@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.repository.UserRepository
@@ -23,7 +24,7 @@ import kotlin.system.exitProcess
 class MainViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userRepository: UserRepository
-): ViewModel() {
+): BaseViewModel() {
     fun runBackPressAppCloseEvent(activity: Activity) {
         val isAllowAppClose = userRepository.isAllowAppClose()
         if (isAllowAppClose == StockConfig.TRUE) {

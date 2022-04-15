@@ -18,6 +18,7 @@ import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.MainActivity
 import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.common.dialog.CommonDialogManager
+import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.test.TestActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -89,12 +90,22 @@ class MyFragment : Fragment() {
                 mainActivity?.stopLoadingAnimation()
             }
             is MyViewModel.Event.ResponseServerError -> {
-                CommonDialogManager.showCommonOneBtnDialog(
+                if (myViewModel.isDialogShowing) {
+                    return
+                }
+                val fragmentDialog = CommonOneBtnDialog(
                     requireContext(),
-                    requireActivity().supportFragmentManager,
-                    TAG,
-                    event.msg
+                    CommonOneBtnDialog.CommonOneBtnData(
+                        noticeText = event.msg,
+                        btnText = getString(R.string.Common_Ok),
+                        btnListener = { _: View, dialog ->
+                            dialog.dismiss()
+                            myViewModel.isDialogShowing = false
+                        }
+                    )
                 )
+                fragmentDialog.show(requireActivity().supportFragmentManager, TAG)
+                myViewModel.isDialogShowing = true
             }
         }
     }
