@@ -75,9 +75,10 @@ class IncomeNoteListAdapter(
 //                        binding.ivLoading.visibility = View.VISIBLE
                         binding.ivLoading.startAnimation()
                     } else {
-                        binding.consLoading.visibility = View.VISIBLE
-//                        binding.ivLoading.visibility = View.GONE
-                        binding.ivLoading.startAnimation()
+//                        binding.consLoading.visibility = View.GONE
+                        binding.ivLoading.visibility = View.GONE
+//                        binding.ivLoading.startAnimation()
+//                        binding.ivLoading.setGone()
                     }
                 }
             }
