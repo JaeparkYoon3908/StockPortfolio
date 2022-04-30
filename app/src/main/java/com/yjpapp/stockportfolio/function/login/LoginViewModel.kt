@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.NaverIdLoginSDK
+import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
@@ -62,8 +63,8 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val naverAccessToken = userRepository.getNaverAccessToken()
             val params = HashMap<String, String>()
-            params["client_id"] = StockConfig.NAVER_SIGN_CLIENT_ID
-            params["client_secret"] = StockConfig.NAVER_SIGN_CLIENT_SECRET
+            params["client_id"] = BuildConfig.NAVER_SIGN_CLIENT_ID
+            params["client_secret"] = BuildConfig.NAVER_SIGN_CLIENT_SECRET
             params["access_token"] = naverAccessToken
             params["grant_type"] = "delete"
             params["service_provider"] = "NAVER"

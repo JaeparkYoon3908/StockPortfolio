@@ -11,6 +11,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.common.StockConfig
@@ -77,7 +78,7 @@ class MainActivity : BaseActivity() {
 
         AdView(this).apply {
             adSize = AdSize.BANNER
-            adUnitId = StockConfig.AD_MOB_ID
+            adUnitId = BuildConfig.AD_MOB_ID
         }
 
         MobileAds.initialize(this) {}

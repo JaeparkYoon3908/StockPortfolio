@@ -26,9 +26,11 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.common.StockConfig.GOOGLE_SIGN_CLIENT_ID
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.MainActivity
@@ -39,7 +41,6 @@ import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
-import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch
 
 
@@ -56,7 +57,7 @@ class LoginActivity : BaseActivity() {
     private val gso by lazy {
         GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(StockConfig.GOOGLE_SIGN_CLIENT_ID)
+            .requestIdToken(BuildConfig.GOOGLE_SIGN_CLIENT_ID)
             .requestEmail() // email addresses도 요청함
             .build()
     }
@@ -216,8 +217,8 @@ class LoginActivity : BaseActivity() {
     private fun naverSignIn() {
         NaverIdLoginSDK.initialize(
             context = this@LoginActivity,
-            clientId = StockConfig.NAVER_SIGN_CLIENT_ID,
-            clientSecret = StockConfig.NAVER_SIGN_CLIENT_SECRET,
+            clientId = BuildConfig.NAVER_SIGN_CLIENT_ID,
+            clientSecret = BuildConfig.NAVER_SIGN_CLIENT_SECRET,
             clientName = getString(R.string.app_name)
         )
 

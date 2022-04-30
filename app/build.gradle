@@ -3,6 +3,9 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdkVersion 32
     buildToolsVersion "32.0.0"
@@ -14,6 +17,13 @@ android {
         versionCode 28
         versionName "2.0.55"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "GOOGLE_SIGN_CLIENT_ID", properties["goole.sign.client.id"]
+        buildConfigField "String", "NAVER_SIGN_CLIENT_ID", properties["naver.sign.client.id"]
+        buildConfigField "String", "NAVER_SIGN_CLIENT_SECRET", properties["naver.sign.client.secret"]
+        buildConfigField "String", "FACEBOOK_SIGN_APP_ID", properties["facebook.sign.app.id"]
+        buildConfigField "String", "FACEBOOK_SIGN_PROTOCOL_SCHEME", properties["facebook.sign.protocol.scheme"]
+        buildConfigField "String", "AD_MOB_ID", properties["ad.mob.id"]
+
     }
 
     buildTypes {

@@ -16,7 +16,6 @@ object StockConfig {
      * 구글 아이디로 로그인
      */
     const val LOGIN_TYPE_GOOGLE = "GOOGLE"
-    const val GOOGLE_SIGN_CLIENT_ID = "248238742829-c4l2mo77psv2f681sm0lta392hur63fk.apps.googleusercontent.com"
 
     /**
      * 네이버 아이디로 로그인
@@ -29,8 +28,6 @@ object StockConfig {
      * 페이스북 아이디로 로그인
      */
     const val LOGIN_TYPE_FACEBOOK = "FACEBOOK"
-    const val FACEBOOK_SIGN_APP_ID = "2928940814012749"
-    const val FACEBOOK_SIGN_PROTOCOL_SCHEME = "fb2928940814012749"
 
     const val TRUE = "true"
     const val FALSE = "false"
@@ -38,6 +35,5 @@ object StockConfig {
     /**
      * AdMob
      */
-    const val AD_MOB_ID = "ca-app-pub-6147567013464925/6556078565"
     const val TEST_AD_MOB_ID = "ca-app-pub-3940256099942544/6300978111"
 }

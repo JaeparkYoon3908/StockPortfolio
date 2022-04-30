@@ -75,9 +75,10 @@ class IncomeNoteListAdapter(
 //                        binding.ivLoading.visibility = View.VISIBLE
                         binding.ivLoading.startAnimation()
                     } else {
-                        binding.consLoading.visibility = View.VISIBLE
-//                        binding.ivLoading.visibility = View.GONE
-                        binding.ivLoading.startAnimation()
+//                        binding.consLoading.visibility = View.GONE
+                        binding.ivLoading.visibility = View.GONE
+//                        binding.ivLoading.startAnimation()
+//                        binding.ivLoading.setGone()
                     }
                 }
             }
@@ -140,14 +141,16 @@ class IncomeNoteListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return incomeNoteListInfo.size + 1
+        return incomeNoteListInfo.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1) {
-            VIEW_TYPE_LOADING
-        } else {
-            VIEW_TYPE_LIST
-        }
+//        return if (position == itemCount - 1) {
+//            VIEW_TYPE_LOADING
+//        } else {
+//            VIEW_TYPE_LIST
+//        }
+        return VIEW_TYPE_LIST
     }
+
 }

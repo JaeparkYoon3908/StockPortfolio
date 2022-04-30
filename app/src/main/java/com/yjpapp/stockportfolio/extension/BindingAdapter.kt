@@ -93,7 +93,7 @@ fun setLoginTypeImage(imageView: ImageView, loginType: String) {
             imageView.setBackgroundResource(R.drawable.ic_google)
         }
         StockConfig.LOGIN_TYPE_NAVER -> {
-            imageView.setBackgroundResource(R.drawable.naver_icon)
+            imageView.setBackgroundResource(R.drawable.ic_naver)
         }
     }
 }

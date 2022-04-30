@@ -2,22 +2,20 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/cons_loading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_10dp"
-        android:layout_marginBottom="@dimen/common_10dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:paddingTop="@dimen/common_10dp"
+        android:paddingBottom="@dimen/common_10dp"
         >
+
         <com.yjpapp.stockportfolio.common.widget.CommonLoadingView
             android:id="@+id/iv_loading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:visibility="visible"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            tools:visibility="visible" />
+    </LinearLayout>
 </layout>
