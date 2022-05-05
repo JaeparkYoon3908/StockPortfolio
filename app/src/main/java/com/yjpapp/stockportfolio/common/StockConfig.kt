@@ -21,8 +21,6 @@ object StockConfig {
      * 네이버 아이디로 로그인
      */
     const val LOGIN_TYPE_NAVER = "NAVER"
-    const val NAVER_SIGN_CLIENT_ID = "j9SRSjKtQ1bueHqgd1pv"
-    const val NAVER_SIGN_CLIENT_SECRET = "5QuEg4cvmA"
 
     /**
      * 페이스북 아이디로 로그인
