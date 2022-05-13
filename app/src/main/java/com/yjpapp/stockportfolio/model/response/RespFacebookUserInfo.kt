@@ -1,12 +1,10 @@
 package com.yjpapp.stockportfolio.model.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class RespFacebookUserInfo (
-    @SerializedName("name")
     var name: String = "",
-    @SerializedName("email")
     var email: String = "",
-    @SerializedName("id")
     var id: String = ""
 )

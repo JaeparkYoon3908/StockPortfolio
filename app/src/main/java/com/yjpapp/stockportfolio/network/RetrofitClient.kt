@@ -1,16 +1,18 @@
 package com.yjpapp.stockportfolio.network
 
 import android.content.Context
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.repository.PreferenceRepository
 import com.yjpapp.stockportfolio.util.NetworkUtils
 import com.yjpapp.stockportfolio.util.StockLog
+import kotlinx.serialization.json.Json
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.internal.http2.ConnectionShutdownException
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -48,11 +50,11 @@ class RetrofitClient(
             connectTimeout(CONNECT_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
             readTimeout(READ_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
         }.build()
-
+        val contentType = "application/json".toMediaType()
         val retrofit = Retrofit.Builder().apply {
             baseUrl(baseServerURL.url)
             client(client)
-            addConverterFactory(GsonConverterFactory.create()) // 파싱등록
+            addConverterFactory(Json.asConverterFactory(contentType)) // 파싱등록
         }.build()
 
         return retrofit.create(RetrofitService::class.java)

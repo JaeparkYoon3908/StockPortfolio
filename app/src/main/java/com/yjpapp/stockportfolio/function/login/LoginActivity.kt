@@ -20,7 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.gson.Gson
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
@@ -41,7 +40,7 @@ import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
+import kotlinx.serialization.json.Json
 
 /**
  * 디자인 패턴 : MVVM
@@ -316,7 +315,7 @@ class LoginActivity : BaseActivity() {
                     StockLog.d(TAG, "onSuccess")
                     val accessToken = AccessToken.getCurrentAccessToken()
                     val callback = GraphJSONObjectCallback { `object`, response ->
-                        val respFacebookUserInfo =
+                        val respFacebookUserInfo = Json.decodeFromString(RespFacebookUserInfo, response.rawResponse)
                             Gson().fromJson(response.rawResponse, RespFacebookUserInfo::class.java)
                         requestLogin(
                             ReqSNSLogin(
