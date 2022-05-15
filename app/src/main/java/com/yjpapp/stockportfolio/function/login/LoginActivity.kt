@@ -40,6 +40,7 @@ import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 /**
@@ -126,14 +127,14 @@ class LoginActivity : BaseActivity() {
             is LoginViewModel.Event.ResponseLoginResultData -> {
                 when (event.respLoginUserInfo.status) {
                     ServerRespCode.OK -> {
-                        StockLog.d(TAG, "email = ${event.respLoginUserInfo.data.email}")
-                        StockLog.d(TAG, "name = ${event.respLoginUserInfo.data.name}")
-                        StockLog.d(TAG, "userIndex = ${event.respLoginUserInfo.data.userIndex}")
+                        StockLog.d(TAG, "email = ${event.respLoginUserInfo.data.user_email}")
+                        StockLog.d(TAG, "name = ${event.respLoginUserInfo.data.user_name}")
+                        StockLog.d(TAG, "userIndex = ${event.respLoginUserInfo.data.user_index}")
                         StockLog.d(TAG, "login_type = ${event.respLoginUserInfo.data.login_type}")
 
-                        viewModel.requestSetPreference(PrefKey.KEY_USER_INDEX, event.respLoginUserInfo.data.userIndex.toString())
-                        viewModel.requestSetPreference(PrefKey.KEY_USER_NAME, event.respLoginUserInfo.data.name)
-                        viewModel.requestSetPreference(PrefKey.KEY_USER_EMAIL, event.respLoginUserInfo.data.email)
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_INDEX, event.respLoginUserInfo.data.user_index.toString())
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_NAME, event.respLoginUserInfo.data.user_name)
+                        viewModel.requestSetPreference(PrefKey.KEY_USER_EMAIL, event.respLoginUserInfo.data.user_email)
                         viewModel.requestSetPreference(PrefKey.KEY_USER_LOGIN_TYPE, event.respLoginUserInfo.data.login_type)
                         viewModel.requestSetPreference(PrefKey.KEY_USER_TOKEN, event.respLoginUserInfo.data.token)
                         viewModel.requestSetPreference(PrefKey.KEY_AUTO_LOGIN, true.toString())
@@ -315,8 +316,7 @@ class LoginActivity : BaseActivity() {
                     StockLog.d(TAG, "onSuccess")
                     val accessToken = AccessToken.getCurrentAccessToken()
                     val callback = GraphJSONObjectCallback { `object`, response ->
-                        val respFacebookUserInfo = Json.decodeFromString(RespFacebookUserInfo, response.rawResponse)
-                            Gson().fromJson(response.rawResponse, RespFacebookUserInfo::class.java)
+                        val respFacebookUserInfo = Json.decodeFromString<RespFacebookUserInfo>(response.rawResponse)
                         requestLogin(
                             ReqSNSLogin(
                                 user_email = respFacebookUserInfo.email,

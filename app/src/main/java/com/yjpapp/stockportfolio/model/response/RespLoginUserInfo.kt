@@ -9,9 +9,9 @@ data class RespLoginUserInfo(
 ){
     @Serializable
     data class UserInfo (
-        var userIndex: Int = 0,
-        var email: String = "",
-        var name: String = "",
+        var user_index: Int = 0,
+        var user_email: String = "",
+        var user_name: String = "",
         var login_type: String = "",
         var token: String = ""
     )

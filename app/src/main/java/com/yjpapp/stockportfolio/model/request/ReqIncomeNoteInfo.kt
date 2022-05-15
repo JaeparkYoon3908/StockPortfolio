@@ -1,5 +1,8 @@
 package com.yjpapp.stockportfolio.model.request
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ReqIncomeNoteInfo(
     var id: Int = -1,
     var subjectName: String = "",
