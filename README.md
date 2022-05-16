@@ -30,4 +30,4 @@
  - MVP -> MVVM
  - Koin -> Hilt
  - LiveData -> StateFlow
- - Gson -> kotlinx.serialization
+ - Gson -> Kotlinx Serialization
