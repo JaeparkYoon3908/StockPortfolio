@@ -1,12 +1,12 @@
-package com.yjpapp.data.repository
+package com.yjpapp.data.datasource
 
 import com.yjpapp.data.StockConfig
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.data.network.RetrofitClient
 
-class UserRepository(
-    private val preferenceRepository: PreferenceRepository,
+class UserDataSource(
+    private val preferenceRepository: PreferenceDataSource,
     private val retrofitClient: RetrofitClient
 ) {
 

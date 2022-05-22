@@ -1,8 +1,8 @@
-package com.yjpapp.data.repository
+package com.yjpapp.data.datasource
 
 import android.content.SharedPreferences
 
-class PreferenceRepository(
+class PreferenceDataSource(
     private val pref: SharedPreferences
 ) {
 

@@ -1,9 +1,9 @@
-package com.yjpapp.data.repository
+package com.yjpapp.data.datasource
 
 import com.yjpapp.data.localdb.room.mystock.MyStockDao
 import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 
-class MyStockRepository(private val myStockDao: MyStockDao) {
+class MyStockDataSource(private val myStockDao: MyStockDao) {
 
     fun insertMyStock(myStockEntity: MyStockEntity) {
         myStockDao.insert(myStockEntity)

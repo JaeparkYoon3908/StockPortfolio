@@ -1,4 +1,4 @@
-package com.yjpapp.data.repository
+package com.yjpapp.data.datasource
 
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.localdb.room.memo.MemoListDao
@@ -12,9 +12,9 @@ import javax.inject.Inject
  * @since 2020.12
  */
 
-class MemoRepository @Inject constructor(
+class MemoDataSource @Inject constructor(
     private val memoListDao: MemoListDao,
-    private val preferenceRepository: PreferenceRepository
+    private val preferenceRepository: PreferenceDataSource
 ) {
     fun insertMemoData(memoData: MemoListEntity) {
         try {

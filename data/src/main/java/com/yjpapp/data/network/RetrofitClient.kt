@@ -5,7 +5,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.yjpapp.data.BuildConfig
 import com.yjpapp.data.StockLog
 import com.yjpapp.data.localdb.preference.PrefKey
-import com.yjpapp.data.repository.PreferenceRepository
+import com.yjpapp.data.datasource.PreferenceDataSource
 import kotlinx.serialization.json.Json
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitClient(
     private val context: Context,
-    private val preferenceRepository: PreferenceRepository
+    private val preferenceDataSource: PreferenceDataSource
 ) {
     enum class BaseServerURL(val url: String) {
         RaspberryPi("http://112.147.50.241"),
@@ -35,7 +35,7 @@ class RetrofitClient(
         if (!NetworkUtils.isInternetAvailable(context)) {
             return null
         }
-        val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceRepository)
+        val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceDataSource)
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -62,19 +62,19 @@ class RetrofitClient(
     class CustomInterceptor(
         private val context: Context,
         private val baseServerURL: BaseServerURL,
-        private val preferenceRepository: PreferenceRepository
+        private val preferenceDataSource: PreferenceDataSource
     ) : Interceptor {
         private val TAG = CustomInterceptor::class.java.simpleName
         override fun intercept(chain: Interceptor.Chain): Response {
             val builder =
                 when (baseServerURL) {
                     BaseServerURL.RaspberryPi -> {
-                        val authorization = preferenceRepository
+                        val authorization = preferenceDataSource
                             .getPreference(PrefKey.KEY_USER_TOKEN) ?: ""
                         getClientBuilderWithToken(context, chain, authorization)
                     }
                     BaseServerURL.NAVER_OPEN_API -> {
-                        val authorization = preferenceRepository
+                        val authorization = preferenceDataSource
                             .getPreference(PrefKey.KEY_NAVER_USER_TOKEN) ?: ""
                         getNaverClientBuilderWithToken(chain, authorization)
                     }
@@ -137,7 +137,7 @@ class RetrofitClient(
 //            .addHeader("Content-Type", "application/json")
                 .addHeader(
                     "user-index",
-                    preferenceRepository.getPreference(PrefKey.KEY_USER_INDEX) ?: ""
+                    preferenceDataSource.getPreference(PrefKey.KEY_USER_INDEX) ?: ""
                 )
 //            .addHeader("user-index", "10005")
         }
