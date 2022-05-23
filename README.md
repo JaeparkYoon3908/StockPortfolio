@@ -1,4 +1,4 @@
-### 나의 국내 주식 가격을 실시간으로 확인하고, 매도 기록을 입력하여 주식 수익을 언제든지 확인 할 수 있는 앱입니다. 
+### 내가 소유한 국내 주식 가격을 실시간으로 확인하고, 매도 기록을 입력하여 주식 수익을 언제든지 확인 할 수 있는 앱입니다. 
 
 ### Google Play Store : https://play.google.com/store/apps/details?id=com.yjpapp.stockportfolio
 
