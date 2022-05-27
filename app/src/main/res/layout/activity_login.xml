@@ -37,6 +37,7 @@
             android:layout_marginStart="@dimen/common_32dp"
             android:layout_marginEnd="@dimen/common_32dp"
             android:onClick="@{callback::onClick}"
+            android:visibility="gone"
             android:background="@drawable/btn_login_btn_selector"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toTopOf="@+id/btn_naver_login"
