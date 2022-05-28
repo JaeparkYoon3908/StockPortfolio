@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
@@ -39,7 +38,9 @@ class IncomeNoteViewModel @Inject constructor(
     var page = 1
     private val pageSize = 20
     var initStartYYYYMMDD = listOf<String>()
+    private val _initStartYYYYMMDD get() = initStartYYYYMMDD
     var initEndYYYYMMDD = listOf<String>()
+    private val _initEndYYYYMMDD get() = initEndYYYYMMDD
     var hasNext = true
 
     fun requestGetIncomeNote() {
@@ -47,9 +48,9 @@ class IncomeNoteViewModel @Inject constructor(
         val params = HashMap<String, String>()
         params["page"] = page.toString()
         params["size"] = pageSize.toString()
-        if (initStartYYYYMMDD.isNotEmpty() && initEndYYYYMMDD.isNotEmpty()) {
-            params["startDate"] = makeDateString(initStartYYYYMMDD)
-            params["endDate"] = makeDateString(initEndYYYYMMDD)
+        if (_initStartYYYYMMDD.isNotEmpty() && _initEndYYYYMMDD.isNotEmpty()) {
+            params["startDate"] = makeDateString(_initStartYYYYMMDD)
+            params["endDate"] = makeDateString(_initEndYYYYMMDD)
         }
         viewModelScope.launch {
             try {
@@ -76,9 +77,9 @@ class IncomeNoteViewModel @Inject constructor(
 
     fun requestTotalGain() {
         val params = hashMapOf<String, String>()
-        if (initStartYYYYMMDD.size == 3 && initEndYYYYMMDD.size == 3) {
-            params["startDate"] = makeDateString(initStartYYYYMMDD)
-            params["endDate"] = makeDateString(initEndYYYYMMDD)
+        if (_initStartYYYYMMDD.size == 3 && _initEndYYYYMMDD.size == 3) {
+            params["startDate"] = makeDateString(_initStartYYYYMMDD)
+            params["endDate"] = makeDateString(_initEndYYYYMMDD)
         }
         CoroutineScope(Dispatchers.Main).launch {
             val result = incomeNoteRepository.requestTotalGain(params)

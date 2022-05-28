@@ -51,10 +51,11 @@ class RetrofitClient(
             readTimeout(READ_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
         }.build()
         val contentType = "application/json".toMediaType()
+        val json = Json { ignoreUnknownKeys = true }
         val retrofit = Retrofit.Builder().apply {
             baseUrl(baseServerURL.url)
             client(client)
-            addConverterFactory(Json.asConverterFactory(contentType)) // 파싱등록
+            addConverterFactory(json.asConverterFactory(contentType)) // 파싱등록
         }.build()
 
         return retrofit.create(RetrofitService::class.java)
