@@ -124,7 +124,7 @@ class IncomeNoteAPI(APIView):
             sellDate = request.data.get("sellDate")
             purchasePrice = Decimal(request.data.get("purchasePrice"))
             sellPrice = Decimal(request.data.get("sellPrice"))
-            sellCount = Decimal(request.data.get("sellCount"))
+            sellCount = int(request.data.get("sellCount"))
 
             # 계산
             realPainLossesAmount = (sellPrice - purchasePrice) * sellCount

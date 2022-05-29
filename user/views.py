@@ -25,7 +25,7 @@ class RegistUser(APIView):
         )
         token = "jwt " + response.json().get("token")
 
-        if UserInfo.objects.filter(user_email=user_email, login_type=login_type).exists() :
+        if UserInfo.objects.filter(user_email=user_email, login_type=login_type).exists():
             try:
                 cursor = connection.cursor()
                 query = "SELECT user_index FROM user_info WHERE user_email='" + user_email + "' && user_name='" + user_name + "' && login_type='" + login_type + "'"
