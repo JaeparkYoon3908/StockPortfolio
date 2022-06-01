@@ -29,6 +29,6 @@ data class RespIncomeNoteListInfo(
         var gainPercent: Double = 0.00, // 수익률
         var purchasePrice: Double = 0.00, // 매수단가
         var sellPrice: Double = 0.00, // 매도단가
-        var sellCount: Int = 0) {
-    }
+        var sellCount: Int = 0
+    )
 }
