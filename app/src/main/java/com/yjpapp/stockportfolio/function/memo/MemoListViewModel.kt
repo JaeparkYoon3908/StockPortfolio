@@ -37,7 +37,7 @@ class MemoListViewModel @Inject constructor(
     val allMemoListData get() = _allMemoListData
     fun getAllMemoInfoList() {
         _allMemoListData = memoRepository.getAllMemoInfoList()
-        event(Event.SendToAllMemoListData(_allMemoListData))
+        event(Event.RefreshMemoListData(_allMemoListData))
     }
 
     fun requestDeleteMemoInfo() {
@@ -47,7 +47,7 @@ class MemoListViewModel @Inject constructor(
                 if (memoList[position].deleteChecked == "true") {
                     memoRepository.deleteMemoInfoList(memoList[position])
                     val updateMemoList = memoRepository.getAllMemoInfoList()
-                    event(Event.SendToAllMemoListData(updateMemoList))
+                    event(Event.RefreshMemoListData(updateMemoList))
                 }
             }
             val updateMemoList = memoRepository.getAllMemoInfoList()
@@ -88,7 +88,7 @@ class MemoListViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class SendToAllMemoListData(val data: MutableList<MemoListEntity>): Event()
+        data class RefreshMemoListData(val data: MutableList<MemoListEntity>): Event()
         data class MemoListDataDeleteSuccess(val data: MutableList<MemoListEntity>): Event()
     }
 }

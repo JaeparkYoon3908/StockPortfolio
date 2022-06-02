@@ -123,7 +123,6 @@ class RetrofitClient(
                     .message(msg)
                     .build()
             }
-
         }
 
         private fun getClientBuilderWithToken(

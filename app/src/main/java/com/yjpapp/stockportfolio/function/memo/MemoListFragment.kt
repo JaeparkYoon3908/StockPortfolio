@@ -23,7 +23,6 @@ import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -112,7 +111,7 @@ class MemoListFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun handleEvent(event: MemoListViewModel.Event) = when (event) {
-        is MemoListViewModel.Event.SendToAllMemoListData -> {
+        is MemoListViewModel.Event.RefreshMemoListData -> {
             val memoList = event.data
             memoListAdapter.memoListData = memoList
             memoListAdapter.notifyDataSetChanged()

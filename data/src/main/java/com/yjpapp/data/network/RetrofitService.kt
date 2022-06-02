@@ -1,5 +1,6 @@
 package com.yjpapp.data.network
 
+import com.yjpapp.data.model.RepositoryResult
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.data.model.response.*
