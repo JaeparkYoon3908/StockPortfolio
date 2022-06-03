@@ -5,16 +5,16 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.data.model.request.ReqIncomeNoteInfo
+import com.yjpapp.data.model.response.RespIncomeNoteListInfo
+import com.yjpapp.data.model.response.RespTotalGainIncomeNoteData
+import com.yjpapp.data.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
-import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
-import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -54,7 +54,7 @@ class IncomeNoteViewModel @Inject constructor(
         }
         viewModelScope.launch {
             try {
-                val result = incomeNoteRepository.requestGetIncomeNote(params)
+                val result = incomeNoteRepository.getIncomeNote(params)
                 if (result == null) {
                     event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                     return@launch
@@ -64,7 +64,7 @@ class IncomeNoteViewModel @Inject constructor(
                     return@launch
                 }
 
-                result.body()?.let {
+                result.data?.let {
                     event(Event.FetchUIncomeNotes(it.income_note))
                     hasNext = page * pageSize < it.page_info.total_elements
                 }
@@ -82,7 +82,7 @@ class IncomeNoteViewModel @Inject constructor(
             params["endDate"] = makeDateString(_initEndYYYYMMDD)
         }
         CoroutineScope(Dispatchers.Main).launch {
-            val result = incomeNoteRepository.requestTotalGain(params)
+            val result = incomeNoteRepository.getTotalGain(params)
             if (result == null) {
                 event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
@@ -92,7 +92,7 @@ class IncomeNoteViewModel @Inject constructor(
                 return@launch
             }
 
-            result.body()?.let {
+            result.data?.let {
                 event(Event.SendTotalGainData(it))
             }
         }
@@ -100,7 +100,7 @@ class IncomeNoteViewModel @Inject constructor(
 
     fun requestDeleteIncomeNote(id: Int, position: Int) {
         viewModelScope.launch {
-            val result = incomeNoteRepository.requestDeleteIncomeNote(id)
+            val result = incomeNoteRepository.deleteIncomeNote(id)
             if (result == null) {
                 event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
@@ -116,7 +116,7 @@ class IncomeNoteViewModel @Inject constructor(
 
     fun requestModifyIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
-            val result = incomeNoteRepository.requestPutIncomeNote(reqIncomeNoteInfo)
+            val result = incomeNoteRepository.modifyIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
                 event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
@@ -125,7 +125,7 @@ class IncomeNoteViewModel @Inject constructor(
                 event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
                 return@launch
             }
-            result.body()?.let { incomeNoteList ->
+            result.data?.let { incomeNoteList ->
                 if (incomeNoteList.id == -1) {
                     event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Normal)))
                     return@launch
@@ -137,7 +137,7 @@ class IncomeNoteViewModel @Inject constructor(
 
     fun requestAddIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
-            val result = incomeNoteRepository.requestPostIncomeNote(reqIncomeNoteInfo)
+            val result = incomeNoteRepository.modifyIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
                 event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
@@ -147,7 +147,7 @@ class IncomeNoteViewModel @Inject constructor(
                 return@launch
             }
 
-            result.body()?.let { incomeNoteInfo ->
+            result.data?.let { incomeNoteInfo ->
                 event(Event.IncomeNoteAddSuccess(incomeNoteInfo))
             }
         }
