@@ -14,13 +14,12 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
+import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputSellMyStockBinding
 import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
-import com.yjpapp.stockportfolio.function.login.UserInfoInputDialog
-import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.util.DisplayUtils
 import com.yjpapp.stockportfolio.util.StockUtils
 import es.dmoral.toasty.Toasty

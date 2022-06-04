@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.opencsv.CSVReader
+import com.yjpapp.data.datasource.MyStockDataSource
 import com.yjpapp.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.repository.MyStockRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.BufferedReader
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StockSearchViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val myStockRepository: MyStockRepository
+    private val myStockRepository: MyStockDataSource
 ): ViewModel() {
     private var _allStockList: MutableList<Array<String>> = mutableListOf()
     var searchResult = mutableStateListOf<SubjectName>()

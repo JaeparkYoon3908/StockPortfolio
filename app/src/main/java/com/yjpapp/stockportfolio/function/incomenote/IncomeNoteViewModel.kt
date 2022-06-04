@@ -5,6 +5,8 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.data.datasource.UserDataSource
+import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.data.model.response.RespIncomeNoteListInfo
 import com.yjpapp.data.model.response.RespTotalGainIncomeNoteData
@@ -14,8 +16,6 @@ import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import es.dmoral.toasty.Toasty
@@ -29,7 +29,7 @@ import kotlin.system.exitProcess
 class IncomeNoteViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val incomeNoteRepository: IncomeNoteRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserDataSource
 ) : BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState

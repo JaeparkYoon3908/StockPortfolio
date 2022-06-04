@@ -5,17 +5,17 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.data.datasource.MyStockDataSource
+import com.yjpapp.data.datasource.PreferenceDataSource
+import com.yjpapp.data.localdb.preference.PrefKey
+import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
+import com.yjpapp.data.repository.IncomeNoteRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
-import com.yjpapp.stockportfolio.repository.IncomeNoteRepository
-import com.yjpapp.stockportfolio.repository.MyStockRepository
-import com.yjpapp.stockportfolio.repository.PreferenceRepository
 import com.yjpapp.stockportfolio.util.NetworkUtils
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,9 +31,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MyStockViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val myStockRepository: MyStockRepository,
-    private val incomeNoteRepository: IncomeNoteRepository,
-    private val preferenceRepository: PreferenceRepository
+    private val myStockRepository: MyStockDataSource,
+    private val incomeNoteDataSource: IncomeNoteRepository,
+    private val preferenceRepository: PreferenceDataSource
 ) : BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState
@@ -233,13 +233,13 @@ class MyStockViewModel @Inject constructor(
      */
     fun requestAddIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo, myStockEntity: MyStockEntity) {
         viewModelScope.launch {
-            val result = incomeNoteRepository.requestPostIncomeNote(reqIncomeNoteInfo)
+            val result = incomeNoteDataSource.addIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
                 event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
             }
             if (result.isSuccessful) {
-                result.body()?.let { incomeNoteInfo ->
+                result.data?.let { incomeNoteInfo ->
                     incomeNoteInfo.gainPercent
                     event(Event.SuccessIncomeNoteAdd(myStockEntity))
                 }

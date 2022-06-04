@@ -25,8 +25,10 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.data.model.response.RespFacebookUserInfo
+import com.yjpapp.data.network.ServerRespCode
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
@@ -35,8 +37,6 @@ import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.databinding.ActivityLoginBinding
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.MainActivity
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.network.ServerRespCode
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

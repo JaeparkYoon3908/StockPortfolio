@@ -7,7 +7,7 @@
         <import type="android.text.TextUtils" />
         <variable
             name="memoData"
-            type="com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity" />
+            type="com.yjpapp.data.localdb.room.memo.MemoListEntity" />
         <variable
             name="deleteModeOn"
             type="boolean" />

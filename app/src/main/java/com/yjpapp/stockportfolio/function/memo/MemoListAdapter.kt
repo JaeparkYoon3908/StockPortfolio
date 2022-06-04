@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.yjpapp.data.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.databinding.ItemMemoListBinding
-import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
 
 /**
  * MemoListPresenter와 연결된 RecyclerView Adapter

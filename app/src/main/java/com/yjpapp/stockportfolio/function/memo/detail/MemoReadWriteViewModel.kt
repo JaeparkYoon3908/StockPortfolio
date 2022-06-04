@@ -3,11 +3,11 @@ package com.yjpapp.stockportfolio.function.memo.detail
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.data.datasource.MemoDataSource
+import com.yjpapp.data.datasource.PreferenceDataSource
+import com.yjpapp.data.localdb.room.memo.MemoListEntity
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.localdb.room.memo.MemoListEntity
-import com.yjpapp.stockportfolio.repository.MemoRepository
-import com.yjpapp.stockportfolio.repository.PreferenceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -20,8 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MemoReadWriteViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val memoRepository: MemoRepository,
-    private val preferenceRepository: PreferenceRepository
+    private val memoRepository: MemoDataSource,
+    private val preferenceRepository: PreferenceDataSource
 ) : ViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState

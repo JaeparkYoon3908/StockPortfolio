@@ -2,13 +2,12 @@ package com.yjpapp.stockportfolio.function
 
 import android.app.Activity
 import android.content.Context
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.data.datasource.UserDataSource
+import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import es.dmoral.toasty.Toasty
@@ -23,7 +22,7 @@ import kotlin.system.exitProcess
 @HiltViewModel
 class MainViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val userRepository: UserRepository
+    private val userRepository: UserDataSource
 ): BaseViewModel() {
     fun runBackPressAppCloseEvent(activity: Activity) {
         val isAllowAppClose = userRepository.isAllowAppClose()

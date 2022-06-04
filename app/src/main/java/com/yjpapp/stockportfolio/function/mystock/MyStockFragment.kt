@@ -42,6 +42,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.data.model.SubjectName
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.R
@@ -52,7 +53,6 @@ import com.yjpapp.stockportfolio.common.theme.*
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockSellInputDialog
-import com.yjpapp.stockportfolio.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import de.charlex.compose.RevealDirection

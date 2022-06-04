@@ -11,12 +11,11 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
-import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.databinding.ActivityMainBinding
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.KeepStateNavigator
 import dagger.hilt.android.AndroidEntryPoint
 

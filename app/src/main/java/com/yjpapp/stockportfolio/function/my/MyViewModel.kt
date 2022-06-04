@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.yjpapp.data.datasource.MyDataSource
+import com.yjpapp.data.datasource.UserDataSource
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.repository.MyRepository
-import com.yjpapp.stockportfolio.repository.UserRepository
 import com.yjpapp.stockportfolio.util.PatternUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,8 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val userRepository: UserRepository,
-    private val myRepository: MyRepository
+    private val userRepository: UserDataSource,
+    private val myRepository: MyDataSource
 ): BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState

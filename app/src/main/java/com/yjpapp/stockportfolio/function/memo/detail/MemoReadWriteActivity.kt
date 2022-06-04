@@ -9,6 +9,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseActivity
 import com.yjpapp.stockportfolio.common.StockConfig
@@ -17,7 +18,6 @@ import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.databinding.ActivityMemoReadWriteBinding
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.memo.MemoListFragment
-import com.yjpapp.stockportfolio.localdb.preference.PrefKey
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

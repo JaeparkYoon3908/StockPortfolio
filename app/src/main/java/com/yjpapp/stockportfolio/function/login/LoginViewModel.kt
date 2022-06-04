@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.function.login
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.NaverIdLoginSDK
+import com.yjpapp.data.datasource.UserDataSource
 import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.data.model.response.RespLoginUserInfo
 import com.yjpapp.data.model.response.RespNaverDeleteUserInfo
@@ -11,7 +12,6 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
-import com.yjpapp.stockportfolio.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val userRepository: UserRepository
+    private val userRepository: UserDataSource
 ) : BaseViewModel() {
     /**
      * Common
