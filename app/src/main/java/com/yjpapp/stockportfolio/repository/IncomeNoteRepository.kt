@@ -1,15 +1,12 @@
 package com.yjpapp.stockportfolio.repository
 
-import android.content.Context
-import androidx.paging.*
+import com.yjpapp.data.model.request.ReqIncomeNoteInfo
+import com.yjpapp.data.model.response.RespIncomeNoteListInfo
+import com.yjpapp.data.model.response.RespStatusInfo
+import com.yjpapp.data.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
-import com.yjpapp.stockportfolio.model.response.RespStatusInfo
-import com.yjpapp.stockportfolio.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.stockportfolio.network.RetrofitClient
-import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 /**

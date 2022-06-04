@@ -25,9 +25,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import com.yjpapp.data.model.SubjectName
 import com.yjpapp.stockportfolio.common.theme.Color_222222
 import com.yjpapp.stockportfolio.common.theme.Color_FFFFFF
-import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
 

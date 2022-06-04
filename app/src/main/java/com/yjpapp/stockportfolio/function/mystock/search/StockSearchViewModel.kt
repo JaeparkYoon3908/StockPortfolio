@@ -4,10 +4,9 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.opencsv.CSVReader
+import com.yjpapp.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.model.SubjectName
 import com.yjpapp.stockportfolio.repository.MyStockRepository
-import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.BufferedReader

@@ -1,11 +1,8 @@
 package com.yjpapp.stockportfolio.repository
 
-import android.content.Context
-import android.content.Intent
+import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.function.login.LoginActivity
 import com.yjpapp.stockportfolio.localdb.preference.PrefKey
-import com.yjpapp.stockportfolio.model.request.ReqSNSLogin
 import com.yjpapp.stockportfolio.network.RetrofitClient
 
 class UserRepository(

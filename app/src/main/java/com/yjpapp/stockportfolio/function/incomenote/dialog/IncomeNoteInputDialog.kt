@@ -1,6 +1,5 @@
 package com.yjpapp.stockportfolio.function.incomenote.dialog
 
-import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -14,14 +13,15 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
+import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.databinding.CustomDialogInputIncomeNoteBinding
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.databinding.CustomDialogInputIncomeNoteBinding
 import com.yjpapp.stockportfolio.extension.OnSingleClickListener
-import com.yjpapp.stockportfolio.model.request.ReqIncomeNoteInfo
 import com.yjpapp.stockportfolio.util.DisplayUtils
 import com.yjpapp.stockportfolio.util.StockUtils
 

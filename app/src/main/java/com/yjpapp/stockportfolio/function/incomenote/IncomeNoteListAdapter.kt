@@ -4,20 +4,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.yjpapp.data.model.response.RespIncomeNoteListInfo
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.widget.CommonLoadingView
 import com.yjpapp.stockportfolio.databinding.ItemIncomeNoteListBinding
 import com.yjpapp.stockportfolio.databinding.ItemLoadingBinding
-import com.yjpapp.stockportfolio.model.response.RespIncomeNoteListInfo
-import com.yjpapp.stockportfolio.util.StockLog
 import com.yjpapp.swipelayout.SwipeLayout
 import com.yjpapp.swipelayout.adapters.RecyclerSwipeAdapter
 import com.yjpapp.swipelayout.implments.SwipeItemRecyclerMangerImpl
-import java.util.*
 
 /**
  * IncomeNotePresenter와 연결된 RecyclerView Adapter

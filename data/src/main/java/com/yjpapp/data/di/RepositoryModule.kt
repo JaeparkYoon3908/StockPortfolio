@@ -1,6 +1,7 @@
 package com.yjpapp.data.di
 
 import com.yjpapp.data.datasource.IncomeNoteDataSource
+import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.repository.IncomeNoteRepository
 import dagger.Module
 import dagger.Provides
@@ -11,12 +12,13 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class RepositoryModule @Inject constructor(
-    private val incomeNoteDataSource: IncomeNoteDataSource
-) {
+class RepositoryModule {
     @Provides
     @Singleton
-    fun provideIncomeNoteRepository(): IncomeNoteRepository {
-        return IncomeNoteRepository(incomeNoteDataSource)
+    fun provideIncomeNoteRepository(
+        incomeNoteDataSource: IncomeNoteDataSource,
+        preferenceDataSource: PreferenceDataSource
+    ): IncomeNoteRepository {
+        return IncomeNoteRepository(incomeNoteDataSource, preferenceDataSource)
     }
 }
