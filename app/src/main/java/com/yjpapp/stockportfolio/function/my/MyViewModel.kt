@@ -4,8 +4,9 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
-import com.yjpapp.data.datasource.MyDataSource
+import com.yjpapp.data.repository.MyRepository
 import com.yjpapp.data.datasource.UserDataSource
+import com.yjpapp.data.repository.UserRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
@@ -20,8 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val userRepository: UserDataSource,
-    private val myRepository: MyDataSource
+    private val userRepository: UserRepository,
+    private val myRepository: MyRepository
 ): BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState

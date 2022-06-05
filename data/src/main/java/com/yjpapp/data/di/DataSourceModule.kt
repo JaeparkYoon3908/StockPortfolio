@@ -8,6 +8,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.yjpapp.data.datasource.*
 import com.yjpapp.data.localdb.room.MyRoomDatabase
 import com.yjpapp.data.network.RetrofitClient
+import com.yjpapp.data.network.service.NaverNidService
+import com.yjpapp.data.network.service.NaverOpenService
+import com.yjpapp.data.network.service.RaspberryPiService
+import com.yjpapp.data.repository.MyRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,33 +65,57 @@ class DataSourceModule {
     }
 
     @Provides
-    fun provideIncomeNoteDataSource(
+    fun provideNaverNidService(
         retrofitClient: RetrofitClient
+    ): NaverNidService {
+        val retrofit = retrofitClient.getRetrofit(RetrofitClient.BaseServerURL.NAVER_NID)
+        return retrofit.create(NaverNidService::class.java)
+    }
+
+    @Provides
+    fun provideNaverOpenService(
+        retrofitClient: RetrofitClient
+    ): NaverOpenService {
+        val retrofit = retrofitClient.getRetrofit(RetrofitClient.BaseServerURL.NAVER_OPEN_API)
+        return retrofit.create(NaverOpenService::class.java)
+    }
+
+    @Provides
+    fun provideRaspberryPiService(
+        retrofitClient: RetrofitClient
+    ): RaspberryPiService {
+        val retrofit = retrofitClient.getRetrofit(RetrofitClient.BaseServerURL.RaspberryPi)
+        return retrofit.create(RaspberryPiService::class.java)
+    }
+
+    @Provides
+    fun provideIncomeNoteDataSource(
+        raspberryPiService: RaspberryPiService
     ): IncomeNoteDataSource {
-        return IncomeNoteDataSource(retrofitClient)
+        return IncomeNoteDataSource(raspberryPiService)
     }
 
     @Provides
     fun provideMemoDataSource(
-        myRoomDatabase: MyRoomDatabase,
-        preferenceRepository: PreferenceDataSource
+        myRoomDatabase: MyRoomDatabase
     ): MemoDataSource {
-        return MemoDataSource(myRoomDatabase.memoListDao(), preferenceRepository)
+        return MemoDataSource(myRoomDatabase.memoListDao())
     }
 
     @Provides
     fun provideMyRepository(
         preferenceRepository: PreferenceDataSource
-    ): MyDataSource {
-        return MyDataSource(preferenceRepository)
+    ): MyRepository {
+        return MyRepository(preferenceRepository)
     }
 
     @Provides
     fun provideUserRepository(
-        preferenceRepository: PreferenceDataSource,
-        retrofitClient: RetrofitClient
+        raspberryPiService: RaspberryPiService,
+        naverOpenService: NaverOpenService,
+        naverNidService: NaverNidService,
     ): UserDataSource {
-        return UserDataSource(preferenceRepository, retrofitClient)
+        return UserDataSource(raspberryPiService,naverOpenService, naverNidService)
     }
 
     @Provides

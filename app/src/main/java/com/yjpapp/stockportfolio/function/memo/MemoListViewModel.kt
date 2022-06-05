@@ -10,6 +10,7 @@ import com.yjpapp.data.datasource.MemoDataSource
 import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.localdb.room.memo.MemoListEntity
+import com.yjpapp.data.repository.MemoRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
@@ -28,7 +29,7 @@ import kotlin.system.exitProcess
 @HiltViewModel
 class MemoListViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val memoRepository: MemoDataSource,
+    private val memoRepository: MemoRepository,
     private val preferenceRepository: PreferenceDataSource
 ) : ViewModel() {
     private val _uiState = MutableEventFlow<Event>()
@@ -36,21 +37,21 @@ class MemoListViewModel @Inject constructor(
     private var _allMemoListData = mutableListOf<MemoListEntity>()
     val allMemoListData get() = _allMemoListData
     fun getAllMemoInfoList() {
-        _allMemoListData = memoRepository.getAllMemoInfoList()
+        _allMemoListData = memoRepository.getAllMemoDataList()
         event(Event.RefreshMemoListData(_allMemoListData))
     }
 
     fun requestDeleteMemoInfo() {
-        val memoList = memoRepository.getAllMemoInfoList()
+        val memoList = memoRepository.getAllMemoDataList()
         try {
             for (position in memoList.indices) {
                 if (memoList[position].deleteChecked == "true") {
                     memoRepository.deleteMemoInfoList(memoList[position])
-                    val updateMemoList = memoRepository.getAllMemoInfoList()
+                    val updateMemoList = memoRepository.getAllMemoDataList()
                     event(Event.RefreshMemoListData(updateMemoList))
                 }
             }
-            val updateMemoList = memoRepository.getAllMemoInfoList()
+            val updateMemoList = memoRepository.getAllMemoDataList()
             event(Event.MemoListDataDeleteSuccess(updateMemoList))
         } catch (e: Exception) {
             e.stackTrace
@@ -58,8 +59,8 @@ class MemoListViewModel @Inject constructor(
     }
 
     fun requestUpdateDeleteCheck(position: Int, deleteCheck: Boolean) {
-        val id = memoRepository.getAllMemoInfoList()[position].id
-        memoRepository.updateDeleteCheck(id, deleteCheck.toString())
+        val id = memoRepository.getAllMemoDataList()[position].id
+        memoRepository.modifyDeleteCheck(id, deleteCheck.toString())
     }
 
     fun runBackPressAppCloseEvent(activity: Activity) {

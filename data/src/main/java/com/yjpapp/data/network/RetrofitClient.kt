@@ -6,6 +6,8 @@ import com.yjpapp.data.BuildConfig
 import com.yjpapp.data.StockLog
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.datasource.PreferenceDataSource
+import com.yjpapp.data.network.service.NaverNidService
+import com.yjpapp.data.network.service.RaspberryPiService
 import kotlinx.serialization.json.Json
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -31,10 +33,10 @@ class RetrofitClient(
     private val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
     private val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
-    fun getService(baseServerURL: BaseServerURL): RetrofitService? {
-        if (!NetworkUtils.isInternetAvailable(context)) {
-            return null
-        }
+    fun getRetrofit(baseServerURL: BaseServerURL): Retrofit {
+//        if (!NetworkUtils.isInternetAvailable(context)) {
+//            return null
+//        }
         val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceDataSource)
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -50,13 +52,11 @@ class RetrofitClient(
             readTimeout(READ_TIMEOUT_OUT_MINUTE, TimeUnit.MINUTES)
         }.build()
         val contentType = "application/json".toMediaType()
-        val retrofit = Retrofit.Builder().apply {
+        return Retrofit.Builder().apply {
             baseUrl(baseServerURL.url)
             client(client)
             addConverterFactory(Json.asConverterFactory(contentType)) // 파싱등록
         }.build()
-
-        return retrofit.create(RetrofitService::class.java)
     }
 
     class CustomInterceptor(

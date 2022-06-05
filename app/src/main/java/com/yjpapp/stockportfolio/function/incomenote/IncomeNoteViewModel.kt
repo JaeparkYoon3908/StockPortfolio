@@ -11,6 +11,7 @@ import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.data.model.response.RespIncomeNoteListInfo
 import com.yjpapp.data.model.response.RespTotalGainIncomeNoteData
 import com.yjpapp.data.repository.IncomeNoteRepository
+import com.yjpapp.data.repository.UserRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
@@ -29,7 +30,7 @@ import kotlin.system.exitProcess
 class IncomeNoteViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val incomeNoteRepository: IncomeNoteRepository,
-    private val userRepository: UserDataSource
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState
@@ -137,7 +138,7 @@ class IncomeNoteViewModel @Inject constructor(
 
     fun requestAddIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
-            val result = incomeNoteRepository.modifyIncomeNote(reqIncomeNoteInfo)
+            val result = incomeNoteRepository.addIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
                 event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch

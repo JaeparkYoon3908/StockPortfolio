@@ -1,6 +1,5 @@
 package com.yjpapp.data.datasource
 
-import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.localdb.room.memo.MemoListDao
 import com.yjpapp.data.localdb.room.memo.MemoListEntity
 import javax.inject.Inject
@@ -13,10 +12,9 @@ import javax.inject.Inject
  */
 
 class MemoDataSource @Inject constructor(
-    private val memoListDao: MemoListDao,
-    private val preferenceRepository: PreferenceDataSource
+    private val memoListDao: MemoListDao
 ) {
-    fun insertMemoData(memoData: MemoListEntity) {
+    fun requestInsertMemoData(memoData: MemoListEntity) {
         try {
             memoListDao.insert(memoData)
         } catch (e: Exception) {
@@ -24,7 +22,7 @@ class MemoDataSource @Inject constructor(
         }
     }
 
-    fun updateMemoData(memoData: MemoListEntity) {
+    fun requestUpdateMemoData(memoData: MemoListEntity) {
         try {
             memoListDao.update(memoData)
         } catch (e: Exception) {
@@ -32,7 +30,7 @@ class MemoDataSource @Inject constructor(
         }
     }
 
-    fun deleteMomoData(id: Int): Boolean {
+    fun requestDeleteMomoData(id: Int): Boolean {
         return try {
             memoListDao.deleteMemoInfo(id)
             true
@@ -42,11 +40,11 @@ class MemoDataSource @Inject constructor(
         }
     }
 
-    fun getMemoInfo(id: Int): MemoListEntity {
+    fun requestGetMemoInfo(id: Int): MemoListEntity {
        return memoListDao.getMemoInfo(id)
     }
 
-    fun getAllMemoInfoList(): MutableList<MemoListEntity> {
+    fun requestGetAllMemoInfoList(): MutableList<MemoListEntity> {
         return try {
             memoListDao.getAll()
         } catch (e: Exception) {
@@ -55,7 +53,7 @@ class MemoDataSource @Inject constructor(
         }
     }
 
-    fun updateDeleteCheck(id: Int, deleteCheck: String) {
+    fun requestUpdateDeleteCheck(id: Int, deleteCheck: String) {
         try {
             memoListDao.updateDeleteChecked(id, deleteCheck)
         } catch (e: Exception) {
@@ -63,16 +61,11 @@ class MemoDataSource @Inject constructor(
         }
     }
 
-    fun deleteMemoInfoList(memoListEntity: MemoListEntity){
+    fun requestDeleteMemoInfoList(memoListEntity: MemoListEntity){
         try {
             memoListDao.delete(memoListEntity)
         } catch (e: Exception) {
             e.stackTrace
         }
-    }
-
-    fun getIsMemoVibration(): Boolean {
-        val isMemoVibration = preferenceRepository.getPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)?: ""
-        return isMemoVibration == "true"
     }
 }

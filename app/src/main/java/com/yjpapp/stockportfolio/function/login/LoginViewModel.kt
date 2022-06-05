@@ -7,6 +7,7 @@ import com.yjpapp.data.datasource.UserDataSource
 import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.data.model.response.RespLoginUserInfo
 import com.yjpapp.data.model.response.RespNaverDeleteUserInfo
+import com.yjpapp.data.repository.UserRepository
 import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
@@ -26,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val userRepository: UserDataSource
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
     /**
      * Common
@@ -40,7 +41,7 @@ class LoginViewModel @Inject constructor(
      */
     fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch {
-            val result = userRepository.postUserInfo(reqSnsLogin)
+            val result = userRepository.addUserInfo(reqSnsLogin)
             if (result == null) {
                 event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch
