@@ -11,6 +11,7 @@ import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.data.repository.IncomeNoteRepository
+import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
@@ -31,7 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyStockViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val myStockRepository: MyStockDataSource,
+    private val myStockRepository: MyStockRepository,
     private val incomeNoteDataSource: IncomeNoteRepository,
     private val preferenceRepository: PreferenceDataSource
 ) : BaseViewModel() {
@@ -55,44 +56,50 @@ class MyStockViewModel @Inject constructor(
      * MyStockFragment 영역
      */
     init {
-        myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
-        if (myStockInfoList.isNotEmpty()) refreshAllPrices()
-        calculateTopData()
+        viewModelScope.launch {
+            myStockInfoList = myStockRepository.getAllMyStock().toMutableStateList()
+            if (myStockInfoList.isNotEmpty()) refreshAllPrices()
+            calculateTopData()
+        }
     }
 
-    fun addMyStock(myStockEntity: MyStockEntity): Boolean {
-        return try {
-            myStockRepository.insertMyStock(myStockEntity)
-            myStockRepository.getAllMyStock().last {
-                myStockInfoList.add(it)
+    suspend fun addMyStock(myStockEntity: MyStockEntity): Boolean {
+        return withContext(viewModelScope.coroutineContext) {
+            try {
+                myStockRepository.addMyStock(myStockEntity)
+                myStockRepository.getAllMyStock().last {
+                    myStockInfoList.add(it)
+                }
+                _scrollIndex.value = myStockInfoList.size
+                event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)))
+                calculateTopData()
+                true
+            } catch (e: Exception) {
+                e.stackTrace
+                event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
+                false
             }
-            _scrollIndex.value = myStockInfoList.size
-            event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)))
-            calculateTopData()
-            true
-        } catch (e: Exception) {
-            e.stackTrace
-            event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
-            false
         }
     }
 
-    fun updateMyStock(myStockEntity: MyStockEntity): Boolean {
-        return try {
-            myStockRepository.updateMyStock(myStockEntity)
-            myStockInfoList.clear()
-            myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
-            event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Modify_Success)))
-            calculateTopData()
-            true
-        } catch (e: Exception) {
-            e.stackTrace
-            event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
-            false
+    suspend fun updateMyStock(myStockEntity: MyStockEntity): Boolean =
+        withContext(viewModelScope.coroutineContext) {
+            try {
+                myStockRepository.updateMyStock(myStockEntity)
+                myStockInfoList.clear()
+                myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
+                event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Modify_Success)))
+                calculateTopData()
+                true
+            } catch (e: Exception) {
+                e.stackTrace
+                event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
+                false
+            }
         }
-    }
 
-    fun deleteMyStock(myStockEntity: MyStockEntity) {
+
+    suspend fun deleteMyStock(myStockEntity: MyStockEntity) {
         try {
             myStockRepository.deleteMyStock((myStockEntity))
             myStockInfoList.remove(myStockEntity)
@@ -117,7 +124,8 @@ class MyStockViewModel @Inject constructor(
             totalEvaluationAmount += currentPrice * purchaseCount
         }
         totalGainPrice = totalEvaluationAmount - totalPurchasePrice
-        totalGainPricePercent = StockUtils.calculateGainPercent(totalPurchasePrice, totalEvaluationAmount)
+        totalGainPricePercent =
+            StockUtils.calculateGainPercent(totalPurchasePrice, totalEvaluationAmount)
         viewModelScope.launch {
             _totalPurchasePrice.emit(totalPurchasePrice.toString())
             _totalEvaluationAmount.emit(totalEvaluationAmount.toString())
@@ -133,7 +141,8 @@ class MyStockViewModel @Inject constructor(
         }
         viewModelScope.launch {
             repeat(myStockInfoList.size) { count ->
-                val url = "https://finance.naver.com/item/main.naver?code=${myStockInfoList[count].subjectCode}"
+                val url =
+                    "https://finance.naver.com/item/main.naver?code=${myStockInfoList[count].subjectCode}"
                 val doc = withContext(Dispatchers.IO) {
                     try {
                         Jsoup.connect(url).get()
@@ -161,7 +170,8 @@ class MyStockViewModel @Inject constructor(
                     val yesterdayPrice = blind[startIndex + 3].text()
 
                     val currentPriceNumber = StockUtils.getNumDeletedComma(currentPrice).toInt()
-                    val purchasePriceNumber = StockUtils.getNumDeletedComma(myStockInfoList[count].purchasePrice).toInt()
+                    val purchasePriceNumber =
+                        StockUtils.getNumDeletedComma(myStockInfoList[count].purchasePrice).toInt()
                     val purchaseCountNumber = myStockInfoList[count].purchaseCount
                     val gainPrice = (currentPriceNumber - purchasePriceNumber) * purchaseCountNumber
                     myStockInfoList[count].apply {
@@ -219,12 +229,14 @@ class MyStockViewModel @Inject constructor(
     }
 
     fun isDeleteCheck(): Boolean {
-        val isDeleteCheckPref = preferenceRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
+        val isDeleteCheckPref =
+            preferenceRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
         return isDeleteCheckPref == StockConfig.TRUE
     }
 
     fun isAutoAdd(): Boolean {
-        val isAutoAddPref = preferenceRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
+        val isAutoAddPref =
+            preferenceRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
         return isAutoAddPref == StockConfig.TRUE
     }
 
@@ -257,12 +269,12 @@ class MyStockViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class ShowInfoToastMessage(val msg: String): Event()
-        data class ShowErrorToastMessage(val msg: String): Event()
-        data class ShowLoadingImage(val msg: Unit): Event()
-        data class HideLoadingImage(val msg: Unit): Event()
-        data class SuccessIncomeNoteAdd(val data: MyStockEntity): Event()
-        data class RefreshCurrentPriceDone(val isSuccess: Boolean): Event()
-        data class ResponseServerError(val msg: String): Event()
+        data class ShowInfoToastMessage(val msg: String) : Event()
+        data class ShowErrorToastMessage(val msg: String) : Event()
+        data class ShowLoadingImage(val msg: Unit) : Event()
+        data class HideLoadingImage(val msg: Unit) : Event()
+        data class SuccessIncomeNoteAdd(val data: MyStockEntity) : Event()
+        data class RefreshCurrentPriceDone(val isSuccess: Boolean) : Event()
+        data class ResponseServerError(val msg: String) : Event()
     }
 }

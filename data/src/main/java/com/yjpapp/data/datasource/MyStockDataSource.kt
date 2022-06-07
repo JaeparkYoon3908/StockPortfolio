@@ -2,22 +2,31 @@ package com.yjpapp.data.datasource
 
 import com.yjpapp.data.localdb.room.mystock.MyStockDao
 import com.yjpapp.data.localdb.room.mystock.MyStockEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MyStockDataSource(private val myStockDao: MyStockDao) {
-
-    fun insertMyStock(myStockEntity: MyStockEntity) {
-        myStockDao.insert(myStockEntity)
+    private val ioDispatcher = Dispatchers.IO
+    suspend fun requestInsertMyStock(myStockEntity: MyStockEntity) {
+        withContext(ioDispatcher) {
+            myStockDao.insert(myStockEntity)
+        }
     }
 
-    fun updateMyStock(myStockEntity: MyStockEntity) {
-        myStockDao.update(myStockEntity)
+    suspend fun requestUpdateMyStock(myStockEntity: MyStockEntity) {
+        withContext(ioDispatcher) {
+            myStockDao.update(myStockEntity)
+        }
     }
 
-    fun deleteMyStock(myStockEntity: MyStockEntity) {
-        myStockDao.delete(myStockEntity)
+    suspend fun requestDeleteMyStock(myStockEntity: MyStockEntity) {
+        withContext(ioDispatcher) {
+            myStockDao.delete(myStockEntity)
+        }
     }
 
-    fun getAllMyStock(): MutableList<MyStockEntity> {
-        return myStockDao.getAll()
-    }
+    suspend fun requestGetAllMyStock(): MutableList<MyStockEntity> =
+        withContext(Dispatchers.IO) {
+            myStockDao.getAll()
+        }
 }

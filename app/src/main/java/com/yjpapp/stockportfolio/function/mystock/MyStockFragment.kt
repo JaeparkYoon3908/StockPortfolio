@@ -148,9 +148,11 @@ class MyStockFragment : Fragment() {
                 Toasty.error(requireContext(), event.msg, Toasty.LENGTH_LONG).show()
             }
             is MyStockViewModel.Event.SuccessIncomeNoteAdd -> {
-                myStockViewModel.deleteMyStock(
-                    myStockEntity = event.data
-                )
+                lifecycleScope.launch {
+                    myStockViewModel.deleteMyStock(
+                        myStockEntity = event.data
+                    )
+                }
             }
             is MyStockViewModel.Event.RefreshCurrentPriceDone -> {
                 if (event.isSuccess)
@@ -518,9 +520,11 @@ class MyStockFragment : Fragment() {
                         modifier = Modifier
                             .clickable {
                                 if (!myStockViewModel.isDeleteCheck()) {
-                                    myStockViewModel.deleteMyStock(
-                                        myStockEntity = myStockEntity
-                                    )
+                                    coroutineScope.launch {
+                                        myStockViewModel.deleteMyStock(
+                                            myStockEntity = myStockEntity
+                                        )
+                                    }
                                     return@clickable
                                 }
                                 CommonTwoBtnDialog(
@@ -533,10 +537,12 @@ class MyStockFragment : Fragment() {
                                         },
                                         rightBtnText = getString(R.string.Common_Ok),
                                         rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
-                                            myStockViewModel.deleteMyStock(
-                                                myStockEntity = myStockEntity
-                                            )
-                                            dialog.dismiss()
+                                            coroutineScope.launch {
+                                                myStockViewModel.deleteMyStock(
+                                                    myStockEntity = myStockEntity
+                                                )
+                                                dialog.dismiss()
+                                            }
                                         }
                                     )
                                 ).show()

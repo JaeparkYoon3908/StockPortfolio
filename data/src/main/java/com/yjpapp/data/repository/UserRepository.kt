@@ -30,6 +30,7 @@ class UserRepository @Inject constructor(
 
     fun logout() {
         //프리퍼런스 reset
+
         preferenceDataSource.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
         preferenceDataSource.setPreference(PrefKey.KEY_USER_INDEX, "")
         preferenceDataSource.setPreference(PrefKey.KEY_USER_TOKEN, "")

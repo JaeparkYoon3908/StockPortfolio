@@ -56,6 +56,7 @@ object StockUtils {
 
     //5,000,000 => 5000000 변환
     fun getNumDeletedComma(num: String): String {
+        if (num.isEmpty()) return "0"
         val result = StringBuffer()
         val split = num.split(",")
         for (i in split.indices) {
@@ -66,6 +67,7 @@ object StockUtils {
 
     //5000000 => 5,000,000 변환
     fun getNumInsertComma(num: String): String {
+        if (num.isEmpty()) return "0"
         var result = ""
         val decimalFormat = DecimalFormat("###,###")
         result = decimalFormat.format(num.replace(",", "").toDouble())
@@ -74,6 +76,7 @@ object StockUtils {
 
     //5000000 => $5,000,000 변환
     fun getPriceNum(num: String): String {
+        if (num.isEmpty()) return "0"
         val result = StringBuffer().apply {
             append(StockConfig.koreaMoneySymbol)
             append(getNumInsertComma(num))
@@ -84,6 +87,7 @@ object StockUtils {
     //14% => 14 변환.
     fun getNumDeletedPercent(num: String): String {
         var result: String = ""
+        if (num.isEmpty()) return result
         val split = num.split("%")
         for (i in split.indices) {
             result += split[i]

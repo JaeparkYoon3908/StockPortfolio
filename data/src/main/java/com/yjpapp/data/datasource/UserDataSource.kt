@@ -6,25 +6,25 @@ import com.yjpapp.data.network.service.NaverOpenService
 import com.yjpapp.data.network.service.RaspberryPiService
 
 class UserDataSource(
-    private val raspberryPiService: RaspberryPiService?,
-    private val naverOpenService: NaverOpenService?,
-    private val naverNIDService: NaverNidService?
+    private val raspberryPiService: RaspberryPiService,
+    private val naverOpenService: NaverOpenService,
+    private val naverNIDService: NaverNidService
 ) {
     suspend fun requestPostUserInfo(reqSnsLogin: ReqSNSLogin) =
-        raspberryPiService?.requestRegUser(reqSnsLogin)
+        raspberryPiService.requestRegUser(reqSnsLogin)
 
     suspend fun requestGetUserInfo(params: HashMap<String, String>) =
-        raspberryPiService?.requestUserInfo(params)
+        raspberryPiService.requestUserInfo(params)
 
     suspend fun requestGetNaverUserInfo() =
-        naverNIDService?.requestGetNaverUserInfo()
+        naverNIDService.requestGetNaverUserInfo()
 
     suspend fun requestDeleteNaverUserInfo(params: HashMap<String, String>) =
-        naverOpenService?.requestDeleteNaverUserInfo(params)
+        naverOpenService.requestDeleteNaverUserInfo(params)
 
     suspend fun requestRetryNaverUserLogin(params: HashMap<String, String>) =
-        naverOpenService?.requestRetryNaverUserLogin(params)
+        naverOpenService.requestRetryNaverUserLogin(params)
 
     suspend fun requestDeleteUserInfo() =
-        raspberryPiService?.requestDeleteUserInfo()
+        raspberryPiService.requestDeleteUserInfo()
 }
