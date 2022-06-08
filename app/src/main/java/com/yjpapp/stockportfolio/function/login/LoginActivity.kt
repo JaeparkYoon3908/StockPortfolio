@@ -126,7 +126,7 @@ class LoginActivity : BaseActivity() {
             }
             is LoginViewModel.Event.ResponseLoginResultData -> {
                 when (event.respLoginUserInfo.status) {
-                    ServerRespCode.OK -> {
+                    200 -> {
                         StockLog.d(TAG, "email = ${event.respLoginUserInfo.data.user_email}")
                         StockLog.d(TAG, "name = ${event.respLoginUserInfo.data.user_name}")
                         StockLog.d(TAG, "userIndex = ${event.respLoginUserInfo.data.user_index}")

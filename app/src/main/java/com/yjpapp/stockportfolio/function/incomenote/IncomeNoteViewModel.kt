@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.data.datasource.UserDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
+import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.data.model.response.RespIncomeNoteListInfo
 import com.yjpapp.data.model.response.RespTotalGainIncomeNoteData
@@ -56,12 +57,8 @@ class IncomeNoteViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val result = incomeNoteRepository.getIncomeNote(params)
-                if (result == null) {
-                    event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
-                    return@launch
-                }
-                if (!result.isSuccessful) {
-                    event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
+                if (result is ResponseResult.DataError) {
+                    event(Event.ResponseServerError(result.resultMessage))
                     return@launch
                 }
 
@@ -84,12 +81,9 @@ class IncomeNoteViewModel @Inject constructor(
         }
         CoroutineScope(Dispatchers.Main).launch {
             val result = incomeNoteRepository.getTotalGain(params)
-            if (result == null) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
-                return@launch
-            }
-            if (!result.isSuccessful) {
-                event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
+
+            if (result is ResponseResult.DataError) {
+                event(Event.ResponseServerError(result.resultMessage))
                 return@launch
             }
 
@@ -102,12 +96,9 @@ class IncomeNoteViewModel @Inject constructor(
     fun requestDeleteIncomeNote(id: Int, position: Int) {
         viewModelScope.launch {
             val result = incomeNoteRepository.deleteIncomeNote(id)
-            if (result == null) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
-                return@launch
-            }
-            if (!result.isSuccessful) {
-                event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
+
+            if (result is ResponseResult.DataError) {
+                event(Event.ResponseServerError(result.resultMessage))
                 return@launch
             }
 
@@ -118,17 +109,14 @@ class IncomeNoteViewModel @Inject constructor(
     fun requestModifyIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
             val result = incomeNoteRepository.modifyIncomeNote(reqIncomeNoteInfo)
-            if (result == null) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
+            if (result is ResponseResult.DataError) {
+                event(Event.ResponseServerError(result.resultMessage))
                 return@launch
             }
-            if (!result.isSuccessful) {
-                event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
-                return@launch
-            }
+
             result.data?.let { incomeNoteList ->
                 if (incomeNoteList.id == -1) {
-                    event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Normal)))
+                    event(Event.ResponseServerError("incomeNoteList.id is -1"))
                     return@launch
                 }
                 event(Event.IncomeNoteModifySuccess(incomeNoteList))
@@ -139,12 +127,9 @@ class IncomeNoteViewModel @Inject constructor(
     fun requestAddIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) {
         viewModelScope.launch {
             val result = incomeNoteRepository.addIncomeNote(reqIncomeNoteInfo)
-            if (result == null) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
-                return@launch
-            }
-            if (!result.isSuccessful) {
-                event(Event.ResponseServerError("서버에 응답이 없습니다. 잠시 후 다시 시도해주세요."))
+
+            if (result is ResponseResult.DataError) {
+                event(Event.ResponseServerError(result.resultMessage))
                 return@launch
             }
 

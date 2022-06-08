@@ -1,10 +1,8 @@
 package com.yjpapp.data.network.service
 
-import com.yjpapp.data.model.RepositoryResult
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.data.model.response.*
-import dagger.Provides
 import retrofit2.Response
 import retrofit2.http.*
 

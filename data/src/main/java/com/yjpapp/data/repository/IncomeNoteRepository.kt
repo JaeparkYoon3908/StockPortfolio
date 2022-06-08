@@ -5,7 +5,6 @@ import com.yjpapp.data.datasource.IncomeNoteDataSource
 import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
-import com.yjpapp.data.network.RetrofitClient
 import javax.inject.Inject
 
 /**
@@ -16,19 +15,19 @@ class IncomeNoteRepository @Inject constructor(
     private val preferenceDataSource: PreferenceDataSource
 ) : BaseRepository() {
     suspend fun getIncomeNote(params: HashMap<String, String>) =
-        safeApiCall { incomeNoteDataSource.requestGetIncomeNote(params)?.body() }
+        incomeNoteDataSource.requestGetIncomeNote(params)
 
     suspend fun addIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) =
-        safeApiCall { incomeNoteDataSource.requestPostIncomeNote(reqIncomeNoteInfo)?.body() }
+        incomeNoteDataSource.requestPostIncomeNote(reqIncomeNoteInfo)
 
     suspend fun modifyIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) =
-        safeApiCall { incomeNoteDataSource.requestPutIncomeNote(reqIncomeNoteInfo)?.body() }
+        incomeNoteDataSource.requestPutIncomeNote(reqIncomeNoteInfo)
 
     suspend fun deleteIncomeNote(id: Int) =
-        safeApiCall { incomeNoteDataSource.requestDeleteIncomeNote(id)?.body() }
+        incomeNoteDataSource.requestDeleteIncomeNote(id)
 
     suspend fun getTotalGain(params: HashMap<String, String>) =
-        safeApiCall { incomeNoteDataSource.requestTotalGain(params)?.body() }
+        incomeNoteDataSource.requestTotalGain(params)
 
     fun isShowDeleteCheck(): String {
         return preferenceDataSource.getPreference(

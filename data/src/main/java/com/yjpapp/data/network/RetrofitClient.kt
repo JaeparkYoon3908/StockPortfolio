@@ -4,10 +4,8 @@ import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.yjpapp.data.BuildConfig
 import com.yjpapp.data.StockLog
-import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.datasource.PreferenceDataSource
-import com.yjpapp.data.network.service.NaverNidService
-import com.yjpapp.data.network.service.RaspberryPiService
+import com.yjpapp.data.localdb.preference.PrefKey
 import kotlinx.serialization.json.Json
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
