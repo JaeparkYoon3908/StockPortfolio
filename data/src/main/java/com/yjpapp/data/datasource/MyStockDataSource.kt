@@ -9,24 +9,41 @@ class MyStockDataSource(private val myStockDao: MyStockDao) {
     private val ioDispatcher = Dispatchers.IO
     suspend fun requestInsertMyStock(myStockEntity: MyStockEntity) {
         withContext(ioDispatcher) {
-            myStockDao.insert(myStockEntity)
+            try {
+                myStockDao.insert(myStockEntity)
+            } catch (e: Exception) {
+                e.stackTrace
+            }
         }
     }
 
     suspend fun requestUpdateMyStock(myStockEntity: MyStockEntity) {
         withContext(ioDispatcher) {
-            myStockDao.update(myStockEntity)
+            try {
+                myStockDao.update(myStockEntity)
+            } catch (e: Exception) {
+                e.stackTrace
+            }
         }
     }
 
     suspend fun requestDeleteMyStock(myStockEntity: MyStockEntity) {
         withContext(ioDispatcher) {
-            myStockDao.delete(myStockEntity)
+            try {
+                myStockDao.delete(myStockEntity)
+            } catch (e: Exception) {
+                e.stackTrace
+            }
         }
     }
 
     suspend fun requestGetAllMyStock(): MutableList<MyStockEntity> =
         withContext(Dispatchers.IO) {
-            myStockDao.getAll()
+            try {
+                myStockDao.getAll()
+            } catch (e: Exception) {
+                e.stackTrace
+                mutableListOf()
+            }
         }
 }
