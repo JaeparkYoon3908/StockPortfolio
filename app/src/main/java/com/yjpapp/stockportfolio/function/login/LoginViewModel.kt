@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.NaverIdLoginSDK
 import com.yjpapp.data.datasource.UserDataSource
+import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.data.model.response.RespLoginUserInfo
 import com.yjpapp.data.model.response.RespNaverDeleteUserInfo
@@ -42,19 +43,13 @@ class LoginViewModel @Inject constructor(
     fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch {
             val result = userRepository.addUserInfo(reqSnsLogin)
-            if (result == null) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
+            if (result is ResponseResult.DataError) {
+                event(Event.ResponseServerError(result.resultMessage))
                 return@launch
             }
-            if (result.body() == null) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Normal)))
-                return@launch
+            result.data?.let { data ->
+                event(Event.ResponseLoginResultData(data))
             }
-            if (!result.isSuccessful) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Normal)))
-                return@launch
-            }
-            event(Event.ResponseLoginResultData(result.body()!!))
         }
     }
 
@@ -67,17 +62,14 @@ class LoginViewModel @Inject constructor(
             params["access_token"] = naverAccessToken
             params["grant_type"] = "delete"
             params["service_provider"] = "NAVER"
-
             val result = userRepository.deleteNaverUserInfo(params)
-            if (result == null) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
+            if (result is ResponseResult.DataError) {
+                event(Event.ResponseServerError(result.resultMessage))
                 return@launch
             }
-            if (!result.isSuccessful) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Normal)))
-                return@launch
+            result.data?.let { data ->
+                event(Event.ResponseDeleteNaverUserInfo(data))
             }
-            event(Event.ResponseDeleteNaverUserInfo(result.body()))
         }
     }
 

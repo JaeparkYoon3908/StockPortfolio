@@ -9,8 +9,7 @@ import javax.inject.Inject
 class MemoRepository @Inject constructor(
     private val memoDataSource: MemoDataSource,
     private val preferenceDataSource: PreferenceDataSource
-): BaseRepository()
-{
+) {
     fun addMemoData(memoData: MemoListEntity) {
         memoDataSource.requestInsertMemoData(memoData)
     }

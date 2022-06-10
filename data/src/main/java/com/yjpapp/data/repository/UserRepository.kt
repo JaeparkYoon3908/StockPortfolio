@@ -11,7 +11,7 @@ import javax.inject.Inject
 class UserRepository @Inject constructor(
     private val userDataSource: UserDataSource,
     private val preferenceDataSource: PreferenceDataSource
-): BaseRepository() {
+) {
 
     suspend fun addUserInfo(reqSnsLogin: ReqSNSLogin) =
         userDataSource.requestPostUserInfo(reqSnsLogin)

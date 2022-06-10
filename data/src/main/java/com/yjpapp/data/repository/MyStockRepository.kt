@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class MyStockRepository @Inject constructor(
     private val myStockDataSource: MyStockDataSource,
-) : BaseRepository() {
+) {
 
     suspend fun addMyStock(myStockEntity: MyStockEntity) {
         myStockDataSource.requestInsertMyStock(myStockEntity)

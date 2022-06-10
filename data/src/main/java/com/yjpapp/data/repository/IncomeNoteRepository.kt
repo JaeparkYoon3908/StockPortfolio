@@ -13,7 +13,7 @@ import javax.inject.Inject
 class IncomeNoteRepository @Inject constructor(
     private val incomeNoteDataSource: IncomeNoteDataSource,
     private val preferenceDataSource: PreferenceDataSource
-) : BaseRepository() {
+) {
     suspend fun getIncomeNote(params: HashMap<String, String>) =
         incomeNoteDataSource.requestGetIncomeNote(params)
 

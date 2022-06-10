@@ -5,7 +5,9 @@ import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MyStockDataSource(private val myStockDao: MyStockDao) {
+class MyStockDataSource(
+    private val myStockDao: MyStockDao
+) {
     private val ioDispatcher = Dispatchers.IO
     suspend fun requestInsertMyStock(myStockEntity: MyStockEntity) {
         withContext(ioDispatcher) {
