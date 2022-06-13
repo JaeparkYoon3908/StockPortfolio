@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.viewModelScope
-import com.yjpapp.data.datasource.UserDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo

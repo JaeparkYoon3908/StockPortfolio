@@ -1,13 +1,11 @@
 package com.yjpapp.data.di
 
-import com.yjpapp.data.datasource.IncomeNoteDataSource
-import com.yjpapp.data.datasource.PreferenceDataSource
-import com.yjpapp.data.repository.IncomeNoteRepository
+import com.yjpapp.data.datasource.*
+import com.yjpapp.data.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -19,6 +17,41 @@ class RepositoryModule {
         incomeNoteDataSource: IncomeNoteDataSource,
         preferenceDataSource: PreferenceDataSource
     ): IncomeNoteRepository {
-        return IncomeNoteRepository(incomeNoteDataSource, preferenceDataSource)
+        return IncomeNoteRepositoryImpl(incomeNoteDataSource, preferenceDataSource)
     }
+
+    @Provides
+    @Singleton
+    fun provideMyRepository(
+        preferenceDataSource: PreferenceDataSource
+    ): MyRepository {
+        return MyRepositoryImpl(preferenceDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        userDataSource: UserDataSource,
+        preferenceDataSource: PreferenceDataSource
+    ): UserRepository {
+        return UserRepositoryImpl(userDataSource, preferenceDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMyStockRepository(
+        myStockDataSource: MyStockDataSource
+    ): MyStockRepository {
+        return MyStockRepositoryImpl(myStockDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMemoRepository(
+        memoDataSource: MemoDataSource,
+        preferenceDataSource: PreferenceDataSource
+    ): MemoRepository {
+        return MemoRepositoryImpl(memoDataSource, preferenceDataSource)
+    }
+
 }

@@ -4,73 +4,94 @@ import com.yjpapp.data.StockConfig
 import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.datasource.UserDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
+import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqSNSLogin
-import com.yjpapp.data.network.service.RaspberryPiService
+import com.yjpapp.data.model.response.RespGetNaverUserInfo
+import com.yjpapp.data.model.response.RespLoginUserInfo
+import com.yjpapp.data.model.response.RespNaverDeleteUserInfo
+import com.yjpapp.data.model.response.RespStatusInfo
 import javax.inject.Inject
 
-class UserRepository @Inject constructor(
+interface UserRepository {
+    suspend fun addUserInfo(reqSnsLogin: ReqSNSLogin): ResponseResult<RespLoginUserInfo>
+    suspend fun getUserInfo(params: HashMap<String, String>): ResponseResult<RespLoginUserInfo>
+    suspend fun getNaverUserInfo(): ResponseResult<RespGetNaverUserInfo>
+    suspend fun deleteNaverUserInfo(params: HashMap<String, String>): ResponseResult<RespNaverDeleteUserInfo>
+    suspend fun retryNaverUserLogin(params: HashMap<String, String>): ResponseResult<RespNaverDeleteUserInfo>
+    fun logout()
+    suspend fun deleteUserInfo(): ResponseResult<RespStatusInfo>
+    fun getLoginType(): String
+    fun getNaverAccessToken(): String
+    fun getUserName(): String
+    fun getUserEmail(): String
+    fun isAllowAppClose(): String
+    fun setPreference(prefKey: String, value: String?)
+    fun setPreference(prefKey: String, value: Int)
+    fun getPreference(prefKey: String): String
+    fun isExistPreference(prefKey: String): Boolean
+}
+class UserRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
     private val preferenceDataSource: PreferenceDataSource
-) {
+): UserRepository {
 
-    suspend fun addUserInfo(reqSnsLogin: ReqSNSLogin) =
+    override suspend fun addUserInfo(reqSnsLogin: ReqSNSLogin) =
         userDataSource.requestPostUserInfo(reqSnsLogin)
 
-    suspend fun getUserInfo(params: HashMap<String, String>) =
+    override suspend fun getUserInfo(params: HashMap<String, String>) =
         userDataSource.requestGetUserInfo(params)
 
-    suspend fun getNaverUserInfo() =
+    override suspend fun getNaverUserInfo() =
         userDataSource.requestGetNaverUserInfo()
 
-    suspend fun deleteNaverUserInfo(params: HashMap<String, String>) =
+    override suspend fun deleteNaverUserInfo(params: HashMap<String, String>) =
         userDataSource.requestDeleteNaverUserInfo(params)
 
-    suspend fun retryNaverUserLogin(params: HashMap<String, String>) =
+    override suspend fun retryNaverUserLogin(params: HashMap<String, String>) =
         userDataSource.requestRetryNaverUserLogin(params)
 
-    fun logout() {
+    override fun logout() {
         //프리퍼런스 reset
-
         preferenceDataSource.setPreference(PrefKey.KEY_AUTO_LOGIN, false)
         preferenceDataSource.setPreference(PrefKey.KEY_USER_INDEX, "")
         preferenceDataSource.setPreference(PrefKey.KEY_USER_TOKEN, "")
     }
 
-    suspend fun deleteUserInfo() = userDataSource.requestDeleteUserInfo()
+    override suspend fun deleteUserInfo() = userDataSource.requestDeleteUserInfo()
 
-    fun getLoginType(): String {
+    override fun getLoginType(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_USER_LOGIN_TYPE)?: ""
     }
 
-    fun getNaverAccessToken(): String {
+    override fun getNaverAccessToken(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_NAVER_ACCESS_TOKEN)?: ""
     }
 
-    fun getUserName(): String {
+    override fun getUserName(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_USER_NAME)?: ""
     }
 
-    fun getUserEmail(): String {
+    override fun getUserEmail(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_USER_EMAIL)?: ""
     }
 
-    fun isAllowAppClose(): String {
+    override fun isAllowAppClose(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)?: StockConfig.FALSE
     }
 
-    fun setPreference(prefKey: String, value: String?) {
+    override fun setPreference(prefKey: String, value: String?) {
         preferenceDataSource.setPreference(prefKey, value)
     }
 
-    fun setPreference(prefKey: String, value: Int) {
+    override fun setPreference(prefKey: String, value: Int) {
         preferenceDataSource.setPreference(prefKey, value)
     }
 
-    fun getPreference(prefKey: String): String {
+    override fun getPreference(prefKey: String): String {
         return preferenceDataSource.getPreference(prefKey)?: ""
     }
 
-    fun isExistPreference(prefKey: String): Boolean {
+    override fun isExistPreference(prefKey: String): Boolean {
         return preferenceDataSource.isExists(prefKey)
     }
 }

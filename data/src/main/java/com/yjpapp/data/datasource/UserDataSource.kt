@@ -16,7 +16,6 @@ class UserDataSource(
     private val naverOpenService: NaverOpenService,
     private val naverNIDService: NaverNidService
 ): BaseDataSource() {
-    private val ioDispatcher = Dispatchers.IO
     suspend fun requestPostUserInfo(reqSnsLogin: ReqSNSLogin): ResponseResult<RespLoginUserInfo> =
         handleApi { raspberryPiService.requestRegUser(reqSnsLogin) }
 

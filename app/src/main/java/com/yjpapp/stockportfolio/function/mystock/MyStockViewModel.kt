@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
-import com.yjpapp.data.datasource.MyStockDataSource
 import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.localdb.room.mystock.MyStockEntity
@@ -33,7 +32,7 @@ import javax.inject.Inject
 class MyStockViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val myStockRepository: MyStockRepository,
-    private val incomeNoteDataSource: IncomeNoteRepository,
+    private val incomeNoteRepository: IncomeNoteRepository,
     private val preferenceRepository: PreferenceDataSource
 ) : BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
@@ -245,7 +244,7 @@ class MyStockViewModel @Inject constructor(
      */
     fun requestAddIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo, myStockEntity: MyStockEntity) {
         viewModelScope.launch {
-            val result = incomeNoteDataSource.addIncomeNote(reqIncomeNoteInfo)
+            val result = incomeNoteRepository.addIncomeNote(reqIncomeNoteInfo)
             if (result == null) {
                 event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
                 return@launch

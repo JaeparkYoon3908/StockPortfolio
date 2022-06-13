@@ -11,7 +11,6 @@ import com.yjpapp.data.network.RetrofitClient
 import com.yjpapp.data.network.service.NaverNidService
 import com.yjpapp.data.network.service.NaverOpenService
 import com.yjpapp.data.network.service.RaspberryPiService
-import com.yjpapp.data.repository.MyRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -65,6 +64,7 @@ class DataSourceModule {
     }
 
     @Provides
+    @Singleton
     fun provideNaverNidService(
         retrofitClient: RetrofitClient
     ): NaverNidService {
@@ -73,6 +73,7 @@ class DataSourceModule {
     }
 
     @Provides
+    @Singleton
     fun provideNaverOpenService(
         retrofitClient: RetrofitClient
     ): NaverOpenService {
@@ -81,6 +82,7 @@ class DataSourceModule {
     }
 
     @Provides
+    @Singleton
     fun provideRaspberryPiService(
         retrofitClient: RetrofitClient
     ): RaspberryPiService {
@@ -89,6 +91,7 @@ class DataSourceModule {
     }
 
     @Provides
+    @Singleton
     fun provideIncomeNoteDataSource(
         raspberryPiService: RaspberryPiService
     ): IncomeNoteDataSource {
@@ -96,6 +99,7 @@ class DataSourceModule {
     }
 
     @Provides
+    @Singleton
     fun provideMemoDataSource(
         myRoomDatabase: MyRoomDatabase
     ): MemoDataSource {
@@ -103,25 +107,20 @@ class DataSourceModule {
     }
 
     @Provides
-    fun provideMyRepository(
-        preferenceRepository: PreferenceDataSource
-    ): MyRepository {
-        return MyRepository(preferenceRepository)
-    }
-
-    @Provides
-    fun provideUserRepository(
-        raspberryPiService: RaspberryPiService,
-        naverOpenService: NaverOpenService,
-        naverNidService: NaverNidService,
-    ): UserDataSource {
-        return UserDataSource(raspberryPiService,naverOpenService, naverNidService)
-    }
-
-    @Provides
-    fun provideMyStockRepository(
+    @Singleton
+    fun provideMyStockDataSource(
         myRoomDatabase: MyRoomDatabase
     ): MyStockDataSource {
         return MyStockDataSource(myRoomDatabase.myStockDao())
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDataSource(
+        raspberryPiService: RaspberryPiService,
+        naverOpenService: NaverOpenService,
+        naverNIDService: NaverNidService
+    ): UserDataSource {
+        return UserDataSource(raspberryPiService, naverOpenService, naverNIDService)
     }
 }

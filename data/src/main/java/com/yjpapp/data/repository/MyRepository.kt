@@ -3,52 +3,71 @@ package com.yjpapp.data.repository
 import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
 
-class MyRepository(
+interface MyRepository {
+    fun initMySetting()
+    fun setAutoLogin(isAutoLogin: Boolean)
+    fun getAutoLogin(): String
+    fun setMyStockAutoRefresh(isAutoRefresh: Boolean)
+    fun getMyStockAutoRefresh(): String
+    fun setMyStockAutoAdd(isAutoAdd: Boolean)
+    fun getMyStockAutoAdd(): String
+    fun setMyStockShowDeleteCheck(isDeleteCheckShow: Boolean)
+    fun getMyStockShowDeleteCheck(): String
+    fun setIncomeNoteShowDeleteCheck(isDeleteCheckShow: Boolean)
+    fun getIncomeNoteShowDeleteCheck(): String
+    fun setShowMemoDeleteCheck(isDeleteCheckShow: Boolean)
+    fun getShowMemoDeleteCheck(): String
+    fun setMemoVibrateOff(isVibrateOff: Boolean)
+    fun getMemoVibrateOff(): String
+    fun deleteUserPreference()
+}
+
+class MyRepositoryImpl(
     private val preferenceDataSource: PreferenceDataSource
-) {
-    fun setAutoLogin(isAutoLogin: Boolean) {
+): MyRepository {
+    override fun setAutoLogin(isAutoLogin: Boolean) {
         preferenceDataSource.setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, isAutoLogin)
     }
-    fun getAutoLogin(): String {
+    override fun getAutoLogin(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_SETTING_AUTO_LOGIN)?: ""
     }
-    fun setMyStockAutoRefresh(isAutoRefresh: Boolean) {
+    override fun setMyStockAutoRefresh(isAutoRefresh: Boolean) {
         preferenceDataSource.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH, isAutoRefresh)
     }
-    fun getMyStockAutoRefresh(): String {
+    override fun getMyStockAutoRefresh(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_REFRESH)?: ""
     }
-    fun setMyStockAutoAdd(isAutoAdd: Boolean) {
+    override fun setMyStockAutoAdd(isAutoAdd: Boolean) {
         preferenceDataSource.setPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD, isAutoAdd)
     }
-    fun getMyStockAutoAdd(): String {
+    override fun getMyStockAutoAdd(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)?: ""
     }
-    fun setMyStockShowDeleteCheck(isDeleteCheckShow: Boolean) {
+    override fun setMyStockShowDeleteCheck(isDeleteCheckShow: Boolean) {
         preferenceDataSource.setPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK, isDeleteCheckShow)
     }
-    fun getMyStockShowDeleteCheck(): String {
+    override fun getMyStockShowDeleteCheck(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)?: ""
     }
-    fun setIncomeNoteShowDeleteCheck(isDeleteCheckShow: Boolean) {
+    override fun setIncomeNoteShowDeleteCheck(isDeleteCheckShow: Boolean) {
         preferenceDataSource.setPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK, isDeleteCheckShow)
     }
-    fun getIncomeNoteShowDeleteCheck(): String {
+    override fun getIncomeNoteShowDeleteCheck(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK)?: ""
     }
-    fun setShowMemoDeleteCheck(isDeleteCheckShow: Boolean) {
+    override fun setShowMemoDeleteCheck(isDeleteCheckShow: Boolean) {
         preferenceDataSource.setPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK, isDeleteCheckShow)
     }
-    fun getShowMemoDeleteCheck(): String {
+    override fun getShowMemoDeleteCheck(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)?: ""
     }
-    fun setMemoVibrateOff(isVibrateOff: Boolean) {
+    override fun setMemoVibrateOff(isVibrateOff: Boolean) {
         preferenceDataSource.setPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK, isVibrateOff)
     }
-    fun getMemoVibrateOff(): String {
+    override fun getMemoVibrateOff(): String {
         return preferenceDataSource.getPreference(PrefKey.KEY_SETTING_MEMO_LONG_CLICK_VIBRATE_CHECK)?: ""
     }
-    fun deleteUserPreference() {
+    override fun deleteUserPreference() {
         preferenceDataSource.apply {
             removePreference(PrefKey.KEY_BOTTOM_MENU_SELECTED_POSITION)
             removePreference(PrefKey.KEY_AUTO_LOGIN)
@@ -67,7 +86,7 @@ class MyRepository(
             removePreference(PrefKey.KEY_SETTING_MEMO_SHOW_DELETE_CHECK)
         }
     }
-    fun initMySetting() {
+    override fun initMySetting() {
         preferenceDataSource.apply {
             if (!isExists(PrefKey.KEY_SETTING_AUTO_LOGIN)) {
                 setPreference(PrefKey.KEY_SETTING_AUTO_LOGIN, true)

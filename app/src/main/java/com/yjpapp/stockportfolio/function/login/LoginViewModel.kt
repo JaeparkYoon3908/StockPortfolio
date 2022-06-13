@@ -3,14 +3,12 @@ package com.yjpapp.stockportfolio.function.login
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.navercorp.nid.NaverIdLoginSDK
-import com.yjpapp.data.datasource.UserDataSource
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.data.model.response.RespLoginUserInfo
 import com.yjpapp.data.model.response.RespNaverDeleteUserInfo
 import com.yjpapp.data.repository.UserRepository
 import com.yjpapp.stockportfolio.BuildConfig
-import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow

@@ -4,34 +4,47 @@ import com.yjpapp.data.StockConfig
 import com.yjpapp.data.datasource.IncomeNoteDataSource
 import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
+import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
+import com.yjpapp.data.model.response.RespIncomeNoteListInfo
+import com.yjpapp.data.model.response.RespStatusInfo
+import com.yjpapp.data.model.response.RespTotalGainIncomeNoteData
 import javax.inject.Inject
 
 /**
  * 수익 노트 관련 Repository
  */
-class IncomeNoteRepository @Inject constructor(
+interface IncomeNoteRepository {
+    suspend fun getIncomeNote(params: HashMap<String, String>): ResponseResult<RespIncomeNoteListInfo>
+    suspend fun addIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo): ResponseResult<RespIncomeNoteListInfo.IncomeNoteInfo>
+    suspend fun modifyIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo): ResponseResult<RespIncomeNoteListInfo.IncomeNoteInfo>
+    suspend fun deleteIncomeNote(id: Int): ResponseResult<RespStatusInfo>
+    suspend fun getTotalGain(params: HashMap<String, String>): ResponseResult<RespTotalGainIncomeNoteData>
+    fun isShowDeleteCheck(): String
+}
+class IncomeNoteRepositoryImpl @Inject constructor(
     private val incomeNoteDataSource: IncomeNoteDataSource,
     private val preferenceDataSource: PreferenceDataSource
-) {
-    suspend fun getIncomeNote(params: HashMap<String, String>) =
+): IncomeNoteRepository {
+    override suspend fun getIncomeNote(params: HashMap<String, String>) =
         incomeNoteDataSource.requestGetIncomeNote(params)
 
-    suspend fun addIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) =
+    override suspend fun addIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) =
         incomeNoteDataSource.requestPostIncomeNote(reqIncomeNoteInfo)
 
-    suspend fun modifyIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) =
+    override suspend fun modifyIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo) =
         incomeNoteDataSource.requestPutIncomeNote(reqIncomeNoteInfo)
 
-    suspend fun deleteIncomeNote(id: Int) =
+    override suspend fun deleteIncomeNote(id: Int) =
         incomeNoteDataSource.requestDeleteIncomeNote(id)
 
-    suspend fun getTotalGain(params: HashMap<String, String>) =
+    override suspend fun getTotalGain(params: HashMap<String, String>) =
         incomeNoteDataSource.requestTotalGain(params)
 
-    fun isShowDeleteCheck(): String {
+    override fun isShowDeleteCheck(): String {
         return preferenceDataSource.getPreference(
             PrefKey.KEY_SETTING_INCOME_NOTE_SHOW_DELETE_CHECK
         ) ?: StockConfig.TRUE
     }
 }
+

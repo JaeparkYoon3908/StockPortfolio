@@ -3,7 +3,6 @@ package com.yjpapp.stockportfolio.function
 import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.viewModelScope
-import com.yjpapp.data.datasource.UserDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.repository.UserRepository
 import com.yjpapp.stockportfolio.R

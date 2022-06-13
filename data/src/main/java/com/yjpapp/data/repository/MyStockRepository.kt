@@ -6,22 +6,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class MyStockRepository @Inject constructor(
-    private val myStockDataSource: MyStockDataSource,
-) {
+interface MyStockRepository {
+    suspend fun addMyStock(myStockEntity: MyStockEntity)
 
-    suspend fun addMyStock(myStockEntity: MyStockEntity) {
+    suspend fun updateMyStock(myStockEntity: MyStockEntity)
+
+    suspend fun deleteMyStock(myStockEntity: MyStockEntity)
+
+    suspend fun getAllMyStock(): MutableList<MyStockEntity>
+}
+class MyStockRepositoryImpl @Inject constructor(
+    private val myStockDataSource: MyStockDataSource,
+): MyStockRepository {
+
+    override suspend fun addMyStock(myStockEntity: MyStockEntity) {
         myStockDataSource.requestInsertMyStock(myStockEntity)
     }
 
-    suspend fun updateMyStock(myStockEntity: MyStockEntity) {
+    override suspend fun updateMyStock(myStockEntity: MyStockEntity) {
         myStockDataSource.requestUpdateMyStock(myStockEntity)
     }
 
-    suspend fun deleteMyStock(myStockEntity: MyStockEntity) {
+    override suspend fun deleteMyStock(myStockEntity: MyStockEntity) {
         myStockDataSource.requestDeleteMyStock(myStockEntity)
     }
 
-    suspend fun getAllMyStock(): MutableList<MyStockEntity> =
-        myStockDataSource.requestGetAllMyStock()
+    override suspend fun getAllMyStock() = myStockDataSource.requestGetAllMyStock()
 }
