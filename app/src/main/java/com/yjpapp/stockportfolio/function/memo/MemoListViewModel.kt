@@ -10,6 +10,7 @@ import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.localdb.room.memo.MemoListEntity
 import com.yjpapp.data.repository.MemoRepository
+import com.yjpapp.data.repository.UserRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.extension.EventFlow
@@ -29,7 +30,7 @@ import kotlin.system.exitProcess
 class MemoListViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val memoRepository: MemoRepository,
-    private val preferenceRepository: PreferenceDataSource
+    private val userRepository: UserRepository
 ) : ViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState
@@ -63,16 +64,16 @@ class MemoListViewModel @Inject constructor(
     }
 
     fun runBackPressAppCloseEvent(activity: Activity) {
-        val isAllowAppClose = preferenceRepository.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)?: StockConfig.FALSE
+        val isAllowAppClose = userRepository.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)?: StockConfig.FALSE
         if (isAllowAppClose == StockConfig.TRUE) {
             activity.finishAffinity()
             System.runFinalization()
             exitProcess(0)
         } else {
             Toasty.normal(context, context.getString(R.string.Common_BackButton_AppClose_Message)).show()
-            preferenceRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
+            userRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                preferenceRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
+                userRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
             },3000)
         }
     }

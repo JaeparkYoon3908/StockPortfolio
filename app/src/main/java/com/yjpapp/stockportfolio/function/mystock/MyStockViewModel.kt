@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
 import com.yjpapp.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.data.repository.IncomeNoteRepository
 import com.yjpapp.data.repository.MyStockRepository
+import com.yjpapp.data.repository.UserRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
@@ -33,7 +35,7 @@ class MyStockViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val myStockRepository: MyStockRepository,
     private val incomeNoteRepository: IncomeNoteRepository,
-    private val preferenceRepository: PreferenceDataSource
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState
@@ -229,13 +231,12 @@ class MyStockViewModel @Inject constructor(
 
     fun isDeleteCheck(): Boolean {
         val isDeleteCheckPref =
-            preferenceRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
+            userRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
         return isDeleteCheckPref == StockConfig.TRUE
     }
 
     fun isAutoAdd(): Boolean {
-        val isAutoAddPref =
-            preferenceRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
+        val isAutoAddPref = userRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
         return isAutoAddPref == StockConfig.TRUE
     }
 
@@ -245,15 +246,14 @@ class MyStockViewModel @Inject constructor(
     fun requestAddIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo, myStockEntity: MyStockEntity) {
         viewModelScope.launch {
             val result = incomeNoteRepository.addIncomeNote(reqIncomeNoteInfo)
-            if (result == null) {
-                event(Event.ResponseServerError(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
+            if (result is ResponseResult.DataError) {
+                event(Event.ResponseServerError(result.resultMessage))
                 return@launch
             }
-            if (result.isSuccessful) {
-                result.data?.let { incomeNoteInfo ->
-                    incomeNoteInfo.gainPercent
-                    event(Event.SuccessIncomeNoteAdd(myStockEntity))
-                }
+
+            result.data?.let { incomeNoteInfo ->
+                incomeNoteInfo.gainPercent
+                event(Event.SuccessIncomeNoteAdd(myStockEntity))
             }
         }
     }

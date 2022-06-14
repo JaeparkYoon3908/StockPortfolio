@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.yjpapp.data.datasource.MemoDataSource
 import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.localdb.room.memo.MemoListEntity
+import com.yjpapp.data.repository.MyRepository
+import com.yjpapp.data.repository.UserRepository
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +23,7 @@ import javax.inject.Inject
 class MemoReadWriteViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val memoRepository: MemoDataSource,
-    private val preferenceRepository: PreferenceDataSource
+    private val userRepository: UserRepository
 ) : ViewModel() {
     private val _uiState = MutableEventFlow<Event>()
     val uiState: EventFlow<Event> get() = _uiState
@@ -45,16 +47,8 @@ class MemoReadWriteViewModel @Inject constructor(
         event(Event.SendDeleteResult(memoRepository.requestDeleteMomoData(id)))
     }
 
-    fun requestSetPreference(prefKey: String, value: String) {
-        preferenceRepository.setPreference(prefKey, value)
-    }
-
     fun requestGetPreference(prefKey: String): String {
-        return preferenceRepository.getPreference(prefKey)?: ""
-    }
-
-    fun requestIsExistPreference(prefKey: String): Boolean {
-        return preferenceRepository.isExists(prefKey)
+        return userRepository.getPreference(prefKey)
     }
 
     private fun event(event: Event) {
