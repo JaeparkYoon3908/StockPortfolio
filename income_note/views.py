@@ -216,7 +216,7 @@ class TestAPI(View):
             "age": 20,
             "hobbies": ["Coding", "Art", "Gaming", "Cricket", "Piano"]
         }
-        data = [{"line": "01호선", "name": "녹양", "lat": 37.75938, "lng": 127.042292},
+        data = {"stations" : [{"line": "01호선", "name": "녹양", "lat": 37.75938, "lng": 127.042292},
                               {"line": "01호선", "name": "남영", "lat": 37.541021, "lng": 126.9713},
                               {"line": "01호선", "name": "용산", "lat": 37.529849, "lng": 126.964561},
                               {"line": "01호선", "name": "노량진", "lat": 37.514219, "lng": 126.942454},
@@ -915,5 +915,5 @@ class TestAPI(View):
                               {"line": "인천선", "name": "인천대입구", "lat": 37.386007, "lng": 126.639484},
                               {"line": "인천선", "name": "센트럴파크", "lat": 37.393054, "lng": 126.634729},
                               {"line": "인천선", "name": "국제업무지구", "lat": 37.399907, "lng": 126.630347},
-                              {"line": "인천선", "name": "간석오거리", "lat": 37.467048, "lng": 126.707938}]
+                              {"line": "인천선", "name": "간석오거리", "lat": 37.467048, "lng": 126.707938}]}
         return JsonResponse(data, safe=False)
