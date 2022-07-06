@@ -69,6 +69,7 @@ import kotlinx.coroutines.launch
  * @author Yoon Jae-park
  * @since 2022.02
  */
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class MyStockFragment : Fragment() {
     private val TAG = MyStockFragment::class.java.simpleName
@@ -428,7 +429,6 @@ class MyStockFragment : Fragment() {
         }
     }
 
-    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun StockListItem(
         position: Int,

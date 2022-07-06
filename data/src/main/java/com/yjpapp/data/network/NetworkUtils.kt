@@ -1,9 +1,10 @@
 package com.yjpapp.data.network
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-
+@SuppressLint("MissingPermission")
 object NetworkUtils {
     //와이파이 연결 여부
     fun isWifiConnected(context: Context?): Boolean {

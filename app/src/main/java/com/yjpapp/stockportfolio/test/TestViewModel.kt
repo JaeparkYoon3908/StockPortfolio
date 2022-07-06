@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.data.network.NetworkUtils
 import com.yjpapp.stockportfolio.test.model.LatestNewsUiState
 import com.yjpapp.stockportfolio.test.model.UserMessage
 import com.yjpapp.stockportfolio.util.Event
-import com.yjpapp.stockportfolio.util.NetworkUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

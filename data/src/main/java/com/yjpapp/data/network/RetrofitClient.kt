@@ -1,5 +1,6 @@
 package com.yjpapp.data.network
 
+import android.accounts.NetworkErrorException
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.yjpapp.data.BuildConfig
@@ -64,6 +65,9 @@ class RetrofitClient(
     ) : Interceptor {
         private val TAG = CustomInterceptor::class.java.simpleName
         override fun intercept(chain: Interceptor.Chain): Response {
+            if (!NetworkUtils.isInternetAvailable(context)) {
+                throw NoConnectivityException()
+            }
             val builder =
                 when (baseServerURL) {
                     BaseServerURL.RaspberryPi -> {
@@ -154,5 +158,7 @@ class RetrofitClient(
 //            .removeHeader("user-index")
         }
     }
-
+    class NoConnectivityException : IOException() {
+        override val message: String get() = "인터넷 연결 상태를 확인해주세요."
+    }
 }

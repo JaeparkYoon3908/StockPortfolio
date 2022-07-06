@@ -8,11 +8,8 @@ import javax.inject.Inject
 
 interface MyStockRepository {
     suspend fun addMyStock(myStockEntity: MyStockEntity)
-
     suspend fun updateMyStock(myStockEntity: MyStockEntity)
-
     suspend fun deleteMyStock(myStockEntity: MyStockEntity)
-
     suspend fun getAllMyStock(): MutableList<MyStockEntity>
 }
 class MyStockRepositoryImpl @Inject constructor(
