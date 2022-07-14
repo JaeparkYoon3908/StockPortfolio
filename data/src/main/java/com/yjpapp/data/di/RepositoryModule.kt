@@ -32,9 +32,11 @@ class RepositoryModule {
     @Singleton
     fun provideUserRepository(
         userDataSource: UserDataSource,
+        naverNIDDataSource: NaverNIDDataSource,
+        naverOpenDataSource: NaverOpenDataSource,
         preferenceDataSource: PreferenceDataSource
     ): UserRepository {
-        return UserRepositoryImpl(userDataSource, preferenceDataSource)
+        return UserRepositoryImpl(userDataSource, naverNIDDataSource, naverOpenDataSource, preferenceDataSource)
     }
 
     @Provides

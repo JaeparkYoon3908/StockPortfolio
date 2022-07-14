@@ -4,8 +4,9 @@ import com.yjpapp.data.localdb.room.mystock.MyStockDao
 import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MyStockDataSource(
+class MyStockDataSource @Inject constructor(
     private val myStockDao: MyStockDao
 ) {
     private val ioDispatcher = Dispatchers.IO

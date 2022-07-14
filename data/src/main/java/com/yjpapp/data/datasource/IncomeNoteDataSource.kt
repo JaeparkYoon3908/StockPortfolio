@@ -11,6 +11,7 @@ import com.yjpapp.data.network.ServerRespMessage
 import com.yjpapp.data.network.service.RaspberryPiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /**
  * IncomeNoteFragment의 Model 역할하는 class
@@ -19,7 +20,7 @@ import kotlinx.coroutines.withContext
  * @since 2020.12
  */
 
-class IncomeNoteDataSource(
+class IncomeNoteDataSource @Inject constructor(
     private val raspberryPiAPIService: RaspberryPiService
 ) {
     suspend fun requestPostIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo): ResponseResult<RespIncomeNoteListInfo.IncomeNoteInfo> =

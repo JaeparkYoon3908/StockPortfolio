@@ -1,8 +1,9 @@
 package com.yjpapp.data.datasource
 
 import android.content.SharedPreferences
+import javax.inject.Inject
 
-class PreferenceDataSource(
+class PreferenceDataSource @Inject constructor(
     private val pref: SharedPreferences
 ) {
 

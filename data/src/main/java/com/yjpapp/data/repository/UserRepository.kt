@@ -1,6 +1,8 @@
 package com.yjpapp.data.repository
 
 import com.yjpapp.data.StockConfig
+import com.yjpapp.data.datasource.NaverNIDDataSource
+import com.yjpapp.data.datasource.NaverOpenDataSource
 import com.yjpapp.data.datasource.PreferenceDataSource
 import com.yjpapp.data.datasource.UserDataSource
 import com.yjpapp.data.localdb.preference.PrefKey
@@ -32,6 +34,8 @@ interface UserRepository {
 }
 class UserRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
+    private val naverNIDDataSource: NaverNIDDataSource,
+    private val naverOpenDataSource: NaverOpenDataSource,
     private val preferenceDataSource: PreferenceDataSource
 ): UserRepository {
 
@@ -42,13 +46,13 @@ class UserRepositoryImpl @Inject constructor(
         userDataSource.requestGetUserInfo(params)
 
     override suspend fun getNaverUserInfo() =
-        userDataSource.requestGetNaverUserInfo()
+        naverNIDDataSource.requestGetNaverUserInfo()
 
     override suspend fun deleteNaverUserInfo(params: HashMap<String, String>) =
-        userDataSource.requestDeleteNaverUserInfo(params)
+        naverOpenDataSource.requestDeleteNaverUserInfo(params)
 
     override suspend fun retryNaverUserLogin(params: HashMap<String, String>) =
-        userDataSource.requestRetryNaverUserLogin(params)
+        naverOpenDataSource.requestRetryNaverUserLogin(params)
 
     override fun logout() {
         //프리퍼런스 reset

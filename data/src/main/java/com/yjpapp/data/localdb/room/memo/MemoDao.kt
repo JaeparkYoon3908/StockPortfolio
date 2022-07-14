@@ -10,7 +10,7 @@ import kotlin.jvm.Throws
  */
 
 @Dao
-interface MemoListDao {
+interface MemoDao {
     @Insert
     @Throws(Exception::class)
     fun insert(memoListEntity: MemoListEntity)

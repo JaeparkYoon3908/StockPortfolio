@@ -1,6 +1,6 @@
 package com.yjpapp.data.datasource
 
-import com.yjpapp.data.localdb.room.memo.MemoListDao
+import com.yjpapp.data.localdb.room.memo.MemoDao
 import com.yjpapp.data.localdb.room.memo.MemoListEntity
 import javax.inject.Inject
 
@@ -12,11 +12,11 @@ import javax.inject.Inject
  */
 
 class MemoDataSource @Inject constructor(
-    private val memoListDao: MemoListDao
+    private val memoDao: MemoDao
 ) {
     fun requestInsertMemoData(memoData: MemoListEntity) {
         try {
-            memoListDao.insert(memoData)
+            memoDao.insert(memoData)
         } catch (e: Exception) {
             e.stackTrace
         }
@@ -24,7 +24,7 @@ class MemoDataSource @Inject constructor(
 
     fun requestUpdateMemoData(memoData: MemoListEntity) {
         try {
-            memoListDao.update(memoData)
+            memoDao.update(memoData)
         } catch (e: Exception) {
             e.stackTrace
         }
@@ -32,7 +32,7 @@ class MemoDataSource @Inject constructor(
 
     fun requestDeleteMomoData(id: Int): Boolean {
         return try {
-            memoListDao.deleteMemoInfo(id)
+            memoDao.deleteMemoInfo(id)
             true
         } catch (e: Exception) {
             e.stackTrace
@@ -41,12 +41,12 @@ class MemoDataSource @Inject constructor(
     }
 
     fun requestGetMemoInfo(id: Int): MemoListEntity {
-       return memoListDao.getMemoInfo(id)
+       return memoDao.getMemoInfo(id)
     }
 
     fun requestGetAllMemoInfoList(): MutableList<MemoListEntity> {
         return try {
-            memoListDao.getAll()
+            memoDao.getAll()
         } catch (e: Exception) {
             e.stackTrace
             mutableListOf()
@@ -55,7 +55,7 @@ class MemoDataSource @Inject constructor(
 
     fun requestUpdateDeleteCheck(id: Int, deleteCheck: String) {
         try {
-            memoListDao.updateDeleteChecked(id, deleteCheck)
+            memoDao.updateDeleteChecked(id, deleteCheck)
         } catch (e: Exception) {
             e.stackTrace
         }
@@ -63,7 +63,7 @@ class MemoDataSource @Inject constructor(
 
     fun requestDeleteMemoInfoList(memoListEntity: MemoListEntity){
         try {
-            memoListDao.delete(memoListEntity)
+            memoDao.delete(memoListEntity)
         } catch (e: Exception) {
             e.stackTrace
         }
