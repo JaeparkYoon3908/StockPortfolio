@@ -1,5 +1,6 @@
 package com.yjpapp.data.datasource
 
+import com.yjpapp.data.APICall
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqSNSLogin
 import com.yjpapp.data.model.response.*
@@ -15,22 +16,22 @@ class UserDataSource(
     private val raspberryPiService: RaspberryPiService,
     private val naverOpenService: NaverOpenService,
     private val naverNIDService: NaverNidService
-): BaseDataSource() {
+) {
     suspend fun requestPostUserInfo(reqSnsLogin: ReqSNSLogin): ResponseResult<RespLoginUserInfo> =
-        handleApi { raspberryPiService.requestRegUser(reqSnsLogin) }
+        APICall.handleApi { raspberryPiService.requestRegUser(reqSnsLogin) }
 
     suspend fun requestGetUserInfo(params: HashMap<String, String>): ResponseResult<RespLoginUserInfo> =
-        handleApi { raspberryPiService.requestUserInfo(params) }
+        APICall.handleApi { raspberryPiService.requestUserInfo(params) }
 
     suspend fun requestGetNaverUserInfo(): ResponseResult<RespGetNaverUserInfo> =
-        handleApi { naverNIDService.requestGetNaverUserInfo() }
+        APICall.handleApi { naverNIDService.requestGetNaverUserInfo() }
 
     suspend fun requestDeleteNaverUserInfo(params: HashMap<String, String>): ResponseResult<RespNaverDeleteUserInfo> =
-        handleApi { naverOpenService.requestDeleteNaverUserInfo(params) }
+        APICall.handleApi { naverOpenService.requestDeleteNaverUserInfo(params) }
 
     suspend fun requestRetryNaverUserLogin(params: HashMap<String, String>): ResponseResult<RespNaverDeleteUserInfo> =
-        handleApi { naverOpenService.requestRetryNaverUserLogin(params) }
+        APICall.handleApi { naverOpenService.requestRetryNaverUserLogin(params) }
 
     suspend fun requestDeleteUserInfo(): ResponseResult<RespStatusInfo> =
-        handleApi { raspberryPiService.requestDeleteUserInfo() }
+        APICall.handleApi { raspberryPiService.requestDeleteUserInfo() }
 }

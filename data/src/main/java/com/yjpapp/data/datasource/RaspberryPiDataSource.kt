@@ -6,35 +6,27 @@ import com.yjpapp.data.model.request.ReqIncomeNoteInfo
 import com.yjpapp.data.model.response.RespIncomeNoteListInfo
 import com.yjpapp.data.model.response.RespStatusInfo
 import com.yjpapp.data.model.response.RespTotalGainIncomeNoteData
-import com.yjpapp.data.network.ServerRespCode
-import com.yjpapp.data.network.ServerRespMessage
 import com.yjpapp.data.network.service.RaspberryPiService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /**
- * IncomeNoteFragment의 Model 역할하는 class
- *
- * @author Yoon Jae-park
- * @since 2020.12
+ * 라즈베리파이 서버 전용 DataSource
  */
-
-class IncomeNoteDataSource(
-    private val raspberryPiAPIService: RaspberryPiService
+class RaspberryPiDataSource @Inject constructor(
+    private val raspberryPiService: RaspberryPiService
 ) {
     suspend fun requestPostIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo): ResponseResult<RespIncomeNoteListInfo.IncomeNoteInfo> =
-        APICall.handleApi { raspberryPiAPIService.requestPostIncomeNote(reqIncomeNoteInfo) }
+        APICall.handleApi { raspberryPiService.requestPostIncomeNote(reqIncomeNoteInfo) }
 
     suspend fun requestDeleteIncomeNote(id: Int): ResponseResult<RespStatusInfo> =
-        APICall.handleApi { raspberryPiAPIService.requestDeleteIncomeNote(id) }
+        APICall.handleApi { raspberryPiService.requestDeleteIncomeNote(id) }
 
     suspend fun requestPutIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo): ResponseResult<RespIncomeNoteListInfo.IncomeNoteInfo> =
-        APICall.handleApi { raspberryPiAPIService.requestPutIncomeNote(reqIncomeNoteInfo) }
+        APICall.handleApi { raspberryPiService.requestPutIncomeNote(reqIncomeNoteInfo) }
 
     suspend fun requestGetIncomeNote(params: HashMap<String, String>): ResponseResult<RespIncomeNoteListInfo> =
-        APICall.handleApi { raspberryPiAPIService.requestGetIncomeNote(params)  }
+        APICall.handleApi { raspberryPiService.requestGetIncomeNote(params)  }
 
     suspend fun requestTotalGain(params: HashMap<String, String>): ResponseResult<RespTotalGainIncomeNoteData> =
-        APICall.handleApi { raspberryPiAPIService.requestTotalGainIncomeNote(params) }
+        APICall.handleApi { raspberryPiService.requestTotalGainIncomeNote(params) }
 }
-
