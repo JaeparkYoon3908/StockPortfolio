@@ -83,7 +83,7 @@ DATABASES = {
         'HOST': '112.147.50.241',
         'NAME': 'server_dev',
         'USER': 'pi',
-        'PASSWORD': 'admin123!',
+        'PASSWORD': 'fnclrkakql3#',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
     }
