@@ -51,8 +51,8 @@ import kotlinx.serialization.json.Json
 @AndroidEntryPoint
 class LoginActivity : BaseActivity() {
     private val TAG = LoginActivity::class.java.simpleName
-    private var _binding: ActivityLoginBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var _binding: ActivityLoginBinding
+    private val binding get() = _binding
     private val gso by lazy {
         GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

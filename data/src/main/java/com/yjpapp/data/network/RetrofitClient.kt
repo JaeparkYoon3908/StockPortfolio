@@ -23,7 +23,7 @@ class RetrofitClient(
     private val preferenceDataSource: PreferenceDataSource
 ) {
     enum class BaseServerURL(val url: String) {
-        RaspberryPi("http://112.147.50.241"),
+        RaspberryPi("http://112.147.50.203"),
         NAVER_OPEN_API("https://openapi.naver.com"),
         NAVER_NID("https://nid.naver.com")
     }
