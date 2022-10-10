@@ -17,6 +17,7 @@ class RegistUser(APIView):
         user_email = request.data.get('user_email', "") # 클라이언트에서 올리는 user_id
         user_name = request.data.get('user_name', "") # 클라이언트에서 올리는 user_pw
         login_type = request.data.get('login_type', "") # 클라이언트에서 올리는 login_type
+        reg_date = request.data.get('reg_date', "") # 클라이언트에서 올리는 reg date
 
         response = requests.post(
             "http://112.147.50.203/api/token/",
@@ -40,6 +41,7 @@ class RegistUser(APIView):
                         user_email=user_email,
                         user_name=user_name,
                         login_type=login_type,
+                        regist_date=reg_date,
                         token=token
                     )
                 )
@@ -49,7 +51,7 @@ class RegistUser(APIView):
 
             return Response(data)
 
-        UserInfo.objects.create(user_email=user_email, user_name=user_name, login_type=login_type) # LoginUser 모델에 새로운 object 생성
+        UserInfo.objects.create(user_email=user_email, user_name=user_name, login_type=login_type, reg_date=reg_date) # LoginUser 모델에 새로운 object 생성
         try:
             cursor = connection.cursor()
 
@@ -64,6 +66,7 @@ class RegistUser(APIView):
                     user_email=user_email,
                     user_name=user_name,
                     login_type=login_type,
+                    reg_date=reg_date,
                     token=token
                 )
             )
