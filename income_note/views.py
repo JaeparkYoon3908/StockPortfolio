@@ -205,7 +205,11 @@ class TotalGainAPI(APIView):
 
             return Response(data=data)
         except:
-            return Response(data=CustomResponse.exception)
+            data = dict(
+                total_price=0.0,
+                total_percent=0.00
+            )
+            return Response(data=data)
 
 class TestAPI(View):
     permission_classes = [permissions.AllowAny]
