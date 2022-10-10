@@ -41,7 +41,7 @@ class RegistUser(APIView):
                         user_email=user_email,
                         user_name=user_name,
                         login_type=login_type,
-                        regist_date=reg_date,
+                        reg_date=reg_date,
                         token=token
                     )
                 )
