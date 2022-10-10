@@ -12,6 +12,7 @@ import com.yjpapp.stockportfolio.BuildConfig
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.extension.EventFlow
 import com.yjpapp.stockportfolio.extension.MutableEventFlow
+import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +41,7 @@ class LoginViewModel @Inject constructor(
      */
     fun requestLogin(reqSnsLogin: ReqSNSLogin) {
         viewModelScope.launch {
+            reqSnsLogin.reg_date = StockUtils.getTodayYYYY_MM_DD()
             val result = userRepository.addUserInfo(reqSnsLogin)
             if (result is ResponseResult.DataError) {
                 event(Event.ResponseServerError(result.resultMessage))

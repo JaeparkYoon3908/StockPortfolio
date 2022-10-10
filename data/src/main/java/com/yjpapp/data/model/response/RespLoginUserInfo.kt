@@ -13,6 +13,7 @@ data class RespLoginUserInfo(
         var user_email: String = "",
         var user_name: String = "",
         var login_type: String = "",
-        var token: String = ""
+        var reg_date: String = "",
+        var token: String = "",
     )
 }
