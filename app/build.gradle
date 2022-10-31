@@ -15,8 +15,8 @@ android {
         applicationId "com.yjpapp.stockportfolio"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 37
-        versionName "2.1.4"
+        versionCode 38
+        versionName "2.1.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "GOOGLE_SIGN_CLIENT_ID", properties["goole.sign.client.id"]
         buildConfigField "String", "NAVER_SIGN_CLIENT_ID", properties["naver.sign.client.id"]

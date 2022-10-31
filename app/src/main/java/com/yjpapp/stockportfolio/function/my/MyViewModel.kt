@@ -9,11 +9,12 @@ import com.yjpapp.data.repository.UserRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.base.BaseViewModel
 import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.extension.EventFlow
-import com.yjpapp.stockportfolio.extension.MutableEventFlow
 import com.yjpapp.stockportfolio.util.PatternUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,8 +24,12 @@ class MyViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val myRepository: MyRepository
 ): BaseViewModel() {
-    private val _uiState = MutableEventFlow<Event>()
-    val uiState: EventFlow<Event> get() = _uiState
+    private val _uiState = MutableSharedFlow<Event>(
+        replay = 0, //replay = 0 : 새로운 구독자에게 이전 이벤트를 전달하지 않음
+        extraBufferCapacity = 1, //추가 버퍼를 생성하여 emit 한 데이터가 버퍼에 유지 되도록함
+        onBufferOverflow = BufferOverflow.DROP_OLDEST //버퍼가 가득찼을 시 오래된 데이터 제거
+    )
+    val uiState = _uiState.asSharedFlow() //convert read only
     val userName = userRepository.getUserName()
     val userEmail = PatternUtils.getEmailMasking(userRepository.getUserEmail())
     val userLoginType = userRepository.getLoginType()
