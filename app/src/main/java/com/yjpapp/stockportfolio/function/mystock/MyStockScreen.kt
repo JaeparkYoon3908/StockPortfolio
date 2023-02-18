@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
  */
 @Composable
 @ExperimentalMaterialApi
-fun MyStockContent(
+fun MyStockScreen(
     context: Context,
     viewModel: MyStockViewModel,
     showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData?) -> Unit,

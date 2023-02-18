@@ -4,7 +4,7 @@ buildscript {
         kotlin_version = "1.6.10"
     }
     repositories {
-        maven { url "https://jitpack.io" }
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
         mavenCentral()
         google()
         jcenter()

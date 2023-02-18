@@ -42,7 +42,7 @@ class MyStockFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setHasOptionsMenu(true)
             setContent {
-                MyStockContent(
+                MyStockScreen(
                     context = requireContext(),
                     viewModel = myStockViewModel,
                     showPurchaseInputDialog = { showPurchaseInputDialog(it) },
