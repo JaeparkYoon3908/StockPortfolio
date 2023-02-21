@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.NidOAuthErrorCode
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
@@ -254,6 +256,7 @@ class LoginActivity : BaseActivity() {
                 NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse>{
                     override fun onError(errorCode: Int, message: String) {
                         StockLog.d(TAG, "onError : $message")
+
                         Toast.makeText(
                             this@LoginActivity,
                             getString(R.string.Login_Naver_Login_Error_Msg, message)
@@ -290,11 +293,14 @@ class LoginActivity : BaseActivity() {
             override fun onFailure(httpStatus: Int, message: String) {
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                 val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                Toast.makeText(
-                    this@LoginActivity,
-                    getString(R.string.Login_Naver_Login_Error_Msg, message)
-                    ,Toast.LENGTH_SHORT
-                ).show()
+//                Log.d(TAG, "errorCode : $errorCode")
+                if (errorCode != NidOAuthErrorCode.CLIENT_USER_CANCEL.code) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        getString(R.string.Login_Naver_Login_Error_Msg, message)
+                        ,Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
             override fun onError(errorCode: Int, message: String) {
                 onFailure(errorCode, message)
