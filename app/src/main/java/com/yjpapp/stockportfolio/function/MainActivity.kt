@@ -34,14 +34,14 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//        initData()
-//        initLayout()
-        setContent {
-            MainScreen(
-                viewModel = viewModel
-            )
-        }
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        initData()
+        initLayout()
+//        setContent {
+//            MainScreen(
+//                viewModel = viewModel
+//            )
+//        }
     }
 
     private fun initData() {

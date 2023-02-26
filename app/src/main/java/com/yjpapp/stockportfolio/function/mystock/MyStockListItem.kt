@@ -10,6 +10,8 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +26,7 @@ import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog
+import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogContent
 import com.yjpapp.stockportfolio.util.StockUtils
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
@@ -48,6 +51,12 @@ fun MyStockListItemWidget(
     val revealSwipeState = rememberRevealState()
     val coroutineScope = rememberCoroutineScope()
     val maxRevealDp = 110.dp
+    val showMyStockPurchaseInputDialog = remember { mutableStateOf(false) }
+    if (showMyStockPurchaseInputDialog.value) {
+        MyStockPurchaseInputDialogContent {
+            showMyStockPurchaseInputDialog.value = false
+        }
+    }
     RevealSwipe(
         modifier = Modifier
             .padding(bottom = 10.dp)
@@ -81,21 +90,22 @@ fun MyStockListItemWidget(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .clickable {
-                            val dialogData =
-                                MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData(
-                                    id = myStockEntity.id,
-                                    subjectName = SubjectName(
-                                        text = myStockEntity.subjectName,
-                                        code = myStockEntity.subjectCode
-                                    ),
-                                    purchaseDate = myStockEntity.purchaseDate,
-                                    purchasePrice = myStockEntity.purchasePrice,
-                                    purchaseCount = myStockEntity.purchaseCount.toString()
-                                )
-                            showPurchaseInputDialog(dialogData)
-                            coroutineScope.launch {
-                                revealSwipeState.reset()
-                            }
+//                            val dialogData =
+//                                MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData(
+//                                    id = myStockEntity.id,
+//                                    subjectName = SubjectName(
+//                                        text = myStockEntity.subjectName,
+//                                        code = myStockEntity.subjectCode
+//                                    ),
+//                                    purchaseDate = myStockEntity.purchaseDate,
+//                                    purchasePrice = myStockEntity.purchasePrice,
+//                                    purchaseCount = myStockEntity.purchaseCount.toString()
+//                                )
+//                            showPurchaseInputDialog(dialogData)
+//                            coroutineScope.launch {
+//                                revealSwipeState.reset()
+//                            }
+                            showMyStockPurchaseInputDialog.value = true
                         }
                         .fillMaxWidth()
                         .weight(0.333f)
