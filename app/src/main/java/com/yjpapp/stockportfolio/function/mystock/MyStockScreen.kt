@@ -25,6 +25,7 @@ import com.yjpapp.stockportfolio.common.theme.Color_4876C7
 import com.yjpapp.stockportfolio.common.theme.Color_CD4632
 import com.yjpapp.stockportfolio.common.theme.Color_Line_1A000000
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog
+import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogData
 import com.yjpapp.stockportfolio.util.StockUtils
 import kotlinx.coroutines.launch
 
@@ -38,7 +39,7 @@ import kotlinx.coroutines.launch
 fun MyStockScreen(
     context: Context,
     viewModel: MyStockViewModel,
-    showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData?) -> Unit,
+    showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialogData?) -> Unit,
     showSellInputDialog: (myStockEntity: MyStockEntity) -> Unit
 ) {
     Column {
@@ -187,7 +188,7 @@ private fun TotalPriceComposable(
 private fun StockListComposable(
     context: Context,
     myStockViewModel: MyStockViewModel,
-    showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData?) -> Unit,
+    showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialogData?) -> Unit,
     showSellInputDialog: (myStockEntity: MyStockEntity) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()

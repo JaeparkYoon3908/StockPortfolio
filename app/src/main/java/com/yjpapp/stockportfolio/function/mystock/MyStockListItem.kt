@@ -25,8 +25,8 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
-import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogContent
+import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogData
 import com.yjpapp.stockportfolio.util.StockUtils
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
@@ -45,7 +45,7 @@ fun MyStockListItemWidget(
     context: Context,
     myStockViewModel: MyStockViewModel,
     myStockEntity: MyStockEntity,
-    showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData?) -> Unit,
+    showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialogData?) -> Unit,
     showSellInputDialog: (myStockEntity: MyStockEntity) -> Unit
 ) {
     val revealSwipeState = rememberRevealState()
@@ -90,8 +90,7 @@ fun MyStockListItemWidget(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .clickable {
-//                            val dialogData =
-//                                MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData(
+//                            val dialogData = MyStockPurchaseInputDialogData(
 //                                    id = myStockEntity.id,
 //                                    subjectName = SubjectName(
 //                                        text = myStockEntity.subjectName,

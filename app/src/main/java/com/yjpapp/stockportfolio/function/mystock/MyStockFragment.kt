@@ -15,6 +15,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.dialog.CommonOneBtnDialog
 import com.yjpapp.stockportfolio.extension.repeatOnStarted
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog
+import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogData
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockSellInputDialog
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -130,7 +131,7 @@ class MyStockFragment : Fragment() {
     }
 
     private fun showPurchaseInputDialog(
-        dialogData: MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData?
+        dialogData: MyStockPurchaseInputDialogData?
     ) {
         MyStockPurchaseInputDialog(
             mContext = requireContext(),
@@ -138,7 +139,7 @@ class MyStockFragment : Fragment() {
             callBack = object : MyStockPurchaseInputDialog.CallBack {
                 override fun onInputDialogCompleteClicked(
                     dialog: MyStockPurchaseInputDialog,
-                    userInputDialogData: MyStockPurchaseInputDialog.MyStockPurchaseInputDialogData
+                    userInputDialogData: MyStockPurchaseInputDialogData
                 ) {
                     lifecycleScope.launch {
                         val currentPriceData = myStockViewModel.getCurrentPrice(userInputDialogData.subjectName.code)

@@ -48,14 +48,6 @@ class MyStockPurchaseInputDialog(
     private var convertText = ""
     private var selectedSubjectName = SubjectName()
 
-    data class MyStockPurchaseInputDialogData(
-        var id: Int = -1,
-        var subjectName: SubjectName = SubjectName(),
-        var purchaseDate: String = "",
-        var purchasePrice: String = "",
-        var purchaseCount: String = "",
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
