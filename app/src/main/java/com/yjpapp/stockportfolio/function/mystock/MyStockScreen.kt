@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,28 +38,20 @@ import kotlinx.coroutines.launch
 @Composable
 @ExperimentalMaterialApi
 fun MyStockScreen(
-    context: Context,
-    viewModel: MyStockViewModel,
-    showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialogData?) -> Unit,
-    showSellInputDialog: (myStockEntity: MyStockEntity) -> Unit
+    viewModel: MyStockViewModel
 ) {
     Column {
         TotalPriceComposable(
-            context = context,
             myStockViewModel = viewModel
         )
         StockListComposable(
-            context = context,
-            myStockViewModel = viewModel,
-            showPurchaseInputDialog = showPurchaseInputDialog,
-            showSellInputDialog = showSellInputDialog
+            myStockViewModel = viewModel
         )
     }
 }
 
 @Composable
 private fun TotalPriceComposable(
-    context: Context,
     myStockViewModel: MyStockViewModel,
 ) {
     val totalPurchasePrice by myStockViewModel.totalPurchasePrice.collectAsState()
@@ -78,7 +71,7 @@ private fun TotalPriceComposable(
                 .padding(top = dimensionResource(id = R.dimen.common_10dp))
         ) {
             Text(
-                text = context.getString(R.string.MyStockFragment_Total_Purchase_Price),
+                text = stringResource(R.string.MyStockFragment_Total_Purchase_Price),
                 color = Color_222222,
                 fontSize = 16.sp,
                 maxLines = 1,
@@ -102,7 +95,7 @@ private fun TotalPriceComposable(
 
         ) {
             Text(
-                text = context.getString(R.string.MyStockFragment_Total_Evaluation_Amount),
+                text = stringResource(R.string.MyStockFragment_Total_Evaluation_Amount),
                 color = Color_222222,
                 fontSize = 16.sp,
                 maxLines = 1,
@@ -125,7 +118,7 @@ private fun TotalPriceComposable(
                 .padding(top = dimensionResource(id = R.dimen.common_10dp))
         ) {
             Text(
-                text = context.getString(R.string.Common_gains_losses),
+                text = stringResource(R.string.Common_gains_losses),
                 color = Color_222222,
                 fontSize = 16.sp,
                 maxLines = 1,
@@ -152,7 +145,7 @@ private fun TotalPriceComposable(
                 .padding(top = dimensionResource(id = R.dimen.common_10dp))
         ) {
             Text(
-                text = context.getString(R.string.Common_GainPercent),
+                text = stringResource(R.string.Common_GainPercent),
                 color = Color_222222,
                 fontSize = 16.sp,
                 maxLines = 1,
@@ -186,10 +179,7 @@ private fun TotalPriceComposable(
 @ExperimentalMaterialApi
 @Composable
 private fun StockListComposable(
-    context: Context,
-    myStockViewModel: MyStockViewModel,
-    showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialogData?) -> Unit,
-    showSellInputDialog: (myStockEntity: MyStockEntity) -> Unit
+    myStockViewModel: MyStockViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold { paddingValues ->
@@ -206,11 +196,8 @@ private fun StockListComposable(
                 count = myStockViewModel.myStockInfoList.size
             ) {
                 MyStockListItemWidget(
-                    context = context,
                     myStockViewModel = myStockViewModel,
                     myStockEntity = myStockViewModel.myStockInfoList[it],
-                    showPurchaseInputDialog = showPurchaseInputDialog,
-                    showSellInputDialog = showSellInputDialog
                 )
             }
         }

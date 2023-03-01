@@ -44,10 +44,7 @@ class MyStockFragment : Fragment() {
             setHasOptionsMenu(true)
             setContent {
                 MyStockScreen(
-                    context = requireContext(),
                     viewModel = myStockViewModel,
-                    showPurchaseInputDialog = { showPurchaseInputDialog(it) },
-                    showSellInputDialog = { showSellInputDialog(it) }
                 )
             }
         }

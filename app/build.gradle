@@ -113,6 +113,7 @@ dependencies {
     //Hilt
     implementation "com.google.dagger:hilt-android:2.40.1"
     kapt "com.google.dagger:hilt-compiler:2.40.1"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
     //Crawling library
     implementation 'org.jsoup:jsoup:1.13.1'
     //Compose swipeLayout

@@ -1,10 +1,17 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.yjpapp.stockportfolio.function
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.function.mystock.MyStockViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.yjpapp.stockportfolio.function.mystock.MyStockScreen
 
 sealed class NavItem(
     val title: Int,
@@ -37,7 +44,8 @@ sealed class NavItem(
 fun NavigationGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = NavItem.MyStock.screenRoute) {
         composable(NavItem.MyStock.screenRoute) {
-            //Todo 나의 주식 compose
+            val myStockViewModel = hiltViewModel<MyStockViewModel>()
+            MyStockScreen(viewModel = myStockViewModel)
         }
         composable(NavItem.IncomeNote.screenRoute) {
             //Todo 수익 노트 compose

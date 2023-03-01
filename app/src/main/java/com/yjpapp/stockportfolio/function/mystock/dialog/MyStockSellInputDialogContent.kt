@@ -1,0 +1,13 @@
+package com.yjpapp.stockportfolio.function.mystock.dialog
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.window.Dialog
+
+@Composable
+fun MyStockSellInputDialogContent(
+    
+) {
+    Dialog(onDismissRequest = {  }) {
+        
+    }
+}

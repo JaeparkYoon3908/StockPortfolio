@@ -42,18 +42,26 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun MyStockListItemWidget(
-    context: Context,
     myStockViewModel: MyStockViewModel,
-    myStockEntity: MyStockEntity,
-    showPurchaseInputDialog: (dialogData: MyStockPurchaseInputDialogData?) -> Unit,
-    showSellInputDialog: (myStockEntity: MyStockEntity) -> Unit
+    myStockEntity: MyStockEntity
 ) {
     val revealSwipeState = rememberRevealState()
     val coroutineScope = rememberCoroutineScope()
     val maxRevealDp = 110.dp
     val showMyStockPurchaseInputDialog = remember { mutableStateOf(false) }
     if (showMyStockPurchaseInputDialog.value) {
-        MyStockPurchaseInputDialogContent {
+        MyStockPurchaseInputDialogContent(
+            dialogData = MyStockPurchaseInputDialogData(
+                id = myStockEntity.id,
+                subjectName = SubjectName(
+                    text = myStockEntity.subjectName,
+                    code = myStockEntity.subjectCode
+                ),
+                purchaseDate = myStockEntity.purchaseDate,
+                purchasePrice = myStockEntity.purchasePrice,
+                purchaseCount = myStockEntity.purchaseCount.toString()
+            )
+        ) {
             showMyStockPurchaseInputDialog.value = false
         }
     }
@@ -111,7 +119,7 @@ fun MyStockListItemWidget(
                         .background(color = Color_80000000)
                 ) {
                     Text(
-                        text = context.getString(R.string.Common_Edit),
+                        text = stringResource(R.string.Common_Edit),
                         fontSize = 16.sp,
                         color = Color_FFFFFF
                     )
@@ -120,7 +128,7 @@ fun MyStockListItemWidget(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .clickable {
-                            showSellInputDialog(myStockEntity)
+//                            showSellInputDialog(myStockEntity)
                             coroutineScope.launch {
                                 revealSwipeState.reset()
                             }
@@ -130,7 +138,7 @@ fun MyStockListItemWidget(
                         .background(color = Color_4876C7)
                 ) {
                     Text(
-                        text = context.getString(R.string.Common_Sell),
+                        text = stringResource(R.string.Common_Sell),
                         fontSize = 16.sp,
                         color = Color_FFFFFF
                     )
@@ -147,25 +155,25 @@ fun MyStockListItemWidget(
                                 }
                                 return@clickable
                             }
-                            CommonTwoBtnDialog(
-                                mContext = context,
-                                CommonTwoBtnDialog.CommonTwoBtnData(
-                                    noticeText = context.getString(R.string.Common_Notice_Delete_Check),
-                                    leftBtnText = context.getString(R.string.Common_Cancel),
-                                    leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
-                                        dialog.dismiss()
-                                    },
-                                    rightBtnText = context.getString(R.string.Common_Ok),
-                                    rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
-                                        coroutineScope.launch {
-                                            myStockViewModel.deleteMyStock(
-                                                myStockEntity = myStockEntity
-                                            )
-                                            dialog.dismiss()
-                                        }
-                                    }
-                                )
-                            ).show()
+//                            CommonTwoBtnDialog(
+//                                mContext = context,
+//                                CommonTwoBtnDialog.CommonTwoBtnData(
+//                                    noticeText = context.getString(R.string.Common_Notice_Delete_Check),
+//                                    leftBtnText = context.getString(R.string.Common_Cancel),
+//                                    leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+//                                        dialog.dismiss()
+//                                    },
+//                                    rightBtnText = context.getString(R.string.Common_Ok),
+//                                    rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
+//                                        coroutineScope.launch {
+//                                            myStockViewModel.deleteMyStock(
+//                                                myStockEntity = myStockEntity
+//                                            )
+//                                            dialog.dismiss()
+//                                        }
+//                                    }
+//                                )
+//                            ).show()
                             coroutineScope.launch {
                                 revealSwipeState.reset()
                             }
@@ -175,7 +183,7 @@ fun MyStockListItemWidget(
                         .background(color = Color_CD4632)
                 ) {
                     Text(
-                        text = context.getString(R.string.Common_Delete),
+                        text = stringResource(R.string.Common_Delete),
                         fontSize = 16.sp,
                         color = Color_FFFFFF
                     )
@@ -278,7 +286,7 @@ fun MyStockListItemWidget(
                     ) {
                         //매수일
                         Text(
-                            text = context.getString(R.string.MyStockFragment_Purchase_Date),
+                            text = stringResource(R.string.MyStockFragment_Purchase_Date),
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = Color_666666
@@ -300,7 +308,7 @@ fun MyStockListItemWidget(
                     ) {
                         //평균단가
                         Text(
-                            text = context.getString(R.string.MyStockFragment_Purchase_Average),
+                            text = stringResource(R.string.MyStockFragment_Purchase_Average),
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = Color_666666,
@@ -327,7 +335,7 @@ fun MyStockListItemWidget(
                         modifier = Modifier.weight(0.35f)
                     ) {
                         Text(
-                            text = context.getString(R.string.MyStockFragment_Holding_Quantity),
+                            text = stringResource(R.string.MyStockFragment_Holding_Quantity),
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = colorResource(id = R.color.color_666666)
@@ -350,7 +358,7 @@ fun MyStockListItemWidget(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = context.getString(R.string.MyStockFragment_Current_Price),
+                            text = stringResource(R.string.MyStockFragment_Current_Price),
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = Color_666666,
