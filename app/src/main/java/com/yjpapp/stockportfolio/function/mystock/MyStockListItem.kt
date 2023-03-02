@@ -61,8 +61,11 @@ fun MyStockListItemWidget(
                 purchasePrice = myStockEntity.purchasePrice,
                 purchaseCount = myStockEntity.purchaseCount.toString()
             )
-        ) {
+        ) { dialogData ->
             showMyStockPurchaseInputDialog.value = false
+            dialogData?.let {
+                //TODO 완료 했을 때 데이터 처리
+            }
         }
     }
     RevealSwipe(

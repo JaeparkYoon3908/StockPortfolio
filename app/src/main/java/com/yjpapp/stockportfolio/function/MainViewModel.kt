@@ -17,7 +17,7 @@ import javax.inject.Inject
 import kotlin.system.exitProcess
 
 /**
- * MainActivity 전용 ViewModel
+ * MainActivity Global ViewModel
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(

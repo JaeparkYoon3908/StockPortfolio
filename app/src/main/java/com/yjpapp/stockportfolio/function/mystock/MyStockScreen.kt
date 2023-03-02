@@ -1,7 +1,6 @@
 package com.yjpapp.stockportfolio.function.mystock
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,14 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yjpapp.data.localdb.room.mystock.MyStockEntity
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.theme.Color_222222
 import com.yjpapp.stockportfolio.common.theme.Color_4876C7
 import com.yjpapp.stockportfolio.common.theme.Color_CD4632
 import com.yjpapp.stockportfolio.common.theme.Color_Line_1A000000
-import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialog
-import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogData
 import com.yjpapp.stockportfolio.util.StockUtils
 import kotlinx.coroutines.launch
 
@@ -38,7 +35,7 @@ import kotlinx.coroutines.launch
 @Composable
 @ExperimentalMaterialApi
 fun MyStockScreen(
-    viewModel: MyStockViewModel
+    viewModel: MyStockViewModel = hiltViewModel()
 ) {
     Column {
         TotalPriceComposable(

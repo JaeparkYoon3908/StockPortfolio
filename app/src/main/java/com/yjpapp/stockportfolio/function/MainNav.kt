@@ -11,6 +11,12 @@ import androidx.navigation.compose.composable
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.function.mystock.MyStockViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteScreen
+import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
+import com.yjpapp.stockportfolio.function.memo.MemoListViewModel
+import com.yjpapp.stockportfolio.function.memo.MemoScreen
+import com.yjpapp.stockportfolio.function.my.MyContent
+import com.yjpapp.stockportfolio.function.my.MyViewModel
 import com.yjpapp.stockportfolio.function.mystock.MyStockScreen
 
 sealed class NavItem(
@@ -48,13 +54,16 @@ fun NavigationGraph(navController: NavHostController) {
             MyStockScreen(viewModel = myStockViewModel)
         }
         composable(NavItem.IncomeNote.screenRoute) {
-            //Todo 수익 노트 compose
+            val incomeNoteViewModel = hiltViewModel<IncomeNoteViewModel>()
+            IncomeNoteScreen(viewModel = incomeNoteViewModel)
         }
         composable(NavItem.Memo.screenRoute) {
-            //Todo 메모 compose
+            val memoViewModel:MemoListViewModel = hiltViewModel()
+            MemoScreen(viewModel = memoViewModel)
         }
         composable(NavItem.My.screenRoute) {
-            //Todo 마이 compose
+            val myViewModel: MyViewModel = hiltViewModel()
+            MyContent(viewModel = myViewModel)
         }
     }
 }
