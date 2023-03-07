@@ -1,7 +1,7 @@
 ### 안드로이드 기술 향상을 위한 사이드 프로젝트입니다.
 
 ### 1. 어플리케이션 스크린샷(더 이상 스토어에 앱을 제공 하지 않습니다.)
-![Screenshot_20230307-221139_One UI Home (2) (1) (1)](https://user-images.githubusercontent.com/54883589/223433297-af95dd3d-069a-4cde-b197-3ca5baa3f2a3.jpg)
+![Screenshot_20230307-221139_One UI Home (2) (1) (1) (1)](https://user-images.githubusercontent.com/54883589/223433497-65ebe30b-64fe-4339-94a5-01dece6018bf.jpg)
 ![001](https://user-images.githubusercontent.com/54883589/160115732-994a1d66-df11-4dc8-9f17-574aec9e6ad9.png)
 ![002](https://user-images.githubusercontent.com/54883589/160115735-a0a69593-0d9f-46f0-a1c9-e5a8d43cc3b5.png)
 ![003](https://user-images.githubusercontent.com/54883589/160115736-8543508f-7947-4f66-a6d8-1ba85ae0a452.png)
