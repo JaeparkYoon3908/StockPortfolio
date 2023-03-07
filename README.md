@@ -1,5 +1,4 @@
-### 내가 소유한 국내 주식 가격을 실시간으로 복잡한 인증 절차 없이 언제든지 확인 해보세요!
-### 매도 일지를 기입하여 나의 실현 수익도 확인 할 수 있습니다.
+### 안드로이드 기술 향상을 위한 사이드 프로젝트입니다.
 
 ### Google Play Store : https://play.google.com/store/apps/details?id=com.yjpapp.stockportfolio
 
