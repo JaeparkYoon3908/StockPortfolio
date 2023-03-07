@@ -1,7 +1,7 @@
 ### 안드로이드 기술 향상을 위한 사이드 프로젝트입니다.
 
-### Google Play Store : https://play.google.com/store/apps/details?id=com.yjpapp.stockportfolio
-
+### 더 이상 스토어에 제공을 하지 않습니다.
+![Screenshot_20230307-221139_One UI Home](https://user-images.githubusercontent.com/54883589/223432627-8034912f-7798-47ce-96e9-43047a506f70.jpg)
 
 ### 1. 어플리케이션 스크린샷
 ![001](https://user-images.githubusercontent.com/54883589/160115732-994a1d66-df11-4dc8-9f17-574aec9e6ad9.png)
