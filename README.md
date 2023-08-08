@@ -1,6 +1,6 @@
 ### 안드로이드 기술 향상을 위한 사이드 프로젝트입니다.
 
-### 1. 어플리케이션 스크린샷(더 이상 스토어에 앱을 제공 하지 않습니다.)
+### 1. 어플리케이션 스크린샷
 ![store](https://user-images.githubusercontent.com/54883589/223433943-906fb793-b485-4079-925d-0b2aae75aab3.jpg)
 ![001](https://user-images.githubusercontent.com/54883589/160115732-994a1d66-df11-4dc8-9f17-574aec9e6ad9.png)
 ![002](https://user-images.githubusercontent.com/54883589/160115735-a0a69593-0d9f-46f0-a1c9-e5a8d43cc3b5.png)
