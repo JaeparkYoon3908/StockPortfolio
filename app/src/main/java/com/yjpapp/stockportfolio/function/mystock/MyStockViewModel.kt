@@ -4,18 +4,12 @@ package com.yjpapp.stockportfolio.function.mystock
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yjpapp.data.localdb.preference.PrefKey
-import com.yjpapp.data.localdb.room.mystock.MyStockEntity
-import com.yjpapp.data.model.ResponseResult
-import com.yjpapp.data.model.request.ReqIncomeNoteInfo
-import com.yjpapp.data.network.NetworkUtils
-import com.yjpapp.data.repository.IncomeNoteRepository
-import com.yjpapp.data.repository.MyStockRepository
-import com.yjpapp.data.repository.UserRepository
+import com.yjpapp.stockportfolio.data.network.NetworkUtils
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.base.BaseViewModel
-import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.stockportfolio.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -35,9 +29,7 @@ import javax.inject.Inject
 class MyStockViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val myStockRepository: MyStockRepository,
-    private val incomeNoteRepository: IncomeNoteRepository,
-    private val userRepository: UserRepository
-) : BaseViewModel() {
+) : ViewModel() {
     private val _uiState = MutableSharedFlow<Event>(
         replay = 0, //replay = 0 : 새로운 구독자에게 이전 이벤트를 전달하지 않음
         extraBufferCapacity = 1, //추가 버퍼를 생성하여 emit 한 데이터가 버퍼에 유지 되도록함
@@ -232,35 +224,6 @@ class MyStockViewModel @Inject constructor(
             }
         }
         return result
-    }
-
-    fun isDeleteCheck(): Boolean {
-        val isDeleteCheckPref =
-            userRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_SHOW_DELETE_CHECK)
-        return isDeleteCheckPref == StockConfig.TRUE
-    }
-
-    fun isAutoAdd(): Boolean {
-        val isAutoAddPref = userRepository.getPreference(PrefKey.KEY_SETTING_MY_STOCK_AUTO_ADD)
-        return isAutoAddPref == StockConfig.TRUE
-    }
-
-    /**
-     * IncomeNote 연동
-     */
-    fun requestAddIncomeNote(reqIncomeNoteInfo: ReqIncomeNoteInfo, myStockEntity: MyStockEntity) {
-        viewModelScope.launch {
-            val result = incomeNoteRepository.addIncomeNote(reqIncomeNoteInfo)
-            if (result is ResponseResult.DataError) {
-                event(Event.ResponseServerError(result.resultMessage))
-                return@launch
-            }
-
-            result.data?.let { incomeNoteInfo ->
-                incomeNoteInfo.gainPercent
-                event(Event.SuccessIncomeNoteAdd(myStockEntity))
-            }
-        }
     }
 
     /**

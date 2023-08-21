@@ -2,11 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="data"
-            type="com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog.IncomeNoteInputDialogData" />
-    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/EditMainDialog_MainContainer"
         android:layout_width="match_parent"
@@ -38,7 +34,6 @@
             android:background="@drawable/border_line_bottom"
             android:hint="@string/EditIncomeNoteDialog_SubjectName_Hint"
             android:textSize="@dimen/common_15dp"
-            android:text="@{data.subjectName}"
             app:layout_constraintBottom_toBottomOf="@+id/txt_subject_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_subject_name"
@@ -68,7 +63,6 @@
             android:hint="@string/EditIncomeNoteDialog_Sell_Date_Hint"
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_15dp"
-            android:text="@{data.sellDate}"
             app:layout_constraintBottom_toBottomOf="@+id/txt_sell_date"
             app:layout_constraintStart_toEndOf="@+id/txt_sell_date"
             app:layout_constraintTop_toTopOf="@+id/txt_sell_date" />
@@ -108,7 +102,6 @@
             android:inputType="number"
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_15dp"
-            android:text="@{data.purchasePrice}"
             app:layout_constraintBottom_toBottomOf="@+id/txt_purchase_price"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_purchase_price_symbol"
@@ -149,7 +142,6 @@
             android:inputType="number"
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_15dp"
-            android:text="@{data.sellPrice}"
             app:layout_constraintBottom_toBottomOf="@+id/txt_sell_price"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_sell_price_symbol"
@@ -180,7 +172,6 @@
             android:inputType="number"
             android:textColor="@color/color_222222"
             android:textSize="@dimen/common_15dp"
-            android:text="@{data.sellCount}"
             app:layout_constraintBottom_toBottomOf="@+id/txt_sell_count"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_sell_count"

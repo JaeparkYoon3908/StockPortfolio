@@ -34,16 +34,6 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
-        <activity
-            android:name=".function.memo.detail.MemoReadWriteActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-
-        <activity
-            android:name=".function.login.LoginActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-
         <activity android:name=".function.mystock.search.StockSearchActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
@@ -67,16 +57,6 @@
             android:exported="true"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
-        <activity
-            android:name=".test.TestActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-
-        <activity
-            android:name=".test.TestDetailActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
 
         <service
             android:name=".service.FBMessagingService"

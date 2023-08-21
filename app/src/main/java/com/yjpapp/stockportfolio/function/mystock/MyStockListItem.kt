@@ -1,7 +1,5 @@
 package com.yjpapp.stockportfolio.function.mystock
 
-import android.content.Context
-import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,11 +17,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yjpapp.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
-import com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog
 import com.yjpapp.stockportfolio.common.theme.*
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogContent
 import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogData
@@ -150,13 +147,10 @@ fun MyStockListItemWidget(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .clickable {
-                            if (!myStockViewModel.isDeleteCheck()) {
-                                coroutineScope.launch {
-                                    myStockViewModel.deleteMyStock(
-                                        myStockEntity = myStockEntity
-                                    )
-                                }
-                                return@clickable
+                            coroutineScope.launch {
+                                myStockViewModel.deleteMyStock(
+                                    myStockEntity = myStockEntity
+                                )
                             }
 //                            CommonTwoBtnDialog(
 //                                mContext = context,

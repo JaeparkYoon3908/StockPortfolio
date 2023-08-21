@@ -17,35 +17,4 @@
             />
     </keep_state_fragment>
 
-    <keep_state_fragment
-        android:id="@+id/incomeNoteFragment"
-        android:name="com.yjpapp.stockportfolio.function.incomenote.IncomeNoteFragment"
-        android:label="IncomeNoteFragment"
-        tools:layout="@layout/fragment_income_note"
-        />
-
-    <keep_state_fragment
-        android:id="@+id/memoListFragment"
-        android:name="com.yjpapp.stockportfolio.function.memo.MemoListFragment"
-        android:label="MemoListFragment"
-        tools:layout="@layout/fragment_memo_list"
-        />
-
-    <keep_state_fragment
-        android:id="@+id/myFragment"
-        android:name="com.yjpapp.stockportfolio.function.my.MyFragment"
-        android:label="MyFragment"
-        tools:layout="@layout/fragment_my"
-        />
-
-    <fragment
-        android:id="@+id/stockSearchFragment"
-        android:name="com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity"
-        android:label="StockSearchFragment">
-        <action
-            android:id="@+id/action_stockSearchFragment_to_myStockFragment"
-            app:destination="@+id/myStockFragment"
-            />
-    </fragment>
-
 </navigation>
