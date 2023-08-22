@@ -1,2 +1,5 @@
 include ':app'
 rootProject.name = "StockPortfolio"
+include ':swipeLayout'
+project(':swipeLayout').projectDir = new File(rootDir, 'libraries/swipeLayout/')
+include ':data'

@@ -1,0 +1,100 @@
+package com.yjpapp.stockportfolio.function.memo
+
+import android.app.Activity
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.yjpapp.data.localdb.preference.PrefKey
+import com.yjpapp.data.localdb.room.memo.MemoListEntity
+import com.yjpapp.data.repository.MemoRepository
+import com.yjpapp.data.repository.UserRepository
+import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.function.incomenote.IncomeNoteViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.system.exitProcess
+
+/**
+ * @author 윤재박
+ * @since 2022.01.06
+ */
+@HiltViewModel
+class MemoListViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val memoRepository: MemoRepository,
+    private val userRepository: UserRepository
+) : ViewModel() {
+    private val _uiState = MutableSharedFlow<Event>(
+        replay = 0, //replay = 0 : 새로운 구독자에게 이전 이벤트를 전달하지 않음
+        extraBufferCapacity = 1, //추가 버퍼를 생성하여 emit 한 데이터가 버퍼에 유지 되도록함
+        onBufferOverflow = BufferOverflow.DROP_OLDEST //버퍼가 가득찼을 시 오래된 데이터 제거
+    )
+    val uiState = _uiState.asSharedFlow() //convert read only
+    private var _allMemoListData = mutableListOf<MemoListEntity>()
+    val allMemoListData get() = _allMemoListData
+    fun getAllMemoInfoList() {
+        _allMemoListData = memoRepository.getAllMemoDataList()
+        event(Event.RefreshMemoListData(_allMemoListData))
+    }
+
+    fun requestDeleteMemoInfo() {
+        val memoList = memoRepository.getAllMemoDataList()
+        try {
+            for (position in memoList.indices) {
+                if (memoList[position].deleteChecked == "true") {
+                    memoRepository.deleteMemoInfoList(memoList[position])
+                    val updateMemoList = memoRepository.getAllMemoDataList()
+                    event(Event.RefreshMemoListData(updateMemoList))
+                }
+            }
+            val updateMemoList = memoRepository.getAllMemoDataList()
+            event(Event.MemoListDataDeleteSuccess(updateMemoList))
+        } catch (e: Exception) {
+            e.stackTrace
+        }
+    }
+
+    fun requestUpdateDeleteCheck(position: Int, deleteCheck: Boolean) {
+        val id = memoRepository.getAllMemoDataList()[position].id
+        memoRepository.modifyDeleteCheck(id, deleteCheck.toString())
+    }
+
+    fun runBackPressAppCloseEvent(activity: Activity) {
+        val isAllowAppClose = userRepository.getPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE)?: StockConfig.FALSE
+        if (isAllowAppClose == StockConfig.TRUE) {
+            activity.finishAffinity()
+            System.runFinalization()
+            exitProcess(0)
+        } else {
+            Toasty.normal(context, context.getString(R.string.Common_BackButton_AppClose_Message)).show()
+            userRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.TRUE)
+            Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                userRepository.setPreference(PrefKey.KEY_BACK_BUTTON_APP_CLOSE, StockConfig.FALSE)
+            },3000)
+        }
+    }
+
+    private fun event(event: Event) {
+        viewModelScope.launch {
+            _uiState.emit(event)
+        }
+    }
+
+    fun isMemoVibration(): Boolean {
+        return memoRepository.getIsMemoVibration()
+    }
+
+    sealed class Event {
+        data class RefreshMemoListData(val data: MutableList<MemoListEntity>): Event()
+        data class MemoListDataDeleteSuccess(val data: MutableList<MemoListEntity>): Event()
+    }
+}

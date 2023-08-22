@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_MainActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_f1f1f1"
+            android:orientation="horizontal"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/txt_MainActivity_Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/common_10dp"
+                android:paddingBottom="@dimen/common_10dp"
+                android:text="@string/MyStockFragment_Title"
+                android:textColor="@color/color_222222"
+                android:textSize="18sp" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/cons_MainActivity_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/color_ffffff"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@+id/adView"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_MainActivity"/>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/cons_MainActivity_fragment"
+            app:layout_constraintBottom_toTopOf="@+id/view_bottom_line"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-6147567013464925/6556078565"/>
+
+        <View
+            android:id="@+id/view_bottom_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_1dp"
+            android:background="@color/color_line_1a000000"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+            tools:visibility="visible" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/color_ffffff"
+            app:itemIconTint="@color/selector_bottom_text_color"
+            app:itemTextColor="@color/selector_bottom_text_color"
+            app:itemHorizontalTranslationEnabled="true"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H, 1 : 0.17"
+            app:menu="@menu/menu_main_bottom_navi" />
+
+        <View
+            android:id="@+id/view_masking"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#77000000"
+            android:visibility="gone"
+            />
+
+        <com.yjpapp.stockportfolio.common.widget.CommonLoadingView
+            android:id="@+id/iv_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

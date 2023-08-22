@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.yjpapp.stockportfolio.function.memo.detail.MemoReadWriteViewModel" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_MemoReadWriteActivity"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_50dp"
+            android:background="@color/color_f1f1f1"
+            android:theme="@style/AppTheme">
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/txt_MainActivity_Title"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:paddingTop="@dimen/common_10dp"-->
+            <!--                android:paddingBottom="@dimen/common_10dp"-->
+            <!--                android:text="@string/MemoListFragment_Write_Memo"-->
+            <!--                android:textColor="@color/color_222222"-->
+            <!--                android:textSize="18sp"-->
+            <!--                />-->
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_MemoReadWriteActivity_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_20dp"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:layout_marginEnd="@dimen/common_20dp"
+            android:maxLines="3"
+            android:theme="@style/EditTextStyle"
+            android:backgroundTint="@drawable/selector_edit_text_bg"
+            android:hint="@string/MemoReadWriteActivity_Title_Hint"
+            android:text="@{viewModel.savedTitle}"
+            android:textColor="@color/color_222222" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_MemoReadWriteActivity_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/common_20dp"
+            android:layout_marginTop="@dimen/common_10dp"
+            android:layout_marginEnd="@dimen/common_20dp"
+            android:layout_marginBottom="20dp"
+            android:theme="@style/EditTextStyle"
+            android:backgroundTint="@drawable/selector_edit_text_bg"
+            android:gravity="top"
+            android:hint="@string/MemoReadWriteActivity_Content_Hint"
+            android:text="@{viewModel.savedContent}"
+            android:textColor="@color/color_222222" />
+
+    </LinearLayout>
+</layout>
