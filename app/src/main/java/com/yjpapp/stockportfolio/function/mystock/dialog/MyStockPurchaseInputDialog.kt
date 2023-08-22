@@ -22,6 +22,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.databinding.CustomDialogPurchaseInputMyStockBinding
 import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
+import com.yjpapp.stockportfolio.function.incomenote.dialog.IncomeNoteInputDialog
 import com.yjpapp.stockportfolio.function.mystock.search.StockSearchActivity
 import com.yjpapp.stockportfolio.util.DisplayUtils
 import com.yjpapp.stockportfolio.util.StockUtils
@@ -217,6 +218,7 @@ class MyStockPurchaseInputDialog(
         } else {
             (dayOfMonth + 1).toString()
         }
+        uiHandler.sendEmptyMessage(IncomeNoteInputDialog.MSG.PURCHASE_DATE_DATA_INPUT)
     }
 
     private val stockSearchActivityResult =
