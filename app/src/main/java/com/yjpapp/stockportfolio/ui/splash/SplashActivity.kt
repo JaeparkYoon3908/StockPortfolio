@@ -1,11 +1,11 @@
-package com.yjpapp.stockportfolio.function.splash
+package com.yjpapp.stockportfolio.ui.splash
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
-import com.yjpapp.stockportfolio.function.MainActivity
+import com.yjpapp.stockportfolio.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

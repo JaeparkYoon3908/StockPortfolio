@@ -8,7 +8,7 @@
 
     <keep_state_fragment
         android:id="@+id/myStockFragment"
-        android:name="com.yjpapp.stockportfolio.function.mystock.MyStockFragment"
+        android:name="com.yjpapp.stockportfolio.ui.mystock.MyStockFragment"
         android:label="MyStockFragment"
         >
         <action

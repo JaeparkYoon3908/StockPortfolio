@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.mystock
+package com.yjpapp.stockportfolio.ui.mystock
 
 
 import android.content.Context

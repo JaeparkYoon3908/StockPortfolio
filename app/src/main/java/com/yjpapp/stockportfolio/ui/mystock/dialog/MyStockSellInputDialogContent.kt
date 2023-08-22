@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.mystock.dialog
+package com.yjpapp.stockportfolio.ui.mystock.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview

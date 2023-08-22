@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.mystock
+package com.yjpapp.stockportfolio.ui.mystock
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,8 +22,8 @@ import com.yjpapp.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.common.StockConfig
 import com.yjpapp.stockportfolio.common.theme.*
-import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogContent
-import com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogData
+import com.yjpapp.stockportfolio.ui.mystock.dialog.MyStockPurchaseInputDialogContent
+import com.yjpapp.stockportfolio.ui.mystock.dialog.MyStockPurchaseInputDialogData
 import com.yjpapp.stockportfolio.util.StockUtils
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
@@ -98,20 +98,6 @@ fun MyStockListItemWidget(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .clickable {
-//                            val dialogData = MyStockPurchaseInputDialogData(
-//                                    id = myStockEntity.id,
-//                                    subjectName = SubjectName(
-//                                        text = myStockEntity.subjectName,
-//                                        code = myStockEntity.subjectCode
-//                                    ),
-//                                    purchaseDate = myStockEntity.purchaseDate,
-//                                    purchasePrice = myStockEntity.purchasePrice,
-//                                    purchaseCount = myStockEntity.purchaseCount.toString()
-//                                )
-//                            showPurchaseInputDialog(dialogData)
-//                            coroutineScope.launch {
-//                                revealSwipeState.reset()
-//                            }
                             showMyStockPurchaseInputDialog.value = true
                         }
                         .fillMaxWidth()

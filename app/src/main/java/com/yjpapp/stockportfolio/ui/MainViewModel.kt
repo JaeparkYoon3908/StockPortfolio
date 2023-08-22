@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function
+package com.yjpapp.stockportfolio.ui
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

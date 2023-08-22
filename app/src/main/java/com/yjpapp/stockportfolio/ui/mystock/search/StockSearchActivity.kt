@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.mystock.search
+package com.yjpapp.stockportfolio.ui.mystock.search
 
 import android.content.Intent
 import android.os.Bundle

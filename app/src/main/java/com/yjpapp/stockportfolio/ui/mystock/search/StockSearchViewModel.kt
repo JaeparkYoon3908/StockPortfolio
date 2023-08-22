@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.mystock.search
+package com.yjpapp.stockportfolio.ui.mystock.search
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf

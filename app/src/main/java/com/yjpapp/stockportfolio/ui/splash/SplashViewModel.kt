@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function.splash
+package com.yjpapp.stockportfolio.ui.splash
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

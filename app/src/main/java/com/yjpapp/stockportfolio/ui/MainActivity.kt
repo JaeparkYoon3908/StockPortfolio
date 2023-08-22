@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.function
+package com.yjpapp.stockportfolio.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

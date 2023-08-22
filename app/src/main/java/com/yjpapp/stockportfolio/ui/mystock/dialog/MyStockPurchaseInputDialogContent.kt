@@ -1,9 +1,8 @@
-package com.yjpapp.stockportfolio.function.mystock.dialog
+package com.yjpapp.stockportfolio.ui.mystock.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
