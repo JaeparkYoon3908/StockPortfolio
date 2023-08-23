@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.util
 
-import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.ui.common.StockConfig
 
 object PatternUtils {
     //이메일 마스킹킹

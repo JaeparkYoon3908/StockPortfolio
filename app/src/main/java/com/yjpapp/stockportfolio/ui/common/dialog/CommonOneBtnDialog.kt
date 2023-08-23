@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.common.dialog
+package com.yjpapp.stockportfolio.ui.common.dialog
 
 import android.content.Context
 import android.os.Bundle

@@ -19,7 +19,7 @@ import androidx.fragment.app.DialogFragment
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.ui.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.databinding.CustomDialogPurchaseInputMyStockBinding
 import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.ui.mystock.search.StockSearchActivity

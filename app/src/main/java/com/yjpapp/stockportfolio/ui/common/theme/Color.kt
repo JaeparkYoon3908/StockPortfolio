@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.common.theme
+package com.yjpapp.stockportfolio.ui.common.theme
 
 import androidx.compose.ui.graphics.Color
 

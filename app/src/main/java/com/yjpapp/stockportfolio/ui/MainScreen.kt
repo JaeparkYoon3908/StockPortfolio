@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.yjpapp.stockportfolio.common.theme.Color_222222
-import com.yjpapp.stockportfolio.common.theme.Color_888888
+import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
+import com.yjpapp.stockportfolio.ui.common.theme.Color_888888
 
 @Composable
 fun MainScreen(

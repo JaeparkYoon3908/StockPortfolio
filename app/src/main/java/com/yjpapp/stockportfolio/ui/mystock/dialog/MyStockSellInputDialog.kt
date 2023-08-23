@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.common.dialog.CommonDatePickerDialog
+import com.yjpapp.stockportfolio.ui.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.databinding.CustomDialogInputSellMyStockBinding
 import com.yjpapp.stockportfolio.extension.setOnSingleClickListener
 import com.yjpapp.stockportfolio.util.DisplayUtils

@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.yjpapp.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.common.theme.Color_222222
-import com.yjpapp.stockportfolio.common.theme.Color_E52B4E
-import com.yjpapp.stockportfolio.common.theme.Color_F1F1F1
-import com.yjpapp.stockportfolio.common.theme.Color_FFFFFF
+import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
+import com.yjpapp.stockportfolio.ui.common.theme.Color_E52B4E
+import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
+import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 
 data class MyStockPurchaseInputDialogData(
     var id: Int = -1,

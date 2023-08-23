@@ -9,7 +9,7 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Base64
-import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.ui.common.StockConfig
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat

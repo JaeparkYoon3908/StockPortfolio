@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.common
+package com.yjpapp.stockportfolio.ui.common
 
 import java.util.*
 

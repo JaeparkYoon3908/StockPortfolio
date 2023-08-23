@@ -26,10 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.common.theme.Color_222222
-import com.yjpapp.stockportfolio.common.theme.Color_4876C7
-import com.yjpapp.stockportfolio.common.theme.Color_CD4632
-import com.yjpapp.stockportfolio.common.theme.Color_F1F1F1
+import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
+import com.yjpapp.stockportfolio.ui.common.theme.Color_4876C7
+import com.yjpapp.stockportfolio.ui.common.theme.Color_CD4632
+import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
 import com.yjpapp.stockportfolio.util.StockUtils
 import kotlinx.coroutines.launch
 
