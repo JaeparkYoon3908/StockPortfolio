@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.data
 
-import com.yjpapp.data.model.ResponseResult
+import com.yjpapp.stockportfolio.data.model.ResponseResult
 import com.yjpapp.stockportfolio.data.network.ServerRespCode
 import com.yjpapp.stockportfolio.data.network.ServerRespMessage
 import kotlinx.coroutines.Dispatchers

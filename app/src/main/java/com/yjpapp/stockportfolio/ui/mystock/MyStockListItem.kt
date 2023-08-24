@@ -17,16 +17,18 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yjpapp.data.model.SubjectName
+import com.yjpapp.stockportfolio.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.ui.common.StockConfig
@@ -60,8 +62,8 @@ fun MyStockListItemWidget(
     val revealSwipeState = rememberRevealState()
     val coroutineScope = rememberCoroutineScope()
     val maxRevealDp = 110.dp
-    val showMyStockPurchaseInputDialog = remember { mutableStateOf(false) }
-    if (showMyStockPurchaseInputDialog.value) {
+    var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
+    if (showMyStockPurchaseInputDialog) {
         MyStockPurchaseInputDialogContent(
             dialogData = MyStockPurchaseInputDialogData(
                 id = myStockEntity.id,
@@ -74,7 +76,7 @@ fun MyStockListItemWidget(
                 purchaseCount = myStockEntity.purchaseCount.toString()
             )
         ) { dialogData ->
-            showMyStockPurchaseInputDialog.value = false
+            showMyStockPurchaseInputDialog = false
             dialogData?.let {
                 //TODO 완료 했을 때 데이터 처리
             }
@@ -93,14 +95,7 @@ fun MyStockListItemWidget(
 //        RevealDirection.StartToEnd,
             RevealDirection.EndToStart
         ),
-//            hiddenContentStart = {
-//                Icon(
-//                    modifier = Modifier.padding(horizontal = 25.dp),
-//                    imageVector = Icons.Outlined.Star,
-//                    contentDescription = null,
-//                    tint = Color.White
-//                )
-//            },
+
         hiddenContentEnd = {
             Column(
                 modifier = Modifier
@@ -112,9 +107,7 @@ fun MyStockListItemWidget(
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .clickable {
-                            showMyStockPurchaseInputDialog.value = true
-                        }
+                        .clickable { showMyStockPurchaseInputDialog = true }
                         .fillMaxWidth()
                         .weight(0.333f)
                         .background(color = Color_80000000)
@@ -129,49 +122,11 @@ fun MyStockListItemWidget(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .clickable {
-//                            showSellInputDialog(myStockEntity)
-                            coroutineScope.launch {
-                                revealSwipeState.reset()
-                            }
-                        }
-                        .fillMaxWidth()
-                        .weight(0.333f)
-                        .background(color = Color_4876C7)
-                ) {
-                    Text(
-                        text = stringResource(R.string.Common_Sell),
-                        fontSize = 16.sp,
-                        color = Color_FFFFFF
-                    )
-                }
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .clickable {
                             coroutineScope.launch {
                                 myStockViewModel.deleteMyStock(
                                     myStockEntity = myStockEntity
                                 )
                             }
-//                            CommonTwoBtnDialog(
-//                                mContext = context,
-//                                CommonTwoBtnDialog.CommonTwoBtnData(
-//                                    noticeText = context.getString(R.string.Common_Notice_Delete_Check),
-//                                    leftBtnText = context.getString(R.string.Common_Cancel),
-//                                    leftBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
-//                                        dialog.dismiss()
-//                                    },
-//                                    rightBtnText = context.getString(R.string.Common_Ok),
-//                                    rightBtnListener = { _: View, dialog: CommonTwoBtnDialog ->
-//                                        coroutineScope.launch {
-//                                            myStockViewModel.deleteMyStock(
-//                                                myStockEntity = myStockEntity
-//                                            )
-//                                            dialog.dismiss()
-//                                        }
-//                                    }
-//                                )
-//                            ).show()
                             coroutineScope.launch {
                                 revealSwipeState.reset()
                             }

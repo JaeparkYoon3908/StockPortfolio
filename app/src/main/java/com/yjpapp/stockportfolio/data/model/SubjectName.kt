@@ -1,4 +1,4 @@
-package com.yjpapp.data.model
+package com.yjpapp.stockportfolio.data.model
 
 import java.io.Serializable
 

@@ -16,7 +16,6 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 /**
  * 개발에 필요한 함수들
@@ -25,11 +24,15 @@ import kotlin.math.roundToLong
  * @since 2020.07
  */
 object StockUtils {
+    const val DATEFORMAT = "yyyy.MM.dd HH:mm"
+    const val DATEFORMAT2 = "yyyy.MM.dd HH:mm:ss"
+    const val DATEFORMAT3 = "yyyy-MM-dd"
+    const val DATEFORMAT4 = "yyyyMMdd"
     //yyyymmdd로 변환
     fun getTodayYYYYMMDD(): String {
         val currentTime: Long = System.currentTimeMillis()
         val todayDate = Date(currentTime)
-        val sdformat = SimpleDateFormat("yyyyMMdd")
+        val sdformat = SimpleDateFormat(DATEFORMAT4)
         return sdformat.format(todayDate)
     }
 
@@ -50,7 +53,7 @@ object StockUtils {
     fun getTodayYYMMDD(): List<String> {
         val currentTime: Long = System.currentTimeMillis()
         val todayDate = Date(currentTime)
-        val sdformat = SimpleDateFormat("yyyy-MM-DD")
+        val sdformat = SimpleDateFormat(DATEFORMAT3)
         return sdformat.format(todayDate).split("-")
     }
 

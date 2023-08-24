@@ -1,8 +1,8 @@
 package com.yjpapp.stockportfolio.data.datasource
 
 import com.yjpapp.stockportfolio.data.APICall
-import com.yjpapp.data.model.ResponseResult
-import com.yjpapp.data.model.response.RespNaverDeleteUserInfo
+import com.yjpapp.stockportfolio.data.model.ResponseResult
+import com.yjpapp.stockportfolio.data.model.response.RespNaverDeleteUserInfo
 import com.yjpapp.stockportfolio.data.network.service.NaverOpenService
 import javax.inject.Inject
 

@@ -1,35 +1,43 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_4876C7
 import com.yjpapp.stockportfolio.ui.common.theme.Color_CD4632
-import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
+import com.yjpapp.stockportfolio.ui.mystock.dialog.MyStockPurchaseInputDialogContent
 import com.yjpapp.stockportfolio.util.StockUtils
 import kotlinx.coroutines.launch
 
@@ -44,15 +52,75 @@ fun MyStockScreen(
     modifier: Modifier = Modifier,
     viewModel: MyStockViewModel = hiltViewModel()
 ) {
-    Column {
-        TotalPriceComposable(
-            modifier = modifier,
-            myStockViewModel = viewModel
-        )
-        StockListComposable(
-            modifier = modifier,
-            myStockViewModel = viewModel
-        )
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+    var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
+    if (showMyStockPurchaseInputDialog) {
+        MyStockPurchaseInputDialogContent { dialogData ->
+            showMyStockPurchaseInputDialog = false
+            if (dialogData != null) {
+                coroutineScope.launch {
+                    val currentPriceData = viewModel.getCurrentPrice(subjectCode = dialogData.subjectName.code)
+                    viewModel.addMyStock(
+                        MyStockEntity(
+                            subjectName = dialogData.subjectName.text,
+                            subjectCode = dialogData.subjectName.code,
+                            purchaseDate = dialogData.purchaseDate,
+                            purchasePrice = dialogData.purchasePrice,
+                            purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
+                            currentPrice = currentPriceData.currentPrice,
+                            gainPrice = (StockUtils.getNumDeletedComma(dialogData.purchasePrice).toInt() - StockUtils.getNumDeletedComma(currentPriceData.currentPrice).toInt()).toString(),
+                            dayToDayPrice = currentPriceData.dayToDayPrice,
+                            dayToDayPercent = currentPriceData.dayToDayPercent,
+                            yesterdayPrice = currentPriceData.yesterdayPrice
+                        )
+                    )
+                }
+            }
+        }
+    }
+    LazyColumn(modifier = modifier) {
+        item {
+            TotalPriceComposable(
+                modifier = modifier,
+                myStockViewModel = viewModel
+            )
+        }
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "보유 주식",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                )
+                IconButton(
+                    modifier = Modifier.size(15.dp),
+                    onClick = { showMyStockPurchaseInputDialog = true }
+                ) {
+                    Icon(
+                        modifier = Modifier.size(15.dp),
+                        painter = painterResource(id = R.drawable.icon_add),
+                        contentDescription = "추가하기",
+                        tint = Color_222222
+                    )
+                }
+            }
+        }
+        item { Spacer(modifier = Modifier.size(20.dp)) }
+        items(
+            count = viewModel.myStockInfoList.size
+        ) {
+            MyStockListItemWidget(
+                myStockViewModel = viewModel,
+                myStockEntity = viewModel.myStockInfoList[it],
+            )
+        }
     }
 }
 
@@ -66,7 +134,7 @@ private fun TotalPriceComposable(
     val totalGainPrice by myStockViewModel.totalGainPrice.collectAsState()
     val totalGainPricePercent by myStockViewModel.totalGainPricePercent.collectAsState()
     Card(
-        modifier = modifier.padding(20.dp),
+        modifier = Modifier.padding(20.dp),
         shape = RoundedCornerShape(10.dp),
         backgroundColor = Color.White
     ) {
@@ -179,41 +247,6 @@ private fun TotalPriceComposable(
                     modifier = Modifier
                         .weight(0.70f)
                 )
-            }
-        }
-    }
-}
-
-@SuppressLint("CoroutineCreationDuringComposition", "UnsafeRepeatOnLifecycleDetector")
-@ExperimentalMaterialApi
-@Composable
-private fun StockListComposable(
-    modifier: Modifier = Modifier,
-    myStockViewModel: MyStockViewModel
-) {
-    val coroutineScope = rememberCoroutineScope()
-    Scaffold { paddingValues ->
-        val listState = rememberLazyListState()
-        LazyColumn(
-            reverseLayout = true,
-            state = listState,
-            contentPadding = paddingValues,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-        ) {
-            items(
-                count = myStockViewModel.myStockInfoList.size
-            ) {
-                MyStockListItemWidget(
-                    myStockViewModel = myStockViewModel,
-                    myStockEntity = myStockViewModel.myStockInfoList[it],
-                )
-            }
-        }
-        coroutineScope.launch {
-            myStockViewModel.scrollIndex.collect { position ->
-                listState.scrollToItem(position)
             }
         }
     }

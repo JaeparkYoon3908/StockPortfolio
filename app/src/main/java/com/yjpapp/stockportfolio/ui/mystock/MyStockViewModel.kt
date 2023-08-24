@@ -47,8 +47,6 @@ class MyStockViewModel @Inject constructor(
     var myStockInfoList = mutableStateListOf<MyStockEntity>() //나의 주식 목록 List
         private set
     private val _scrollIndex by lazy { MutableStateFlow(myStockInfoList.size) }
-    val scrollIndex: StateFlow<Int> get() = _scrollIndex
-    var isCurrentPriceRefreshing = false
 
     /**
      * MyStockFragment 영역
@@ -61,8 +59,8 @@ class MyStockViewModel @Inject constructor(
     }
     fun getAllMyStock() = viewModelScope.async { myStockRepository.getAllMyStock().toMutableStateList() }
 
-    suspend fun addMyStock(myStockEntity: MyStockEntity): Boolean {
-        return withContext(viewModelScope.coroutineContext) {
+    fun addMyStock(myStockEntity: MyStockEntity) = viewModelScope.launch {
+        withContext(viewModelScope.coroutineContext) {
             try {
                 myStockRepository.addMyStock(myStockEntity)
                 myStockRepository.getAllMyStock().last {
@@ -71,11 +69,9 @@ class MyStockViewModel @Inject constructor(
                 _scrollIndex.value = myStockInfoList.size
                 event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)))
                 calculateTopData()
-                true
             } catch (e: Exception) {
                 e.stackTrace
                 event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
-                false
             }
         }
     }

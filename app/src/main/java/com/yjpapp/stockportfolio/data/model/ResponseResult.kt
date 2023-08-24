@@ -1,4 +1,4 @@
-package com.yjpapp.data.model
+package com.yjpapp.stockportfolio.data.model
 
 sealed class ResponseResult<T>(
     val data: T? = null,

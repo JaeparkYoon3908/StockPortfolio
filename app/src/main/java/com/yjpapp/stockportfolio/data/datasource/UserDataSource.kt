@@ -1,9 +1,10 @@
 package com.yjpapp.stockportfolio.data.datasource
 
 import com.yjpapp.stockportfolio.data.APICall
-import com.yjpapp.data.model.ResponseResult
+import com.yjpapp.stockportfolio.data.model.ResponseResult
 import com.yjpapp.stockportfolio.data.model.request.ReqSNSLogin
-import com.yjpapp.data.model.response.*
+import com.yjpapp.stockportfolio.data.model.response.RespLoginUserInfo
+import com.yjpapp.stockportfolio.data.model.response.RespStatusInfo
 import com.yjpapp.stockportfolio.data.network.service.RaspberryPiService
 
 class UserDataSource(

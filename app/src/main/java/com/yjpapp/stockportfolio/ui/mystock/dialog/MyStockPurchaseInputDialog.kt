@@ -17,7 +17,7 @@ import android.widget.DatePicker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import com.ibotta.android.support.pickerdialogs.SupportedDatePickerDialog
-import com.yjpapp.data.model.SubjectName
+import com.yjpapp.stockportfolio.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.ui.common.dialog.CommonDatePickerDialog
 import com.yjpapp.stockportfolio.databinding.CustomDialogPurchaseInputMyStockBinding

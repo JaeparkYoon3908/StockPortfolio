@@ -55,7 +55,7 @@ class CommonDatePickerDialog(
         binding.pickerYear.apply {
             minValue = MIN_YEAR
             maxValue = nowYYYYMMDD[0].toInt()
-            value = if(year.isEmpty() || year.isEmpty()){
+            value = if(year.isEmpty()){
                 nowYYYYMMDD[0].toInt()
             }else{
                 year.toInt()
@@ -66,7 +66,7 @@ class CommonDatePickerDialog(
         binding.pickerMonth.apply {
             minValue = 1
             maxValue = 12
-            value = if(month.isEmpty() || month.isEmpty()){
+            value = if(month.isEmpty()){
                 nowYYYYMMDD[1].toInt()
             }else{
                 month.toInt()
@@ -82,7 +82,7 @@ class CommonDatePickerDialog(
             displayedValues = displayValues
             minValue = 1
             maxValue = displayValues.size
-            value = if(day.isEmpty() || day.isEmpty()){
+            value = if(day.isEmpty()){
                 nowYYYYMMDD[2].toInt()
             }else{
                 day.toInt()

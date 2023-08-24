@@ -1,4 +1,4 @@
-package com.yjpapp.data.model.response
+package com.yjpapp.stockportfolio.data.model.response
 
 import kotlinx.serialization.Serializable
 

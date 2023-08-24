@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.opencsv.CSVReader
 import com.yjpapp.stockportfolio.data.datasource.MyStockDataSource
-import com.yjpapp.data.model.SubjectName
+import com.yjpapp.stockportfolio.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -39,10 +39,12 @@ class StockSearchViewModel @Inject constructor(
         searchResult.clear()
         _allStockList.forEach {
             if (it[3].contains(other = keyWord, ignoreCase = true)) {
-                searchResult.add(SubjectName(
+                searchResult.add(
+                    SubjectName(
                     code = remakeSubjectCode(it[1]),
                     text = it[3]
-                ))
+                )
+                )
             }
         }
     }

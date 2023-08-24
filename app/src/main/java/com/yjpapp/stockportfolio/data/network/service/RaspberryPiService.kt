@@ -1,8 +1,9 @@
 package com.yjpapp.stockportfolio.data.network.service
 
-import com.yjpapp.stockportfolio.data.model.request.ReqIncomeNoteInfo
+import com.yjpapp.stockportfolio.data.model.response.*
 import com.yjpapp.stockportfolio.data.model.request.ReqSNSLogin
-import com.yjpapp.data.model.response.*
+import com.yjpapp.stockportfolio.data.model.response.RespLoginUserInfo
+import com.yjpapp.stockportfolio.data.model.response.RespStatusInfo
 import com.yjpapp.stockportfolio.data.model.response.RespTotalGainIncomeNoteData
 import retrofit2.Response
 import retrofit2.http.*

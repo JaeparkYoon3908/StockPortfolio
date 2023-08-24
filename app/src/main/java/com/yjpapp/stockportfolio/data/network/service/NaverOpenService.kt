@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.data.network.service
 
-import com.yjpapp.data.model.response.RespNaverDeleteUserInfo
+import com.yjpapp.stockportfolio.data.model.response.RespNaverDeleteUserInfo
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
