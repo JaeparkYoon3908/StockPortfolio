@@ -21,6 +21,8 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 
+val json = Json { ignoreUnknownKeys = true }
+
 class RetrofitClient(
     private val context: Context,
     private val preferenceDataSource: PreferenceDataSource
@@ -28,7 +30,8 @@ class RetrofitClient(
     enum class BaseServerURL(val url: String) {
         RaspberryPi("http://112.147.50.203"),
         NAVER_OPEN_API("https://openapi.naver.com"),
-        NAVER_NID("https://nid.naver.com")
+        NAVER_NID("https://nid.naver.com"),
+        DATA_PORTAL("https://apis.data.go.kr")
     }
 
     private val TAG = RetrofitClient::class.java.simpleName
@@ -36,9 +39,6 @@ class RetrofitClient(
     private val READ_TIMEOUT_OUT_MINUTE: Long = 3
 
     fun getRetrofit(baseServerURL: BaseServerURL): Retrofit {
-//        if (!NetworkUtils.isInternetAvailable(context)) {
-//            return null
-//        }
         val interceptor: Interceptor = CustomInterceptor(context, baseServerURL, preferenceDataSource)
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -57,7 +57,8 @@ class RetrofitClient(
         return Retrofit.Builder().apply {
             baseUrl(baseServerURL.url)
             client(client)
-            addConverterFactory(Json.asConverterFactory(contentType)) // 파싱등록
+            addConverterFactory(json.asConverterFactory(contentType)) // 파싱등록
+
         }.build()
     }
 
@@ -83,7 +84,7 @@ class RetrofitClient(
                             .getPreference(PrefKey.KEY_NAVER_USER_TOKEN) ?: ""
                         getNaverClientBuilderWithToken(chain, authorization)
                     }
-                    BaseServerURL.NAVER_NID -> {
+                    BaseServerURL.NAVER_NID, BaseServerURL.DATA_PORTAL -> {
                         getNaverClientBuilderNID(chain)
                     }
                 }

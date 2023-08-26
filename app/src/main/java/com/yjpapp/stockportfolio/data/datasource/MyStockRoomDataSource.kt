@@ -6,8 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class MyStockDataSource @Inject constructor(
-    private val myStockDao: MyStockDao
+class MyStockRoomDataSource @Inject constructor(
+    private val myStockDao: MyStockDao,
 ) {
     private val ioDispatcher = Dispatchers.IO
     suspend fun requestInsertMyStock(myStockEntity: MyStockEntity) {

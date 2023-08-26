@@ -3,6 +3,7 @@ package com.yjpapp.stockportfolio.data.di
 import android.content.Context
 import com.yjpapp.stockportfolio.data.datasource.PreferenceDataSource
 import com.yjpapp.stockportfolio.data.network.RetrofitClient
+import com.yjpapp.stockportfolio.data.network.service.DataPortalService
 import com.yjpapp.stockportfolio.data.network.service.NaverNidService
 import com.yjpapp.stockportfolio.data.network.service.NaverOpenService
 import com.yjpapp.stockportfolio.data.network.service.RaspberryPiService
@@ -50,5 +51,14 @@ class RetrofitModule {
     ): RaspberryPiService {
         val retrofit = retrofitClient.getRetrofit(RetrofitClient.BaseServerURL.RaspberryPi)
         return retrofit.create(RaspberryPiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataPortalService(
+        retrofitClient: RetrofitClient
+    ): DataPortalService {
+        val retrofit = retrofitClient.getRetrofit(RetrofitClient.BaseServerURL.DATA_PORTAL)
+        return retrofit.create(DataPortalService::class.java)
     }
 }

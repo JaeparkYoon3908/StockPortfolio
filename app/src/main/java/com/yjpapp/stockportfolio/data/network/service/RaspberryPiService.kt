@@ -7,6 +7,7 @@ import com.yjpapp.stockportfolio.data.model.response.RespStatusInfo
 import com.yjpapp.stockportfolio.data.model.response.RespTotalGainIncomeNoteData
 import retrofit2.Response
 import retrofit2.http.*
+import retrofit2.http.Body
 
 interface RaspberryPiService {
     /**

@@ -2,6 +2,7 @@ package com.yjpapp.stockportfolio.ui.mystock
 
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.data.network.NetworkUtils
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.stockportfolio.data.model.request.ReqStockPriceInfo
 import com.yjpapp.stockportfolio.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -228,6 +230,20 @@ class MyStockViewModel @Inject constructor(
     private fun event(event: Event) {
         viewModelScope.launch {
             _uiState.emit(event)
+        }
+    }
+
+    private fun getStockPriceInfo(name: String) = viewModelScope.launch {
+        val reqStockPriceInfo = ReqStockPriceInfo(
+            numOfRows = "20",
+            pageNo = "1",
+            basDt = "20230824",
+            likeItmsNm = name
+        )
+        val result = myStockRepository.getStockPriceInfo(reqStockPriceInfo)
+        if (result.isSuccessful) {
+            val a = result.data?.response?.body?.items?.item
+            Log.d("YJP", "a = ${a?.toString()}")
         }
     }
 

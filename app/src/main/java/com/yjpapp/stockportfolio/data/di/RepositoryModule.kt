@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio.data.di
 
-import com.yjpapp.stockportfolio.data.datasource.MyStockDataSource
+import com.yjpapp.stockportfolio.data.datasource.MyStockRoomDataSource
+import com.yjpapp.stockportfolio.data.datasource.StockInfoDataSource
 import com.yjpapp.stockportfolio.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.data.repository.MyStockRepositoryImpl
 import dagger.Module
@@ -15,8 +16,9 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideMyStockRepository(
-        myStockDataSource: MyStockDataSource
+        myStockLocalDataSource: MyStockRoomDataSource,
+        stockInfoDataSource: StockInfoDataSource
     ): MyStockRepository {
-        return MyStockRepositoryImpl(myStockDataSource)
+        return MyStockRepositoryImpl(myStockLocalDataSource, stockInfoDataSource)
     }
 }

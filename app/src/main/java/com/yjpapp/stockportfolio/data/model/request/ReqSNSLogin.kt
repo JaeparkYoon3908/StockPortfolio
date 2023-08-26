@@ -8,4 +8,4 @@ data class ReqSNSLogin(
     var user_name: String = "",
     var login_type: String = "",
     var reg_date: String = ""
-    )
+)

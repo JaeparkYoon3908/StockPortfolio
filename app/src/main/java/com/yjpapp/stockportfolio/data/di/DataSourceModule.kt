@@ -1,7 +1,9 @@
 package com.yjpapp.stockportfolio.data.di
 
-import com.yjpapp.stockportfolio.data.datasource.MyStockDataSource
+import com.yjpapp.stockportfolio.data.datasource.MyStockRoomDataSource
+import com.yjpapp.stockportfolio.data.datasource.StockInfoDataSource
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockDao
+import com.yjpapp.stockportfolio.data.network.service.DataPortalService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,5 +21,11 @@ class DataSourceModule {
     @Singleton
     fun provideMyStockDataSource(
         myStockDao: MyStockDao
-    ): MyStockDataSource = MyStockDataSource(myStockDao)
+    ): MyStockRoomDataSource = MyStockRoomDataSource(myStockDao)
+
+    @Provides
+    @Singleton
+    fun provideStockPriceDataSource(
+        dataPortalService: DataPortalService
+    ): StockInfoDataSource = StockInfoDataSource(dataPortalService)
 }

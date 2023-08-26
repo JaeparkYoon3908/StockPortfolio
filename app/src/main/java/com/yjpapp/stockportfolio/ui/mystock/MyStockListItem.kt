@@ -75,9 +75,9 @@ fun MyStockListItemWidget(
                 purchasePrice = myStockEntity.purchasePrice,
                 purchaseCount = myStockEntity.purchaseCount.toString()
             )
-        ) { dialogData ->
+        ) { dialogData, isComplete ->
             showMyStockPurchaseInputDialog = false
-            dialogData?.let {
+            if (isComplete) {
                 //TODO 완료 했을 때 데이터 처리
             }
         }

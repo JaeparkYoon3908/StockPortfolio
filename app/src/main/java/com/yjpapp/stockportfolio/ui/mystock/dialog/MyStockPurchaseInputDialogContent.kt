@@ -57,7 +57,7 @@ data class MyStockPurchaseInputDialogData(
 @Composable
 fun MyStockPurchaseInputDialogContent(
     dialogData: MyStockPurchaseInputDialogData = MyStockPurchaseInputDialogData(),
-    onDismissRequest: (data: MyStockPurchaseInputDialogData?) -> Unit
+    onDismissRequest: (data: MyStockPurchaseInputDialogData, isComplete: Boolean) -> Unit
 ) {
     val context = LocalContext.current
     var subjectName by remember { mutableStateOf(dialogData.subjectName) }
@@ -76,7 +76,7 @@ fun MyStockPurchaseInputDialogContent(
             }
         }
     )
-    Dialog(onDismissRequest = { onDismissRequest(dialogData) }) {
+    Dialog(onDismissRequest = { onDismissRequest(dialogData, false) }) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -367,7 +367,7 @@ fun MyStockPurchaseInputDialogContent(
                             .weight(0.5f)
                             .height(50.dp)
                             .background(color = Color_F1F1F1),
-                        onClick = { onDismissRequest(null) }) {
+                        onClick = { onDismissRequest(MyStockPurchaseInputDialogData(), false) }) {
                         Text(
                             text = stringResource(id = R.string.Common_Cancel),
                             color = Color_222222,
@@ -406,7 +406,8 @@ fun MyStockPurchaseInputDialogContent(
                                     purchaseDate = purchaseDateText,
                                     purchasePrice = purchasePriceText.text,
                                     purchaseCount = purchaseCountText
-                                )
+                                ),
+                                true
                             )
                         }
                     ) {
@@ -425,5 +426,5 @@ fun MyStockPurchaseInputDialogContent(
 @Preview
 @Composable
 private fun Preview() {
-    MyStockPurchaseInputDialogContent(onDismissRequest = {})
+    MyStockPurchaseInputDialogContent(onDismissRequest = { data, isComplete -> })
 }

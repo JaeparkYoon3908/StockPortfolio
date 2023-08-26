@@ -1,5 +1,7 @@
 package com.yjpapp.stockportfolio.ui.mystock
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -56,9 +58,9 @@ fun MyStockScreen(
     val listState = rememberLazyListState()
     var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
     if (showMyStockPurchaseInputDialog) {
-        MyStockPurchaseInputDialogContent { dialogData ->
+        MyStockPurchaseInputDialogContent { dialogData, isComplete ->
             showMyStockPurchaseInputDialog = false
-            if (dialogData != null) {
+            if (isComplete) {
                 coroutineScope.launch {
                     val currentPriceData = viewModel.getCurrentPrice(subjectCode = dialogData.subjectName.code)
                     viewModel.addMyStock(
@@ -97,18 +99,26 @@ fun MyStockScreen(
                 Text(
                     text = "보유 주식",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
+                    fontSize = 17.sp,
                 )
-                IconButton(
-                    modifier = Modifier.size(15.dp),
-                    onClick = { showMyStockPurchaseInputDialog = true }
-                ) {
-                    Icon(
-                        modifier = Modifier.size(15.dp),
-                        painter = painterResource(id = R.drawable.icon_add),
-                        contentDescription = "추가하기",
-                        tint = Color_222222
+                Row {
+                    Image(
+                        modifier = Modifier.size(20.dp).clickable { viewModel.refreshAllPrices() },
+                        painter = painterResource(id = R.drawable.ic_refresh),
+                        contentDescription = "새로고침",
                     )
+                    Spacer(modifier = Modifier.size(20.dp))
+                    IconButton(
+                        modifier = Modifier.size(18.dp),
+                        onClick = { showMyStockPurchaseInputDialog = true }
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(18.dp),
+                            painter = painterResource(id = R.drawable.icon_add),
+                            contentDescription = "추가하기",
+                            tint = Color_222222
+                        )
+                    }
                 }
             }
         }
