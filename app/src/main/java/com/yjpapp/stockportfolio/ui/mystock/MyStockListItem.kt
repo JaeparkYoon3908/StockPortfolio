@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.yjpapp.stockportfolio.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
 import com.yjpapp.stockportfolio.ui.common.StockConfig
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_4876C7
@@ -67,9 +68,9 @@ fun MyStockListItemWidget(
         MyStockPurchaseInputDialogContent(
             dialogData = MyStockPurchaseInputDialogData(
                 id = myStockEntity.id,
-                subjectName = SubjectName(
-                    text = myStockEntity.subjectName,
-                    code = myStockEntity.subjectCode
+                stockPriceInfo = StockPriceInfo(
+                    itmsNm = myStockEntity.subjectName,
+                    srtnCd = myStockEntity.subjectCode
                 ),
                 purchaseDate = myStockEntity.purchaseDate,
                 purchasePrice = myStockEntity.purchasePrice,
@@ -156,8 +157,6 @@ fun MyStockListItemWidget(
             val currentPriceNumber =
                 StockUtils.getNumDeletedComma(myStockEntity.currentPrice).toDouble()
             val gainPriceNumber = StockUtils.getNumDeletedComma(myStockEntity.gainPrice).toDouble()
-            val yesterdayPriceNumber =
-                StockUtils.getNumDeletedComma(myStockEntity.yesterdayPrice).toDouble()
             Column(
                 modifier = Modifier
 //                    .padding(bottom = 10.dp)
@@ -329,15 +328,12 @@ fun MyStockListItemWidget(
                         )
 
                         Text(
-                            text = StockUtils.getDayToDayPrice(
-                                currentPrice = currentPriceNumber,
-                                yesterdayPrice = yesterdayPriceNumber
-                            ),
+                            text = myStockEntity.dayToDayPrice,
                             fontSize = 11.sp,
                             maxLines = 1,
                             color = when {
-                                currentPriceNumber - yesterdayPriceNumber > 0 -> Color_CD4632
-                                currentPriceNumber == yesterdayPriceNumber -> Color_222222
+                                myStockEntity.dayToDayPrice.toInt() > 0 -> Color_CD4632
+                                myStockEntity.dayToDayPrice.toInt() == 0 -> Color_222222
                                 else -> Color_4876C7
                             },
                             modifier = Modifier
@@ -349,8 +345,8 @@ fun MyStockListItemWidget(
                             text = "(${myStockEntity.dayToDayPercent}%)",
                             fontSize = 11.sp,
                             color = when {
-                                currentPriceNumber - yesterdayPriceNumber > 0 -> Color_CD4632
-                                currentPriceNumber == yesterdayPriceNumber -> Color_222222
+                                myStockEntity.dayToDayPrice.toInt() > 0 -> Color_CD4632
+                                myStockEntity.dayToDayPrice.toInt() == 0 -> Color_222222
                                 else -> Color_4876C7
                             },
                         )

@@ -62,19 +62,17 @@ fun MyStockScreen(
             showMyStockPurchaseInputDialog = false
             if (isComplete) {
                 coroutineScope.launch {
-                    val currentPriceData = viewModel.getCurrentPrice(subjectCode = dialogData.subjectName.code)
                     viewModel.addMyStock(
                         MyStockEntity(
-                            subjectName = dialogData.subjectName.text,
-                            subjectCode = dialogData.subjectName.code,
+                            subjectName = dialogData.stockPriceInfo.itmsNm,
+                            subjectCode = dialogData.stockPriceInfo.srtnCd,
                             purchaseDate = dialogData.purchaseDate,
                             purchasePrice = dialogData.purchasePrice,
                             purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
-                            currentPrice = currentPriceData.currentPrice,
-                            gainPrice = (StockUtils.getNumDeletedComma(dialogData.purchasePrice).toInt() - StockUtils.getNumDeletedComma(currentPriceData.currentPrice).toInt()).toString(),
-                            dayToDayPrice = currentPriceData.dayToDayPrice,
-                            dayToDayPercent = currentPriceData.dayToDayPercent,
-                            yesterdayPrice = currentPriceData.yesterdayPrice
+                            currentPrice = dialogData.stockPriceInfo.clpr,
+                            gainPrice = (StockUtils.getNumDeletedComma(dialogData.purchasePrice).toInt() - StockUtils.getNumDeletedComma(dialogData.stockPriceInfo.clpr).toInt()).toString(),
+                            dayToDayPrice = dialogData.stockPriceInfo.vs,
+                            dayToDayPercent = dialogData.stockPriceInfo.fltRt,
                         )
                     )
                 }

@@ -187,43 +187,6 @@ class MyStockViewModel @Inject constructor(
         }
     }
 
-    suspend fun getCurrentPrice(subjectCode: String): MyStockEntity.CurrentPriceData {
-        if (!NetworkUtils.isInternetAvailable(context)) {
-            event(Event.ShowErrorToastMessage(context.getString(R.string.Error_Msg_Network_Connect_Exception)))
-            return MyStockEntity.CurrentPriceData()
-        }
-        val currentPrice = withContext(viewModelScope.coroutineContext) {
-            getCurrentPriceJob(subjectCode = subjectCode)
-        }
-        return currentPrice
-    }
-
-    private suspend fun getCurrentPriceJob(subjectCode: String): MyStockEntity.CurrentPriceData {
-        val result = MyStockEntity.CurrentPriceData()
-        val url = "https://finance.naver.com/item/main.naver?code=$subjectCode"
-        val doc = withContext(Dispatchers.IO) {
-            try {
-                Jsoup.connect(url).get()
-            } catch (e: Exception) {
-                e.stackTrace
-                null
-            }
-        }
-        val blind = doc?.select(".blind")
-        blind?.let {
-            if (it.isNotEmpty() && it.size > 19) {
-                val startIndex = it.size - 18
-                result.apply {
-                    currentPrice = blind[startIndex].text()
-                    dayToDayPrice = blind[startIndex + 1].text()
-                    dayToDayPercent = blind[startIndex + 2].text()
-                    yesterdayPrice = blind[startIndex + 3].text()
-                }
-            }
-        }
-        return result
-    }
-
     /**
      * Event 정의
      */

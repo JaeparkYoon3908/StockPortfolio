@@ -36,6 +36,16 @@ object StockUtils {
         return sdformat.format(todayDate)
     }
 
+    //어제 날짜를 yyyymmdd로 return
+    fun getYesterday(): String {
+        val calendar = Calendar.getInstance()
+        val today = Date()
+        calendar.time = today
+        calendar.add(Calendar.DATE, -1)
+        val sdformat = SimpleDateFormat(DATEFORMAT4)
+        return sdformat.format(calendar.time)
+    }
+
     //yyyy.mm.dd로 변환
     fun getTodayYYYY_MM_DD(): String {
         val yyyymmdd = getTodayYYYYMMDD()

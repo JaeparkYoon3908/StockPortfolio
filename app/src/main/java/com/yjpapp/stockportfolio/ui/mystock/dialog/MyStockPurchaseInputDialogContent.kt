@@ -32,8 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.yjpapp.stockportfolio.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
 import com.yjpapp.stockportfolio.extension.getSerializableExtraData
 import com.yjpapp.stockportfolio.ui.common.StockConfig
 import com.yjpapp.stockportfolio.ui.common.dialog.CommonDatePickerDialog
@@ -48,7 +48,7 @@ import es.dmoral.toasty.Toasty
 
 data class MyStockPurchaseInputDialogData(
     var id: Int = -1,
-    var subjectName: SubjectName = SubjectName(),
+    var stockPriceInfo: StockPriceInfo = StockPriceInfo(),
     var purchaseDate: String = "",
     var purchasePrice: String = "",
     var purchaseCount: String = "",
@@ -60,7 +60,7 @@ fun MyStockPurchaseInputDialogContent(
     onDismissRequest: (data: MyStockPurchaseInputDialogData, isComplete: Boolean) -> Unit
 ) {
     val context = LocalContext.current
-    var subjectName by remember { mutableStateOf(dialogData.subjectName) }
+    var rememberStockPriceInfo by remember { mutableStateOf(dialogData.stockPriceInfo) }
     var purchaseDateText by remember { mutableStateOf(dialogData.purchaseDate) }
     var purchasePriceText by remember { mutableStateOf(TextFieldValue(text = dialogData.purchasePrice)) }
     var purchaseCountText by remember { mutableStateOf(dialogData.purchaseCount) }
@@ -69,9 +69,9 @@ fun MyStockPurchaseInputDialogContent(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val mSubjectName = result.data?.getSerializableExtraData("subjectName", SubjectName::class.java)
-                if (mSubjectName is SubjectName) {
-                    subjectName = mSubjectName
+                val stockPriceInfo = result.data?.getSerializableExtraData("stockPriceInfo", StockPriceInfo::class.java)
+                if (stockPriceInfo is StockPriceInfo) {
+                    rememberStockPriceInfo = stockPriceInfo
                 }
             }
         }
@@ -104,8 +104,8 @@ fun MyStockPurchaseInputDialogContent(
                         )
                         BasicTextField(
                             modifier = Modifier.padding(start = 10.dp),
-                            value = subjectName.text,
-                            onValueChange = { subjectName.text = it },
+                            value = rememberStockPriceInfo.itmsNm,
+                            onValueChange = { rememberStockPriceInfo.itmsNm = it },
                             singleLine = true,
                             readOnly = true,
                             enabled = false,
@@ -130,7 +130,7 @@ fun MyStockPurchaseInputDialogContent(
                                         },
                                 ) {
                                     Box {
-                                        if (subjectName.text.isEmpty()) {
+                                        if (rememberStockPriceInfo.itmsNm.isEmpty()) {
                                             Text(
                                                 text = stringResource(id = R.string.EditIncomeNoteDialog_SubjectName_Hint),
                                                 style = TextStyle(fontSize = 14.sp, color = Color_666666)
@@ -383,7 +383,7 @@ fun MyStockPurchaseInputDialogContent(
                             if (purchaseCountText.isEmpty() ||
                                 purchaseDateText.isEmpty() ||
                                 purchasePriceText.text.isEmpty() ||
-                                subjectName.text.isEmpty()
+                                rememberStockPriceInfo.itmsNm.isEmpty()
                             ) {
                                 Toasty.error(
                                     context,
@@ -402,7 +402,7 @@ fun MyStockPurchaseInputDialogContent(
                             }
                             onDismissRequest(
                                 MyStockPurchaseInputDialogData(
-                                    subjectName = subjectName,
+                                    stockPriceInfo = rememberStockPriceInfo,
                                     purchaseDate = purchaseDateText,
                                     purchasePrice = purchasePriceText.text,
                                     purchaseCount = purchaseCountText

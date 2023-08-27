@@ -11,7 +11,9 @@ import com.yjpapp.stockportfolio.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.data.datasource.StockInfoDataSource
 import com.yjpapp.stockportfolio.data.model.request.ReqStockPriceInfo
+import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
 import com.yjpapp.stockportfolio.data.repository.MyStockRepository
+import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -20,9 +22,7 @@ import java.io.InputStreamReader
 import javax.inject.Inject
 
 /**
- * @link StockFragment 전용 ViewModel
- *
- * @author Yoon Jae-park
+ * @author Yoon jaepark
  * @since 2021.11
  */
 @HiltViewModel
@@ -30,22 +30,20 @@ class StockSearchViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val myStockRepository: MyStockRepository
 ): ViewModel() {
-    var searchResult = mutableStateListOf<SubjectName>()
+    var searchResult = mutableStateListOf<StockPriceInfo>()
         private set
 
     fun requestSearchList(keyWord: String) {
         searchResult.clear()
         viewModelScope.launch {
             val reqStockPriceInfo = ReqStockPriceInfo(
-                numOfRows = "20",
+                numOfRows = "50",
                 pageNo = "1",
-                basDt = "20230824",
                 likeItmsNm = keyWord
             )
             val result = myStockRepository.getStockPriceInfo(reqStockPriceInfo)
-            if (result.isSuccessful) {
-                val a = result.data?.response?.body?.items?.item
-                Log.d("YJP", "a = ${a?.toString()}")
+            if (result.isSuccessful && result.data != null) {
+                searchResult.addAll(result.data.response.body.items.item)
             }
         }
     }

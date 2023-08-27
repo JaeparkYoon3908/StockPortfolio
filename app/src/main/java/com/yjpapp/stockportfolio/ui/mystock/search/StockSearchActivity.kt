@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.yjpapp.stockportfolio.data.model.SubjectName
+import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 import com.yjpapp.stockportfolio.util.StockLog
@@ -143,13 +144,13 @@ class StockSearchActivity : AppCompatActivity() {
             items(
                 count = viewModel.searchResult.size
             ) {
-                SearchListItem(subjectName = viewModel.searchResult[it])
+                SearchListItem(stockPriceInfo = viewModel.searchResult[it])
             }
         }
     }
 
     @Composable
-    private fun SearchListItem(subjectName: SubjectName) {
+    private fun SearchListItem(stockPriceInfo: StockPriceInfo) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -157,13 +158,13 @@ class StockSearchActivity : AppCompatActivity() {
                 .background(Color_FFFFFF)
         ) {
             Text(
-                text = subjectName.text,
+                text = stockPriceInfo.itmsNm,
                 fontSize = 16.sp,
                 color = Color_222222,
                 modifier = Modifier
                     .clickable {
                         val intent = Intent().apply {
-                            putExtra("subjectName", subjectName)
+                            putExtra("stockPriceInfo", stockPriceInfo)
                         }
                         setResult(RESULT_OK, intent)
                         finish()
