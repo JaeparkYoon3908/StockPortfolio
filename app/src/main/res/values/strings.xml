@@ -39,7 +39,7 @@
     <string name="Common_Notice_Add_Ok">추가완료</string>
     <string name="Common_Notice_Modify_Ok">수정완료</string>
 
-    <string name="News_Title">뉴스</string>
+    <string name="News_Title">경제 뉴스</string>
     <string name="IncomeNoteFragment_Gain">수익</string>
     <string name="IncomeNoteFragment_Purchase_Price">매수금액</string>
     <string name="IncomeNoteFragment_Sell_Price">매도금액</string>

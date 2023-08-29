@@ -1,7 +1,5 @@
-package com.yjpapp.stockportfolio.ui.mystock
+package com.yjpapp.stockportfolio.ui.main.mystock
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -38,8 +37,10 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_4876C7
+import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
 import com.yjpapp.stockportfolio.ui.common.theme.Color_CD4632
-import com.yjpapp.stockportfolio.ui.mystock.dialog.MyStockPurchaseInputDialogContent
+import com.yjpapp.stockportfolio.ui.main.MainViewModel
+import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogContent
 import com.yjpapp.stockportfolio.util.StockUtils
 import kotlinx.coroutines.launch
 
@@ -52,7 +53,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 fun MyStockScreen(
     modifier: Modifier = Modifier,
-    viewModel: MyStockViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -65,14 +66,15 @@ fun MyStockScreen(
                     viewModel.addMyStock(
                         MyStockEntity(
                             subjectName = dialogData.stockPriceInfo.itmsNm,
-                            subjectCode = dialogData.stockPriceInfo.srtnCd,
+                            subjectCode = dialogData.stockPriceInfo.isinCd,
                             purchaseDate = dialogData.purchaseDate,
                             purchasePrice = dialogData.purchasePrice,
                             purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
-                            currentPrice = dialogData.stockPriceInfo.clpr,
-                            gainPrice = (StockUtils.getNumDeletedComma(dialogData.purchasePrice).toInt() - StockUtils.getNumDeletedComma(dialogData.stockPriceInfo.clpr).toInt()).toString(),
+                            currentPrice = StockUtils.getNumInsertComma(dialogData.stockPriceInfo.clpr),
+                            gainPrice = (dialogData.stockPriceInfo.clpr.toInt() - StockUtils.getNumDeletedComma(dialogData.purchasePrice).toInt()).toString(),
                             dayToDayPrice = dialogData.stockPriceInfo.vs,
                             dayToDayPercent = dialogData.stockPriceInfo.fltRt,
+                            basDt = dialogData.stockPriceInfo.basDt,
                         )
                     )
                 }
@@ -94,17 +96,36 @@ fun MyStockScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "보유 주식",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 17.sp,
-                )
-                Row {
-                    Image(
-                        modifier = Modifier.size(20.dp).clickable { viewModel.refreshAllPrices() },
-                        painter = painterResource(id = R.drawable.ic_refresh),
-                        contentDescription = "새로고침",
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "보유 주식",
+                        fontWeight = FontWeight.Bold,
+                        color = Color_222222,
+                        fontSize = 17.sp,
                     )
+                    Spacer(modifier = Modifier.size(10.dp))
+                    if (viewModel.myStockInfoList.size > 0) {
+                        Text(
+                            text = "기준 일자 : ${viewModel.myStockInfoList.first().basDt}",
+                            fontWeight = FontWeight.Light,
+                            color = Color_666666,
+                            fontSize = 13.sp,
+                        )
+                    }
+                }
+                Row {
+                    IconButton(
+                        modifier = Modifier.size(18.dp),
+                        onClick = { viewModel.refreshStockCurrentPriceInfo() }
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(25.dp),
+                            painter = painterResource(id = R.drawable.ic_refresh),
+                            contentDescription = "새로고침",
+                        )
+                    }
                     Spacer(modifier = Modifier.size(20.dp))
                     IconButton(
                         modifier = Modifier.size(18.dp),
@@ -121,12 +142,10 @@ fun MyStockScreen(
             }
         }
         item { Spacer(modifier = Modifier.size(20.dp)) }
-        items(
-            count = viewModel.myStockInfoList.size
-        ) {
+        items(items = viewModel.myStockInfoList) { stockEntity ->
             MyStockListItemWidget(
-                myStockViewModel = viewModel,
-                myStockEntity = viewModel.myStockInfoList[it],
+                viewModel = viewModel,
+                myStockEntity = stockEntity,
             )
         }
     }
@@ -135,7 +154,7 @@ fun MyStockScreen(
 @Composable
 private fun TotalPriceComposable(
     modifier: Modifier = Modifier,
-    myStockViewModel: MyStockViewModel,
+    myStockViewModel: MainViewModel,
 ) {
     val totalPurchasePrice by myStockViewModel.totalPurchasePrice.collectAsState()
     val totalEvaluationAmount by myStockViewModel.totalEvaluationAmount.collectAsState()

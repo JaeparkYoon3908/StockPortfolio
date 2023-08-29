@@ -17,4 +17,5 @@ data class MyStockEntity (
     , @ColumnInfo(name = "gainPrice") var gainPrice: String = "" //수익
     , @ColumnInfo(name = "dayToDayPrice") var dayToDayPrice: String = "" //전일 대비 변동 가격
     , @ColumnInfo(name = "dayToDayPercent") var dayToDayPercent: String = "" //현재 상승 퍼센트
+    , @ColumnInfo(name = "basDt") var basDt: String = "" //기준일자
 )

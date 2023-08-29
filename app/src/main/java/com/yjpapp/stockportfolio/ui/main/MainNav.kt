@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.yjpapp.stockportfolio.ui
+package com.yjpapp.stockportfolio.ui.main
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
@@ -12,8 +12,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.ui.mystock.MyStockScreen
-import com.yjpapp.stockportfolio.ui.mystock.MyStockViewModel
+import com.yjpapp.stockportfolio.ui.main.mystock.MyStockScreen
+import com.yjpapp.stockportfolio.ui.main.news.NewsScreen
 
 @Stable
 sealed class NavItem(
@@ -38,18 +38,21 @@ sealed class NavItem(
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
+    viewModel: MainViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = NavItem.MyStock.screenRoute) {
         composable(NavItem.MyStock.screenRoute) {
-            val myStockViewModel = hiltViewModel<MyStockViewModel>()
             MyStockScreen(
                 modifier = modifier,
-                viewModel = myStockViewModel
+                viewModel = viewModel
             )
         }
         composable(NavItem.News.screenRoute) {
-
+            NewsScreen(
+                modifier = modifier,
+                viewModel = viewModel
+            )
         }
     }
 }

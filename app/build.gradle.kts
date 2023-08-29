@@ -93,6 +93,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
     implementation("androidx.compose.runtime:runtime-rxjava2:1.5.0")
     implementation("androidx.navigation:navigation-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
 
     //Compose swipeLayout
     implementation("de.charlex.compose:revealswipe:1.0.0")
@@ -121,9 +122,6 @@ dependencies {
 
     //Crawling library
     implementation("org.jsoup:jsoup:1.15.3")
-
-    //Read csv
-    implementation("com.opencsv:opencsv:4.4")
 
     //Room
     implementation("androidx.room:room-runtime:2.5.2")

@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui.mystock
+package com.yjpapp.stockportfolio.ui.main.mystock
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
@@ -24,11 +27,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yjpapp.stockportfolio.data.model.SubjectName
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
@@ -40,8 +43,9 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_80000000
 import com.yjpapp.stockportfolio.ui.common.theme.Color_CD4632
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FBFBFB
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
-import com.yjpapp.stockportfolio.ui.mystock.dialog.MyStockPurchaseInputDialogContent
-import com.yjpapp.stockportfolio.ui.mystock.dialog.MyStockPurchaseInputDialogData
+import com.yjpapp.stockportfolio.ui.main.MainViewModel
+import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogContent
+import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogData
 import com.yjpapp.stockportfolio.util.StockUtils
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
@@ -57,7 +61,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun MyStockListItemWidget(
-    myStockViewModel: MyStockViewModel,
+    viewModel: MainViewModel,
     myStockEntity: MyStockEntity
 ) {
     val revealSwipeState = rememberRevealState()
@@ -79,17 +83,30 @@ fun MyStockListItemWidget(
         ) { dialogData, isComplete ->
             showMyStockPurchaseInputDialog = false
             if (isComplete) {
-                //TODO 완료 했을 때 데이터 처리
+                viewModel.updateMyStock(
+                    MyStockEntity(
+                        id = myStockEntity.id,
+                        subjectName = dialogData.stockPriceInfo.itmsNm,
+                        subjectCode = dialogData.stockPriceInfo.isinCd,
+                        purchaseDate = dialogData.purchaseDate,
+                        purchasePrice = dialogData.purchasePrice,
+                        purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
+                        currentPrice = myStockEntity.currentPrice,
+                        gainPrice = myStockEntity.gainPrice,
+                        dayToDayPrice = myStockEntity.dayToDayPrice,
+                        dayToDayPercent = myStockEntity.dayToDayPercent,
+                        basDt = myStockEntity.basDt
+                    )
+                )
             }
         }
     }
     RevealSwipe(
         modifier = Modifier
-            .padding(bottom = 10.dp)
             .wrapContentHeight()
             .fillMaxWidth(),
         maxRevealDp = maxRevealDp,
-        backgroundCardEndColor = Color_FBFBFB,
+        backgroundCardEndColor = Color.White,
         animateBackgroundCardColor = false,
         state = revealSwipeState,
         directions = setOf(
@@ -98,49 +115,56 @@ fun MyStockListItemWidget(
         ),
 
         hiddenContentEnd = {
-            Column(
+            Card(
                 modifier = Modifier
+                    .padding(start = 20.dp, end = 20.dp)
                     .width(maxRevealDp)
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                shape = RoundedCornerShape(10.dp),
+                elevation = 0.dp
             ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .clickable { showMyStockPurchaseInputDialog = true }
-                        .fillMaxWidth()
-                        .weight(0.333f)
-                        .background(color = Color_80000000)
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = stringResource(R.string.Common_Edit),
-                        fontSize = 16.sp,
-                        color = Color_FFFFFF
-                    )
-                }
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .clickable {
-                            coroutineScope.launch {
-                                myStockViewModel.deleteMyStock(
-                                    myStockEntity = myStockEntity
-                                )
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .clickable { showMyStockPurchaseInputDialog = true }
+                            .fillMaxWidth()
+                            .weight(0.333f)
+                            .background(color = Color_80000000)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.Common_Edit),
+                            fontSize = 16.sp,
+                            color = Color_FFFFFF
+                        )
+                    }
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .clickable {
+                                coroutineScope.launch {
+                                    viewModel.deleteMyStock(
+                                        myStockEntity = myStockEntity
+                                    )
+                                }
+                                coroutineScope.launch {
+                                    revealSwipeState.reset()
+                                }
                             }
-                            coroutineScope.launch {
-                                revealSwipeState.reset()
-                            }
-                        }
-                        .fillMaxWidth()
-                        .weight(0.333f)
-                        .background(color = Color_CD4632)
-                ) {
-                    Text(
-                        text = stringResource(R.string.Common_Delete),
-                        fontSize = 16.sp,
-                        color = Color_FFFFFF
-                    )
+                            .fillMaxWidth()
+                            .weight(0.333f)
+                            .background(color = Color_CD4632)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.Common_Delete),
+                            fontSize = 16.sp,
+                            color = Color_FFFFFF
+                        )
+                    }
                 }
             }
         }
@@ -148,9 +172,9 @@ fun MyStockListItemWidget(
         Card(
             modifier = Modifier
                 .fillMaxSize()
-                .wrapContentHeight(),
-            elevation = 0.dp,
-            backgroundColor = Color_FBFBFB
+                .padding(start = 20.dp, end = 20.dp),
+            shape = RoundedCornerShape(10.dp),
+            backgroundColor = Color.White
         ) {
             val purchasePriceNumber =
                 StockUtils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
@@ -355,4 +379,5 @@ fun MyStockListItemWidget(
             }
         }
     }
+    Spacer(modifier = Modifier.size(20.dp))
 }

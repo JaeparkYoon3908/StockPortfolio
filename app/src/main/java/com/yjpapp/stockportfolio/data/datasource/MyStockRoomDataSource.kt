@@ -20,12 +20,14 @@ class MyStockRoomDataSource @Inject constructor(
         }
     }
 
-    suspend fun requestUpdateMyStock(myStockEntity: MyStockEntity) {
-        withContext(ioDispatcher) {
+    suspend fun requestUpdateMyStock(myStockEntity: MyStockEntity): Boolean {
+        return withContext(ioDispatcher) {
             try {
                 myStockDao.update(myStockEntity)
+                true
             } catch (e: Exception) {
                 e.stackTrace
+                false
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui
+package com.yjpapp.stockportfolio.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,5 +24,7 @@ class MainActivity : ComponentActivity() {
                 viewModel = viewModel
             )
         }
+        viewModel.refreshStockCurrentPriceInfo()
+        viewModel.getNewsList()
     }
 }
