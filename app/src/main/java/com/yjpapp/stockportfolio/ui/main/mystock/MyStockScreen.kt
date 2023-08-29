@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
@@ -57,6 +58,7 @@ fun MyStockScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    val stockListState = viewModel.myStockInfoList.collectAsStateWithLifecycle()
     var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
     if (showMyStockPurchaseInputDialog) {
         MyStockPurchaseInputDialogContent { dialogData, isComplete ->
@@ -71,7 +73,6 @@ fun MyStockScreen(
                             purchasePrice = dialogData.purchasePrice,
                             purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
                             currentPrice = StockUtils.getNumInsertComma(dialogData.stockPriceInfo.clpr),
-                            gainPrice = (dialogData.stockPriceInfo.clpr.toInt() - StockUtils.getNumDeletedComma(dialogData.purchasePrice).toInt()).toString(),
                             dayToDayPrice = dialogData.stockPriceInfo.vs,
                             dayToDayPercent = dialogData.stockPriceInfo.fltRt,
                             basDt = dialogData.stockPriceInfo.basDt,
@@ -106,9 +107,9 @@ fun MyStockScreen(
                         fontSize = 17.sp,
                     )
                     Spacer(modifier = Modifier.size(10.dp))
-                    if (viewModel.myStockInfoList.size > 0) {
+                    if (stockListState.value.size > 0) {
                         Text(
-                            text = "기준 일자 : ${viewModel.myStockInfoList.first().basDt}",
+                            text = "기준 일자 : ${stockListState.value.first().basDt}",
                             fontWeight = FontWeight.Light,
                             color = Color_666666,
                             fontSize = 13.sp,
@@ -142,7 +143,7 @@ fun MyStockScreen(
             }
         }
         item { Spacer(modifier = Modifier.size(20.dp)) }
-        items(items = viewModel.myStockInfoList) { stockEntity ->
+        items(items = stockListState.value) { stockEntity ->
             MyStockListItemWidget(
                 viewModel = viewModel,
                 myStockEntity = stockEntity,

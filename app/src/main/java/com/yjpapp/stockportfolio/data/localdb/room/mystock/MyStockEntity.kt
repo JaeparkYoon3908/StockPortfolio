@@ -14,7 +14,6 @@ data class MyStockEntity (
     , @ColumnInfo(name = "purchaseCount") var purchaseCount: Int = 0 //보유수량
     //실시간 변동 데이터
     , @ColumnInfo(name = "currentPrice") var currentPrice: String = "" //종가
-    , @ColumnInfo(name = "gainPrice") var gainPrice: String = "" //수익
     , @ColumnInfo(name = "dayToDayPrice") var dayToDayPrice: String = "" //전일 대비 변동 가격
     , @ColumnInfo(name = "dayToDayPercent") var dayToDayPercent: String = "" //현재 상승 퍼센트
     , @ColumnInfo(name = "basDt") var basDt: String = "" //기준일자
