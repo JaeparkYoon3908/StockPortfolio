@@ -70,6 +70,7 @@ object StockUtils {
     //5,000,000 => 5000000 변환
     fun getNumDeletedComma(num: String): String {
         if (num.isEmpty()) return "0"
+        if (!num.contains(",")) return num
         val result = StringBuffer()
         val split = num.split(",")
         for (i in split.indices) {

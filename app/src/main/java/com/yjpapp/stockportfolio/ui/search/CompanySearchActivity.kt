@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui.mystock.search
+package com.yjpapp.stockportfolio.ui.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -25,28 +25,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
-import com.yjpapp.stockportfolio.data.model.SubjectName
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
+import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 import com.yjpapp.stockportfolio.util.StockLog
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * @link 주식 추가 다이얼로그 -> 회사명 입력 할 때 띄워지는 Fragment
- *
  * @author Yoon Jae-park
  * @since 2021.11
  */
 @AndroidEntryPoint
-class StockSearchActivity : AppCompatActivity() {
-    private val TAG = StockSearchActivity::class.java.simpleName
-    private val viewModel: StockSearchViewModel by viewModels()
+class CompanySearchActivity : AppCompatActivity() {
+    private val TAG = CompanySearchActivity::class.java.simpleName
+    private val viewModel: CompanySearchViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
+            val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -55,6 +55,14 @@ class StockSearchActivity : AppCompatActivity() {
             ) {
                 SearchBar()
                 SearchList()
+            }
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                if (isLoading.value) {
+                    LoadingWidget()
+                }
             }
         }
     }

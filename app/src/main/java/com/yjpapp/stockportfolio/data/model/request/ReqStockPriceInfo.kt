@@ -15,7 +15,7 @@ data class ReqStockPriceInfo(
 //    var beginBasDt: String = "", //기준일자 : 기준일자가 검색값보다 크거나 같은 데이터를 검색
 //    var endBasDt: String = "",   //기준일자 : 기준일자가 검색값보다 작은 데이터를 검색
 //    var likeBasDt: String = "",  //기준일자 : 기준일자값이 검색값을 포함하는 데이터를 검색
-//    var isinCd: String = "",      //ISIN코드 : 검색값과 ISIN코드이 일치하는 데이터를 검색
+    var isinCd: String = "",      //ISIN코드 : 검색값과 ISIN코드이 일치하는 데이터를 검색
 //    var likeIsinCd: String = "",    //ISIN코드 : ISIN코드가 검색값을 포함하는 데이터를 검색
 //    var itmsNm: String = "",      //종목명 : 검색값과 종목명이 일치하는 데이터를 검색
     var likeItmsNm: String = "", //종목명 : 종목명이 검색값을 포함하는 데이터를 검색

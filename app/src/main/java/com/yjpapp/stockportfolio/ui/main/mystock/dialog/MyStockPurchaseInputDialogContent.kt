@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui.mystock.dialog
+package com.yjpapp.stockportfolio.ui.main.mystock.dialog
 
 import android.app.Activity
 import android.content.Intent
@@ -42,7 +42,7 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
 import com.yjpapp.stockportfolio.ui.common.theme.Color_E52B4E
 import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
-import com.yjpapp.stockportfolio.ui.mystock.search.StockSearchActivity
+import com.yjpapp.stockportfolio.ui.search.CompanySearchActivity
 import com.yjpapp.stockportfolio.util.StockUtils
 import es.dmoral.toasty.Toasty
 
@@ -92,7 +92,7 @@ fun MyStockPurchaseInputDialogContent(
                     Spacer(modifier = Modifier.height(30.dp))
                     Row(
                         modifier = Modifier.clickable {
-                            val intent = Intent(context, StockSearchActivity::class.java)
+                            val intent = Intent(context, CompanySearchActivity::class.java)
                             stockSearchActivityResultLauncher.launch(intent)
                         },
                         verticalAlignment = Alignment.CenterVertically

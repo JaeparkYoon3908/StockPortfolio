@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.ui
+package com.yjpapp.stockportfolio.ui.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -95,6 +95,7 @@ fun MainScreen(
     ) { paddingValues ->
         NavigationGraph(
             modifier = Modifier.padding(paddingValues),
+            viewModel = viewModel,
             navController = navController
         )
     }

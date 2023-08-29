@@ -21,7 +21,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 
-val json = Json { ignoreUnknownKeys = true }
+val jsonParser = Json { ignoreUnknownKeys = true }
 
 class RetrofitClient(
     private val context: Context,
@@ -31,9 +31,9 @@ class RetrofitClient(
         RaspberryPi("http://112.147.50.203"),
         NAVER_OPEN_API("https://openapi.naver.com"),
         NAVER_NID("https://nid.naver.com"),
-        DATA_PORTAL("https://apis.data.go.kr")
+        DATA_PORTAL("https://apis.data.go.kr"),
+        MK_NEWS("https://www.mk.co.kr")
     }
-
     private val TAG = RetrofitClient::class.java.simpleName
     private val CONNECT_TIMEOUT_OUT_MINUTE: Long = 3
     private val READ_TIMEOUT_OUT_MINUTE: Long = 3
@@ -57,7 +57,7 @@ class RetrofitClient(
         return Retrofit.Builder().apply {
             baseUrl(baseServerURL.url)
             client(client)
-            addConverterFactory(json.asConverterFactory(contentType)) // 파싱등록
+            addConverterFactory(jsonParser.asConverterFactory(contentType)) // 파싱등록
 
         }.build()
     }
@@ -84,7 +84,7 @@ class RetrofitClient(
                             .getPreference(PrefKey.KEY_NAVER_USER_TOKEN) ?: ""
                         getNaverClientBuilderWithToken(chain, authorization)
                     }
-                    BaseServerURL.NAVER_NID, BaseServerURL.DATA_PORTAL -> {
+                    BaseServerURL.NAVER_NID, BaseServerURL.DATA_PORTAL, BaseServerURL.MK_NEWS -> {
                         getNaverClientBuilderNID(chain)
                     }
                 }

@@ -5,9 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
-import com.yjpapp.stockportfolio.ui.MainActivity
+import com.yjpapp.stockportfolio.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -33,7 +32,6 @@ class SplashActivity: ComponentActivity() {
 
     private fun startMainActivity() {
         lifecycleScope.launch {
-            delay(1500)
             val intent = Intent(applicationContext, MainActivity::class.java)
             finish()
             startActivity(intent)
