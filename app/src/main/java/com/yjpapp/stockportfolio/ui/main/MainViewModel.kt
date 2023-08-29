@@ -47,9 +47,8 @@ class MainViewModel @Inject constructor(
         private set
     var totalGainPricePercent = MutableStateFlow("0%") //상단 수익률
         private set
-    var myStockInfoList = mutableStateListOf<MyStockEntity>() //나의 주식 목록 List
+    var myStockInfoList = MutableStateFlow(mutableListOf(MyStockEntity())) //나의 주식 목록 List
         private set
-    val scrollIndex by lazy { MutableStateFlow(myStockInfoList.size) }
     var newsList = MutableStateFlow<MutableList<NewsData>>(mutableListOf())
         private set
 
@@ -58,20 +57,15 @@ class MainViewModel @Inject constructor(
      */
     init {
         viewModelScope.launch {
-            myStockInfoList.addAll(myStockRepository.getAllMyStock())
+            myStockInfoList.value = myStockRepository.getAllMyStock()
             calculateTopData()
         }
     }
-    fun getAllMyStock() = viewModelScope.async { myStockRepository.getAllMyStock().toMutableStateList() }
-
     fun addMyStock(myStockEntity: MyStockEntity) = viewModelScope.launch {
         withContext(viewModelScope.coroutineContext) {
             try {
                 myStockRepository.addMyStock(myStockEntity)
-                myStockRepository.getAllMyStock().last {
-                    myStockInfoList.add(it)
-                }
-                scrollIndex.value = myStockInfoList.size
+                myStockInfoList.value = myStockRepository.getAllMyStock()
                 event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)))
                 calculateTopData()
             } catch (e: Exception) {
@@ -85,8 +79,7 @@ class MainViewModel @Inject constructor(
         withContext(viewModelScope.coroutineContext) {
             try {
                 myStockRepository.updateMyStock(myStockEntity)
-                myStockInfoList.clear()
-                myStockInfoList.addAll(myStockRepository.getAllMyStock().toMutableStateList())
+                myStockInfoList.value = myStockRepository.getAllMyStock()
                 event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Modify_Success)))
                 calculateTopData()
             } catch (e: Exception) {
@@ -100,7 +93,7 @@ class MainViewModel @Inject constructor(
     suspend fun deleteMyStock(myStockEntity: MyStockEntity) {
         try {
             myStockRepository.deleteMyStock((myStockEntity))
-            myStockInfoList.remove(myStockEntity)
+            myStockInfoList.value = myStockRepository.getAllMyStock()
             calculateTopData()
         } catch (e: Exception) {
             e.stackTrace
@@ -114,7 +107,7 @@ class MainViewModel @Inject constructor(
         var mTotalGainPrice = 0.00 //손익
         var mTotalGainPricePercent = 0.00 //수익률
 
-        myStockInfoList.forEach {
+        myStockInfoList.value.forEach {
             val purchasePrice = StockUtils.getNumDeletedComma(it.purchasePrice).toDouble()
             val currentPrice = StockUtils.getNumDeletedComma(it.currentPrice).toDouble()
             val purchaseCount = it.purchaseCount.toDouble()
@@ -134,6 +127,7 @@ class MainViewModel @Inject constructor(
 
     fun refreshStockCurrentPriceInfo() = viewModelScope.launch {
         myStockRepository.refreshMyStock()
+        myStockInfoList.value = myStockRepository.getAllMyStock()
     }
 
     fun getNewsList() = CoroutineScope(Dispatchers.IO).launch {

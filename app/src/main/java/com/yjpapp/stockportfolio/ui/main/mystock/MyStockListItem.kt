@@ -20,6 +20,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -81,6 +82,9 @@ fun MyStockListItemWidget(
                 purchaseCount = myStockEntity.purchaseCount.toString()
             )
         ) { dialogData, isComplete ->
+            coroutineScope.launch {
+                revealSwipeState.reset()
+            }
             showMyStockPurchaseInputDialog = false
             if (isComplete) {
                 viewModel.updateMyStock(
@@ -92,7 +96,6 @@ fun MyStockListItemWidget(
                         purchasePrice = dialogData.purchasePrice,
                         purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
                         currentPrice = myStockEntity.currentPrice,
-                        gainPrice = myStockEntity.gainPrice,
                         dayToDayPrice = myStockEntity.dayToDayPrice,
                         dayToDayPercent = myStockEntity.dayToDayPercent,
                         basDt = myStockEntity.basDt
@@ -180,13 +183,12 @@ fun MyStockListItemWidget(
                 StockUtils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
             val currentPriceNumber =
                 StockUtils.getNumDeletedComma(myStockEntity.currentPrice).toDouble()
-            val gainPriceNumber = StockUtils.getNumDeletedComma(myStockEntity.gainPrice).toDouble()
+            val gainPriceNumber = (currentPriceNumber - purchasePriceNumber) * myStockEntity.purchaseCount
             Column(
                 modifier = Modifier
 //                    .padding(bottom = 10.dp)
                     .wrapContentHeight()
             ) {
-
                 Row(
                     Modifier
                         .padding(start = 15.dp, end = 15.dp)
@@ -197,55 +199,9 @@ fun MyStockListItemWidget(
                         maxLines = 1,
                         color = Color_222222,
                         modifier = Modifier
-                            .weight(0.55f)
+                            .weight(0.50f)
                             .padding(top = 10.dp)
                     )
-                    Row(
-                        modifier = Modifier
-                            .weight(0.45f)
-                            .padding(top = 10.dp),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.MyStockFragment_Gain),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = Color_222222,
-                        )
-                        //수익
-                        Text(
-                            text = StockUtils.getPriceNum(myStockEntity.gainPrice),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = when {
-                                gainPriceNumber > 0 -> Color_CD4632
-                                gainPriceNumber < 0 -> Color_4876C7
-                                else -> Color_222222
-                            },
-                            modifier = Modifier
-                                .padding(start = 5.dp)
-                        )
-
-                        //수익 퍼센트
-                        val allPurchasePriceNum =
-                            (purchasePriceNumber * myStockEntity.purchaseCount)
-                        val allCurrentPriceNum = (currentPriceNumber * myStockEntity.purchaseCount)
-                        val gainPercentNum =
-                            StockUtils.calculateGainPercent(allPurchasePriceNum, allCurrentPriceNum)
-                        Text(
-                            text = "(${StockUtils.getRoundsPercentNumber(gainPercentNum)})",
-                            fontSize = 12.sp,
-                            maxLines = 1,
-                            color = when {
-                                gainPriceNumber > 0 -> Color_CD4632
-                                gainPriceNumber < 0 -> Color_4876C7
-                                else -> Color_222222
-                            },
-                            modifier = Modifier
-                                .padding(start = 5.dp)
-                        )
-                    }
                 }
 
                 Divider(
@@ -258,7 +214,29 @@ fun MyStockListItemWidget(
                 ) {
                     Row(
                         modifier = Modifier
-                            .weight(0.5f)
+                            .weight(0.6f),
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        //평균단가
+                        Text(
+                            text = stringResource(R.string.MyStockFragment_Purchase_Average),
+                            fontSize = 14.sp,
+                            maxLines = 1,
+                            color = Color_666666,
+                        )
+
+                        Text(
+                            text = StockUtils.getPriceNum(myStockEntity.purchasePrice),
+                            fontSize = 14.sp,
+                            maxLines = 1,
+                            color = Color_222222,
+                            modifier = Modifier
+                                .padding(start = 10.dp)
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.weight(0.4f),
+                        horizontalArrangement = Arrangement.End
                     ) {
                         //매수일
                         Text(
@@ -277,60 +255,16 @@ fun MyStockListItemWidget(
                                 .padding(start = 10.dp)
                         )
                     }
-                    Row(
-                        modifier = Modifier
-                            .weight(0.5f),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        //평균단가
-                        Text(
-                            text = stringResource(R.string.MyStockFragment_Purchase_Average),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = Color_666666,
-                            modifier = Modifier
-                                .padding(start = 10.dp)
-                        )
-
-                        Text(
-                            text = StockUtils.getPriceNum(myStockEntity.purchasePrice),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = Color_222222,
-                            modifier = Modifier
-                                .padding(start = 10.dp)
-                        )
-                    }
                 }
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(start = 15.dp, end = 15.dp, top = 10.dp, bottom = 10.dp)
+                        .padding(start = 15.dp, end = 15.dp, top = 10.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.weight(0.35f)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.MyStockFragment_Holding_Quantity),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = colorResource(id = R.color.color_666666)
-                        )
-
-                        Text(
-                            text = myStockEntity.purchaseCount.toString(),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = colorResource(id = R.color.color_222222),
-                            modifier = Modifier
-                                .padding(start = 10.dp)
-                        )
-                    }
-
                     Row(
                         modifier = Modifier
                             .weight(0.65f),
-                        horizontalArrangement = Arrangement.End,
+                        horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
@@ -338,8 +272,6 @@ fun MyStockListItemWidget(
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = Color_666666,
-                            modifier = Modifier
-                                .padding(start = 10.dp)
                         )
 
                         Text(
@@ -375,6 +307,74 @@ fun MyStockListItemWidget(
                             },
                         )
                     }
+
+                    Row(
+                        modifier = Modifier.weight(0.35f),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = stringResource(R.string.MyStockFragment_Holding_Quantity),
+                            fontSize = 14.sp,
+                            maxLines = 1,
+                            color = colorResource(id = R.color.color_666666)
+                        )
+
+                        Text(
+                            text = myStockEntity.purchaseCount.toString(),
+                            fontSize = 14.sp,
+                            maxLines = 1,
+                            color = colorResource(id = R.color.color_222222),
+                            modifier = Modifier
+                                .padding(start = 10.dp)
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 15.dp, end = 15.dp, top = 10.dp, bottom = 10.dp),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.MyStockFragment_Gain),
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = Color_666666
+                    )
+                    //수익
+                    Text(
+                        text = StockUtils.getPriceNum(gainPriceNumber.toInt().toString()),
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        color = when {
+                            gainPriceNumber > 0 -> Color_CD4632
+                            gainPriceNumber < 0 -> Color_4876C7
+                            else -> Color_222222
+                        },
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                    )
+
+                    //수익 퍼센트
+                    val allPurchasePriceNum =
+                        (purchasePriceNumber * myStockEntity.purchaseCount)
+                    val allCurrentPriceNum = (currentPriceNumber * myStockEntity.purchaseCount)
+                    val gainPercentNum =
+                        StockUtils.calculateGainPercent(allPurchasePriceNum, allCurrentPriceNum)
+                    Text(
+                        text = "(${StockUtils.getRoundsPercentNumber(gainPercentNum)})",
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        color = when {
+                            gainPriceNumber > 0 -> Color_CD4632
+                            gainPriceNumber < 0 -> Color_4876C7
+                            else -> Color_222222
+                        },
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                    )
                 }
             }
         }

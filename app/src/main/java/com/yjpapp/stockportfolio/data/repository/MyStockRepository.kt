@@ -72,7 +72,6 @@ class MyStockRepositoryImpl @Inject constructor(
                                 purchasePrice = it.purchasePrice,
                                 purchaseCount = it.purchaseCount,
                                 currentPrice = StockUtils.getNumInsertComma(item.first().clpr),
-                                gainPrice = (item.first().clpr.toInt() - StockUtils.getNumDeletedComma(it.purchasePrice).toInt()).toString(),
                                 dayToDayPrice = item.first().vs,
                                 dayToDayPercent = item.first().fltRt,
                                 basDt = item.first().basDt,
