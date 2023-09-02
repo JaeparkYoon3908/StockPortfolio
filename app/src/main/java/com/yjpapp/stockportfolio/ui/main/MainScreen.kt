@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.ui.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,10 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -28,7 +26,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_888888
+import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
@@ -50,8 +50,10 @@ fun MainScreen(
                         Text(text = titleText)
                     }
                 },
-                backgroundColor = Color.White,
-                contentColor = Color_222222
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color_FFFFFF,
+                    titleContentColor = Color_222222
+                )
             )
         },
         bottomBar = {
@@ -62,7 +64,7 @@ fun MainScreen(
                 elevation = 12.dp
             ) {
                 navItemList.forEach { item ->
-                    val tintColor = if (currentRoute == item.screenRoute) {
+                    val selectedColor = if (currentRoute == item.screenRoute) {
                         Color_222222
                     } else {
                         Color_888888
@@ -73,18 +75,22 @@ fun MainScreen(
                     BottomNavigationItem(
                         selected = currentRoute == item.screenRoute,
                         onClick = {
+                            if (item == NavItem.News) viewModel.getNewsList()
                             navController.navigation(item)
                         },
                         icon = {
                             Icon(
                                 modifier = Modifier.size(30.dp),
                                 painter = painterResource(id = item.icon),
-                                tint = tintColor,
+                                tint = selectedColor,
                                 contentDescription = null
                             )
                         },
                         label = {
-                            Text(text = stringResource(id = item.title))
+                            Text(
+                                text = stringResource(id = item.title),
+                                color = selectedColor
+                            )
                         },
                         selectedContentColor = Color_222222,
                         unselectedContentColor = Color_888888
@@ -94,7 +100,7 @@ fun MainScreen(
         }
     ) { paddingValues ->
         NavigationGraph(
-            modifier = Modifier.padding(paddingValues),
+            modifier = Modifier.padding(paddingValues).background(color = Color.White),
             viewModel = viewModel,
             navController = navController
         )
