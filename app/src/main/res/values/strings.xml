@@ -39,7 +39,7 @@
     <string name="Common_Notice_Add_Ok">추가완료</string>
     <string name="Common_Notice_Modify_Ok">수정완료</string>
 
-    <string name="IncomeNoteFragment_Title">수익 노트</string>
+    <string name="News_Title">경제 뉴스</string>
     <string name="IncomeNoteFragment_Gain">수익</string>
     <string name="IncomeNoteFragment_Purchase_Price">매수금액</string>
     <string name="IncomeNoteFragment_Sell_Price">매도금액</string>
@@ -47,9 +47,6 @@
     <string name="IncomeNoteFragment_Purchase_Date">매수일</string>
     <string name="IncomeNoteFragment_Sell_Date">매도일</string>
     <string name="IncomeNoteFragment_SubjectName">종목명</string>
-    <string name="IncomeNoteFragment_SearchBar_Hint">종목명으로 검색하세요.</string>
-    <string name="IncomeNoteFragment_Term">기간</string>
-    <string name="IncomeNoteFragment_All_Search">전체 기간</string>
 
     <string name="EditIncomeNoteDialog_SubjectName_Hint">매매한 회사 이름</string>
     <string name="EditIncomeNoteDialog_Purchase_Date_Hint">매수한 날짜</string>
@@ -76,9 +73,9 @@
     <string name="MyStockFragment_Total_Evaluation_Amount">총 평가금액</string>
     <string name="MyStockFragment_Total_Purchase_Price">총 매수금액</string>
     <string name="MyStockFragment_Purchase_Average">평균단가</string>
-    <string name="MyStockFragment_Current_Price">현재가</string>
+    <string name="MyStockFragment_Current_Price">현재단가</string>
     <string name="MyStockFragment_Holding_Quantity">보유수량</string>
-    <string name="MyStockFragment_Gain">수익</string>
+    <string name="MyStockFragment_Gain">평가수익</string>
     <string name="MyStockFragment_Purchase_Date">매수일</string>
     <string name="MyStockFragment_Notice_Max_List">최대 10개까지 등록 할 수 있습니다.</string>
     <string name="MyStockFragment_Sell_Price">매도단가</string>

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.yjpapp.stockportfolio.common.dialog.CommonTwoBtnDialog.CommonTwoBtnData" />
+            type="com.yjpapp.stockportfolio.ui.common.dialog.CommonTwoBtnDialog.CommonTwoBtnData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -9,14 +9,13 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Base64
-import com.yjpapp.stockportfolio.common.StockConfig
+import com.yjpapp.stockportfolio.ui.common.StockConfig
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 /**
  * 개발에 필요한 함수들
@@ -25,12 +24,26 @@ import kotlin.math.roundToLong
  * @since 2020.07
  */
 object StockUtils {
+    const val DATEFORMAT = "yyyy.MM.dd HH:mm"
+    const val DATEFORMAT2 = "yyyy.MM.dd HH:mm:ss"
+    const val DATEFORMAT3 = "yyyy-MM-dd"
+    const val DATEFORMAT4 = "yyyyMMdd"
     //yyyymmdd로 변환
     fun getTodayYYYYMMDD(): String {
         val currentTime: Long = System.currentTimeMillis()
         val todayDate = Date(currentTime)
-        val sdformat = SimpleDateFormat("yyyyMMdd")
+        val sdformat = SimpleDateFormat(DATEFORMAT4)
         return sdformat.format(todayDate)
+    }
+
+    //어제 날짜를 yyyymmdd로 return
+    fun getYesterday(): String {
+        val calendar = Calendar.getInstance()
+        val today = Date()
+        calendar.time = today
+        calendar.add(Calendar.DATE, -1)
+        val sdformat = SimpleDateFormat(DATEFORMAT4)
+        return sdformat.format(calendar.time)
     }
 
     //yyyy.mm.dd로 변환
@@ -50,13 +63,14 @@ object StockUtils {
     fun getTodayYYMMDD(): List<String> {
         val currentTime: Long = System.currentTimeMillis()
         val todayDate = Date(currentTime)
-        val sdformat = SimpleDateFormat("yyyy-MM-DD")
+        val sdformat = SimpleDateFormat(DATEFORMAT3)
         return sdformat.format(todayDate).split("-")
     }
 
     //5,000,000 => 5000000 변환
     fun getNumDeletedComma(num: String): String {
         if (num.isEmpty()) return "0"
+        if (!num.contains(",")) return num
         val result = StringBuffer()
         val split = num.split(",")
         for (i in split.indices) {

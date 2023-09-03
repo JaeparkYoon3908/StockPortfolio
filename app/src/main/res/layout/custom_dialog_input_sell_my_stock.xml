@@ -4,14 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="com.yjpapp.stockportfolio.common.StockConfig"/>
+        <import type="com.yjpapp.stockportfolio.ui.common.StockConfig"/>
         <variable
             name="convertText"
             type="String" />
 
         <variable
             name="data"
-            type="com.yjpapp.stockportfolio.function.mystock.dialog.MyStockPurchaseInputDialogData" />
+            type="com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
