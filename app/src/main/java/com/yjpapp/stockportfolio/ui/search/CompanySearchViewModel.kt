@@ -30,7 +30,6 @@ class CompanySearchViewModel @Inject constructor(
         searchResult.clear()
         isLoading.value = true
         viewModelScope.launch {
-
             val reqStockPriceInfo = ReqStockPriceInfo(
                 numOfRows = "50",
                 pageNo = "1",
@@ -38,7 +37,8 @@ class CompanySearchViewModel @Inject constructor(
             )
             val result = myStockRepository.getStockPriceInfo(reqStockPriceInfo)
             if (result.isSuccessful && result.data != null) {
-                searchResult.addAll(result.data.response.body.items.item)
+                val companyList = result.data.response.body.items.item.distinctBy { it.itmsNm }
+                searchResult.addAll(companyList)
             }
             isLoading.value = false
         }

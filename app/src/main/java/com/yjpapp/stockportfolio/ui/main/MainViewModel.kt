@@ -1,13 +1,12 @@
 package com.yjpapp.stockportfolio.ui.main
 
 import android.content.Context
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.data.model.NewsData
+import com.yjpapp.stockportfolio.data.model.TabData
 import com.yjpapp.stockportfolio.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.data.repository.NewsRepository
 import com.yjpapp.stockportfolio.util.StockUtils
@@ -15,7 +14,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +22,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+data class NewsUIData(
+    var mKNewsList: MutableList<NewsData> = mutableListOf(),
+    var hanKyungNewsList: MutableList<NewsData> = mutableListOf(),
+    var financialNewsList: MutableList<NewsData> = mutableListOf(),
+)
 /**
  * MainActivity Global ViewModel
  */
@@ -51,9 +54,11 @@ class MainViewModel @Inject constructor(
         private set
     var newsList = MutableStateFlow<MutableList<NewsData>>(mutableListOf())
         private set
-
+    var isLoading = MutableStateFlow(false)
+    var newsUIData = NewsUIData()
+    val newsMenuList = listOf(TabData.MKNews, TabData.HanKyungNews, TabData.FinancialNews)
     /**
-     * MyStockFragment 영역
+     * 나의 주식
      */
     init {
         viewModelScope.launch {
@@ -130,8 +135,26 @@ class MainViewModel @Inject constructor(
         myStockInfoList.value = myStockRepository.getAllMyStock()
     }
 
+    /**
+     * 경제 뉴스
+     */
     fun getNewsList() = CoroutineScope(Dispatchers.IO).launch {
-        newsList.value = newsRepository.getMkFinanceNewsList()
+        isLoading.value = true
+        newsMenuList.forEach {
+            when (it) {
+                TabData.MKNews -> {
+                    newsUIData.mKNewsList = newsRepository.getNewsList(it.url)
+                }
+                TabData.HanKyungNews -> {
+                    newsUIData.hanKyungNewsList = newsRepository.getNewsList(it.url)
+                }
+                TabData.FinancialNews -> {
+                    newsUIData.financialNewsList = newsRepository.getNewsList(it.url)
+                }
+                else -> Unit
+            }
+        }
+        isLoading.value = false
     }
 
     /**

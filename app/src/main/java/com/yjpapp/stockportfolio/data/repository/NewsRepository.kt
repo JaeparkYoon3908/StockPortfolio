@@ -5,11 +5,12 @@ import com.yjpapp.stockportfolio.data.model.NewsData
 import javax.inject.Inject
 
 interface NewsRepository {
-    suspend fun getMkFinanceNewsList(): MutableList<NewsData>
+    suspend fun getNewsList(url: String): MutableList<NewsData>
 }
 
 class NewsRepositoryImpl @Inject constructor(
     private val newsDataSource: NewsDataSource
 ): NewsRepository {
-    override suspend fun getMkFinanceNewsList(): MutableList<NewsData> = newsDataSource.getNkFinanceNewsList()
+    override suspend fun getNewsList(url: String): MutableList<NewsData> =
+        newsDataSource.getNewsList(url)
 }

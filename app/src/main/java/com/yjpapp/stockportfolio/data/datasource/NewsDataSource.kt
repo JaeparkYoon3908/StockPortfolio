@@ -1,5 +1,6 @@
 package com.yjpapp.stockportfolio.data.datasource
 
+import android.util.Log
 import com.yjpapp.stockportfolio.data.model.NewsData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -8,15 +9,14 @@ import java.io.BufferedInputStream
 import java.net.URL
 import javax.inject.Inject
 
-val mkNewsRssUrl = "https://www.mk.co.kr/rss/30100041/"
 class NewsDataSource @Inject constructor(
     private val parser: XmlPullParser
 ) {
-    suspend fun getNkFinanceNewsList(): MutableList<NewsData> {
+    suspend fun getNewsList(newsRssUrl: String = "https://www.mk.co.kr/rss/30100041/"): MutableList<NewsData> {
         val newsDataList = mutableListOf<NewsData>()
 
         try {
-            val url = URL(mkNewsRssUrl)
+            val url = URL(newsRssUrl)
             val bis = BufferedInputStream(withContext(Dispatchers.IO) { url.openStream() } )
             parser.setInput(bis, null)
 
@@ -70,6 +70,7 @@ class NewsDataSource @Inject constructor(
             }
             return newsDataList
         } catch (e: Exception) {
+            Log.d("YJP", "e.message = ${e.message}")
             return newsDataList
         }
     }
