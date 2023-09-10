@@ -16,7 +16,7 @@ android {
         targetSdk = 34
         versionCode = 40
         versionName = "2.0.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.yjpapp.stockportfolio.common.CustomTestRunner"
     }
 
     buildTypes {
@@ -52,10 +52,21 @@ android {
 }
 
 dependencies {
-    testImplementation("junit:junit:4.13.2")
+    //Test Code
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.0")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.47")
+    androidTestImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("org.mockito:mockito-core:2.25.0")
+    androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.44")
+    testImplementation("junit:junit:4.13.2")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.0")
+    implementation("com.google.dagger:hilt-android-testing:2.47")
+    implementation("androidx.compose.ui:ui-test-junit4:1.5.0")
+    implementation("androidx.test:runner:1.5.2")
+    //view
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("androidx.core:core-ktx:1.10.1")
