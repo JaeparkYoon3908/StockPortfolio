@@ -16,7 +16,7 @@ android {
         targetSdk = 34
         versionCode = 40
         versionName = "2.0.0"
-        testInstrumentationRunner = "com.yjpapp.stockportfolio.common.CustomTestRunner"
+        testInstrumentationRunner = "com.yjpapp.stockportfolio.common.StockPortfolioTestRunner"
     }
 
     buildTypes {
@@ -47,6 +47,7 @@ android {
         abortOnError = false
         checkReleaseBuilds = false
     }
+
     namespace = "com.yjpapp.stockportfolio"
 
 }
@@ -56,16 +57,17 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.0")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.47")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:core:1.5.0")
     androidTestImplementation("org.mockito:mockito-core:2.25.0")
-    androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.44")
+    androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.48")
     testImplementation("junit:junit:4.13.2")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.0")
-    implementation("com.google.dagger:hilt-android-testing:2.47")
+    implementation("com.google.dagger:hilt-android-testing:2.48")
     implementation("androidx.compose.ui:ui-test-junit4:1.5.0")
     implementation("androidx.test:runner:1.5.2")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48")
     //view
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
@@ -87,8 +89,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging:23.2.1")
     //Google Service
-    implementation("com.google.android.gms:play-services-ads:22.2.0")
-    implementation("com.google.android.gms:play-services-auth:20.6.0")
+    implementation("com.google.android.gms:play-services-ads:22.3.0")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     //SNS Login
     implementation("com.navercorp.nid:oauth:5.2.0")
     implementation("com.facebook.android:facebook-login:5.15.3")
@@ -100,16 +102,16 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class:1.1.1")
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-    implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
-    implementation("androidx.compose.runtime:runtime-rxjava2:1.5.0")
-    implementation("androidx.navigation:navigation-compose:2.7.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.1")
+    implementation("androidx.compose.runtime:runtime-rxjava2:1.5.1")
+    implementation("androidx.navigation:navigation-compose:2.7.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
 
     //Compose swipeLayout
     implementation("de.charlex.compose:revealswipe:1.0.0")
 
     //Navigation
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.1")
 
     implementation("com.github.Ibotta:Supported-Picker-Dialogs:1.0.0")
 
@@ -124,11 +126,13 @@ dependencies {
 
     //Hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation("com.google.dagger:hilt-android:2.47")
-    kapt("com.google.dagger:hilt-compiler:2.47")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.48")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
+
 
     //Paging
-    implementation("androidx.paging:paging-runtime-ktx:3.2.0")
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 
     //Crawling library
     implementation("org.jsoup:jsoup:1.15.3")

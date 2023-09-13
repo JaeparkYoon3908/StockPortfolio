@@ -1,6 +1,7 @@
 package com.yjpapp.stockportfolio
 
 import android.content.Context
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
@@ -9,12 +10,14 @@ import com.yjpapp.stockportfolio.data.repository.NewsRepositoryImpl
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
@@ -57,7 +60,10 @@ class MainViewModelTest {
             basDt = "2023.09.08",
         )
         mainViewModel.addMyStock(testEntityData)
-        val allMyStockList = myStockRepository.getAllMyStock()
-        assertEquals(true, allMyStockList.any { it.subjectCode == testEntityData.subjectCode})
+        mainViewModel.myStockInfoList.collect { myStockList ->
+            Log.d("YJP", "allMyStockList = $myStockList")
+            println("allMyStockList = $myStockList")
+            assertEquals(true, myStockList.any { it.subjectCode == testEntityData.subjectCode })
+        }
     }
 }
