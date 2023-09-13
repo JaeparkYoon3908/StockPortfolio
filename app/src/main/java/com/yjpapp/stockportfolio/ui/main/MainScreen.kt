@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -37,6 +38,7 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+
     val navController = rememberNavController()
     val navItemList = remember { mutableStateListOf(NavItem.MyStock, NavItem.News) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -80,6 +82,7 @@ fun MainScreen(
                         modifier = Modifier.semantics {
                             contentDescription = context.getString(item.title)
                         },
+
                         selected = currentRoute == item.screenRoute,
                         onClick = {
                             if (item == NavItem.News) viewModel.getNewsList()
