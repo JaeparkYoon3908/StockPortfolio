@@ -18,8 +18,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,6 +37,8 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+
     val navController = rememberNavController()
     val navItemList = remember { mutableStateListOf(NavItem.MyStock, NavItem.News) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -73,6 +79,10 @@ fun MainScreen(
                         titleText = stringResource(id = item.title)
                     }
                     BottomNavigationItem(
+                        modifier = Modifier.semantics {
+                            contentDescription = context.getString(item.title)
+                        },
+
                         selected = currentRoute == item.screenRoute,
                         onClick = {
                             if (item == NavItem.News) viewModel.getNewsList()
