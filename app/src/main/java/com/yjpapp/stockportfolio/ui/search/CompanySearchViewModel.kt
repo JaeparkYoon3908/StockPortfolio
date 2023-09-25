@@ -19,7 +19,6 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class CompanySearchViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val myStockRepository: MyStockRepository
 ): ViewModel() {
     var searchResult = mutableStateListOf<StockPriceInfo>()
