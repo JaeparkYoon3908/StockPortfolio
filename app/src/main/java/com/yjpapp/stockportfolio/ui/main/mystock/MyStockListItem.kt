@@ -87,20 +87,22 @@ fun MyStockListItemWidget(
             }
             showMyStockPurchaseInputDialog = false
             if (isComplete) {
-                viewModel.updateMyStock(
-                    MyStockEntity(
-                        id = myStockEntity.id,
-                        subjectName = dialogData.stockPriceInfo.itmsNm,
-                        subjectCode = dialogData.stockPriceInfo.isinCd,
-                        purchaseDate = dialogData.purchaseDate,
-                        purchasePrice = dialogData.purchasePrice,
-                        purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
-                        currentPrice = myStockEntity.currentPrice,
-                        dayToDayPrice = myStockEntity.dayToDayPrice,
-                        dayToDayPercent = myStockEntity.dayToDayPercent,
-                        basDt = myStockEntity.basDt
+                coroutineScope.launch {
+                    viewModel.updateMyStock(
+                        MyStockEntity(
+                            id = myStockEntity.id,
+                            subjectName = dialogData.stockPriceInfo.itmsNm,
+                            subjectCode = dialogData.stockPriceInfo.isinCd,
+                            purchaseDate = dialogData.purchaseDate,
+                            purchasePrice = dialogData.purchasePrice,
+                            purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
+                            currentPrice = myStockEntity.currentPrice,
+                            dayToDayPrice = myStockEntity.dayToDayPrice,
+                            dayToDayPercent = myStockEntity.dayToDayPercent,
+                            basDt = myStockEntity.basDt
+                        )
                     )
-                )
+                }
             }
         }
     }

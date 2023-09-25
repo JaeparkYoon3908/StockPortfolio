@@ -89,6 +89,7 @@ fun MyStockScreen(
                 myStockViewModel = viewModel
             )
         }
+        item { Spacer(modifier = Modifier.size(10.dp)) }
         item {
             Row(
                 modifier = Modifier

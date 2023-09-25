@@ -52,8 +52,6 @@ class MainViewModel @Inject constructor(
         private set
     var myStockInfoList = MutableStateFlow(mutableListOf(MyStockEntity())) //나의 주식 목록 List
         private set
-    var newsList = MutableStateFlow<MutableList<NewsData>>(mutableListOf())
-        private set
     var isLoading = MutableStateFlow(false)
     var newsUIData = NewsUIData()
     val newsMenuList = listOf(TabData.MKNews, TabData.HanKyungNews, TabData.FinancialNews)
@@ -66,34 +64,30 @@ class MainViewModel @Inject constructor(
             calculateTopData()
         }
     }
-    fun addMyStock(myStockEntity: MyStockEntity) = viewModelScope.launch {
-        withContext(viewModelScope.coroutineContext) {
-            try {
-                myStockRepository.addMyStock(myStockEntity)
-                myStockInfoList.value = myStockRepository.getAllMyStock()
-                event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)))
-                calculateTopData()
-            } catch (e: Exception) {
-                e.stackTrace
-                event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
-            }
+
+    suspend fun addMyStock(myStockEntity: MyStockEntity) {
+        try {
+            myStockRepository.addMyStock(myStockEntity)
+            myStockInfoList.value = myStockRepository.getAllMyStock()
+            event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)))
+            calculateTopData()
+        } catch (e: Exception) {
+            e.stackTrace
+            event(Event.ShowErrorToastMessage("${context.getString(R.string.Error_Msg_Normal)} cause : ${e.message}"))
         }
     }
 
-    fun updateMyStock(myStockEntity: MyStockEntity) = viewModelScope.launch {
-        withContext(viewModelScope.coroutineContext) {
-            try {
-                myStockRepository.updateMyStock(myStockEntity)
-                myStockInfoList.value = myStockRepository.getAllMyStock()
-                event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Modify_Success)))
-                calculateTopData()
-            } catch (e: Exception) {
-                e.stackTrace
-                event(Event.ShowErrorToastMessage(context.getString(R.string.MyStockInputDialog_Error_Message)))
-            }
+    suspend fun updateMyStock(myStockEntity: MyStockEntity) {
+        try {
+            myStockRepository.updateMyStock(myStockEntity)
+            myStockInfoList.value = myStockRepository.getAllMyStock()
+            event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Modify_Success)))
+            calculateTopData()
+        } catch (e: Exception) {
+            e.stackTrace
+            event(Event.ShowErrorToastMessage("${context.getString(R.string.Error_Msg_Normal)} cause : ${e.message}"))
         }
     }
-
 
     suspend fun deleteMyStock(myStockEntity: MyStockEntity) {
         try {
@@ -106,7 +100,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun calculateTopData() {
+    private suspend fun calculateTopData() {
         var mTotalPurchasePrice = 0.00 // 총 매수금액
         var mTotalEvaluationAmount = 0.00 // 총 평가금액
         var mTotalGainPrice = 0.00 //손익
@@ -122,12 +116,10 @@ class MainViewModel @Inject constructor(
         mTotalGainPrice = mTotalEvaluationAmount - mTotalPurchasePrice
         mTotalGainPricePercent =
             StockUtils.calculateGainPercent(mTotalPurchasePrice, mTotalEvaluationAmount)
-        viewModelScope.launch {
-            totalPurchasePrice.emit(mTotalPurchasePrice.toString())
-            totalEvaluationAmount.emit(mTotalEvaluationAmount.toString())
-            totalGainPrice.emit(mTotalGainPrice.toString())
-            totalGainPricePercent.emit(StockUtils.getRoundsPercentNumber(mTotalGainPricePercent))
-        }
+        totalPurchasePrice.emit(mTotalPurchasePrice.toString())
+        totalEvaluationAmount.emit(mTotalEvaluationAmount.toString())
+        totalGainPrice.emit(mTotalGainPrice.toString())
+        totalGainPricePercent.emit(StockUtils.getRoundsPercentNumber(mTotalGainPricePercent))
     }
 
     fun refreshStockCurrentPriceInfo() = viewModelScope.launch {

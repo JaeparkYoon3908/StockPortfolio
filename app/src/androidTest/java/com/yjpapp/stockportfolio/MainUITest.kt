@@ -2,12 +2,15 @@ package com.yjpapp.stockportfolio
 
 import android.content.Context
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yjpapp.stockportfolio.data.repository.MyStockRepositoryImpl
 import com.yjpapp.stockportfolio.data.repository.NewsRepositoryImpl
 import com.yjpapp.stockportfolio.ui.main.MainScreen
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
+import com.yjpapp.stockportfolio.ui.main.NavItem
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -41,14 +44,23 @@ class MainUITest {
             myStockRepository = myStockRepository,
             newsRepository = newsRepository
         )
-    }
 
-    @Test
-    fun test_navigation() {
         composeTestRule.setContent {
             MainScreen(
                 viewModel = mainViewModel
             )
         }
     }
+
+    @Test
+    fun test_news_navigation_click() {
+        composeTestRule
+            .onNodeWithContentDescription(context.getString(NavItem.News.title))
+            .performClick()
+        composeTestRule
+            .onNodeWithContentDescription("NewsTab")
+            .assertExists()
+        Thread.sleep(3000)
+    }
+
 }
