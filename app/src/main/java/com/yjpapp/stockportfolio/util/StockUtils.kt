@@ -1,21 +1,10 @@
 package com.yjpapp.stockportfolio.util
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.pm.VersionedPackage
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.util.Base64
 import com.yjpapp.stockportfolio.ui.common.StockConfig
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.math.roundToInt
+import java.util.Calendar
+import java.util.Date
 
 /**
  * 개발에 필요한 함수들
@@ -140,55 +129,34 @@ object StockUtils {
         return result
     }
 
-    //전일대비 가격 구하기
-    fun getDayToDayPrice(
-        yesterdayPrice: Double,
-        currentPrice: Double,
-        local: String = StockConfig.LOCAL_KOREA
-    ): String {
-        when (local) {
-            StockConfig.LOCAL_KOREA -> {
-                return getNumInsertComma((currentPrice - yesterdayPrice).roundToInt().toString())
-            }
-        }
-        //기본 값 : USA
-        return getNumInsertComma((currentPrice - yesterdayPrice).toString())
-    }
-
-    @SuppressLint("MissingPermission")
-    fun runVibration(mContext: Context, milliseconds: Long) {
-        val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator!!.vibrate(
-                VibrationEffect.createOneShot(
-                    milliseconds,
-                    VibrationEffect.DEFAULT_AMPLITUDE
-                )
-            )
-        } else {
-            vibrator!!.vibrate(milliseconds);
-        }
-    }
-
-    private fun getHashKey(packageManager: PackageManager, packageName: VersionedPackage) {
-        var packageInfo: PackageInfo? = null
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                packageInfo =
-                    packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        if (packageInfo == null) StockLog.e("KeyHash", "KeyHash:null")
-        for (signature in packageInfo!!.signatures) {
-            try {
-                val md: MessageDigest = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                StockLog.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT))
-            } catch (e: NoSuchAlgorithmException) {
-                StockLog.e("KeyHash", "Unable to get MessageDigest. signature=$signature", e)
-            }
+    fun parseNewsDate(date: String): String {
+        return try {
+            val dateSplit = date.split(" ", ",").filter { it != "" && it != "09:00" }
+            if (dateSplit.size >= 5) {
+                if (dayOfMonthHashMap[dateSplit[2]] == null ||
+                    dayOfWeeksKoreaHashMap[dateSplit[0]] == null) {
+                    return date
+                }
+                "${dateSplit[3]}.${dayOfMonthHashMap[dateSplit[2]]}.${dateSplit[1]} ${dayOfWeeksKoreaHashMap[dateSplit[0]]} ${dateSplit[4]}"
+            } else date
+        } catch (e: Exception) {
+            date
         }
     }
 }
+
+val dayOfWeeksKoreaHashMap = hashMapOf(
+    "Mon" to "월요일",
+    "Tue" to "화요일",
+    "Wen" to "수요일",
+    "Thu" to "목요일",
+    "Fri" to "금요일",
+    "Sat" to "토요일",
+    "Sun" to "일요일",
+)
+val dayOfMonthHashMap = hashMapOf(
+    "Jan" to "01", "Feb" to "02", "Mar" to "03",
+    "Apr" to "04", "May" to "05", "Jun" to "06",
+    "Jul" to "07", "Aug" to "08", "Sep" to "09",
+    "Oct" to "10", "Nov" to "11", "Dec" to "12"
+)
