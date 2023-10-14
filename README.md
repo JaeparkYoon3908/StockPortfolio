@@ -2,11 +2,6 @@
 
 ### 1. 어플리케이션 스크린샷
 ![store](https://user-images.githubusercontent.com/54883589/223433943-906fb793-b485-4079-925d-0b2aae75aab3.jpg)
-![001](https://user-images.githubusercontent.com/54883589/160115732-994a1d66-df11-4dc8-9f17-574aec9e6ad9.png)
-![002](https://user-images.githubusercontent.com/54883589/160115735-a0a69593-0d9f-46f0-a1c9-e5a8d43cc3b5.png)
-![003](https://user-images.githubusercontent.com/54883589/160115736-8543508f-7947-4f66-a6d8-1ba85ae0a452.png)
-![004](https://user-images.githubusercontent.com/54883589/160115740-94b97047-d645-475a-a979-e92c7de02801.png)
-![005](https://user-images.githubusercontent.com/54883589/160115742-661da08e-1b03-4687-a9fa-5fe82f2d2397.png)
 
 ### 2. 기능 소개
 - 나의 주식
