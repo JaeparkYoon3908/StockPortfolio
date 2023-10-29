@@ -10,7 +10,6 @@ buildscript {
         maven(url="https://mvnrepository.com/artifact/com.github.gundy/semver4j")
         mavenCentral()
         google()
-        jcenter()
     }
 
     dependencies {
@@ -28,7 +27,6 @@ allprojects {
         maven(url="https://mvnrepository.com/artifact/com.github.gundy/semver4j")
         mavenCentral()
         google()
-        jcenter()
     }
 }
 

@@ -80,7 +80,6 @@ dependencies {
 
     implementation("com.github.bumptech.glide:glide:4.14.2")
     //RecyclerView Animation
-    implementation("jp.wasabeef:recyclerview-animators:4.0.0")
     implementation("com.github.GrenderG:Toasty:1.5.0")
     implementation("com.google.android.material:material:1.9.0")
 
@@ -92,9 +91,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:22.3.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
-    //SNS Login
-    implementation("com.navercorp.nid:oauth:5.2.0")
-    implementation("com.facebook.android:facebook-login:5.15.3")
     //Compose
     implementation("androidx.compose.ui:ui:1.5.0")
     implementation("androidx.compose.ui:ui-tooling:1.5.0")
@@ -115,7 +111,6 @@ dependencies {
     //Navigation
     implementation("androidx.navigation:navigation-ui-ktx:2.7.1")
 
-
     implementation("com.github.Ibotta:Supported-Picker-Dialogs:1.0.0")
 
     //network
@@ -132,14 +127,6 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
-
-
-    //Paging
-    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
-
-
-    //Crawling library
-    implementation("org.jsoup:jsoup:1.15.3")
 
     //Room
     implementation("androidx.room:room-runtime:2.5.2")
