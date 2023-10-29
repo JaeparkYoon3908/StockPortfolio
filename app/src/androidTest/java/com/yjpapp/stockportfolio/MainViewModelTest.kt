@@ -1,7 +1,6 @@
 package com.yjpapp.stockportfolio
 
 import android.content.Context
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.data.repository.MyStockRepositoryImpl
@@ -14,11 +13,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
 import javax.inject.Inject
 
-@RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class MainViewModelTest {
     @get:Rule
@@ -29,8 +25,7 @@ class MainViewModelTest {
     lateinit var newsRepository: NewsRepositoryImpl
     private lateinit var context: Context
     private lateinit var mainViewModel: MainViewModel
-    @Mock
-    val testEntityData = MyStockEntity(
+    private val testEntityData = MyStockEntity(
         id = 1,
         subjectName = "회사이름",
         subjectCode = "subCode",

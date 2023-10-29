@@ -19,7 +19,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
 
-@RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class MainUITest {
     //TODO ViewModelTest에서 중복 되는 코드에 대한 커스텀 룰 있는지 확인

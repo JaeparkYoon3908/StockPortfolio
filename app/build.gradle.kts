@@ -54,15 +54,12 @@ android {
 
 dependencies {
     //Test Code
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.0")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
-    androidTestImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test:core:1.5.0")
-    androidTestImplementation("org.mockito:mockito-core:2.25.0")
-    androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.48")
-    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation(libs.androidx.test.ext)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestAnnotationProcessor(libs.hilt.compiler)
+    testImplementation(libs.junit)
+
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.0")
     implementation("com.google.dagger:hilt-android-testing:2.48")
     implementation("androidx.compose.ui:ui-test-junit4:1.5.0")
@@ -92,18 +89,18 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     //Compose
-    implementation("androidx.compose.ui:ui:1.5.0")
-    implementation("androidx.compose.ui:ui-tooling:1.5.0")
-    implementation("androidx.compose.foundation:foundation:1.5.0")
-    implementation("androidx.compose.material3:material3:1.1.1")
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-    implementation("androidx.compose.runtime:runtime-livedata:1.5.1")
-    implementation("androidx.compose.runtime:runtime-rxjava2:1.5.1")
-    implementation("androidx.navigation:navigation-compose:2.7.1")
-
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.window)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewModel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
+//    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+//    implementation("androidx.navigation:navigation-compose:2.7.1")
+//    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
 
     //Compose swipeLayout
     implementation("de.charlex.compose:revealswipe:1.0.0")
