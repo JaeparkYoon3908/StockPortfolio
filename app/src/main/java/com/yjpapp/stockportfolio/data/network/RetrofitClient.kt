@@ -100,25 +100,24 @@ class RetrofitClient(
                 return response
             } catch (e: Exception) {
                 e.printStackTrace()
-                var msg = ""
-                when (e) {
+                val msg = when (e) {
                     is SocketTimeoutException -> {
-                        msg = "Timeout - Please check your internet connection"
+                        "Timeout - Please check your internet connection"
                     }
                     is UnknownHostException -> {
-                        msg = "Unable to make a connection. Please check your internet"
+                        "Unable to make a connection. Please check your internet"
                     }
                     is ConnectionShutdownException -> {
-                        msg = "Connection shutdown. Please check your internet"
+                        "Connection shutdown. Please check your internet"
                     }
                     is IOException -> {
-                        msg = "Server is unreachable, please try again later."
+                        "Server is unreachable, please try again later."
                     }
                     is IllegalStateException -> {
-                        msg = "${e.message}"
+                        "${e.message}"
                     }
                     else -> {
-                        msg = "${e.message}"
+                        "${e.message}"
                     }
                 }
 

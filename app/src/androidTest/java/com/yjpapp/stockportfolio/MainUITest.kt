@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yjpapp.stockportfolio.data.repository.MyStockRepositoryImpl
 import com.yjpapp.stockportfolio.data.repository.NewsRepositoryImpl
@@ -16,7 +15,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import javax.inject.Inject
 
 @HiltAndroidTest

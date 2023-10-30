@@ -1,48 +1,66 @@
 [versions]
-googleMaterial = "1.8.0"
-androidxCore = "1.9.0"
+firebaseMessaging = "23.2.1"
+googleMaterial = "1.10.0"
+androidxCore = "1.12.0"
 androidxAppCompat = "1.6.1"
 androidxConstraintlayout = "2.1.4"
-kotlin = "1.6.21"
+kotlin = "1.9.10"
 junit4 = "4.13.2"
+androidxTestRunner = "1.5.2"
 androidxTestExt = "1.1.5"
-androidxEspresso = "3.5.0"
+androidxEspresso = "3.5.1"
 androidGradlePlugin = "7.4.0"
+navigationUiKtx = "2.7.1"
 retrofit = "2.9.0"
-retrofitKotlinxSerializationJson = "0.8.0"
-kotlinxSerializationJson = "1.3.3"
-okhttp = "4.10.0"
-kotlinxCoroutines = "1.6.4"
-hilt = "2.41"
-kotlin-bom = "1.8.0"
+retrofitKotlinxSerializationJson = "1.0.0"
+kotlinxSerializationJson = "1.6.0"
+okhttp = "4.12.0"
+kotlinxCoroutines = "1.7.3"
+hilt = "2.48.1"
+kotlin-bom = "1.9.0"
 junit = "1.1.5"
-lifecycle = "2.5.0"
-activity = "1.5.0"
-activityCompose = "1.7.2"
+lifecycle = "2.6.2"
+activity = "1.8.0"
+activityCompose = "1.8.0"
 glide = "4.16.0"
-navigationCompose = "2.7.1"
-composeUi = "1.5.0"
-composeMaterial3 = "1.1.1"
+hiltNavigationCompose = "1.0.0"
+navigationCompose = "2.7.4"
+composeUi = "1.5.4"
+composeMaterial3 = "1.1.2"
+androidxHiltCompiler = "1.0.0"
+revealswipe = "1.0.0"
+roomCompiler = "2.5.2"
+roomRuntime = "2.5.2"
+supportedPickerDialogs = "1.0.0"
+#toasty = "1.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidxConstraintlayout" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestExt" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
 androidx-lifecycle-viewModel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewModel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "composeUi" }
+androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "composeUi" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "composeUi" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "composeUi" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "composeUi" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3"}
 androidx-compose-material3-window = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "composeMaterial3"}
+androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidxHiltCompiler" }
 
-kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-bom" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
@@ -54,9 +72,16 @@ okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor",
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+revealswipe = { module = "de.charlex.compose:revealswipe", version.ref = "revealswipe" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+supported-picker-dialogs = { module = "com.github.Ibotta:Supported-Picker-Dialogs", version.ref = "supportedPickerDialogs" }
+#toasty = { module = "com.github.GrenderG", name = "Toasty", version.ref = "toasty" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
