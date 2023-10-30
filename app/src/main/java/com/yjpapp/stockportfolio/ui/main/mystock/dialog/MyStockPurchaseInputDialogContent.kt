@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
+import com.yjpapp.data.model.response.StockPriceInfo
 import com.yjpapp.stockportfolio.extension.getSerializableExtraData
 import com.yjpapp.stockportfolio.ui.common.StockConfig
 import com.yjpapp.stockportfolio.ui.common.dialog.CommonDatePickerDialog

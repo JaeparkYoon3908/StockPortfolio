@@ -6,6 +6,4 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-): ViewModel() {
-
-}
+): ViewModel()

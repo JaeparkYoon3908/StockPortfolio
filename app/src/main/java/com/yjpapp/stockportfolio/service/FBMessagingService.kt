@@ -32,7 +32,7 @@ class FBMessagingService: FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        StockLog.d(TAG, "From: " + remoteMessage!!.from)
+        StockLog.d(TAG, "From: " + remoteMessage.from)
 
         // Notification 메시지를 수신할 경우는
         // remoteMessage.notification?.body!! 여기에 내용이 저장되어있다.
@@ -46,7 +46,7 @@ class FBMessagingService: FirebaseMessagingService() {
 
         else {
             StockLog.i(TAG, "수신에러 : data가 비어있습니다. 메시지를 수신하지 못했습니다.")
-            StockLog.i(TAG, "data값: ${remoteMessage.data.toString()}")
+            StockLog.i(TAG, "data값: ${remoteMessage.data}")
         }
     }
 

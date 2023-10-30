@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.yjpapp.stockportfolio"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 34
         versionCode = 41
         versionName = "2.2.0"
@@ -54,6 +54,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:network"))
+    implementation(project(":core:data"))
+
     //Test Code
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.espresso.core)
@@ -101,7 +104,6 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.okhttp.logging)
-    //kotlinx.serialization
     implementation(libs.kotlinx.serialization.json)
     //Hilt
     implementation(libs.hilt.navigation.compose)

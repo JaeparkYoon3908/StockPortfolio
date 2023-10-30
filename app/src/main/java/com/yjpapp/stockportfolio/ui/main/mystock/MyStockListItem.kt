@@ -20,7 +20,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,16 +32,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yjpapp.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.network.model.StockPriceInfo
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.data.localdb.room.mystock.MyStockEntity
-import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
 import com.yjpapp.stockportfolio.ui.common.StockConfig
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_4876C7
 import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
 import com.yjpapp.stockportfolio.ui.common.theme.Color_80000000
 import com.yjpapp.stockportfolio.ui.common.theme.Color_CD4632
-import com.yjpapp.stockportfolio.ui.common.theme.Color_FBFBFB
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
 import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogContent

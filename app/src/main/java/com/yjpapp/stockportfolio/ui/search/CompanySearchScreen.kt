@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
+import com.yjpapp.network.model.StockPriceInfo
 import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF

@@ -1,14 +1,12 @@
 package com.yjpapp.stockportfolio.ui.search
 
-import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yjpapp.stockportfolio.data.model.request.ReqStockPriceInfo
-import com.yjpapp.stockportfolio.data.model.response.StockPriceInfo
-import com.yjpapp.stockportfolio.data.repository.MyStockRepository
+import com.yjpapp.data.model.request.ReqStockPriceInfo
+import com.yjpapp.data.repository.MyStockRepository
+import com.yjpapp.network.model.StockPriceInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,7 +34,7 @@ class CompanySearchViewModel @Inject constructor(
             )
             val result = myStockRepository.getStockPriceInfo(reqStockPriceInfo)
             if (result.isSuccessful && result.data != null) {
-                val companyList = result.data.response.body.items.item.distinctBy { it.itmsNm }
+                val companyList = result.data?.response?.body?.items?.item?.distinctBy { it.itmsNm }?: listOf()
                 searchResult.addAll(companyList)
             }
             isLoading.value = false

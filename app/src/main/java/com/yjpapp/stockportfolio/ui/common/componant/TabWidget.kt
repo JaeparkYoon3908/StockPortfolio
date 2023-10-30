@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yjpapp.stockportfolio.data.model.TabData
+import com.yjpapp.stockportfolio.model.TabData
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
@@ -75,7 +75,6 @@ fun TabWidget(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 private fun Preview() {

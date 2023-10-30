@@ -5,7 +5,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
-import com.yjpapp.stockportfolio.data.repository.MyStockRepositoryImpl
+import com.yjpapp.data.repository.MyStockRepositoryImpl
 import com.yjpapp.stockportfolio.data.repository.NewsRepositoryImpl
 import com.yjpapp.stockportfolio.ui.main.MainScreen
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
