@@ -9,10 +9,12 @@ plugins {
 }
 
 android {
+    namespace = "com.yjpapp.stockportfolio"
+    compileSdk = 34
+
     defaultConfig {
         applicationId = "com.yjpapp.stockportfolio"
         minSdk = 23
-        compileSdk = 34
         targetSdk = 34
         versionCode = 41
         versionName = "2.2.0"
@@ -49,7 +51,6 @@ android {
         abortOnError = false
         checkReleaseBuilds = false
     }
-    namespace = "com.yjpapp.stockportfolio"
 }
 
 dependencies {

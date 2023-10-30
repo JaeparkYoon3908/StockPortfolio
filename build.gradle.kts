@@ -22,15 +22,6 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        maven(url="https://jitpack.io")
-        maven(url="https://mvnrepository.com/artifact/com.github.gundy/semver4j")
-        mavenCentral()
-        google()
-    }
-}
-
 task("clean", Delete::class) {
     delete = setOf(rootProject.buildDir)
 }
