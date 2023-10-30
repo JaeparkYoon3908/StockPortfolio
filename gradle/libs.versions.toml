@@ -4,7 +4,9 @@ googleMaterial = "1.10.0"
 androidxCore = "1.12.0"
 androidxAppCompat = "1.6.1"
 androidxConstraintlayout = "2.1.4"
-kotlin = "1.9.10"
+googleServices = "4.4.0"
+gradle = "8.1.1"
+kotlin = "1.9.0"
 junit4 = "4.13.2"
 androidxTestRunner = "1.5.2"
 androidxTestExt = "1.1.5"
@@ -32,7 +34,7 @@ revealswipe = "1.0.0"
 roomCompiler = "2.5.2"
 roomRuntime = "2.5.2"
 supportedPickerDialogs = "1.0.0"
-#toasty = "1.5.0"
+ksp = "1.9.0-1.0.13"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
@@ -58,8 +60,11 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3"}
 androidx-compose-material3-window = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "composeMaterial3"}
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidxHiltCompiler" }
-
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-bom" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
@@ -73,15 +78,14 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
 revealswipe = { module = "de.charlex.compose:revealswipe", version.ref = "revealswipe" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 supported-picker-dialogs = { module = "com.github.Ibotta:Supported-Picker-Dialogs", version.ref = "supportedPickerDialogs" }
-#toasty = { module = "com.github.GrenderG", name = "Toasty", version.ref = "toasty" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -90,3 +94,4 @@ android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin"}
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

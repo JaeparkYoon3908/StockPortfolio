@@ -1,7 +1,8 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
-    id("com.google.dagger.hilt.android") version "2.48" apply false
-    id("com.google.devtools.ksp") version "1.9.0-1.0.13" apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.ksp) apply false
 }
 
 buildscript {
@@ -13,11 +14,11 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.9.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
-        classpath("com.android.tools.build:gradle:8.1.1")
-        classpath("com.google.gms:google-services:4.3.15")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.48")
+        classpath(libs.kotlin.serialization)
+        classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.gradle)
+        classpath(libs.google.services)
+        classpath(libs.hilt.android.gradle.plugin)
     }
 }
 

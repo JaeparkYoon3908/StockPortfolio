@@ -75,7 +75,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.glide)
     //RecyclerView Animation
-    implementation("com.github.GrenderG:Toasty:1.5.0")
     implementation(libs.google.material)
     //FireBase
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))

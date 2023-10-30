@@ -3,15 +3,26 @@ package com.yjpapp.stockportfolio.ui.main.mystock.dialog
 import android.app.Activity
 import android.content.Intent
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,7 +55,6 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 import com.yjpapp.stockportfolio.ui.search.CompanySearchActivity
 import com.yjpapp.stockportfolio.util.StockUtils
-import es.dmoral.toasty.Toasty
 
 data class MyStockPurchaseInputDialogData(
     var id: Int = -1,
@@ -160,19 +170,11 @@ fun MyStockPurchaseInputDialogContent(
                                 setListener { _: DatePicker?, year, month, dayOfMonth ->
                                     val todaySplit = StockUtils.getTodayYYYY_MM_DD().split(".")
                                     if (year == todaySplit[0].toInt() && month > todaySplit[1].toInt()) {
-                                        Toasty.error(
-                                            mContext,
-                                            "선택하신 월이 현재 보다 큽니다.",
-                                            Toasty.LENGTH_LONG
-                                        ).show()
+                                        Toast.makeText(mContext, "선택하신 월이 현재 보다 큽니다.", Toast.LENGTH_LONG).show()
                                         return@setListener
                                     }
                                     if (year == todaySplit[0].toInt() && month == todaySplit[1].toInt() && dayOfMonth > todaySplit[2].toInt()) {
-                                        Toasty.error(
-                                            mContext,
-                                            "선택하신 일이 현재 보다 큽니다.",
-                                            Toasty.LENGTH_LONG
-                                        ).show()
+                                        Toast.makeText(mContext, "선택하신 일이 현재 보다 큽니다.", Toast.LENGTH_LONG).show()
                                         return@setListener
                                     }
                                     val purchaseYear = year.toString()
@@ -385,18 +387,18 @@ fun MyStockPurchaseInputDialogContent(
                                 purchasePriceText.text.isEmpty() ||
                                 rememberStockPriceInfo.itmsNm.isEmpty()
                             ) {
-                                Toasty.error(
+                                Toast.makeText(
                                     context,
                                     context.getString(R.string.MyStockInputDialog_Error_Message),
-                                    Toasty.LENGTH_SHORT
+                                    Toast.LENGTH_LONG
                                 ).show()
                                 return@TextButton
                             }
                             if (purchaseCountText.toInt() == 0) {
-                                Toasty.error(
+                                Toast.makeText(
                                     context,
                                     context.getString(R.string.MyStockInputDialog_Error_Message_Purchase_Count),
-                                    Toasty.LENGTH_SHORT
+                                    Toast.LENGTH_LONG
                                 ).show()
                                 return@TextButton
                             }
