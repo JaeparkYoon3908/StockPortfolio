@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.yjpapp.data.datasource.PreferenceDataSource
-import com.yjpapp.data.di.LocalDatabaseModule
 import com.yjpapp.data.localdb.room.MyRoomDatabase
 import com.yjpapp.data.localdb.room.mystock.MyStockDao
 import dagger.Module

@@ -6,7 +6,7 @@ import com.yjpapp.data.datasource.MyStockRoomDataSource
 import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqStockPriceInfo
-import com.yjpapp.network.SPNetworkDataSource
+import com.yjpapp.network.datasource.DataPortalDataSource
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ interface MyStockRepository {
 
 class MyStockRepositoryImpl @Inject constructor(
     private val myStockLocalDataSource: MyStockRoomDataSource,
-    private val stockInfoDataSource: SPNetworkDataSource
+    private val stockInfoDataSource: DataPortalDataSource
 ) : MyStockRepository {
 
     override suspend fun addMyStock(myStockEntity: MyStockEntity) =
