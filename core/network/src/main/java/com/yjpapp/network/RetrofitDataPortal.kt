@@ -1,6 +1,7 @@
 package com.yjpapp.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.yjpapp.network.datasource.DataPortalDataSource
 import com.yjpapp.network.model.RespStockPriceInfo
 import kotlinx.serialization.json.Json
 import okhttp3.Call
@@ -17,10 +18,10 @@ interface DataPortalApi {
     @GET("/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo")
     suspend fun getStockPriceInfo(@QueryMap params: HashMap<String, String>): Response<RespStockPriceInfo>
 }
-class RetrofitSPNetwork @Inject constructor(
+class RetrofitDataPortal @Inject constructor(
     networkJson: Json,
     okhttpCallFactory: Call.Factory,
-): SPNetworkDataSource {
+): DataPortalDataSource {
     private val dataPortalApi = Retrofit.Builder()
         .baseUrl(dataPortalBaseUrl)
         .callFactory(okhttpCallFactory)
