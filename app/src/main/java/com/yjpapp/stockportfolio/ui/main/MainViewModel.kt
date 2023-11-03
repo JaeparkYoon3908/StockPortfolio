@@ -18,6 +18,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -59,7 +60,7 @@ class MainViewModel @Inject constructor(
      */
     init {
         viewModelScope.launch {
-            myStockInfoList.value = myStockRepository.getAllMyStock()
+            myStockInfoList.update { myStockRepository.getAllMyStock() }
             calculateTopData()
         }
     }
@@ -67,7 +68,7 @@ class MainViewModel @Inject constructor(
     suspend fun addMyStock(myStockEntity: MyStockEntity) {
         try {
             myStockRepository.addMyStock(myStockEntity)
-            myStockInfoList.value = myStockRepository.getAllMyStock()
+            myStockInfoList.update { myStockRepository.getAllMyStock() }
             event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)))
             calculateTopData()
         } catch (e: Exception) {
@@ -79,7 +80,7 @@ class MainViewModel @Inject constructor(
     suspend fun updateMyStock(myStockEntity: MyStockEntity) {
         try {
             myStockRepository.updateMyStock(myStockEntity)
-            myStockInfoList.value = myStockRepository.getAllMyStock()
+            myStockInfoList.update { myStockRepository.getAllMyStock() }
             event(Event.ShowInfoToastMessage(context.getString(R.string.MyStockFragment_Msg_MyStock_Modify_Success)))
             calculateTopData()
         } catch (e: Exception) {
@@ -91,7 +92,7 @@ class MainViewModel @Inject constructor(
     suspend fun deleteMyStock(myStockEntity: MyStockEntity) {
         try {
             myStockRepository.deleteMyStock((myStockEntity))
-            myStockInfoList.value = myStockRepository.getAllMyStock()
+            myStockInfoList.update { myStockRepository.getAllMyStock() }
             calculateTopData()
         } catch (e: Exception) {
             e.stackTrace
@@ -115,22 +116,22 @@ class MainViewModel @Inject constructor(
         mTotalGainPrice = mTotalEvaluationAmount - mTotalPurchasePrice
         mTotalGainPricePercent =
             StockUtils.calculateGainPercent(mTotalPurchasePrice, mTotalEvaluationAmount)
-        totalPurchasePrice.emit(mTotalPurchasePrice.toString())
-        totalEvaluationAmount.emit(mTotalEvaluationAmount.toString())
-        totalGainPrice.emit(mTotalGainPrice.toString())
-        totalGainPricePercent.emit(StockUtils.getRoundsPercentNumber(mTotalGainPricePercent))
+        totalPurchasePrice.update { mTotalPurchasePrice.toString() }
+        totalEvaluationAmount.update { mTotalEvaluationAmount.toString() }
+        totalGainPrice.update { mTotalGainPrice.toString() }
+        totalGainPricePercent.update { StockUtils.getRoundsPercentNumber(mTotalGainPricePercent) }
     }
 
     fun refreshStockCurrentPriceInfo() = viewModelScope.launch {
         myStockRepository.refreshMyStock()
-        myStockInfoList.value = myStockRepository.getAllMyStock()
+        myStockInfoList.update { myStockRepository.getAllMyStock() }
     }
 
     /**
      * 경제 뉴스
      */
     fun getNewsList() = CoroutineScope(Dispatchers.IO).launch {
-        isLoading.value = true
+        isLoading.update { true }
         newsMenuList.forEach {
             when (it) {
                 TabData.MKNews -> {
@@ -142,10 +143,9 @@ class MainViewModel @Inject constructor(
                 TabData.FinancialNews -> {
                     newsUIData.financialNewsList = newsRepository.getNewsList(it.url)
                 }
-                else -> Unit
             }
         }
-        isLoading.value = false
+        isLoading.update { false }
     }
 
     /**

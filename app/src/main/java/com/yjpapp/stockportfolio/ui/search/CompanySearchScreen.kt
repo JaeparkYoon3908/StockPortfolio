@@ -53,7 +53,7 @@ fun CompanySearchScreen(
     onItemClick: (stockPriceInfo: StockPriceInfo) -> Unit
 ) {
     val context = LocalContext.current
-    val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -119,7 +119,6 @@ fun CompanySearchScreen(
 
                     },
                     onDone = {
-
                         viewModel.requestSearchList(userInputKeyWord)
                         keyboardController?.hide()
                     }
@@ -137,7 +136,7 @@ fun CompanySearchScreen(
          */
         LazyColumn {
             items(
-                count = viewModel.searchResult.size
+                count = uiState.searchResult.size
             ) {
                 Column(
                     modifier = Modifier
@@ -146,11 +145,11 @@ fun CompanySearchScreen(
                         .background(Color_FFFFFF)
                 ) {
                     Text(
-                        text = viewModel.searchResult[it].itmsNm,
+                        text = uiState.searchResult[it].itmsNm,
                         fontSize = 16.sp,
                         color = Color_222222,
                         modifier = Modifier
-                            .clickable { onItemClick(viewModel.searchResult[it]) }
+                            .clickable { onItemClick(uiState.searchResult[it]) }
                             .fillMaxWidth()
                     )
                 }
@@ -161,7 +160,7 @@ fun CompanySearchScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (isLoading.value) {
+        if (uiState.isLoading) {
             LoadingWidget()
         }
     }
