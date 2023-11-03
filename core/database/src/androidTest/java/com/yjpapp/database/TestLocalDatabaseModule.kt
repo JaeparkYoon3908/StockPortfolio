@@ -1,12 +1,11 @@
-package com.yjpapp.stockportfolio.common
+package com.yjpapp.database
 
 import android.app.Activity
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.yjpapp.data.datasource.PreferenceDataSource
-import com.yjpapp.data.localdb.room.MyRoomDatabase
 import com.yjpapp.data.localdb.room.mystock.MyStockDao
+import com.yjpapp.database.di.LocalDatabaseModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

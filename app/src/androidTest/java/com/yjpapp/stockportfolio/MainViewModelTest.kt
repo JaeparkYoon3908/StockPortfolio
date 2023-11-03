@@ -4,11 +4,12 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.data.repository.MyStockRepositoryImpl
-import com.yjpapp.stockportfolio.data.repository.NewsRepositoryImpl
+import com.yjpapp.data.repository.NewsRepositoryImpl
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -26,7 +27,7 @@ class MainViewModelTest {
     private lateinit var context: Context
     private lateinit var mainViewModel: MainViewModel
     private val testEntityData = MyStockEntity(
-        id = 1,
+        id = 124241,
         subjectName = "회사이름",
         subjectCode = "subCode",
         purchaseDate = "2023-04-04",
@@ -48,6 +49,11 @@ class MainViewModelTest {
         )
     }
 
+    @After
+    fun destroy() = runTest {
+        mainViewModel.deleteMyStock(testEntityData)
+    }
+
     /**
      * @link[MainViewModel.addMyStock]
      */
@@ -66,7 +72,7 @@ class MainViewModelTest {
         testEntityData.subjectName = "변경"
         mainViewModel.updateMyStock(testEntityData)
         val myStockList = myStockRepository.getAllMyStock() //리스트 갱신
-        val isUpdateComplete = myStockList.any { it.id == 1 && it.subjectName == testEntityData.subjectName }
+        val isUpdateComplete = myStockList.any { it.id == testEntityData.id && it.subjectName == testEntityData.subjectName }
         assertEquals(true, isUpdateComplete)
     }
 

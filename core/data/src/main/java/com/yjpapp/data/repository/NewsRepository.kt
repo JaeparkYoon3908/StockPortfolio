@@ -1,4 +1,4 @@
-package com.yjpapp.stockportfolio.data.repository
+package com.yjpapp.data.repository
 
 import com.yjpapp.data.datasource.NewsDataSource
 import com.yjpapp.data.model.NewsData

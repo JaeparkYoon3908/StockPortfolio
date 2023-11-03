@@ -36,12 +36,18 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.google.material)
-    testImplementation(libs.junit.junit)
-    androidTestImplementation(libs.junit)
+    //Test Code
+    androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.compose.ui)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestAnnotationProcessor(libs.hilt.android.compiler)
+    testImplementation(libs.junit)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    kaptAndroidTest(libs.hilt.android.compiler)
 
     //Hilt
     implementation(libs.hilt.navigation.compose)
