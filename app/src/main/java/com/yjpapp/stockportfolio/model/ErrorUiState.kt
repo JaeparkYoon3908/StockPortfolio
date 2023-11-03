@@ -1,6 +1,6 @@
 package com.yjpapp.stockportfolio.model
 
-data class ErrorState(
+data class ErrorUiState(
     val isError: Boolean = false,
     val errorCode: String = "",
     val errorMessage: String = ""

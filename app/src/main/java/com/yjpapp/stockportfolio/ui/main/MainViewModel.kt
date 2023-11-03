@@ -7,7 +7,7 @@ import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 import com.yjpapp.data.model.NewsData
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.data.repository.NewsRepository
+import com.yjpapp.data.repository.NewsRepository
 import com.yjpapp.stockportfolio.model.TabData
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel

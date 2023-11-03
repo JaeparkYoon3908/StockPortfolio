@@ -1,13 +1,12 @@
 package com.yjpapp.stockportfolio.ui.search
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqStockPriceInfo
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.network.model.StockPriceInfo
-import com.yjpapp.stockportfolio.model.ErrorState
+import com.yjpapp.stockportfolio.model.ErrorUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,7 +16,7 @@ import javax.inject.Inject
 data class CompanySearchUiState(
     val searchResult: List<StockPriceInfo> = listOf(),
     val isLoading: Boolean = false,
-    val errorState: ErrorState = ErrorState()
+    val errorUiState: ErrorUiState = ErrorUiState()
 )
 /**
  * @author Yoon jaepark
@@ -50,7 +49,7 @@ class CompanySearchViewModel @Inject constructor(
                 uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorState = ErrorState(
+                        errorUiState = ErrorUiState(
                             isError = true,
                             errorCode = result.resultCode,
                             errorMessage = result.resultMessage,
