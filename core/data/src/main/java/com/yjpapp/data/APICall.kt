@@ -21,12 +21,12 @@ object APICall {
                 if (response.isSuccessful && body != null) {
                     ResponseResult.Success(body, "200", "SUCCESS")
                 } else {
-                    ResponseResult.DataError("400", "Fail")
+                    ResponseResult.Error("400", "Fail")
                 }
             } catch (e: HttpException) {
-                ResponseResult.DataError("500", "${e.message}")
+                ResponseResult.Error("500", "${e.message}")
             } catch (e: Throwable) {
-                ResponseResult.DataError("501", "${e.message}")
+                ResponseResult.Error("501", "${e.message}")
             }
         }
     }
