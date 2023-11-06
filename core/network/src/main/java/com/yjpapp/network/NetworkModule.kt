@@ -1,5 +1,6 @@
 package com.yjpapp.network
 
+import com.yjpapp.network.datasource.DataPortalDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,5 +38,5 @@ object NetworkModule {
     fun providesJPNetworkDataSource(
         networkJson: Json,
         okhttpCallFactory: Call.Factory,
-    ): SPNetworkDataSource = RetrofitSPNetwork(networkJson, okhttpCallFactory)
+    ): DataPortalDataSource = RetrofitDataPortal(networkJson, okhttpCallFactory)
 }

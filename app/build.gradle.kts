@@ -10,12 +10,12 @@ plugins {
 
 android {
     namespace = "com.yjpapp.stockportfolio"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.yjpapp.stockportfolio"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 41
         versionName = "2.2.0"
 
@@ -54,9 +54,10 @@ android {
 }
 
 dependencies {
+    //module
     implementation(project(":core:network"))
     implementation(project(":core:data"))
-
+    implementation(project(":core:database"))
     //Test Code
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.espresso.core)
@@ -99,19 +100,12 @@ dependencies {
     //Navigation
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.supported.picker.dialogs)
-    //network
-    implementation(libs.okhttp)
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.kotlin.serialization)
-    implementation(libs.okhttp.logging)
-    implementation(libs.kotlinx.serialization.json)
     //Hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     kapt(libs.androidx.hilt.compiler)
-    //Room
-    implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.room.compiler)
-    ksp(libs.room.compiler)
+    implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.kotlinx.serialization.json)
+
 }

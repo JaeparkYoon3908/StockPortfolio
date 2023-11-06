@@ -3,10 +3,11 @@ package com.yjpapp.data.repository
 import androidx.compose.runtime.toMutableStateList
 import com.yjpapp.data.APICall
 import com.yjpapp.data.datasource.MyStockRoomDataSource
-import com.yjpapp.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.database.mystock.MyStockEntity
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqStockPriceInfo
-import com.yjpapp.network.SPNetworkDataSource
+import com.yjpapp.network.datasource.DataPortalDataSource
+import com.yjpapp.network.model.RespStockPriceInfo
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -14,14 +15,14 @@ interface MyStockRepository {
     suspend fun addMyStock(myStockEntity: MyStockEntity)
     suspend fun updateMyStock(myStockEntity: MyStockEntity): Boolean
     suspend fun deleteMyStock(myStockEntity: MyStockEntity)
-    suspend fun getAllMyStock(): MutableList<MyStockEntity>
-    suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<com.yjpapp.network.model.RespStockPriceInfo>
+    suspend fun getAllMyStock(): List<MyStockEntity>
+    suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<RespStockPriceInfo>
     suspend fun refreshMyStock(): Boolean
 }
 
 class MyStockRepositoryImpl @Inject constructor(
     private val myStockLocalDataSource: MyStockRoomDataSource,
-    private val stockInfoDataSource: SPNetworkDataSource
+    private val stockInfoDataSource: DataPortalDataSource
 ) : MyStockRepository {
 
     override suspend fun addMyStock(myStockEntity: MyStockEntity) =
@@ -51,29 +52,25 @@ class MyStockRepositoryImpl @Inject constructor(
         }
 
     override suspend fun refreshMyStock(): Boolean {
-        getAllMyStock().toMutableStateList().forEach {
+        getAllMyStock().toMutableStateList().forEach { myStockEntity ->
             val reqStockPriceInfo = ReqStockPriceInfo(
                 numOfRows = "20",
                 pageNo = "1",
-                isinCd = it.subjectCode,
-                likeItmsNm = it.subjectName
+                isinCd = myStockEntity.subjectCode,
+                likeItmsNm = myStockEntity.subjectName
             )
             val result = getStockPriceInfo(reqStockPriceInfo)
             if (result.isSuccessful && result.data != null) {
                 val item = result.data.response.body.items.item
-                if (item.isNotEmpty()) {
+                val resultItem = item.find { it.isinCd == myStockEntity.subjectCode }
+
+                if (resultItem != null) {
                     if (!updateMyStock(
-                            MyStockEntity(
-                                id = it.id,
-                                subjectName = item.first().itmsNm,
-                                subjectCode = item.first().isinCd,
-                                purchaseDate = it.purchaseDate,
-                                purchasePrice = it.purchasePrice,
-                                purchaseCount = it.purchaseCount,
-                                currentPrice = getNumInsertComma(item.first().clpr),
-                                dayToDayPrice = item.first().vs,
-                                dayToDayPercent = item.first().fltRt,
-                                basDt = item.first().basDt,
+                            myStockEntity.copy(
+                                currentPrice = getNumInsertComma(resultItem.clpr),
+                                dayToDayPrice = resultItem.vs,
+                                dayToDayPercent = resultItem.fltRt,
+                                basDt = resultItem.basDt
                             )
                         )
                     ) {

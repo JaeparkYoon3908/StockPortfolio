@@ -1,16 +1,23 @@
 package com.yjpapp.stockportfolio.ui.search
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqStockPriceInfo
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.network.model.StockPriceInfo
+import com.yjpapp.stockportfolio.model.ErrorUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class CompanySearchUiState(
+    val searchResult: List<StockPriceInfo> = listOf(),
+    val isLoading: Boolean = false,
+    val errorUiState: ErrorUiState = ErrorUiState()
+)
 /**
  * @author Yoon jaepark
  * @since 2021.11
@@ -19,25 +26,37 @@ import javax.inject.Inject
 class CompanySearchViewModel @Inject constructor(
     private val myStockRepository: MyStockRepository
 ): ViewModel() {
-    var searchResult = mutableStateListOf<StockPriceInfo>()
-        private set
-    var isLoading = MutableStateFlow(false)
-        private set
-    fun requestSearchList(keyWord: String) {
-        searchResult.clear()
-        isLoading.value = true
-        viewModelScope.launch {
-            val reqStockPriceInfo = ReqStockPriceInfo(
-                numOfRows = "50",
-                pageNo = "1",
-                likeItmsNm = keyWord
-            )
-            val result = myStockRepository.getStockPriceInfo(reqStockPriceInfo)
-            if (result.isSuccessful && result.data != null) {
+    var uiState = MutableStateFlow(CompanySearchUiState(isLoading = false))
+    fun requestSearchList(keyWord: String) = viewModelScope.launch {
+        uiState.update { it.copy(searchResult = listOf(), isLoading = true) }
+        val reqStockPriceInfo = ReqStockPriceInfo(
+            numOfRows = "50",
+            pageNo = "1",
+            likeItmsNm = keyWord
+        )
+
+        when (val result = myStockRepository.getStockPriceInfo(reqStockPriceInfo)) {
+            is ResponseResult.Success -> {
                 val companyList = result.data?.response?.body?.items?.item?.distinctBy { it.itmsNm }?: listOf()
-                searchResult.addAll(companyList)
+                uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        searchResult = companyList
+                    )
+                }
             }
-            isLoading.value = false
+            is ResponseResult.Error -> {
+                uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorUiState = ErrorUiState(
+                            isError = true,
+                            errorCode = result.resultCode,
+                            errorMessage = result.resultMessage,
+                        )
+                    )
+                }
+            }
         }
     }
     //종목 코드 6자리 만들기

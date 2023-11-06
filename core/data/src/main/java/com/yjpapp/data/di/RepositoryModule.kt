@@ -4,9 +4,9 @@ import com.yjpapp.data.datasource.MyStockRoomDataSource
 import com.yjpapp.data.datasource.NewsDataSource
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.data.repository.MyStockRepositoryImpl
-import com.yjpapp.network.SPNetworkDataSource
-import com.yjpapp.stockportfolio.data.repository.NewsRepository
-import com.yjpapp.stockportfolio.data.repository.NewsRepositoryImpl
+import com.yjpapp.network.datasource.DataPortalDataSource
+import com.yjpapp.data.repository.NewsRepository
+import com.yjpapp.data.repository.NewsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +20,7 @@ class RepositoryModule {
     @Singleton
     fun provideMyStockRepository(
         myStockLocalDataSource: MyStockRoomDataSource,
-        stockInfoDataSource: SPNetworkDataSource,
+        stockInfoDataSource: DataPortalDataSource,
     ): MyStockRepository = MyStockRepositoryImpl(myStockLocalDataSource, stockInfoDataSource)
 
     @Provides
