@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,10 +23,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.yjpapp.stockportfolio.model.TabData
 import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.componant.TabWidget
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
 
+val newsMenuList = listOf(TabData.MKNews, TabData.HanKyungNews, TabData.FinancialNews)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewsScreen(
@@ -33,8 +36,8 @@ fun NewsScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val pagerState = rememberPagerState(pageCount = { viewModel.newsMenuList.size })
-    val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
+    val pagerState = rememberPagerState(pageCount = { newsMenuList.size })
+    val newsUiState by viewModel.newsUiState.collectAsStateWithLifecycle()
     Column(modifier = modifier) {
         TabWidget(
             modifier = Modifier
@@ -42,19 +45,19 @@ fun NewsScreen(
                 .semantics {
                     contentDescription = "NewsTab"
                 },
-            menus = viewModel.newsMenuList,
+            menus = newsMenuList,
             pagerState = pagerState,
         ) {
             HorizontalPager(
                 state = pagerState,
             ) { page ->
                 val newsList = when(page) {
-                    0 -> viewModel.newsUIData.mKNewsList
-                    1 -> viewModel.newsUIData.hanKyungNewsList
-                    2 -> viewModel.newsUIData.financialNewsList
-                    else -> viewModel.newsUIData.mKNewsList
+                    0 -> newsUiState.mKNewsList
+                    1 -> newsUiState.hanKyungNewsList
+                    2 -> newsUiState.financialNewsList
+                    else -> newsUiState.mKNewsList
                 }
-                if (isLoading.value) {
+                if (newsUiState.isLoading) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center

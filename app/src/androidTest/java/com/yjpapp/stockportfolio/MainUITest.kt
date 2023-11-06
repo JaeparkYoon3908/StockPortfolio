@@ -6,7 +6,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yjpapp.data.repository.MyStockRepositoryImpl
-import com.yjpapp.stockportfolio.data.repository.NewsRepositoryImpl
+import com.yjpapp.data.repository.NewsRepositoryImpl
 import com.yjpapp.stockportfolio.ui.main.MainScreen
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
 import com.yjpapp.stockportfolio.ui.main.NavItem
@@ -19,7 +19,6 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 class MainUITest {
-    //TODO ViewModelTest에서 중복 되는 코드에 대한 커스텀 룰 있는지 확인
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
     @get:Rule

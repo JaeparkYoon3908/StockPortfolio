@@ -2,15 +2,13 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("kotlinx-serialization")
     id("kotlin-kapt")
     alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.yjpapp.data"
+    namespace = "com.yjpapp.database"
     compileSdk = libs.versions.compileSdk.get().toInt()
-
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
 
@@ -37,19 +35,20 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:network"))
-    implementation(project(":core:database"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.google.material)
-    testImplementation(libs.junit.junit)
-    androidTestImplementation(libs.junit)
+    //Test Code
+    androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.espresso.core)
-    //network
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.kotlin.serialization)
-    implementation(libs.kotlinx.serialization.json)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.compose.ui)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestAnnotationProcessor(libs.hilt.android.compiler)
+    testImplementation(libs.junit)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    kaptAndroidTest(libs.hilt.android.compiler)
+
     //Hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.android)

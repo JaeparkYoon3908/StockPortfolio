@@ -84,6 +84,7 @@
     <string name="MyStockFragment_Sell_Count_Hint">총 매도수량</string>
     <string name="MyStockFragment_Msg_MyStock_Add_Success">추가 완료 됐습니다.</string>
     <string name="MyStockFragment_Msg_MyStock_Modify_Success">수정 완료 됐습니다.</string>
+    <string name="MyStockFragment_Msg_MyStock_Delete_Success">삭제 완료 됐습니다.</string>
     <string name="MyStockFragment_Msg_Current_Price_Refresh_Success">새로고침에 성공했습니다.</string>
     <string name="MyStockFragment_Msg_Current_Price_Refresh_Error">새로운 데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</string>
     <string name="MyStockFragment_Msg_Current_Price_Refresh_Warning">나의 보유 주식을 추가해주세요.</string>

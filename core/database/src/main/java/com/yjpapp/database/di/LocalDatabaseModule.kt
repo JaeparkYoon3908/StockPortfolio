@@ -1,13 +1,12 @@
-package com.yjpapp.data.di
+package com.yjpapp.database.di
 
 import android.app.Activity
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.yjpapp.data.datasource.PreferenceDataSource
-import com.yjpapp.data.localdb.room.MyRoomDatabase
-import com.yjpapp.data.localdb.room.mystock.MyStockDao
+import com.yjpapp.database.mystock.MyStockDao
+import com.yjpapp.database.MyRoomDatabase
+import com.yjpapp.database.PreferenceDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +27,7 @@ class LocalDatabaseModule {
     ): MyRoomDatabase =
          Room.databaseBuilder(
             context.applicationContext, MyRoomDatabase::class.java,
-            MyRoomDatabase.DB_NAME
+             MyRoomDatabase.DB_NAME
         )
             .addCallback(object : RoomDatabase.Callback() {
             })
