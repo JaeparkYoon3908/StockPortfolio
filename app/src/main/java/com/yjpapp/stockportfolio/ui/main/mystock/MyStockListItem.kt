@@ -30,9 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yjpapp.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.database.mystock.MyStockEntity
 import com.yjpapp.network.model.StockPriceInfo
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.ui.common.StockConfig
@@ -85,22 +86,20 @@ fun MyStockListItemWidget(
             }
             showMyStockPurchaseInputDialog = false
             if (isComplete) {
-                coroutineScope.launch {
-                    viewModel.updateMyStock(
-                        MyStockEntity(
-                            id = myStockEntity.id,
-                            subjectName = dialogData.stockPriceInfo.itmsNm,
-                            subjectCode = dialogData.stockPriceInfo.isinCd,
-                            purchaseDate = dialogData.purchaseDate,
-                            purchasePrice = dialogData.purchasePrice,
-                            purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
-                            currentPrice = myStockEntity.currentPrice,
-                            dayToDayPrice = myStockEntity.dayToDayPrice,
-                            dayToDayPercent = myStockEntity.dayToDayPercent,
-                            basDt = myStockEntity.basDt
-                        )
+                viewModel.updateMyStock(
+                    MyStockEntity(
+                        id = myStockEntity.id,
+                        subjectName = dialogData.stockPriceInfo.itmsNm,
+                        subjectCode = dialogData.stockPriceInfo.isinCd,
+                        purchaseDate = dialogData.purchaseDate,
+                        purchasePrice = dialogData.purchasePrice,
+                        purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
+                        currentPrice = myStockEntity.currentPrice,
+                        dayToDayPrice = myStockEntity.dayToDayPrice,
+                        dayToDayPercent = myStockEntity.dayToDayPercent,
+                        basDt = myStockEntity.basDt
                     )
-                }
+                )
             }
         }
     }
@@ -214,7 +213,7 @@ fun MyStockListItemWidget(
                 ) {
                     Row(
                         modifier = Modifier
-                            .weight(0.6f),
+                            .weight(0.5f),
                         horizontalArrangement = Arrangement.Start
                     ) {
                         //평균단가
@@ -229,13 +228,14 @@ fun MyStockListItemWidget(
                             text = StockUtils.getPriceNum(myStockEntity.purchasePrice),
                             fontSize = 14.sp,
                             maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             color = Color_222222,
                             modifier = Modifier
                                 .padding(start = 10.dp)
                         )
                     }
                     Row(
-                        modifier = Modifier.weight(0.4f),
+                        modifier = Modifier.weight(0.5f),
                         horizontalArrangement = Arrangement.End
                     ) {
                         //매수일

@@ -1,7 +1,7 @@
 package com.yjpapp.data.datasource
 
-import com.yjpapp.data.localdb.room.mystock.MyStockEntity
-import com.yjpapp.data.localdb.room.mystock.MyStockDao
+import com.yjpapp.database.mystock.MyStockEntity
+import com.yjpapp.database.mystock.MyStockDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -42,13 +42,13 @@ class MyStockRoomDataSource @Inject constructor(
         }
     }
 
-    suspend fun requestGetAllMyStock(): MutableList<MyStockEntity> =
+    suspend fun requestGetAllMyStock(): List<MyStockEntity> =
         withContext(Dispatchers.IO) {
             try {
                 myStockDao.getAll()
             } catch (e: Exception) {
                 e.stackTrace
-                mutableListOf()
+                listOf()
             }
         }
 }

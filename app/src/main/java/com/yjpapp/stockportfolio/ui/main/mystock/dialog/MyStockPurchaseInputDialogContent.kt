@@ -74,7 +74,6 @@ fun MyStockPurchaseInputDialogContent(
     var purchaseDateText by remember { mutableStateOf(dialogData.purchaseDate) }
     var purchasePriceText by remember { mutableStateOf(TextFieldValue(text = dialogData.purchasePrice)) }
     var purchaseCountText by remember { mutableStateOf(dialogData.purchaseCount) }
-    val inputPurchaseInputDialogData = MyStockPurchaseInputDialogData()
     val stockSearchActivityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = { result ->

@@ -1,7 +1,6 @@
-package com.yjpapp.data.localdb.room.mystock
+package com.yjpapp.database.mystock
 
 import androidx.room.*
-import com.yjpapp.data.localdb.room.mystock.MyStockEntity
 
 @Dao
 interface MyStockDao {
@@ -21,7 +20,7 @@ interface MyStockDao {
     //Query
     @Query("SELECT * FROM my_stock")
     @Throws(Exception::class)
-    fun getAll(): MutableList<MyStockEntity>
+    fun getAll(): List<MyStockEntity>
 
     @Query("SELECT * FROM my_stock WHERE subjectName = :subjectName")
     @Throws(Exception::class)

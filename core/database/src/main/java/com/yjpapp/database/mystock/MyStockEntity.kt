@@ -1,4 +1,4 @@
-package com.yjpapp.data.localdb.room.mystock
+package com.yjpapp.database.mystock
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

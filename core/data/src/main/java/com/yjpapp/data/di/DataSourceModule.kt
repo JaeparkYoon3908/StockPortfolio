@@ -2,7 +2,7 @@ package com.yjpapp.data.di
 
 import com.yjpapp.data.datasource.MyStockRoomDataSource
 import com.yjpapp.data.datasource.NewsDataSource
-import com.yjpapp.data.localdb.room.mystock.MyStockDao
+import com.yjpapp.database.mystock.MyStockDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

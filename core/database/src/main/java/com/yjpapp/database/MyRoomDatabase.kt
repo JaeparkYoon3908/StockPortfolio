@@ -2,8 +2,8 @@ package com.yjpapp.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.yjpapp.data.localdb.room.mystock.MyStockDao
-import com.yjpapp.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.database.mystock.MyStockDao
+import com.yjpapp.database.mystock.MyStockEntity
 
 @Database(
     entities = [MyStockEntity::class],

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.yjpapp.data.localdb.room.mystock.MyStockDao
+import com.yjpapp.database.mystock.MyStockDao
 import com.yjpapp.database.MyRoomDatabase
 import com.yjpapp.database.PreferenceDataSource
 import dagger.Module
