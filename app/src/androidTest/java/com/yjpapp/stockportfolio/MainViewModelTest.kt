@@ -2,7 +2,7 @@ package com.yjpapp.stockportfolio
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
-import com.yjpapp.data.localdb.room.mystock.MyStockEntity
+import com.yjpapp.database.mystock.MyStockEntity
 import com.yjpapp.data.repository.MyStockRepositoryImpl
 import com.yjpapp.data.repository.NewsRepositoryImpl
 import com.yjpapp.stockportfolio.ui.main.MainViewModel

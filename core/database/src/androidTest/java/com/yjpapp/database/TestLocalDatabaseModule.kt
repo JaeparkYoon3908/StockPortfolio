@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.yjpapp.data.localdb.room.mystock.MyStockDao
+import com.yjpapp.database.mystock.MyStockDao
 import com.yjpapp.database.di.LocalDatabaseModule
 import dagger.Module
 import dagger.Provides
