@@ -1,10 +1,12 @@
 package com.yjpapp.stockportfolio.ui.main
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.database.mystock.MyStockEntity
 import com.yjpapp.data.model.NewsData
+import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.data.repository.NewsRepository
@@ -35,11 +37,11 @@ data class MyStockUiState(
     val isLoading: Boolean = false,
 )
 data class NewsUiState(
-    val mKNewsList: MutableList<NewsData> = mutableListOf(),
-    val hanKyungNewsList: MutableList<NewsData> = mutableListOf(),
-    val financialNewsList: MutableList<NewsData> = mutableListOf(),
+    val newsList: HashMap<String, List<NewsData>> = hashMapOf(),
     val isLoading: Boolean = false
 )
+
+
 /**
  * MainActivity Global ViewModel
  */
@@ -142,8 +144,7 @@ class MainViewModel @Inject constructor(
             mTotalEvaluationAmount += currentPrice * purchaseCount
         }
         mTotalGainPrice = mTotalEvaluationAmount - mTotalPurchasePrice
-        mTotalGainPricePercent =
-            StockUtils.calculateGainPercent(mTotalPurchasePrice, mTotalEvaluationAmount)
+        mTotalGainPricePercent = StockUtils.calculateGainPercent(mTotalPurchasePrice, mTotalEvaluationAmount)
         _myStockUiState.update {
             it.copy(
                 totalPurchasePrice = mTotalPurchasePrice.toString(),
@@ -152,10 +153,6 @@ class MainViewModel @Inject constructor(
                 totalGainPricePercent = StockUtils.getRoundsPercentNumber(mTotalGainPricePercent),
             )
         }
-//        totalPurchasePrice.update { mTotalPurchasePrice.toString() }
-//        totalEvaluationAmount.update { mTotalEvaluationAmount.toString() }
-//        totalGainPrice.update { mTotalGainPrice.toString() }
-//        totalGainPricePercent.update { StockUtils.getRoundsPercentNumber(mTotalGainPricePercent) }
     }
 
     fun refreshStockCurrentPriceInfo() = viewModelScope.launch {
@@ -170,33 +167,21 @@ class MainViewModel @Inject constructor(
     /**
      * 경제 뉴스
      */
-    fun getNewsList() = CoroutineScope(Dispatchers.IO).launch {
+    fun getNewsList() = viewModelScope.launch {
         _newsUiState.update { it.copy(isLoading = true) }
         newsMenuList.forEach { tabData ->
-            when (tabData) {
-                TabData.MKNews -> {
+            when (val result = newsRepository.getNewsList(tabData.url)) {
+                is ResponseResult.Success -> {
+                    val newsList = result.data?: listOf()
                     _newsUiState.update {
                         it.copy(
-                            mKNewsList = newsRepository.getNewsList(tabData.url),
+                            newsList = it.newsList.apply { this[tabData.route] = newsList },
                             isLoading = false
                         )
                     }
                 }
-                TabData.HanKyungNews -> {
-                    _newsUiState.update {
-                        it.copy(
-                            hanKyungNewsList = newsRepository.getNewsList(tabData.url),
-                            isLoading = false
-                        )
-                    }
-                }
-                TabData.FinancialNews -> {
-                    _newsUiState.update {
-                        it.copy(
-                            financialNewsList = newsRepository.getNewsList(tabData.url),
-                            isLoading = false
-                        )
-                    }
+                is ResponseResult.Error -> {
+
                 }
             }
         }
