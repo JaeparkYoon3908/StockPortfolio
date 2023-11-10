@@ -51,12 +51,7 @@ fun NewsScreen(
             HorizontalPager(
                 state = pagerState,
             ) { page ->
-                val newsList = when(page) {
-                    0 -> newsUiState.mKNewsList
-                    1 -> newsUiState.hanKyungNewsList
-                    2 -> newsUiState.financialNewsList
-                    else -> newsUiState.mKNewsList
-                }
+                val newsList = newsUiState.newsList[newsMenuList[page].route]?: listOf()
                 if (newsUiState.isLoading) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
