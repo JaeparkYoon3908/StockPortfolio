@@ -109,7 +109,7 @@ object StockUtils {
     }
 
     //수익률 계산
-    fun calculateGainPercent(purchasePrice: Double, sellPrice: Double): Double{
+    fun calculateGainPercent(purchasePrice: Double, sellPrice: Double): Double {
 //        val purchasePriceNum = getNumDeletedComma(purchasePrice)
 //        val sellPriceNum = getNumDeletedComma(sellPrice)
         var result = (((sellPrice / purchasePrice) -1) * 100)
