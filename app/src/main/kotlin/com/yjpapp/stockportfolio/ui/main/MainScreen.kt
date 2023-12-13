@@ -37,7 +37,6 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-
     val navController = rememberNavController()
     val navItemList = remember { mutableStateListOf(NavItem.MyStock, NavItem.News) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
