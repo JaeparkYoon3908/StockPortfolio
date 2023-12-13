@@ -133,12 +133,13 @@ object StockUtils {
         return try {
             val dateSplit = date.split(" ", ",").filter { it != "" && it != "09:00" }
             if (dateSplit.size >= 5) {
-                if (dayOfMonthHashMap[dateSplit[2]] == null ||
-                    dayOfWeeksKoreaHashMap[dateSplit[0]] == null) {
+                if (dayOfMonthHashMap[dateSplit[2]] == null || dayOfWeeksKoreaHashMap[dateSplit[0]] == null) {
                     return date
                 }
                 "${dateSplit[3]}.${dayOfMonthHashMap[dateSplit[2]]}.${dateSplit[1]} ${dayOfWeeksKoreaHashMap[dateSplit[0]]} ${dateSplit[4]}"
-            } else date
+            } else {
+                date
+            }
         } catch (e: Exception) {
             date
         }
@@ -149,6 +150,7 @@ val dayOfWeeksKoreaHashMap = hashMapOf(
     "Mon" to "월요일",
     "Tue" to "화요일",
     "Wen" to "수요일",
+    "Wed" to "수요일",
     "Thu" to "목요일",
     "Fri" to "금요일",
     "Sat" to "토요일",
