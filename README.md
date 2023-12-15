@@ -1,9 +1,10 @@
 ### 안드로이드 기술 향상을 위한 사이드 프로젝트입니다.
 
 ### 1. 어플리케이션 스크린샷
-![Screenshot_20231215_164720_Google Play Store](https://github.com/YoonJaePark3908/StockPortfolio/assets/54883589/c8fcbb6c-adda-4f75-bdd6-0fd8809727c7)
-![Screenshot_20231215_164655](https://github.com/YoonJaePark3908/StockPortfolio/assets/54883589/c8f63c07-50e3-40fd-babc-9350d93e6b3c)
-![Screenshot_20231215_164635](https://github.com/YoonJaePark3908/StockPortfolio/assets/54883589/b3459534-17ae-4594-9906-12637c2f7445)
+
+![Screenshot_20231215_164720_Google Play Store](https://github.com/YoonJaePark3908/StockPortfolio/assets/54883589/9094c0a6-0e14-4b9d-a0e5-6db74b0ebe99)
+![Screenshot_20231215_164635](https://github.com/YoonJaePark3908/StockPortfolio/assets/54883589/ac91ab9e-7605-4eb3-89b4-312a9b35df50)
+![Screenshot_20231215_164655](https://github.com/YoonJaePark3908/StockPortfolio/assets/54883589/56fe764b-96cb-46a5-a154-442d0f236b58)
 
 ### 2. 기능 소개
 - 수익 노트
