@@ -2,9 +2,11 @@
 This repository is my side project for skill up android app develop.
 ### 1. Screenshot
 
-![Screenshot_20231215_164720_Google Play Store](https://github.com/YoonJaePark3908/StockPortfolio/assets/54883589/9094c0a6-0e14-4b9d-a0e5-6db74b0ebe99)
-![Screenshot_20231215_164635](https://github.com/YoonJaePark3908/StockPortfolio/assets/54883589/ac91ab9e-7605-4eb3-89b4-312a9b35df50)
-![Screenshot_20231215_164655](https://github.com/YoonJaePark3908/StockPortfolio/assets/54883589/56fe764b-96cb-46a5-a154-442d0f236b58)
+<p>
+    <img src="./images/Screensho_Google Play Store.jpg" width="260">
+    <img src="./images/Screenshot_My Stock.jpg" width="260">
+    <img src="./images/Screenshot_News.jpg" width="260">
+</p>
 
 ### 2. App feature introduce
 - Income note
