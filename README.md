@@ -1,7 +1,11 @@
 ### 안드로이드 기술 향상을 위한 사이드 프로젝트입니다.
 
 ### 1. 어플리케이션 스크린샷
-![store](https://user-images.githubusercontent.com/54883589/223433943-906fb793-b485-4079-925d-0b2aae75aab3.jpg)
+<p align="center">
+    <img src="./images/Screensho_Google Play Store.jpg" width="260">
+    <img src="./images/Screenshot_My Stock.jpg" width="260">
+    <img src="./images/Screenshot_News.jpg" width="260">
+</p>
 
 ### 2. 기능 소개
 - 수익 노트
