@@ -1,16 +1,19 @@
 package com.yjpapp.stockportfolio.ui.common.dialog
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -29,10 +32,13 @@ fun CommonTwoBtnWidget(
     noticeText: String = "",
     leftBtnText: String = stringResource(id = R.string.Common_Cancel),
     rightBtnText: String = stringResource(id = R.string.Common_Complete),
-    onLeftBtnClickListener: () -> Unit,
-    onRightBtnClickListener: () -> Unit,
+    onLeftBtnClickListener: () -> Unit = {},
+    onRightBtnClickListener: () -> Unit = {},
+    onDismissListener: () -> Unit = {},
 ) {
-    Dialog(onDismissRequest = {  }) {
+    Dialog(
+        onDismissRequest = { onDismissListener() }
+    ) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -41,7 +47,18 @@ fun CommonTwoBtnWidget(
             color = Color.White
         ) {
             Column {
-                Text(text = noticeText)
+                Box(
+                    modifier = Modifier
+                        .height(150.dp)
+                        .padding(start = 20.dp, end = 20.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = noticeText,
+                        fontSize = 14.sp,
+                        color = Color_222222
+                    )
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -50,7 +67,8 @@ fun CommonTwoBtnWidget(
                             .weight(0.5f)
                             .height(50.dp)
                             .background(color = Color_F1F1F1),
-                        onClick = {  }) {
+                        onClick = { onLeftBtnClickListener() }
+                    ) {
                         androidx.compose.material.Text(
                             text = leftBtnText,
                             color = Color_222222,
@@ -62,9 +80,7 @@ fun CommonTwoBtnWidget(
                             .weight(0.5f)
                             .height(50.dp)
                             .background(color = Color_E52B4E),
-                        onClick = {
-
-                        }
+                        onClick = { onRightBtnClickListener() }
                     ) {
                         Text(
                             text = rightBtnText,

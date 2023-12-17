@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.yjpapp.stockportfolio.R
@@ -104,17 +103,6 @@ class CommonDatePickerDialog(
 
     private fun getDisplayedDayValues(): Array<String> {
         val result = mutableListOf<String>()
-//        val month = if (selectedMonth < 10) {
-//            "0$selectedMonth"
-//        } else {
-//            "$selectedMonth"
-//        }
-//        val date = "$selectedYear/$month/01"
-//        val dateFormat = SimpleDateFormat("yyyy/MM/dd")
-//        val convertedDate: Date = dateFormat.parse(date)
-//        val c = Calendar.getInstance()
-//        c.time = convertedDate
-//        val lastMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH)
         for (i in 1..31) {
             if (i < 10) {
                 result.add("0$i")
@@ -123,9 +111,5 @@ class CommonDatePickerDialog(
             }
         }
         return result.toTypedArray()
-    }
-
-    interface OnClickListener {
-        fun onClick(view: View, dialog: CommonTwoBtnDialog)
     }
 }
