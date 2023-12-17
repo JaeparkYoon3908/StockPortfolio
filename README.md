@@ -1,7 +1,7 @@
 ### 안드로이드 기술 향상을 위한 사이드 프로젝트입니다.
 
 ### 1. 어플리케이션 스크린샷
-<p align="center">
+<p>
     <img src="./images/Screensho_Google Play Store.jpg" width="260">
     <img src="./images/Screenshot_My Stock.jpg" width="260">
     <img src="./images/Screenshot_News.jpg" width="260">
