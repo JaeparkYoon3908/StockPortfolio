@@ -43,7 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.yjpapp.network.model.StockPriceInfo
+import com.yjpapp.data.model.response.StockPriceData
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.extension.getSerializableExtraData
 import com.yjpapp.stockportfolio.ui.common.StockConfig
@@ -57,11 +57,11 @@ import com.yjpapp.stockportfolio.ui.search.CompanySearchActivity
 import com.yjpapp.stockportfolio.util.StockUtils
 
 data class MyStockPurchaseInputDialogData(
-    var id: Int = -1,
-    var stockPriceInfo: StockPriceInfo = StockPriceInfo(),
-    var purchaseDate: String = "",
-    var purchasePrice: String = "",
-    var purchaseCount: String = "",
+    val id: Int = -1,
+    val stockPriceInfo: StockPriceData = StockPriceData(),
+    val purchaseDate: String = "",
+    val purchasePrice: String = "",
+    val purchaseCount: String = "",
 )
 
 @Composable
@@ -78,8 +78,8 @@ fun MyStockPurchaseInputDialogContent(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val stockPriceInfo = result.data?.getSerializableExtraData("stockPriceInfo", StockPriceInfo::class.java)
-                if (stockPriceInfo is StockPriceInfo) {
+                val stockPriceInfo = result.data?.getSerializableExtraData("stockPriceInfo", StockPriceData::class.java)
+                if (stockPriceInfo is StockPriceData) {
                     rememberStockPriceInfo = stockPriceInfo
                 }
             }
@@ -114,7 +114,7 @@ fun MyStockPurchaseInputDialogContent(
                         BasicTextField(
                             modifier = Modifier.padding(start = 10.dp),
                             value = rememberStockPriceInfo.itmsNm,
-                            onValueChange = { rememberStockPriceInfo.itmsNm = it },
+                            onValueChange = { },
                             singleLine = true,
                             readOnly = true,
                             enabled = false,

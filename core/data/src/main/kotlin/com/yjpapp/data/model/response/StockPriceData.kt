@@ -1,39 +1,8 @@
-package com.yjpapp.network.model
+package com.yjpapp.data.model.response
 
-import kotlinx.serialization.Serializable
+import java.io.Serializable
 
-@Serializable
-data class RespStockPriceInfo(
-    var response: Response = Response()
-) {
-    @Serializable
-    data class Response(
-        var header: Header = Header(),
-        var body: Body = Body()
-    ) {
-        @Serializable
-        data class Header(
-            var resultCode: String = "",
-            var resultMsg: String = ""
-        )
-
-        @Serializable
-        data class Body(
-            var numOfRows: Int = 0,
-            var pageNo: Int = 0,
-            var totalCount: Int = 0,
-            var items: Item = Item()
-        ) {
-            @Serializable
-            data class Item(
-                var item: List<StockPriceInfo> = listOf()
-            )
-        }
-    }
-}
-
-@Serializable
-data class StockPriceInfo(
+data class StockPriceData(
     val basDt: String = "", //기준 일자
     val srtnCd: String = "", //단축코드 : 종목 코드보다 짧으면서 유일성이 보장되는 코드(6자리)
     val isinCd: String = "", //ISIN 코드 : 국제 채권 식별 번호. 유가증권(채권)의 국제인증 고유번호
@@ -49,4 +18,4 @@ data class StockPriceInfo(
     val trPrc: String = "", //거래대금
     val lstgStCnt: String = "", //상장 주식수
     val mrktTotAmt: String = "" // 시가총액
-)
+): Serializable

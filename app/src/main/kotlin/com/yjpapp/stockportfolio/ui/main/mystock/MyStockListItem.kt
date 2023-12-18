@@ -33,8 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yjpapp.database.mystock.MyStockEntity
-import com.yjpapp.network.model.StockPriceInfo
+import com.yjpapp.data.model.MyStockData
+import com.yjpapp.data.model.response.StockPriceData
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.ui.common.StockConfig
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
@@ -62,7 +62,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MyStockListItemWidget(
     viewModel: MainViewModel,
-    myStockEntity: MyStockEntity
+    myStockData: MyStockData
 ) {
     val revealSwipeState = rememberRevealState()
     val coroutineScope = rememberCoroutineScope()
@@ -71,14 +71,14 @@ fun MyStockListItemWidget(
     if (showMyStockPurchaseInputDialog) {
         MyStockPurchaseInputDialogContent(
             dialogData = MyStockPurchaseInputDialogData(
-                id = myStockEntity.id,
-                stockPriceInfo = StockPriceInfo(
-                    itmsNm = myStockEntity.subjectName,
-                    srtnCd = myStockEntity.subjectCode
+                id = myStockData.id,
+                stockPriceInfo = StockPriceData(
+                    itmsNm = myStockData.subjectName,
+                    srtnCd = myStockData.subjectCode
                 ),
-                purchaseDate = myStockEntity.purchaseDate,
-                purchasePrice = myStockEntity.purchasePrice,
-                purchaseCount = myStockEntity.purchaseCount.toString()
+                purchaseDate = myStockData.purchaseDate,
+                purchasePrice = myStockData.purchasePrice,
+                purchaseCount = myStockData.purchaseCount.toString()
             )
         ) { dialogData, isComplete ->
             coroutineScope.launch {
@@ -87,17 +87,17 @@ fun MyStockListItemWidget(
             showMyStockPurchaseInputDialog = false
             if (isComplete) {
                 viewModel.updateMyStock(
-                    MyStockEntity(
-                        id = myStockEntity.id,
+                    MyStockData(
+                        id = myStockData.id,
                         subjectName = dialogData.stockPriceInfo.itmsNm,
                         subjectCode = dialogData.stockPriceInfo.isinCd,
                         purchaseDate = dialogData.purchaseDate,
                         purchasePrice = dialogData.purchasePrice,
                         purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
-                        currentPrice = myStockEntity.currentPrice,
-                        dayToDayPrice = myStockEntity.dayToDayPrice,
-                        dayToDayPercent = myStockEntity.dayToDayPercent,
-                        basDt = myStockEntity.basDt
+                        currentPrice = myStockData.currentPrice,
+                        dayToDayPrice = myStockData.dayToDayPrice,
+                        dayToDayPercent = myStockData.dayToDayPercent,
+                        basDt = myStockData.basDt
                     )
                 )
             }
@@ -150,7 +150,7 @@ fun MyStockListItemWidget(
                             .clickable {
                                 coroutineScope.launch {
                                     viewModel.deleteMyStock(
-                                        myStockEntity = myStockEntity
+                                        myStockData = myStockData
                                     )
                                 }
                                 coroutineScope.launch {
@@ -179,10 +179,10 @@ fun MyStockListItemWidget(
             backgroundColor = Color.White
         ) {
             val purchasePriceNumber =
-                StockUtils.getNumDeletedComma(myStockEntity.purchasePrice).toDouble()
+                StockUtils.getNumDeletedComma(myStockData.purchasePrice).toDouble()
             val currentPriceNumber =
-                StockUtils.getNumDeletedComma(myStockEntity.currentPrice).toDouble()
-            val gainPriceNumber = (currentPriceNumber - purchasePriceNumber) * myStockEntity.purchaseCount
+                StockUtils.getNumDeletedComma(myStockData.currentPrice).toDouble()
+            val gainPriceNumber = (currentPriceNumber - purchasePriceNumber) * myStockData.purchaseCount
             Column(
                 modifier = Modifier
 //                    .padding(bottom = 10.dp)
@@ -193,7 +193,7 @@ fun MyStockListItemWidget(
                         .padding(start = 15.dp, end = 15.dp)
                 ) {
                     Text(
-                        text = myStockEntity.subjectName,
+                        text = myStockData.subjectName,
                         fontSize = 16.sp,
                         maxLines = 1,
                         color = Color_222222,
@@ -225,7 +225,7 @@ fun MyStockListItemWidget(
                         )
 
                         Text(
-                            text = StockUtils.getPriceNum(myStockEntity.purchasePrice),
+                            text = StockUtils.getPriceNum(myStockData.purchasePrice),
                             fontSize = 14.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -247,7 +247,7 @@ fun MyStockListItemWidget(
                         )
 
                         Text(
-                            text = myStockEntity.purchaseDate,
+                            text = myStockData.purchaseDate,
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = Color_222222,
@@ -275,7 +275,7 @@ fun MyStockListItemWidget(
                         )
 
                         Text(
-                            text = "${StockConfig.koreaMoneySymbol}${myStockEntity.currentPrice}",
+                            text = "${StockConfig.koreaMoneySymbol}${myStockData.currentPrice}",
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = Color_222222,
@@ -284,12 +284,12 @@ fun MyStockListItemWidget(
                         )
 
                         Text(
-                            text = myStockEntity.dayToDayPrice,
+                            text = myStockData.dayToDayPrice,
                             fontSize = 11.sp,
                             maxLines = 1,
                             color = when {
-                                myStockEntity.dayToDayPrice.toInt() > 0 -> Color_CD4632
-                                myStockEntity.dayToDayPrice.toInt() == 0 -> Color_222222
+                                myStockData.dayToDayPrice.toInt() > 0 -> Color_CD4632
+                                myStockData.dayToDayPrice.toInt() == 0 -> Color_222222
                                 else -> Color_4876C7
                             },
                             modifier = Modifier
@@ -298,11 +298,11 @@ fun MyStockListItemWidget(
                         )
 
                         Text(
-                            text = "(${myStockEntity.dayToDayPercent}%)",
+                            text = "(${myStockData.dayToDayPercent}%)",
                             fontSize = 11.sp,
                             color = when {
-                                myStockEntity.dayToDayPrice.toInt() > 0 -> Color_CD4632
-                                myStockEntity.dayToDayPrice.toInt() == 0 -> Color_222222
+                                myStockData.dayToDayPrice.toInt() > 0 -> Color_CD4632
+                                myStockData.dayToDayPrice.toInt() == 0 -> Color_222222
                                 else -> Color_4876C7
                             },
                         )
@@ -321,7 +321,7 @@ fun MyStockListItemWidget(
                         )
 
                         Text(
-                            text = myStockEntity.purchaseCount.toString(),
+                            text = myStockData.purchaseCount.toString(),
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = colorResource(id = R.color.color_222222),
@@ -359,8 +359,8 @@ fun MyStockListItemWidget(
 
                     //수익 퍼센트
                     val allPurchasePriceNum =
-                        (purchasePriceNumber * myStockEntity.purchaseCount)
-                    val allCurrentPriceNum = (currentPriceNumber * myStockEntity.purchaseCount)
+                        (purchasePriceNumber * myStockData.purchaseCount)
+                    val allCurrentPriceNum = (currentPriceNumber * myStockData.purchaseCount)
                     val gainPercentNum =
                         StockUtils.calculateGainPercent(allPurchasePriceNum, allCurrentPriceNum)
                     Text(
