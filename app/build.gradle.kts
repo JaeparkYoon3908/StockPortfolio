@@ -55,9 +55,7 @@ android {
 
 dependencies {
     //module
-    implementation(project(":core:network"))
     implementation(project(":core:data"))
-    implementation(project(":core:database"))
     //Test Code
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.espresso.core)

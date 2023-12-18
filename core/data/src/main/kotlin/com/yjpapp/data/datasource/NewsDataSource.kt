@@ -42,10 +42,10 @@ class NewsDataSource @Inject constructor(
                         XmlPullParser.TEXT -> { // TAG 안의 문자열. 예시) <title> 과 </title> 사이의 문자열
                             if (isItemTag) {
                                 when (tag) {
-                                    "title" -> newsData.title = parser.text
-                                    "link" -> newsData.link = parser.text
-                                    "description" -> newsData.description = parser.text
-                                    "pubDate" -> newsData.pubDate = parser.text
+                                    "title" -> newsData = newsData.copy(title = parser.text)
+                                    "link" -> newsData = newsData.copy(link = parser.text)
+                                    "description" -> newsData = newsData.copy(description = parser.text)
+                                    "pubDate" -> newsData = newsData.copy(pubDate = parser.text)
                                 }
                             }
                         }
