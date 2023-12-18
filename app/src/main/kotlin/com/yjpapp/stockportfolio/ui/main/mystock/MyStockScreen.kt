@@ -1,15 +1,19 @@
+@file:OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+
 package com.yjpapp.stockportfolio.ui.main.mystock
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -28,13 +32,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.yjpapp.database.mystock.MyStockEntity
+import com.yjpapp.data.model.MyStockData
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.model.TabData
+import com.yjpapp.stockportfolio.ui.common.componant.TabWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_4876C7
 import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
@@ -61,7 +70,7 @@ fun MyStockScreen(
             showMyStockPurchaseInputDialog = false
             if (isComplete) {
                 viewModel.addMyStock(
-                    MyStockEntity(
+                    MyStockData(
                         subjectName = dialogData.stockPriceInfo.itmsNm,
                         subjectCode = dialogData.stockPriceInfo.isinCd,
                         purchaseDate = dialogData.purchaseDate,
@@ -270,4 +279,10 @@ private fun TotalPriceComposable(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    MyStockScreen()
 }

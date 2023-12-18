@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqStockPriceInfo
+import com.yjpapp.data.model.response.StockPriceData
 import com.yjpapp.data.repository.MyStockRepository
-import com.yjpapp.network.model.StockPriceInfo
 import com.yjpapp.stockportfolio.model.ErrorUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CompanySearchUiState(
-    val searchResult: List<StockPriceInfo> = listOf(),
+    val searchResult: List<StockPriceData> = listOf(),
     val isLoading: Boolean = false,
     val errorUiState: ErrorUiState = ErrorUiState()
 )
@@ -37,7 +37,7 @@ class CompanySearchViewModel @Inject constructor(
 
         when (val result = myStockRepository.getStockPriceInfo(reqStockPriceInfo)) {
             is ResponseResult.Success -> {
-                val companyList = result.data?.response?.body?.items?.item?.distinctBy { it.itmsNm }?: listOf()
+                val companyList = result.data?: listOf()
                 uiState.update {
                     it.copy(
                         isLoading = false,

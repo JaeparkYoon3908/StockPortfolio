@@ -3,11 +3,11 @@ package com.yjpapp.stockportfolio.ui.main
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yjpapp.data.model.MyStockData
 import com.yjpapp.data.model.NewsData
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.data.repository.NewsRepository
-import com.yjpapp.database.mystock.MyStockEntity
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.ui.main.news.newsMenuList
 import com.yjpapp.stockportfolio.util.StockUtils
@@ -25,7 +25,7 @@ data class MyStockUiState(
     val totalEvaluationAmount: String = "",
     val totalGainPrice: String = "", //상단 손익
     val totalGainPricePercent: String = "0%", //상단 수익률
-    val myStockInfoList: List<MyStockEntity> = listOf(),
+    val myStockInfoList: List<MyStockData> = listOf(),
     val toastMessage: String = "",
     val isLoading: Boolean = false,
 )
@@ -61,9 +61,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun addMyStock(myStockEntity: MyStockEntity) = viewModelScope.launch {
+    fun addMyStock(myStockData: MyStockData) = viewModelScope.launch {
         try {
-            myStockRepository.addMyStock(myStockEntity)
+            myStockRepository.addMyStock(myStockData)
             _myStockUiState.update {
                 it.copy(
                     myStockInfoList = myStockRepository.getAllMyStock(),
@@ -80,9 +80,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun updateMyStock(myStockEntity: MyStockEntity) = viewModelScope.launch {
+    fun updateMyStock(myStockData: MyStockData) = viewModelScope.launch {
         try {
-            myStockRepository.updateMyStock(myStockEntity)
+            myStockRepository.updateMyStock(myStockData)
             _myStockUiState.update {
                 it.copy(
                     myStockInfoList = myStockRepository.getAllMyStock(),
@@ -101,9 +101,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun deleteMyStock(myStockEntity: MyStockEntity) = viewModelScope.launch {
+    fun deleteMyStock(myStockData: MyStockData) = viewModelScope.launch {
         try {
-            myStockRepository.deleteMyStock((myStockEntity))
+            myStockRepository.deleteMyStock(myStockData)
             _myStockUiState.update {
                 it.copy(
                     myStockInfoList = myStockRepository.getAllMyStock(),

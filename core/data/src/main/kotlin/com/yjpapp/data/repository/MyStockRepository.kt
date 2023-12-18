@@ -1,22 +1,23 @@
 package com.yjpapp.data.repository
 
 import androidx.compose.runtime.toMutableStateList
-import com.yjpapp.data.APICall
 import com.yjpapp.data.datasource.MyStockRoomDataSource
-import com.yjpapp.database.mystock.MyStockEntity
+import com.yjpapp.data.mapper.mapping
+import com.yjpapp.data.model.MyStockData
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqStockPriceInfo
+import com.yjpapp.data.model.response.StockPriceData
 import com.yjpapp.network.datasource.DataPortalDataSource
-import com.yjpapp.network.model.RespStockPriceInfo
+import retrofit2.HttpException
 import java.text.DecimalFormat
 import javax.inject.Inject
 
 interface MyStockRepository {
-    suspend fun addMyStock(myStockEntity: MyStockEntity)
-    suspend fun updateMyStock(myStockEntity: MyStockEntity): Boolean
-    suspend fun deleteMyStock(myStockEntity: MyStockEntity)
-    suspend fun getAllMyStock(): List<MyStockEntity>
-    suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<RespStockPriceInfo>
+    suspend fun addMyStock(myStockData: MyStockData)
+    suspend fun updateMyStock(myStockData: MyStockData): Boolean
+    suspend fun deleteMyStock(myStockData: MyStockData)
+    suspend fun getAllMyStock(): List<MyStockData>
+    suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>>
     suspend fun refreshMyStock(): Boolean
 }
 
@@ -25,31 +26,43 @@ class MyStockRepositoryImpl @Inject constructor(
     private val stockInfoDataSource: DataPortalDataSource
 ) : MyStockRepository {
 
-    override suspend fun addMyStock(myStockEntity: MyStockEntity) =
-        myStockLocalDataSource.requestInsertMyStock(myStockEntity)
+    override suspend fun addMyStock(myStockData: MyStockData) =
+        myStockLocalDataSource.requestInsertMyStock(myStockData.mapping())
 
 
-    override suspend fun updateMyStock(myStockEntity: MyStockEntity) =
-        myStockLocalDataSource.requestUpdateMyStock(myStockEntity)
+    override suspend fun updateMyStock(myStockData: MyStockData) =
+        myStockLocalDataSource.requestUpdateMyStock(myStockData.mapping())
 
 
-    override suspend fun deleteMyStock(myStockEntity: MyStockEntity) =
-        myStockLocalDataSource.requestDeleteMyStock(myStockEntity)
+    override suspend fun deleteMyStock(myStockData: MyStockData) =
+        myStockLocalDataSource.requestDeleteMyStock(myStockData.mapping())
 
 
-    override suspend fun getAllMyStock() = myStockLocalDataSource.requestGetAllMyStock()
+    override suspend fun getAllMyStock() = myStockLocalDataSource.requestGetAllMyStock().map { it.mapping() }
 
-    override suspend fun getStockPriceInfo(request: ReqStockPriceInfo) =
-        HashMap<String, String>().apply {
+    override suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>> {
+        val hashMap = HashMap<String, String>().apply {
             this["serviceKey"] = request.serviceKey
             this["numOfRows"] = request.numOfRows
             this["pageNo"] = request.pageNo
             this["resultType"] = request.resultType
             this["basDt"] = request.basDt
             this["likeItmsNm"] = request.likeItmsNm
-        }.run {
-            APICall.handleApi { stockInfoDataSource.getStockPriceInfo(this) }
         }
+        val response = stockInfoDataSource.getStockPriceInfo(hashMap)
+        return try {
+            if (response.isSuccessful) {
+                val data = response.body()?.response?.body?.items?.item?.map { it.mapping() }?: listOf()
+                ResponseResult.Success(data, "200", "SUCCESS")
+            } else {
+                ResponseResult.Error("400", response.message())
+            }
+        } catch (e: HttpException) {
+            ResponseResult.Error("500", "${e.message}")
+        } catch (e: Throwable) {
+            ResponseResult.Error("501", "${e.message}")
+        }
+    }
 
     override suspend fun refreshMyStock(): Boolean {
         getAllMyStock().toMutableStateList().forEach { myStockEntity ->
@@ -60,8 +73,8 @@ class MyStockRepositoryImpl @Inject constructor(
                 likeItmsNm = myStockEntity.subjectName
             )
             val result = getStockPriceInfo(reqStockPriceInfo)
-            if (result.isSuccessful && result.data != null) {
-                val item = result.data.response.body.items.item
+            if (result is ResponseResult.Success) {
+                val item = result.data?: listOf()
                 val resultItem = item.find { it.isinCd == myStockEntity.subjectCode }
 
                 if (resultItem != null) {
