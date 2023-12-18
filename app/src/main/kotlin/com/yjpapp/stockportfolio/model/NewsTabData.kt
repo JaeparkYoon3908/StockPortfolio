@@ -6,6 +6,12 @@ sealed class TabData(
     val url: String
 ) {
     /**
+     * MyStock Tab
+     */
+    data object KoreaStock: TabData(title = "한국주식", route = "KoreaStock", url = "")
+    data object USAStock: TabData(title = "미국주식", route = "KoreaStock", url = "")
+
+    /**
      * News Tab
      */
     data object MKNews : TabData(title = "매일경제", route = "MKNews", url = "https://www.mk.co.kr/rss/30100041/")
