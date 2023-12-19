@@ -60,13 +60,13 @@ class MainViewModel @Inject constructor(
      * 나의 주식
      */
     init {
-        viewModelScope.launch { getAllMyStock() }
+        viewModelScope.launch { getAllMyStock(type = 1) }
     }
 
     /**
      * type 1: 한국주식, 2: 미국주식
      */
-    private fun getAllMyStock() = viewModelScope.launch {
+    private fun getAllMyStock(type: Int) = viewModelScope.launch {
         when (val result = myStockRepository.getAllMyStock()) {
             is ResponseResult.Success -> {
                 _myStockUiState.update {
@@ -75,7 +75,7 @@ class MainViewModel @Inject constructor(
                         usaStockInfoList = result.data?.filter { data-> data.type == 2 }?: listOf(),
                     )
                 }
-                calculateTopData()
+                calculateTopData(type = type)
             }
             is ResponseResult.Error -> {
                 _mainUiState.update { it.copy(toastMessage = result.resultMessage) }
@@ -91,7 +91,7 @@ class MainViewModel @Inject constructor(
                     toastMessage = context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)
                 )
             }
-            getAllMyStock()
+            getAllMyStock(type = myStockData.type)
         } catch (e: Exception) {
             _mainUiState.update {
                 it.copy(
@@ -110,7 +110,7 @@ class MainViewModel @Inject constructor(
                     isLoading = false
                 )
             }
-            getAllMyStock()
+            getAllMyStock(type = myStockData.type)
         } catch (e: Exception) {
             _mainUiState.update {
                 it.copy(
@@ -130,7 +130,7 @@ class MainViewModel @Inject constructor(
                     isLoading = false
                 )
             }
-            getAllMyStock()
+            getAllMyStock(type = myStockData.type)
         } catch (e: Exception) {
             e.stackTrace
             _mainUiState.update {
@@ -142,13 +142,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun calculateTopData() {
+    private fun calculateTopData(type: Int) {
         var mTotalPurchasePrice = 0.00 // 총 매수금액
         var mTotalEvaluationAmount = 0.00 // 총 평가금액
         var mTotalGainPrice = 0.00 //손익
         var mTotalGainPricePercent = 0.00 //수익률
-
-        _myStockUiState.value.koreaStockInfoList.forEach {
+        val stockInfoList =
+            if (type == 1) _myStockUiState.value.koreaStockInfoList
+            else _myStockUiState.value.usaStockInfoList
+        stockInfoList.forEach {
             val purchasePrice = StockUtils.getNumDeletedComma(it.purchasePrice).toDouble()
             val currentPrice = StockUtils.getNumDeletedComma(it.currentPrice).toDouble()
             val purchaseCount = it.purchaseCount.toDouble()
@@ -176,7 +178,7 @@ class MainViewModel @Inject constructor(
                     isLoading = false
                 )
             }
-            getAllMyStock()
+            getAllMyStock(type = type)
         }
     }
 
