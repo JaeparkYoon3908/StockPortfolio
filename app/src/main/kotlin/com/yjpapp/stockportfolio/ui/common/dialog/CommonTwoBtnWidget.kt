@@ -69,7 +69,7 @@ fun CommonTwoBtnWidget(
                             .background(color = Color_F1F1F1),
                         onClick = { onLeftBtnClickListener() }
                     ) {
-                        androidx.compose.material.Text(
+                        Text(
                             text = leftBtnText,
                             color = Color_222222,
                             fontSize = 15.sp

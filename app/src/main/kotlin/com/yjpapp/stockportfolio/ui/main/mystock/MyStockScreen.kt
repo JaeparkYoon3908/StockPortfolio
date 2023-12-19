@@ -2,11 +2,15 @@
 
 package com.yjpapp.stockportfolio.ui.main.mystock
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,11 +21,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,7 +61,7 @@ import com.yjpapp.stockportfolio.util.StockUtils
  * @author Yoon Jae-park
  * @since 2023.02
  */
-val myStockMenuList = listOf(TabData.KoreaStock, TabData.USAStock,)
+val myStockMenuList = listOf(TabData.KoreaStock, TabData.USAStock)
 
 @Composable
 @ExperimentalMaterialApi
@@ -66,6 +70,8 @@ fun MyStockScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val myStockUiState by viewModel.myStockUiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
     var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
     if (showMyStockPurchaseInputDialog) {
         MyStockPurchaseInputDialogContent { dialogData, isComplete ->
@@ -77,7 +83,7 @@ fun MyStockScreen(
                         subjectCode = dialogData.stockPriceInfo.isinCd,
                         purchaseDate = dialogData.purchaseDate,
                         purchasePrice = dialogData.purchasePrice,
-                        purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
+                        purchaseCount = dialogData.purchaseCount.toIntOrNull() ?: 0,
                         currentPrice = StockUtils.getNumInsertComma(dialogData.stockPriceInfo.clpr),
                         dayToDayPrice = dialogData.stockPriceInfo.vs,
                         dayToDayPercent = dialogData.stockPriceInfo.fltRt,
@@ -88,83 +94,85 @@ fun MyStockScreen(
         }
     }
     val pagerState = rememberPagerState(pageCount = { myStockMenuList.size })
-    Column(modifier = modifier) {
-        TabWidget(
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics { contentDescription = "MyStockTab" },
-            menus = myStockMenuList,
-            pagerState = pagerState,
-        ) {
-            HorizontalPager(
-                state = pagerState,
-            ) { page ->
-                LazyColumn {
-                    item {
-                        TotalPriceComposable(
-                            myStockViewModel = viewModel
-                        )
-                    }
-                    item { Spacer(modifier = Modifier.size(10.dp)) }
-                    item {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 20.dp, end = 20.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+    Box {
+        Column(modifier = modifier) {
+            TabWidget(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics { contentDescription = "MyStockTab" },
+                menus = myStockMenuList,
+                pagerState = pagerState,
+            ) {
+                HorizontalPager(
+                    state = pagerState,
+                ) { page ->
+                    LazyColumn {
+                        item {
+                            TotalPriceComposable(
+                                myStockViewModel = viewModel
+                            )
+                        }
+                        item { Spacer(modifier = Modifier.size(10.dp)) }
+                        item {
                             Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp, end = 20.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = "보유 주식",
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color_222222,
-                                    fontSize = 17.sp,
-                                )
-                                Spacer(modifier = Modifier.size(10.dp))
-                                if (myStockUiState.myStockInfoList.isNotEmpty()) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
                                     Text(
-                                        text = "기준 일자 : ${myStockUiState.myStockInfoList.first().basDt}",
-                                        fontWeight = FontWeight.Light,
-                                        color = Color_666666,
-                                        fontSize = 13.sp,
+                                        text = "보유 주식",
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color_222222,
+                                        fontSize = 17.sp,
                                     )
+                                    Spacer(modifier = Modifier.size(10.dp))
+                                    if (myStockUiState.myStockInfoList.isNotEmpty()) {
+                                        Text(
+                                            text = "기준 일자 : ${myStockUiState.myStockInfoList.first().basDt}",
+                                            fontWeight = FontWeight.Light,
+                                            color = Color_666666,
+                                            fontSize = 13.sp,
+                                        )
+                                    }
                                 }
-                            }
-                            Row {
-                                IconButton(
-                                    modifier = Modifier.size(18.dp),
-                                    onClick = { viewModel.refreshStockCurrentPriceInfo() }
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.size(25.dp),
-                                        painter = painterResource(id = R.drawable.ic_refresh),
-                                        contentDescription = "새로고침",
-                                    )
-                                }
-                                Spacer(modifier = Modifier.size(20.dp))
-                                IconButton(
-                                    modifier = Modifier.size(18.dp),
-                                    onClick = { showMyStockPurchaseInputDialog = true }
-                                ) {
-                                    Icon(
+                                Row {
+                                    IconButton(
                                         modifier = Modifier.size(18.dp),
-                                        painter = painterResource(id = R.drawable.icon_add),
-                                        contentDescription = "추가하기",
-                                        tint = Color_222222
-                                    )
+                                        onClick = { viewModel.refreshStockCurrentPriceInfo() }
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(25.dp),
+                                            painter = painterResource(id = R.drawable.ic_refresh),
+                                            contentDescription = "새로고침",
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.size(20.dp))
+                                    IconButton(
+                                        modifier = Modifier.size(18.dp),
+                                        onClick = { showMyStockPurchaseInputDialog = true }
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(18.dp),
+                                            painter = painterResource(id = R.drawable.icon_add),
+                                            contentDescription = "추가하기",
+                                            tint = Color_222222
+                                        )
+                                    }
                                 }
                             }
                         }
-                    }
-                    item { Spacer(modifier = Modifier.size(20.dp)) }
-                    items(items = myStockUiState.myStockInfoList) { stockEntity ->
-                        MyStockListItemWidget(
-                            viewModel = viewModel,
-                            myStockData = stockEntity,
-                        )
+                        item { Spacer(modifier = Modifier.size(20.dp)) }
+                        items(items = myStockUiState.myStockInfoList) { stockEntity ->
+                            MyStockListItemWidget(
+                                viewModel = viewModel,
+                                myStockData = stockEntity,
+                            )
+                        }
                     }
                 }
             }
@@ -176,7 +184,7 @@ fun MyStockScreen(
 private fun TotalPriceComposable(
     myStockViewModel: MainViewModel,
 ) {
-    val myStockUiState by myStockViewModel.myStockUiState.collectAsState()
+    val myStockUiState by myStockViewModel.myStockUiState.collectAsStateWithLifecycle()
     Card(
         modifier = Modifier.padding(20.dp),
         shape = RoundedCornerShape(10.dp),
@@ -251,8 +259,12 @@ private fun TotalPriceComposable(
                 Text(
                     text = StockUtils.getPriceNum(myStockUiState.totalGainPrice),
                     color = when {
-                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice).toDouble() > 0 -> Color_CD4632
-                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice).toDouble() < 0 -> Color_4876C7
+                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice)
+                            .toDouble() > 0 -> Color_CD4632
+
+                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice)
+                            .toDouble() < 0 -> Color_4876C7
+
                         else -> Color_CD4632
                     },
                     fontSize = 16.sp,
@@ -281,8 +293,12 @@ private fun TotalPriceComposable(
                 Text(
                     text = myStockUiState.totalGainPricePercent,
                     color = when {
-                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice).toDouble() > 0 -> Color_CD4632
-                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice).toDouble() < 0 -> Color_4876C7
+                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice)
+                            .toDouble() > 0 -> Color_CD4632
+
+                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice)
+                            .toDouble() < 0 -> Color_4876C7
+
                         else -> Color_CD4632
                     },
                     fontSize = 16.sp,

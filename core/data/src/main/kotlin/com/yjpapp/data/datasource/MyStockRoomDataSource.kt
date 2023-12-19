@@ -43,12 +43,5 @@ class MyStockRoomDataSource @Inject constructor(
     }
 
     suspend fun requestGetAllMyStock(): List<MyStockEntity> =
-        withContext(Dispatchers.IO) {
-            try {
-                myStockDao.getAll()
-            } catch (e: Exception) {
-                e.stackTrace
-                listOf()
-            }
-        }
+        withContext(Dispatchers.IO) { myStockDao.getAll() }
 }
