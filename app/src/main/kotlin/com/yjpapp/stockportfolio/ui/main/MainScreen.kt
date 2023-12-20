@@ -2,11 +2,8 @@ package com.yjpapp.stockportfolio.ui.main
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_888888
@@ -51,13 +49,22 @@ fun MainScreen(
     Box {
         Scaffold(
             topBar = {
-                TopAppBar(
+                CenterAlignedTopAppBar(
                     title = {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(text = titleText)
+                        Text(text = titleText)
+                    },
+                    actions = {
+                        if (currentRoute == NavItem.MyStock.screenRoute) {
+                            IconButton(
+                                onClick = {
+
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.arrow_down),
+                                    contentDescription = null
+                                )
+                            }
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -79,8 +86,10 @@ fun MainScreen(
                         } else {
                             Color_888888
                         }
-                        if (currentRoute == item.screenRoute) {
-                            titleText = stringResource(id = item.title)
+                        titleText = if (currentRoute == NavItem.MyStock.screenRoute) {
+                            "미국 주식"
+                        } else {
+                            stringResource(id = item.title)
                         }
                         BottomNavigationItem(
                             modifier = Modifier.semantics {
@@ -128,7 +137,9 @@ fun MainScreen(
         }
         if (mainUiState.isLoading) {
             Box(
-                modifier = Modifier.fillMaxSize().background(Color(0x66666666)),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0x66666666)),
                 contentAlignment = Alignment.Center
             ) {
                 LoadingWidget()
