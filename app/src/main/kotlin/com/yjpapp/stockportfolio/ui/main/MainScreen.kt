@@ -3,7 +3,9 @@ package com.yjpapp.stockportfolio.ui.main
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,6 +35,7 @@ import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_888888
+import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,29 +52,36 @@ fun MainScreen(
     Box {
         Scaffold(
             topBar = {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(text = titleText)
-                    },
-                    actions = {
-                        if (currentRoute == NavItem.MyStock.screenRoute) {
-                            IconButton(
-                                onClick = {
+                Column {
+                    CenterAlignedTopAppBar(
+                        title = {
+                            Text(text = titleText)
+                        },
+                        actions = {
+                            if (currentRoute == NavItem.MyStock.screenRoute) {
+                                IconButton(
+                                    onClick = {
 
+                                    }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.arrow_down),
+                                        contentDescription = null
+                                    )
                                 }
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.arrow_down),
-                                    contentDescription = null
-                                )
                             }
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color_FFFFFF,
-                        titleContentColor = Color_222222
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color_FFFFFF,
+                            titleContentColor = Color_222222
+                        )
                     )
-                )
+                    Divider(
+                        modifier = Modifier.fillMaxWidth(),
+                        thickness = 1.dp,
+                        color = Color_F1F1F1
+                    )
+                }
             },
             bottomBar = {
                 BottomNavigation(

@@ -3,20 +3,15 @@
 package com.yjpapp.stockportfolio.ui.main.mystock
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -35,8 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,13 +38,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yjpapp.data.model.MyStockData
 import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.model.TabData
-import com.yjpapp.stockportfolio.ui.common.componant.TabWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_4876C7
 import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
 import com.yjpapp.stockportfolio.ui.common.theme.Color_CD4632
-import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
 import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogContent
 import com.yjpapp.stockportfolio.util.StockUtils
@@ -61,7 +51,6 @@ import com.yjpapp.stockportfolio.util.StockUtils
  * @author Yoon Jae-park
  * @since 2023.02
  */
-val myStockMenuList = listOf(TabData.KoreaStock, TabData.USAStock)
 
 @Composable
 @ExperimentalMaterialApi
@@ -71,7 +60,6 @@ fun MyStockScreen(
 ) {
     val context = LocalContext.current
     val myStockUiState by viewModel.myStockUiState.collectAsStateWithLifecycle()
-    val pagerState = rememberPagerState(pageCount = { myStockMenuList.size })
     var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
     if (showMyStockPurchaseInputDialog) {
         MyStockPurchaseInputDialogContent { dialogData, isComplete ->
@@ -85,7 +73,7 @@ fun MyStockScreen(
                         purchasePrice = dialogData.purchasePrice,
                         purchaseCount = dialogData.purchaseCount.toIntOrNull() ?: 0,
                         currentPrice = StockUtils.getNumInsertComma(dialogData.stockPriceInfo.clpr),
-                        type = pagerState.currentPage + 1,
+                        type = 1, //TODO 프리퍼런스 정리
                         dayToDayPrice = dialogData.stockPriceInfo.vs,
                         dayToDayPercent = dialogData.stockPriceInfo.fltRt,
                         basDt = dialogData.stockPriceInfo.basDt,
@@ -94,91 +82,76 @@ fun MyStockScreen(
             }
         }
     }
-
     Column(modifier = modifier) {
-        TabWidget(
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics { contentDescription = "MyStockTab" },
-            menus = myStockMenuList,
-            pagerState = pagerState,
-        ) {
-            HorizontalPager(
-                state = pagerState,
-            ) { page ->
-                Box(modifier = Modifier.fillMaxSize().background(Color_FFFFFF)) {
-                    LazyColumn {
-                        item {
-                            TotalPriceComposable(
-                                myStockViewModel = viewModel
+        LazyColumn {
+            item {
+                TotalPriceComposable(
+                    myStockViewModel = viewModel
+                )
+            }
+            item { Spacer(modifier = Modifier.size(10.dp)) }
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "보유 주식",
+                            fontWeight = FontWeight.Bold,
+                            color = Color_222222,
+                            fontSize = 17.sp,
+                        )
+                        Spacer(modifier = Modifier.size(10.dp))
+                        if (myStockUiState.koreaStockInfoList.isNotEmpty()) {
+                            Text(
+                                text = "기준 일자 : ${myStockUiState.koreaStockInfoList.first().basDt}",
+                                fontWeight = FontWeight.Light,
+                                color = Color_666666,
+                                fontSize = 13.sp,
                             )
                         }
-                        item { Spacer(modifier = Modifier.size(10.dp)) }
-                        item {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 20.dp, end = 20.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = "보유 주식",
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color_222222,
-                                        fontSize = 17.sp,
-                                    )
-                                    Spacer(modifier = Modifier.size(10.dp))
-                                    if (myStockUiState.koreaStockInfoList.isNotEmpty()) {
-                                        Text(
-                                            text = "기준 일자 : ${myStockUiState.koreaStockInfoList.first().basDt}",
-                                            fontWeight = FontWeight.Light,
-                                            color = Color_666666,
-                                            fontSize = 13.sp,
-                                        )
-                                    }
-                                }
-                                Row {
-                                    IconButton(
-                                        modifier = Modifier.size(18.dp),
-                                        enabled = myStockUiState.koreaStockInfoList.isNotEmpty(),
-                                        onClick = { viewModel.refreshStockCurrentPriceInfo(pagerState.currentPage + 1) }
-                                    ) {
-                                        Icon(
-                                            modifier = Modifier.size(25.dp),
-                                            painter = painterResource(id = R.drawable.ic_refresh),
-                                            contentDescription = "새로고침",
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.size(20.dp))
-                                    IconButton(
-                                        modifier = Modifier.size(18.dp),
-                                        onClick = { showMyStockPurchaseInputDialog = true }
-                                    ) {
-                                        Icon(
-                                            modifier = Modifier.size(18.dp),
-                                            painter = painterResource(id = R.drawable.icon_add),
-                                            contentDescription = "추가하기",
-                                            tint = Color_222222
-                                        )
-                                    }
-                                }
-                            }
+                    }
+                    Row {
+                        IconButton(
+                            modifier = Modifier.size(18.dp),
+                            enabled = myStockUiState.koreaStockInfoList.isNotEmpty(),
+                            onClick = { viewModel.refreshStockCurrentPriceInfo(1) } //TODO 프리퍼런스 정리
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(25.dp),
+                                painter = painterResource(id = R.drawable.ic_refresh),
+                                contentDescription = "새로고침",
+                            )
                         }
-                        item { Spacer(modifier = Modifier.size(20.dp)) }
-                        items(
-                            items = if (pagerState.currentPage == 0) myStockUiState.koreaStockInfoList else myStockUiState.usaStockInfoList,
-                        ) { stockEntity ->
-                            MyStockListItemWidget(
-                                viewModel = viewModel,
-                                myStockData = stockEntity,
+                        Spacer(modifier = Modifier.size(20.dp))
+                        IconButton(
+                            modifier = Modifier.size(18.dp),
+                            onClick = { showMyStockPurchaseInputDialog = true }
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(18.dp),
+                                painter = painterResource(id = R.drawable.icon_add),
+                                contentDescription = "추가하기",
+                                tint = Color_222222
                             )
                         }
                     }
                 }
+            }
+            item { Spacer(modifier = Modifier.size(20.dp)) }
+            items(
+                items = myStockUiState.koreaStockInfoList,
+            ) { stockEntity ->
+                MyStockListItemWidget(
+                    viewModel = viewModel,
+                    myStockData = stockEntity,
+                )
             }
         }
     }
