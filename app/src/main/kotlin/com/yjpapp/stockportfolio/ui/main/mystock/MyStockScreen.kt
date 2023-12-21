@@ -2,7 +2,6 @@
 
 package com.yjpapp.stockportfolio.ui.main.mystock
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +51,7 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_4876C7
 import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
 import com.yjpapp.stockportfolio.ui.common.theme.Color_CD4632
+import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
 import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogContent
 import com.yjpapp.stockportfolio.util.StockUtils
@@ -69,9 +69,9 @@ fun MyStockScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    val myStockUiState by viewModel.myStockUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
+    val myStockUiState by viewModel.myStockUiState.collectAsStateWithLifecycle()
+    val pagerState = rememberPagerState(pageCount = { myStockMenuList.size })
     var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
     if (showMyStockPurchaseInputDialog) {
         MyStockPurchaseInputDialogContent { dialogData, isComplete ->
@@ -85,6 +85,7 @@ fun MyStockScreen(
                         purchasePrice = dialogData.purchasePrice,
                         purchaseCount = dialogData.purchaseCount.toIntOrNull() ?: 0,
                         currentPrice = StockUtils.getNumInsertComma(dialogData.stockPriceInfo.clpr),
+                        type = pagerState.currentPage + 1,
                         dayToDayPrice = dialogData.stockPriceInfo.vs,
                         dayToDayPercent = dialogData.stockPriceInfo.fltRt,
                         basDt = dialogData.stockPriceInfo.basDt,
@@ -93,19 +94,19 @@ fun MyStockScreen(
             }
         }
     }
-    val pagerState = rememberPagerState(pageCount = { myStockMenuList.size })
-    Box {
-        Column(modifier = modifier) {
-            TabWidget(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .semantics { contentDescription = "MyStockTab" },
-                menus = myStockMenuList,
-                pagerState = pagerState,
-            ) {
-                HorizontalPager(
-                    state = pagerState,
-                ) { page ->
+
+    Column(modifier = modifier) {
+        TabWidget(
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentDescription = "MyStockTab" },
+            menus = myStockMenuList,
+            pagerState = pagerState,
+        ) {
+            HorizontalPager(
+                state = pagerState,
+            ) { page ->
+                Box(modifier = Modifier.fillMaxSize().background(Color_FFFFFF)) {
                     LazyColumn {
                         item {
                             TotalPriceComposable(
@@ -131,9 +132,9 @@ fun MyStockScreen(
                                         fontSize = 17.sp,
                                     )
                                     Spacer(modifier = Modifier.size(10.dp))
-                                    if (myStockUiState.myStockInfoList.isNotEmpty()) {
+                                    if (myStockUiState.koreaStockInfoList.isNotEmpty()) {
                                         Text(
-                                            text = "기준 일자 : ${myStockUiState.myStockInfoList.first().basDt}",
+                                            text = "기준 일자 : ${myStockUiState.koreaStockInfoList.first().basDt}",
                                             fontWeight = FontWeight.Light,
                                             color = Color_666666,
                                             fontSize = 13.sp,
@@ -143,7 +144,8 @@ fun MyStockScreen(
                                 Row {
                                     IconButton(
                                         modifier = Modifier.size(18.dp),
-                                        onClick = { viewModel.refreshStockCurrentPriceInfo() }
+                                        enabled = myStockUiState.koreaStockInfoList.isNotEmpty(),
+                                        onClick = { viewModel.refreshStockCurrentPriceInfo(pagerState.currentPage + 1) }
                                     ) {
                                         Icon(
                                             modifier = Modifier.size(25.dp),
@@ -167,7 +169,9 @@ fun MyStockScreen(
                             }
                         }
                         item { Spacer(modifier = Modifier.size(20.dp)) }
-                        items(items = myStockUiState.myStockInfoList) { stockEntity ->
+                        items(
+                            items = if (pagerState.currentPage == 0) myStockUiState.koreaStockInfoList else myStockUiState.usaStockInfoList,
+                        ) { stockEntity ->
                             MyStockListItemWidget(
                                 viewModel = viewModel,
                                 myStockData = stockEntity,

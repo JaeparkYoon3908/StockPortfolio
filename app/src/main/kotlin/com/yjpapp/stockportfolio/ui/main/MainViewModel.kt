@@ -29,7 +29,8 @@ data class MyStockUiState(
     val totalEvaluationAmount: String = "",
     val totalGainPrice: String = "", //상단 손익
     val totalGainPricePercent: String = "0%", //상단 수익률
-    val myStockInfoList: List<MyStockData> = listOf(),
+    val koreaStockInfoList: List<MyStockData> = listOf(),
+    val usaStockInfoList: List<MyStockData> = listOf()
 )
 data class NewsUiState(
     val newsList: HashMap<String, List<NewsData>> = hashMapOf(),
@@ -59,24 +60,25 @@ class MainViewModel @Inject constructor(
      * 나의 주식
      */
     init {
-        viewModelScope.launch {
-            getAllMyStock()
-            calculateTopData()
-        }
+        viewModelScope.launch { getAllMyStock() }
     }
 
     /**
      * type 1: 한국주식, 2: 미국주식
      */
-    private fun getAllMyStock(type: Int = 1) = viewModelScope.launch {
+    private fun getAllMyStock() = viewModelScope.launch {
         when (val result = myStockRepository.getAllMyStock()) {
             is ResponseResult.Success -> {
                 _myStockUiState.update {
-                    it.copy(myStockInfoList = result.data?: listOf())
+                    it.copy(
+                        koreaStockInfoList = result.data?.filter { data-> data.type == 1 }?: listOf(),
+                        usaStockInfoList = result.data?.filter { data-> data.type == 2 }?: listOf(),
+                    )
                 }
+                calculateTopData()
             }
             is ResponseResult.Error -> {
-                //TODO 에러처리
+                _mainUiState.update { it.copy(toastMessage = result.resultMessage) }
             }
         }
     }
@@ -89,7 +91,6 @@ class MainViewModel @Inject constructor(
                     toastMessage = context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)
                 )
             }
-            calculateTopData()
             getAllMyStock()
         } catch (e: Exception) {
             _mainUiState.update {
@@ -109,7 +110,6 @@ class MainViewModel @Inject constructor(
                     isLoading = false
                 )
             }
-            calculateTopData()
             getAllMyStock()
         } catch (e: Exception) {
             _mainUiState.update {
@@ -130,7 +130,6 @@ class MainViewModel @Inject constructor(
                     isLoading = false
                 )
             }
-            calculateTopData()
             getAllMyStock()
         } catch (e: Exception) {
             e.stackTrace
@@ -149,7 +148,7 @@ class MainViewModel @Inject constructor(
         var mTotalGainPrice = 0.00 //손익
         var mTotalGainPricePercent = 0.00 //수익률
 
-        _myStockUiState.value.myStockInfoList.forEach {
+        _myStockUiState.value.koreaStockInfoList.forEach {
             val purchasePrice = StockUtils.getNumDeletedComma(it.purchasePrice).toDouble()
             val currentPrice = StockUtils.getNumDeletedComma(it.currentPrice).toDouble()
             val purchaseCount = it.purchaseCount.toDouble()
@@ -168,9 +167,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun refreshStockCurrentPriceInfo() = viewModelScope.launch {
+    fun refreshStockCurrentPriceInfo(type: Int) = viewModelScope.launch {
         _mainUiState.update { it.copy(isLoading = true) }
-        if (myStockRepository.refreshMyStock()) {
+        if (myStockRepository.refreshMyStock(type = type)) {
             _mainUiState.update {
                 it.copy(
                     toastMessage = "새로고침 되었습니다.",

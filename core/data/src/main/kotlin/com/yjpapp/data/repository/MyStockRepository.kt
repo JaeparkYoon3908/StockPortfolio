@@ -16,9 +16,10 @@ interface MyStockRepository {
     suspend fun addMyStock(myStockData: MyStockData)
     suspend fun updateMyStock(myStockData: MyStockData): Boolean
     suspend fun deleteMyStock(myStockData: MyStockData)
+    //type 1: 한국 주식, 2: 미국 주식
     suspend fun getAllMyStock(): ResponseResult<List<MyStockData>>
     suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>>
-    suspend fun refreshMyStock(): Boolean
+    suspend fun refreshMyStock(type: Int): Boolean
 }
 
 class MyStockRepositoryImpl @Inject constructor(
@@ -71,7 +72,7 @@ class MyStockRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun refreshMyStock(): Boolean {
+    override suspend fun refreshMyStock(type: Int): Boolean {
         return when (val result = getAllMyStock()) {
             is ResponseResult.Success -> {
                 result.data?.forEach { myStockEntity ->
