@@ -20,20 +20,22 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class MainUiState(
+    val toastMessage: String? = null,
+    val isLoading: Boolean = false, //전체 화면 로딩 여부
+)
 data class MyStockUiState(
     val totalPurchasePrice: String = "", //상단 총 매수금액
     val totalEvaluationAmount: String = "",
     val totalGainPrice: String = "", //상단 손익
     val totalGainPricePercent: String = "0%", //상단 수익률
-    val myStockInfoList: List<MyStockData> = listOf(),
-    val toastMessage: String = "",
-    val isLoading: Boolean = false,
+    val koreaStockInfoList: List<MyStockData> = listOf(),
+    val usaStockInfoList: List<MyStockData> = listOf()
 )
 data class NewsUiState(
     val newsList: HashMap<String, List<NewsData>> = hashMapOf(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false, //일부 뉴스 탭 영역 로딩 애니메이션 노출 여부
 )
-
 
 /**
  * MainActivity Global ViewModel
@@ -44,35 +46,54 @@ class MainViewModel @Inject constructor(
     private val myStockRepository: MyStockRepository,
     private val newsRepository: NewsRepository
 ): ViewModel() {
-    //나의 주식
-    private val _myStockUiState = MutableStateFlow(MyStockUiState(isLoading = false))
+    //전체 메인 화면
+    private val _mainUiState = MutableStateFlow(MainUiState(isLoading = false, toastMessage = null))
+    val mainUiState: StateFlow<MainUiState> = _mainUiState.asStateFlow()
+    //나의 주식 tab
+    private val _myStockUiState = MutableStateFlow(MyStockUiState())
     val myStockUiState: StateFlow<MyStockUiState> = _myStockUiState.asStateFlow()
-    //경제 뉴스
-    private val _newsUiState = MutableStateFlow(NewsUiState(isLoading = false))
+    //경제 뉴스 tab
+    private val _newsUiState = MutableStateFlow(NewsUiState())
     val newsUiState: StateFlow<NewsUiState> = _newsUiState.asStateFlow()
 
     /**
      * 나의 주식
      */
     init {
-        viewModelScope.launch {
-            _myStockUiState.update { it.copy(myStockInfoList = myStockRepository.getAllMyStock()) }
-            calculateTopData()
+        viewModelScope.launch { getAllMyStock(type = 1) }
+    }
+
+    /**
+     * type 1: 한국주식, 2: 미국주식
+     */
+    private fun getAllMyStock(type: Int) = viewModelScope.launch {
+        when (val result = myStockRepository.getAllMyStock()) {
+            is ResponseResult.Success -> {
+                _myStockUiState.update {
+                    it.copy(
+                        koreaStockInfoList = result.data?.filter { data-> data.type == 1 }?: listOf(),
+                        usaStockInfoList = result.data?.filter { data-> data.type == 2 }?: listOf(),
+                    )
+                }
+                calculateTopData(type = type)
+            }
+            is ResponseResult.Error -> {
+                _mainUiState.update { it.copy(toastMessage = result.resultMessage) }
+            }
         }
     }
 
     fun addMyStock(myStockData: MyStockData) = viewModelScope.launch {
         try {
             myStockRepository.addMyStock(myStockData)
-            _myStockUiState.update {
+            _mainUiState.update {
                 it.copy(
-                    myStockInfoList = myStockRepository.getAllMyStock(),
                     toastMessage = context.getString(R.string.MyStockFragment_Msg_MyStock_Add_Success)
                 )
             }
-            calculateTopData()
+            getAllMyStock(type = myStockData.type)
         } catch (e: Exception) {
-            _myStockUiState.update {
+            _mainUiState.update {
                 it.copy(
                     toastMessage = "${context.getString(R.string.Error_Msg_Normal)} cause : ${e.message}"
                 )
@@ -83,16 +104,15 @@ class MainViewModel @Inject constructor(
     fun updateMyStock(myStockData: MyStockData) = viewModelScope.launch {
         try {
             myStockRepository.updateMyStock(myStockData)
-            _myStockUiState.update {
+            _mainUiState.update {
                 it.copy(
-                    myStockInfoList = myStockRepository.getAllMyStock(),
                     toastMessage = context.getString(R.string.MyStockFragment_Msg_MyStock_Modify_Success),
                     isLoading = false
                 )
             }
-            calculateTopData()
+            getAllMyStock(type = myStockData.type)
         } catch (e: Exception) {
-            _myStockUiState.update {
+            _mainUiState.update {
                 it.copy(
                     toastMessage = "${context.getString(R.string.Error_Msg_Normal)} cause : ${e.message}",
                     isLoading = false
@@ -104,17 +124,16 @@ class MainViewModel @Inject constructor(
     fun deleteMyStock(myStockData: MyStockData) = viewModelScope.launch {
         try {
             myStockRepository.deleteMyStock(myStockData)
-            _myStockUiState.update {
+            _mainUiState.update {
                 it.copy(
-                    myStockInfoList = myStockRepository.getAllMyStock(),
                     toastMessage = context.getString(R.string.MyStockFragment_Msg_MyStock_Delete_Success),
                     isLoading = false
                 )
             }
-            calculateTopData()
+            getAllMyStock(type = myStockData.type)
         } catch (e: Exception) {
             e.stackTrace
-            _myStockUiState.update {
+            _mainUiState.update {
                 it.copy(
                     toastMessage = context.getString(R.string.Common_Cancel),
                     isLoading = false
@@ -123,13 +142,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun calculateTopData() {
+    private fun calculateTopData(type: Int) {
         var mTotalPurchasePrice = 0.00 // 총 매수금액
         var mTotalEvaluationAmount = 0.00 // 총 평가금액
         var mTotalGainPrice = 0.00 //손익
         var mTotalGainPricePercent = 0.00 //수익률
-
-        _myStockUiState.value.myStockInfoList.forEach {
+        val stockInfoList =
+            if (type == 1) _myStockUiState.value.koreaStockInfoList
+            else _myStockUiState.value.usaStockInfoList
+        stockInfoList.forEach {
             val purchasePrice = StockUtils.getNumDeletedComma(it.purchasePrice).toDouble()
             val currentPrice = StockUtils.getNumDeletedComma(it.currentPrice).toDouble()
             val purchaseCount = it.purchaseCount.toDouble()
@@ -148,12 +169,16 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun refreshStockCurrentPriceInfo() = viewModelScope.launch {
-        myStockRepository.refreshMyStock()
-        _myStockUiState.update {
-            it.copy(
-                myStockInfoList = myStockRepository.getAllMyStock()
-            )
+    fun refreshStockCurrentPriceInfo(type: Int) = viewModelScope.launch {
+        _mainUiState.update { it.copy(isLoading = true) }
+        if (myStockRepository.refreshMyStock(type = type)) {
+            _mainUiState.update {
+                it.copy(
+                    toastMessage = "새로고침 되었습니다.",
+                    isLoading = false
+                )
+            }
+            getAllMyStock(type = type)
         }
     }
 
@@ -178,5 +203,8 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+    fun toastMessageShown() = viewModelScope.launch {
+        _mainUiState.update { it.copy(toastMessage = null) }
     }
 }

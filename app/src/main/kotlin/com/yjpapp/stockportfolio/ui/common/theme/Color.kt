@@ -2,10 +2,6 @@ package com.yjpapp.stockportfolio.ui.common.theme
 
 import androidx.compose.ui.graphics.Color
 
-fun getColor(colorString: String): Color {
-    return Color(android.graphics.Color.parseColor("#$colorString"))
-}
-
 val Black = Color(0xff000000)
 val Color_FFFFFF = Color(0xffffffff)
 val Color_F1F1F1 = Color(0xfff1f1f1)

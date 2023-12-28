@@ -16,9 +16,10 @@ interface MyStockRepository {
     suspend fun addMyStock(myStockData: MyStockData)
     suspend fun updateMyStock(myStockData: MyStockData): Boolean
     suspend fun deleteMyStock(myStockData: MyStockData)
-    suspend fun getAllMyStock(): List<MyStockData>
+    //type 1: 한국 주식, 2: 미국 주식
+    suspend fun getAllMyStock(): ResponseResult<List<MyStockData>>
     suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>>
-    suspend fun refreshMyStock(): Boolean
+    suspend fun refreshMyStock(type: Int): Boolean
 }
 
 class MyStockRepositoryImpl @Inject constructor(
@@ -38,7 +39,14 @@ class MyStockRepositoryImpl @Inject constructor(
         myStockLocalDataSource.requestDeleteMyStock(myStockData.mapping())
 
 
-    override suspend fun getAllMyStock() = myStockLocalDataSource.requestGetAllMyStock().map { it.mapping() }
+    override suspend fun getAllMyStock(): ResponseResult<List<MyStockData>> {
+        return try {
+            val data = myStockLocalDataSource.requestGetAllMyStock().map { it.mapping() }
+            ResponseResult.Success(data = data, resultCode = "200",  resultMessage = "SUCCESS")
+        } catch (e: Exception) {
+            ResponseResult.Error(errorCode = "400", errorMessage = e.message?: "Unknown error")
+        }
+    }
 
     override suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>> {
         val hashMap = HashMap<String, String>().apply {
@@ -64,41 +72,38 @@ class MyStockRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun refreshMyStock(): Boolean {
-        getAllMyStock().toMutableStateList().forEach { myStockEntity ->
-            val reqStockPriceInfo = ReqStockPriceInfo(
-                numOfRows = "20",
-                pageNo = "1",
-                isinCd = myStockEntity.subjectCode,
-                likeItmsNm = myStockEntity.subjectName
-            )
-            val result = getStockPriceInfo(reqStockPriceInfo)
-            if (result is ResponseResult.Success) {
-                val item = result.data?: listOf()
-                val resultItem = item.find { it.isinCd == myStockEntity.subjectCode }
-
-                if (resultItem != null) {
-                    if (!updateMyStock(
-                            myStockEntity.copy(
-                                currentPrice = getNumInsertComma(resultItem.clpr),
-                                dayToDayPrice = resultItem.vs,
-                                dayToDayPercent = resultItem.fltRt,
-                                basDt = resultItem.basDt
+    override suspend fun refreshMyStock(type: Int): Boolean {
+        return when (val result = getAllMyStock()) {
+            is ResponseResult.Success -> {
+                result.data?.forEach { myStockEntity ->
+                    val reqStockPriceInfo = ReqStockPriceInfo(
+                        numOfRows = "20",
+                        pageNo = "1",
+                        isinCd = myStockEntity.subjectCode,
+                        likeItmsNm = myStockEntity.subjectName
+                    )
+                    val stockPriceInfo = getStockPriceInfo(reqStockPriceInfo)
+                    if (stockPriceInfo is ResponseResult.Success) {
+                        val item = stockPriceInfo.data?: listOf()
+                        val resultItem = item.find { it.isinCd == myStockEntity.subjectCode }
+                        if (resultItem != null) {
+                            updateMyStock(
+                                myStockEntity.copy(
+                                    currentPrice = getNumInsertComma(resultItem.clpr),
+                                    dayToDayPrice = resultItem.vs,
+                                    dayToDayPercent = resultItem.fltRt,
+                                    basDt = resultItem.basDt
+                                )
                             )
-                        )
-                    ) {
-                        return false
+                        }
                     }
-                } else {
-                    //서버에 빈 값이 내려옴
-                    return false
                 }
-            } else {
-                //에러
-                return false
+                true
+            }
+            is ResponseResult.Error -> {
+                false
             }
         }
-        return true
     }
 
     //5000000 => 5,000,000 변환
