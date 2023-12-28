@@ -16,3 +16,8 @@ sealed class ResponseResult<T>(
         }
     }
 }
+
+enum class ResultCode(val code: Int) {
+    OK(200),
+
+}
