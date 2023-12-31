@@ -2,6 +2,9 @@ package com.yjpapp.data.di
 
 import com.yjpapp.data.datasource.MyStockRoomDataSource
 import com.yjpapp.data.datasource.NewsDataSource
+import com.yjpapp.data.datasource.PreferenceDataSource
+import com.yjpapp.data.repository.MySettingRepository
+import com.yjpapp.data.repository.MySettingRepositoryImpl
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.data.repository.MyStockRepositoryImpl
 import com.yjpapp.network.datasource.DataPortalDataSource
@@ -29,4 +32,9 @@ class RepositoryModule {
         newsDataSource: NewsDataSource
     ): NewsRepository = NewsRepositoryImpl(newsDataSource)
 
+    @Provides
+    @Singleton
+    fun provideMySettingRepository(
+        preferenceDataSource: PreferenceDataSource
+    ): MySettingRepository = MySettingRepositoryImpl(preferenceDataSource)
 }

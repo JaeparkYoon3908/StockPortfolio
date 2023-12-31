@@ -2,13 +2,17 @@ package com.yjpapp.stockportfolio.ui.main
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.*
@@ -27,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -37,7 +42,7 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_888888
 import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
-
+val myStockCountryList = listOf("한국 주식", "미국 주식")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
@@ -48,7 +53,8 @@ fun MainScreen(
     val navItemList = remember { mutableStateListOf(NavItem.MyStock, NavItem.News) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    var titleText by remember { mutableStateOf("") }
+    var isShowBottomSheet by remember { mutableStateOf(false) }
+    var titleText by remember { mutableStateOf("한국 주식") }
     Box {
         Scaffold(
             topBar = {
@@ -60,9 +66,7 @@ fun MainScreen(
                         actions = {
                             if (currentRoute == NavItem.MyStock.screenRoute) {
                                 IconButton(
-                                    onClick = {
-
-                                    }
+                                    onClick = { isShowBottomSheet = !isShowBottomSheet }
                                 ) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.arrow_down),
@@ -96,16 +100,13 @@ fun MainScreen(
                         } else {
                             Color_888888
                         }
-                        titleText = if (currentRoute == NavItem.MyStock.screenRoute) {
-                            "미국 주식"
-                        } else {
-                            stringResource(id = item.title)
+                        if (currentRoute != NavItem.MyStock.screenRoute) {
+                            titleText = stringResource(id = item.title)
                         }
                         BottomNavigationItem(
                             modifier = Modifier.semantics {
                                 contentDescription = context.getString(item.title)
                             },
-
                             selected = currentRoute == item.screenRoute,
                             onClick = {
                                 if (item == NavItem.News) viewModel.getNewsList()
@@ -128,7 +129,8 @@ fun MainScreen(
                             selectedContentColor = Color_222222,
                             unselectedContentColor = Color_888888
                         )
-                    }
+                            stringResource(id = item.title)
+                        }
                 }
             }
         ) { paddingValues ->
@@ -153,6 +155,32 @@ fun MainScreen(
                 contentAlignment = Alignment.Center
             ) {
                 LoadingWidget()
+            }
+        }
+        if (isShowBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { isShowBottomSheet = false }
+            ) {
+                LazyColumn(
+                    modifier = Modifier.padding(30.dp).fillMaxWidth()
+                ) {
+                    items(items = myStockCountryList) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    viewModel.getAllMyStock(type = myStockCountryList.indexOf(it))
+                                    isShowBottomSheet = false
+                                    titleText = it
+                                },
+                            text = it,
+                            fontSize = 18.sp,
+                            color = Color_222222
+                        )
+                        Spacer(modifier = Modifier.size(20.dp))
+                    }
+                    item { Spacer(modifier = Modifier.size(20.dp)) }
+                }
             }
         }
     }
