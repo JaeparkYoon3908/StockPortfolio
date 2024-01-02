@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.yjpapp.data.model.MyStockData
 import com.yjpapp.data.model.NewsData
 import com.yjpapp.data.model.ResponseResult
+import com.yjpapp.data.repository.MySettingRepository
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.data.repository.NewsRepository
 import com.yjpapp.stockportfolio.R
@@ -21,9 +22,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class MainUiState(
+    val title: String = "",
     val toastMessage: String? = null,
     val isLoading: Boolean = false, //전체 화면 로딩 여부
+    val isShowBottomSheet: Boolean = false,
 )
+
 data class MyStockUiState(
     val totalPurchasePrice: String = "", //상단 총 매수금액
     val totalEvaluationAmount: String = "",
@@ -32,6 +36,7 @@ data class MyStockUiState(
     val koreaStockInfoList: List<MyStockData> = listOf(),
     val usaStockInfoList: List<MyStockData> = listOf()
 )
+
 data class NewsUiState(
     val newsList: HashMap<String, List<NewsData>> = hashMapOf(),
     val isLoading: Boolean = false, //일부 뉴스 탭 영역 로딩 애니메이션 노출 여부
@@ -44,41 +49,64 @@ data class NewsUiState(
 class MainViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val myStockRepository: MyStockRepository,
-    private val newsRepository: NewsRepository
-): ViewModel() {
+    private val newsRepository: NewsRepository,
+    private val mySettingRepository: MySettingRepository,
+) : ViewModel() {
     //전체 메인 화면
     private val _mainUiState = MutableStateFlow(MainUiState(isLoading = false, toastMessage = null))
     val mainUiState: StateFlow<MainUiState> = _mainUiState.asStateFlow()
+
     //나의 주식 tab
     private val _myStockUiState = MutableStateFlow(MyStockUiState())
     val myStockUiState: StateFlow<MyStockUiState> = _myStockUiState.asStateFlow()
+
     //경제 뉴스 tab
     private val _newsUiState = MutableStateFlow(NewsUiState())
     val newsUiState: StateFlow<NewsUiState> = _newsUiState.asStateFlow()
+
+    lateinit var defaultTitle: String
 
     /**
      * 나의 주식
      */
     init {
-        viewModelScope.launch { getAllMyStock(type = 1) }
+        viewModelScope.launch {
+            defaultTitle = getDefaultMyStockTitle()
+            getAllMyStock(type = myStockCountryList.indexOf(defaultTitle))
+        }
     }
 
     /**
      * type 1: 한국주식, 2: 미국주식
      */
-    private fun getAllMyStock(type: Int) = viewModelScope.launch {
+    fun getAllMyStock(type: Int) = viewModelScope.launch {
         when (val result = myStockRepository.getAllMyStock()) {
             is ResponseResult.Success -> {
                 _myStockUiState.update {
                     it.copy(
-                        koreaStockInfoList = result.data?.filter { data-> data.type == 1 }?: listOf(),
-                        usaStockInfoList = result.data?.filter { data-> data.type == 2 }?: listOf(),
+                        koreaStockInfoList = result.data?.filter { data -> data.type == 1 }
+                            ?: listOf(),
+                        usaStockInfoList = result.data?.filter { data -> data.type == 2 }
+                            ?: listOf(),
                     )
                 }
                 calculateTopData(type = type)
             }
+
             is ResponseResult.Error -> {
                 _mainUiState.update { it.copy(toastMessage = result.resultMessage) }
+            }
+        }
+    }
+
+    suspend fun getDefaultMyStockTitle(): String {
+        return when (val result = mySettingRepository.getDefaultMyStockTitle()) {
+            is ResponseResult.Success -> {
+                result.data?: myStockCountryList.first()
+            }
+
+            is ResponseResult.Error -> {
+                myStockCountryList.first()
             }
         }
     }
@@ -158,7 +186,8 @@ class MainViewModel @Inject constructor(
             mTotalEvaluationAmount += currentPrice * purchaseCount
         }
         mTotalGainPrice = mTotalEvaluationAmount - mTotalPurchasePrice
-        mTotalGainPricePercent = StockUtils.calculateGainPercent(mTotalPurchasePrice, mTotalEvaluationAmount)
+        mTotalGainPricePercent =
+            StockUtils.calculateGainPercent(mTotalPurchasePrice, mTotalEvaluationAmount)
         _myStockUiState.update {
             it.copy(
                 totalPurchasePrice = mTotalPurchasePrice.toString(),
@@ -190,7 +219,7 @@ class MainViewModel @Inject constructor(
         newsMenuList.forEach { tabData ->
             when (val result = newsRepository.getNewsList(tabData.url)) {
                 is ResponseResult.Success -> {
-                    val newsList = result.data?: listOf()
+                    val newsList = result.data ?: listOf()
                     _newsUiState.update {
                         it.copy(
                             newsList = it.newsList.apply { this[tabData.route] = newsList },
@@ -198,12 +227,14 @@ class MainViewModel @Inject constructor(
                         )
                     }
                 }
+
                 is ResponseResult.Error -> {
 
                 }
             }
         }
     }
+
     fun toastMessageShown() = viewModelScope.launch {
         _mainUiState.update { it.copy(toastMessage = null) }
     }
