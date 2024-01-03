@@ -54,7 +54,7 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var isShowBottomSheet by remember { mutableStateOf(false) }
-    var titleText by remember { mutableStateOf("한국 주식") }
+    var titleText by remember { mutableStateOf("") }
     Box {
         Scaffold(
             topBar = {
