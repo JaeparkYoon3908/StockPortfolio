@@ -143,8 +143,13 @@ fun MainScreen(
             )
         }
         val mainUiState by viewModel.mainUiState.collectAsStateWithLifecycle()
-        if (mainUiState.toastMessage?.isNotEmpty() == true) {
-            Toast.makeText(context, mainUiState.toastMessage, Toast.LENGTH_SHORT).show()
+        if (mainUiState.toastMessageId != 0) {
+            val message = if (mainUiState.toastErrorMessage != null) {
+                context.getString(mainUiState.toastMessageId, mainUiState.toastErrorMessage)
+            } else {
+                context.getString(mainUiState.toastMessageId)
+            }
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             viewModel.toastMessageShown()
         }
         if (mainUiState.isLoading) {

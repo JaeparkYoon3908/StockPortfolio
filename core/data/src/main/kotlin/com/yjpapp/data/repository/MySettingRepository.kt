@@ -7,7 +7,6 @@ import javax.inject.Inject
 interface MySettingRepository {
     suspend fun setDefaultMyStockTitle(title: String): ResponseResult<Boolean>
     suspend fun getDefaultMyStockTitle(): ResponseResult<String>
-
     suspend fun setIsFirstAppRun(value: Boolean): ResponseResult<Boolean>
     suspend fun getIsFirstAppRun(): ResponseResult<Boolean>
 }
