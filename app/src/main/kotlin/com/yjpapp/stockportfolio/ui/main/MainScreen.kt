@@ -54,7 +54,7 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var isShowBottomSheet by remember { mutableStateOf(false) }
-    var titleText by remember { mutableStateOf("한국 주식") }
+    var titleText by remember { mutableStateOf("") }
     Box {
         Scaffold(
             topBar = {
@@ -143,8 +143,13 @@ fun MainScreen(
             )
         }
         val mainUiState by viewModel.mainUiState.collectAsStateWithLifecycle()
-        if (mainUiState.toastMessage?.isNotEmpty() == true) {
-            Toast.makeText(context, mainUiState.toastMessage, Toast.LENGTH_SHORT).show()
+        if (mainUiState.toastMessageId != 0) {
+            val message = if (mainUiState.toastErrorMessage != null) {
+                context.getString(mainUiState.toastMessageId, mainUiState.toastErrorMessage)
+            } else {
+                context.getString(mainUiState.toastMessageId)
+            }
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             viewModel.toastMessageShown()
         }
         if (mainUiState.isLoading) {
