@@ -73,7 +73,7 @@ fun MyStockScreen(
                         purchasePrice = dialogData.purchasePrice,
                         purchaseCount = dialogData.purchaseCount.toIntOrNull() ?: 0,
                         currentPrice = StockUtils.getNumInsertComma(dialogData.stockPriceInfo.clpr),
-                        type = 1,
+                        type = myStockUiState.type,
                         dayToDayPrice = dialogData.stockPriceInfo.vs,
                         dayToDayPercent = dialogData.stockPriceInfo.fltRt,
                         basDt = dialogData.stockPriceInfo.basDt,

@@ -39,6 +39,8 @@
     <string name="Common_Notice_Add_Ok">추가완료</string>
     <string name="Common_Notice_Modify_Ok">수정완료</string>
 
+    <string name="Msg_Refresh_Success">"새로고침 되었습니다."</string>
+
     <string name="News_Title">경제 뉴스</string>
     <string name="IncomeNoteFragment_Gain">수익</string>
     <string name="IncomeNoteFragment_Purchase_Price">매수금액</string>
@@ -124,6 +126,7 @@
 
     <string name="Error_Msg_Not_Found_Data">값을 불러올 수 없습니다.</string>
     <string name="Error_Msg_Network_Connect_Exception">네트워크 연결 상태를 확인해주세요.</string>
-    <string name="Error_Msg_Normal">일시적 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</string>
+    <string name="Error_Msg_Normal">일시적 오류가 발생했습니다. 잠시 후 다시 시도해주세요. cause : %s </string>
     <string name="Error_Msg_Naver_Info_Not_Agree">필수 항목 제공 동의를 체크해주세요.</string>
+
 </resources>
