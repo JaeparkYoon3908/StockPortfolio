@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +43,8 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_888888
 import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
+import kotlinx.coroutines.launch
+
 val myStockCountryList = listOf("한국 주식", "미국 주식")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,12 +52,13 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val navController = rememberNavController()
     val navItemList = remember { mutableStateListOf(NavItem.MyStock, NavItem.News) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var isShowBottomSheet by remember { mutableStateOf(false) }
-    var titleText by remember { mutableStateOf("") }
+    val titleText by viewModel.myStockTitleState.collectAsStateWithLifecycle()
     Box {
         Scaffold(
             topBar = {
@@ -100,8 +104,12 @@ fun MainScreen(
                         } else {
                             Color_888888
                         }
-                        if (currentRoute != NavItem.MyStock.screenRoute) {
-                            titleText = stringResource(id = item.title)
+                        if (currentRoute == NavItem.MyStock.screenRoute) {
+                            scope.launch {
+                                viewModel.updateTopTitleText(viewModel.getDefaultMyStockTitle())
+                            }
+                        } else {
+                            viewModel.updateTopTitleText(stringResource(id = item.title))
                         }
                         BottomNavigationItem(
                             modifier = Modifier.semantics {
@@ -167,7 +175,9 @@ fun MainScreen(
                 onDismissRequest = { isShowBottomSheet = false }
             ) {
                 LazyColumn(
-                    modifier = Modifier.padding(30.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(30.dp)
+                        .fillMaxWidth()
                 ) {
                     items(items = myStockCountryList) {
                         Text(
@@ -176,7 +186,8 @@ fun MainScreen(
                                 .clickable {
                                     viewModel.getAllMyStock(type = myStockCountryList.indexOf(it))
                                     isShowBottomSheet = false
-                                    titleText = it
+                                    viewModel.updateTopTitleText(it)
+                                    viewModel.setDefaultMyStockCountry(it)
                                 },
                             text = it,
                             fontSize = 18.sp,
