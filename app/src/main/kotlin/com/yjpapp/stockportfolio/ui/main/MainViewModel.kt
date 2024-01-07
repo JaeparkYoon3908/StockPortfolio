@@ -61,12 +61,16 @@ class MainViewModel @Inject constructor(
     private val _newsUiState = MutableStateFlow(NewsUiState())
     val newsUiState: StateFlow<NewsUiState> = _newsUiState.asStateFlow()
 
+    private val _myStockTitleState = MutableStateFlow("")
+    val myStockTitleState: StateFlow<String> = _myStockTitleState.asStateFlow()
+
     /**
      * 나의 주식
      */
     init {
         viewModelScope.launch {
             val defaultTitle = getDefaultMyStockTitle()
+            _myStockTitleState.update { defaultTitle }
             getAllMyStock(type = myStockCountryList.indexOf(defaultTitle) + 1)
         }
     }
@@ -117,7 +121,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getDefaultMyStockTitle(): String {
+    suspend fun getDefaultMyStockTitle(): String {
         return when (val result = mySettingRepository.getDefaultMyStockTitle()) {
             is ResponseResult.Success -> {
                 result.data?: myStockCountryList.first()
@@ -233,7 +237,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun toastMessageShown() = viewModelScope.launch {
+    fun toastMessageShown() {
         _mainUiState.update { it.copy(toastMessageId = 0, toastErrorMessage = null) }
+    }
+
+    fun updateTopTitleText(title: String) {
+        _myStockTitleState.update { title }
+    }
+
+    fun setDefaultMyStockCountry(title: String) = viewModelScope.launch {
+        mySettingRepository.setDefaultMyStockTitle(title)
     }
 }
