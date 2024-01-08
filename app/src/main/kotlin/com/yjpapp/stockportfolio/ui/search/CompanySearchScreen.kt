@@ -170,7 +170,15 @@ fun CompanySearchScreen(
                         fontSize = 16.sp,
                         color = Color_222222,
                         modifier = Modifier
-                            .clickable { onItemClick(uiState.koreaStockSearchResult[it]) }
+                            .clickable {
+                                when (type) {
+                                    Country.Korea.type -> onItemClick(uiState.koreaStockSearchResult[it])
+                                    Country.Usa.type -> {
+
+                                    }
+                                }
+
+                            }
                             .fillMaxWidth()
                     )
                 }
