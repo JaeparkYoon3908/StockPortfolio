@@ -72,6 +72,7 @@ fun MyStockListItemWidget(
         MyStockPurchaseInputDialogContent(
             dialogData = MyStockPurchaseInputDialogData(
                 id = myStockData.id,
+                type = 2,
                 stockPriceInfo = StockPriceData(
                     itmsNm = myStockData.subjectName,
                     srtnCd = myStockData.subjectCode

@@ -44,6 +44,7 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
 import com.yjpapp.stockportfolio.ui.common.theme.Color_CD4632
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
 import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogContent
+import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogData
 import com.yjpapp.stockportfolio.util.StockUtils
 
 /**
@@ -62,7 +63,9 @@ fun MyStockScreen(
     val myStockUiState by viewModel.myStockUiState.collectAsStateWithLifecycle()
     var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
     if (showMyStockPurchaseInputDialog) {
-        MyStockPurchaseInputDialogContent { dialogData, isComplete ->
+        MyStockPurchaseInputDialogContent(
+            dialogData = MyStockPurchaseInputDialogData(type = viewModel.myStockCountryState.value.type)
+        ) { dialogData, isComplete ->
             showMyStockPurchaseInputDialog = false
             if (isComplete) {
                 viewModel.addMyStock(

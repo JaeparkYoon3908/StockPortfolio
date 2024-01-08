@@ -19,8 +19,10 @@ class CompanySearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        val type = intent?.getIntExtra("type", 1)?: 1
         setContent {
             CompanySearchScreen(
+                type = type,
                 viewModel = viewModel,
                 onItemClick = { stockPriceInfo ->
                     val intent = Intent().apply {

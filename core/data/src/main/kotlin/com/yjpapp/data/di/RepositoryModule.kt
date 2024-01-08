@@ -10,6 +10,7 @@ import com.yjpapp.data.repository.MyStockRepositoryImpl
 import com.yjpapp.network.datasource.DataPortalDataSource
 import com.yjpapp.data.repository.NewsRepository
 import com.yjpapp.data.repository.NewsRepositoryImpl
+import com.yjpapp.network.datasource.AlphaVantageDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +25,8 @@ class RepositoryModule {
     fun provideMyStockRepository(
         myStockLocalDataSource: MyStockRoomDataSource,
         stockInfoDataSource: DataPortalDataSource,
-    ): MyStockRepository = MyStockRepositoryImpl(myStockLocalDataSource, stockInfoDataSource)
+        alphaVantageDataSource: AlphaVantageDataSource
+    ): MyStockRepository = MyStockRepositoryImpl(myStockLocalDataSource, stockInfoDataSource, alphaVantageDataSource)
 
     @Provides
     @Singleton

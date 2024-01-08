@@ -9,6 +9,7 @@ import com.yjpapp.data.repository.MySettingRepository
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.data.repository.NewsRepository
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.model.Country
 import com.yjpapp.stockportfolio.ui.main.news.newsMenuList
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,8 +62,8 @@ class MainViewModel @Inject constructor(
     private val _newsUiState = MutableStateFlow(NewsUiState())
     val newsUiState: StateFlow<NewsUiState> = _newsUiState.asStateFlow()
 
-    private val _myStockTitleState = MutableStateFlow("")
-    val myStockTitleState: StateFlow<String> = _myStockTitleState.asStateFlow()
+    private val _myStockCountryState = MutableStateFlow(Country.Korea)
+    val myStockCountryState: StateFlow<Country> = _myStockCountryState.asStateFlow()
 
     /**
      * 나의 주식
@@ -70,8 +71,8 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val defaultTitle = getDefaultMyStockTitle()
-            _myStockTitleState.update { defaultTitle }
-            getAllMyStock(type = myStockCountryList.indexOf(defaultTitle) + 1)
+            _myStockCountryState.update { Country.entries.find { it.title == defaultTitle }?: Country.Korea }
+            getAllMyStock(type = _myStockCountryState.value.type)
         }
     }
 
@@ -124,11 +125,11 @@ class MainViewModel @Inject constructor(
     suspend fun getDefaultMyStockTitle(): String {
         return when (val result = mySettingRepository.getDefaultMyStockTitle()) {
             is ResponseResult.Success -> {
-                result.data?: myStockCountryList.first()
+                result.data?: myStockCountryList.first().title
             }
 
             is ResponseResult.Error -> {
-                myStockCountryList.first()
+                myStockCountryList.first().title
             }
         }
     }
@@ -241,8 +242,8 @@ class MainViewModel @Inject constructor(
         _mainUiState.update { it.copy(toastMessageId = 0, toastErrorMessage = null) }
     }
 
-    fun updateTopTitleText(title: String) {
-        _myStockTitleState.update { title }
+    fun updateMyStockCountry(country: Country) {
+        _myStockCountryState.update { country }
     }
 
     fun setDefaultMyStockCountry(title: String) = viewModelScope.launch {

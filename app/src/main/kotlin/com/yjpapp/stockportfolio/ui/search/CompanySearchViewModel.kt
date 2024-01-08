@@ -3,18 +3,21 @@ package com.yjpapp.stockportfolio.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yjpapp.data.model.ResponseResult
-import com.yjpapp.data.model.request.ReqStockPriceInfo
+import com.yjpapp.data.model.request.ReqKoreaStockPriceInfo
 import com.yjpapp.data.model.response.StockPriceData
+import com.yjpapp.data.model.response.UsaStockSymbolData
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.model.ErrorUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 data class CompanySearchUiState(
-    val searchResult: List<StockPriceData> = listOf(),
+    val usaStockSearchResult: List<UsaStockSymbolData> = listOf(),
+    val koreaStockSearchResult: List<StockPriceData> = listOf(),
     val isLoading: Boolean = false,
     val errorUiState: ErrorUiState = ErrorUiState()
 )
@@ -26,27 +29,29 @@ data class CompanySearchUiState(
 class CompanySearchViewModel @Inject constructor(
     private val myStockRepository: MyStockRepository
 ): ViewModel() {
-    var uiState = MutableStateFlow(CompanySearchUiState(isLoading = false))
-    fun requestSearchList(keyWord: String) = viewModelScope.launch {
-        uiState.update { it.copy(searchResult = listOf(), isLoading = true) }
-        val reqStockPriceInfo = ReqStockPriceInfo(
+    private val _uiState = MutableStateFlow(CompanySearchUiState(isLoading = false))
+    val uiState: StateFlow<CompanySearchUiState> = _uiState.asStateFlow()
+
+    fun requestKoreaSearchList(keyWord: String) = viewModelScope.launch {
+        _uiState.update { it.copy(koreaStockSearchResult = listOf(), isLoading = true) }
+        val reqKoreaStockPriceInfo = ReqKoreaStockPriceInfo(
             numOfRows = "50",
             pageNo = "1",
             likeItmsNm = keyWord
         )
 
-        when (val result = myStockRepository.getStockPriceInfo(reqStockPriceInfo)) {
+        when (val result = myStockRepository.getKoreaStockPriceInfo(reqKoreaStockPriceInfo)) {
             is ResponseResult.Success -> {
                 val companyList = result.data?: listOf()
-                uiState.update {
+                _uiState.update {
                     it.copy(
                         isLoading = false,
-                        searchResult = companyList
+                        koreaStockSearchResult = companyList.distinct()
                     )
                 }
             }
             is ResponseResult.Error -> {
-                uiState.update {
+                _uiState.update {
                     it.copy(
                         isLoading = false,
                         errorUiState = ErrorUiState(
@@ -59,14 +64,40 @@ class CompanySearchViewModel @Inject constructor(
             }
         }
     }
-    //종목 코드 6자리 만들기
-    private fun remakeSubjectCode(code: String): String {
-        val result = StringBuffer()
-        val repeatCount = 6 - code.length
-        for (i in 0 until repeatCount) {
-            result.append("0")
+    fun requestUsaSearchList(keywords: String) = viewModelScope.launch {
+        _uiState.update { it.copy(usaStockSearchResult = listOf(), isLoading = true) }
+        when (val result = myStockRepository.getUsaStockSymbol(keywords = keywords)) {
+            is ResponseResult.Success -> {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        usaStockSearchResult = result.data?: listOf()
+                    )
+                }
+            }
+            is ResponseResult.Error -> {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorUiState = ErrorUiState(
+                            isError = true,
+                            errorCode = result.resultCode,
+                            errorMessage = result.resultMessage,
+                        )
+                    )
+                }
+            }
         }
-        result.append(code)
-        return result.toString()
+
     }
+//    //종목 코드 6자리 만들기
+//    private fun remakeSubjectCode(code: String): String {
+//        val result = StringBuffer()
+//        val repeatCount = 6 - code.length
+//        for (i in 0 until repeatCount) {
+//            result.append("0")
+//        }
+//        result.append(code)
+//        return result.toString()
+//    }
 }
