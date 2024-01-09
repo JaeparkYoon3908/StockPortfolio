@@ -1,8 +1,7 @@
-@file:OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalMaterialApi::class)
 
 package com.yjpapp.stockportfolio.ui.main.mystock
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,12 +57,12 @@ fun MyStockScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
     val myStockUiState by viewModel.myStockUiState.collectAsStateWithLifecycle()
+    val myStockCountryState by viewModel.myStockCountryState.collectAsStateWithLifecycle()
     var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
     if (showMyStockPurchaseInputDialog) {
         MyStockPurchaseInputDialogContent(
-            dialogData = MyStockPurchaseInputDialogData(type = viewModel.myStockCountryState.value.type)
+            dialogData = MyStockPurchaseInputDialogData(type = myStockCountryState.type)
         ) { dialogData, isComplete ->
             showMyStockPurchaseInputDialog = false
             if (isComplete) {
@@ -76,7 +74,7 @@ fun MyStockScreen(
                         purchasePrice = dialogData.purchasePrice,
                         purchaseCount = dialogData.purchaseCount.toIntOrNull() ?: 0,
                         currentPrice = StockUtils.getNumInsertComma(dialogData.stockPriceInfo.clpr),
-                        type = myStockUiState.type,
+                        type = myStockCountryState.type,
                         dayToDayPrice = dialogData.stockPriceInfo.vs,
                         dayToDayPercent = dialogData.stockPriceInfo.fltRt,
                         basDt = dialogData.stockPriceInfo.basDt,
@@ -89,7 +87,10 @@ fun MyStockScreen(
         LazyColumn {
             item {
                 TotalPriceComposable(
-                    myStockViewModel = viewModel
+                    totalPurchasePrice = myStockUiState.totalPurchasePrice,
+                    totalEvaluationAmount = myStockUiState.totalEvaluationAmount,
+                    totalGainPrice = myStockUiState.totalGainPrice,
+                    totalGainPricePercent = myStockUiState.totalGainPricePercent,
                 )
             }
             item { Spacer(modifier = Modifier.size(10.dp)) }
@@ -111,9 +112,9 @@ fun MyStockScreen(
                             fontSize = 17.sp,
                         )
                         Spacer(modifier = Modifier.size(10.dp))
-                        if (myStockUiState.koreaStockInfoList.isNotEmpty()) {
+                        if (myStockUiState.stockInfoList.isNotEmpty()) {
                             Text(
-                                text = "기준 일자 : ${myStockUiState.koreaStockInfoList.first().basDt}",
+                                text = "기준 일자 : ${myStockUiState.stockInfoList.first().basDt}",
                                 fontWeight = FontWeight.Light,
                                 color = Color_666666,
                                 fontSize = 13.sp,
@@ -123,8 +124,8 @@ fun MyStockScreen(
                     Row {
                         IconButton(
                             modifier = Modifier.size(18.dp),
-                            enabled = myStockUiState.koreaStockInfoList.isNotEmpty(),
-                            onClick = { viewModel.refreshStockCurrentPriceInfo(1) } //TODO 프리퍼런스 정리
+                            enabled = myStockUiState.stockInfoList.isNotEmpty(),
+                            onClick = { viewModel.refreshStockCurrentPriceInfo(myStockCountryState.type) }
                         ) {
                             Icon(
                                 modifier = Modifier.size(25.dp),
@@ -149,7 +150,7 @@ fun MyStockScreen(
             }
             item { Spacer(modifier = Modifier.size(20.dp)) }
             items(
-                items = myStockUiState.koreaStockInfoList,
+                items = myStockUiState.stockInfoList,
             ) { stockEntity ->
                 MyStockListItemWidget(
                     viewModel = viewModel,
@@ -162,9 +163,11 @@ fun MyStockScreen(
 
 @Composable
 private fun TotalPriceComposable(
-    myStockViewModel: MainViewModel,
+    totalPurchasePrice: String = "", //상단 총 매수금액
+    totalEvaluationAmount: String = "",
+    totalGainPrice: String = "", //상단 손익
+    totalGainPricePercent: String = "0%", //상단 수익률
 ) {
-    val myStockUiState by myStockViewModel.myStockUiState.collectAsStateWithLifecycle()
     Card(
         modifier = Modifier.padding(20.dp),
         shape = RoundedCornerShape(10.dp),
@@ -191,7 +194,7 @@ private fun TotalPriceComposable(
                         .weight(0.30f)
                 )
                 Text(
-                    text = StockUtils.getPriceNum(myStockUiState.totalPurchasePrice),
+                    text = StockUtils.getPriceNum(totalPurchasePrice),
                     color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
@@ -214,7 +217,7 @@ private fun TotalPriceComposable(
                         .weight(0.30f)
                 )
                 Text(
-                    text = StockUtils.getPriceNum(myStockUiState.totalEvaluationAmount),
+                    text = StockUtils.getPriceNum(totalEvaluationAmount),
                     color = Color_222222,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
@@ -237,12 +240,12 @@ private fun TotalPriceComposable(
                         .weight(0.30f)
                 )
                 Text(
-                    text = StockUtils.getPriceNum(myStockUiState.totalGainPrice),
+                    text = StockUtils.getPriceNum(totalGainPrice),
                     color = when {
-                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice)
+                        StockUtils.getNumDeletedComma(totalGainPrice)
                             .toDouble() > 0 -> Color_CD4632
 
-                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice)
+                        StockUtils.getNumDeletedComma(totalGainPrice)
                             .toDouble() < 0 -> Color_4876C7
 
                         else -> Color_CD4632
@@ -271,12 +274,12 @@ private fun TotalPriceComposable(
                         .weight(0.30f)
                 )
                 Text(
-                    text = myStockUiState.totalGainPricePercent,
+                    text = totalGainPricePercent,
                     color = when {
-                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice)
+                        StockUtils.getNumDeletedComma(totalGainPrice)
                             .toDouble() > 0 -> Color_CD4632
 
-                        StockUtils.getNumDeletedComma(myStockUiState.totalGainPrice)
+                        StockUtils.getNumDeletedComma(totalGainPrice)
                             .toDouble() < 0 -> Color_4876C7
 
                         else -> Color_CD4632

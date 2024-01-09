@@ -89,4 +89,8 @@ class CompanySearchViewModel @Inject constructor(
             }
         }
     }
+
+    fun requestUsaStockInfo(symbol: String) = viewModelScope.launch {
+
+    }
 }

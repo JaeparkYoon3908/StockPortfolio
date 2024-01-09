@@ -186,10 +186,10 @@ fun MainScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    viewModel.getAllMyStock(type = myStockCountryList.indexOf(it))
                                     isShowBottomSheet = false
                                     viewModel.updateMyStockCountry(it)
                                     viewModel.setDefaultMyStockCountry(it.title)
+                                    viewModel.getAllMyStock(type = viewModel.myStockCountryState.value.type)
                                 },
                             text = it.title,
                             fontSize = 18.sp,

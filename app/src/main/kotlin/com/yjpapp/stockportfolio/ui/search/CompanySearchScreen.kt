@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -57,6 +58,7 @@ fun CompanySearchScreen(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -173,9 +175,7 @@ fun CompanySearchScreen(
                             .clickable {
                                 when (type) {
                                     Country.Korea.type -> onItemClick(uiState.koreaStockSearchResult[it])
-                                    Country.Usa.type -> {
-
-                                    }
+                                    Country.Usa.type -> {  }
                                 }
 
                             }

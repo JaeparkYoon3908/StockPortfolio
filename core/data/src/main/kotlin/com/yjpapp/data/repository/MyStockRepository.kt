@@ -21,6 +21,7 @@ interface MyStockRepository {
     suspend fun getAllMyStock(): ResponseResult<List<MyStockData>>
     suspend fun getKoreaStockPriceInfo(request: ReqKoreaStockPriceInfo): ResponseResult<List<StockPriceData>>
     suspend fun getUsaStockSymbol(keywords: String): ResponseResult<List<UsaStockSymbolData>>
+    suspend fun getUsaStockInfo(symbol: String)
     suspend fun refreshMyStock(type: Int): Boolean
 }
 
@@ -90,6 +91,10 @@ class MyStockRepositoryImpl @Inject constructor(
         } catch (e: Throwable) {
             ResponseResult.Error("501", "${e.message}")
         }
+    }
+
+    override suspend fun getUsaStockInfo(symbol: String) {
+        TODO("Not yet implemented")
     }
 
     override suspend fun refreshMyStock(type: Int): Boolean {
