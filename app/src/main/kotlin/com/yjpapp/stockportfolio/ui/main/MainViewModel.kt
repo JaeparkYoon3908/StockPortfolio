@@ -9,6 +9,7 @@ import com.yjpapp.data.repository.MySettingRepository
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.data.repository.NewsRepository
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.model.Country
 import com.yjpapp.stockportfolio.ui.main.news.newsMenuList
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,13 +27,11 @@ data class MainUiState(
 )
 
 data class MyStockUiState(
-    val type: Int = 0,
     val totalPurchasePrice: String = "", //상단 총 매수금액
     val totalEvaluationAmount: String = "",
     val totalGainPrice: String = "", //상단 손익
     val totalGainPricePercent: String = "0%", //상단 수익률
-    val koreaStockInfoList: List<MyStockData> = listOf(),
-    val usaStockInfoList: List<MyStockData> = listOf()
+    val stockInfoList: List<MyStockData> = listOf(),
 )
 
 data class NewsUiState(
@@ -57,6 +56,11 @@ class MainViewModel @Inject constructor(
     private val _myStockUiState = MutableStateFlow(MyStockUiState())
     val myStockUiState: StateFlow<MyStockUiState> = _myStockUiState.asStateFlow()
 
+    private val _myStockCountryState = MutableStateFlow(Country.Korea)
+    val myStockCountryState: StateFlow<Country> = _myStockCountryState.asStateFlow()
+
+
+
     //경제 뉴스 tab
     private val _newsUiState = MutableStateFlow(NewsUiState())
     val newsUiState: StateFlow<NewsUiState> = _newsUiState.asStateFlow()
@@ -67,7 +71,8 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val defaultTitle = getDefaultMyStockTitle()
-            getAllMyStock(type = myStockCountryList.indexOf(defaultTitle) + 1)
+            _myStockCountryState.update { Country.entries.find { it.title == defaultTitle }?: Country.Korea }
+            getAllMyStock(type = _myStockCountryState.value.type)
         }
     }
 
@@ -80,10 +85,8 @@ class MainViewModel @Inject constructor(
                 var mTotalPurchasePrice = 0.00 // 총 매수금액
                 var mTotalEvaluationAmount = 0.00 // 총 평가금액
                 //한국주식 리스트
-                val koreaStockInfoList = result.data?.filter { data -> data.type == 1 }?: listOf()
+                val stockInfoList = result.data?.filter { data -> data.type == type }?: listOf()
                 //미국 주식 리스트
-                val usaStockInfoList = result.data?.filter { data -> data.type == 2 }?: listOf()
-                val stockInfoList = if (type == 1) koreaStockInfoList else usaStockInfoList
                 //계산
                 stockInfoList.forEach {
                     val purchasePrice = StockUtils.getNumDeletedComma(it.purchasePrice).toDouble()
@@ -100,9 +103,7 @@ class MainViewModel @Inject constructor(
 
                 _myStockUiState.update {
                     it.copy(
-                        type = type,
-                        koreaStockInfoList = koreaStockInfoList,
-                        usaStockInfoList = usaStockInfoList,
+                        stockInfoList = stockInfoList,
                         totalPurchasePrice = mTotalPurchasePrice.toString(),
                         totalEvaluationAmount = mTotalEvaluationAmount.toString(),
                         totalGainPrice = mTotalGainPrice.toString(),
@@ -117,14 +118,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getDefaultMyStockTitle(): String {
+    suspend fun getDefaultMyStockTitle(): String {
         return when (val result = mySettingRepository.getDefaultMyStockTitle()) {
             is ResponseResult.Success -> {
-                result.data?: myStockCountryList.first()
+                result.data?: myStockCountryList.first().title
             }
 
             is ResponseResult.Error -> {
-                myStockCountryList.first()
+                myStockCountryList.first().title
             }
         }
     }
@@ -233,7 +234,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun toastMessageShown() = viewModelScope.launch {
+    fun toastMessageShown() {
         _mainUiState.update { it.copy(toastMessageId = 0, toastErrorMessage = null) }
+    }
+
+    fun updateMyStockCountry(country: Country) {
+        _myStockCountryState.update { country }
+    }
+
+    fun setDefaultMyStockCountry(title: String) = viewModelScope.launch {
+        mySettingRepository.setDefaultMyStockTitle(title)
     }
 }

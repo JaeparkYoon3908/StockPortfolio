@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,31 +38,35 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.model.Country
 import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_888888
 import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
-val myStockCountryList = listOf("한국 주식", "미국 주식")
+import kotlinx.coroutines.launch
+
+val myStockCountryList = Country.entries
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val navController = rememberNavController()
     val navItemList = remember { mutableStateListOf(NavItem.MyStock, NavItem.News) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var isShowBottomSheet by remember { mutableStateOf(false) }
-    var titleText by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf("") }
     Box {
         Scaffold(
             topBar = {
                 Column {
                     CenterAlignedTopAppBar(
                         title = {
-                            Text(text = titleText)
+                            Text(text = title)
                         },
                         actions = {
                             if (currentRoute == NavItem.MyStock.screenRoute) {
@@ -100,8 +105,13 @@ fun MainScreen(
                         } else {
                             Color_888888
                         }
-                        if (currentRoute != NavItem.MyStock.screenRoute) {
-                            titleText = stringResource(id = item.title)
+                        if (currentRoute == NavItem.MyStock.screenRoute) {
+                            scope.launch {
+                                viewModel.updateMyStockCountry(myStockCountryList.find { it.title == viewModel.getDefaultMyStockTitle() }?: Country.Korea)
+                                title = viewModel.myStockCountryState.value.title
+                            }
+                        } else {
+                            title = stringResource(id = item.title)
                         }
                         BottomNavigationItem(
                             modifier = Modifier.semantics {
@@ -167,18 +177,21 @@ fun MainScreen(
                 onDismissRequest = { isShowBottomSheet = false }
             ) {
                 LazyColumn(
-                    modifier = Modifier.padding(30.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(30.dp)
+                        .fillMaxWidth()
                 ) {
                     items(items = myStockCountryList) {
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    viewModel.getAllMyStock(type = myStockCountryList.indexOf(it))
                                     isShowBottomSheet = false
-                                    titleText = it
+                                    viewModel.updateMyStockCountry(it)
+                                    viewModel.setDefaultMyStockCountry(it.title)
+                                    viewModel.getAllMyStock(type = viewModel.myStockCountryState.value.type)
                                 },
-                            text = it,
+                            text = it.title,
                             fontSize = 18.sp,
                             color = Color_222222
                         )

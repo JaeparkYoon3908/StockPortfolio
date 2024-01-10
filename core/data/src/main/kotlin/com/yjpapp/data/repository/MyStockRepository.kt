@@ -4,8 +4,10 @@ import com.yjpapp.data.datasource.MyStockRoomDataSource
 import com.yjpapp.data.mapper.mapping
 import com.yjpapp.data.model.MyStockData
 import com.yjpapp.data.model.ResponseResult
-import com.yjpapp.data.model.request.ReqStockPriceInfo
+import com.yjpapp.data.model.request.ReqKoreaStockPriceInfo
 import com.yjpapp.data.model.response.StockPriceData
+import com.yjpapp.data.model.response.UsaStockSymbolData
+import com.yjpapp.network.datasource.AlphaVantageDataSource
 import com.yjpapp.network.datasource.DataPortalDataSource
 import retrofit2.HttpException
 import java.text.DecimalFormat
@@ -17,13 +19,16 @@ interface MyStockRepository {
     suspend fun deleteMyStock(myStockData: MyStockData)
     //type 1: 한국 주식, 2: 미국 주식
     suspend fun getAllMyStock(): ResponseResult<List<MyStockData>>
-    suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>>
+    suspend fun getKoreaStockPriceInfo(request: ReqKoreaStockPriceInfo): ResponseResult<List<StockPriceData>>
+    suspend fun getUsaStockSymbol(keywords: String): ResponseResult<List<UsaStockSymbolData>>
+    suspend fun getUsaStockInfo(symbol: String)
     suspend fun refreshMyStock(type: Int): Boolean
 }
 
 class MyStockRepositoryImpl @Inject constructor(
     private val myStockLocalDataSource: MyStockRoomDataSource,
-    private val stockInfoDataSource: DataPortalDataSource
+    private val stockInfoDataSource: DataPortalDataSource,
+    private val alphaVantageDataSource: AlphaVantageDataSource
 ) : MyStockRepository {
     override suspend fun addMyStock(myStockData: MyStockData) =
         myStockLocalDataSource.requestInsertMyStock(myStockData.mapping())
@@ -46,7 +51,7 @@ class MyStockRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>> {
+    override suspend fun getKoreaStockPriceInfo(request: ReqKoreaStockPriceInfo): ResponseResult<List<StockPriceData>> {
         val hashMap = HashMap<String, String>().apply {
             this["serviceKey"] = request.serviceKey
             this["numOfRows"] = request.numOfRows
@@ -55,7 +60,7 @@ class MyStockRepositoryImpl @Inject constructor(
             this["basDt"] = request.basDt
             this["likeItmsNm"] = request.likeItmsNm
         }
-        val response = stockInfoDataSource.getStockPriceInfo(hashMap)
+        val response = stockInfoDataSource.getKoreaStockPriceInfo(hashMap)
         return try {
             if (response.isSuccessful) {
                 val data = response.body()?.response?.body?.items?.item?.map { it.mapping() }?: listOf()
@@ -70,17 +75,39 @@ class MyStockRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getUsaStockSymbol(keywords: String): ResponseResult<List<UsaStockSymbolData>> {
+        val response = alphaVantageDataSource.getUSAStockSymbol(keywords = keywords)
+        return try {
+            if (response.isSuccessful) {
+                val data = response.body()?.bestMatches
+                    ?.filter { it.region == "United States" }
+                    ?.map { UsaStockSymbolData(symbol = it.symbol, name = it.name, type = it.type) }?: listOf()
+                ResponseResult.Success(data, "200", "SUCCESS")
+            } else {
+                ResponseResult.Error("400", response.message())
+            }
+        } catch (e: HttpException) {
+            ResponseResult.Error("500", "${e.message}")
+        } catch (e: Throwable) {
+            ResponseResult.Error("501", "${e.message}")
+        }
+    }
+
+    override suspend fun getUsaStockInfo(symbol: String) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun refreshMyStock(type: Int): Boolean {
         return when (val result = getAllMyStock()) {
             is ResponseResult.Success -> {
                 result.data?.forEach { myStockEntity ->
-                    val reqStockPriceInfo = ReqStockPriceInfo(
+                    val reqKoreaStockPriceInfo = ReqKoreaStockPriceInfo(
                         numOfRows = "20",
                         pageNo = "1",
                         isinCd = myStockEntity.subjectCode,
                         likeItmsNm = myStockEntity.subjectName
                     )
-                    val stockPriceInfo = getStockPriceInfo(reqStockPriceInfo)
+                    val stockPriceInfo = getKoreaStockPriceInfo(reqKoreaStockPriceInfo)
                     if (stockPriceInfo is ResponseResult.Success) {
                         val item = stockPriceInfo.data?: listOf()
                         val resultItem = item.find { it.isinCd == myStockEntity.subjectCode }
