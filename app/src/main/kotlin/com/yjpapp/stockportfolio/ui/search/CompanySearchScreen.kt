@@ -17,7 +17,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -36,12 +37,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yjpapp.data.model.response.StockPriceData
+import com.yjpapp.stockportfolio.model.Country
 import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
@@ -49,11 +52,13 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CompanySearchScreen(
+    type: Int = 1,
     viewModel: CompanySearchViewModel = hiltViewModel(),
     onItemClick: (stockPriceInfo: StockPriceData) -> Unit
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -87,7 +92,14 @@ fun CompanySearchScreen(
                 leadingIcon = {
                     IconButton(
                         onClick = {
-                            viewModel.requestSearchList(userInputKeyWord)
+                            when (type) {
+                                Country.Korea.type -> {
+                                    viewModel.requestKoreaSearchList(userInputKeyWord)
+                                }
+                                Country.Usa.type -> {
+                                    viewModel.requestUsaSearchList(userInputKeyWord)
+                                }
+                            }
                             keyboardController?.hide()
                         }
                     ) {
@@ -119,7 +131,15 @@ fun CompanySearchScreen(
 
                     },
                     onDone = {
-                        viewModel.requestSearchList(userInputKeyWord)
+                        when (type) {
+                            Country.Korea.type -> {
+                                viewModel.requestKoreaSearchList(userInputKeyWord)
+                            }
+                            Country.Usa.type -> {
+                                viewModel.requestUsaSearchList(userInputKeyWord)
+                            }
+                        }
+
                         keyboardController?.hide()
                     }
                 ),
@@ -134,10 +154,13 @@ fun CompanySearchScreen(
         /**
          * SearchList
          */
+        val companyList = if (type == Country.Korea.type) {
+            uiState.koreaStockSearchResult
+        } else {
+            uiState.usaStockSearchResult
+        }
         LazyColumn {
-            items(
-                count = uiState.searchResult.size
-            ) {
+            items(count = companyList.size) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -145,12 +168,28 @@ fun CompanySearchScreen(
                         .background(Color_FFFFFF)
                 ) {
                     Text(
-                        text = uiState.searchResult[it].itmsNm,
+                        text = if (type == Country.Korea.type) uiState.koreaStockSearchResult[it].itmsNm else uiState.usaStockSearchResult[it].name,
                         fontSize = 16.sp,
                         color = Color_222222,
                         modifier = Modifier
-                            .clickable { onItemClick(uiState.searchResult[it]) }
+                            .clickable {
+                                when (type) {
+                                    Country.Korea.type -> onItemClick(uiState.koreaStockSearchResult[it])
+                                    Country.Usa.type -> {  }
+                                }
+
+                            }
                             .fillMaxWidth()
+                    )
+                }
+            }
+            item {
+                if (type == Country.Usa.type) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth() ,
+                        text = "${Country.Usa.title} 검색\n",
+                        textAlign = TextAlign.Center,
+                        fontSize = 14.sp
                     )
                 }
             }

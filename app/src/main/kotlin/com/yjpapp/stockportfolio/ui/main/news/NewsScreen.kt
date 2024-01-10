@@ -36,7 +36,7 @@ fun NewsScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val pagerState = rememberPagerState(pageCount = { newsMenuList.size })
+    val pagerState = rememberPagerState(pageCount = { newsMenuList.size } )
     val newsUiState by viewModel.newsUiState.collectAsStateWithLifecycle()
     Column(modifier = modifier) {
         TabWidget(

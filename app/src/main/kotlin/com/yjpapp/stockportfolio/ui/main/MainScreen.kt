@@ -38,6 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.model.Country
 import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_888888
@@ -45,7 +46,7 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_F1F1F1
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 import kotlinx.coroutines.launch
 
-val myStockCountryList = listOf("한국 주식", "미국 주식")
+val myStockCountryList = Country.entries
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
@@ -58,14 +59,14 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var isShowBottomSheet by remember { mutableStateOf(false) }
-    val titleText by viewModel.myStockTitleState.collectAsStateWithLifecycle()
+    var title by remember { mutableStateOf("") }
     Box {
         Scaffold(
             topBar = {
                 Column {
                     CenterAlignedTopAppBar(
                         title = {
-                            Text(text = titleText)
+                            Text(text = title)
                         },
                         actions = {
                             if (currentRoute == NavItem.MyStock.screenRoute) {
@@ -106,10 +107,11 @@ fun MainScreen(
                         }
                         if (currentRoute == NavItem.MyStock.screenRoute) {
                             scope.launch {
-                                viewModel.updateTopTitleText(viewModel.getDefaultMyStockTitle())
+                                viewModel.updateMyStockCountry(myStockCountryList.find { it.title == viewModel.getDefaultMyStockTitle() }?: Country.Korea)
+                                title = viewModel.myStockCountryState.value.title
                             }
                         } else {
-                            viewModel.updateTopTitleText(stringResource(id = item.title))
+                            title = stringResource(id = item.title)
                         }
                         BottomNavigationItem(
                             modifier = Modifier.semantics {
@@ -184,12 +186,12 @@ fun MainScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    viewModel.getAllMyStock(type = myStockCountryList.indexOf(it))
                                     isShowBottomSheet = false
-                                    viewModel.updateTopTitleText(it)
-                                    viewModel.setDefaultMyStockCountry(it)
+                                    viewModel.updateMyStockCountry(it)
+                                    viewModel.setDefaultMyStockCountry(it.title)
+                                    viewModel.getAllMyStock(type = viewModel.myStockCountryState.value.type)
                                 },
-                            text = it,
+                            text = it.title,
                             fontSize = 18.sp,
                             color = Color_222222
                         )
