@@ -1,5 +1,6 @@
 package com.yjpapp.data.repository
 
+import com.yjpapp.data.APICall
 import com.yjpapp.data.datasource.MyStockRoomDataSource
 import com.yjpapp.data.mapper.mapping
 import com.yjpapp.data.model.MyStockData
@@ -9,6 +10,7 @@ import com.yjpapp.data.model.response.StockPriceData
 import com.yjpapp.data.model.response.UsaStockSymbolData
 import com.yjpapp.network.datasource.AlphaVantageDataSource
 import com.yjpapp.network.datasource.DataPortalDataSource
+import com.yjpapp.network.model.StockPriceInfo
 import retrofit2.HttpException
 import java.text.DecimalFormat
 import javax.inject.Inject
@@ -21,7 +23,7 @@ interface MyStockRepository {
     suspend fun getAllMyStock(): ResponseResult<List<MyStockData>>
     suspend fun getKoreaStockPriceInfo(request: ReqKoreaStockPriceInfo): ResponseResult<List<StockPriceData>>
     suspend fun getUsaStockSymbol(keywords: String): ResponseResult<List<UsaStockSymbolData>>
-    suspend fun getUsaStockInfo(symbol: String)
+    suspend fun getUsaStockInfo(symbol: String): ResponseResult<StockPriceData>
     suspend fun refreshMyStock(type: Int): Boolean
 }
 
@@ -60,41 +62,33 @@ class MyStockRepositoryImpl @Inject constructor(
             this["basDt"] = request.basDt
             this["likeItmsNm"] = request.likeItmsNm
         }
-        val response = stockInfoDataSource.getKoreaStockPriceInfo(hashMap)
-        return try {
-            if (response.isSuccessful) {
-                val data = response.body()?.response?.body?.items?.item?.map { it.mapping() }?: listOf()
-                ResponseResult.Success(data, "200", "SUCCESS")
-            } else {
-                ResponseResult.Error("400", response.message())
-            }
-        } catch (e: HttpException) {
-            ResponseResult.Error("500", "${e.message}")
-        } catch (e: Throwable) {
-            ResponseResult.Error("501", "${e.message}")
+        val response = APICall.handleApi { stockInfoDataSource.getKoreaStockPriceInfo(hashMap) }
+        return if (response is ResponseResult.Success) {
+            //mapping
+            val data = response.data?.response?.body?.items?.item?.map { it.mapping() }?: listOf()
+            ResponseResult.Success(data, "200", "SUCCESS")
+        } else {
+            ResponseResult.Error(errorCode = response.resultCode, errorMessage = response.resultMessage)
         }
     }
 
     override suspend fun getUsaStockSymbol(keywords: String): ResponseResult<List<UsaStockSymbolData>> {
-        val response = alphaVantageDataSource.getUSAStockSymbol(keywords = keywords)
-        return try {
-            if (response.isSuccessful) {
-                val data = response.body()?.bestMatches
-                    ?.filter { it.region == "United States" }
-                    ?.map { UsaStockSymbolData(symbol = it.symbol, name = it.name, type = it.type) }?: listOf()
-                ResponseResult.Success(data, "200", "SUCCESS")
-            } else {
-                ResponseResult.Error("400", response.message())
-            }
-        } catch (e: HttpException) {
-            ResponseResult.Error("500", "${e.message}")
-        } catch (e: Throwable) {
-            ResponseResult.Error("501", "${e.message}")
+        val response = APICall.handleApi { alphaVantageDataSource.getUSAStockSymbol(keywords = keywords) }
+        return if (response is ResponseResult.Success) {
+            val data = response.data?.bestMatches
+                ?.filter { it.region == "United States" }
+                ?.map { UsaStockSymbolData(symbol = it.symbol, name = it.name, type = it.type) }
+                ?: listOf()
+            ResponseResult.Success(data, "200", "SUCCESS")
+        } else {
+            ResponseResult.Error(errorCode = response.resultCode, errorMessage = response.resultMessage)
         }
     }
 
-    override suspend fun getUsaStockInfo(symbol: String) {
-        TODO("Not yet implemented")
+    override suspend fun getUsaStockInfo(symbol: String): ResponseResult<StockPriceData> {
+        //TODO 작성 따로하기
+        val response = alphaVantageDataSource.getUSAStockInfo(symbol = symbol)
+        return ResponseResult.Error("500", "error")
     }
 
     override suspend fun refreshMyStock(type: Int): Boolean {

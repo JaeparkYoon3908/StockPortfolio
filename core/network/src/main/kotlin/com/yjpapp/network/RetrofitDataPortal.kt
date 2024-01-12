@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.yjpapp.network.datasource.AlphaVantageDataSource
 import com.yjpapp.network.datasource.DataPortalDataSource
 import com.yjpapp.network.model.RespStockPriceInfo
+import com.yjpapp.network.model.RespUsaStockInfo
 import com.yjpapp.network.model.RespUsaStockSymbolSearch
 import kotlinx.serialization.json.Json
 import okhttp3.Call
@@ -30,6 +31,14 @@ interface AlphaVantageApi {
         @Query("keywords")keywords: String,
         @Query("apikey")apikey: String = "6RTTL7DXZNIV1SXN",
     ): Response<RespUsaStockSymbolSearch>
+
+    @GET("/query")
+    suspend fun getUSAStockInfo(
+        @Query("function")function: String = "TIME_SERIES_INTRADAY",
+        @Query("symbol")symbol: String,
+        @Query("interval")interval: String = "1min",
+        @Query("apikey")apikey: String = "6RTTL7DXZNIV1SXN",
+    ): Response<RespUsaStockInfo>
 }
 class RetrofitDataPortal @Inject constructor(
     networkJson: Json,
@@ -59,6 +68,8 @@ class RetrofitDataPortal @Inject constructor(
     override suspend fun getUSAStockSymbol(keywords: String): Response<RespUsaStockSymbolSearch> =
         alphaVantageApi.getSymbolSearch(keywords = keywords)
 
+    override suspend fun getUSAStockInfo(symbol: String): Response<RespUsaStockInfo> =
+        alphaVantageApi.getUSAStockInfo(symbol = symbol)
 
 
 }
