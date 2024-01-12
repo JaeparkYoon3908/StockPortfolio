@@ -54,7 +54,7 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 fun CompanySearchScreen(
     type: Int = 1,
     viewModel: CompanySearchViewModel = hiltViewModel(),
-    onItemClick: (stockPriceInfo: StockPriceData) -> Unit
+    onItemClick: (stockPriceData: StockPriceData) -> Unit
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -175,7 +175,7 @@ fun CompanySearchScreen(
                             .clickable {
                                 when (type) {
                                     Country.Korea.type -> onItemClick(uiState.koreaStockSearchResult[it])
-                                    Country.Usa.type -> {  }
+                                    Country.Usa.type -> { viewModel.requestUsaStockInfo(uiState.usaStockSearchResult[it].symbol) }
                                 }
 
                             }

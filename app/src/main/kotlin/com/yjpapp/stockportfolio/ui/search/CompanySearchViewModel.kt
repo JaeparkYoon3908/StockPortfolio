@@ -9,8 +9,12 @@ import com.yjpapp.data.model.response.UsaStockSymbolData
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.model.ErrorUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -31,6 +35,13 @@ class CompanySearchViewModel @Inject constructor(
 ): ViewModel() {
     private val _uiState = MutableStateFlow(CompanySearchUiState(isLoading = false))
     val uiState: StateFlow<CompanySearchUiState> = _uiState.asStateFlow()
+
+    private val _usaStockInfoState = MutableSharedFlow<StockPriceData>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val usaStockInfoState: SharedFlow<StockPriceData> = _usaStockInfoState.asSharedFlow()
 
     fun requestKoreaSearchList(keyWord: String) = viewModelScope.launch {
         _uiState.update { it.copy(koreaStockSearchResult = listOf(), isLoading = true) }
@@ -91,6 +102,13 @@ class CompanySearchViewModel @Inject constructor(
     }
 
     fun requestUsaStockInfo(symbol: String) = viewModelScope.launch {
+        when (val result = myStockRepository.getUsaStockInfo(symbol)) {
+            is ResponseResult.Success -> {
 
+            }
+            is ResponseResult.Error -> {
+
+            }
+        }
     }
 }
