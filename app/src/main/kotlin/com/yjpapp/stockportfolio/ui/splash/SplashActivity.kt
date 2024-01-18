@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.yjpapp.stockportfolio.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,12 +19,14 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SplashActivity: ComponentActivity() {
-    private val viewModel: SplashViewModel by viewModels()
+
     private val PERMISSION_REQUEST_CODE = 0 // 임의 설정
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.setIsFirstAppStart()
+        setContent {
+
+        }
         startMainActivity()
     }
 
