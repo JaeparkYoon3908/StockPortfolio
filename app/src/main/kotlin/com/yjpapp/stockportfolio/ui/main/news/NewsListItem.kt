@@ -25,7 +25,7 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
 import com.yjpapp.stockportfolio.util.StockUtils
 
 @Composable
-fun NewsListItem(
+internal fun NewsListItem(
     data: NewsData,
     onItemClick: () -> Unit = {}
 ) {

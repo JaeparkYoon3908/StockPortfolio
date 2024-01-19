@@ -65,7 +65,7 @@ data class MyStockPurchaseInputDialogData(
 )
 
 @Composable
-fun MyStockPurchaseInputDialogContent(
+internal fun MyStockPurchaseInputDialogContent(
     dialogData: MyStockPurchaseInputDialogData = MyStockPurchaseInputDialogData(),
     onDismissRequest: (data: MyStockPurchaseInputDialogData, isComplete: Boolean) -> Unit
 ) {
