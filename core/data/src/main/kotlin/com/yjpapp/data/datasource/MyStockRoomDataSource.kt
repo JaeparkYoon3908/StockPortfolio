@@ -12,43 +12,24 @@ class MyStockRoomDataSource @Inject constructor(
     private val ioDispatcher = Dispatchers.IO
     suspend fun requestInsertMyStock(myStockEntity: MyStockEntity) {
         withContext(ioDispatcher) {
-            try {
-                myStockDao.insert(myStockEntity)
-            } catch (e: Exception) {
-                e.stackTrace
-            }
+            myStockDao.insert(myStockEntity)
         }
     }
 
-    suspend fun requestUpdateMyStock(myStockEntity: MyStockEntity): Boolean {
+    suspend fun requestUpdateMyStock(myStockEntity: MyStockEntity) {
         return withContext(ioDispatcher) {
-            try {
-                myStockDao.update(myStockEntity)
-                true
-            } catch (e: Exception) {
-                e.stackTrace
-                false
-            }
+            myStockDao.update(myStockEntity)
         }
     }
 
     suspend fun requestDeleteMyStock(myStockEntity: MyStockEntity) {
         withContext(ioDispatcher) {
-            try {
-                myStockDao.delete(myStockEntity)
-            } catch (e: Exception) {
-                e.stackTrace
-            }
+            myStockDao.delete(myStockEntity)
         }
     }
 
     suspend fun requestGetAllMyStock(): List<MyStockEntity> =
         withContext(Dispatchers.IO) {
-            try {
-                myStockDao.getAll()
-            } catch (e: Exception) {
-                e.stackTrace
-                listOf()
-            }
+            myStockDao.getAll()
         }
 }

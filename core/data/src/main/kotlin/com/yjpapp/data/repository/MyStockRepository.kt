@@ -1,23 +1,23 @@
 package com.yjpapp.data.repository
 
-import androidx.compose.runtime.toMutableStateList
 import com.yjpapp.data.APICall
 import com.yjpapp.data.datasource.MyStockRoomDataSource
-import com.yjpapp.database.mystock.MyStockEntity
+import com.yjpapp.data.mapper.mapping
+import com.yjpapp.data.model.MyStockData
 import com.yjpapp.data.model.ResponseResult
 import com.yjpapp.data.model.request.ReqStockPriceInfo
+import com.yjpapp.data.model.response.StockPriceData
 import com.yjpapp.network.datasource.DataPortalDataSource
-import com.yjpapp.network.model.RespStockPriceInfo
 import java.text.DecimalFormat
 import javax.inject.Inject
 
 interface MyStockRepository {
-    suspend fun addMyStock(myStockEntity: MyStockEntity)
-    suspend fun updateMyStock(myStockEntity: MyStockEntity): Boolean
-    suspend fun deleteMyStock(myStockEntity: MyStockEntity)
-    suspend fun getAllMyStock(): List<MyStockEntity>
-    suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<RespStockPriceInfo>
-    suspend fun refreshMyStock(): Boolean
+    suspend fun addMyStock(myStockData: MyStockData): ResponseResult<Boolean>
+    suspend fun updateMyStock(myStockData: MyStockData): ResponseResult<Boolean>
+    suspend fun deleteMyStock(myStockData: MyStockData): ResponseResult<Boolean>
+    suspend fun getAllMyStock(): ResponseResult<List<MyStockData>>
+    suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>>
+    suspend fun refreshMyStock(): ResponseResult<Boolean>
 }
 
 class MyStockRepositoryImpl @Inject constructor(
@@ -25,47 +25,107 @@ class MyStockRepositoryImpl @Inject constructor(
     private val stockInfoDataSource: DataPortalDataSource
 ) : MyStockRepository {
 
-    override suspend fun addMyStock(myStockEntity: MyStockEntity) =
-        myStockLocalDataSource.requestInsertMyStock(myStockEntity)
+    override suspend fun addMyStock(myStockData: MyStockData) =
+        try {
+            myStockLocalDataSource.requestInsertMyStock(myStockData.mapping())
+            ResponseResult.Success(
+                data = true,
+                resultCode = "200",
+                resultMessage = "SUCCESS"
+            )
+        } catch (e: Exception) {
+            ResponseResult.Error(
+                data = false,
+                errorCode = "700",
+                errorMessage = e.message?: "Unknown Message"
+            )
+        }
 
+    override suspend fun updateMyStock(myStockData: MyStockData) =
+        try {
+            myStockLocalDataSource.requestUpdateMyStock(myStockData.mapping())
+            ResponseResult.Success(
+                data = true,
+                resultCode = "200",
+                resultMessage = "SUCCESS"
+            )
+        } catch (e: Exception) {
+            ResponseResult.Error(
+                errorCode = "700",
+                errorMessage = e.message?: "Unknown Message"
+            )
+        }
 
-    override suspend fun updateMyStock(myStockEntity: MyStockEntity) =
-        myStockLocalDataSource.requestUpdateMyStock(myStockEntity)
+    override suspend fun deleteMyStock(myStockData: MyStockData) =
+        try {
+            myStockLocalDataSource.requestDeleteMyStock(myStockData.mapping())
+            ResponseResult.Success(
+                data = true,
+                resultCode = "200",
+                resultMessage = "SUCCESS"
+            )
+        } catch (e: Exception) {
+            ResponseResult.Error(
+                errorCode = "700",
+                errorMessage = e.message?: "Unknown Message"
+            )
+        }
 
-
-    override suspend fun deleteMyStock(myStockEntity: MyStockEntity) =
-        myStockLocalDataSource.requestDeleteMyStock(myStockEntity)
-
-
-    override suspend fun getAllMyStock() = myStockLocalDataSource.requestGetAllMyStock()
-
-    override suspend fun getStockPriceInfo(request: ReqStockPriceInfo) =
-        HashMap<String, String>().apply {
+    override suspend fun getAllMyStock() =
+        try {
+            val data = myStockLocalDataSource.requestGetAllMyStock().map { it.mapping() }
+            ResponseResult.Success(
+                data = data,
+                resultCode = "200",
+                resultMessage = "SUCCESS"
+            )
+        } catch (e: Exception) {
+            ResponseResult.Error(
+                errorCode = "700",
+                errorMessage = e.message?: "Unknown Message"
+            )
+        }
+    override suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>> {
+        val hashMap = HashMap<String, String>().apply {
             this["serviceKey"] = request.serviceKey
             this["numOfRows"] = request.numOfRows
             this["pageNo"] = request.pageNo
             this["resultType"] = request.resultType
             this["basDt"] = request.basDt
             this["likeItmsNm"] = request.likeItmsNm
-        }.run {
-            APICall.handleApi { stockInfoDataSource.getStockPriceInfo(this) }
         }
-
-    override suspend fun refreshMyStock(): Boolean {
-        getAllMyStock().toMutableStateList().forEach { myStockEntity ->
-            val reqStockPriceInfo = ReqStockPriceInfo(
-                numOfRows = "20",
-                pageNo = "1",
-                isinCd = myStockEntity.subjectCode,
-                likeItmsNm = myStockEntity.subjectName
+        val response = APICall.requestApi { stockInfoDataSource.getStockPriceInfo(hashMap) }
+        val data = response.data?.response?.body?.items?.item?.map { it.mapping() }?: listOf()
+        return if (response is ResponseResult.Success) {
+            ResponseResult.Success(
+                data = data,
+                resultCode = response.resultCode,
+                resultMessage = response.resultMessage
             )
-            val result = getStockPriceInfo(reqStockPriceInfo)
-            if (result.isSuccessful && result.data != null) {
-                val item = result.data.response.body.items.item
-                val resultItem = item.find { it.isinCd == myStockEntity.subjectCode }
+        } else {
+            ResponseResult.Error(
+                errorMessage = response.resultCode,
+                errorCode = response.resultMessage
+            )
+        }
+    }
 
-                if (resultItem != null) {
-                    if (!updateMyStock(
+    override suspend fun refreshMyStock(): ResponseResult<Boolean> {
+        val allMyStock = getAllMyStock()
+        if (allMyStock is ResponseResult.Success) {
+            allMyStock.data?.forEach { myStockEntity ->
+                val reqStockPriceInfo = ReqStockPriceInfo(
+                    numOfRows = "20",
+                    pageNo = "1",
+                    isinCd = myStockEntity.subjectCode,
+                    likeItmsNm = myStockEntity.subjectName
+                )
+                val result = getStockPriceInfo(reqStockPriceInfo)
+                if (result is ResponseResult.Success) {
+                    val item = result.data ?: listOf()
+                    val resultItem = item.find { it.isinCd == myStockEntity.subjectCode }
+                    if (resultItem != null) {
+                        updateMyStock(
                             myStockEntity.copy(
                                 currentPrice = getNumInsertComma(resultItem.clpr),
                                 dayToDayPrice = resultItem.vs,
@@ -73,19 +133,27 @@ class MyStockRepositoryImpl @Inject constructor(
                                 basDt = resultItem.basDt
                             )
                         )
-                    ) {
-                        return false
                     }
                 } else {
-                    //서버에 빈 값이 내려옴
-                    return false
+                    return ResponseResult.Error(
+                        data = false,
+                        errorCode = "700",
+                        errorMessage = "resultItem is null"
+                    )
                 }
-            } else {
-                //에러
-                return false
             }
+            return ResponseResult.Success(
+                data = true,
+                resultCode = "200",
+                resultMessage = "SUCCESS"
+            )
+        } else {
+            return ResponseResult.Error(
+                data = false,
+                errorCode = "700",
+                errorMessage = "resultItem is null"
+            )
         }
-        return true
     }
 
     //5000000 => 5,000,000 변환

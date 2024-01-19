@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.yjpapp.network.model.StockPriceInfo
+import com.yjpapp.data.model.response.StockPriceData
 import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
@@ -50,7 +50,7 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 @Composable
 fun CompanySearchScreen(
     viewModel: CompanySearchViewModel = hiltViewModel(),
-    onItemClick: (stockPriceInfo: StockPriceInfo) -> Unit
+    onItemClick: (stockPriceInfo: StockPriceData) -> Unit
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

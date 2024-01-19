@@ -29,7 +29,6 @@ object DisplayUtils {
             val window = dialog?.window
 
             val x = (size.x * width).toInt()
-//            val y = (size.y * height).toInt()
             val y = ViewGroup.LayoutParams.WRAP_CONTENT
             window?.setLayout(x, y)
         } else {
@@ -38,7 +37,6 @@ object DisplayUtils {
             val window = dialog?.window
 
             val x = (rect.width() * width).toInt()
-//            val y = (rect.height() * height).toInt()
             val y = ViewGroup.LayoutParams.WRAP_CONTENT
 
             window?.setLayout(x, y)

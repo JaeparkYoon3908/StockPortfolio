@@ -33,7 +33,7 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(
+internal fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current

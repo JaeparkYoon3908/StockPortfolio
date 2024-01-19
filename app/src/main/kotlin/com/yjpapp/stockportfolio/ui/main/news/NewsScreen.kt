@@ -31,7 +31,7 @@ import com.yjpapp.stockportfolio.ui.main.MainViewModel
 val newsMenuList = listOf(TabData.MKNews, TabData.HanKyungNews, TabData.FinancialNews)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NewsScreen(
+internal fun NewsScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel()
 ) {

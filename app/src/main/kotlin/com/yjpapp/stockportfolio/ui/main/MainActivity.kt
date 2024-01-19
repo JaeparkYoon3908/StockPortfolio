@@ -19,9 +19,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen(
-                viewModel = viewModel
-            )
+            MainScreen(viewModel = viewModel)
+            MainDialogWidget(viewModel = viewModel)
         }
+
     }
 }
