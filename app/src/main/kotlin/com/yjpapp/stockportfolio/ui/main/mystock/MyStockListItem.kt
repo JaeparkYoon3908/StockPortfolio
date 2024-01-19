@@ -20,11 +20,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,8 +30,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yjpapp.data.model.MyStockData
-import com.yjpapp.data.model.response.StockPriceData
 import com.yjpapp.stockportfolio.R
+import com.yjpapp.stockportfolio.model.DialogType
 import com.yjpapp.stockportfolio.ui.common.StockConfig
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_4876C7
@@ -44,8 +40,6 @@ import com.yjpapp.stockportfolio.ui.common.theme.Color_80000000
 import com.yjpapp.stockportfolio.ui.common.theme.Color_CD4632
 import com.yjpapp.stockportfolio.ui.common.theme.Color_FFFFFF
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
-import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogContent
-import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogData
 import com.yjpapp.stockportfolio.util.StockUtils
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
@@ -60,50 +54,13 @@ import kotlinx.coroutines.launch
  */
 @ExperimentalMaterialApi
 @Composable
-fun MyStockListItemWidget(
+internal fun MyStockListItemWidget(
     viewModel: MainViewModel,
     myStockData: MyStockData
 ) {
     val revealSwipeState = rememberRevealState()
     val coroutineScope = rememberCoroutineScope()
     val maxRevealDp = 110.dp
-    var showMyStockPurchaseInputDialog by remember { mutableStateOf(false) }
-    if (showMyStockPurchaseInputDialog) {
-        MyStockPurchaseInputDialogContent(
-            dialogData = MyStockPurchaseInputDialogData(
-                id = myStockData.id,
-                type = 2,
-                stockPriceInfo = StockPriceData(
-                    itmsNm = myStockData.subjectName,
-                    srtnCd = myStockData.subjectCode
-                ),
-                purchaseDate = myStockData.purchaseDate,
-                purchasePrice = myStockData.purchasePrice,
-                purchaseCount = myStockData.purchaseCount.toString()
-            )
-        ) { dialogData, isComplete ->
-            coroutineScope.launch {
-                revealSwipeState.reset()
-            }
-            showMyStockPurchaseInputDialog = false
-            if (isComplete) {
-                viewModel.updateMyStock(
-                    MyStockData(
-                        id = myStockData.id,
-                        subjectName = dialogData.stockPriceInfo.itmsNm,
-                        subjectCode = dialogData.stockPriceInfo.isinCd,
-                        purchaseDate = dialogData.purchaseDate,
-                        purchasePrice = dialogData.purchasePrice,
-                        purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
-                        currentPrice = myStockData.currentPrice,
-                        dayToDayPrice = myStockData.dayToDayPrice,
-                        dayToDayPercent = myStockData.dayToDayPercent,
-                        basDt = myStockData.basDt
-                    )
-                )
-            }
-        }
-    }
     RevealSwipe(
         modifier = Modifier
             .wrapContentHeight()
@@ -134,7 +91,12 @@ fun MyStockListItemWidget(
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .clickable { showMyStockPurchaseInputDialog = true }
+                            .clickable {
+                                viewModel.showMainDialog(DialogType.UpdatePurchaseInput(myStockData = myStockData))
+                                coroutineScope.launch {
+                                    revealSwipeState.reset()
+                                }
+                            }
                             .fillMaxWidth()
                             .weight(0.333f)
                             .background(color = Color_80000000)

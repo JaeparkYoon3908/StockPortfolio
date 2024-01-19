@@ -36,7 +36,7 @@ sealed class NavItem(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NavigationGraph(
+internal fun NavigationGraph(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel(),
     navController: NavHostController

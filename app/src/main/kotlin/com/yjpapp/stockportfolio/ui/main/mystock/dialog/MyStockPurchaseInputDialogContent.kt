@@ -58,7 +58,6 @@ import com.yjpapp.stockportfolio.util.StockUtils
 
 data class MyStockPurchaseInputDialogData(
     val id: Int = -1,
-    val type: Int = 1,
     val stockPriceInfo: StockPriceData = StockPriceData(),
     val purchaseDate: String = "",
     val purchasePrice: String = "",
@@ -66,7 +65,7 @@ data class MyStockPurchaseInputDialogData(
 )
 
 @Composable
-fun MyStockPurchaseInputDialogContent(
+internal fun MyStockPurchaseInputDialogContent(
     dialogData: MyStockPurchaseInputDialogData = MyStockPurchaseInputDialogData(),
     onDismissRequest: (data: MyStockPurchaseInputDialogData, isComplete: Boolean) -> Unit
 ) {
@@ -102,9 +101,7 @@ fun MyStockPurchaseInputDialogContent(
                     Spacer(modifier = Modifier.height(30.dp))
                     Row(
                         modifier = Modifier.clickable {
-                            val intent = Intent(context, CompanySearchActivity::class.java).apply {
-                                putExtra("type", dialogData.type)
-                            }
+                            val intent = Intent(context, CompanySearchActivity::class.java)
                             stockSearchActivityResultLauncher.launch(intent)
                         },
                         verticalAlignment = Alignment.CenterVertically

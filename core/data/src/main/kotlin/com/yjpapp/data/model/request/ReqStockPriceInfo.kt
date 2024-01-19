@@ -1,6 +1,6 @@
 package com.yjpapp.data.model.request
 
-data class ReqKoreaStockPriceInfo(
+data class ReqStockPriceInfo(
     /**
      * 필수
      */

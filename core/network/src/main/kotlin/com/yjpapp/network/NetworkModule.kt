@@ -1,6 +1,5 @@
 package com.yjpapp.network
 
-import com.yjpapp.network.datasource.AlphaVantageDataSource
 import com.yjpapp.network.datasource.DataPortalDataSource
 import dagger.Module
 import dagger.Provides
@@ -36,15 +35,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesDataPortalDataSource(
+    fun providesJPNetworkDataSource(
         networkJson: Json,
         okhttpCallFactory: Call.Factory,
     ): DataPortalDataSource = RetrofitDataPortal(networkJson, okhttpCallFactory)
-
-    @Provides
-    @Singleton
-    fun providesAlphaVantageDataSource(
-        networkJson: Json,
-        okhttpCallFactory: Call.Factory,
-    ): AlphaVantageDataSource = RetrofitDataPortal(networkJson, okhttpCallFactory)
 }

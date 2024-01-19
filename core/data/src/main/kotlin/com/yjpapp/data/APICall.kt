@@ -11,7 +11,25 @@ import retrofit2.Response
  */
 object APICall {
     private val ioDispatcher = Dispatchers.IO
-    suspend fun <T : Any> handleApi(
+    suspend fun <T : Any> requestApi(
+        execute: suspend () -> Response<T>
+    ): ResponseResult<T> {
+        return try {
+            val response = execute()
+            val body = response.body()
+            if (response.isSuccessful && body != null) {
+                ResponseResult.Success(body, "200", "SUCCESS")
+            } else {
+                ResponseResult.Error("400", "Fail")
+            }
+        } catch (e: HttpException) {
+            ResponseResult.Error("500", "${e.message}")
+        } catch (e: Throwable) {
+            ResponseResult.Error("501", "${e.message}")
+        }
+    }
+
+    suspend fun <T : Any> requestApiIO(
         execute: suspend () -> Response<T>
     ): ResponseResult<T> {
         return withContext(ioDispatcher) {

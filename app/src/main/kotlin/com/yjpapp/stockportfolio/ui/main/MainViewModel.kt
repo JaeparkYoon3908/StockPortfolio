@@ -5,38 +5,37 @@ import androidx.lifecycle.viewModelScope
 import com.yjpapp.data.model.MyStockData
 import com.yjpapp.data.model.NewsData
 import com.yjpapp.data.model.ResponseResult
-import com.yjpapp.data.repository.MySettingRepository
 import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.data.repository.NewsRepository
-import com.yjpapp.stockportfolio.R
-import com.yjpapp.stockportfolio.model.Country
+import com.yjpapp.stockportfolio.model.DialogType
 import com.yjpapp.stockportfolio.ui.main.news.newsMenuList
 import com.yjpapp.stockportfolio.util.StockUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class MainUiState(
-    val toastMessageId: Int = 0,
-    val toastErrorMessage: String? = null,
-    val isLoading: Boolean = false, //전체 화면 로딩 여부
+    val toastMessage: String = "",
 )
-
 data class MyStockUiState(
     val totalPurchasePrice: String = "", //상단 총 매수금액
     val totalEvaluationAmount: String = "",
     val totalGainPrice: String = "", //상단 손익
     val totalGainPricePercent: String = "0%", //상단 수익률
-    val stockInfoList: List<MyStockData> = listOf(),
+    val myStockInfoList: List<MyStockData> = listOf(),
+    val isLoading: Boolean = false,
 )
-
 data class NewsUiState(
     val newsList: HashMap<String, List<NewsData>> = hashMapOf(),
-    val isLoading: Boolean = false, //일부 뉴스 탭 영역 로딩 애니메이션 노출 여부
+    val isLoading: Boolean = false
 )
 
 /**
@@ -45,164 +44,109 @@ data class NewsUiState(
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val myStockRepository: MyStockRepository,
-    private val newsRepository: NewsRepository,
-    private val mySettingRepository: MySettingRepository,
-) : ViewModel() {
-    //전체 메인 화면
-    private val _mainUiState = MutableStateFlow(MainUiState())
-    val mainUiState: StateFlow<MainUiState> = _mainUiState.asStateFlow()
-
-    //나의 주식 tab
-    private val _myStockUiState = MutableStateFlow(MyStockUiState())
+    private val newsRepository: NewsRepository
+): ViewModel() {
+    //나의 주식
+    private val _myStockUiState = MutableStateFlow(MyStockUiState(isLoading = false))
     val myStockUiState: StateFlow<MyStockUiState> = _myStockUiState.asStateFlow()
-
-    private val _myStockCountryState = MutableStateFlow(Country.Korea)
-    val myStockCountryState: StateFlow<Country> = _myStockCountryState.asStateFlow()
-
-
-
-    //경제 뉴스 tab
-    private val _newsUiState = MutableStateFlow(NewsUiState())
+    //경제 뉴스
+    private val _newsUiState = MutableStateFlow(NewsUiState(isLoading = false))
     val newsUiState: StateFlow<NewsUiState> = _newsUiState.asStateFlow()
 
+    private val _dialogUiState = MutableSharedFlow<DialogType>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val dialogUiState: SharedFlow<DialogType> = _dialogUiState.asSharedFlow()
     /**
      * 나의 주식
      */
     init {
         viewModelScope.launch {
-            val defaultTitle = getDefaultMyStockTitle()
-            _myStockCountryState.update { Country.entries.find { it.title == defaultTitle }?: Country.Korea }
-            getAllMyStock(type = _myStockCountryState.value.type)
+            getAllMyStock()
+            calculateTopData()
         }
     }
 
-    /**
-     * type 1: 한국주식, 2: 미국주식
-     */
-    fun getAllMyStock(type: Int) = viewModelScope.launch {
-        when (val result = myStockRepository.getAllMyStock()) {
+    private fun getAllMyStock() = viewModelScope.launch {
+        when (val response = myStockRepository.getAllMyStock()) {
             is ResponseResult.Success -> {
-                var mTotalPurchasePrice = 0.00 // 총 매수금액
-                var mTotalEvaluationAmount = 0.00 // 총 평가금액
-                //한국주식 리스트
-                val stockInfoList = result.data?.filter { data -> data.type == type }?: listOf()
-                //미국 주식 리스트
-                //계산
-                stockInfoList.forEach {
-                    val purchasePrice = StockUtils.getNumDeletedComma(it.purchasePrice).toDouble()
-                    val currentPrice = StockUtils.getNumDeletedComma(it.currentPrice).toDouble()
-                    val purchaseCount = it.purchaseCount.toDouble()
-                    mTotalPurchasePrice += purchasePrice * purchaseCount
-                    mTotalEvaluationAmount += currentPrice * purchaseCount
-                }
-                //손익
-                val mTotalGainPrice = mTotalEvaluationAmount - mTotalPurchasePrice
-                //수익률
-                val mTotalGainPricePercent =
-                    StockUtils.calculateGainPercent(mTotalPurchasePrice, mTotalEvaluationAmount)
-
                 _myStockUiState.update {
                     it.copy(
-                        stockInfoList = stockInfoList,
-                        totalPurchasePrice = mTotalPurchasePrice.toString(),
-                        totalEvaluationAmount = mTotalEvaluationAmount.toString(),
-                        totalGainPrice = mTotalGainPrice.toString(),
-                        totalGainPricePercent = StockUtils.getRoundsPercentNumber(mTotalGainPricePercent),
+                        myStockInfoList = response.data?: listOf(),
                     )
                 }
+                calculateTopData()
             }
-
             is ResponseResult.Error -> {
-                _mainUiState.update { it.copy(toastErrorMessage = result.resultMessage) }
-            }
-        }
-    }
 
-    suspend fun getDefaultMyStockTitle(): String {
-        return when (val result = mySettingRepository.getDefaultMyStockTitle()) {
-            is ResponseResult.Success -> {
-                result.data?: myStockCountryList.first().title
-            }
-
-            is ResponseResult.Error -> {
-                myStockCountryList.first().title
             }
         }
     }
 
     fun addMyStock(myStockData: MyStockData) = viewModelScope.launch {
-        try {
-            myStockRepository.addMyStock(myStockData)
-            _mainUiState.update {
-                it.copy(
-                    toastMessageId = R.string.MyStockFragment_Msg_MyStock_Add_Success
-                )
+        when (myStockRepository.addMyStock(myStockData)) {
+            is ResponseResult.Success -> {
+                //TODO 전체 리스트 업데이트하기
+                _dialogUiState.emit(DialogType.None)
+                getAllMyStock()
             }
-            getAllMyStock(type = myStockData.type)
-        } catch (e: Exception) {
-            _mainUiState.update {
-                it.copy(
-                    toastMessageId = R.string.Error_Msg_Normal,
-                    toastErrorMessage = e.message?: "Unknown error"
-                )
+            is ResponseResult.Error -> {
+
             }
         }
     }
 
     fun updateMyStock(myStockData: MyStockData) = viewModelScope.launch {
-        try {
-            myStockRepository.updateMyStock(myStockData)
-            _mainUiState.update {
-                it.copy(
-                    toastMessageId = R.string.MyStockFragment_Msg_MyStock_Modify_Success,
-                    isLoading = false
-                )
+        when (myStockRepository.updateMyStock(myStockData)) {
+            is ResponseResult.Success -> {
+                _dialogUiState.emit(DialogType.None)
+                getAllMyStock()
             }
-            getAllMyStock(type = myStockData.type)
-        } catch (e: Exception) {
-            _mainUiState.update {
-                it.copy(
-                    toastMessageId = R.string.Error_Msg_Normal,
-                    toastErrorMessage = e.message?: "Unknown error",
-                    isLoading = false
-                )
+            is ResponseResult.Error -> {
+
             }
         }
     }
 
     fun deleteMyStock(myStockData: MyStockData) = viewModelScope.launch {
-        try {
-            myStockRepository.deleteMyStock(myStockData)
-            _mainUiState.update {
-                it.copy(
-                    toastMessageId = R.string.MyStockFragment_Msg_MyStock_Delete_Success,
-                    isLoading = false
-                )
+        when (myStockRepository.deleteMyStock(myStockData)) {
+            is ResponseResult.Success -> {
+                getAllMyStock()
             }
-            getAllMyStock(type = myStockData.type)
-        } catch (e: Exception) {
-            e.stackTrace
-            _mainUiState.update {
-                it.copy(
-                    toastMessageId = R.string.Common_Cancel,
-                    toastErrorMessage = e.message?: "Unknown error",
-                    isLoading = false
-                )
+            is ResponseResult.Error -> {
+
             }
         }
     }
 
-    fun refreshStockCurrentPriceInfo(type: Int) = viewModelScope.launch {
-        _mainUiState.update { it.copy(isLoading = true) }
-        if (myStockRepository.refreshMyStock(type = type)) {
-            _mainUiState.update {
-                it.copy(
-                    toastMessageId = R.string.Msg_Refresh_Success,
-                    isLoading = false
-                )
-            }
-            getAllMyStock(type = type)
+    private fun calculateTopData() {
+        var mTotalPurchasePrice = 0.00 // 총 매수금액
+        var mTotalEvaluationAmount = 0.00 // 총 평가금액
+        //계산
+        _myStockUiState.value.myStockInfoList.forEach {
+            val purchasePrice = StockUtils.getNumDeletedComma(it.purchasePrice).toDouble()
+            val currentPrice = StockUtils.getNumDeletedComma(it.currentPrice).toDouble()
+            val purchaseCount = it.purchaseCount.toDouble()
+            mTotalPurchasePrice += purchasePrice * purchaseCount
+            mTotalEvaluationAmount += currentPrice * purchaseCount
         }
+        val mTotalGainPrice = mTotalEvaluationAmount - mTotalPurchasePrice //손익
+        val mTotalGainPricePercent = StockUtils.calculateGainPercent(mTotalPurchasePrice, mTotalEvaluationAmount) //수익률
+        _myStockUiState.update {
+            it.copy(
+                totalPurchasePrice = mTotalPurchasePrice.toString(),
+                totalEvaluationAmount = mTotalEvaluationAmount.toString(),
+                totalGainPrice = mTotalGainPrice.toString(),
+                totalGainPricePercent = StockUtils.getRoundsPercentNumber(mTotalGainPricePercent),
+            )
+        }
+    }
+
+    fun refreshStockCurrentPriceInfo() = viewModelScope.launch {
+        myStockRepository.refreshMyStock()
+        getAllMyStock()
     }
 
     /**
@@ -213,7 +157,7 @@ class MainViewModel @Inject constructor(
         newsMenuList.forEach { tabData ->
             when (val result = newsRepository.getNewsList(tabData.url)) {
                 is ResponseResult.Success -> {
-                    val newsList = result.data ?: listOf()
+                    val newsList = result.data?: listOf()
                     _newsUiState.update {
                         it.copy(
                             newsList = it.newsList.apply { this[tabData.route] = newsList },
@@ -221,28 +165,14 @@ class MainViewModel @Inject constructor(
                         )
                     }
                 }
-
                 is ResponseResult.Error -> {
-                    _mainUiState.update {
-                        it.copy(
-                            toastMessageId = R.string.Error_Msg_Normal,
-                            toastErrorMessage = result.resultMessage
-                        )
-                    }
+
                 }
             }
         }
     }
 
-    fun toastMessageShown() {
-        _mainUiState.update { it.copy(toastMessageId = 0, toastErrorMessage = null) }
-    }
-
-    fun updateMyStockCountry(country: Country) {
-        _myStockCountryState.update { country }
-    }
-
-    fun setDefaultMyStockCountry(title: String) = viewModelScope.launch {
-        mySettingRepository.setDefaultMyStockTitle(title)
+    fun showMainDialog(dialogType: DialogType) = viewModelScope.launch {
+        _dialogUiState.emit(dialogType)
     }
 }
