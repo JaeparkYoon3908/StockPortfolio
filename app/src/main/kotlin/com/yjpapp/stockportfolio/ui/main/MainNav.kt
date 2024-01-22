@@ -22,7 +22,7 @@ sealed class NavItem(
     val screenRoute: String
 ) {
     data object MyStock: NavItem(
-        title = R.string.MyStockFragment_Title,
+        title = R.string.MyStock_Title,
         icon = R.drawable.ic_my_stock,
         screenRoute = "MY_STOCK"
     )

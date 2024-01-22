@@ -16,8 +16,8 @@ android {
         applicationId = "com.yjpapp.stockportfolio"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 42
-        versionName = "2.0.0"
+        versionCode = 43
+        versionName = "2.0.1"
 
         testInstrumentationRunner = "com.yjpapp.stockportfolio.common.StockPortfolioTestRunner"
 
