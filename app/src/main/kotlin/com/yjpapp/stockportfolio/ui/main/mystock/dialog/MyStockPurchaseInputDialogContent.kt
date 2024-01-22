@@ -196,7 +196,7 @@ internal fun MyStockPurchaseInputDialogContent(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = stringResource(id = R.string.MyStockFragment_Purchase_Date),
+                            text = stringResource(id = R.string.MyStock_Purchase_Date),
                             fontSize = 16.sp,
                             color = Color(0xff666666)
                         )
@@ -247,7 +247,7 @@ internal fun MyStockPurchaseInputDialogContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(id = R.string.MyStockFragment_Purchase_Average),
+                            text = stringResource(id = R.string.MyStock_Purchase_Average),
                             fontSize = 16.sp,
                             color = Color_666666
                         )
@@ -313,7 +313,7 @@ internal fun MyStockPurchaseInputDialogContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(id = R.string.MyStockFragment_Holding_Quantity),
+                            text = stringResource(id = R.string.MyStock_Holding_Quantity),
                             fontSize = 16.sp,
                             color = Color(0xff666666)
                         )

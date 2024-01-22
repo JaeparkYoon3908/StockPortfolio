@@ -48,7 +48,7 @@ internal fun TotalPriceWidget(
                     .padding(top = dimensionResource(id = R.dimen.common_20dp))
             ) {
                 Text(
-                    text = stringResource(R.string.MyStockFragment_Total_Purchase_Price),
+                    text = stringResource(R.string.MyStock_Total_Purchase_Price),
                     color = Color_222222,
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -71,7 +71,7 @@ internal fun TotalPriceWidget(
                     .padding(top = dimensionResource(id = R.dimen.common_10dp))
             ) {
                 Text(
-                    text = stringResource(R.string.MyStockFragment_Total_Evaluation_Amount),
+                    text = stringResource(R.string.MyStock_Total_Evaluation_Amount),
                     color = Color_222222,
                     fontSize = 16.sp,
                     maxLines = 1,

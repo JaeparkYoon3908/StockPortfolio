@@ -69,25 +69,26 @@
     <string name="MemoListFragment_Msg_Check_Add_Mode_Cancel_Memo">입력중인 메모가 있습니다. 취소 하시겠습니까?</string>
     <string name="MemoListFragment_Msg_Check_Update_Mode_Cancel_Memo">변경 내용이 저장되지 않았습니다. 변경 내용을 삭제하시겠습니까?</string>
 
-    <string name="MyStockFragment_Title">나의 주식</string>
-    <string name="MyStockFragment_Total_Evaluation_Amount">총 평가금액</string>
-    <string name="MyStockFragment_Total_Purchase_Price">총 매수금액</string>
-    <string name="MyStockFragment_Purchase_Average">평균단가</string>
-    <string name="MyStockFragment_Current_Price">현재단가</string>
-    <string name="MyStockFragment_Holding_Quantity">보유수량</string>
-    <string name="MyStockFragment_Gain">평가수익</string>
-    <string name="MyStockFragment_Purchase_Date">매수일</string>
-    <string name="MyStockFragment_Notice_Max_List">최대 10개까지 등록 할 수 있습니다.</string>
-    <string name="MyStockFragment_Sell_Price">매도단가</string>
-    <string name="MyStockFragment_Sell_Price_Hint">1주당 매도한 평균 단가</string>
-    <string name="MyStockFragment_Sell_Count">매도수량</string>
-    <string name="MyStockFragment_Sell_Count_Hint">총 매도수량</string>
-    <string name="MyStockFragment_Msg_MyStock_Add_Success">추가 완료 됐습니다.</string>
-    <string name="MyStockFragment_Msg_MyStock_Modify_Success">수정 완료 됐습니다.</string>
-    <string name="MyStockFragment_Msg_MyStock_Delete_Success">삭제 완료 됐습니다.</string>
-    <string name="MyStockFragment_Msg_Current_Price_Refresh_Success">새로고침에 성공했습니다.</string>
-    <string name="MyStockFragment_Msg_Current_Price_Refresh_Error">새로운 데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</string>
-    <string name="MyStockFragment_Msg_Current_Price_Refresh_Warning">나의 보유 주식을 추가해주세요.</string>
+    <string name="MyStock_Title">나의 주식</string>
+    <string name="MyStock_Total_Evaluation_Amount">총 평가금액</string>
+    <string name="MyStock_Total_Purchase_Price">총 매수금액</string>
+    <string name="MyStock_Purchase_Average">평균단가</string>
+    <string name="MyStock_Current_Price">현재단가</string>
+    <string name="MyStock_Holding_Quantity">보유수량</string>
+    <string name="MyStock_Gain">평가수익</string>
+    <string name="MyStock_Purchase_Date">매수일</string>
+    <string name="MyStock_Notice_Max_List">최대 10개까지 등록 할 수 있습니다.</string>
+    <string name="MyStock_Sell_Price">매도단가</string>
+    <string name="MyStock_Sell_Price_Hint">1주당 매도한 평균 단가</string>
+    <string name="MyStock_Sell_Count">매도수량</string>
+    <string name="MyStock_Sell_Count_Hint">총 매도수량</string>
+
+    <string name="Msg_MyStock_Add_Success">추가 완료 됐습니다.</string>
+    <string name="Msg_MyStock_Update_Success">수정 완료 됐습니다.</string>
+    <string name="Msg_MyStock_Delete_Success">삭제 완료 됐습니다.</string>
+    <string name="Msg_Current_Price_Refresh_Success">새로고침에 성공했습니다.</string>
+    <string name="Msg_Current_Price_Refresh_Error">새로운 데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</string>
+    <string name="Msg_Current_Price_Refresh_Warning">나의 보유 주식을 추가해주세요.</string>
 
     <string name="MyStockInputDialog_Error_Message_Sell_Count">판매수량을 입력해주세요.</string>
     <string name="MyStockInputDialog_Error_Message_Sell_Count_Over">판매 수량은 보유 수량을 넘을 수 없습니다.</string>
