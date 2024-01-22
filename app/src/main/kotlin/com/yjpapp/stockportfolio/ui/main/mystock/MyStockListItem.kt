@@ -181,7 +181,7 @@ internal fun MyStockListItemWidget(
                     ) {
                         //평균단가
                         Text(
-                            text = stringResource(R.string.MyStockFragment_Purchase_Average),
+                            text = stringResource(R.string.MyStock_Purchase_Average),
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = Color_666666,
@@ -203,7 +203,7 @@ internal fun MyStockListItemWidget(
                     ) {
                         //매수일
                         Text(
-                            text = stringResource(R.string.MyStockFragment_Purchase_Date),
+                            text = stringResource(R.string.MyStock_Purchase_Date),
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = Color_666666
@@ -231,7 +231,7 @@ internal fun MyStockListItemWidget(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(R.string.MyStockFragment_Current_Price),
+                            text = stringResource(R.string.MyStock_Current_Price),
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = Color_666666,
@@ -277,7 +277,7 @@ internal fun MyStockListItemWidget(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(R.string.MyStockFragment_Holding_Quantity),
+                            text = stringResource(R.string.MyStock_Holding_Quantity),
                             fontSize = 14.sp,
                             maxLines = 1,
                             color = colorResource(id = R.color.color_666666)
@@ -301,7 +301,7 @@ internal fun MyStockListItemWidget(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(id = R.string.MyStockFragment_Gain),
+                        text = stringResource(id = R.string.MyStock_Gain),
                         fontSize = 14.sp,
                         maxLines = 1,
                         color = Color_666666

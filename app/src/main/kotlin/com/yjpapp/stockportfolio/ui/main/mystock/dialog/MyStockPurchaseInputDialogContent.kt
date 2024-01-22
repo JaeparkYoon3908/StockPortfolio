@@ -167,7 +167,7 @@ internal fun MyStockPurchaseInputDialogContent(
                             //매수 날짜 선택 다이얼로그 show
                             CommonDatePickerDialog(context, year, month, day).apply {
                                 setListener { _: DatePicker?, year, month, dayOfMonth ->
-                                    val todaySplit = StockUtils.getTodayYYYY_MM_DD().split(".")
+                                    val todaySplit = StockUtils.convertYYYY_MM_DD(StockUtils.getTodayYYYYMMDD()).split(".")
                                     if (year == todaySplit[0].toInt() && month > todaySplit[1].toInt()) {
                                         Toast.makeText(mContext, "선택하신 월이 현재 보다 큽니다.", Toast.LENGTH_LONG).show()
                                         return@setListener
@@ -196,7 +196,7 @@ internal fun MyStockPurchaseInputDialogContent(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = stringResource(id = R.string.MyStockFragment_Purchase_Date),
+                            text = stringResource(id = R.string.MyStock_Purchase_Date),
                             fontSize = 16.sp,
                             color = Color(0xff666666)
                         )
@@ -247,7 +247,7 @@ internal fun MyStockPurchaseInputDialogContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(id = R.string.MyStockFragment_Purchase_Average),
+                            text = stringResource(id = R.string.MyStock_Purchase_Average),
                             fontSize = 16.sp,
                             color = Color_666666
                         )
@@ -313,7 +313,7 @@ internal fun MyStockPurchaseInputDialogContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(id = R.string.MyStockFragment_Holding_Quantity),
+                            text = stringResource(id = R.string.MyStock_Holding_Quantity),
                             fontSize = 16.sp,
                             color = Color(0xff666666)
                         )

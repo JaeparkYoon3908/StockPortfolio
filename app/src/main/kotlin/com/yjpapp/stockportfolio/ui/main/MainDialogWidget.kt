@@ -10,8 +10,6 @@ import com.yjpapp.stockportfolio.model.DialogType
 import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogContent
 import com.yjpapp.stockportfolio.ui.main.mystock.dialog.MyStockPurchaseInputDialogData
 import com.yjpapp.stockportfolio.util.StockUtils
-import de.charlex.compose.reset
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainDialogWidget(
@@ -35,12 +33,13 @@ fun MainDialogWidget(
                             basDt = dialogData.stockPriceInfo.basDt,
                         )
                     )
+                } else {
+                    viewModel.showMainDialog(DialogType.None)
                 }
             }
         }
         is DialogType.UpdatePurchaseInput -> {
             val myStockData = (mainDialogType as DialogType.UpdatePurchaseInput).myStockData
-
             MyStockPurchaseInputDialogContent(
                 dialogData = MyStockPurchaseInputDialogData(
                     id = myStockData.id,
@@ -68,13 +67,13 @@ fun MainDialogWidget(
                             basDt = myStockData.basDt
                         )
                     )
+                } else {
+                    viewModel.showMainDialog(DialogType.None)
                 }
             }
         }
         DialogType.None -> Unit
-        else -> {
-
-        }
+        else -> Unit
     }
 
 }

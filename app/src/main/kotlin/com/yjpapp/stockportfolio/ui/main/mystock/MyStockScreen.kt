@@ -2,7 +2,9 @@
 
 package com.yjpapp.stockportfolio.ui.main.mystock
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,9 +30,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yjpapp.stockportfolio.R
 import com.yjpapp.stockportfolio.model.DialogType
+import com.yjpapp.stockportfolio.ui.common.componant.LoadingWidget
 import com.yjpapp.stockportfolio.ui.common.theme.Color_222222
 import com.yjpapp.stockportfolio.ui.common.theme.Color_666666
 import com.yjpapp.stockportfolio.ui.main.MainViewModel
+import com.yjpapp.stockportfolio.util.StockUtils
 
 /**
  * MyStock UI Compose 분리
@@ -72,7 +76,7 @@ internal fun MyStockScreen(
                     Spacer(modifier = Modifier.size(10.dp))
                     if (myStockUiState.myStockInfoList.isNotEmpty()) {
                         Text(
-                            text = "기준 일자 : ${myStockUiState.myStockInfoList.first().basDt}",
+                            text = "기준 일자 : ${StockUtils.convertYYYY_MM_DD(myStockUiState.myStockInfoList.first().basDt)}",
                             fontWeight = FontWeight.Light,
                             color = Color_666666,
                             fontSize = 13.sp,
@@ -111,6 +115,17 @@ internal fun MyStockScreen(
                 viewModel = viewModel,
                 myStockData = myStockData,
             )
+        }
+    }
+
+    if (myStockUiState.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color_222222.copy(alpha = 0.3f)),
+            contentAlignment = Alignment.Center
+        ) {
+            LoadingWidget()
         }
     }
 }
