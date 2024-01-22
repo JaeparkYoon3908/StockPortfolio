@@ -80,6 +80,7 @@ class MainViewModel @Inject constructor(
                 _myStockUiState.update {
                     it.copy(
                         myStockInfoList = response.data?: listOf(),
+                        isLoading = false
                     )
                 }
                 calculateTopData()
@@ -164,8 +165,20 @@ class MainViewModel @Inject constructor(
     }
 
     fun refreshStockCurrentPriceInfo() = viewModelScope.launch {
-        myStockRepository.refreshMyStock()
-        getAllMyStock()
+        _myStockUiState.update { it.copy(isLoading = true) }
+        when (val response = myStockRepository.refreshMyStock()) {
+            is ResponseResult.Success -> {
+                getAllMyStock()
+                _toastMessageState.emit(
+                    ToastMessage(
+                        strResId = R.string.Msg_Current_Price_Refresh_Success
+                    )
+                )
+            }
+            is ResponseResult.Error -> {
+                _toastMessageState.emit(ToastMessage(message = response.resultMessage))
+            }
+        }
     }
 
     /**

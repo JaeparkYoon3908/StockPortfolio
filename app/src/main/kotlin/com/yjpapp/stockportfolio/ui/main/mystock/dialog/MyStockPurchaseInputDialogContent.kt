@@ -167,7 +167,7 @@ internal fun MyStockPurchaseInputDialogContent(
                             //매수 날짜 선택 다이얼로그 show
                             CommonDatePickerDialog(context, year, month, day).apply {
                                 setListener { _: DatePicker?, year, month, dayOfMonth ->
-                                    val todaySplit = StockUtils.getTodayYYYY_MM_DD().split(".")
+                                    val todaySplit = StockUtils.convertYYYY_MM_DD(StockUtils.getTodayYYYYMMDD()).split(".")
                                     if (year == todaySplit[0].toInt() && month > todaySplit[1].toInt()) {
                                         Toast.makeText(mContext, "선택하신 월이 현재 보다 큽니다.", Toast.LENGTH_LONG).show()
                                         return@setListener

@@ -36,16 +36,19 @@ object StockUtils {
     }
 
     //yyyy.mm.dd로 변환
-    fun getTodayYYYY_MM_DD(): String {
-        val yyyymmdd = getTodayYYYYMMDD()
-        val result = StringBuffer().apply {
-            append(yyyymmdd.substring(0, 4))
-            append(".")
-            append(yyyymmdd.substring(4, 6))
-            append(".")
-            append(yyyymmdd.substring(6, 8))
+    fun convertYYYY_MM_DD(yyyymmdd: String): String {
+        val result = if (yyyymmdd.length == 8) {
+            StringBuffer().apply {
+                append(yyyymmdd.substring(0, 4))
+                append(".")
+                append(yyyymmdd.substring(4, 6))
+                append(".")
+                append(yyyymmdd.substring(6, 8))
+            }.toString()
+        } else {
+            yyyymmdd
         }
-        return result.toString()
+        return result
     }
 
     //현재 yyyy.mm 반환
