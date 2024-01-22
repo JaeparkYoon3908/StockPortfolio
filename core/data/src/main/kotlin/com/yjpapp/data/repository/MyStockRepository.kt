@@ -16,7 +16,7 @@ interface MyStockRepository {
     suspend fun updateMyStock(myStockData: MyStockData): ResponseResult<Boolean>
     suspend fun deleteMyStock(myStockData: MyStockData): ResponseResult<Boolean>
     suspend fun getAllMyStock(): ResponseResult<List<MyStockData>>
-    suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>>
+    suspend fun searchStockInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>>
     suspend fun refreshMyStock(): ResponseResult<Boolean>
 }
 
@@ -85,7 +85,7 @@ class MyStockRepositoryImpl @Inject constructor(
                 errorMessage = e.message?: "Unknown Message"
             )
         }
-    override suspend fun getStockPriceInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>> {
+    override suspend fun searchStockInfo(request: ReqStockPriceInfo): ResponseResult<List<StockPriceData>> {
         val hashMap = HashMap<String, String>().apply {
             this["serviceKey"] = request.serviceKey
             this["numOfRows"] = request.numOfRows
@@ -95,7 +95,11 @@ class MyStockRepositoryImpl @Inject constructor(
             this["likeItmsNm"] = request.likeItmsNm
         }
         val response = APICall.requestApi { stockInfoDataSource.getStockPriceInfo(hashMap) }
-        val data = response.data?.response?.body?.items?.item?.map { it.mapping() }?: listOf()
+        val data = response.data?.response?.body?.items?.item?.map {
+            it.mapping()
+        }?.distinctBy {
+            it.srtnCd
+        }?: listOf()
         return if (response is ResponseResult.Success) {
             ResponseResult.Success(
                 data = data,
@@ -120,7 +124,7 @@ class MyStockRepositoryImpl @Inject constructor(
                     isinCd = myStockEntity.subjectCode,
                     likeItmsNm = myStockEntity.subjectName
                 )
-                val result = getStockPriceInfo(reqStockPriceInfo)
+                val result = searchStockInfo(reqStockPriceInfo)
                 if (result is ResponseResult.Success) {
                     val item = result.data ?: listOf()
                     val resultItem = item.find { it.isinCd == myStockEntity.subjectCode }

@@ -9,6 +9,8 @@ import com.yjpapp.data.repository.MyStockRepository
 import com.yjpapp.stockportfolio.model.ErrorUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,19 +28,20 @@ data class CompanySearchUiState(
 class CompanySearchViewModel @Inject constructor(
     private val myStockRepository: MyStockRepository
 ): ViewModel() {
-    var uiState = MutableStateFlow(CompanySearchUiState(isLoading = false))
+    private val _uiState = MutableStateFlow(CompanySearchUiState(isLoading = false))
+    val uiState: StateFlow<CompanySearchUiState> = _uiState.asStateFlow()
     fun requestSearchList(keyWord: String) = viewModelScope.launch {
-        uiState.update { it.copy(searchResult = listOf(), isLoading = true) }
+        _uiState.update { it.copy(searchResult = listOf(), isLoading = true) }
         val reqStockPriceInfo = ReqStockPriceInfo(
             numOfRows = "50",
             pageNo = "1",
             likeItmsNm = keyWord
         )
 
-        when (val result = myStockRepository.getStockPriceInfo(reqStockPriceInfo)) {
+        when (val result = myStockRepository.searchStockInfo(reqStockPriceInfo)) {
             is ResponseResult.Success -> {
                 val companyList = result.data?: listOf()
-                uiState.update {
+                _uiState.update {
                     it.copy(
                         isLoading = false,
                         searchResult = companyList
@@ -46,7 +49,7 @@ class CompanySearchViewModel @Inject constructor(
                 }
             }
             is ResponseResult.Error -> {
-                uiState.update {
+                _uiState.update {
                     it.copy(
                         isLoading = false,
                         errorUiState = ErrorUiState(
