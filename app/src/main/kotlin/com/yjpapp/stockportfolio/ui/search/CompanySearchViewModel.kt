@@ -18,6 +18,7 @@ import javax.inject.Inject
 data class CompanySearchUiState(
     val searchResult: List<StockPriceData> = listOf(),
     val isLoading: Boolean = false,
+    val isEmptyResult: Boolean = false,
     val errorUiState: ErrorUiState = ErrorUiState()
 )
 /**
@@ -44,7 +45,8 @@ class CompanySearchViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        searchResult = companyList
+                        searchResult = companyList,
+                        isEmptyResult = companyList.isEmpty()
                     )
                 }
             }
