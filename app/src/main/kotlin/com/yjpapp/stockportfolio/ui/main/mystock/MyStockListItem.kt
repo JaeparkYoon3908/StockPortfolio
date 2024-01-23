@@ -26,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -148,12 +150,14 @@ internal fun MyStockListItemWidget(
             val gainPriceNumber = (currentPriceNumber - purchasePriceNumber) * myStockData.purchaseCount
             Column(
                 modifier = Modifier
-//                    .padding(bottom = 10.dp)
+                    .fillMaxWidth()
                     .wrapContentHeight()
             ) {
                 Row(
-                    Modifier
-                        .padding(start = 15.dp, end = 15.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 15.dp, end = 15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = myStockData.subjectName,
@@ -163,6 +167,18 @@ internal fun MyStockListItemWidget(
                         modifier = Modifier
                             .weight(0.50f)
                             .padding(top = 10.dp)
+                    )
+
+                    Text(
+                        text = "${myStockData.purchaseCount}주",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        textAlign = TextAlign.End,
+                        fontWeight = FontWeight.Bold,
+                        color = colorResource(id = R.color.color_222222),
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .weight(0.50f)
                     )
                 }
 
@@ -197,27 +213,27 @@ internal fun MyStockListItemWidget(
                                 .padding(start = 10.dp)
                         )
                     }
-                    Row(
-                        modifier = Modifier.weight(0.5f),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        //매수일
-                        Text(
-                            text = stringResource(R.string.MyStock_Purchase_Date),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = Color_666666
-                        )
-
-                        Text(
-                            text = myStockData.purchaseDate,
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = Color_222222,
-                            modifier = Modifier
-                                .padding(start = 10.dp)
-                        )
-                    }
+//                    Row(
+//                        modifier = Modifier.weight(0.35f),
+//                        horizontalArrangement = Arrangement.End,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Text(
+//                            text = stringResource(R.string.MyStock_Holding_Quantity),
+//                            fontSize = 14.sp,
+//                            maxLines = 1,
+//                            color = colorResource(id = R.color.color_666666)
+//                        )
+//
+//                        Text(
+//                            text = myStockData.purchaseCount.toString(),
+//                            fontSize = 14.sp,
+//                            maxLines = 1,
+//                            color = colorResource(id = R.color.color_222222),
+//                            modifier = Modifier
+//                                .padding(start = 10.dp)
+//                        )
+//                    }
                 }
                 Row(
                     Modifier
@@ -225,8 +241,7 @@ internal fun MyStockListItemWidget(
                         .padding(start = 15.dp, end = 15.dp, top = 10.dp)
                 ) {
                     Row(
-                        modifier = Modifier
-                            .weight(0.65f),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -268,28 +283,6 @@ internal fun MyStockListItemWidget(
                                 myStockData.dayToDayPrice.toInt() == 0 -> Color_222222
                                 else -> Color_4876C7
                             },
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier.weight(0.35f),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(R.string.MyStock_Holding_Quantity),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = colorResource(id = R.color.color_666666)
-                        )
-
-                        Text(
-                            text = myStockData.purchaseCount.toString(),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = colorResource(id = R.color.color_222222),
-                            modifier = Modifier
-                                .padding(start = 10.dp)
                         )
                     }
                 }

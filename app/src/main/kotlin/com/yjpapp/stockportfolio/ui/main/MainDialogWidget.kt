@@ -24,7 +24,7 @@ fun MainDialogWidget(
                         MyStockData(
                             subjectName = dialogData.stockPriceInfo.itmsNm,
                             subjectCode = dialogData.stockPriceInfo.isinCd,
-                            purchaseDate = dialogData.purchaseDate,
+//                            purchaseDate = dialogData.purchaseDate,
                             purchasePrice = dialogData.purchasePrice,
                             purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
                             currentPrice = StockUtils.getNumInsertComma(dialogData.stockPriceInfo.clpr),
@@ -47,7 +47,7 @@ fun MainDialogWidget(
                         itmsNm = myStockData.subjectName,
                         srtnCd = myStockData.subjectCode
                     ),
-                    purchaseDate = myStockData.purchaseDate,
+//                    purchaseDate = myStockData.purchaseDate,
                     purchasePrice = myStockData.purchasePrice,
                     purchaseCount = myStockData.purchaseCount.toString()
                 )
@@ -58,7 +58,7 @@ fun MainDialogWidget(
                             id = myStockData.id,
                             subjectName = dialogData.stockPriceInfo.itmsNm,
                             subjectCode = dialogData.stockPriceInfo.isinCd,
-                            purchaseDate = dialogData.purchaseDate,
+//                            purchaseDate = dialogData.purchaseDate,
                             purchasePrice = dialogData.purchasePrice,
                             purchaseCount = dialogData.purchaseCount.toIntOrNull()?: 0,
                             currentPrice = myStockData.currentPrice,

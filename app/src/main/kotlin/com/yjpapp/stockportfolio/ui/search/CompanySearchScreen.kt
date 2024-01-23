@@ -36,6 +36,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,6 +79,11 @@ fun CompanySearchScreen(
             val focusRequester = remember { FocusRequester() }
             TextField(
                 value = userInputKeyWord,
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    color = Color_222222,
+
+                ),
                 onValueChange = {
                     userInputKeyWord = it
                     showClearIcon = userInputKeyWord.isNotEmpty()
@@ -134,26 +140,44 @@ fun CompanySearchScreen(
         /**
          * SearchList
          */
-        LazyColumn {
-            items(
-                count = uiState.searchResult.size
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, bottom = 15.dp)
-                        .background(Color_FFFFFF)
-                ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 25.dp, end = 25.dp)
+                .background(Color_FFFFFF)
+        ) {
+            if (uiState.errorUiState.isError) {
+                item {
+                    Text(
+                        text = "일시적인 오류가 발생했습니다. 다시 시도해주세요.\nmessage : ${uiState.errorUiState.errorMessage}",
+                        fontSize = 18.sp,
+                        color = Color_222222,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            } else if (uiState.isEmptyResult) {
+                item {
+                    Text(
+                        text = "검색 결과가 없습니다. 다시 검색해주세요.",
+                        fontSize = 18.sp,
+                        color = Color_222222,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            } else {
+                items(count = uiState.searchResult.size) {
                     Text(
                         text = uiState.searchResult[it].itmsNm,
-                        fontSize = 16.sp,
+                        fontSize = 18.sp,
                         color = Color_222222,
                         modifier = Modifier
                             .clickable { onItemClick(uiState.searchResult[it]) }
                             .fillMaxWidth()
                     )
+                    Spacer(modifier = Modifier.size(20.dp))
                 }
             }
+
         }
     }
     Box(

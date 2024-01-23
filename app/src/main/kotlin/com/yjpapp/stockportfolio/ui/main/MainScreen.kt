@@ -45,14 +45,9 @@ internal fun MainScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(text = titleText)
-                    }
+                    Text(text = titleText)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color_FFFFFF,
@@ -108,7 +103,9 @@ internal fun MainScreen(
         }
     ) { paddingValues ->
         NavigationGraph(
-            modifier = Modifier.padding(paddingValues).background(color = Color.White),
+            modifier = Modifier
+                .padding(paddingValues)
+                .background(color = Color.White),
             viewModel = viewModel,
             navController = navController
         )

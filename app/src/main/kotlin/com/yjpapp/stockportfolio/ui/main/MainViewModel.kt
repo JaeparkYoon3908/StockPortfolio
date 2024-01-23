@@ -86,7 +86,7 @@ class MainViewModel @Inject constructor(
                 calculateTopData()
             }
             is ResponseResult.Error -> {
-
+                _toastMessageState.emit(ToastMessage(message = response.resultMessage))
             }
         }
     }
