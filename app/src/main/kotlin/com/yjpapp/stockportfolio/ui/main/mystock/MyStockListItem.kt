@@ -198,22 +198,22 @@ internal fun MyStockListItemWidget(
                         )
                     }
                     Row(
-                        modifier = Modifier.weight(0.5f),
-                        horizontalArrangement = Arrangement.End
+                        modifier = Modifier.weight(0.35f),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        //매수일
                         Text(
-                            text = stringResource(R.string.MyStock_Purchase_Date),
+                            text = stringResource(R.string.MyStock_Holding_Quantity),
                             fontSize = 14.sp,
                             maxLines = 1,
-                            color = Color_666666
+                            color = colorResource(id = R.color.color_666666)
                         )
 
                         Text(
-                            text = myStockData.purchaseDate,
+                            text = myStockData.purchaseCount.toString(),
                             fontSize = 14.sp,
                             maxLines = 1,
-                            color = Color_222222,
+                            color = colorResource(id = R.color.color_222222),
                             modifier = Modifier
                                 .padding(start = 10.dp)
                         )
@@ -270,28 +270,27 @@ internal fun MyStockListItemWidget(
                             },
                         )
                     }
-
-                    Row(
-                        modifier = Modifier.weight(0.35f),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(R.string.MyStock_Holding_Quantity),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = colorResource(id = R.color.color_666666)
-                        )
-
-                        Text(
-                            text = myStockData.purchaseCount.toString(),
-                            fontSize = 14.sp,
-                            maxLines = 1,
-                            color = colorResource(id = R.color.color_222222),
-                            modifier = Modifier
-                                .padding(start = 10.dp)
-                        )
-                    }
+                    //                    Row(
+//                        modifier = Modifier.weight(0.5f),
+//                        horizontalArrangement = Arrangement.End
+//                    ) {
+//                        //매수일
+//                        Text(
+//                            text = stringResource(R.string.MyStock_Purchase_Date),
+//                            fontSize = 14.sp,
+//                            maxLines = 1,
+//                            color = Color_666666
+//                        )
+//
+//                        Text(
+//                            text = myStockData.purchaseDate,
+//                            fontSize = 14.sp,
+//                            maxLines = 1,
+//                            color = Color_222222,
+//                            modifier = Modifier
+//                                .padding(start = 10.dp)
+//                        )
+//                    }
                 }
                 Row(
                     modifier = Modifier
