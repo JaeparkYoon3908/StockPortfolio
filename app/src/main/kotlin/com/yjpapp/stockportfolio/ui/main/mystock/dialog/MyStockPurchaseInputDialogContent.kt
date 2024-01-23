@@ -59,7 +59,7 @@ import com.yjpapp.stockportfolio.util.StockUtils
 data class MyStockPurchaseInputDialogData(
     val id: Int = -1,
     val stockPriceInfo: StockPriceData = StockPriceData(),
-    val purchaseDate: String = "",
+//    val purchaseDate: String = "",
     val purchasePrice: String = "",
     val purchaseCount: String = "",
 )
@@ -71,7 +71,7 @@ internal fun MyStockPurchaseInputDialogContent(
 ) {
     val context = LocalContext.current
     var rememberStockPriceInfo by remember { mutableStateOf(dialogData.stockPriceInfo) }
-    var purchaseDateText by remember { mutableStateOf(dialogData.purchaseDate) }
+//    var purchaseDateText by remember { mutableStateOf(dialogData.purchaseDate) }
     var purchasePriceText by remember { mutableStateOf(TextFieldValue(text = dialogData.purchasePrice)) }
     var purchaseCountText by remember { mutableStateOf(dialogData.purchaseCount) }
     val stockSearchActivityResultLauncher = rememberLauncherForActivityResult(
@@ -153,96 +153,96 @@ internal fun MyStockPurchaseInputDialogContent(
                         )
                     }
                     Spacer(modifier = Modifier.height(30.dp))
-                    Row(
-                        modifier = Modifier.clickable {
-                            var year = ""
-                            var month = ""
-                            var day = ""
-                            if (purchaseDateText != "") {
-                                val split = purchaseDateText.split("-")
-                                year = split[0]
-                                month = split[1]
-                                day = split[2]
-                            }
-                            //매수 날짜 선택 다이얼로그 show
-                            CommonDatePickerDialog(context, year, month, day).apply {
-                                setListener { _: DatePicker?, year, month, dayOfMonth ->
-                                    val todaySplit = StockUtils.convertYYYY_MM_DD(StockUtils.getTodayYYYYMMDD()).split(".")
-                                    if (year == todaySplit[0].toInt() && month > todaySplit[1].toInt()) {
-                                        Toast.makeText(mContext, "선택하신 월이 현재 보다 큽니다.", Toast.LENGTH_LONG).show()
-                                        return@setListener
-                                    }
-                                    if (year == todaySplit[0].toInt() && month == todaySplit[1].toInt() && dayOfMonth > todaySplit[2].toInt()) {
-                                        Toast.makeText(mContext, "선택하신 일이 현재 보다 큽니다.", Toast.LENGTH_LONG).show()
-                                        return@setListener
-                                    }
-                                    val purchaseYear = year.toString()
-                                    val purchaseMonth = if (month < 10) {
-                                        "0$month"
-                                    } else {
-                                        month.toString()
-                                    }
-                                    val purchaseDay = if (dayOfMonth < 10) {
-                                        "0$dayOfMonth"
-                                    } else {
-                                        dayOfMonth.toString()
-                                    }
-                                    purchaseDateText = "$purchaseYear-$purchaseMonth-$purchaseDay"
-                                    dismiss()
-                                }
-                                show()
-                            }
-                        },
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.MyStock_Purchase_Date),
-                            fontSize = 16.sp,
-                            color = Color(0xff666666)
-                        )
-                        BasicTextField(
-                            modifier = Modifier
-                                .padding(start = 10.dp),
-                            value = purchaseDateText,
-                            onValueChange = { purchaseDateText = it },
-                            singleLine = true,
-                            readOnly = true,
-                            enabled = false,
-                            decorationBox = { innerTextField ->
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .drawWithContent {
-                                            drawContent()
-                                            drawLine(
-                                                color = Color(0x1a000000),
-                                                start = Offset(
-                                                    x = 0f,
-                                                    y = size.height - 1.dp.toPx(),
-                                                ),
-                                                end = Offset(
-                                                    x = size.width,
-                                                    y = size.height - 1.dp.toPx(),
-                                                ),
-                                                strokeWidth = 1.dp.toPx(),
-                                            )
-                                        },
-                                ) {
-                                    Box {
-                                        if (purchaseDateText.isEmpty()) {
-                                            Text(
-                                                text = stringResource(id = R.string.EditIncomeNoteDialog_Purchase_Date_Hint),
-                                                style = TextStyle(fontSize = 14.sp, color = Color_666666)
-                                            )
-                                        }
-                                        innerTextField()
-                                    }
-                                    Spacer(modifier = Modifier.height(5.dp))
-                                }
-                            }
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(30.dp))
+//                    Row(
+//                        modifier = Modifier.clickable {
+//                            var year = ""
+//                            var month = ""
+//                            var day = ""
+//                            if (purchaseDateText != "") {
+//                                val split = purchaseDateText.split("-")
+//                                year = split[0]
+//                                month = split[1]
+//                                day = split[2]
+//                            }
+//                            //매수 날짜 선택 다이얼로그 show
+//                            CommonDatePickerDialog(context, year, month, day).apply {
+//                                setListener { _: DatePicker?, year, month, dayOfMonth ->
+//                                    val todaySplit = StockUtils.convertYYYY_MM_DD(StockUtils.getTodayYYYYMMDD()).split(".")
+//                                    if (year == todaySplit[0].toInt() && month > todaySplit[1].toInt()) {
+//                                        Toast.makeText(mContext, "선택하신 월이 현재 보다 큽니다.", Toast.LENGTH_LONG).show()
+//                                        return@setListener
+//                                    }
+//                                    if (year == todaySplit[0].toInt() && month == todaySplit[1].toInt() && dayOfMonth > todaySplit[2].toInt()) {
+//                                        Toast.makeText(mContext, "선택하신 일이 현재 보다 큽니다.", Toast.LENGTH_LONG).show()
+//                                        return@setListener
+//                                    }
+//                                    val purchaseYear = year.toString()
+//                                    val purchaseMonth = if (month < 10) {
+//                                        "0$month"
+//                                    } else {
+//                                        month.toString()
+//                                    }
+//                                    val purchaseDay = if (dayOfMonth < 10) {
+//                                        "0$dayOfMonth"
+//                                    } else {
+//                                        dayOfMonth.toString()
+//                                    }
+//                                    purchaseDateText = "$purchaseYear-$purchaseMonth-$purchaseDay"
+//                                    dismiss()
+//                                }
+//                                show()
+//                            }
+//                        },
+//                        verticalAlignment = Alignment.CenterVertically,
+//                    ) {
+//                        Text(
+//                            text = stringResource(id = R.string.MyStock_Purchase_Date),
+//                            fontSize = 16.sp,
+//                            color = Color(0xff666666)
+//                        )
+//                        BasicTextField(
+//                            modifier = Modifier
+//                                .padding(start = 10.dp),
+//                            value = purchaseDateText,
+//                            onValueChange = { purchaseDateText = it },
+//                            singleLine = true,
+//                            readOnly = true,
+//                            enabled = false,
+//                            decorationBox = { innerTextField ->
+//                                Column(
+//                                    modifier = Modifier
+//                                        .fillMaxWidth()
+//                                        .drawWithContent {
+//                                            drawContent()
+//                                            drawLine(
+//                                                color = Color(0x1a000000),
+//                                                start = Offset(
+//                                                    x = 0f,
+//                                                    y = size.height - 1.dp.toPx(),
+//                                                ),
+//                                                end = Offset(
+//                                                    x = size.width,
+//                                                    y = size.height - 1.dp.toPx(),
+//                                                ),
+//                                                strokeWidth = 1.dp.toPx(),
+//                                            )
+//                                        },
+//                                ) {
+//                                    Box {
+//                                        if (purchaseDateText.isEmpty()) {
+//                                            Text(
+//                                                text = stringResource(id = R.string.EditIncomeNoteDialog_Purchase_Date_Hint),
+//                                                style = TextStyle(fontSize = 14.sp, color = Color_666666)
+//                                            )
+//                                        }
+//                                        innerTextField()
+//                                    }
+//                                    Spacer(modifier = Modifier.height(5.dp))
+//                                }
+//                            }
+//                        )
+//                    }
+//                    Spacer(modifier = Modifier.height(30.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -382,7 +382,7 @@ internal fun MyStockPurchaseInputDialogContent(
                             .background(color = Color_E52B4E),
                         onClick = {
                             if (purchaseCountText.isEmpty() ||
-                                purchaseDateText.isEmpty() ||
+//                                purchaseDateText.isEmpty() ||
                                 purchasePriceText.text.isEmpty() ||
                                 rememberStockPriceInfo.itmsNm.isEmpty()
                             ) {
@@ -404,7 +404,7 @@ internal fun MyStockPurchaseInputDialogContent(
                             onDismissRequest(
                                 MyStockPurchaseInputDialogData(
                                     stockPriceInfo = rememberStockPriceInfo,
-                                    purchaseDate = purchaseDateText,
+//                                    purchaseDate = purchaseDateText,
                                     purchasePrice = purchasePriceText.text,
                                     purchaseCount = purchaseCountText
                                 ),

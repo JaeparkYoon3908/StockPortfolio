@@ -30,7 +30,7 @@ class MainViewModelTest {
         id = 124241,
         subjectName = "회사이름",
         subjectCode = "subCode",
-        purchaseDate = "2023-04-04",
+//        purchaseDate = "2023-04-04",
         purchasePrice = "20,000",
         purchaseCount = 2,
         currentPrice = "25,000",

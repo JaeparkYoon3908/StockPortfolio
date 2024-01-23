@@ -6,7 +6,7 @@ data class MyStockData(
     val id: Int = 0, //id
     val subjectName: String = "", //종목명
     val subjectCode: String = "", //종목코드
-    val purchaseDate: String = "", //매수일
+//    val purchaseDate: String = "", //매수일
     val purchasePrice: String = "", //평균단가
     val purchaseCount: Int = 0, //보유수량
     //실시간 변동 데이터
