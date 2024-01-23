@@ -225,8 +225,7 @@ internal fun MyStockListItemWidget(
                         .padding(start = 15.dp, end = 15.dp, top = 10.dp)
                 ) {
                     Row(
-                        modifier = Modifier
-                            .weight(0.65f),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
