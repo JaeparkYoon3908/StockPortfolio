@@ -1,5 +1,5 @@
 # Stockprotfolio
-This repository is my side project for skill up android app develop.
+This repository is my side project for skill up android app development.
 ### 1. Screenshot
 
 <p>
@@ -15,9 +15,12 @@ This repository is my side project for skill up android app develop.
 - News
   - This screen possible to see recent economy news.
 
-### 3. Changed android develop skill stacks
- - SQLite -> Room
- - MVP -> MVVM
- - Koin -> Hilt
- - LiveData -> StateFlow
- - Gson -> Kotlinx Serialization
+### 3. develop skill stacks
+ - Kotlin
+ - MVVM
+ - Compose
+ - Room, Retrofit2
+ - Hilt
+ - Flow
+ - Coroutine
+ - Kotlinx Serialization
