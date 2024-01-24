@@ -15,7 +15,7 @@
 - 경제 뉴스
   - 매일 경제, 한국 경제, 파이낸셜뉴스에서 제공하는 실시간 경제 뉴스를 볼 수 있습니다.
 
-### 3. Changed android develop skill stacks
+### 3. develop skill stacks
  - Kotlin
  - MVVM
  - Compose
