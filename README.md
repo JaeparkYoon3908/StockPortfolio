@@ -1,5 +1,5 @@
 # Stockprotfolio
-This repository is my side project for skill up android app develop.
+안드로이드 개발 기술 향상을위한 개인 사이드 프로젝트입니다.
 ### 1. Screenshot
 
 <p>
@@ -9,15 +9,18 @@ This repository is my side project for skill up android app develop.
 </p>
 
 ### 2. App feature introduce
-- Income note
-  - This screen possible input my purchase stock and price.
-  - It's possible to check about my stock income.
-- News
-  - This screen possible to see recent economy news.
+- 나의 주식
+  - 내가 산 국내 주식의 가격을 입력하여 추가합니다.
+  - 데이터 포털에서 제공하는 하루전날 주식 종가를 기준으로 현재 나의 수익을 확인할 수 있습니다.
+- 경제 뉴스
+  - 매일 경제, 한국 경제, 파이낸셜뉴스에서 제공하는 실시간 경제 뉴스를 볼 수 있습니다.
 
 ### 3. Changed android develop skill stacks
- - SQLite -> Room
- - MVP -> MVVM
- - Koin -> Hilt
- - LiveData -> StateFlow
- - Gson -> Kotlinx Serialization
+ - Kotlin
+ - MVVM
+ - Compose
+ - Room, Retrofit2
+ - Hilt
+ - Flow
+ - Coroutine
+ - Kotlinx Serialization
