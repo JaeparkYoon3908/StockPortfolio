@@ -95,12 +95,12 @@ class MyStockRepositoryImpl @Inject constructor(
             this["likeItmsNm"] = request.likeItmsNm
         }
         val response = APICall.requestApi { stockInfoDataSource.getStockPriceInfo(hashMap) }
-        val data = response.data?.response?.body?.items?.item?.map {
-            it.mapping()
-        }?.distinctBy {
-            it.srtnCd
-        }?: listOf()
         return if (response is ResponseResult.Success) {
+            val data = response.data?.response?.body?.items?.item?.map {
+                it.mapping()
+            }?.distinctBy {
+                it.srtnCd
+            }?: listOf()
             ResponseResult.Success(
                 data = data,
                 resultCode = response.resultCode,
@@ -108,8 +108,8 @@ class MyStockRepositoryImpl @Inject constructor(
             )
         } else {
             ResponseResult.Error(
-                errorMessage = response.resultCode,
-                errorCode = response.resultMessage
+                errorMessage = response.resultMessage,
+                errorCode = response.resultCode
             )
         }
     }

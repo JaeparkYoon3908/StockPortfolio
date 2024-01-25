@@ -36,7 +36,6 @@ class MainUITest {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         hiltRule.inject()
         mainViewModel = MainViewModel(
-            context = context,
             myStockRepository = myStockRepository,
             newsRepository = newsRepository
         )
