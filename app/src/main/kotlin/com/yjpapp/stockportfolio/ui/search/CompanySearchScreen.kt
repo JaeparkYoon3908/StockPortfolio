@@ -149,7 +149,7 @@ fun CompanySearchScreen(
             if (uiState.errorUiState.isError) {
                 item {
                     Text(
-                        text = "일시적인 오류가 발생했습니다. 다시 시도해주세요.\nmessage : ${uiState.errorUiState.errorMessage}",
+                        text = "일시적인 오류가 발생했습니다. \n다시 시도해주세요.\nerror message : ${uiState.errorUiState.errorMessage}",
                         fontSize = 18.sp,
                         color = Color_222222,
                         modifier = Modifier.fillMaxWidth()
