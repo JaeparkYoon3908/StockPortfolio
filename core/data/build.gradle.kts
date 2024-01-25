@@ -15,7 +15,8 @@ android {
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.yjpapp.data.StockPortfolioTestRunner"
+
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -40,13 +41,22 @@ android {
 dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:database"))
+    //test code
+    androidTestImplementation(libs.androidx.test.ext)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.compose.ui)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestAnnotationProcessor(libs.hilt.android.compiler)
+    testImplementation(libs.junit)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    kaptAndroidTest(libs.hilt.android.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.google.material)
-    testImplementation(libs.junit.junit)
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
     //network
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)

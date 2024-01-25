@@ -12,7 +12,7 @@ android {
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.yjpapp.stockportfolio.common.StockPortfolioTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
