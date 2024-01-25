@@ -35,7 +35,6 @@ internal fun NewsListItem(
             .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
             .clickable { onItemClick() },
         shape = RoundedCornerShape(10.dp),
-
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Text(
