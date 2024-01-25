@@ -213,27 +213,6 @@ internal fun MyStockListItemWidget(
                                 .padding(start = 10.dp)
                         )
                     }
-//                    Row(
-//                        modifier = Modifier.weight(0.35f),
-//                        horizontalArrangement = Arrangement.End,
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        Text(
-//                            text = stringResource(R.string.MyStock_Holding_Quantity),
-//                            fontSize = 14.sp,
-//                            maxLines = 1,
-//                            color = colorResource(id = R.color.color_666666)
-//                        )
-//
-//                        Text(
-//                            text = myStockData.purchaseCount.toString(),
-//                            fontSize = 14.sp,
-//                            maxLines = 1,
-//                            color = colorResource(id = R.color.color_222222),
-//                            modifier = Modifier
-//                                .padding(start = 10.dp)
-//                        )
-//                    }
                 }
                 Row(
                     Modifier
