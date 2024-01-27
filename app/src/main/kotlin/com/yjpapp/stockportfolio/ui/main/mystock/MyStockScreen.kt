@@ -86,6 +86,7 @@ internal fun MyStockScreen(
                 Row {
                     IconButton(
                         modifier = Modifier.size(18.dp),
+                        enabled = myStockUiState.myStockInfoList.isNotEmpty(),
                         onClick = { viewModel.refreshStockCurrentPriceInfo() }
                     ) {
                         Icon(

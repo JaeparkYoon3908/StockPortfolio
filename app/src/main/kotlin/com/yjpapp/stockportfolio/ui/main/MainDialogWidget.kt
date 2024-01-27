@@ -18,7 +18,9 @@ fun MainDialogWidget(
     val mainDialogType by viewModel.dialogUiState.collectAsStateWithLifecycle(initialValue = DialogType.None)
     when (mainDialogType) {
         is DialogType.InsertPurchaseInput -> {
-            MyStockPurchaseInputDialogContent { dialogData, isComplete ->
+            MyStockPurchaseInputDialogContent(
+                isInsert = true
+            ) { dialogData, isComplete ->
                 if (isComplete) {
                     viewModel.addMyStock(
                         MyStockData(
@@ -41,6 +43,7 @@ fun MainDialogWidget(
         is DialogType.UpdatePurchaseInput -> {
             val myStockData = (mainDialogType as DialogType.UpdatePurchaseInput).myStockData
             MyStockPurchaseInputDialogContent(
+                isInsert = false,
                 dialogData = MyStockPurchaseInputDialogData(
                     id = myStockData.id,
                     stockPriceInfo = StockPriceData(

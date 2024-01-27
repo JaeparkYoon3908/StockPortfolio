@@ -66,6 +66,7 @@ data class MyStockPurchaseInputDialogData(
 
 @Composable
 internal fun MyStockPurchaseInputDialogContent(
+    isInsert: Boolean = false,
     dialogData: MyStockPurchaseInputDialogData = MyStockPurchaseInputDialogData(),
     onDismissRequest: (data: MyStockPurchaseInputDialogData, isComplete: Boolean) -> Unit
 ) {
@@ -99,60 +100,62 @@ internal fun MyStockPurchaseInputDialogContent(
                         .padding(PaddingValues(start = 20.dp, end = 20.dp))
                 ) {
                     Spacer(modifier = Modifier.height(30.dp))
-                    Row(
-                        modifier = Modifier.clickable {
-                            val intent = Intent(context, CompanySearchActivity::class.java)
-                            stockSearchActivityResultLauncher.launch(intent)
-                        },
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.IncomeNoteFragment_SubjectName),
-                            fontSize = 16.sp,
-                            color = Color(0xff666666)
-                        )
-                        BasicTextField(
-                            modifier = Modifier.padding(start = 10.dp),
-                            value = rememberStockPriceInfo.itmsNm,
-                            onValueChange = { },
-                            singleLine = true,
-                            readOnly = true,
-                            enabled = false,
-                            decorationBox = { innerTextField ->
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .drawWithContent {
-                                            drawContent()
-                                            drawLine(
-                                                color = Color(0x1a000000),
-                                                start = Offset(
-                                                    x = 0f,
-                                                    y = size.height - 1.dp.toPx(),
-                                                ),
-                                                end = Offset(
-                                                    x = size.width,
-                                                    y = size.height - 1.dp.toPx(),
-                                                ),
-                                                strokeWidth = 1.dp.toPx(),
-                                            )
-                                        },
-                                ) {
-                                    Box {
-                                        if (rememberStockPriceInfo.itmsNm.isEmpty()) {
-                                            Text(
-                                                text = stringResource(id = R.string.EditIncomeNoteDialog_SubjectName_Hint),
-                                                style = TextStyle(fontSize = 14.sp, color = Color_666666)
-                                            )
+                    if (isInsert) {
+                        Row(
+                            modifier = Modifier.clickable {
+                                val intent = Intent(context, CompanySearchActivity::class.java)
+                                stockSearchActivityResultLauncher.launch(intent)
+                            },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.IncomeNoteFragment_SubjectName),
+                                fontSize = 16.sp,
+                                color = Color(0xff666666)
+                            )
+                            BasicTextField(
+                                modifier = Modifier.padding(start = 10.dp),
+                                value = rememberStockPriceInfo.itmsNm,
+                                onValueChange = { },
+                                singleLine = true,
+                                readOnly = true,
+                                enabled = false,
+                                decorationBox = { innerTextField ->
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .drawWithContent {
+                                                drawContent()
+                                                drawLine(
+                                                    color = Color(0x1a000000),
+                                                    start = Offset(
+                                                        x = 0f,
+                                                        y = size.height - 1.dp.toPx(),
+                                                    ),
+                                                    end = Offset(
+                                                        x = size.width,
+                                                        y = size.height - 1.dp.toPx(),
+                                                    ),
+                                                    strokeWidth = 1.dp.toPx(),
+                                                )
+                                            },
+                                    ) {
+                                        Box {
+                                            if (rememberStockPriceInfo.itmsNm.isEmpty()) {
+                                                Text(
+                                                    text = stringResource(id = R.string.EditIncomeNoteDialog_SubjectName_Hint),
+                                                    style = TextStyle(fontSize = 14.sp, color = Color_666666)
+                                                )
+                                            }
+                                            innerTextField()
                                         }
-                                        innerTextField()
+                                        Spacer(modifier = Modifier.height(5.dp))
                                     }
-                                    Spacer(modifier = Modifier.height(5.dp))
                                 }
-                            }
-                        )
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(30.dp))
                     }
-                    Spacer(modifier = Modifier.height(30.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
