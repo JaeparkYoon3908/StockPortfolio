@@ -91,7 +91,7 @@ class MyStockRepositoryImpl @Inject constructor(
             this["numOfRows"] = request.numOfRows
             this["pageNo"] = request.pageNo
             this["resultType"] = request.resultType
-            this["basDt"] = request.basDt
+            this["basDt"] = ""
             this["likeItmsNm"] = request.likeItmsNm
         }
         val response = APICall.requestApi { stockInfoDataSource.getStockPriceInfo(hashMap) }
@@ -122,12 +122,13 @@ class MyStockRepositoryImpl @Inject constructor(
                     numOfRows = "20",
                     pageNo = "1",
                     isinCd = myStockEntity.subjectCode,
-                    likeItmsNm = myStockEntity.subjectName
+                    likeItmsNm = myStockEntity.subjectName,
+                    basDt = GadgetDate.getTodayKorea(GadgetDate.DateFormat4)
                 )
                 val result = searchStockInfo(reqStockPriceInfo)
                 if (result is ResponseResult.Success) {
                     val item = result.data ?: listOf()
-                    val resultItem = item.find { it.isinCd == myStockEntity.subjectCode }
+                    val resultItem = item.firstOrNull()
                     if (resultItem != null) {
                         updateMyStock(
                             myStockEntity.copy(
