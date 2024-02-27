@@ -307,8 +307,7 @@ internal fun MyStockListItemWidget(
                             gainPriceNumber < 0 -> Color_4876C7
                             else -> Color_222222
                         },
-                        modifier = Modifier
-                            .padding(start = 5.dp)
+                        modifier = Modifier.padding(start = 5.dp)
                     )
                 }
             }
