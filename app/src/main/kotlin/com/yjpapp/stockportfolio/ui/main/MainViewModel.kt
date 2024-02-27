@@ -67,7 +67,7 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getAllMyStock()
+            refreshStockCurrentPriceInfo()
             calculateTopData()
         }
     }

@@ -39,6 +39,11 @@ android {
 }
 
 dependencies {
+    implementation(
+        files(
+            "libs/GadgetUtils.aar"
+        )
+    )
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     //test code
