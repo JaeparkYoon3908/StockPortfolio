@@ -174,6 +174,8 @@ internal fun MyStockPurchaseInputDialogContent(
                                 } else if (it.text.last().toString().matches(numberPattern)) {
                                     val commaInsertedText = StockUtils.getNumInsertComma(it.text)
                                     purchasePriceText = TextFieldValue(text = commaInsertedText, selection = TextRange(commaInsertedText.length))
+                                } else if (!it.text.last().toString().matches(numberPattern)) {
+                                    Toast.makeText(context, context.getString(R.string.Msg_Only_Number), Toast.LENGTH_SHORT).show()
                                 }
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -234,7 +236,14 @@ internal fun MyStockPurchaseInputDialogContent(
                                 .padding(start = 10.dp),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             value = purchaseCountText,
-                            onValueChange = { purchaseCountText = it },
+                            onValueChange = {
+                                if (it.isEmpty()) {
+                                    purchaseCountText = ""
+                                } else if (it.matches(numberPattern)) {
+                                    purchaseCountText = it
+                                } else if (!it.matches(numberPattern)) {
+                                    Toast.makeText(context, context.getString(R.string.Msg_Only_Number), Toast.LENGTH_SHORT).show()
+                                } },
                             singleLine = true,
                             decorationBox = { innerTextField ->
                                 Column(
