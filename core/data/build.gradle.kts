@@ -14,9 +14,7 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
         testInstrumentationRunner = "com.yjpapp.data.StockPortfolioTestRunner"
-
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -39,11 +37,6 @@ android {
 }
 
 dependencies {
-    implementation(
-        files(
-            "libs/GadgetUtils.aar"
-        )
-    )
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     //test code
@@ -75,4 +68,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
+    //Gadget
+    implementation(libs.gadget.utils)
 }

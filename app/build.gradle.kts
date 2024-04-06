@@ -104,5 +104,4 @@ dependencies {
     kapt(libs.androidx.hilt.compiler)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.kotlinx.serialization.json)
-
 }

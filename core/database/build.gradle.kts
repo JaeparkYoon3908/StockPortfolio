@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-
     //Test Code
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.espresso.core)
@@ -48,7 +47,6 @@ dependencies {
     testImplementation(libs.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     kaptAndroidTest(libs.hilt.android.compiler)
-
     //Hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.android)
