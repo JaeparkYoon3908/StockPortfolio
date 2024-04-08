@@ -8,7 +8,7 @@ androidxCore = "1.12.0"
 androidxAppCompat = "1.6.1"
 androidxConstraintlayout = "2.1.4"
 googleServices = "4.4.0"
-gradle = "8.2.1"
+gradle = "8.3.0"
 kotlin = "1.9.0"
 junit4 = "4.13.2"
 androidxTestRunner = "1.5.2"
@@ -39,6 +39,8 @@ roomRuntime = "2.5.2"
 supportedPickerDialogs = "1.0.0"
 ksp = "1.9.0-1.0.13"
 junit-junit = "4.13.2"
+webKit = "1.10.0"
+gadGet = "0.0.1-test"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
@@ -64,6 +66,7 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3"}
 androidx-compose-material3-window = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "composeMaterial3"}
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidxHiltCompiler" }
+androidx-webkit = { group = "androidx.webkit", name = "webkit", version.ref = "webKit" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
@@ -91,6 +94,7 @@ revealswipe = { module = "de.charlex.compose:revealswipe", version.ref = "reveal
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 supported-picker-dialogs = { module = "com.github.Ibotta:Supported-Picker-Dialogs", version.ref = "supportedPickerDialogs" }
 junit-junit = { group = "junit", name = "junit", version.ref = "junit-junit" }
+gadget-utils = { group = "com.github.YoonJaePark3908", name = "GadgetUtil-android", version.ref = "gadGet" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

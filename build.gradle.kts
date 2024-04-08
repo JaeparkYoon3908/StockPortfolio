@@ -10,7 +10,6 @@ plugins {
 buildscript {
     repositories {
         maven(url="https://jitpack.io")
-        maven(url="https://mvnrepository.com/artifact/com.github.gundy/semver4j")
         mavenCentral()
         google()
     }
