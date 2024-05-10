@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Stockprotfolio
 안드로이드 개발 기술 향상을위한 개인 사이드 프로젝트입니다.
 ### 1. Screenshot
@@ -24,3 +25,7 @@
  - Flow
  - Coroutine
  - Kotlinx Serialization
+=======
+# 주식 포트폴리오 전용 서버
+ 
+>>>>>>> StockPortfolioServer/main
