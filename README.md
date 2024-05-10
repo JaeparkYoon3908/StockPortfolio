@@ -25,7 +25,3 @@
  - Flow
  - Coroutine
  - Kotlinx Serialization
-=======
-# 주식 포트폴리오 전용 서버
- 
->>>>>>> StockPortfolioServer/main
